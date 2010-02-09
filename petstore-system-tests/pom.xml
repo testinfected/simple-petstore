@@ -15,7 +15,7 @@
 	<url>http://maven.apache.org</url>
 
     <properties>
-        <server.port>8280</server.port>
+        <server.port>8080</server.port>
         <context>petstore</context>
     </properties>
 
@@ -41,6 +41,7 @@
 			<version>0.8</version>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.codehaus.cargo</groupId>
 			<artifactId>cargo-ant</artifactId>
@@ -141,4 +142,17 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		
+		<profile>
+			<id>integration</id>
+		</profile>		
+	</profiles>
+	
 </project>

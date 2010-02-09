@@ -1,0 +1,12 @@
+<html>
+<head>
+	<title>PetStore - Search</title>
+</head>
+<body>
+<form action="search/do" method="POST">
+  Search: 
+  <input id="query" type="text" name="query" value="" />
+  <input type="submit" value="submit"/>
+</form>
+</body>
+</html>
