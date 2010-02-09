@@ -14,6 +14,11 @@
 	<name>petstore-system-tests</name>
 	<url>http://maven.apache.org</url>
 
+    <properties>
+        <server.port>8280</server.port>
+        <context>petstore</context>
+    </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -94,6 +99,11 @@
 							<installDir>${basedir}/appserver</installDir>
 						</zipUrlInstaller>
 					</container>
+                    <configuration>
+                        <properties>
+                            <cargo.servlet.port>${server.port}</cargo.servlet.port>
+                        </properties>
+                    </configuration>
 				</configuration>
 				<executions>
 					<execution>
@@ -110,9 +120,9 @@
 										<groupId>com.pyxis</groupId>
 										<artifactId>petstore-app</artifactId>
 										<type>war</type>
-										<pingURL>http://localhost:8080/petstore</pingURL>
+										<pingURL>http://localhost:${server.port}/${context}</pingURL>
 										<properties>
-											<context>petstore</context>
+											<context>${context}</context>
 										</properties>
 									</deployable>
 								</deployables>
