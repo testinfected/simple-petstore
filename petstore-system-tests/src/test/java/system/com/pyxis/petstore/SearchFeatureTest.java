@@ -7,9 +7,6 @@ import org.junit.Test;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 public class SearchFeatureTest {
 
     private static final List<Object> NO_RESULT = Collections.emptyList();

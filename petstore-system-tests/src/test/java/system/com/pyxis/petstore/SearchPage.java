@@ -13,10 +13,10 @@ public class SearchPage {
 
     public SearchPage(WebDriver webdriver) {
         this.webdriver = webdriver;
-        validateLocation();
+        assertOnSearchPage();
     }
 
-    private void validateLocation() {
+    private void assertOnSearchPage() {
         displaysTitle("PetStore");
     }
 
