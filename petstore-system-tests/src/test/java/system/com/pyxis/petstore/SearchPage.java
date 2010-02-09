@@ -17,7 +17,7 @@ public class SearchPage {
     }
 
     private void assertOnSearchPage() {
-        displaysTitle("PetStore");
+        displaysTitle("PetStore - Search");
     }
 
     public void displaysTitle(final String title) {
