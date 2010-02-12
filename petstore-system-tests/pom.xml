@@ -88,6 +88,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
+                    <includes>
+                        <include>**/*Feature.java</include>
+                    </includes>
                     <systemPropertyVariables>
                         <server.port>${server.port}</server.port>
                         <app.context>${app.context}</app.context>
