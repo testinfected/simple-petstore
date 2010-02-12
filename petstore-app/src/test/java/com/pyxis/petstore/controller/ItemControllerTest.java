@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.ItemRepository;
 
-public class SearchControllerTest {
+public class ItemControllerTest {
 
 	private Mockery mockery;
 	private ItemRepository itemRepository;
