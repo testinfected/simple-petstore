@@ -12,10 +12,6 @@ import static org.junit.Assert.assertThat;
 
 public class SearchPage extends PageObject {
 
-    public SearchPage(WebDriver webDriver) {
-		super(webDriver);
-	}
-
 	@FindBy(tagName = "title")
     private WebElement title;
 
@@ -25,6 +21,10 @@ public class SearchPage extends PageObject {
     @FindBy(id = "search")
     private WebElement searchButton;
 
+    public SearchPage(WebDriver webDriver) {
+    	super(webDriver);
+    }
+    
     public void assertOnRightPage() {
         displaysTitle("PetStore - Search");
     }

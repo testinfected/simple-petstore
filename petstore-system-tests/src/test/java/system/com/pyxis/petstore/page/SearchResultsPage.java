@@ -14,16 +14,16 @@ import system.com.pyxis.petstore.support.PageObject;
 
 public class SearchResultsPage extends PageObject {
 
-    public SearchResultsPage(WebDriver webDriver) {
-		super(webDriver);
-	}
-
 	@FindBy(tagName = "title")
     private WebElement title;
 
     @FindBy(id = "numberOfItemsFound")
     private WebElement numberOfResultsElement;
 
+    public SearchResultsPage(WebDriver webDriver) {
+    	super(webDriver);
+    }
+    
     public void displays(List<Object> expectedItems) {
 		String text = numberOfResultsElement.getText();
 		Integer numberOfItemsFound = Integer.parseInt(text);
