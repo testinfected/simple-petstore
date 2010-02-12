@@ -1,24 +1,31 @@
 package system.com.pyxis.petstore;
 
-import org.junit.After;
-import org.junit.Before;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
 import system.com.pyxis.petstore.page.SearchPage;
 import system.com.pyxis.petstore.page.SearchResultsPage;
 import system.com.pyxis.petstore.support.PetStoreDriver;
 
-import java.util.Collections;
-import java.util.List;
+import com.pyxis.petstore.domain.Item;
 
 public class SearchFeature {
 
     private static final List<Object> NO_RESULT = Collections.emptyList();
 
-    private PetStoreDriver petstore = new PetStoreDriver();
+    private static PetStoreDriver petstore = new PetStoreDriver();
 
-    @Before
-	public void setUp()
+    @BeforeClass
+	public static void setUp()
 	{
+    	Item dalmatian = new Item("Dalmatian");
+    	dalmatian.setId(1L);
+		petstore.addToInventory(dalmatian);
 	}
 
 	@Test
@@ -28,17 +35,20 @@ public class SearchFeature {
 		resultsPage.displays(NO_RESULT);
 	}
 
-	/*
 	@Test
 	public void displaysAListOfItemsWithNameMatchingQuery() throws Exception {
 		SearchPage searchPage = petstore.navigateTo(SearchPage.class);
 		SearchResultsPage resultsPage = searchPage.search("Dalmatian");
 		resultsPage.displays(listWithItem("Dalmatian"));
 	}
-	*/
-
-    @After
-    public void tearDown() {
+				
+	@AfterClass
+    public static void tearDown() {
         petstore.dispose();
     }
+
+	private List<String> listWithItem(String... itemNames) {
+		return Arrays.asList(itemNames);
+	}
+	
 }
