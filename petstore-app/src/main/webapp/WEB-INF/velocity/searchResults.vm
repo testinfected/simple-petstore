@@ -1,0 +1,8 @@
+<html>
+<head>
+	<title>PetStore - Search Resuts</title>
+</head>
+<body>
+	Found <span id="numberOfItemsFound">0</span> result(s)
+</body>
+</html>
