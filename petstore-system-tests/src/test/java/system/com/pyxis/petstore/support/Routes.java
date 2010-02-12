@@ -15,7 +15,7 @@ public final class Routes {
 
     private static Map<Class<?>, String> urlMappings = new HashMap<Class<?>, String>();
     static {
-		urlMappings.put(SearchPage.class, "/search");
+		urlMappings.put(SearchPage.class, "/item/search");
 	}
 
     private Routes() {}

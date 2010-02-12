@@ -15,51 +15,82 @@
 	<url>http://maven.apache.org</url>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.5</version>
-			<scope>test</scope>
 		</dependency>
-
 		<dependency>
-		  <groupId>org.springframework</groupId>
-		  <artifactId>spring-core</artifactId>
-		  <version>3.0.0.RELEASE</version>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock</artifactId>
 		</dependency>
-
 		<dependency>
-		  <groupId>org.springframework</groupId>
-		  <artifactId>spring-context-support</artifactId>
-		  <version>3.0.0.RELEASE</version>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit4</artifactId>
 		</dependency>
-
 		<dependency>
-		  <groupId>org.springframework</groupId>
-		  <artifactId>spring-web</artifactId>
-		  <version>3.0.0.RELEASE</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
 		</dependency>
-
 		<dependency>
-		  <groupId>org.springframework</groupId>
-		  <artifactId>spring-webmvc</artifactId>
-		  <version>3.0.0.RELEASE</version>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity</artifactId>
-			<version>1.6.3</version>
 		</dependency>
-	
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.11</version>
-			<scope>runtime</scope>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
 		</dependency>
-
 	</dependencies>
 
 	<build>

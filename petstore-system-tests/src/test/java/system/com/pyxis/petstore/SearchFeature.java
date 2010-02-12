@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import system.com.pyxis.petstore.page.SearchPage;
+import system.com.pyxis.petstore.page.SearchResultsPage;
 import system.com.pyxis.petstore.support.PetStoreDriver;
 
 import java.util.Collections;
@@ -23,9 +24,18 @@ public class SearchFeature {
 	@Test
 	public void displaysAnEmptyProductListWhenNoProductMatchesKeyword() throws Exception {
         SearchPage searchPage = petstore.navigateTo(SearchPage.class);
-        searchPage.search("PetStore");
-//        resultsPage.displays(NO_RESULT);
+		SearchResultsPage resultsPage = searchPage.search("Squirrel");
+		resultsPage.displays(NO_RESULT);
 	}
+
+	/*
+	@Test
+	public void displaysAListOfItemsWithNameMatchingQuery() throws Exception {
+		SearchPage searchPage = petstore.navigateTo(SearchPage.class);
+		SearchResultsPage resultsPage = searchPage.search("Dalmatian");
+		resultsPage.displays(listWithItem("Dalmatian"));
+	}
+	*/
 
     @After
     public void tearDown() {

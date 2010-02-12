@@ -3,10 +3,9 @@
 	<title>PetStore - Search</title>
 </head>
 <body>
-<form action="search/do" method="POST">
-  Search: 
+<form action="searchResults" method="POST">
   <input id="query" type="text" name="query" value="" />
-  <input type="submit" value="submit"/>
+  <input id="search" type="submit" value="Search"/>
 </form>
 </body>
 </html>
