@@ -1,7 +1,9 @@
 package system.com.pyxis.petstore.page;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 import system.com.pyxis.petstore.support.PageObject;
 
@@ -10,7 +12,11 @@ import static org.junit.Assert.assertThat;
 
 public class SearchPage extends PageObject {
 
-    @FindBy(tagName = "title")
+    public SearchPage(WebDriver webDriver) {
+		super(webDriver);
+	}
+
+	@FindBy(tagName = "title")
     private WebElement title;
 
     @FindBy(id = "query")
@@ -30,6 +36,6 @@ public class SearchPage extends PageObject {
     public SearchResultsPage search(String keyword) {
 		queryField.sendKeys(keyword);
 		searchButton.click();
-		return new SearchResultsPage();
+		return PageFactory.initElements(webDriver, SearchResultsPage.class);
     }
 }

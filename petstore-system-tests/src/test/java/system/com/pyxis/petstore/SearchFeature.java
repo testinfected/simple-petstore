@@ -25,7 +25,7 @@ public class SearchFeature {
 	public void displaysAnEmptyProductListWhenNoProductMatchesKeyword() throws Exception {
         SearchPage searchPage = petstore.navigateTo(SearchPage.class);
 		SearchResultsPage resultsPage = searchPage.search("Squirrel");
-		//resultsPage.displays(NO_RESULT);
+		resultsPage.displays(NO_RESULT);
 	}
 
 	/*

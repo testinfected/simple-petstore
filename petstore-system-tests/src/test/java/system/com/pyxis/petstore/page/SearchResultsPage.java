@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -13,7 +14,11 @@ import system.com.pyxis.petstore.support.PageObject;
 
 public class SearchResultsPage extends PageObject {
 
-    @FindBy(tagName = "title")
+    public SearchResultsPage(WebDriver webDriver) {
+		super(webDriver);
+	}
+
+	@FindBy(tagName = "title")
     private WebElement title;
 
     @FindBy(id = "numberOfItemsFound")
