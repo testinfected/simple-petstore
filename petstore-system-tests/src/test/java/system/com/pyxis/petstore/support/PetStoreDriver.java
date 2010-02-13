@@ -35,6 +35,6 @@ public class PetStoreDriver {
 
 	public void addToInventory(Item item) {
 		HibernateTemplate hibernateTemplate = persistenceContext.getBean(HibernateTemplate.class);
-		hibernateTemplate.save(item);
+		hibernateTemplate.saveOrUpdate(item);
 	}
 }
