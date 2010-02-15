@@ -8,6 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import com.pyxis.petstore.domain.Item;
+import system.com.pyxis.petstore.page.HomePage;
 
 public class PetStoreDriver {
 
@@ -22,11 +23,19 @@ public class PetStoreDriver {
         this.webdriver = new ChromeDriver();
     }
 
+    public HomePage start() throws Exception {
+        return navigateTo(HomePage.class);
+    }
+
     public <T extends PageObject> T navigateTo(Class<T> pageClass) throws Exception {
         webdriver.navigate().to(Routes.urlFor(pageClass));
-        T page = PageFactory.initElements(webdriver, pageClass);
+        T page = getPage(pageClass);
         page.assertOnRightPage();
         return page;
+    }
+
+    private <T extends PageObject> T getPage(Class<T> pageClass) {
+        return PageFactory.initElements(webdriver, pageClass);
     }
 
     public void dispose() {

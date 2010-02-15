@@ -1,14 +1,21 @@
 package system.com.pyxis.petstore.support;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
 
 public abstract class PageObject {
 
-	protected final WebDriver webDriver;
-	
-	public PageObject(WebDriver webDriver) {
-		this.webDriver = webDriver;
-	}
+    protected WebDriver webdriver;
 
-	public abstract void assertOnRightPage();
+    protected PageObject(WebDriver driver) {
+        this.webdriver = driver;
+    }
+
+    public abstract void assertOnRightPage();
+
+    public <T extends PageObject> T assertOn(Class<T> pageClass) {
+        T page = PageFactory.initElements(webdriver, pageClass);
+        page.assertOnRightPage();
+        return page;
+    }
 }

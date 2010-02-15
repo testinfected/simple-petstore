@@ -1,5 +1,6 @@
 package system.com.pyxis.petstore.support;
 
+import system.com.pyxis.petstore.page.HomePage;
 import system.com.pyxis.petstore.page.SearchPage;
 
 import java.net.MalformedURLException;
@@ -15,6 +16,7 @@ public final class Routes {
 
     private static Map<Class<?>, String> urlMappings = new HashMap<Class<?>, String>();
     static {
+        urlMappings.put(HomePage.class, "/");
 		urlMappings.put(SearchPage.class, "/item/search");
 	}
 
