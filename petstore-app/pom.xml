@@ -25,10 +25,6 @@
 			<artifactId>spring-test</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 		</dependency>
@@ -61,6 +57,12 @@
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					<stopKey>foo</stopKey>
 					<stopPort>9999</stopPort>
+					<systemProperties>
+						<systemProperty>
+							<name>java.util.logging.config.file</name>
+							<value>logging.properties</value>
+						</systemProperty>
+					</systemProperties>
 				</configuration>
 			</plugin>
 
