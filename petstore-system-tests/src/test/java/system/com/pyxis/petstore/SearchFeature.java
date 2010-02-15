@@ -1,12 +1,10 @@
 package system.com.pyxis.petstore;
 
 import com.pyxis.petstore.domain.Item;
-import org.junit.*;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import system.com.pyxis.petstore.page.HomePage;
 import system.com.pyxis.petstore.page.SearchPage;
 import system.com.pyxis.petstore.page.SearchResultsPage;

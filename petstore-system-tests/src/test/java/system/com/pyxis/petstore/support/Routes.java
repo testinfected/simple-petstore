@@ -15,16 +15,18 @@ public final class Routes {
     private static final String HTTP = "http";
 
     private static Map<Class<?>, String> urlMappings = new HashMap<Class<?>, String>();
+
     static {
         urlMappings.put(HomePage.class, "/");
-		urlMappings.put(SearchPage.class, "/item/search");
-	}
+        urlMappings.put(SearchPage.class, "/item/search");
+    }
 
-    private Routes() {}
+    private Routes() {
+    }
 
     public static URL urlFor(Class<?> pageClass) throws MalformedURLException {
         return new URL(HTTP, serverHost(), serverPort(), path(pageClass));
-	}
+    }
 
     private static String path(Class<?> pageClass) {
         return "/" + context() + urlMappings.get(pageClass);
@@ -35,8 +37,8 @@ public final class Routes {
     }
 
     private static int serverPort() {
-		return getPropertyAsInt("server.port", "8080");
-	}
+        return getPropertyAsInt("server.port", "8080");
+    }
 
     private static String context() {
         return getProperty("app.context", "petstore");

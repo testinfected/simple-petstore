@@ -10,7 +10,7 @@ public class PetStoreContext {
 
     static {
         applicationContext = new ClassPathXmlApplicationContext("persistenceContext.xml");
-	}
+    }
 
     public static SessionFactory sessionFactory() {
         return applicationContext.getBean(SessionFactory.class);

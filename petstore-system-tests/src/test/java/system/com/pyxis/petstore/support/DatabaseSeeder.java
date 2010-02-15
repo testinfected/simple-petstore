@@ -27,12 +27,12 @@ public class DatabaseSeeder {
         transaction.execute(transactionCallback);
     }
 
-	public void store(final Item item) {
+    public void store(final Item item) {
         perform(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
                 hibernateTemplate.saveOrUpdate(item);
             }
         });
-	}
+    }
 }
