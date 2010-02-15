@@ -1,4 +1,8 @@
 target
-\.idea
+.idea
 .project
+.settings
+.classpath
 petstore.log
+*.iml
+*.log

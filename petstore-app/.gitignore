@@ -1,6 +1,0 @@
-target
-.settings
-.project
-.classpath
-?*\.iml
-petstore.log
