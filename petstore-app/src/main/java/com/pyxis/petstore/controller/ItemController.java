@@ -26,7 +26,7 @@ public class ItemController {
 	@RequestMapping(value="/searchResults", method = RequestMethod.POST)
 	public ModelAndView doSearch(@RequestParam("query") String query)
 	{
-		List<Item> matchingItems = itemRepository.findItemsByQuery(query);
+		List<Item> matchingItems = itemRepository.findItemsByKeyword(query);
 		ModelAndView modelAndView = new ModelAndView("searchResults");
 		modelAndView.addObject("matchingItems", matchingItems);
 		return modelAndView;

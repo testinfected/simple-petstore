@@ -11,22 +11,25 @@ import org.junit.Test;
 
 import system.com.pyxis.petstore.page.HomePage;
 import system.com.pyxis.petstore.page.SearchResultsPage;
+import system.com.pyxis.petstore.support.DatabaseSeeder;
 import system.com.pyxis.petstore.support.PetStoreDriver;
 
 import com.pyxis.petstore.domain.Item;
+
+import static system.com.pyxis.petstore.support.PetStoreContext.sessionFactory;
 
 public class SearchFeature {
 
     private static final List<Object> NO_RESULT = Collections.emptyList();
 
-    private static PetStoreDriver petstore = new PetStoreDriver();
+    private static final PetStoreDriver petstore = new PetStoreDriver();
     private HomePage home;
 
     @BeforeClass
-    public static void seedDatabase() {
+    public static void seedDatabase() throws Exception {
         Item dalmatian = new Item("Dalmatian");
         dalmatian.setId(1L);
-        petstore.addToInventory(dalmatian);
+        new DatabaseSeeder(sessionFactory()).seed(dalmatian);
     }
 
     @Before
@@ -51,7 +54,7 @@ public class SearchFeature {
         petstore.dispose();
     }
 
-    private List<String> listWithItem(String... itemNames) {
+    private static List<String> listWithItem(String... itemNames) {
         return Arrays.asList(itemNames);
     }
 

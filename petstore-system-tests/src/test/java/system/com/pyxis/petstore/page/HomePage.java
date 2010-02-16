@@ -23,14 +23,15 @@ public class HomePage extends PageObject {
     }
 
     @Override
-    public void assertOnRightPage() {
-    	assertThat(queryField, is(notNullValue()));
-    	assertThat(searchButton, is(notNullValue()));
+    public void assertLocation() {
+		assertThat(queryField, is(notNullValue()));
+		assertThat(searchButton, is(notNullValue()));
     }
 
 	public SearchResultsPage searchFor(String keyword) {
         queryField.sendKeys(keyword);
         queryField.submit();
-        return assertOn(SearchResultsPage.class);
+        return nowOn(SearchResultsPage.class);
 	}
+
 }

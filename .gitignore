@@ -3,6 +3,6 @@ target
 .project
 .settings
 .classpath
-petstore.log
 *.iml
 *.log
+logs

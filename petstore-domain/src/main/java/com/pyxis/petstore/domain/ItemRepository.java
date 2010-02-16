@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface ItemRepository {
 
-	List<Item> findItemsByQuery(String query);
+	List<Item> findItemsByKeyword(String query);
 
 }
