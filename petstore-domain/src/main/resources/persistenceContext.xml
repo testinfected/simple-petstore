@@ -10,37 +10,36 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="${jdbc.driverClassName}" />
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
-	</bean>
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
 
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="packagesToScan" value="com.pyxis.petstore.domain" />
-		<property name="schemaUpdate" value="true" />
-		<property name="hibernateProperties">
-			<value>
-				hibernate.dialect=org.hibernate.dialect.HSQLDialect
-				hibernate.show_sql=true				
-	   		</value>
-		</property>
-	</bean>
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.pyxis.petstore.domain"/>
+        <property name="schemaUpdate" value="true"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+                <prop key="hibernate.format_sql">true</prop>
+            </props>
+        </property>
+    </bean>
 
-	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
-	<tx:annotation-driven />
-	
-	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
-		<constructor-arg ref="sessionFactory"/>
-	</bean>
+    <tx:annotation-driven/>
 
-	<bean id="itemRepository" class="com.pyxis.petstore.domain.hibernate.HibernateItemRepository">
-		<constructor-arg name="hibernateTemplate" ref="hibernateTemplate" />
-	</bean>
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+        <constructor-arg ref="sessionFactory"/>
+    </bean>
 
+    <bean id="itemRepository" class="com.pyxis.petstore.domain.hibernate.HibernateItemRepository">
+    <constructor-arg ref="sessionFactory"/>
+    </bean>
 </beans>

@@ -39,7 +39,7 @@ public class ItemControllerTest {
 	{		  
 		final List<Item> matchingItems = Collections.emptyList();
 		mockery.checking(new Expectations(){{
-			oneOf(itemRepository).findItemsByQuery("Dog");
+			oneOf(itemRepository).findItemsByKeyword("Dog");
 			will(returnValue(matchingItems));
 		}});
 		ItemController seachController = new ItemController(itemRepository);
