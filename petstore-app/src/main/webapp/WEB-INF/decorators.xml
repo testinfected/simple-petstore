@@ -1,0 +1,5 @@
+<decorators defaultdir="/WEB-INF/velocity/decorators">
+	<decorator name="main" page="main.vm">
+          <pattern>/*</pattern>
+    </decorator>
+</decorators>
