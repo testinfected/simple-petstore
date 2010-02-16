@@ -35,11 +35,7 @@
 
     <tx:annotation-driven/>
 
-    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
-        <constructor-arg ref="sessionFactory"/>
-    </bean>
-
     <bean id="itemRepository" class="com.pyxis.petstore.domain.hibernate.HibernateItemRepository">
-    <constructor-arg ref="sessionFactory"/>
+        <constructor-arg ref="sessionFactory"/>
     </bean>
 </beans>

@@ -2,7 +2,6 @@ package system.com.pyxis.petstore.support;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.PageFactory;
 import system.com.pyxis.petstore.page.HomePage;
 
 public class PetStoreDriver {
@@ -19,13 +18,9 @@ public class PetStoreDriver {
 
     public <T extends PageObject> T navigateTo(Class<T> pageClass) throws Exception {
         webdriver.navigate().to(Routes.urlFor(pageClass));
-        T page = getPage(pageClass);
-        page.assertOnRightPage();
+        T page = PageObject.newPage(webdriver, pageClass);
+        page.assertLocation();
         return page;
-    }
-
-    private <T extends PageObject> T getPage(Class<T> pageClass) {
-        return PageFactory.initElements(webdriver, pageClass);
     }
 
     public void dispose() {

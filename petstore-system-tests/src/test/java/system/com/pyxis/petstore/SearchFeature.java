@@ -25,10 +25,10 @@ public class SearchFeature {
     private HomePage home;
 
     @BeforeClass
-    public static void seedDatabase() {
+    public static void seedDatabase() throws Exception {
         Item dalmatian = new Item("Dalmatian");
         dalmatian.setId(1L);
-        new DatabaseSeeder(sessionFactory()).store(dalmatian);
+        new DatabaseSeeder(sessionFactory()).seed(dalmatian);
     }
 
     @Before

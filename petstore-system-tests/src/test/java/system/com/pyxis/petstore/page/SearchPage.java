@@ -23,14 +23,14 @@ public class SearchPage extends PageObject {
         super(webDriver);
     }
 
-    public void assertOnRightPage() {
+    public void assertLocation() {
         displaysTitle("PetStore - Search");
     }
 
     public SearchResultsPage searchFor(String keyword) {
         queryField.sendKeys(keyword);
         queryField.submit();
-        return assertOn(SearchResultsPage.class);
+        return nowOn(SearchResultsPage.class);
     }
 
     private void displaysTitle(final String expected) {

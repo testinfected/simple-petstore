@@ -10,6 +10,6 @@ public class HomePage extends PageObject {
     }
 
     @Override
-    public void assertOnRightPage() {
+    public void assertLocation() {
     }
 }
