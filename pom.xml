@@ -10,9 +10,10 @@
 	<url>http://maven.apache.org</url>
 
 	<modules>
+        <module>petstore-domain</module>
+        <module>petstore-persistence</module>
 		<module>petstore-app</module>
 		<module>petstore-system-tests</module>
-		<module>petstore-domain</module>
 	</modules>
 
 	<dependencies>
