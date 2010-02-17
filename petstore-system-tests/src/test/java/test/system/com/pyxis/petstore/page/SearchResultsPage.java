@@ -22,7 +22,7 @@ public class SearchResultsPage extends PageObject {
         super(webDriver);
     }
 
-    public void displays(List<Object> expectedItems) {
+    public void displays(List<?> expectedItems) {
         String text = numberOfResultsElement.getText();
         Integer numberOfItemsFound = Integer.parseInt(text);
         assertThat(numberOfItemsFound, is(expectedItems.size()));
