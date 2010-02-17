@@ -23,7 +23,7 @@ public class PetStoreDriver {
         return page;
     }
 
-    public void dispose() {
-        webdriver.quit();
+    public void close() {
+        webdriver.close();
     }
 }

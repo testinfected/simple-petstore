@@ -1,0 +1,4 @@
+<form action="$base/item/searchResults" method="POST">
+  <input id="query" type="text" name="query" value="" />
+  <input id="search" type="submit" value="Search"/>
+</form>			

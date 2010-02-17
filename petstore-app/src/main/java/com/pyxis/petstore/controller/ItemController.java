@@ -23,12 +23,6 @@ public class ItemController {
 		this.itemRepository = itemRepository;
 	}
 
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public ModelAndView showSearchPage()
-	{
-		return new ModelAndView("search");
-	}
-
 	@RequestMapping(value="/searchResults", method = RequestMethod.POST)
 	public ModelAndView doSearch(@RequestParam("query") String query)
 	{

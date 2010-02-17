@@ -1,19 +1,17 @@
 package system.com.pyxis.petstore;
 
-import com.pyxis.petstore.domain.Item;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.junit.*;
+
 import system.com.pyxis.petstore.page.HomePage;
-import system.com.pyxis.petstore.page.SearchPage;
 import system.com.pyxis.petstore.page.SearchResultsPage;
 import system.com.pyxis.petstore.support.DatabaseSeeder;
 import system.com.pyxis.petstore.support.PetStoreDriver;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import com.pyxis.petstore.domain.Item;
 
 import static system.com.pyxis.petstore.support.PetStoreContext.sessionFactory;
 
@@ -21,7 +19,7 @@ public class SearchFeature {
 
     private static final List<Object> NO_RESULT = Collections.emptyList();
 
-    private static final PetStoreDriver petstore = new PetStoreDriver();
+    private final PetStoreDriver petstore = new PetStoreDriver();
     private HomePage home;
 
     @BeforeClass
@@ -38,21 +36,19 @@ public class SearchFeature {
 
     @Test
     public void displaysAnEmptyProductListWhenNoProductMatchesKeyword() throws Exception {
-        SearchPage searchPage = petstore.navigateTo(SearchPage.class);
-        SearchResultsPage resultsPage = searchPage.searchFor("Squirrel");
+        SearchResultsPage resultsPage = home.searchFor("Squirrel");
         resultsPage.displays(NO_RESULT);
     }
 
     @Test
     public void displaysAListOfItemsWithNameMatchingQuery() throws Exception {
-        SearchPage searchPage = petstore.navigateTo(SearchPage.class);
-        SearchResultsPage resultsPage = searchPage.searchFor("Labrador");
+        SearchResultsPage resultsPage = home.searchFor("Labrador");
         resultsPage.displays(listWithItem("Labrador"));
     }
 
-    @AfterClass
-    public static void tearDown() {
-        petstore.dispose();
+    @After
+    public void tearDown() {
+        petstore.close();
     }
 
     private static List<String> listWithItem(String... itemNames) {

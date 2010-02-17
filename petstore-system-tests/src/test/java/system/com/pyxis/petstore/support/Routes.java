@@ -1,14 +1,13 @@
 package system.com.pyxis.petstore.support;
 
-import system.com.pyxis.petstore.page.HomePage;
-import system.com.pyxis.petstore.page.SearchPage;
+import static java.lang.System.getProperty;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.System.getProperty;
+import system.com.pyxis.petstore.page.HomePage;
 
 public final class Routes {
 
@@ -18,8 +17,7 @@ public final class Routes {
 
     static {
         urlMappings.put(HomePage.class, "/");
-        urlMappings.put(SearchPage.class, "/item/search");
-    }
+	}
 
     private Routes() {
     }
