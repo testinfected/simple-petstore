@@ -10,7 +10,10 @@ public class PetStoreContext {
     private static final ApplicationContext applicationContext;
 
     static {
-        applicationContext = new ClassPathXmlApplicationContext("persistenceContext.xml");
+        applicationContext = new ClassPathXmlApplicationContext(new String[] {
+                "test-dataSource.xml",
+                "persistenceContext.xml" 
+        });
     }
 
     public static SessionFactory sessionFactory() {

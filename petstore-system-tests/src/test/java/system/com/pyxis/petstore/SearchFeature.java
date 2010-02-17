@@ -26,9 +26,9 @@ public class SearchFeature {
 
     @BeforeClass
     public static void seedDatabase() throws Exception {
-        Item dalmatian = new Item("Dalmatian");
-        dalmatian.setId(1L);
-        new DatabaseSeeder(sessionFactory()).seed(dalmatian);
+        Item labrador = new Item("Labrador");
+        labrador.setId(1L);
+        new DatabaseSeeder(sessionFactory()).seed(labrador);
     }
 
     @Before
@@ -46,8 +46,8 @@ public class SearchFeature {
     @Test
     public void displaysAListOfItemsWithNameMatchingQuery() throws Exception {
         SearchPage searchPage = petstore.navigateTo(SearchPage.class);
-        SearchResultsPage resultsPage = searchPage.searchFor("Dalmatian");
-        resultsPage.displays(listWithItem("Dalmatian"));
+        SearchResultsPage resultsPage = searchPage.searchFor("Labrador");
+        resultsPage.displays(listWithItem("Labrador"));
     }
 
     @AfterClass

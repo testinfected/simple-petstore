@@ -92,6 +92,18 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>testResources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -127,9 +139,6 @@
                             <url>http://dist.codehaus.org/jetty/jetty-6.1.21/jetty-6.1.21.zip</url>
                             <installDir>${basedir}/appserver</installDir>
                         </zipUrlInstaller>
-                        <systemProperties>
-                            <java.util.logging.config.file>logging.properties</java.util.logging.config.file>
-                        </systemProperties>
                     </container>
                     <configuration>
                         <properties>
@@ -171,32 +180,13 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+
     </build>
-
-    <profiles>
-        <profile>
-            <id>development</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <server.port>8080</server.port>
-                <app.context>petstore</app.context>
-            </properties>
-        </profile>
-        <profile>
-            <id>integration</id>
-            <properties>
-                <server.port>8280</server.port>
-                <app.context>petstore</app.context>
-            </properties>
-            <activation>
-                <property>
-                    <name>env.type</name>
-                    <value>integration</value>
-                </property>
-            </activation>
-        </profile>
-    </profiles>
-
 </project>

@@ -135,6 +135,12 @@
 				<version>1.8.0.10</version>
 				<scope>runtime</scope>
 			</dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.11</version>
+                <scope>runtime</scope>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -150,5 +156,60 @@
 			</plugin>
 		</plugins>
 	</build>
+
+
+    <profiles>
+        <profile>
+            <id>development</id>
+            <properties>
+                <server.port>8080</server.port>
+                <app.context>petstore</app.context>
+                <jdbc.driverClassName>org.hsqldb.jdbcDriver</jdbc.driverClassName>
+                <jdbc.url>jdbc:hsqldb:file:${basedir}/db/development</jdbc.url>
+                <jdbc.username>sa</jdbc.username>
+                <jdbc.password></jdbc.password>
+                <hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
+                <log.file>development</log.file>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                </dependency>
+            </dependencies>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env.type</name>
+                    <value>dev</value>
+                </property>
+            </activation>
+        </profile>
+        <profile>
+            <id>system</id>
+            <properties>
+                <server.port>8280</server.port>
+                <app.context>petstore</app.context>
+                <jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
+                <jdbc.url>jdbc:mysql://localhost:3306/petstore</jdbc.url>
+                <jdbc.username>petstore</jdbc.username>
+                <jdbc.password>petstore</jdbc.password>
+                <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
+                <log.file>system</log.file>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </dependency>
+            </dependencies>
+            <activation>
+                <property>
+                    <name>env.type</name>
+                    <value>system</value>
+                </property>
+            </activation>
+        </profile>
+    </profiles>
 	
 </project>

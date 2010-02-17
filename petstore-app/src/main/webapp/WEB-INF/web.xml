@@ -9,7 +9,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:persistenceContext.xml</param-value>
+		<param-value>classpath:dataSource.xml, classpath:persistenceContext.xml</param-value>
 	</context-param>
 
 	<listener>
