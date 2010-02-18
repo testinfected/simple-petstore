@@ -13,6 +13,7 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
+        <property name="annotatedPackages" value="com.pyxis.petstore.domain"/>
         <property name="packagesToScan" value="com.pyxis.petstore.domain"/>
         <property name="schemaUpdate" value="true"/>
         <property name="hibernateProperties">
