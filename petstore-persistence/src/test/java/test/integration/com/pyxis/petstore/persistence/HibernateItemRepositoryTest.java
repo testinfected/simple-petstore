@@ -44,13 +44,13 @@ public class HibernateItemRepositoryTest {
     public void returnsAListOfItemsWithNameMatchingQuery() throws Exception {
         final Item dalmatian = new Item("Dalmatian");
         dalmatian.setId(1L);
-        store(dalmatian);
+        persist(dalmatian);
 
         List<Item> matchingItems = itemRepository.findItemsByKeyword("Dalmatian");
         assertThat(matchingItems, hasItem(dalmatian));
-    }
+    }            
 
-    private void store(final Item dalmatian) throws Exception {
+    private void persist(final Item dalmatian) throws Exception {
         transactor.perform(new UnitOfWork() {
             public void work() throws Exception {
                 session.save(dalmatian);

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class HibernateItemRepository implements ItemRepository {
 
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     public HibernateItemRepository(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
