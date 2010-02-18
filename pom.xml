@@ -168,6 +168,12 @@
 				</configuration>
 			</plugin>
 			
+			<!-- 
+			We explicitely specify the resources plugin's version because of an issue with more
+			recent versions that break filtering of spring resources containing a variable that is
+			evaluated to a Windows path.  In these versions, backslashes separators are escaped, which
+			is not understood by Spring/hsqldb.  See http://jira.codehaus.org/browse/MRESOURCES-42 
+			 -->
 		    <plugin>
 		        <groupId>org.apache.maven.plugins</groupId>
 		        <artifactId>maven-resources-plugin</artifactId>
