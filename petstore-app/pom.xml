@@ -7,12 +7,9 @@
         <artifactId>petstore</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.pyxis</groupId>
     <artifactId>petstore-app</artifactId>
     <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
     <name>petstore-app</name>
-    <url>http://maven.apache.org</url>
 
 	<dependencies>
 		<dependency>

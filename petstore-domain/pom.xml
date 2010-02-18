@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <project>
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>petstore</artifactId>
         <groupId>com.pyxis</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.pyxis</groupId>
     <artifactId>petstore-domain</artifactId>
     <name>petstore-domain</name>
-    <version>1.0-SNAPSHOT</version>
-    <url>http://maven.apache.org</url>
 
     <dependencies>
         <dependency>

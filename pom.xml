@@ -7,7 +7,6 @@
 	<packaging>pom</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<name>petstore</name>
-	<url>http://maven.apache.org</url>
 
 	<modules>
         <module>petstore-domain</module>
@@ -224,5 +223,5 @@
             </activation>
         </profile>
     </profiles>
-	
+
 </project>
