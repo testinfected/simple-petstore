@@ -9,8 +9,8 @@
     </parent>
     <groupId>com.pyxis</groupId>
     <artifactId>petstore-system-tests</artifactId>
-    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>petstore-system-tests</name>
     <url>http://maven.apache.org</url>
 
