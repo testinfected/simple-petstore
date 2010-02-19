@@ -1,10 +1,9 @@
 package com.pyxis.petstore.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+//todo use field access
 public class Item {
 
 	private Long id;
@@ -16,8 +15,7 @@ public class Item {
 		this.name = name;
 	}
 
-    // todo autogenerate id
-	@Id
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getId() {
 		return id;
 	}

@@ -1,5 +1,4 @@
-create table item (
-  id bigint not null,
-  name varchar(255),
-  primary key (id)
+CREATE TABLE item (
+  id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  name VARCHAR (255)
 ) ENGINE=InnoDB;
