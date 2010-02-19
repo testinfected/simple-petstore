@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!--<property name="connection.url">${jdbc.url}</property>-->
+        <!--<property name="connection.driver_class">${jdbc.driverClassName}</property>-->
+        <!--<property name="connection.username">${jdbc.username}</property>-->
+        <!--<property name="connection.password">${jdbc.password}</property>-->
+
+        <!-- Disable the second-level cache -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        <property name="format_sql">true</property>
+
+        <mapping package="com.pyxis.petstore.domain"/>
+        <mapping class="com.pyxis.petstore.domain.Item"/>
+    </session-factory>
+</hibernate-configuration>

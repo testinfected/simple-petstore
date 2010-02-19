@@ -13,27 +13,28 @@
 
     <dependencies>
         <dependency>
-            <groupId>${pom.groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>petstore-app</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
             <type>war</type>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>${pom.groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>petstore-domain</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${pom.groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>petstore-persistence</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${pom.groupId}</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>petstore-persistence</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
             <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.codehaus.cargo</groupId>
@@ -66,6 +67,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -160,7 +166,7 @@
                             <deployer>
                                 <deployables>
                                     <deployable>
-                                        <groupId>com.pyxis</groupId>
+                                        <groupId>${pom.groupId}</groupId>
                                         <artifactId>petstore-app</artifactId>
                                         <type>war</type>
                                         <pingURL>http://localhost:${server.port}/${app.context}</pingURL>
@@ -189,6 +195,5 @@
                 <filtering>true</filtering>
             </testResource>
         </testResources>
-
     </build>
 </project>

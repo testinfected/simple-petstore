@@ -15,7 +15,4 @@
             <artifactId>hibernate-annotations</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-    </build>
 </project>

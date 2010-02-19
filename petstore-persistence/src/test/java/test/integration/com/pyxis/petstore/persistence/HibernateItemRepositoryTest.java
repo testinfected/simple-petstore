@@ -42,6 +42,7 @@ public class HibernateItemRepositoryTest {
 
     @Test
     public void returnsAListOfItemsWithNameMatchingQuery() throws Exception {
+        //todo use test data builders
         final Item dalmatian = new Item("Dalmatian");
         dalmatian.setId(1L);
         persist(dalmatian);

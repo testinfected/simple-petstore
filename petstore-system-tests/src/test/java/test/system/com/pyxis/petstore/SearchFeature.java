@@ -23,6 +23,7 @@ public class SearchFeature {
 
     @BeforeClass
     public static void seedDatabase() throws Exception {
+        //todo use test data builders from the persistence module 
         Item labrador = new Item("Labrador");
         labrador.setId(1L);
         new DatabaseSeeder(sessionFactory()).seed(labrador);

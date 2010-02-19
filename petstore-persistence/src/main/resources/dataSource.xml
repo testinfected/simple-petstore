@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:database.properties"
+                                  system-properties-mode="OVERRIDE"/>
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
@@ -11,15 +15,16 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="annotatedPackages" value="com.pyxis.petstore.domain"/>
-        <property name="packagesToScan" value="com.pyxis.petstore.domain"/>
-        <property name="schemaUpdate" value="true"/>
+        <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <property name="namingStrategy">
+            <bean class="org.hibernate.cfg.ImprovedNamingStrategy"/>
+        </property>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
-                <prop key="hibernate.format_sql">true</prop>
             </props>
         </property>
     </bean>

@@ -9,11 +9,26 @@
     <artifactId>petstore-persistence</artifactId>
     <name>petstore-persistence</name>
 
+    <repositories>
+        <repository>
+            <id>c5-public-repository</id>
+            <name>Carbon 5 repository</name>
+            <url>http://mvn.carbonfive.com/public</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>c5-public-repository</id>
+            <name>Carbon 5 repository</name>
+            <url>http://mvn.carbonfive.com/public</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <dependencies>
         <dependency>
-            <groupId>com.pyxis</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>petstore-domain</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -40,8 +55,20 @@
             <artifactId>commons-dbcp</artifactId>
         </dependency>
         <dependency>
-            <groupId>hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.carbonfive.db-support</groupId>
+            <artifactId>db-migration</artifactId>
+            <version>0.9.9-m2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- carbon 5 requires commons-collections -->
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -52,6 +79,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.5</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <jdbc.url>jdbc:mysql://localhost:3306/petstore_test</jdbc.url>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -69,7 +101,16 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <includes>
+                    <include>database.properties</include>
+                </includes>
                 <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>database.properties</exclude>
+                </excludes>
             </resource>
         </resources>
         <testResources>
@@ -79,4 +120,129 @@
             </testResource>
         </testResources>
     </build>
+
+    <properties>
+        <jdbc.username>petstore</jdbc.username>
+        <jdbc.password>petstore</jdbc.password>
+        <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>development</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env.type</name>
+                    <value>dev</value>
+                </property>
+            </activation>
+            <properties>
+                <jdbc.url>jdbc:mysql://localhost:3306/petstore_dev</jdbc.url>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.carbonfive.db-support</groupId>
+                        <artifactId>db-migration-maven-plugin</artifactId>
+                        <version>0.9.9-m2</version>
+                        <configuration>
+                            <url>${jdbc.url}</url>
+                            <username>${jdbc.username}</username>
+                            <password>${jdbc.password}</password>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>5.1.11</version>
+                            </dependency>
+                        </dependencies>
+
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>test</id>
+            <activation>
+                <property>
+                    <name>env.type</name>
+                    <value>test</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.carbonfive.db-support</groupId>
+                        <artifactId>db-migration-maven-plugin</artifactId>
+                        <version>0.9.9-m2</version>
+                        <!-- use custom naming strategy to fit hibernate defaults -->
+                        <configuration>
+                            <url>jdbc:mysql://localhost:3306/petstore_test</url>
+                            <username>${jdbc.username}</username>
+                            <password>${jdbc.password}</password>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>5.1.11</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>system</id>
+            <activation>
+                <property>
+                    <name>env.type</name>
+                    <value>system</value>
+                </property>
+            </activation>
+            <properties>
+                <jdbc.url>jdbc:mysql://localhost:3306/petstore</jdbc.url>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.carbonfive.db-support</groupId>
+                        <artifactId>db-migration-maven-plugin</artifactId>
+                        <version>0.9.9-m2</version>
+                        <configuration>
+                            <url>${jdbc.url}</url>
+                            <username>${jdbc.username}</username>
+                            <password>${jdbc.password}</password>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>5.1.11</version>
+                            </dependency>
+                        </dependencies>
+
+                        <executions>
+                            <execution>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>reset</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

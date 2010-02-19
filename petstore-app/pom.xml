@@ -15,12 +15,12 @@
 		<dependency>
 			<groupId>com.pyxis</groupId>
 			<artifactId>petstore-domain</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 		</dependency>	
         <dependency>
             <groupId>com.pyxis</groupId>
             <artifactId>petstore-persistence</artifactId>
-            <version>${pom.version}</version>
+            <version>${project.version}</version>
         </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -53,7 +53,11 @@
 		<dependency>
 			<groupId>opensymphony</groupId>
 			<artifactId>sitemesh</artifactId>
-		</dependency>		
+		</dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
 	</dependencies>
 
     <build>
@@ -63,7 +67,7 @@
                 <artifactId>maven-jetty-plugin</artifactId>
                 <version>6.1.22</version>
                 <configuration>
-                    <contextPath>petstore</contextPath>
+                    <contextPath>${app.context}</contextPath>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <stopKey>foo</stopKey>
                     <stopPort>9999</stopPort>
@@ -77,5 +81,4 @@
             </resource>
         </resources>
     </build>
-
 </project>
