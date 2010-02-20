@@ -1,7 +1,7 @@
 package test.system.com.pyxis.petstore.support;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import test.system.com.pyxis.petstore.page.HomePage;
 
 public class PetStoreDriver {
@@ -9,7 +9,7 @@ public class PetStoreDriver {
     private final WebDriver webdriver;
 
     public PetStoreDriver() {
-        this.webdriver = new ChromeDriver();
+        this.webdriver = new FirefoxDriver();
     }
 
     public HomePage start() throws Exception {
