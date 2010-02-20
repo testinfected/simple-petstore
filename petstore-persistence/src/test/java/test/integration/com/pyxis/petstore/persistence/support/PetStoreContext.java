@@ -7,21 +7,34 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class PetStoreContext {
 
-    private static final ApplicationContext applicationContext;
+    private static ApplicationContext springContext;
 
     static {
-        applicationContext = new ClassPathXmlApplicationContext(new String[] {
+        beFriendlyWithDevelopmentEnvironments();
+        loadSpringContext();
+    }
+
+    private static void loadSpringContext() {
+        springContext = new ClassPathXmlApplicationContext(new String[] {
                 "dataSource.xml",
                 "migration.xml",
                 "persistenceContext.xml"
         });
     }
 
+    private static void beFriendlyWithDevelopmentEnvironments() {
+        overrideTestDatabaseUrl();
+    }
+
+    private static void overrideTestDatabaseUrl() {
+        System.setProperty("jdbc.url", "jdbc:mysql://localhost:3306/petstore_test");
+    }
+
     public static SessionFactory sessionFactory() {
-        return applicationContext.getBean(SessionFactory.class);
+        return springContext.getBean(SessionFactory.class);
     }
 
     public static ItemRepository itemRepository() {
-        return applicationContext.getBean(ItemRepository.class);
+        return springContext.getBean(ItemRepository.class);
     }
 }

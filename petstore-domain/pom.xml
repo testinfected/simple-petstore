@@ -17,5 +17,9 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-annotations</artifactId>
         </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
     </dependencies>
 </project>

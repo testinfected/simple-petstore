@@ -2,18 +2,17 @@ package test.integration.com.pyxis.petstore.persistence;
 
 import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.ItemRepository;
-import test.integration.com.pyxis.petstore.persistence.support.*;
-import test.integration.com.pyxis.petstore.persistence.support.DatabaseCleaner;
-import test.integration.com.pyxis.petstore.persistence.support.Transactor;
+import org.hamcrest.Matcher;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import test.integration.com.pyxis.petstore.persistence.support.*;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -35,20 +34,34 @@ public class HibernateItemRepositoryTest {
     }
 
     @Test
-    public void returnsAnEmptyListIfNoItemHasNameMatchingQuery() throws Exception {
+    public void wontFindAnythingIfNoItemNameMatches() throws Exception {
+        final Item dalmatian = new Item("Dalmatian");
+        persist(dalmatian);
+
         List<Item> matchingItems = itemRepository.findItemsByKeyword("Squirrel");
         assertTrue(matchingItems.isEmpty());
     }
 
     @Test
-    public void returnsAListOfItemsWithNameMatchingQuery() throws Exception {
+    public void canFindItemsWithAGivenName() throws Exception {
         //todo use test data builders
         final Item dalmatian = new Item("Dalmatian");
         persist(dalmatian);
+        final Item labrador = new Item("Labrador");
+        persist(labrador);
 
-        List<Item> matchingItems = itemRepository.findItemsByKeyword("Dalmatian");
-        assertThat(matchingItems, hasItem(dalmatian));
-    }            
+        List<Item> matches = itemRepository.findItemsByKeyword("Dalmatian");
+        assertThat(matches.size(), is(equalTo(1)));
+        assertThat(matches, hasItem(itemNamed("Dalmatian")));
+    }
+
+//    private <T> Matcher<? extends T> withSamePersistentFieldsAs(T entity) {
+//        return SamePersistentFieldsAs.samePersistentFieldsAs(entity);
+//    }
+
+    private Matcher<Item> itemNamed(String name) {
+        return HasFieldWithValue.hasField("name", equalTo(name));
+    }
 
     private void persist(final Item dalmatian) throws Exception {
         transactor.perform(new UnitOfWork() {
