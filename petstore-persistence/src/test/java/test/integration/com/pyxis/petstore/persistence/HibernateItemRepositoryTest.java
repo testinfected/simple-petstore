@@ -15,6 +15,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static test.integration.com.pyxis.petstore.persistence.support.ItemBuilder.anItem;
 
 public class HibernateItemRepositoryTest {
 
@@ -35,8 +36,7 @@ public class HibernateItemRepositoryTest {
 
     @Test
     public void wontFindAnythingIfNoItemNameMatches() throws Exception {
-        final Item dalmatian = new Item("Dalmatian");
-        persist(dalmatian);
+        havingPersisted(anItem().withName("Dalmatian"));
 
         List<Item> matchingItems = itemRepository.findItemsByKeyword("Squirrel");
         assertTrue(matchingItems.isEmpty());
@@ -44,11 +44,8 @@ public class HibernateItemRepositoryTest {
 
     @Test
     public void canFindItemsWithAGivenName() throws Exception {
-        //todo use test data builders
-        final Item dalmatian = new Item("Dalmatian");
-        persist(dalmatian);
-        final Item labrador = new Item("Labrador");
-        persist(labrador);
+        havingPersisted(anItem().withName("Dalmatian"));
+        havingPersisted(anItem().withName("Labrador"));
 
         List<Item> matches = itemRepository.findItemsByKeyword("Dalmatian");
         assertThat(matches.size(), is(equalTo(1)));
@@ -63,10 +60,10 @@ public class HibernateItemRepositoryTest {
         return HasFieldWithValue.hasField("name", equalTo(name));
     }
 
-    private void persist(final Item dalmatian) throws Exception {
+    private void havingPersisted(final ItemBuilder itemBuilder) throws Exception {
         transactor.perform(new UnitOfWork() {
             public void work() throws Exception {
-                session.save(dalmatian);
+                session.save(itemBuilder.build());
             }
         });
     }

@@ -1,17 +1,19 @@
 package test.system.com.pyxis.petstore;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import com.pyxis.petstore.domain.Item;
-import org.junit.*;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import test.system.com.pyxis.petstore.page.HomePage;
 import test.system.com.pyxis.petstore.page.SearchResultsPage;
 import test.system.com.pyxis.petstore.support.DatabaseSeeder;
 import test.system.com.pyxis.petstore.support.PetStoreDriver;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static test.integration.com.pyxis.petstore.persistence.support.ItemBuilder.anItem;
 import static test.system.com.pyxis.petstore.support.PetStoreContext.sessionFactory;
 
 public class SearchFeature {
@@ -23,9 +25,8 @@ public class SearchFeature {
 
     @BeforeClass
     public static void seedDatabase() throws Exception {
-        //todo use test data builders from the persistence module 
-        Item labrador = new Item("Labrador");
-        new DatabaseSeeder(sessionFactory()).seed(labrador);
+        DatabaseSeeder seeder = new DatabaseSeeder(sessionFactory());
+        seeder.seed(anItem().withName("Labrador"));
     }
 
     @Before
@@ -34,13 +35,13 @@ public class SearchFeature {
     }
 
     @Test
-    public void displaysAnEmptyProductListWhenNoProductMatchesKeyword() throws Exception {
+    public void displaysAnEmptyProductListWhenNoProductNameMatches() throws Exception {
         SearchResultsPage resultsPage = home.searchFor("Squirrel");
         resultsPage.displays(NO_RESULT);
     }
 
     @Test
-    public void displaysAListOfItemsWithNameMatchingQuery() throws Exception {
+    public void displaysAListOfItemsWhoseNamesMatch() throws Exception {
         SearchResultsPage resultsPage = home.searchFor("Labrador");
         resultsPage.displays(listWithItem("Labrador"));
     }

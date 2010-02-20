@@ -1,8 +1,8 @@
 package test.system.com.pyxis.petstore.support;
 
-import com.pyxis.petstore.domain.Item;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import test.integration.com.pyxis.petstore.persistence.support.ItemBuilder;
 import test.integration.com.pyxis.petstore.persistence.support.Transactor;
 import test.integration.com.pyxis.petstore.persistence.support.UnitOfWork;
 
@@ -13,11 +13,11 @@ public class DatabaseSeeder {
         this.sessionFactory = sessionFactory;
     }
 
-    public void seed(final Item item) throws Exception {
+    public void seed(final ItemBuilder itemBuilder) throws Exception {
         final Session session = sessionFactory.openSession();
         new Transactor(session).perform(new UnitOfWork() {
             public void work() throws Exception {
-                session.saveOrUpdate(item);
+                session.saveOrUpdate(itemBuilder.build());
             }
         });
         session.close();
