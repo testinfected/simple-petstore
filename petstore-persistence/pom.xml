@@ -59,13 +59,10 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.carbonfive.db-support</groupId>
             <artifactId>db-migration</artifactId>
-            <version>0.9.9-m2</version>
-            <scope>test</scope>
         </dependency>
         <!-- carbon 5 requires commons-collections -->
         <dependency>
@@ -160,7 +157,6 @@
                                 <version>5.1.11</version>
                             </dependency>
                         </dependencies>
-
                         <executions>
                             <execution>
                                 <phase>validate</phase>

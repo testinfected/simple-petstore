@@ -20,5 +20,20 @@
 		<property name="prefix" value="" />
 		<property name="suffix" value=".vm" />
 	</bean>
+	
+	<bean id="openSessionInView" class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor">
+		<property name="sessionFactory" ref="sessionFactory"/>
+		<property name="singleSession" value="false"/>
+	</bean>
+	
+	<bean id="openSessionInViewHandlerInterceptor" class="org.springframework.web.servlet.handler.WebRequestHandlerInterceptorAdapter">
+		<constructor-arg ref="openSessionInView"/>
+	</bean>
+	
+	<bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="interceptors">
+			<ref bean="openSessionInViewHandlerInterceptor"/>
+		</property>
+	</bean>
 
 </beans>
