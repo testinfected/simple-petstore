@@ -1,14 +1,15 @@
 package test.integration.com.pyxis.petstore.persistence;
 
 import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.ItemRepository;
+import com.pyxis.petstore.domain.ItemCatalog;
 import org.hamcrest.Matcher;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.integration.com.pyxis.petstore.persistence.support.*;
+import test.integration.com.pyxis.petstore.persistence.support.Database;
+import test.integration.com.pyxis.petstore.persistence.support.EntityBuilder;
+import test.integration.com.pyxis.petstore.persistence.support.HasFieldWithValue;
+import test.integration.com.pyxis.petstore.persistence.support.PetStoreContext;
 
 import java.util.List;
 
@@ -17,37 +18,37 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static test.integration.com.pyxis.petstore.persistence.support.ItemBuilder.anItem;
 
-public class HibernateItemRepositoryTest {
+public class PersistentItemCatalogTest {
 
-    SessionFactory sessionFactory = PetStoreContext.sessionFactory();
-    ItemRepository itemRepository = PetStoreContext.itemRepository();
-    Session session = sessionFactory.openSession();
-    Transactor transactor = new Transactor(session);
+    ItemCatalog itemCatalog = PetStoreContext.itemRepository();
+    Database database = new Database(PetStoreContext.sessionFactory()).connect();
 
     @Before
     public void cleanDatabase() {
-        new DatabaseCleaner(session).clean();
+        database.clean();
     }
 
     @After
-    public void closeSession() {
-        session.close();
+    public void closeDatabase() {
+        database.disconnect();
     }
 
     @Test
     public void wontFindAnythingIfNoItemNameMatches() throws Exception {
         havingPersisted(anItem().withName("Dalmatian"));
 
-        List<Item> matchingItems = itemRepository.findItemsByKeyword("Squirrel");
+        List<Item> matchingItems = itemCatalog.findItemsByKeyword("Squirrel");
         assertTrue(matchingItems.isEmpty());
     }
 
     @Test
     public void canFindItemsWithAGivenName() throws Exception {
-        havingPersisted(anItem().withName("Dalmatian"));
-        havingPersisted(anItem().withName("Labrador"));
+        havingPersisted(
+                anItem().withName("Dalmatian"),
+                and(anItem().withName("Labrador"))
+        );
 
-        List<Item> matches = itemRepository.findItemsByKeyword("Dalmatian");
+        List<Item> matches = itemCatalog.findItemsByKeyword("Dalmatian");
         assertThat(matches.size(), is(equalTo(1)));
         assertThat(matches, hasItem(itemNamed("Dalmatian")));
     }
@@ -56,16 +57,15 @@ public class HibernateItemRepositoryTest {
 //        return SamePersistentFieldsAs.samePersistentFieldsAs(entity);
 //    }
 
+    private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
+        database.persist(builders);
+    }
+
     private Matcher<Item> itemNamed(String name) {
         return HasFieldWithValue.hasField("name", equalTo(name));
     }
 
-    private void havingPersisted(final ItemBuilder itemBuilder) throws Exception {
-        transactor.perform(new UnitOfWork() {
-            public void work() throws Exception {
-                session.save(itemBuilder.build());
-            }
-        });
+    private EntityBuilder<?> and(EntityBuilder<?> builder) {
+        return builder;
     }
-
 }

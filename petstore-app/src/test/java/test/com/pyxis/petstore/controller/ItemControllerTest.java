@@ -2,7 +2,7 @@ package test.com.pyxis.petstore.controller;
 
 import com.pyxis.petstore.controller.ItemController;
 import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.ItemRepository;
+import com.pyxis.petstore.domain.ItemCatalog;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -21,12 +21,12 @@ import static org.junit.Assert.assertThat;
 public class ItemControllerTest {
 
     private Mockery mockery;
-    private ItemRepository itemRepository;
+    private ItemCatalog itemCatalog;
 
     @Before
     public void setUp() {
         mockery = new JUnit4Mockery();
-        itemRepository = mockery.mock(ItemRepository.class);
+        itemCatalog = mockery.mock(ItemCatalog.class);
     }
 
     @After
@@ -38,10 +38,10 @@ public class ItemControllerTest {
     public void shouldLookUpItemsInARepositoryWhenQueryIsSubmitted() {
         final List<Item> matchingItems = Collections.emptyList();
         mockery.checking(new Expectations() {{
-            oneOf(itemRepository).findItemsByKeyword("Dog");
+            oneOf(itemCatalog).findItemsByKeyword("Dog");
             will(returnValue(matchingItems));
         }});
-        ItemController searchController = new ItemController(itemRepository);
+        ItemController searchController = new ItemController(itemCatalog);
         ModelAndView view = searchController.doSearch("Dog");
         ModelAndViewAssert.assertModelAttributeValue(view, "matchingItems", matchingItems);
         assertThat(view.getViewName(), is("searchResults"));

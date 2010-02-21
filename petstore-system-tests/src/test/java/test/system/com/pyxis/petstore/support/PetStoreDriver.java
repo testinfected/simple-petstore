@@ -18,9 +18,7 @@ public class PetStoreDriver {
 
     public <T extends PageObject> T navigateTo(Class<T> pageClass) throws Exception {
         webdriver.navigate().to(Routes.urlFor(pageClass));
-        T page = PageObject.newPage(webdriver, pageClass);
-        page.assertLocation();
-        return page;
+        return PageObject.onPage(webdriver, pageClass);
     }
 
     public void close() {

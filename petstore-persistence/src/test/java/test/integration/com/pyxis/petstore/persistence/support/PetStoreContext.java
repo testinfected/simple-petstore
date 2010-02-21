@@ -1,11 +1,14 @@
 package test.integration.com.pyxis.petstore.persistence.support;
 
-import com.pyxis.petstore.domain.ItemRepository;
+import com.pyxis.petstore.domain.ItemCatalog;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class PetStoreContext {
+
+    private static final String JDBC_URL = "jdbc.url";
+    private static final String MYSQL_TEST_DATABASE = "jdbc:mysql://localhost:3306/petstore_test";
 
     private static ApplicationContext springContext;
 
@@ -23,18 +26,22 @@ public class PetStoreContext {
     }
 
     private static void beFriendlyWithDevelopmentEnvironments() {
-        overrideTestDatabaseUrl();
+        overrideDatabaseUrl();
     }
 
-    private static void overrideTestDatabaseUrl() {
-        System.setProperty("jdbc.url", "jdbc:mysql://localhost:3306/petstore_test");
+    private static void overrideDatabaseUrl() {
+        System.setProperty(JDBC_URL, testDatabaseUrl());
+    }
+
+    private static String testDatabaseUrl() {
+        return System.getProperty(JDBC_URL, MYSQL_TEST_DATABASE);
     }
 
     public static SessionFactory sessionFactory() {
         return springContext.getBean(SessionFactory.class);
     }
 
-    public static ItemRepository itemRepository() {
-        return springContext.getBean(ItemRepository.class);
+    public static ItemCatalog itemRepository() {
+        return springContext.getBean(ItemCatalog.class);
     }
 }

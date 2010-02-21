@@ -14,12 +14,12 @@ public abstract class PageObject {
     public abstract void assertLocation();
 
     public <T extends PageObject> T nowOn(Class<T> pageClass) {
-        T page = newPage(webdriver, pageClass);
-        page.assertLocation();
-        return page;
+        return onPage(webdriver, pageClass);
     }
 
-    public static <T extends PageObject> T newPage(WebDriver webdriver, Class<T> pageClass) {
-        return PageFactory.initElements(webdriver, pageClass);
+    public static <T extends PageObject> T onPage(WebDriver webdriver, Class<T> pageClass) {
+        T page = PageFactory.initElements(webdriver, pageClass);
+        page.assertLocation();
+        return page;
     }
 }

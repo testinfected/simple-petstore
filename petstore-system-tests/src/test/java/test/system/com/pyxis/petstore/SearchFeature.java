@@ -2,11 +2,11 @@ package test.system.com.pyxis.petstore;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import test.integration.com.pyxis.petstore.persistence.support.Database;
+import test.integration.com.pyxis.petstore.persistence.support.EntityBuilder;
 import test.system.com.pyxis.petstore.page.HomePage;
 import test.system.com.pyxis.petstore.page.SearchResultsPage;
-import test.system.com.pyxis.petstore.support.DatabaseSeeder;
 import test.system.com.pyxis.petstore.support.PetStoreDriver;
 
 import java.util.Arrays;
@@ -20,14 +20,9 @@ public class SearchFeature {
 
     private static final List<Object> NO_RESULT = Collections.emptyList();
 
-    private final PetStoreDriver petstore = new PetStoreDriver();
+    private PetStoreDriver petstore = new PetStoreDriver();
+    private Database database = new Database(sessionFactory()).connect();
     private HomePage home;
-
-    @BeforeClass
-    public static void seedDatabase() throws Exception {
-        DatabaseSeeder seeder = new DatabaseSeeder(sessionFactory());
-        seeder.seed(anItem().withName("Labrador"));
-    }
 
     @Before
     public void setUp() throws Exception {
@@ -42,6 +37,7 @@ public class SearchFeature {
 
     @Test
     public void displaysAListOfItemsWhoseNamesMatch() throws Exception {
+        given(anItem().withName("Labrador"));
         SearchResultsPage resultsPage = home.searchFor("Labrador");
         resultsPage.displays(listWithItem("Labrador"));
     }
@@ -49,6 +45,10 @@ public class SearchFeature {
     @After
     public void tearDown() {
         petstore.close();
+    }
+
+    private void given(EntityBuilder... builders) throws Exception {
+        database.persist(builders);
     }
 
     private static List<String> listWithItem(String... itemNames) {

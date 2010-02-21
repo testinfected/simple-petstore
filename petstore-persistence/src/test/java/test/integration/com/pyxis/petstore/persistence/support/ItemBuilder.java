@@ -2,7 +2,7 @@ package test.integration.com.pyxis.petstore.persistence.support;
 
 import com.pyxis.petstore.domain.Item;
 
-public class ItemBuilder {
+public class ItemBuilder implements EntityBuilder<Item> {
 
     private String name;
 
