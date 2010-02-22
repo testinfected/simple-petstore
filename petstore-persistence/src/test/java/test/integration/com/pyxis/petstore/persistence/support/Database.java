@@ -8,13 +8,14 @@ public class Database {
     private final SessionFactory sessionFactory;
     private Session session;
 
-    public Database(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public static Database connect(SessionFactory sessionFactory) {
+        Database database = new Database(sessionFactory);
+        database.openConnection();
+        return database;
     }
 
-    public Database connect() {
-        openConnection();
-        return this;
+    public Database(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public void openConnection() {

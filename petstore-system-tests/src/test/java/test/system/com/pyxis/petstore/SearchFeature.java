@@ -21,7 +21,7 @@ public class SearchFeature {
     private static final List<Object> NO_RESULT = Collections.emptyList();
 
     private PetStoreDriver petstore = new PetStoreDriver();
-    private Database database = new Database(sessionFactory()).connect();
+    private Database database = Database.connect(sessionFactory());
     private HomePage home;
 
     @Before

@@ -8,9 +8,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class PetStoreContext {
 
     private static final String JDBC_URL = "jdbc.url";
-    private static final String MYSQL_TEST_DATABASE = "jdbc:mysql://localhost:3306/petstore_test";
+    private static final String DEFAULT_MYSQL_TEST_DATABASE = "jdbc:mysql://localhost:3306/petstore_test";
 
-    private static ApplicationContext springContext;
+    private static ApplicationContext applicationContext;
 
     static {
         beFriendlyWithDevelopmentEnvironments();
@@ -18,7 +18,7 @@ public class PetStoreContext {
     }
 
     private static void loadSpringContext() {
-        springContext = new ClassPathXmlApplicationContext(new String[] {
+        applicationContext = new ClassPathXmlApplicationContext(new String[] {
                 "dataSource.xml",
                 "migration.xml",
                 "persistenceContext.xml"
@@ -34,14 +34,14 @@ public class PetStoreContext {
     }
 
     private static String testDatabaseUrl() {
-        return System.getProperty(JDBC_URL, MYSQL_TEST_DATABASE);
+        return System.getProperty(JDBC_URL, DEFAULT_MYSQL_TEST_DATABASE);
     }
 
     public static SessionFactory sessionFactory() {
-        return springContext.getBean(SessionFactory.class);
+        return applicationContext.getBean(SessionFactory.class);
     }
 
     public static ItemCatalog itemRepository() {
-        return springContext.getBean(ItemCatalog.class);
+        return applicationContext.getBean(ItemCatalog.class);
     }
 }
