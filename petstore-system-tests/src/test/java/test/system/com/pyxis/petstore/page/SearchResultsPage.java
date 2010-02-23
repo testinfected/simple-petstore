@@ -7,23 +7,23 @@ import test.system.com.pyxis.petstore.support.PageObject;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.*;
 
 public class SearchResultsPage extends PageObject {
 
     @FindBy(tagName = "title")
     private WebElement title;
 
-    @FindBy(id = "numberOfItemsFound")
-    private WebElement numberOfResultsElement;
+    @FindBy(id = "match-count")
+    private WebElement numberOfMatches;
 
     public SearchResultsPage(WebDriver webDriver) {
         super(webDriver);
     }
 
     public void displays(List<?> expectedItems) {
-        String text = numberOfResultsElement.getText();
+        String text = numberOfMatches.getText();
         Integer numberOfItemsFound = Integer.parseInt(text);
         assertThat(numberOfItemsFound, is(expectedItems.size()));
     }

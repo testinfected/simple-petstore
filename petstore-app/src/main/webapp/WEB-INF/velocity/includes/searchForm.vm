@@ -1,4 +1,16 @@
-<form action="$base/item/searchResults" method="POST">
-  <input id="query" type="text" name="query" value="" />
-  <input id="search" type="submit" value="Search"/>
+<form action="$base/items" method="get">
+    <fieldset class="inputs">
+        <ol>
+            <li>
+                <input id="keyword" name="keyword" type="text"/>
+            </li>
+        </ol>
+    </fieldset>
+    <fieldset class="buttons">
+        <ol>
+            <li class="commit">
+                <button id="search" class="button" type="submit">Search</button>
+            </li>
+        </ol>
+    </fieldset>
 </form>			

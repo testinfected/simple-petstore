@@ -1,22 +1,24 @@
-<html>
-	<head>		
-		<title>$title</title>
-		$head				
-	</head>
-	<body>
-		<div id="header">
-			<img src="$base/images/logo.gif" width="50">
-			<div id="searchBox">
-			#parse ("/WEB-INF/velocity/includes/searchForm.vm")
-			</div>
-		</div>
-		
-		<div id="body">
-        	$body
-        </body>
-        
-        <div id="footer">        
-        	The footer
-        </div>
-	</body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en-US" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta content="text/html;charset=UTF-8" http-equiv="Content-Type"/>
+    <link href="${base}/stylesheets/main.css?$date.systemTime" media="screen" rel="stylesheet" type="text/css" />
+    <title>$title</title>
+    $head
+</head>
+<body>
+<div id="header">
+    <img class="logo" src="$base/images/logo.gif">
+
+    <div id="search-box">
+        #parse("/WEB-INF/velocity/includes/searchForm.vm")
+    </div>
+</div>
+<div id="content">
+    $body
+</div>
+<div id="footer">
+    note: footer will go here
+</div>
+</body>
 </html>

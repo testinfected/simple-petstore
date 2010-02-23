@@ -1,0 +1,62 @@
+body {
+    font: 62.5% "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+ol, ul, p {
+    font-size: 1.2em;
+    line-height: 1.5;
+}
+
+form, fieldset, legend {
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+legend {
+    font-size: 2em;
+    padding-bottom: .5em;
+}
+
+form ol, form ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+form li {
+    margin: 0 0 .75em;
+    padding: 0;
+}
+
+input {
+    background: #ddd;
+    font: 1em Arial, Helvetica, sans-serif;
+    padding: 1px 3px;
+    width: 250px;
+}
+
+input:focus {
+    background: #fff;
+}
+
+legend {
+    font-size: 2em;
+    line-height: 1.8;
+    padding-bottom: .5em;
+}
+
+button {
+    background: #ffd100;
+    border: 2px outset #333;
+    color: #333;
+    cursor: pointer;
+    font-size: .9em;
+    font-weight: bold;
+    letter-spacing: .3em;
+    padding: .2em .5em;
+}
+
+img.logo {
+    width: 50px;
+}
