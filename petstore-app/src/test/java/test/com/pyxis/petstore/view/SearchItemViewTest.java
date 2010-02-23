@@ -1,74 +1,36 @@
 package test.com.pyxis.petstore.view;
 
-import static com.pyxis.petstore.controller.ItemsController.MATCHING_ITEMS_KEY;
-import static com.pyxis.petstore.controller.ItemsController.SEARCH_RESULTS_VIEW_NAME;
-import static com.threelevers.css.DocumentBuilder.doc;
-import static com.threelevers.css.Selector.from;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static test.support.com.pyxis.petstore.matchers.HasSelector.hasSelector;
-import static test.support.com.pyxis.petstore.matchers.WithContentText.withText;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import org.apache.velocity.app.VelocityEngine;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.ui.velocity.VelocityEngineUtils;
-import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
+import test.support.com.pyxis.petstore.builders.EntityBuilder;
 
-import com.pyxis.petstore.domain.Item;
-import org.w3c.dom.Element;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static test.support.com.pyxis.petstore.matchers.DomMatchers.*;
-import static test.support.com.pyxis.petstore.matchers.WithContentText.withText;
+import static com.pyxis.petstore.controller.ItemsController.MATCHING_ITEMS_KEY;
+import static com.pyxis.petstore.controller.ItemsController.SEARCH_RESULTS_VIEW;
+import static com.threelevers.css.DocumentBuilder.dom;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static test.com.pyxis.petstore.view.VelocityRendering.render;
+import static test.support.com.pyxis.petstore.builders.Entities.entities;
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasUniqueSelector;
+import static test.support.com.pyxis.petstore.matchers.DomMatchers.withText;
 
 public class SearchItemViewTest {
 
-	private static final String VELOCITY_EXTENSION = ".vm";
+    @Test
+    public void shouldDisplayNamesOfItemsFound() {
+        String searchResultsPage = render(SEARCH_RESULTS_VIEW).using(aModelWith(
+                anItem().withName("Dalmatian"),
+                anItem().withName("Labrador")));
 
-	VelocityEngine velocityEngine;
-
-	@Before
-	public void setUp() throws Exception
-	{
-		VelocityConfigurer velocityConfigurer = new VelocityConfigurer();
-		Properties viewsProperties = new Properties();
-		viewsProperties.load(SearchItemViewTest.class.getResourceAsStream("/views.properties"));
-		String templatesBaseUrl = viewsProperties.getProperty("templates.base.url");
-		velocityConfigurer.setResourceLoaderPath(templatesBaseUrl);
-		velocityConfigurer.afterPropertiesSet();
-		this.velocityEngine = velocityConfigurer.getVelocityEngine();
-	}
-
-	@Test
-	public void shouldDisplayNamesOfItemsFound()
-	{
-		String searchResultsPage = renderSearchResultsWith(aModelWith(
-				new Item("Dalmatian"),
-				new Item("Labrador")));
         assertThat(dom(searchResultsPage), hasUniqueSelector("#match-count", withText("2")));
-	}
-
-    private Element dom(String d) {
-        return doc(d).getDocumentElement();
     }
 
-    private Map<String, Object> aModelWith(Item... items) {
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put(MATCHING_ITEMS_KEY, Arrays.asList(items));
-		return model;
-	}
-
-	private String renderSearchResultsWith(Map<String, Object> model) {
-		return VelocityEngineUtils.mergeTemplateIntoString(this.velocityEngine, searchResultsTemplate(), model);
-	}
-
-	private String searchResultsTemplate() {
-		return SEARCH_RESULTS_VIEW_NAME + VELOCITY_EXTENSION;
-	}
-
+    private static <T> Map<String, List<? super T>> aModelWith(EntityBuilder<T>... entityBuilders) {
+        Map<String, List<? super T>> model = new HashMap<String, List<? super T>>();
+        model.put(MATCHING_ITEMS_KEY, entities(entityBuilders));
+        return model;
+    }
 }
