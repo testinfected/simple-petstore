@@ -9,7 +9,11 @@ import org.apache.velocity.app.VelocityEngine;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
+import test.support.com.pyxis.petstore.ExceptionImposter;
+
 public class VelocityRendering {
+
+	private static final String DEFAULT_ENCODING = "UTF-8";
 
 	private static final String TEMPLATES_BASE_URL_KEY = "templates.base.url";
 
@@ -21,7 +25,7 @@ public class VelocityRendering {
 
 	private final String template;
 
-	private String encoding = "UTF-8";
+	private String encoding = DEFAULT_ENCODING;
 
 	private VelocityRendering(String template) {
 		this.template = template;
@@ -43,8 +47,7 @@ public class VelocityRendering {
 			velocityConfigurer.afterPropertiesSet();
 			velocityEngine = velocityConfigurer.getVelocityEngine();
 		} catch (Exception e) {
-			// TODO use ExceptionImposter when available
-			throw new RuntimeException(e);
+			throw ExceptionImposter.imposterize(e);
 		}
 	}
 
