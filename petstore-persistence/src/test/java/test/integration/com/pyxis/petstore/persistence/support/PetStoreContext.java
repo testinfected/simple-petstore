@@ -1,26 +1,61 @@
 package test.integration.com.pyxis.petstore.persistence.support;
 
-import com.pyxis.petstore.domain.ItemCatalog;
+import java.io.IOException;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.carbonfive.db.migration.DataSourceMigrationManager;
+import com.carbonfive.db.migration.ResourceMigrationResolver;
+import com.pyxis.petstore.domain.ItemCatalog;
+
 public class PetStoreContext {
 
-    private static final String JDBC_URL = "jdbc.url";
+	private static final String JDBC_URL = "jdbc.url";
     private static final String MYSQL_TEST_DATABASE = "jdbc:mysql://localhost:3306/petstore_test";
+    private static final String MIGRATION_PROPERTIES_FILE = "/migration.properties";
 
     private static ApplicationContext springContext;
 
     static {
         beFriendlyWithDevelopmentEnvironments();
         loadSpringContext();
+        migrateDatabase();
     }
 
-    private static void loadSpringContext() {
+	private static void migrateDatabase() {
+		ResourceMigrationResolver migrationResolver = new ResourceMigrationResolver(migrationsPath());
+		DataSourceMigrationManager migrationManager = new DataSourceMigrationManager(dataSource());
+		migrationManager.setMigrationResolver(migrationResolver);
+		migrationManager.migrate();
+	}
+
+	private static String migrationsPath() {
+		try {
+			Properties migrationProperties = migrationProperties();
+			return migrationProperties.getProperty("migrations.path");
+		} catch (IOException e) {
+			throw ExceptionImposter.imposterize(e);
+		}
+	}
+
+	private static Properties migrationProperties() throws IOException {
+		Properties migrationProperties = new Properties();
+		migrationProperties.load(PetStoreContext.class.getResourceAsStream(MIGRATION_PROPERTIES_FILE));
+		return migrationProperties;
+	}
+
+    private static DataSource dataSource() {
+		return springContext.getBean(DataSource.class);
+	}
+
+	private static void loadSpringContext() {
         springContext = new ClassPathXmlApplicationContext(new String[] {
                 "dataSource.xml",
-                "migration.xml",
                 "persistenceContext.xml"
         });
     }
@@ -43,5 +78,5 @@ public class PetStoreContext {
 
     public static ItemCatalog itemRepository() {
         return springContext.getBean(ItemCatalog.class);
-    }
+	}
 }
