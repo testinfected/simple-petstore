@@ -11,6 +11,7 @@ import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.matchers.HasFieldWithValue;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.PetStoreContext;
+import test.support.com.pyxis.petstore.matchers.IsIterableWithSize;
 
 import java.util.Collection;
 import java.util.List;
@@ -44,16 +45,16 @@ public class PersistentItemCatalogTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void canFindItemsWithAGivenName() throws Exception {
         havingPersisted(
                 anItem().withName("Dalmatian"),
+                and(anItem().withName("Dalmatian")),
                 and(anItem().withName("Labrador"))
         );
 
         Collection<Item> matches = itemCatalog.findItemsByKeyword("Dalmatian");
-        assertThat(matches, hasSize(equalTo(1)));
-        assertThat(matches, containsItem(itemNamed("Dalmatian")));
+        assertThat(matches, hasSize(equalTo(2)));
+        assertThat(matches, containsItems(itemNamed("Dalmatian"), itemNamed("Dalmatian")));
     }
 
     private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
@@ -64,8 +65,12 @@ public class PersistentItemCatalogTest {
         return builder;
     }
 
-    private Matcher<Iterable<? super Item>> containsItem(final Matcher<Item> elementMatcher) {
-        return Matchers.hasItem(elementMatcher);
+    private Matcher<Iterable<? super Item>> hasSize(final Matcher<? super Integer> sizeMatcher) {
+        return IsIterableWithSize.withSize(sizeMatcher);
+    }
+
+    private Matcher<Iterable<Item>> containsItems(final Matcher<Item>... itemMatchers) {
+        return Matchers.containsInAnyOrder(itemMatchers);
     }
 
     private Matcher<Item> itemNamed(String name) {

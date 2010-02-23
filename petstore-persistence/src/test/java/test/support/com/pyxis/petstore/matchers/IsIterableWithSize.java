@@ -24,12 +24,12 @@ public class IsIterableWithSize<E> extends FeatureMatcher<Iterable<? super E>, I
     }
 
     @Factory
-    public static <E> Matcher<Iterable<? super E>> iterableWithSize(Matcher<? super Integer> sizeMatcher) {
+    public static <E> Matcher<Iterable<? super E>> withSize(Matcher<? super Integer> sizeMatcher) {
         return new IsIterableWithSize<E>(sizeMatcher);
     }
 
     @Factory
-    public static <E> Matcher<Iterable<? super E>> iterableWithSize(int size) {
+    public static <E> Matcher<Iterable<? super E>> withSize(int size) {
         return new IsIterableWithSize<E>(IsEqual.equalTo(size));
     }
 }
