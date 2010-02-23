@@ -14,7 +14,10 @@ import java.util.List;
 @Controller @RequestMapping("/items")
 public class ItemsController {
 
-    private final ItemCatalog itemCatalog;
+	public static final String SEARCH_RESULTS_VIEW_NAME = "searchResults";
+    public static final String MATCHING_ITEMS_KEY = "matchingItems";
+    
+	private final ItemCatalog itemCatalog;
 
     @Autowired
     public ItemsController(ItemCatalog itemCatalog) {
@@ -24,8 +27,8 @@ public class ItemsController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView doSearch(@RequestParam("keyword") String keyword) {
         List<Item> matchingItems = itemCatalog.findItemsByKeyword(keyword);
-        ModelAndView modelAndView = new ModelAndView("searchResults");
-        modelAndView.addObject("matchingItems", matchingItems);
+        ModelAndView modelAndView = new ModelAndView(SEARCH_RESULTS_VIEW_NAME);
+        modelAndView.addObject(MATCHING_ITEMS_KEY, matchingItems);
         return modelAndView;
     }
 

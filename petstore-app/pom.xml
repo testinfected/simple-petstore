@@ -22,6 +22,10 @@
             <artifactId>petstore-persistence</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+        	<groupId>com.3levers.cssselectors</groupId>
+            <artifactId>cssselectors</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -76,5 +80,11 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
     </build>
 </project>

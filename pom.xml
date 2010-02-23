@@ -108,6 +108,12 @@
                 <version>3.0.0.RELEASE</version>
                 <scope>test</scope>
             </dependency>
+	        <dependency>
+	        	<groupId>com.3levers.cssselectors</groupId>
+	            <artifactId>cssselectors</artifactId>
+	            <version>1.0</version>
+	            <scope>test</scope>
+	        </dependency>            
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
@@ -211,16 +217,9 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
-            <!-- 
-			We explicitly specify the resources plugin's version because of an issue with more
-			recent versions that break filtering of spring resources containing a variable that is
-			evaluated to a Windows path.  In these versions, backslashes separators are escaped, which
-			is not understood by Spring/hsqldb.  See http://jira.codehaus.org/browse/MRESOURCES-42 
-			 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.2</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
@@ -261,4 +260,21 @@
             </activation>
         </profile>
     </profiles>
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>${pyxis.distributionManagement.repository.id}</id>
+			<url>${pyxis.distributionManagement.repository.url}</url>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>${pyxis.snapshot.distributionManagement.repository.id}</id>
+			<url>${pyxis.snapshot.distributionManagement.repository.url}</url>
+		</snapshotRepository>
+		<downloadUrl>${pyxis.distributionManagement.downloadUrl}</downloadUrl>
+	</distributionManagement>
+	<scm>
+		<connection>scm:git:git://github.com/mathibodeau/cssselectors.git</connection>
+		<url>scm:git:git://github.com/mathibodeau/cssselectors.git</url>
+	</scm>
 </project>
