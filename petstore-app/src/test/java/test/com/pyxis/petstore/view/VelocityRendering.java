@@ -1,20 +1,19 @@
 package test.com.pyxis.petstore.view;
 
-import static com.pyxis.petstore.controller.ItemsController.MATCHING_ITEMS_KEY;
+import static org.apache.commons.lang.StringUtils.isEmpty;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.apache.commons.lang.StringUtils.isEmpty;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
-import com.pyxis.petstore.domain.Item;
-
 public class VelocityRendering {
+
+	private static final String TEMPLATES_BASE_URL_KEY = "templates.base.url";
+
+	private static final String VIEWS_PROPERTIES_FILENAME = "/views.properties";
 
 	private static final String VELOCITY_EXTENSION = ".vm";
 
@@ -38,8 +37,8 @@ public class VelocityRendering {
 		try {
 			VelocityConfigurer velocityConfigurer = new VelocityConfigurer();
 			Properties viewsProperties = new Properties();
-			viewsProperties.load(SearchItemViewTest.class.getResourceAsStream("/views.properties"));
-			String templatesBaseUrl = viewsProperties.getProperty("templates.base.url");
+			viewsProperties.load(SearchItemViewTest.class.getResourceAsStream(VIEWS_PROPERTIES_FILENAME));
+			String templatesBaseUrl = viewsProperties.getProperty(TEMPLATES_BASE_URL_KEY);
 			velocityConfigurer.setResourceLoaderPath(templatesBaseUrl);
 			velocityConfigurer.afterPropertiesSet();
 			velocityEngine = velocityConfigurer.getVelocityEngine();
