@@ -16,11 +16,27 @@
         <module>petstore-system-tests</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>pyxis</id>
+            <name>Pyxis Nexus Maven Repository</name>
+            <url>https://www.pyxis-tech.ca/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
+
     <dependencies>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>1.2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Declare junit after hamcrest because junit includes org.hamcrest.Matcher
+           version 1.1 -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.5</version>
+            <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -28,12 +44,30 @@
             <artifactId>jmock</artifactId>
             <version>2.5.1</version>
             <scope>test</scope>
+            <exclusions>
+                <!-- exclude older versions of hamcrest -->
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-library</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
             <version>2.5.1</version>
             <scope>test</scope>
+            <exclusions>
+                <!-- exclude junit dep which depends on hamcrest 1.1 -->
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit-dep</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -62,12 +96,12 @@
 
     <dependencyManagement>
         <dependencies>
-	        <dependency>
-	            <groupId>com.carbonfive.db-support</groupId>
-	            <artifactId>db-migration</artifactId>
-	            <version>0.9.9-m2</version>
-	            <scope>test</scope>
-	        </dependency>
+            <dependency>
+                <groupId>com.carbonfive.db-support</groupId>
+                <artifactId>db-migration</artifactId>
+                <version>0.9.9-m2</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
@@ -173,18 +207,25 @@
         </dependencies>
     </dependencyManagement>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <properties>
         <app.context>petstore</app.context>

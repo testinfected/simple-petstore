@@ -1,6 +1,6 @@
 package test.com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.controller.ItemController;
+import com.pyxis.petstore.controller.ItemsController;
 import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.ItemCatalog;
 import org.jmock.Expectations;
@@ -15,8 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.*;
 
 public class ItemControllerTest {
 
@@ -41,7 +41,7 @@ public class ItemControllerTest {
             oneOf(itemCatalog).findItemsByKeyword("Dog");
             will(returnValue(matchingItems));
         }});
-        ItemController searchController = new ItemController(itemCatalog);
+        ItemsController searchController = new ItemsController(itemCatalog);
         ModelAndView view = searchController.doSearch("Dog");
         ModelAndViewAssert.assertModelAttributeValue(view, "matchingItems", matchingItems);
         assertThat(view.getViewName(), is("searchResults"));

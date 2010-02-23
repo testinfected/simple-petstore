@@ -3,25 +3,25 @@ package test.integration.com.pyxis.petstore.persistence;
 import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.ItemCatalog;
 import org.hamcrest.Matcher;
+import org.hamcrest.collection.IsIterableWithSize;
+import org.hamcrest.core.IsCollectionContaining;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.integration.com.pyxis.petstore.persistence.support.Database;
-import test.integration.com.pyxis.petstore.persistence.support.EntityBuilder;
-import test.integration.com.pyxis.petstore.persistence.support.HasFieldWithValue;
-import test.integration.com.pyxis.petstore.persistence.support.PetStoreContext;
+import test.integration.com.pyxis.petstore.persistence.support.*;
 
+import java.util.Collection;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertTrue;
 import static test.integration.com.pyxis.petstore.persistence.support.ItemBuilder.anItem;
 
 public class PersistentItemCatalogTest {
 
     ItemCatalog itemCatalog = PetStoreContext.itemRepository();
-    Database database = new Database(PetStoreContext.sessionFactory()).connect();
+    Database database = Database.connect(PetStoreContext.sessionFactory());
 
     @Before
     public void cleanDatabase() {
@@ -48,17 +48,21 @@ public class PersistentItemCatalogTest {
                 and(anItem().withName("Labrador"))
         );
 
-        List<Item> matches = itemCatalog.findItemsByKeyword("Dalmatian");
-        assertThat(matches.size(), is(equalTo(1)));
-        assertThat(matches, hasItem(itemNamed("Dalmatian")));
+        Collection<Item> matches = itemCatalog.findItemsByKeyword("Dalmatian");
+        assertThat(matches, isOfSize(1));
+        assertThat(matches, contains(itemNamed("Dalmatian")));
     }
-
-//    private <T> Matcher<? extends T> withSamePersistentFieldsAs(T entity) {
-//        return SamePersistentFieldsAs.samePersistentFieldsAs(entity);
-//    }
 
     private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
         database.persist(builders);
+    }
+
+    private Matcher<Iterable<Item>> isOfSize(final int size) {
+        return IsIterableWithSize.iterableWithSize(equalTo(size));
+    }
+
+    public Matcher<Iterable<? super Item>> contains(Matcher<Item> elementMatcher) {
+      return IsCollectionContaining.hasItem(elementMatcher);
     }
 
     private Matcher<Item> itemNamed(String name) {

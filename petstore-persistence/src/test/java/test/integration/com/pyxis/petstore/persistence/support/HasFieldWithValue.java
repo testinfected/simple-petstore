@@ -3,30 +3,32 @@ package test.integration.com.pyxis.petstore.persistence.support;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 
-import java.beans.IntrospectionException;
 import java.lang.reflect.Field;
 
-public class HasFieldWithValue<T> extends TypeSafeMatcher<T> {
+public class HasFieldWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
 
     private final String fieldName;
-    private final Matcher value;
+    private final Matcher valueMatcher;
 
-    public HasFieldWithValue(String fieldName, Matcher value) {
+    public HasFieldWithValue(String fieldName, Matcher valueMatcher) {
         this.fieldName = fieldName;
-        this.value = value;
+        this.valueMatcher = valueMatcher;
     }
 
-    public boolean matchesSafely(T argument) {
-        try {
-            Field field = getField(argument);
-            return field != null && value.matches(fieldValueOf(argument, field));
-        } catch (NoSuchFieldException e) {
-            return false;
-        } catch (IntrospectionException e) {
-            return false;
-        }                                       
+    @Override
+    protected boolean matchesSafely(T argument, Description mismatchDescription) {
+        Field field = getField(argument, mismatchDescription);
+        if (field == null) return false;
+
+        Object fieldValue = fieldValueOf(argument, field);
+        boolean valueMatches = valueMatcher.matches(fieldValue);
+        if (!valueMatches) {
+            mismatchDescription.appendText("field \"" + fieldName + "\" ");
+            valueMatcher.describeMismatch(fieldValue, mismatchDescription);
+        }
+        return valueMatches;
     }
 
     public static Object fieldValueOf(Object argument, Field field) {
@@ -41,16 +43,21 @@ public class HasFieldWithValue<T> extends TypeSafeMatcher<T> {
     private static void byPassSecurity(Field field) {
         field.setAccessible(true);
     }
-            
-    private Field getField(Object argument) throws IntrospectionException, NoSuchFieldException {
-        return argument.getClass().getDeclaredField(fieldName);
+
+    private Field getField(Object argument, Description mismatchDescription) {
+        try {
+            return argument.getClass().getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            mismatchDescription.appendText("without field \"" + fieldName + "\"");
+            return null;
+        }
     }
 
     public void describeTo(Description description) {
-        description.appendText("an argument with ");
+        description.appendText("has field \"");
         description.appendText(fieldName);
-        description.appendText(": ");
-        description.appendDescriptionOf(value);
+        description.appendText("\" ");
+        description.appendDescriptionOf(valueMatcher);
     }
 
     @Factory

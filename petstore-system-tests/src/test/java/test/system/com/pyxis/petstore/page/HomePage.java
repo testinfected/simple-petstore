@@ -12,7 +12,7 @@ import test.system.com.pyxis.petstore.support.PageObject;
 
 public class HomePage extends PageObject {
 
-    @FindBy(id = "query")
+    @FindBy(id = "keyword")
     private WebElement queryField;
 
     @FindBy(id = "search")

@@ -1,7 +1,7 @@
 package test.com.pyxis.petstore.view;
 
-import static com.pyxis.petstore.controller.ItemController.MATCHING_ITEMS_KEY;
-import static com.pyxis.petstore.controller.ItemController.SEARCH_RESULTS_VIEW_NAME;
+import static com.pyxis.petstore.controller.ItemsController.MATCHING_ITEMS_KEY;
+import static com.pyxis.petstore.controller.ItemsController.SEARCH_RESULTS_VIEW_NAME;
 import static com.threelevers.css.DocumentBuilder.doc;
 import static com.threelevers.css.Selector.from;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -45,7 +45,7 @@ public class SearchItemViewTest {
 		String searchResultsPage = renderSearchResultsWith(aModelWith(
 				new Item("Dalmatian"),
 				new Item("Labrador")));
-        assertThat(from(doc(searchResultsPage)).selectUnique("#numberOfItemsFound").getTextContent(), is(equalTo("2")));
+        assertThat(from(doc(searchResultsPage)).selectUnique("#match-count").getTextContent(), is(equalTo("2")));
 	}
 
 	private Map<String, Object> aModelWith(Item... items) {

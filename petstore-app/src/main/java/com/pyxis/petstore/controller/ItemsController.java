@@ -11,8 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@Controller @RequestMapping("/item")
-public class ItemController {
+@Controller @RequestMapping("/items")
+public class ItemsController {
 
 	public static final String SEARCH_RESULTS_VIEW_NAME = "searchResults";
     public static final String MATCHING_ITEMS_KEY = "matchingItems";
@@ -20,13 +20,13 @@ public class ItemController {
 	private final ItemCatalog itemCatalog;
 
     @Autowired
-    public ItemController(ItemCatalog itemCatalog) {
+    public ItemsController(ItemCatalog itemCatalog) {
         this.itemCatalog = itemCatalog;
     }
 
-    @RequestMapping(value = "/searchResults", method = RequestMethod.POST)
-    public ModelAndView doSearch(@RequestParam("query") String query) {
-        List<Item> matchingItems = itemCatalog.findItemsByKeyword(query);
+    @RequestMapping(method = RequestMethod.GET)
+    public ModelAndView doSearch(@RequestParam("keyword") String keyword) {
+        List<Item> matchingItems = itemCatalog.findItemsByKeyword(keyword);
         ModelAndView modelAndView = new ModelAndView(SEARCH_RESULTS_VIEW_NAME);
         modelAndView.addObject(MATCHING_ITEMS_KEY, matchingItems);
         return modelAndView;
