@@ -2,6 +2,7 @@ package test.com.pyxis.petstore.view;
 
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -40,15 +41,18 @@ public class VelocityRendering {
 	private static void loadVelocityEngine() {
 		try {
 			VelocityConfigurer velocityConfigurer = new VelocityConfigurer();
-			Properties viewsProperties = new Properties();
-			viewsProperties.load(SearchItemViewTest.class.getResourceAsStream(VIEWS_PROPERTIES_FILENAME));
-			String templatesBaseUrl = viewsProperties.getProperty(TEMPLATES_BASE_URL_KEY);
-			velocityConfigurer.setResourceLoaderPath(templatesBaseUrl);
+			velocityConfigurer.setResourceLoaderPath(templatesBaseUrl());
 			velocityConfigurer.afterPropertiesSet();
 			velocityEngine = velocityConfigurer.getVelocityEngine();
 		} catch (Exception e) {
 			throw ExceptionImposter.imposterize(e);
 		}
+	}
+
+	private static String templatesBaseUrl() throws IOException {
+		Properties viewsProperties = new Properties();
+		viewsProperties.load(SearchItemViewTest.class.getResourceAsStream(VIEWS_PROPERTIES_FILENAME));
+		return viewsProperties.getProperty(TEMPLATES_BASE_URL_KEY);
 	}
 
 	public void withEncoding(String encoding) {
