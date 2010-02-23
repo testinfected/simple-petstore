@@ -1,4 +1,4 @@
-package test.integration.com.pyxis.petstore.persistence.support;
+package test.support.com.pyxis.petstore.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.hamcrest.Matchers.equalTo;
-import static test.integration.com.pyxis.petstore.persistence.support.HasFieldWithValue.fieldValueOf;
+import static test.support.com.pyxis.petstore.matchers.HasFieldWithValue.fieldValueOf;
 
 public class SamePersistentFieldsAs<T> extends TypeSafeDiagnosingMatcher<T> {
 

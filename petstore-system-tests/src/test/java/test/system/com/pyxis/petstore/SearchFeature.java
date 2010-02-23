@@ -3,8 +3,8 @@ package test.system.com.pyxis.petstore;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.integration.com.pyxis.petstore.persistence.support.Database;
-import test.integration.com.pyxis.petstore.persistence.support.EntityBuilder;
+import test.support.com.pyxis.petstore.db.Database;
+import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.system.com.pyxis.petstore.page.HomePage;
 import test.system.com.pyxis.petstore.page.SearchResultsPage;
 import test.system.com.pyxis.petstore.support.PetStoreDriver;
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static test.integration.com.pyxis.petstore.persistence.support.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.system.com.pyxis.petstore.support.PetStoreContext.sessionFactory;
 
 public class SearchFeature {

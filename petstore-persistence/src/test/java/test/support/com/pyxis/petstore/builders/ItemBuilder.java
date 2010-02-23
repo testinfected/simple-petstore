@@ -1,4 +1,4 @@
-package test.integration.com.pyxis.petstore.persistence.support;
+package test.support.com.pyxis.petstore.builders;
 
 import com.pyxis.petstore.domain.Item;
 

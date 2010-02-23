@@ -1,9 +1,10 @@
-package test.integration.com.pyxis.petstore.persistence.support;
+package test.support.com.pyxis.petstore.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import test.support.com.pyxis.petstore.ExceptionImposter;
 
 import java.lang.reflect.Field;
 

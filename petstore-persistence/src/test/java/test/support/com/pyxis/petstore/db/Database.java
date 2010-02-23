@@ -1,7 +1,8 @@
-package test.integration.com.pyxis.petstore.persistence.support;
+package test.support.com.pyxis.petstore.db;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import test.support.com.pyxis.petstore.builders.EntityBuilder;
 
 public class Database {
 
