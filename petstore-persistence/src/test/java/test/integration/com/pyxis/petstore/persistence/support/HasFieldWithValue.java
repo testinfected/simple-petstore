@@ -48,7 +48,7 @@ public class HasFieldWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
         try {
             return argument.getClass().getDeclaredField(fieldName);
         } catch (NoSuchFieldException e) {
-            mismatchDescription.appendText("without field \"" + fieldName + "\"");
+            mismatchDescription.appendText("no field \"" + fieldName + "\"");
             return null;
         }
     }
