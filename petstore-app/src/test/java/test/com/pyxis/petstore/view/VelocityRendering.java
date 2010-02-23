@@ -61,7 +61,7 @@ public class VelocityRendering {
 		this.encoding = encoding;
 	}
 
-	public String using(Map<String, Object> model) {		
+	public String using(Map<String, ?> model) {		
 		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, templateFileName(), this.encoding, model);
 	}
 
