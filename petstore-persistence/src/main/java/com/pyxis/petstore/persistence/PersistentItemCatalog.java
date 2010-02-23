@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public class HibernateItemCatalog implements ItemCatalog {
+public class PersistentItemCatalog implements ItemCatalog {
 
     private final SessionFactory sessionFactory;
 
-    public HibernateItemCatalog(SessionFactory sessionFactory) {
+    public PersistentItemCatalog(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 

@@ -13,7 +13,7 @@
 
     <tx:annotation-driven/>
 
-    <bean id="itemCatalog" class="com.pyxis.petstore.persistence.HibernateItemCatalog">
+    <bean id="itemCatalog" class="com.pyxis.petstore.persistence.PersistentItemCatalog">
         <constructor-arg ref="sessionFactory"/>
     </bean>
 </beans>
