@@ -5,13 +5,13 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import com.pyxis.petstore.domain.ProductCatalog;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.carbonfive.db.migration.DataSourceMigrationManager;
 import com.carbonfive.db.migration.ResourceMigrationResolver;
-import com.pyxis.petstore.domain.ItemCatalog;
 
 public class Application {
 
@@ -75,7 +75,7 @@ public class Application {
         return applicationContext.getBean(SessionFactory.class);
     }
 
-    public static ItemCatalog itemCatalog() {
-        return applicationContext.getBean(ItemCatalog.class);
+    public static ProductCatalog productCatalog() {
+        return applicationContext.getBean(ProductCatalog.class);
     }
 }

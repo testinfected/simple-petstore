@@ -1,4 +1,4 @@
-<form action="$base/items" method="get">
+<form action="$base/products" method="get">
     <fieldset class="inputs">
         <ol>
             <li>

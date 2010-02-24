@@ -22,10 +22,10 @@ public class SearchResultsPage extends PageObject {
         super(webDriver);
     }
 
-    public void displays(List<?> expectedItems) {
+    public void displays(List<?> expectedProducts) {
         String text = numberOfMatches.getText();
-        Integer numberOfItemsFound = Integer.parseInt(text);
-        assertThat(numberOfItemsFound, is(expectedItems.size()));
+        Integer numberOfProductsFound = Integer.parseInt(text);
+        assertThat(numberOfProductsFound, is(expectedProducts.size()));
     }
 
     @Override

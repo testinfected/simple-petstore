@@ -1,7 +1,7 @@
 package com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.ItemCatalog;
+import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.ProductCatalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,24 +11,24 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@Controller @RequestMapping("/items")
-public class ItemsController {
+@Controller @RequestMapping("/products")
+public class ProductsController {
 
 	public static final String SEARCH_RESULTS_VIEW = "searchResults";
-    public static final String MATCHING_ITEMS_KEY = "matchingItems";
+    public static final String MATCHING_PRODUCTS_KEY = "matchingProducts";
     
-	private final ItemCatalog itemCatalog;
+	private final ProductCatalog productCatalog;
 
     @Autowired
-    public ItemsController(ItemCatalog itemCatalog) {
-        this.itemCatalog = itemCatalog;
+    public ProductsController(ProductCatalog productCatalog) {
+        this.productCatalog = productCatalog;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView index(@RequestParam("keyword") String keyword) {
-        List<Item> matchingItems = itemCatalog.findItemsByKeyword(keyword);
+        List<Product> matchingProducts = productCatalog.findProductsByKeyword(keyword);
         ModelAndView modelAndView = new ModelAndView(SEARCH_RESULTS_VIEW);
-        modelAndView.addObject(MATCHING_ITEMS_KEY, matchingItems);
+        modelAndView.addObject(MATCHING_PRODUCTS_KEY, matchingProducts);
         return modelAndView;
     }
 

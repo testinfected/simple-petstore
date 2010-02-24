@@ -2,26 +2,23 @@ package com.pyxis.petstore.domain;
 
 import org.hibernate.annotations.AccessType;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import static com.pyxis.petstore.domain.EntityToStringStyle.reflectionToString;
 
 
-@Entity
-@AccessType("field")
-public class Item {
-
+@Entity()
+@AccessType("field") @Table(name = "products")
+public class Product {
+                            
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
     public String name;
 
-	Item() {}
+	Product() {}
 
-	public Item(String name) {
+	public Product(String name) {
 		this.name = name;
 	}
 

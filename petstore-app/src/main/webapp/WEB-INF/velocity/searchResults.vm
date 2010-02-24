@@ -3,6 +3,6 @@
     <title>PetStore - Search Results</title>
 </head>
 <body>
-Found <span id="match-count">${matchingItems.size()}</span> result(s)
+Found <span id="match-count">${matchingProducts.size()}</span> result(s)
 </body>
 </html>

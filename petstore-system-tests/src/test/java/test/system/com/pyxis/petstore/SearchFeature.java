@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.system.com.pyxis.petstore.support.Application.sessionFactory;
 
 public class SearchFeature {
@@ -36,10 +36,10 @@ public class SearchFeature {
     }
 
     @Test
-    public void displaysAListOfItemsWhoseNamesMatch() throws Exception {
-        given(anItem().withName("Labrador"));
+    public void displaysAListOfProductsWhoseNamesMatch() throws Exception {
+        given(aProduct().withName("Labrador"));
         SearchResultsPage resultsPage = home.searchFor("Labrador");
-        resultsPage.displays(listWithItem("Labrador"));
+        resultsPage.displays(listWithProducts("Labrador"));
     }
 
     @After
@@ -51,8 +51,8 @@ public class SearchFeature {
         database.persist(builders);
     }
 
-    private static List<String> listWithItem(String... itemNames) {
-        return Arrays.asList(itemNames);
+    private static List<String> listWithProducts(String... productNames) {
+        return Arrays.asList(productNames);
     }
 
 }
