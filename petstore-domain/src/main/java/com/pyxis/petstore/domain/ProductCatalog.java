@@ -5,5 +5,4 @@ import java.util.List;
 public interface ProductCatalog {
 
 	List<Product> findProductsByKeyword(String keyword);
-
 }

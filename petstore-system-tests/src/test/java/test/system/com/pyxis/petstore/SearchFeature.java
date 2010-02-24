@@ -26,20 +26,23 @@ public class SearchFeature {
 
     @Before
     public void setUp() throws Exception {
+        database.clean();
         home = petstore.start();
     }
 
     @Test
-    public void displaysAnEmptyProductListWhenNoProductNameMatches() throws Exception {
-        ProductsPage resultsPage = home.searchFor("Squirrel");
+    public void displaysAnEmptyProductListWhenNoProductMatches() throws Exception {
+        given(aProduct().withName("Labrador Retriever"));
+        ProductsPage resultsPage = home.searchFor("Dalmatian");
         resultsPage.displays(NO_RESULT);
     }
 
     @Test
-    public void displaysAListOfProductsWhoseNamesMatch() throws Exception {
-        given(aProduct().withName("Labrador"));
-        ProductsPage resultsPage = home.searchFor("Labrador");
-        resultsPage.displays(listWithProducts("Labrador"));
+    public void displaysAListOfProductsWhoseNameIncludeKeyword() throws Exception {
+        given(aProduct().withName("Labrador Retriever"),
+              aProduct().withName("Golden Retriever"));
+        ProductsPage resultsPage = home.searchFor("retriever");
+        resultsPage.displays(listWithProducts("Labrador Retriever", "Golden Retriever"));
     }
 
     @After

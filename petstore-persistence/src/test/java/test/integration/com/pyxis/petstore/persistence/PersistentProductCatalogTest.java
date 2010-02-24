@@ -40,21 +40,21 @@ public class PersistentProductCatalogTest {
     public void wontFindAnythingIfNoProductNameMatches() throws Exception {
         havingPersisted(aProduct().withName("Dalmatian"));
 
-        List<Product> matchingProducts = productCatalog.findProductsByKeyword("Squirrel");
+        List<Product> matchingProducts = productCatalog.findProductsByKeyword("bulldog");
         assertTrue(matchingProducts.isEmpty());
     }
 
     @Test
-    public void canFindProductsWithAGivenName() throws Exception {
+    public void canFindProductsByMatchingNames() throws Exception {
         havingPersisted(
-                aProduct().withName("Dalmatian"),
-                and(aProduct().withName("Dalmatian")),
-                and(aProduct().withName("Labrador"))
+                aProduct().withName("English Bulldog"),
+                and(aProduct().withName("French Bulldog")),
+                and(aProduct().withName("Labrador Retriever"))
         );
 
-        Collection<Product> matches = productCatalog.findProductsByKeyword("Dalmatian");
+        Collection<Product> matches = productCatalog.findProductsByKeyword("bull");
         assertThat(matches, hasSize(equalTo(2)));
-        assertThat(matches, containsProducts(productNamed("Dalmatian"), productNamed("Dalmatian")));
+        assertThat(matches, containsProducts(productNamed("English Bulldog"), productNamed("French Bulldog")));
     }
 
     private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
