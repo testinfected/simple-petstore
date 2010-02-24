@@ -23,7 +23,7 @@ public class ProductsControllerTest {
 
     Mockery context = new JUnit4Mockery();
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
-    ProductsController searchController = new ProductsController(productCatalog);
+    ProductsController productsController = new ProductsController(productCatalog);
 
     @Test
     public void listsProductsMatchingKeywordAndMakesThemAvailableToView() {
@@ -33,8 +33,8 @@ public class ProductsControllerTest {
             will(returnValue(matchingProducts));
         }});
 
-        ModelAndView view = searchController.index("Dog");
+        ModelAndView view = productsController.index("Dog");
         assertModelAttributeValue(view, "matchingProducts", matchingProducts);
-        assertThat(view.getViewName(), is("searchResults"));
+        assertThat(view.getViewName(), is("products/index"));
     }
 }

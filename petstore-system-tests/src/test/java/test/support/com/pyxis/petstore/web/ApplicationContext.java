@@ -1,12 +1,11 @@
-package test.system.com.pyxis.petstore.support;
+package test.support.com.pyxis.petstore.web;
 
 import org.hibernate.SessionFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class Application {
+public class ApplicationContext {
 
-    private static ApplicationContext applicationContext;
+    private static org.springframework.context.ApplicationContext applicationContext;
 
     static {
         applicationContext = new ClassPathXmlApplicationContext(new String[] {

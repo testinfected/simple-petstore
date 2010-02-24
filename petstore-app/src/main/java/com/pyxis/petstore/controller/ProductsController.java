@@ -14,7 +14,7 @@ import java.util.List;
 @Controller @RequestMapping("/products")
 public class ProductsController {
 
-	public static final String SEARCH_RESULTS_VIEW = "searchResults";
+	public static final String PRODUCTS_VIEW = "products/index";
     public static final String MATCHING_PRODUCTS_KEY = "matchingProducts";
     
 	private final ProductCatalog productCatalog;
@@ -27,7 +27,7 @@ public class ProductsController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView index(@RequestParam("keyword") String keyword) {
         List<Product> matchingProducts = productCatalog.findProductsByKeyword(keyword);
-        ModelAndView modelAndView = new ModelAndView(SEARCH_RESULTS_VIEW);
+        ModelAndView modelAndView = new ModelAndView(PRODUCTS_VIEW);
         modelAndView.addObject(MATCHING_PRODUCTS_KEY, matchingProducts);
         return modelAndView;
     }

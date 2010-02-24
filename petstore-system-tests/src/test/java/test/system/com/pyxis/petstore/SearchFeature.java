@@ -5,16 +5,16 @@ import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
+import test.support.com.pyxis.petstore.web.PetStoreDriver;
 import test.system.com.pyxis.petstore.page.HomePage;
-import test.system.com.pyxis.petstore.page.SearchResultsPage;
-import test.system.com.pyxis.petstore.support.PetStoreDriver;
+import test.system.com.pyxis.petstore.page.ProductsPage;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.system.com.pyxis.petstore.support.Application.sessionFactory;
+import static test.support.com.pyxis.petstore.web.ApplicationContext.sessionFactory;
 
 public class SearchFeature {
 
@@ -31,14 +31,14 @@ public class SearchFeature {
 
     @Test
     public void displaysAnEmptyProductListWhenNoProductNameMatches() throws Exception {
-        SearchResultsPage resultsPage = home.searchFor("Squirrel");
+        ProductsPage resultsPage = home.searchFor("Squirrel");
         resultsPage.displays(NO_RESULT);
     }
 
     @Test
     public void displaysAListOfProductsWhoseNamesMatch() throws Exception {
         given(aProduct().withName("Labrador"));
-        SearchResultsPage resultsPage = home.searchFor("Labrador");
+        ProductsPage resultsPage = home.searchFor("Labrador");
         resultsPage.displays(listWithProducts("Labrador"));
     }
 

@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>PetStore - Search Results</title>
+    <title>PetStore - Products</title>
 </head>
 <body>
 Found <span id="match-count">${matchingProducts.size()}</span> result(s)

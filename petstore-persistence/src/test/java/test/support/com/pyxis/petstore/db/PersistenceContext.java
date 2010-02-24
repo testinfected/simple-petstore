@@ -1,4 +1,4 @@
-package test.support.com.pyxis.petstore;
+package test.support.com.pyxis.petstore.db;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -12,8 +12,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.carbonfive.db.migration.DataSourceMigrationManager;
 import com.carbonfive.db.migration.ResourceMigrationResolver;
+import test.support.com.pyxis.petstore.ExceptionImposter;
 
-public class Application {
+public class PersistenceContext {
 
 	private static final String MIGRATION_PROPERTIES_FILE = "/migration.properties";
     private static final String JDBC_URL = "jdbc.url";
@@ -63,7 +64,7 @@ public class Application {
 
 	private static Properties migrationProperties() throws IOException {
 		Properties migrationProperties = new Properties();
-		migrationProperties.load(Application.class.getResourceAsStream(MIGRATION_PROPERTIES_FILE));
+		migrationProperties.load(PersistenceContext.class.getResourceAsStream(MIGRATION_PROPERTIES_FILE));
 		return migrationProperties;
 	}
 

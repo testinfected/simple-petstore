@@ -7,7 +7,7 @@ import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.Application;
+import test.support.com.pyxis.petstore.db.PersistenceContext;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.matchers.HasFieldWithValue;
@@ -23,8 +23,8 @@ import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class PersistentProductCatalogTest {
 
-    ProductCatalog productCatalog = Application.productCatalog();
-    Database database = Database.connect(Application.sessionFactory());
+    ProductCatalog productCatalog = PersistenceContext.productCatalog();
+    Database database = Database.connect(PersistenceContext.sessionFactory());
 
     @Before
     public void cleanDatabase() {

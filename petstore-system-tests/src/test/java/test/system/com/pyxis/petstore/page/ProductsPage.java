@@ -3,14 +3,14 @@ package test.system.com.pyxis.petstore.page;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import test.system.com.pyxis.petstore.support.PageObject;
+import test.support.com.pyxis.petstore.web.PageObject;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
-public class SearchResultsPage extends PageObject {
+public class ProductsPage extends PageObject {
 
     @FindBy(tagName = "title")
     private WebElement title;
@@ -18,7 +18,7 @@ public class SearchResultsPage extends PageObject {
     @FindBy(id = "match-count")
     private WebElement numberOfMatches;
 
-    public SearchResultsPage(WebDriver webDriver) {
+    public ProductsPage(WebDriver webDriver) {
         super(webDriver);
     }
 
@@ -30,7 +30,7 @@ public class SearchResultsPage extends PageObject {
 
     @Override
     public void assertLocation() {
-        displaysTitle("PetStore - Search Results");
+        displaysTitle("PetStore - Products");
     }
 
     private void displaysTitle(final String expected) {

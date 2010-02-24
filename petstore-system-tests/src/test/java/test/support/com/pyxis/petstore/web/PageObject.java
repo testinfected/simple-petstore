@@ -1,4 +1,4 @@
-package test.system.com.pyxis.petstore.support;
+package test.support.com.pyxis.petstore.web;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;

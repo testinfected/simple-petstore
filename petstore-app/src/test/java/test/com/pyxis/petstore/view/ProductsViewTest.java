@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.pyxis.petstore.controller.ProductsController.MATCHING_PRODUCTS_KEY;
-import static com.pyxis.petstore.controller.ProductsController.SEARCH_RESULTS_VIEW;
+import static com.pyxis.petstore.controller.ProductsController.PRODUCTS_VIEW;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
@@ -17,11 +17,11 @@ import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasUniqueSelector;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.withText;
 
-public class SearchProductViewTest {
+public class ProductsViewTest {
 
     @Test
     public void displaysNumberOfProductsFound() {
-        String searchResultsPage = render(SEARCH_RESULTS_VIEW).using(aModelWith(
+        String searchResultsPage = render(PRODUCTS_VIEW).using(aModelWith(
                 aProduct().withName("Dalmatian"),
                 aProduct().withName("Labrador")));
 

@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import test.system.com.pyxis.petstore.support.PageObject;
+import test.support.com.pyxis.petstore.web.PageObject;
 
 public class HomePage extends PageObject {
 
@@ -28,10 +28,10 @@ public class HomePage extends PageObject {
 		assertThat(searchButton, is(notNullValue()));
     }
 
-	public SearchResultsPage searchFor(String keyword) {
+	public ProductsPage searchFor(String keyword) {
         queryField.sendKeys(keyword);
         queryField.submit();
-        return nowOn(SearchResultsPage.class);
+        return nowOn(ProductsPage.class);
 	}
 
 }
