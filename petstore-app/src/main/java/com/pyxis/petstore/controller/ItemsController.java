@@ -25,7 +25,7 @@ public class ItemsController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView doSearch(@RequestParam("keyword") String keyword) {
+    public ModelAndView index(@RequestParam("keyword") String keyword) {
         List<Item> matchingItems = itemCatalog.findItemsByKeyword(keyword);
         ModelAndView modelAndView = new ModelAndView(SEARCH_RESULTS_VIEW);
         modelAndView.addObject(MATCHING_ITEMS_KEY, matchingItems);

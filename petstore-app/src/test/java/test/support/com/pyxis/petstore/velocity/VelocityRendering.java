@@ -1,4 +1,4 @@
-package test.com.pyxis.petstore.view;
+package test.support.com.pyxis.petstore.velocity;
 
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
@@ -51,7 +51,7 @@ public class VelocityRendering {
 
 	private static String templatesBaseUrl() throws IOException {
 		Properties viewsProperties = new Properties();
-		viewsProperties.load(SearchItemViewTest.class.getResourceAsStream(VIEWS_PROPERTIES_FILENAME));
+		viewsProperties.load(VelocityRendering.class.getResourceAsStream(VIEWS_PROPERTIES_FILENAME));
 		return viewsProperties.getProperty(TEMPLATES_BASE_URL_KEY);
 	}
 

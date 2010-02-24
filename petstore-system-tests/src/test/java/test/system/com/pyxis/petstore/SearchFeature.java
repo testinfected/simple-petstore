@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
-import static test.system.com.pyxis.petstore.support.PetStoreContext.sessionFactory;
+import static test.system.com.pyxis.petstore.support.Application.sessionFactory;
 
 public class SearchFeature {
 

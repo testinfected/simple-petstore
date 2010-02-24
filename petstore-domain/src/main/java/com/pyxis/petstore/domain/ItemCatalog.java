@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface ItemCatalog {
 
-	List<Item> findItemsByKeyword(String query);
+	List<Item> findItemsByKeyword(String keyword);
 
 }

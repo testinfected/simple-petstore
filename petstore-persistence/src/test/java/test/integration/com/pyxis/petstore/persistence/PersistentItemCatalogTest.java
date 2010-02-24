@@ -7,10 +7,10 @@ import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import test.support.com.pyxis.petstore.Application;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.matchers.HasFieldWithValue;
 import test.support.com.pyxis.petstore.db.Database;
-import test.support.com.pyxis.petstore.PetStoreContext;
 import test.support.com.pyxis.petstore.matchers.IsIterableWithSize;
 
 import java.util.Collection;
@@ -23,8 +23,8 @@ import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 
 public class PersistentItemCatalogTest {
 
-    ItemCatalog itemCatalog = PetStoreContext.itemRepository();
-    Database database = Database.connect(PetStoreContext.sessionFactory());
+    ItemCatalog itemCatalog = Application.itemCatalog();
+    Database database = Database.connect(Application.sessionFactory());
 
     @Before
     public void cleanDatabase() {

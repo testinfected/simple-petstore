@@ -4,7 +4,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class PetStoreContext {
+public class Application {
 
     private static ApplicationContext applicationContext;
 

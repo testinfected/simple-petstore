@@ -11,7 +11,7 @@ import static com.pyxis.petstore.controller.ItemsController.MATCHING_ITEMS_KEY;
 import static com.pyxis.petstore.controller.ItemsController.SEARCH_RESULTS_VIEW;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static test.com.pyxis.petstore.view.VelocityRendering.render;
+import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasUniqueSelector;
@@ -20,7 +20,7 @@ import static test.support.com.pyxis.petstore.matchers.DomMatchers.withText;
 public class SearchItemViewTest {
 
     @Test
-    public void shouldDisplayNamesOfItemsFound() {
+    public void displaysNumberOfItemsFound() {
         String searchResultsPage = render(SEARCH_RESULTS_VIEW).using(aModelWith(
                 anItem().withName("Dalmatian"),
                 anItem().withName("Labrador")));

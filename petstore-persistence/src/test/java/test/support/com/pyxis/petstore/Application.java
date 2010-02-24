@@ -13,12 +13,13 @@ import com.carbonfive.db.migration.DataSourceMigrationManager;
 import com.carbonfive.db.migration.ResourceMigrationResolver;
 import com.pyxis.petstore.domain.ItemCatalog;
 
-public class PetStoreContext {
+public class Application {
 
 	private static final String MIGRATION_PROPERTIES_FILE = "/migration.properties";
     private static final String JDBC_URL = "jdbc.url";
     private static final String DEFAULT_MYSQL_TEST_DATABASE = "jdbc:mysql://localhost:3306/petstore_test";
 
+    private static ApplicationContext applicationContext;
 
     static {
         beFriendlyWithDevelopmentEnvironments();
@@ -26,9 +27,25 @@ public class PetStoreContext {
         migrateDatabase();
     }
 
-    private static ApplicationContext applicationContext;
-    
-	private static void migrateDatabase() {
+    private static void beFriendlyWithDevelopmentEnvironments() {
+        overrideDatabaseUrl();
+    }
+
+    private static void overrideDatabaseUrl() {
+        System.setProperty(JDBC_URL, testDatabaseUrl());
+    }
+
+    private static String testDatabaseUrl() {
+        return System.getProperty(JDBC_URL, DEFAULT_MYSQL_TEST_DATABASE);
+    }
+
+    private static void loadSpringContext() {
+        applicationContext = new ClassPathXmlApplicationContext(new String[] {
+                "dataSource.xml",
+                "persistenceContext.xml"
+        });
+    }
+    private static void migrateDatabase() {
 		ResourceMigrationResolver migrationResolver = new ResourceMigrationResolver(migrationsPath());
 		DataSourceMigrationManager migrationManager = new DataSourceMigrationManager(dataSource());
 		migrationManager.setMigrationResolver(migrationResolver);
@@ -46,38 +63,19 @@ public class PetStoreContext {
 
 	private static Properties migrationProperties() throws IOException {
 		Properties migrationProperties = new Properties();
-		migrationProperties.load(PetStoreContext.class.getResourceAsStream(MIGRATION_PROPERTIES_FILE));
+		migrationProperties.load(Application.class.getResourceAsStream(MIGRATION_PROPERTIES_FILE));
 		return migrationProperties;
 	}
 
     private static DataSource dataSource() {
-		return applicationContext.getBean(DataSource.class);
-	}
-
-    private static void loadSpringContext() {
-        applicationContext = new ClassPathXmlApplicationContext(new String[] {
-                "dataSource.xml",
-                "persistenceContext.xml"
-        });
-    }
-
-    private static void beFriendlyWithDevelopmentEnvironments() {
-        overrideDatabaseUrl();
-    }
-
-    private static void overrideDatabaseUrl() {
-        System.setProperty(JDBC_URL, testDatabaseUrl());
-    }
-
-    private static String testDatabaseUrl() {
-        return System.getProperty(JDBC_URL, DEFAULT_MYSQL_TEST_DATABASE);
+        return applicationContext.getBean(DataSource.class);
     }
 
     public static SessionFactory sessionFactory() {
         return applicationContext.getBean(SessionFactory.class);
     }
 
-    public static ItemCatalog itemRepository() {
+    public static ItemCatalog itemCatalog() {
         return applicationContext.getBean(ItemCatalog.class);
     }
 }

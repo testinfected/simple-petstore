@@ -5,46 +5,36 @@ import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.ItemCatalog;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.test.web.ModelAndViewAssert;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
+@RunWith(JMock.class)
 public class ItemControllerTest {
 
-    private Mockery mockery;
-    private ItemCatalog itemCatalog;
-
-    @Before
-    public void setUp() {
-        mockery = new JUnit4Mockery();
-        itemCatalog = mockery.mock(ItemCatalog.class);
-    }
-
-    @After
-    public void assertMockeryIsSatisfied() {
-        mockery.assertIsSatisfied();
-    }
+    Mockery context = new JUnit4Mockery();
+    ItemCatalog itemCatalog = context.mock(ItemCatalog.class);
+    ItemsController searchController = new ItemsController(itemCatalog);
 
     @Test
-    public void shouldLookUpItemsInARepositoryWhenQueryIsSubmitted() {
+    public void listsItemMatchingKeywordAndMakesThemAvailableToView() {
         final List<Item> matchingItems = Collections.emptyList();
-        mockery.checking(new Expectations() {{
+        context.checking(new Expectations() {{
             oneOf(itemCatalog).findItemsByKeyword("Dog");
             will(returnValue(matchingItems));
         }});
-        ItemsController searchController = new ItemsController(itemCatalog);
-        ModelAndView view = searchController.doSearch("Dog");
+
+        ModelAndView view = searchController.index("Dog");
         ModelAndViewAssert.assertModelAttributeValue(view, "matchingItems", matchingItems);
         assertThat(view.getViewName(), is("searchResults"));
     }
-
 }
