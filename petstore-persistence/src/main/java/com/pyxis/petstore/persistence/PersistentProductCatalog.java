@@ -23,7 +23,7 @@ public class PersistentProductCatalog implements ProductCatalog {
 	public List<Product> findProductsByKeyword(String keyword) {
         Session session = sessionFactory.getCurrentSession();
         return session.createCriteria(Product.class)
-    	    .add(Restrictions.like("name", keyword, MatchMode.ANYWHERE))
+    	    .add(Restrictions.ilike("name", keyword, MatchMode.ANYWHERE))
     	    .list();
 	}
 }
