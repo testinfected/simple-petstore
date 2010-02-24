@@ -4,19 +4,16 @@ import com.pyxis.petstore.domain.Product;
 import com.pyxis.petstore.domain.ProductCatalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @Controller @RequestMapping("/products")
 public class ProductsController {
 
-	public static final String PRODUCTS_VIEW = "products/index";
-    public static final String MATCHING_PRODUCTS_KEY = "matchingProducts";
-    
 	private final ProductCatalog productCatalog;
 
     @Autowired
@@ -25,11 +22,11 @@ public class ProductsController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView index(@RequestParam("keyword") String keyword) {
+    public ModelMap index(@RequestParam("keyword") String keyword) {
         List<Product> matchingProducts = productCatalog.findProductsByKeyword(keyword);
-        ModelAndView modelAndView = new ModelAndView(PRODUCTS_VIEW);
-        modelAndView.addObject(MATCHING_PRODUCTS_KEY, matchingProducts);
-        return modelAndView;
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute("productList", matchingProducts);
+        return modelMap;
     }
 
 }

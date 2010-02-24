@@ -3,20 +3,21 @@ package test.com.pyxis.petstore.controller;
 import com.pyxis.petstore.controller.ProductsController;
 import com.pyxis.petstore.domain.Product;
 import com.pyxis.petstore.domain.ProductCatalog;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.ModelMap;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.ModelAndViewAssert.assertModelAttributeValue;
 
 @RunWith(JMock.class)
 public class ProductsControllerTest {
@@ -33,8 +34,11 @@ public class ProductsControllerTest {
             will(returnValue(matchingProducts));
         }});
 
-        ModelAndView view = productsController.index("Dog");
-        assertModelAttributeValue(view, "matchingProducts", matchingProducts);
-        assertThat(view.getViewName(), is("products/index"));
+        ModelMap map = productsController.index("Dog");
+        assertThat(map, hasAttribute(matchingProducts));
+    }
+
+    private Matcher<Map<? extends String, ?>> hasAttribute(List<Product> matchingProducts) {
+        return Matchers.<String, Object>hasEntry("productList", matchingProducts);
     }
 }
