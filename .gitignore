@@ -6,3 +6,4 @@ target
 *.iml
 *.log
 logs
+release.properties
