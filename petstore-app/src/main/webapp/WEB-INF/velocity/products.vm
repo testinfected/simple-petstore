@@ -4,5 +4,10 @@
 </head>
 <body>
 Found <span id="match-count">${productList.size()}</span> result(s)
+<ul>
+#foreach ($product in $productList) 
+	<li id="product"></li>
+#end
+</ul>
 </body>
 </html>

@@ -7,9 +7,10 @@ public class Entities {
 
     private Entities() {}
 
-    public static <T> List<T> entities(EntityBuilder<T>... entityBuilders) {
-        List<T> entities = new ArrayList<T>();
-        for (EntityBuilder<T> entityBuilder : entityBuilders) {
+    @SuppressWarnings("unchecked")
+	public static List entities(EntityBuilder... entityBuilders) {
+        List entities = new ArrayList();
+        for (EntityBuilder entityBuilder : entityBuilders) {
             entities.add(entityBuilder.build());
         }
         return entities;
