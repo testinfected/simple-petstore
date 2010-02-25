@@ -1,15 +1,15 @@
 package test.com.pyxis.petstore.view;
 
-import static com.google.common.collect.Iterables.size;
 import static com.threelevers.css.DocumentBuilder.doc;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static com.threelevers.css.Selector.from;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasSelector;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasUniqueSelector;
+import static test.support.com.pyxis.petstore.matchers.DomMatchers.withSize;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.withText;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
@@ -41,7 +41,7 @@ public class ProductsViewTest {
     
     @Test
     public void displaysANumberOfElementsMatchingNumberOfProductsFound() {
-    	assertThat(size(from(doc(searchResultsPage)).select("#product")), is(equalTo(2)));
+        assertThat(dom(searchResultsPage), hasSelector("#product", withSize(2)));
     }
     
     @Test
