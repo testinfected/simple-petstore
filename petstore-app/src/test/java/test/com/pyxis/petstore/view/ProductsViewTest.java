@@ -13,11 +13,13 @@ import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasUniqueSele
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.withText;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.ui.ModelMap;
+import org.w3c.dom.Element;
 
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 
@@ -38,11 +40,21 @@ public class ProductsViewTest {
     }
     
     @Test
-    public void displaysASummaryOfEachMatchingProducts() {
+    public void displaysANumberOfElementsMatchingNumberOfProductsFound() {
     	assertThat(size(from(doc(searchResultsPage)).select("#product")), is(equalTo(2)));
     }
+    
+    @Test
+    public void displaysNameOfProductsFound() {
+    	Iterable<Element> products = from(doc(searchResultsPage)).select("#product");
+    	Iterator<Element> productIterator = products.iterator();
+		Element firstProduct = productIterator.next();
+    	Element secondProduct = productIterator.next();
+    	assertThat(firstProduct.getTextContent(), is("Dalmatian"));
+    	assertThat(secondProduct.getTextContent(), is("Labrador"));
+    }
 
-	private static Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
+    private static Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
         ModelMap model = new ModelMap();
         model.addAttribute(entities(entityBuilders));
         return model;

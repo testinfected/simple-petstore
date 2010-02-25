@@ -3,10 +3,10 @@
     <title>PetStore - Products</title>
 </head>
 <body>
-Found <span id="match-count">${productList.size()}</span> result(s)
+Found <span id="match-count">$productList.size()</span> result(s)
 <ul>
 #foreach ($product in $productList) 
-	<li id="product"></li>
+	<li id="product">$product.getName()</li>
 #end
 </ul>
 </body>

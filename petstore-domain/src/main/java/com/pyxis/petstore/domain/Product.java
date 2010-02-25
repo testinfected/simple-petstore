@@ -14,15 +14,19 @@ public class Product {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-    public String name;
+    private String name;
 
 	Product() {}
 
 	public Product(String name) {
 		this.name = name;
 	}
+	
+    public String getName() {
+		return name;
+	}
 
-    @Override
+	@Override
     public String toString() {
         return reflectionToString(this);
     }
