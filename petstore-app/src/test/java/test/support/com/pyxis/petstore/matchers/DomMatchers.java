@@ -46,6 +46,10 @@ public class DomMatchers {
         return HasAttribute.withId(id);
     }
 
+    public static Matcher<Iterable<? super Element>> withSize(int size) {
+        return WithSize.withSize(size);
+    }
+
     public static Matcher<? super Element> withClassName(String className) {
         return HasAttribute.withClassName(className);
     }
