@@ -31,9 +31,7 @@
 	</bean>
 	
 	<bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
-		<property name="interceptors">
-			<ref bean="openSessionInViewHandlerInterceptor"/>
-		</property>
+		<property name="interceptors" ref="openSessionInViewHandlerInterceptor"/>
 	</bean>
 
 </beans>
