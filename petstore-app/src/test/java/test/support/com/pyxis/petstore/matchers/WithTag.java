@@ -3,7 +3,6 @@ package test.support.com.pyxis.petstore.matchers;
 import org.hamcrest.Factory;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.w3c.dom.Element;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -19,12 +18,12 @@ public class WithTag extends FeatureMatcher<Element, String> {
         return actual.getTagName();
     }
 
-    public static Matcher<? super Element> withTag(Matcher<? super String> valueMatcher) {
+    public static Matcher<Element> withTag(Matcher<? super String> valueMatcher) {
         return new WithTag(valueMatcher);
     }
 
     @Factory
-    public static Matcher<? super Element> withTag(String tagName) {
+    public static Matcher<Element> withTag(String tagName) {
         return withTag(equalTo(tagName));
     }
 }

@@ -45,7 +45,7 @@ public class HasUniqueSelector extends TypeSafeDiagnosingMatcher<Element> {
     }
 
     @Factory
-    public static Matcher<? super Element> hasUniqueSelector(String selector, Matcher<? super Element> elementMatcher) {
+    public static Matcher<Element> hasUniqueSelector(String selector, Matcher<? super Element> elementMatcher) {
         return new HasUniqueSelector(selector, elementMatcher);
     }
 }

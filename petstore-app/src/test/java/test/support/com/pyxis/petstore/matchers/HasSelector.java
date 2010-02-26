@@ -11,9 +11,9 @@ import static com.threelevers.css.Selector.from;
 
 public class HasSelector extends TypeSafeDiagnosingMatcher<Element> {
     private final String selector;
-    private final Matcher<Iterable<? super Element>> elementsMatcher;
+    private final Matcher<Iterable<Element>> elementsMatcher;
 
-    public HasSelector(String selector, Matcher<Iterable<? super Element>> elementsMatcher) {
+    public HasSelector(String selector, Matcher<Iterable<Element>> elementsMatcher) {
         this.selector = selector;
         this.elementsMatcher = elementsMatcher;
     }
@@ -43,7 +43,7 @@ public class HasSelector extends TypeSafeDiagnosingMatcher<Element> {
     }
 
     @Factory
-    public static Matcher<? super Element> hasSelector(String selector, Matcher<Iterable<? super Element>> elementsMatcher) {
+    public static Matcher<Element> hasSelector(String selector, Matcher<Iterable<Element>> elementsMatcher) {
         return new HasSelector(selector, elementsMatcher);
     }
 }

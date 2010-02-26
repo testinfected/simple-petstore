@@ -7,11 +7,10 @@ import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.db.PersistenceContext;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.db.Database;
+import test.support.com.pyxis.petstore.db.PersistenceContext;
 import test.support.com.pyxis.petstore.matchers.HasFieldWithValue;
-import test.support.com.pyxis.petstore.matchers.IsIterableWithSize;
 
 import java.util.Collection;
 import java.util.List;
@@ -65,11 +64,11 @@ public class PersistentProductCatalogTest {
         return builder;
     }
 
-    private Matcher<Iterable<? super Product>> hasSize(final Matcher<? super Integer> sizeMatcher) {
-        return IsIterableWithSize.withSize(sizeMatcher);
+    private Matcher<Iterable<Product>> hasSize(Matcher<? super Integer> sizeMatcher) {
+        return Matchers.iterableWithSize(sizeMatcher);
     }
 
-    private Matcher<Iterable<Product>> containsProducts(final Matcher<Product>... productMatchers) {
+    private Matcher<Iterable<Product>> containsProducts(Matcher<Product>... productMatchers) {
         return Matchers.containsInAnyOrder(productMatchers);
     }
 

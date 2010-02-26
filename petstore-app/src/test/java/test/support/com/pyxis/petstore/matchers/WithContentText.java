@@ -19,12 +19,12 @@ public class WithContentText extends FeatureMatcher<Element, String> {
     }
 
     @Factory
-    public static Matcher<? super Element> withText(Matcher<? super String> contentMatcher) {
+    public static Matcher<Element> withText(Matcher<? super String> contentMatcher) {
         return new WithContentText(contentMatcher);
     }
 
     @Factory
-    public static Matcher<? super Element> withText(String contentText) {
+    public static Matcher<Element> withText(String contentText) {
         return withText(equalTo(contentText));
     }
 }
