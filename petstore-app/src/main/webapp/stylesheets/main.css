@@ -66,6 +66,6 @@ table#products {
 } 
 
 th {
-  border-bottom:1px dashed black;
+  border-bottom:1px solid black;
   text-align: left;
 }
