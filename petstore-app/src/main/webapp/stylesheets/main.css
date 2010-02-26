@@ -60,3 +60,12 @@ button {
 img.logo {
     width: 50px;
 }
+
+table#products {
+  width: 500px;
+} 
+
+th {
+  border-bottom:1px dashed black;
+  text-align: left;
+}

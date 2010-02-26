@@ -4,6 +4,7 @@ import com.pyxis.petstore.domain.Product;
 import com.pyxis.petstore.domain.ProductCatalog;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,13 @@ public class PersistentProductCatalog implements ProductCatalog {
 	public List<Product> findProductsByKeyword(String keyword) {
         Session session = sessionFactory.getCurrentSession();
         return session.createCriteria(Product.class)
-    	    .add(Restrictions.ilike("name", keyword, MatchMode.ANYWHERE))
+        	.add(Restrictions.or(
+        			fieldMatchesKeyword("name", keyword), 
+        			fieldMatchesKeyword("description", keyword)))
     	    .list();
+	}
+
+	private Criterion fieldMatchesKeyword(String field, String keyword) {
+		return Restrictions.ilike(field, keyword, MatchMode.ANYWHERE);
 	}
 }

@@ -5,6 +5,7 @@ import com.pyxis.petstore.domain.Product;
 public class ProductBuilder implements EntityBuilder<Product> {
 
     private String name;
+	private String description;
 
     public static ProductBuilder aProduct() {
         return new ProductBuilder();
@@ -16,6 +17,11 @@ public class ProductBuilder implements EntityBuilder<Product> {
     }
 
     public Product build() {
-        return new Product(name);
+        return new Product(name, this.description);
     }
+
+	public ProductBuilder describedAs(String description) {
+		this.description = description;
+		return this;
+	}
 }

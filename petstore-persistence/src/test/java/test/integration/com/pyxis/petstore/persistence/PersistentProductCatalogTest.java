@@ -56,6 +56,17 @@ public class PersistentProductCatalogTest {
         assertThat(matches, containsProducts(productNamed("English Bulldog"), productNamed("French Bulldog")));
     }
 
+    @Test
+    public void canFindProductsByMatchingDescription() throws Exception {
+    	havingPersisted(
+    			aProduct().withName("Labrador").describedAs("Friendly"),
+    			and(aProduct().withName("Poodle").describedAs("Annoying"))
+    	);
+    	
+    	List<Product> matches = productCatalog.findProductsByKeyword("friend");
+    	assertThat(matches, containsProducts(productNamed("Labrador")));
+    }
+    
     private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
         database.persist(builders);
     }

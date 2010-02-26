@@ -8,10 +8,11 @@ import org.junit.Test;
 public class ProductTest {
 
 	@Test
-	public void storesNameThroughConstructor()
+	public void isCreatedCorrectly()
 	{
-		Product product = new Product("Dog");
+		Product product = new Product("Dog", "Man's Best Friend");
 		assertThat(product.getName(), is("Dog"));
+		assertThat(product.getDescription(), is("Man's Best Friend"));
 	}
 	
 }

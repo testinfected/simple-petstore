@@ -4,10 +4,19 @@
 </head>
 <body>
 Found <span id="match-count">$productList.size()</span> result(s)
-<ul id="products">
+<table id="products">
+<thead>
+<tr>
+	<th>Name</th>
+	<th>Description</th>
+</tr>
+</thead>
 #foreach ($product in $productList)
-	<li>$product.getName()</li>
+	<tr>
+		<td>$product.Name</td>
+		<td>$!product.Description</td>
+	</tr>
 #end
-</ul>
+</table>
 </body>
 </html>
