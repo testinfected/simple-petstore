@@ -51,8 +51,7 @@ public class DomMatchers {
     }
 
     public static Matcher<Iterable<Element>> withSize(int size) {
-        return org.hamcrest.collection.IsIterableWithSize.<Element>iterableWithSize(size);
-//        return IsIterableWithSize.withSize(size);
+        return Matchers.iterableWithSize(size);
     }
 
     public static Matcher<Element> withClassName(String className) {
@@ -63,7 +62,11 @@ public class DomMatchers {
         return HasChildElements.hasChildren(childrenMatcher);
     }
 
-//    public static Matcher<? super Element> hasChildren(Matcher<Element>... childrenMatchers) {
-//        return HasChildElements.hasChildren(Matchers.hasItems(childrenMatchers));
-//    }
+    public static Matcher<Element> hasChildren(Matcher<Element>... childrenMatchers) {
+        return HasChildElements.hasChildren(hasElements(childrenMatchers));
+    }
+
+    public static Matcher<Element> hasChild(Matcher<Element> childMatcher) {
+        return HasChildElements.hasChildren(hasElement(childMatcher));
+    }
 }
