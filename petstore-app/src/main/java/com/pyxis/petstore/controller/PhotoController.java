@@ -21,7 +21,7 @@ public class PhotoController {
 	}
 
 	@RequestMapping("/{photoKey}")
-	public void streamImageContent(@PathVariable("photoKey") String photoKey, OutputStream output) {
+	public void showPhoto(@PathVariable("photoKey") String photoKey, OutputStream output) {
 		this.photoAlbum.showPhoto(photoKey, output);
 	}
 }
