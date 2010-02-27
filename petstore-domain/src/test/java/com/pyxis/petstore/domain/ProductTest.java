@@ -10,9 +10,8 @@ public class ProductTest {
 	@Test
 	public void isCreatedCorrectly()
 	{
-		Product product = new Product("Dog", "Man's Best Friend");
+		Product product = new Product("Dog");
 		assertThat(product.getName(), is("Dog"));
-		assertThat(product.getDescription(), is("Man's Best Friend"));
 	}
 	
 }

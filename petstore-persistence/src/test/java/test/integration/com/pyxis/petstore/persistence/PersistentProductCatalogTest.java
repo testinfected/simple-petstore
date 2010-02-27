@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
+@SuppressWarnings("unchecked")
 public class PersistentProductCatalogTest {
 
     ProductCatalog productCatalog = PersistenceContext.productCatalog();
@@ -43,7 +44,7 @@ public class PersistentProductCatalogTest {
         assertTrue(matchingProducts.isEmpty());
     }
 
-    @Test
+	@Test
     public void canFindProductsByMatchingNames() throws Exception {
         havingPersisted(
                 aProduct().withName("English Bulldog"),

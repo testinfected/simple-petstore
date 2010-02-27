@@ -18,11 +18,12 @@ public class Product {
 
 	private String description;
 
+	private String photoKey;
+	
 	Product() {}
 
-	public Product(String name, String description) {
+	public Product(String name) {
 		this.name = name;
-		this.description = description;
 	}
 	
     public String getName() {
@@ -31,6 +32,18 @@ public class Product {
 
 	public String getDescription() {
 		return description;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getPhotoKey() {
+		return photoKey;
+	}
+
+	public void setPhotoKey(String photoKey) {
+		this.photoKey = photoKey;
 	}
 
 	@Override

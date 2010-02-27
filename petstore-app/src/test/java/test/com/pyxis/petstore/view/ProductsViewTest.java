@@ -26,7 +26,7 @@ public class ProductsViewTest {
 	public void setUp() {
 		productsPage = render(PRODUCTS_VIEW).using(aModelWith(
 				aProduct().withName("Dalmatian"),
-				aProduct().withName("Labrador").describedAs("Friendly")));
+				aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador")));
 	}
 	
     @Test
@@ -38,8 +38,10 @@ public class ProductsViewTest {
     public void displaysAListOfProductsFound() {
         assertThat(dom(productsPage), 
         		hasSelector("#products td", 
-        				inOrder(withText("Dalmatian"), 
-        						withText(""), 
+        				inOrder(hasChild(hasAttribute("src", equalTo("photos/"))),
+        						withText("Dalmatian"), 
+        						withText(""),
+        						hasChild(hasAttribute("src", equalTo("photos/labrador"))),
         						withText("Labrador"), 
         						withText("Friendly"))));
     }

@@ -61,6 +61,11 @@ img.logo {
     width: 50px;
 }
 
+img.photo {
+	width: 60px;
+	border: 1px solid black;	
+}
+
 table#products {
   width: 500px;
 } 

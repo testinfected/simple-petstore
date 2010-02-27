@@ -6,6 +6,7 @@ public class ProductBuilder implements EntityBuilder<Product> {
 
     private String name;
 	private String description;
+	private String photoKey;
 
     public static ProductBuilder aProduct() {
         return new ProductBuilder();
@@ -17,11 +18,19 @@ public class ProductBuilder implements EntityBuilder<Product> {
     }
 
     public Product build() {
-        return new Product(name, this.description);
+        Product product = new Product(name);
+        product.setDescription(this.description);
+        product.setPhotoKey(this.photoKey);
+		return product;
     }
 
 	public ProductBuilder describedAs(String description) {
 		this.description = description;
+		return this;
+	}
+
+	public ProductBuilder withPhoto(String photoKey) {
+		this.photoKey = photoKey;
 		return this;
 	}
 }

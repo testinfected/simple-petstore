@@ -7,12 +7,14 @@ Found <span id="match-count">$productList.size()</span> result(s)
 <table id="products">
 <thead>
 <tr>
+	<th>&nbsp;</th>
 	<th>Name</th>
 	<th>Description</th>
 </tr>
 </thead>
 #foreach ($product in $productList)
 	<tr>
+		<td><img class="photo" src="photos/$!product.getPhotoKey()"></td>
 		<td>$product.Name</td>
 		<td>$!product.Description</td>
 	</tr>
