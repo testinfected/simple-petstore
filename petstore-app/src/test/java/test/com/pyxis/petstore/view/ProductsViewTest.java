@@ -36,7 +36,7 @@ public class ProductsViewTest {
     }
     
     @Test
-    public void displaysColumnHeadersOverListOfProductsFound() {
+    public void displaysColumnHeadings() {
 		productsPage = renderProductsPageUsing(aModelWith(
 				aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador")));
         assertThat(dom(productsPage), 
@@ -47,7 +47,7 @@ public class ProductsViewTest {
     }
 
 	@Test
-    public void displaysNameDescriptionAndPhotoOfProductsFoundInDifferentColumns() {
+    public void displaysProductInColumns() {
 		productsPage = renderProductsPageUsing(aModelWith(
 				aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador")));
         assertThat(dom(productsPage), 
@@ -58,7 +58,7 @@ public class ProductsViewTest {
     }
 	
 	@Test
-	public void displaysNothingInDescriptionColumnForAProductWithNoDescription() {
+	public void handlesProductWithNoDescriptionCorrectly() {
 		productsPage = renderProductsPageUsing(aModelWith(
 				aProduct().withName("Labrador").withPhoto("labrador")));
         assertThat(dom(productsPage), 
@@ -67,7 +67,7 @@ public class ProductsViewTest {
 	}
 	
 	@Test
-	public void displaysDefaultPhotoForAProductWithNoPhoto() {
+	public void displaysDefaultPhotoWhenProductHasNoAssociatedPhoto() {
 		productsPage = renderProductsPageUsing(aModelWith(
 						aProduct().withName("Labrador").describedAs("Friendly")));
         assertThat(dom(productsPage), 
