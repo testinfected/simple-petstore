@@ -35,6 +35,17 @@ public class ProductsViewTest {
         assertThat(dom(productsPage), hasUniqueSelector("#match-count", withText("2")));
     }
     
+    @Test
+    public void displaysColumnHeadersOverListOfProductsFound() {
+		productsPage = renderProductsPageUsing(aModelWith(
+				aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador")));
+        assertThat(dom(productsPage), 
+        		hasSelector("#products th", 
+        				inOrder(withEmptyText(),
+        						withText("Name"),
+        						withText("Description"))));
+    }
+
 	@Test
     public void displaysNameDescriptionAndPhotoOfProductsFoundInDifferentColumns() {
 		productsPage = renderProductsPageUsing(aModelWith(
@@ -68,6 +79,10 @@ public class ProductsViewTest {
 		return render(PRODUCTS_VIEW).using(model);
 	}
 
+	private Matcher<Element> withEmptyText() {
+		return withText("");
+	}
+    
 	private Matcher<Element> anEmptyDescription() {
 		return description("");
 	}
