@@ -2,7 +2,7 @@ package test.integration.com.pyxis.petstore.persistence;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.junit.Test;
