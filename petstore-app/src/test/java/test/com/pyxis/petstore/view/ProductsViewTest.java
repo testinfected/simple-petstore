@@ -113,7 +113,7 @@ public class ProductsViewTest {
 
     private static Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
         ModelMap model = new ModelMap();
-        model.addAttribute(entities(entityBuilders));
+        model.addAttribute("productList", entities(entityBuilders));
         return model;
     }
 }
