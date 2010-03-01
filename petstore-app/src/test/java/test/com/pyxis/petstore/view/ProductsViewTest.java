@@ -9,6 +9,7 @@ import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasAttribute;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasChild;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasSelector;
+import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasNoSelector;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasUniqueSelector;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.withText;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.withBlankText;
@@ -74,6 +75,16 @@ public class ProductsViewTest {
         assertThat(dom(productsPage), 
         		hasSelector("#products td:nth-child(1)", 
         				contains(image("photos/"))));		
+	}
+	
+	@Test
+	public void displaysNoProductsTableIfNoProductIsFound() {
+		productsPage = renderProductsPageUsing(anEmptyModel());
+		assertThat(dom(productsPage), hasNoSelector("#products"));
+	}
+
+	private Map<String, ?> anEmptyModel() {
+		return aModelWith();
 	}
 
 	private String renderProductsPageUsing(Map<String, ?> model) {

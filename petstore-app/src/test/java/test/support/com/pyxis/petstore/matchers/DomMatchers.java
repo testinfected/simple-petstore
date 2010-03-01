@@ -18,6 +18,10 @@ public class DomMatchers {
         return HasUniqueSelector.hasUniqueSelector(selector, elementMatcher);
     }
 
+    public static Matcher<Element> hasNoSelector(String selector) {
+    	return HasNoSelector.hasNoSelector(selector);
+    }
+    
     public static Matcher<Iterable<Element>> hasElement(Matcher<? super Element> elementMatcher) {
         return Matchers.hasItems(elementMatcher);
     }

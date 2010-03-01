@@ -10,7 +10,7 @@ public class WithBlankText extends TypeSafeDiagnosingMatcher<String> {
 	@Override
 	protected boolean matchesSafely(String actual, Description mismatchDescription) {
 		if(!isBlank(actual)) {
-			mismatchDescription.appendText("actual value '"+ actual + "'. Expected ");
+			mismatchDescription.appendText("actual value is '"+ actual + "'");
 			describeTo(mismatchDescription);
 			return false;
 		}
