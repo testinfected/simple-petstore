@@ -36,16 +36,16 @@ public class ProductsViewTest {
     
 	@Test
     public void displaysAListOfProductsFound() {
-        assertThat(dom(productsPage), 
-        		hasSelector("#products td", 
+        assertThat(dom(productsPage),
+        		hasSelector("#products td",
         				inOrder(hasChild(hasAttribute("src", equalTo("photos/"))),
-        						withText("Dalmatian"), 
+        						withText("Dalmatian"),
         						withText(""),
         						hasChild(hasAttribute("src", equalTo("photos/labrador"))),
-        						withText("Labrador"), 
+        						withText("Labrador"),
         						withText("Friendly"))));
     }
-    
+
     private Matcher<Iterable<Element>> inOrder(Matcher<Element>... elementMatchers) {
         return contains(elementMatchers);
     }

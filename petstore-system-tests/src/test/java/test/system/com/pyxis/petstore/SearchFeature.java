@@ -3,8 +3,8 @@ package test.system.com.pyxis.petstore;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
+import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
 import test.system.com.pyxis.petstore.page.HomePage;
 import test.system.com.pyxis.petstore.page.ProductsPage;
@@ -18,7 +18,7 @@ import static test.support.com.pyxis.petstore.web.ApplicationContext.sessionFact
 
 public class SearchFeature {
 
-    private static final List<Object> NO_RESULT = Collections.emptyList();
+    private static final List<String> NO_RESULT = Collections.emptyList();
 
     private PetStoreDriver petstore = new PetStoreDriver();
     private Database database = Database.connect(sessionFactory());
@@ -30,19 +30,20 @@ public class SearchFeature {
         home = petstore.start();
     }
 
-    @Test
-    public void displaysAnEmptyProductListWhenNoProductMatches() throws Exception {
+    @Test public void
+    displaysAnEmptyProductListWhenNoProductMatches() throws Exception {
         given(aProduct().withName("Labrador Retriever"));
         ProductsPage resultsPage = home.searchFor("Dalmatian");
-        resultsPage.displays(NO_RESULT);
+        resultsPage.displaysNoResult();
     }
 
-    @Test
-    public void displaysAListOfProductsWhoseNameIncludeKeyword() throws Exception {
+    @Test public void
+    displaysAListOfProductsWhoseNameOrDescriptionIncludeKeyword() throws Exception {
         given(aProduct().withName("Labrador Retriever"),
-              aProduct().withName("Golden Retriever"));
+              aProduct().withName("Chesapeake").describedAs("Chesapeake bay retriever"),
+              aProduct().withName("Doberman"));
         ProductsPage resultsPage = home.searchFor("retriever");
-        resultsPage.displays(listWithProducts("Labrador Retriever", "Golden Retriever"));
+        resultsPage.displays(listWithProductsNamed("Labrador Retriever", "Chesapeake"));
     }
 
     @After
@@ -54,7 +55,7 @@ public class SearchFeature {
         database.persist(builders);
     }
 
-    private static List<String> listWithProducts(String... productNames) {
+    private static List<String> listWithProductsNamed(String... productNames) {
         return Arrays.asList(productNames);
     }
 
