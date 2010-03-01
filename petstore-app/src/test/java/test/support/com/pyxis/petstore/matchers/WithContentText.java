@@ -20,17 +20,17 @@ public class WithContentText extends FeatureMatcher<Element, String> {
     }
 
     @Factory
-    public static Matcher<Element> withText(Matcher<? super String> contentMatcher) {
+    public static Matcher<Element> withContent(Matcher<? super String> contentMatcher) {
         return new WithContentText(contentMatcher);
     }
 
     @Factory
-    public static Matcher<Element> withText(String contentText) {
-        return withText(equalTo(contentText));
+    public static Matcher<Element> withContent(String contentText) {
+        return withContent(equalTo(contentText));
     }
 
-	public static Matcher<Element> withBlankText() {
-		return withText(blank());
+	public static Matcher<Element> withBlankContent() {
+		return withContent(blank());
 	}
 
 }
