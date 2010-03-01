@@ -3,7 +3,6 @@ package test.integration.com.pyxis.petstore.persistence;
 import com.pyxis.petstore.domain.Product;
 import com.pyxis.petstore.domain.ProductCatalog;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
@@ -54,7 +53,7 @@ public class PersistentProductCatalogTest {
 
         Collection<Product> matches = productCatalog.findProductsByKeyword("bull");
         assertThat(matches, hasSize(equalTo(2)));
-        assertThat(matches, containsProducts(productNamed("English Bulldog"), productNamed("French Bulldog")));
+        assertThat(matches, containsInAnyOrder(productNamed("English Bulldog"), productNamed("French Bulldog")));
     }
 
     @Test
@@ -65,7 +64,7 @@ public class PersistentProductCatalogTest {
     	);
     	
     	List<Product> matches = productCatalog.findProductsByKeyword("friend");
-    	assertThat(matches, containsProducts(productNamed("Labrador")));
+    	assertThat(matches, containsInAnyOrder(productNamed("Labrador")));
     }
     
     private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
@@ -77,11 +76,7 @@ public class PersistentProductCatalogTest {
     }
 
     private Matcher<Iterable<Product>> hasSize(Matcher<? super Integer> sizeMatcher) {
-        return Matchers.iterableWithSize(sizeMatcher);
-    }
-
-    private Matcher<Iterable<Product>> containsProducts(Matcher<Product>... productMatchers) {
-        return Matchers.containsInAnyOrder(productMatchers);
+        return iterableWithSize(sizeMatcher);
     }
 
     private Matcher<Product> productNamed(String name) {
