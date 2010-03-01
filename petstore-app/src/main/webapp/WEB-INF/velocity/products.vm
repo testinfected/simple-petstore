@@ -7,7 +7,7 @@ Found <span id="match-count">$productList.size()</span> result(s)
 <table id="products">
 <thead>
 <tr>
-	<th>&nbsp;</th>
+	<th></th>
 	<th>Name</th>
 	<th>Description</th>
 </tr>
