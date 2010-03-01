@@ -11,6 +11,7 @@ import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasChild;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasSelector;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.hasUniqueSelector;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.withText;
+import static test.support.com.pyxis.petstore.matchers.DomMatchers.withBlankText;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
 import java.util.Map;
@@ -41,7 +42,7 @@ public class ProductsViewTest {
 				aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador")));
         assertThat(dom(productsPage), 
         		hasSelector("#products th", 
-        				inOrder(withEmptyText(),
+        				inOrder(withBlankText(),
         						withText("Name"),
         						withText("Description"))));
     }
@@ -79,12 +80,8 @@ public class ProductsViewTest {
 		return render(PRODUCTS_VIEW).using(model);
 	}
 
-	private Matcher<Element> withEmptyText() {
-		return withText("");
-	}
-    
 	private Matcher<Element> anEmptyDescription() {
-		return description("");
+		return withBlankText();
 	}
 
 	private Matcher<Element> image(String imageUrl) {

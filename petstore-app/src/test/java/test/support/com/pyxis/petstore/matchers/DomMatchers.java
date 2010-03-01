@@ -1,10 +1,10 @@
 package test.support.com.pyxis.petstore.matchers;
 
+import static org.hamcrest.Matchers.equalTo;
+
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.w3c.dom.Element;
-
-import static org.hamcrest.Matchers.equalTo;
 
 public class DomMatchers {
 
@@ -32,6 +32,10 @@ public class DomMatchers {
 
     public static Matcher<Element> withText(String contentText) {
         return WithContentText.withText(equalTo(contentText));
+    }
+    
+    public static Matcher<Element> withBlankText() {
+    	return WithContentText.withBlankText();
     }
 
     public static Matcher<Element> withText(Matcher<? super String> contentMatcher) {
