@@ -1,6 +1,6 @@
 package test.com.pyxis.petstore.view;
 
-import com.pyxis.petstore.domain.AttachmentStorage;
+import com.pyxis.petstore.domain.Storage;
 import com.pyxis.petstore.domain.Product;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
@@ -31,7 +31,7 @@ public class ProductsViewTest {
     private static final String DEFAULT_PHOTO = "/path/to/missing.png";
 
     Mockery context = new JUnit4Mockery();
-    AttachmentStorage storage = context.mock(AttachmentStorage.class);
+    Storage storage = context.mock(Storage.class);
     String productsPage;
 
     @Before public void
@@ -121,7 +121,7 @@ public class ProductsViewTest {
 
     private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
         ModelMap model = new ModelMap();
-        model.addAttribute("storage", storage);
+        model.addAttribute(storage);
         model.addAttribute("productList", entities(entityBuilders));
         return model;
     }
