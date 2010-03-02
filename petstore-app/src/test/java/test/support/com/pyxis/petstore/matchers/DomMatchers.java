@@ -1,5 +1,6 @@
 package test.support.com.pyxis.petstore.matchers;
 
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.hamcrest.Matcher;
@@ -12,6 +13,10 @@ public class DomMatchers {
 
     public static Matcher<Element> hasSelector(String selector, Matcher<Iterable<Element>> elementsMatcher) {
         return HasSelector.hasSelector(selector, elementsMatcher);
+    }
+
+    public static Matcher<Element> hasUniqueSelector(String selector) {
+        return HasUniqueSelector.hasUniqueSelector(selector, anything());
     }
 
     public static Matcher<Element> hasUniqueSelector(String selector, Matcher<Element> elementMatcher) {

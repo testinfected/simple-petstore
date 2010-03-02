@@ -9,8 +9,8 @@
         <groupId>com.pyxis</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>petstore-persistence</artifactId>
-    <name>petstore-persistence</name>
+    <artifactId>petstore-infrastructure</artifactId>
+    <name>petstore-infrastructure</name>
 
     <repositories>
         <repository>

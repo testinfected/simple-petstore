@@ -2,34 +2,37 @@ package test.system.com.pyxis.petstore.page;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.IsEqual;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.lift.Finders;
 import org.openqa.selenium.support.FindBy;
 import test.support.com.pyxis.petstore.web.PageObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.String.valueOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.openqa.selenium.lift.Finders.*;
+import static org.openqa.selenium.lift.Matchers.attribute;
+import static org.openqa.selenium.lift.Matchers.exactly;
+import static org.openqa.selenium.lift.Matchers.text;
+import static test.support.com.pyxis.petstore.web.WebMatchers.being;
+import static test.support.com.pyxis.petstore.web.WebMatchers.className;
+import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.element;
+import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.selector;
 
 public class ProductsPage extends PageObject {
-
-    @FindBy(tagName = "title")
-    private WebElement title;
-
-    @FindBy(id = "match-count")
-    private WebElement numberOfMatches;
-    @FindBy(id = "products")
-    private WebElement products;
 
     public ProductsPage(WebDriver webDriver) {
         super(webDriver);
     }
 
     public void displaysNoResult() {
-        displaysNumberOfMatches(0);
+        assertPresenceOf(element("no-match"));
     }
 
     public void displays(List<String> expectedProductNames) {
@@ -38,29 +41,15 @@ public class ProductsPage extends PageObject {
     }
 
     private void displaysTableContaining(List<String> expectedProductNames) {
-        List<WebElement> productRows = products.findElements(By.cssSelector("tr.product"));
-        assertThat(productRows, hasSize(expectedProductNames.size()));
+        assertPresenceOf(exactly(expectedProductNames.size()), selector("tr.product"));
 
-        List<WebElement> nameCells = products.findElements(By.cssSelector("td.name"));
-        assertThat(expectedProductNames, contains(productNames(nameCells)));
-    }
-
-    private Matcher<Iterable<WebElement>> hasSize(int size) {
-        return iterableWithSize(size);
-    }
-
-    private List<Matcher<? super String>> productNames(List<WebElement> nameCells) {
-        List<Matcher<? super String>> nameMatchers = new ArrayList<Matcher<? super String>>();
-        for (WebElement cell : nameCells) {
-            nameMatchers.add(Matchers.is(cell.getText()));
+        for (String expected : expectedProductNames) {
+            assertPresenceOf(cell().with(className("name")).with(text(being(expected))));
         }
-        return nameMatchers;
     }
 
     private void displaysNumberOfMatches(int matchCount) {
-        String text = numberOfMatches.getText();
-        Integer numberOfProductsFound = Integer.parseInt(text);
-        assertThat(numberOfProductsFound, is(matchCount));
+        assertPresenceOf(element("match-count").with(text(being(matchCount))));
     }
 
     @Override
@@ -69,6 +58,6 @@ public class ProductsPage extends PageObject {
     }
 
     private void displaysTitle(final String expected) {
-        assertThat(title.getText(), is(expected));
+        assertPresenceOf(title(expected));
     }
 }

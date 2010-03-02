@@ -3,8 +3,9 @@
     <title>PetStore - Products</title>
 </head>
 <body>
+#if ($productList)
 Found <span id="match-count">$productList.size()</span> result(s)
-#if ($productList.size() > 0)
+
 <table id="products">
 <thead>
 <tr>
@@ -21,6 +22,8 @@ Found <span id="match-count">$productList.size()</span> result(s)
 	</tr>
 #end
 </table>
-#end
+    #else
+    <div id="no-match"><p>No matching product found</p></div>
+        #end
 </body>
 </html>

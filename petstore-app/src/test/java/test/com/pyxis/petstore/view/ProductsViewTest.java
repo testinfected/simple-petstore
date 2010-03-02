@@ -84,6 +84,7 @@ public class ProductsViewTest {
     @Test public void
     displaysNoProductsTableIfNoProductIsFound() {
         productsPage = renderProductsPageUsing(anEmptyModel());
+        assertThat(dom(productsPage), hasUniqueSelector("#no-match"));
         assertThat(dom(productsPage), hasNoSelector("#products"));
     }
 
@@ -122,7 +123,7 @@ public class ProductsViewTest {
     private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
         ModelMap model = new ModelMap();
         model.addAttribute(storage);
-        model.addAttribute("productList", entities(entityBuilders));
+        model.addAttribute(entities(entityBuilders));
         return model;
     }
 }
