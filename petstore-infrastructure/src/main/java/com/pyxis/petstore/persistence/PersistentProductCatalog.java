@@ -35,4 +35,9 @@ public class PersistentProductCatalog implements ProductCatalog {
 	private Criterion fieldMatchesKeyword(String field, String keyword) {
 		return Restrictions.ilike(field, keyword, MatchMode.ANYWHERE);
 	}
+
+	@Transactional
+	public void add(Product product) {
+		this.sessionFactory.getCurrentSession().save(product);
+	}
 }

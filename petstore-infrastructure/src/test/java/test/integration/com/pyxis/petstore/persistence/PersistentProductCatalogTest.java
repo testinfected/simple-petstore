@@ -1,23 +1,28 @@
 package test.integration.com.pyxis.petstore.persistence;
 
-import com.pyxis.petstore.domain.Product;
-import com.pyxis.petstore.domain.ProductCatalog;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.iterableWithSize;
+import static org.junit.Assert.assertTrue;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+
+import java.util.Collection;
+import java.util.List;
+
 import org.hamcrest.Matcher;
+import org.hibernate.PropertyValueException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.PersistenceContext;
 import test.support.com.pyxis.petstore.matchers.HasFieldWithValue;
 
-import java.util.Collection;
-import java.util.List;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertTrue;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.ProductCatalog;
 
 @SuppressWarnings("unchecked")
 public class PersistentProductCatalogTest {
@@ -67,6 +72,11 @@ public class PersistentProductCatalogTest {
         assertThat(matches, containsInAnyOrder(productNamed("Labrador")));
     }
 
+    @Test (expected = PropertyValueException.class)
+    public void cannotPersistAProductWithoutAName() throws Exception {
+    	productCatalog.add(aProduct().withName(null).build());
+    }
+    
     private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
         database.persist(builders);
     }

@@ -15,6 +15,8 @@ public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+    @Column(nullable = false)
     private String name;
     private String description;
     private String photoUrl = MISSING_PHOTO_URL;

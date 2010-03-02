@@ -51,7 +51,7 @@ public class SearchFeature {
         database.persist(entities);
     }
 
-    private void given(EntityBuilder... builders) throws Exception {
+    private void given(EntityBuilder<?>... builders) throws Exception {
         database.persist(builders);
     }
 }
