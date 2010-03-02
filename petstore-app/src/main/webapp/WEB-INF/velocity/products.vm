@@ -4,6 +4,7 @@
 </head>
 <body>
 Found <span id="match-count">$productList.size()</span> result(s)
+#if ($productList)
 <table id="products">
 <thead>
 <tr>
@@ -20,5 +21,6 @@ Found <span id="match-count">$productList.size()</span> result(s)
 	</tr>
 #end
 </table>
+#end
 </body>
 </html>

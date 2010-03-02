@@ -13,7 +13,6 @@ import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 
-import java.net.MalformedURLException;
 import java.util.Map;
 
 import static com.threelevers.css.DocumentBuilder.dom;
@@ -28,14 +27,14 @@ import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 @RunWith(JMock.class)
 public class ProductsViewTest {
     private static final String PRODUCTS_VIEW = "products";
-
-    Mockery context = new JUnit4Mockery();
-    AttachmentStorage storage = context.mock(AttachmentStorage.class);  
-    String productsPage;
     private static final String DEFAULT_PHOTO = "/path/to/missing.png";
 
-    @Test
-    public void displaysNumberOfProductsFound() {
+    Mockery context = new JUnit4Mockery();
+    AttachmentStorage storage = context.mock(AttachmentStorage.class);
+    String productsPage;
+
+    @Test public void
+    displaysNumberOfProductsFound() {
         useDefaultPhoto();
         productsPage = renderProductsPageUsing(aModelWith(
                 aProduct().withName("Dalmatian"),
@@ -43,8 +42,8 @@ public class ProductsViewTest {
         assertThat(dom(productsPage), hasUniqueSelector("#match-count", withText("2")));
     }
 
-    @Test
-    public void displaysColumnHeadingsOfProductTable() {
+    @Test public void
+    displaysColumnHeadingsOfProductTable() {
         useDefaultPhoto();
         productsPage = renderProductsPageUsing(aModelWith(
                 aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador")));
@@ -55,8 +54,8 @@ public class ProductsViewTest {
                                 withText("Description"))));
     }
 
-    @Test
-    public void displaysProductDetailsInColumns() throws MalformedURLException {
+    @Test public void
+    displaysProductDetailsInColumns() throws Exception {
         ProductBuilder labrador = aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador.png");
         final String imageUrl = "relative/path/to/attachment/labrador.png";
         context.checking(new Expectations() {{
@@ -71,8 +70,8 @@ public class ProductsViewTest {
                                 description("Friendly"))));
     }
 
-    @Test
-    public void handlesProductWithNoDescriptionCorrectly() {
+    @Test public void
+    handlesProductWithNoDescriptionCorrectly() {
         useDefaultPhoto();
         productsPage = renderProductsPageUsing(aModelWith(
                 aProduct().withName("Labrador")));
@@ -82,8 +81,8 @@ public class ProductsViewTest {
     }
 
     // todo this behaviour should be on the photo or storage
-    @Test
-    public void displaysDefaultPhotoWhenProductHasNoAssociatedPhoto() {
+    @Test public void
+    displaysDefaultPhotoWhenProductHasNoAssociatedPhoto() {
         useDefaultPhoto();
         productsPage = renderProductsPageUsing(aModelWith(
                 aProduct().withName("Labrador").describedAs("Friendly")));
@@ -92,10 +91,20 @@ public class ProductsViewTest {
                         contains(image(DEFAULT_PHOTO))));
     }
 
+    @Test public void
+    displaysNoProductsTableIfNoProductIsFound() {
+        productsPage = renderProductsPageUsing(anEmptyModel());
+        assertThat(dom(productsPage), hasNoSelector("#products"));
+    }
+
     private void useDefaultPhoto() {
         context.checking(new Expectations() {{
             allowing(storage).getLocation(with(any(String.class))); will(returnValue(DEFAULT_PHOTO));
         }});
+    }
+
+    private Map<String, ?> anEmptyModel() {
+        return aModelWith();
     }
 
     private String renderProductsPageUsing(Map<String, ?> model) {
