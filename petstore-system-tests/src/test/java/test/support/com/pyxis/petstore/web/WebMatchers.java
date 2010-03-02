@@ -10,6 +10,10 @@ public class WebMatchers {
 
     private WebMatchers() {}
 
+    public static Matcher<WebElement> id(String id) {
+        return AttributeMatcher.attribute("id", being(id));
+    }
+
     public static Matcher<WebElement> className(String className) {
         return AttributeMatcher.attribute("class", being(className));
     }

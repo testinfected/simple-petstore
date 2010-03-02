@@ -34,12 +34,12 @@ public class SearchFeature {
 
     @Test public void
     displaysAListOfProductsWhoseNameOrDescriptionIncludeKeyword() throws Exception {
-        Product labrador = aProduct().withName("Labrador Retriever").withPhotoUrl("/labrador.jpg").build();
-        Product chesapeake = aProduct().withName("Chesapeake").describedAs("Chesapeake bay retriever").build();
-        Product dalmatian = aProduct().withName("Dalmatian").build();
-        given(labrador, chesapeake, dalmatian);
+        Product aLabrador = aProduct().withName("Labrador Retriever").withPhotoUrl("/labrador.jpg").build();
+        Product aChesapeake = aProduct().withName("Chesapeake").describedAs("Chesapeake bay retriever").build();
+        Product aDalmatian = aProduct().withName("Dalmatian").build();
+        given(aLabrador, aChesapeake, aDalmatian);
         ProductsPage resultsPage = home.searchFor("retriever");
-        resultsPage.displays(labrador, chesapeake);
+        resultsPage.displays(aLabrador, aChesapeake);
     }
 
     @After

@@ -39,13 +39,4 @@ public class ProductsPage extends PageObject {
     private void displaysNumberOfMatches(int matchCount) {
         assertPresenceOf(element("match-count").with(text(being(matchCount))));
     }
-
-    @Override
-    public void assertLocation() {
-        displaysTitle("PetStore - Products");
-    }
-
-    private void displaysTitle(final String expected) {
-        assertPresenceOf(title(expected));
-    }
 }

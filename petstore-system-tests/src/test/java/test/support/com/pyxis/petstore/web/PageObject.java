@@ -23,17 +23,12 @@ public abstract class PageObject {
         this.context = new WebDriverTestContext(driver);
     }
 
-    public abstract void assertLocation();
-
     public <T extends PageObject> T nowOn(Class<T> pageClass) {
         return onPage(webdriver, pageClass);
     }
 
-    // todo get rid of PageFactory
     public static <T extends PageObject> T onPage(WebDriver webdriver, Class<T> pageClass) {
-        T page = PageFactory.initElements(webdriver, pageClass);
-        page.assertLocation();
-        return page;
+        return PageFactory.initElements(webdriver, pageClass);
     }
 
     protected void clickOn(Finder<WebElement, WebDriver> finder) {
