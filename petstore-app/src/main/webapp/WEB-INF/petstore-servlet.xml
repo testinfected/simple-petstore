@@ -34,6 +34,7 @@
 		<property name="interceptors" ref="openSessionInViewHandlerInterceptor"/>
 	</bean>
 
-    <!--todo move to infrastructure module ?-->
-    <bean id="storage" class="com.pyxis.petstore.service.FileSystemStorage"/>
+    <bean id="storage" class="com.pyxis.petstore.service.SimpleFileStore">
+        <constructor-arg value="attachments/products"/>
+    </bean>
 </beans>

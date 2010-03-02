@@ -33,14 +33,19 @@ public class Database {
 
     public void persist(final EntityBuilder<?>... builders) throws Exception {
         for (final EntityBuilder builder : builders) {
+            persist(builder.build());
+        }
+    }
+
+    public <T> void persist(final T... entities) throws Exception {
+        for (final T entity : entities) {
             perform(new UnitOfWork() {
                 public void work() throws Exception {
-                    session.save(builder.build());
+                    session.save(entity);
                 }
             });
         }
     }
-
     public void perform(UnitOfWork work) throws Exception {
         new Transactor(session).perform(work);
     }

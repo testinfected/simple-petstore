@@ -1,7 +1,7 @@
 package test.com.pyxis.petstore.view;
 
-import com.pyxis.petstore.domain.Storage;
 import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.Storage;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -37,7 +37,8 @@ public class ProductsViewTest {
     @Before public void
     allowDefaultPhoto() {
         context.checking(new Expectations() {{
-            allowing(storage).getLocation(with(Product.MISSING_PHOTO_URL)); will(returnValue(DEFAULT_PHOTO));
+            allowing(storage).getLocation(with(Product.MISSING_PHOTO_URL));
+            will(returnValue(DEFAULT_PHOTO));
         }});
     }
 
@@ -59,10 +60,11 @@ public class ProductsViewTest {
 
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
-        Map<String, ?> model = aModelWith(aProduct().withName("Labrador").describedAs("Friendly").withPhotoUri("/labrador.png"));
-        final String imageUrl = "/relative/path/to/attachment/labrador.png";
+        Map<String, ?> model = aModelWith(aProduct().withName("Labrador").describedAs("Friendly").withPhotoUrl("/labrador.png"));
+        final String imageUrl = "/path/to/attachment/labrador.png";
         context.checking(new Expectations() {{
-            allowing(storage).getLocation("/labrador.png"); will(returnValue(imageUrl));
+            allowing(storage).getLocation("/labrador.png");
+            will(returnValue(imageUrl));
         }});
 
         productsPage = renderProductsPageUsing(model);

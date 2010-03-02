@@ -16,7 +16,4 @@
     <bean id="productCatalog" class="com.pyxis.petstore.persistence.PersistentProductCatalog">
         <constructor-arg ref="sessionFactory"/>
     </bean>
-    
-    <bean id="photoAlbum" class="com.pyxis.petstore.persistence.PersistentPhotoAlbum"/>
-    
 </beans>

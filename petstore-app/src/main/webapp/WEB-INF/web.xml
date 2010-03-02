@@ -43,6 +43,10 @@
     	<servlet-name>default</servlet-name>
         <url-pattern>/images/*</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/attachments/*</url-pattern>
+    </servlet-mapping>
 	<servlet-mapping>
     	<servlet-name>default</servlet-name>
         <url-pattern>/stylesheets/*</url-pattern>

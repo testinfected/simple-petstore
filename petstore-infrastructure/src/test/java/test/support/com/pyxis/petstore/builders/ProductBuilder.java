@@ -7,7 +7,7 @@ public class ProductBuilder implements EntityBuilder<Product> {
 
     private String name = "a product";
 	private String description;
-	private String photoUri;
+	private String photoUrl;
 
     public static ProductBuilder aProduct() {
         return new ProductBuilder();
@@ -21,7 +21,7 @@ public class ProductBuilder implements EntityBuilder<Product> {
     public Product build() {
         Product product = new Product(name);
         product.setDescription(description);
-        if (photoUri != null) product.setPhotoUrl(photoUri);
+        if (photoUrl != null) product.setPhotoUrl(photoUrl);
 		return product;
     }
 
@@ -30,8 +30,8 @@ public class ProductBuilder implements EntityBuilder<Product> {
 		return this;
 	}
 
-	public ProductBuilder withPhotoUri(String uri) {
-		this.photoUri = uri;
+	public ProductBuilder withPhotoUrl(String url) {
+		this.photoUrl = url;
 		return this;
 	}
 }

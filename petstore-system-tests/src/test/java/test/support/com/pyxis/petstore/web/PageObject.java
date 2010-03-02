@@ -29,6 +29,7 @@ public abstract class PageObject {
         return onPage(webdriver, pageClass);
     }
 
+    // todo get rid of PageFactory
     public static <T extends PageObject> T onPage(WebDriver webdriver, Class<T> pageClass) {
         T page = PageFactory.initElements(webdriver, pageClass);
         page.assertLocation();

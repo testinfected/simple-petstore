@@ -1,23 +1,11 @@
 package test.system.com.pyxis.petstore.page;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.hamcrest.core.IsEqual;
-import org.openqa.selenium.By;
+import com.pyxis.petstore.domain.Product;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.lift.Finders;
-import org.openqa.selenium.support.FindBy;
 import test.support.com.pyxis.petstore.web.PageObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.String.valueOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.openqa.selenium.lift.Finders.*;
-import static org.openqa.selenium.lift.Matchers.attribute;
+import static org.openqa.selenium.lift.Finders.cell;
+import static org.openqa.selenium.lift.Finders.title;
 import static org.openqa.selenium.lift.Matchers.exactly;
 import static org.openqa.selenium.lift.Matchers.text;
 import static test.support.com.pyxis.petstore.web.WebMatchers.being;
@@ -35,16 +23,16 @@ public class ProductsPage extends PageObject {
         assertPresenceOf(element("no-match"));
     }
 
-    public void displays(List<String> expectedProductNames) {
-        displaysNumberOfMatches(expectedProductNames.size());
-        displaysTableContaining(expectedProductNames);
+    public void displays(Product... expectedProducts) {
+        displaysNumberOfMatches(expectedProducts.length);
+        displaysTableContaining(expectedProducts);
     }
 
-    private void displaysTableContaining(List<String> expectedProductNames) {
-        assertPresenceOf(exactly(expectedProductNames.size()), selector("tr.product"));
+    private void displaysTableContaining(Product... expectedProducts) {
+        assertPresenceOf(exactly(expectedProducts.length), selector("tr.product"));
 
-        for (String expected : expectedProductNames) {
-            assertPresenceOf(cell().with(className("name")).with(text(being(expected))));
+        for (Product expected : expectedProducts) {
+            assertPresenceOf(cell().with(className("name")).with(text(being(expected.getName()))));
         }
     }
 

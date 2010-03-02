@@ -1,5 +1,6 @@
 package test.system.com.pyxis.petstore;
 
+import com.pyxis.petstore.domain.Product;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,20 +10,14 @@ import test.support.com.pyxis.petstore.web.PetStoreDriver;
 import test.system.com.pyxis.petstore.page.HomePage;
 import test.system.com.pyxis.petstore.page.ProductsPage;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.web.ApplicationContext.sessionFactory;
 
 public class SearchFeature {
 
-    private static final List<String> NO_RESULT = Collections.emptyList();
-
-    private PetStoreDriver petstore = new PetStoreDriver();
-    private Database database = Database.connect(sessionFactory());
-    private HomePage home;
+    PetStoreDriver petstore = new PetStoreDriver();
+    Database database = Database.connect(sessionFactory());
+    HomePage home;
 
     @Before
     public void setUp() throws Exception {
@@ -39,11 +34,12 @@ public class SearchFeature {
 
     @Test public void
     displaysAListOfProductsWhoseNameOrDescriptionIncludeKeyword() throws Exception {
-        given(aProduct().withName("Labrador Retriever"),
-              aProduct().withName("Chesapeake").describedAs("Chesapeake bay retriever"),
-              aProduct().withName("Doberman"));
+        Product labrador = aProduct().withName("Labrador Retriever").withPhotoUrl("/labrador.jpg").build();
+        Product chesapeake = aProduct().withName("Chesapeake").describedAs("Chesapeake bay retriever").build();
+        Product dalmatian = aProduct().withName("Dalmatian").build();
+        given(labrador, chesapeake, dalmatian);
         ProductsPage resultsPage = home.searchFor("retriever");
-        resultsPage.displays(listWithProductsNamed("Labrador Retriever", "Chesapeake"));
+        resultsPage.displays(labrador, chesapeake);
     }
 
     @After
@@ -51,12 +47,11 @@ public class SearchFeature {
         petstore.close();
     }
 
+    private <T> void given(T... entities) throws Exception {
+        database.persist(entities);
+    }
+
     private void given(EntityBuilder... builders) throws Exception {
         database.persist(builders);
     }
-
-    private static List<String> listWithProductsNamed(String... productNames) {
-        return Arrays.asList(productNames);
-    }
-
 }
