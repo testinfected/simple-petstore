@@ -34,16 +34,24 @@ public class HasFieldWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     public static Object fieldValueOf(Object argument, Field field) {
-        byPassSecurity(field);
         try {
-            return field.get(argument);
+            boolean accessible = byPassSecurity(field);
+            Object value = field.get(argument);
+            restoreSecurity(field, accessible);
+            return value;
         } catch (IllegalAccessException e) {
             throw ExceptionImposter.imposterize(e);
         }
     }
 
-    private static void byPassSecurity(Field field) {
+    private static void restoreSecurity(Field field, boolean accessible) {
+        field.setAccessible(accessible);
+    }
+
+    private static boolean byPassSecurity(Field field) {
+        boolean accessible = field.isAccessible();
         field.setAccessible(true);
+        return accessible;
     }
 
     private Field getField(Object argument, Description mismatchDescription) {

@@ -7,8 +7,10 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.core.AllOf;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static test.support.com.pyxis.petstore.matchers.HasFieldWithValue.fieldValueOf;
@@ -40,7 +42,20 @@ public class SamePersistentFieldsAs<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     private static <T> Field[] persistentFieldsOf(T entity) {
-        return entity.getClass().getDeclaredFields();
+        Field[] allFields = entity.getClass().getDeclaredFields();
+        List<Field> persistentFields = new ArrayList<Field>();
+        for (Field each : allFields) {
+            if (!isStatic(each) && !isTransient(each)) persistentFields.add(each);
+        }
+        return persistentFields.toArray(new Field[persistentFields.size()]);
+    }
+
+    private static boolean isTransient(Field each) {
+        return Modifier.isTransient(each.getModifiers());
+    }
+
+    private static boolean isStatic(Field each) {
+        return Modifier.isStatic(each.getModifiers());
     }
 
     public void describeTo(Description description) {
@@ -48,7 +63,7 @@ public class SamePersistentFieldsAs<T> extends TypeSafeDiagnosingMatcher<T> {
         boolean addSeparator = false;
         for (Field field : persistentFieldsOf(expectedEntity)) {
             if (addSeparator) description.appendText(", ");
-            description.appendText("\"" + field.getName() + "\" ");
+            description.appendText(field.getName() + ": ");
             description.appendValue(fieldValueOf(expectedEntity, field));
             addSeparator = true;
         }

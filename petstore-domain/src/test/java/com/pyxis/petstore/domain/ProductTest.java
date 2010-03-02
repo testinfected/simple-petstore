@@ -1,24 +1,28 @@
 package com.pyxis.petstore.domain;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
+@RunWith(JMock.class)
 public class ProductTest {
 
-    @Test public void
-    isCreatedCorrectly() {
-        Product product = new Product("Dog");
-        assertThat(product.getName(), is("Dog"));
-    }
+    static final String MISSING_PHOTO = "/missing.png";
+
+    Mockery context = new JUnit4Mockery();
+    Storage storage = context.mock(Storage.class);
 
     @Test public void
-    usesDefaultPhotoUnlessSpecified() {
-        Product product = new Product("a product");
-        assertThat(product.getPhotoUrl(), equalTo("/missing.png"));
-        product.setPhotoUrl("/labrador.png");
-        assertThat(product.getPhotoUrl(), equalTo("/labrador.png"));
+    usesDefaultPhotoIfNotSpecified() {
+        Product product = aProduct().build();
+        context.checking(new Expectations() {{
+            oneOf(storage).getLocation(with(MISSING_PHOTO));
+        }});
+        product.getPhotoLocation(storage);
     }
 }

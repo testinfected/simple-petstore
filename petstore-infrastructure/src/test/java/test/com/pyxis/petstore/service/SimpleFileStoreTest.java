@@ -1,4 +1,4 @@
-package test.integration.com.pyxis.petstore.service;
+package test.com.pyxis.petstore.service;
 
 import com.pyxis.petstore.domain.Storage;
 import com.pyxis.petstore.service.SimpleFileStore;

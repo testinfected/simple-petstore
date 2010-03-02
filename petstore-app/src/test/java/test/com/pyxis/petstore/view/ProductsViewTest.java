@@ -37,8 +37,7 @@ public class ProductsViewTest {
     @Before public void
     allowDefaultPhoto() {
         context.checking(new Expectations() {{
-            allowing(storage).getLocation(with(Product.MISSING_PHOTO_URL));
-            will(returnValue(DEFAULT_PHOTO));
+            allowing(storage).getLocation(with(Product.MISSING_PHOTO_URL)); will(returnValue(DEFAULT_PHOTO));
         }});
     }
 
@@ -63,8 +62,7 @@ public class ProductsViewTest {
         Map<String, ?> model = aModelWith(aProduct().withName("Labrador").describedAs("Friendly").withPhotoUrl("/labrador.png"));
         final String imageUrl = "/path/to/attachment/labrador.png";
         context.checking(new Expectations() {{
-            allowing(storage).getLocation("/labrador.png");
-            will(returnValue(imageUrl));
+            allowing(storage).getLocation("/labrador.png"); will(returnValue(imageUrl));
         }});
 
         productsPage = renderProductsPageUsing(model);

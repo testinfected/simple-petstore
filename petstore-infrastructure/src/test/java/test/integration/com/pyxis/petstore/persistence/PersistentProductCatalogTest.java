@@ -6,12 +6,15 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.db.Database.idOf;
+import static test.support.com.pyxis.petstore.matchers.SamePersistentFieldsAs.samePersistentFieldsAs;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.hamcrest.Matcher;
 import org.hibernate.PropertyValueException;
+import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,12 +22,12 @@ import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.PersistenceContext;
+import test.support.com.pyxis.petstore.db.UnitOfWork;
 import test.support.com.pyxis.petstore.matchers.HasFieldWithValue;
 
 import com.pyxis.petstore.domain.Product;
 import com.pyxis.petstore.domain.ProductCatalog;
 
-@SuppressWarnings("unchecked")
 public class PersistentProductCatalogTest {
 
     ProductCatalog productCatalog = PersistenceContext.productCatalog();
@@ -74,9 +77,34 @@ public class PersistentProductCatalogTest {
 
     @Test (expected = PropertyValueException.class)
     public void cannotPersistAProductWithoutAName() throws Exception {
-    	productCatalog.add(aProduct().withName(null).build());
+    	productCatalog.add(aNamelessProduct());
     }
-    
+
+    @Test
+    public void canRoundTripProducts() throws Exception {
+        final Product product = aProduct().
+                withName("Labrador").
+                describedAs("Labrador Retriever").
+                withPhotoUrl("/labrador.png").
+                build();
+
+    	productCatalog.add(product);
+        assertCanBeReloadedWithSameState(product);
+    }
+
+    private void assertCanBeReloadedWithSameState(final Product product) throws Exception {
+        database.perform(new UnitOfWork() {
+            public void work(Session session) throws Exception {
+                Product persisted = (Product) session.get(Product.class, idOf(product));
+                assertThat(persisted, samePersistentFieldsAs(product));
+            }
+        });
+    }
+
+    private Product aNamelessProduct() {
+        return aProduct().withName(null).build();
+    }
+
     private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
         database.persist(builders);
     }

@@ -39,9 +39,9 @@ public class Product {
 		this.description = description;
 	}
 
-	public String getPhotoUrl() {
-		return photoUrl;
-	}
+    public String getPhotoLocation(Storage storage) {
+        return storage.getLocation(photoUrl);
+    }
 
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
