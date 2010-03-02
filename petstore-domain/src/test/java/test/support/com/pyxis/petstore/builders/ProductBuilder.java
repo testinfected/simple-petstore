@@ -2,7 +2,6 @@ package test.support.com.pyxis.petstore.builders;
 
 import com.pyxis.petstore.domain.Product;
 
-// todo move to domain module
 public class ProductBuilder implements EntityBuilder<Product> {
 
     private String name = "a product";

@@ -10,7 +10,8 @@ import org.apache.velocity.app.VelocityEngine;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
-import test.support.com.pyxis.petstore.ExceptionImposter;
+import com.pyxis.petstore.ExceptionImposter;
+
 
 public class VelocityRendering {
 

@@ -1,6 +1,8 @@
-package test.support.com.pyxis.petstore;
+package com.pyxis.petstore;
 
 import org.junit.Test;
+
+import com.pyxis.petstore.ExceptionImposter;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
