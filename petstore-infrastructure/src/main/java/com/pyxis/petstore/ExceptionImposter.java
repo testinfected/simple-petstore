@@ -1,4 +1,4 @@
-package test.support.com.pyxis.petstore;
+package com.pyxis.petstore;
 
 public class ExceptionImposter extends RuntimeException {
     private final Exception imposterized;

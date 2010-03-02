@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import com.pyxis.petstore.ExceptionImposter;
 import com.pyxis.petstore.domain.ProductCatalog;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
@@ -12,7 +13,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.carbonfive.db.migration.DataSourceMigrationManager;
 import com.carbonfive.db.migration.ResourceMigrationResolver;
-import test.support.com.pyxis.petstore.ExceptionImposter;
 
 public class PersistenceContext {
 
