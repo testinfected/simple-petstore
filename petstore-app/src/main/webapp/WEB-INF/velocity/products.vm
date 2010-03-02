@@ -15,7 +15,7 @@ Found <span id="match-count">$productList.size()</span> result(s)
 </thead>
 #foreach ($product in $productList)
 	<tr class="product">
-		<td><img class="photo" src="$storage.getLocation($product.PhotoUri)"></td>
+		<td><img class="photo" src="$storage.getLocation($product.PhotoUrl)"></td>
 		<td class="name">$product.Name</td>
 		<td>$!product.Description</td>
 	</tr>

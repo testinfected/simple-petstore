@@ -17,8 +17,8 @@ public class ProductTest {
     @Test public void
     usesDefaultPhotoUnlessSpecified() {
         Product product = new Product("a product");
-        assertThat(product.getPhotoUri(), equalTo("/missing.png"));
-        product.setPhotoUri("/labrador.png");
-        assertThat(product.getPhotoUri(), equalTo("/labrador.png"));
+        assertThat(product.getPhotoUrl(), equalTo("/missing.png"));
+        product.setPhotoUrl("/labrador.png");
+        assertThat(product.getPhotoUrl(), equalTo("/labrador.png"));
     }
 }

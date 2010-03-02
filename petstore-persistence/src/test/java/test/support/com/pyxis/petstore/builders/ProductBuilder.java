@@ -21,7 +21,7 @@ public class ProductBuilder implements EntityBuilder<Product> {
     public Product build() {
         Product product = new Product(name);
         product.setDescription(description);
-        if (photoUri != null) product.setPhotoUri(photoUri);
+        if (photoUri != null) product.setPhotoUrl(photoUri);
 		return product;
     }
 

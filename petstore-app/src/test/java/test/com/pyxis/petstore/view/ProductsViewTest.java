@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.springframework.ui.ModelMap;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
-import test.support.com.pyxis.petstore.builders.ProductBuilder;
 
 import java.util.Map;
 
@@ -38,7 +37,7 @@ public class ProductsViewTest {
     @Before public void
     allowDefaultPhoto() {
         context.checking(new Expectations() {{
-            allowing(storage).getLocation(with(Product.MISSING_PHOTO_URI)); will(returnValue(DEFAULT_PHOTO));
+            allowing(storage).getLocation(with(Product.MISSING_PHOTO_URL)); will(returnValue(DEFAULT_PHOTO));
         }});
     }
 
