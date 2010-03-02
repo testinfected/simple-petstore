@@ -35,15 +35,15 @@ public class DomMatchers {
     }
 
     public static Matcher<Element> withText(String contentText) {
-        return WithContentText.withText(equalTo(contentText));
+        return WithContentText.withContent(equalTo(contentText));
     }
     
     public static Matcher<Element> withBlankText() {
-    	return WithContentText.withBlankText();
+    	return WithContentText.withBlankContent();
     }
 
     public static Matcher<Element> withText(Matcher<? super String> contentMatcher) {
-        return WithContentText.withText(contentMatcher);
+        return WithContentText.withContent(contentMatcher);
     }
 
     public static Matcher<Element> hasAttribute(String name, Matcher<? super String> valueMatcher) {

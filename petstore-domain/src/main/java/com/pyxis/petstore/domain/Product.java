@@ -10,17 +10,16 @@ import static com.pyxis.petstore.domain.EntityToStringStyle.reflectionToString;
 @Entity()
 @AccessType("field") @Table(name = "products")
 public class Product {
-                            
+
+    public static final String MISSING_PHOTO_URI = "/missing.png";
+
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
     private String name;
+    private String description;
+    private String photoUri = MISSING_PHOTO_URI;
 
-	private String description;
-
-	private String photoKey;
-	
-	Product() {}
+    Product() {}
 
 	public Product(String name) {
 		this.name = name;
@@ -38,12 +37,12 @@ public class Product {
 		this.description = description;
 	}
 
-	public String getPhotoKey() {
-		return photoKey;
+	public String getPhotoUri() {
+		return photoUri;
 	}
 
-	public void setPhotoKey(String photoKey) {
-		this.photoKey = photoKey;
+	public void setPhotoUri(String photoUri) {
+		this.photoUri = photoUri;
 	}
 
 	@Override

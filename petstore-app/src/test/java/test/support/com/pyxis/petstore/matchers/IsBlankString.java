@@ -5,7 +5,7 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
-public class WithBlankText extends TypeSafeDiagnosingMatcher<String> {
+public class IsBlankString extends TypeSafeDiagnosingMatcher<String> {
 
 	@Override
 	protected boolean matchesSafely(String actual, Description mismatchDescription) {
@@ -37,8 +37,8 @@ public class WithBlankText extends TypeSafeDiagnosingMatcher<String> {
 	}
 
 	@Factory
-	public static Matcher<String> blank() {
-		return new WithBlankText();
+	public static Matcher<String> isBlank() {
+		return new IsBlankString();
 	}
-	
+
 }

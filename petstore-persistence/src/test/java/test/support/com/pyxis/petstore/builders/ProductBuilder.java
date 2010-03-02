@@ -2,11 +2,12 @@ package test.support.com.pyxis.petstore.builders;
 
 import com.pyxis.petstore.domain.Product;
 
+// todo move to domain module
 public class ProductBuilder implements EntityBuilder<Product> {
 
-    private String name;
+    private String name = "a product";
 	private String description;
-	private String photoKey;
+	private String photoUri;
 
     public static ProductBuilder aProduct() {
         return new ProductBuilder();
@@ -19,8 +20,8 @@ public class ProductBuilder implements EntityBuilder<Product> {
 
     public Product build() {
         Product product = new Product(name);
-        product.setDescription(this.description);
-        product.setPhotoKey(this.photoKey);
+        product.setDescription(description);
+        if (photoUri != null) product.setPhotoUri(photoUri);
 		return product;
     }
 
@@ -29,8 +30,8 @@ public class ProductBuilder implements EntityBuilder<Product> {
 		return this;
 	}
 
-	public ProductBuilder withPhoto(String photoKey) {
-		this.photoKey = photoKey;
+	public ProductBuilder withPhotoUri(String uri) {
+		this.photoUri = uri;
 		return this;
 	}
 }

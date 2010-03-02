@@ -1,11 +1,13 @@
 package test.com.pyxis.petstore.view;
 
 import com.pyxis.petstore.domain.AttachmentStorage;
+import com.pyxis.petstore.domain.Product;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.ui.ModelMap;
@@ -33,20 +35,22 @@ public class ProductsViewTest {
     AttachmentStorage storage = context.mock(AttachmentStorage.class);
     String productsPage;
 
+    @Before public void
+    allowDefaultPhoto() {
+        context.checking(new Expectations() {{
+            allowing(storage).getLocation(with(Product.MISSING_PHOTO_URI)); will(returnValue(DEFAULT_PHOTO));
+        }});
+    }
+
     @Test public void
     displaysNumberOfProductsFound() {
-        useDefaultPhoto();
-        productsPage = renderProductsPageUsing(aModelWith(
-                aProduct().withName("Dalmatian"),
-                aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador")));
+        productsPage = renderProductsPageUsing(aModelWith(aProduct(), aProduct()));
         assertThat(dom(productsPage), hasUniqueSelector("#match-count", withText("2")));
     }
 
     @Test public void
     displaysColumnHeadingsOfProductTable() {
-        useDefaultPhoto();
-        productsPage = renderProductsPageUsing(aModelWith(
-                aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador")));
+        productsPage = renderProductsPageUsing(aModelWith(aProduct()));
         assertThat(dom(productsPage),
                 hasSelector("#products th",
                         inOrder(withEmptyText(),
@@ -56,13 +60,13 @@ public class ProductsViewTest {
 
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
-        ProductBuilder labrador = aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador.png");
-        final String imageUrl = "relative/path/to/attachment/labrador.png";
+        Map<String, ?> model = aModelWith(aProduct().withName("Labrador").describedAs("Friendly").withPhotoUri("/labrador.png"));
+        final String imageUrl = "/relative/path/to/attachment/labrador.png";
         context.checking(new Expectations() {{
-            oneOf(storage).getLocation("labrador.png"); will(returnValue(imageUrl));
+            allowing(storage).getLocation("/labrador.png"); will(returnValue(imageUrl));
         }});
 
-        productsPage = renderProductsPageUsing(aModelWith(labrador));
+        productsPage = renderProductsPageUsing(model);
         assertThat(dom(productsPage),
                 hasSelector("#products td",
                         inOrder(image(imageUrl),
@@ -72,35 +76,16 @@ public class ProductsViewTest {
 
     @Test public void
     handlesProductWithNoDescriptionCorrectly() {
-        useDefaultPhoto();
-        productsPage = renderProductsPageUsing(aModelWith(
-                aProduct().withName("Labrador")));
+        productsPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador")));
         assertThat(dom(productsPage),
                 hasSelector("#products td:nth-child(3)",
                         contains(anEmptyDescription())));
-    }
-
-    // todo this behaviour should be on the photo or storage
-    @Test public void
-    displaysDefaultPhotoWhenProductHasNoAssociatedPhoto() {
-        useDefaultPhoto();
-        productsPage = renderProductsPageUsing(aModelWith(
-                aProduct().withName("Labrador").describedAs("Friendly")));
-        assertThat(dom(productsPage),
-                hasSelector("#products td:nth-child(1)",
-                        contains(image(DEFAULT_PHOTO))));
     }
 
     @Test public void
     displaysNoProductsTableIfNoProductIsFound() {
         productsPage = renderProductsPageUsing(anEmptyModel());
         assertThat(dom(productsPage), hasNoSelector("#products"));
-    }
-
-    private void useDefaultPhoto() {
-        context.checking(new Expectations() {{
-            allowing(storage).getLocation(with(any(String.class))); will(returnValue(DEFAULT_PHOTO));
-        }});
     }
 
     private Map<String, ?> anEmptyModel() {
@@ -137,8 +122,8 @@ public class ProductsViewTest {
 
     private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
         ModelMap model = new ModelMap();
-        model.addAttribute(storage);
-        model.addAttribute(entities(entityBuilders));
+        model.addAttribute("storage", storage);
+        model.addAttribute("productList", entities(entityBuilders));
         return model;
     }
 }
