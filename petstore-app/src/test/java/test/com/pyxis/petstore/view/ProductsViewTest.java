@@ -1,8 +1,9 @@
 package test.com.pyxis.petstore.view;
 
+import com.pyxis.petstore.domain.AttachmentStorage;
 import com.pyxis.petstore.domain.Product;
-import com.pyxis.petstore.domain.Storage;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -20,6 +21,7 @@ import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
 import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.*;
@@ -28,16 +30,16 @@ import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 @RunWith(JMock.class)
 public class ProductsViewTest {
     private static final String PRODUCTS_VIEW = "products";
-    private static final String DEFAULT_PHOTO = "/path/to/missing.png";
+    private static final Object DEFAULT_PHOTO_URL = "/url/of/missing.png";
 
     Mockery context = new JUnit4Mockery();
-    Storage storage = context.mock(Storage.class);
+    AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
     String productsPage;
 
     @Before public void
-    allowDefaultPhoto() {
+    setUpDefaultPhoto() {
         context.checking(new Expectations() {{
-            allowing(storage).getLocation(with(Product.MISSING_PHOTO_URL)); will(returnValue(DEFAULT_PHOTO));
+            allowing(attachmentStorage).getAttachmentUrl(with(aProductWithoutPhoto())); will(returnValue(DEFAULT_PHOTO_URL));
         }});
     }
 
@@ -59,23 +61,23 @@ public class ProductsViewTest {
 
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
-        Map<String, ?> model = aModelWith(aProduct().withName("Labrador").describedAs("Friendly").withPhotoUrl("/labrador.png"));
-        final String imageUrl = "/path/to/attachment/labrador.png";
+        Map<String, ?> model = aModelWith(aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador.png"));
+        final String photoUrl = "/path/to/attachment/labrador.png";
         context.checking(new Expectations() {{
-            allowing(storage).getLocation("/labrador.png"); will(returnValue(imageUrl));
+            allowing(attachmentStorage).getAttachmentUrl(with(aProductWithPhoto("labrador.png"))); will(returnValue(photoUrl));
         }});
 
         productsPage = renderProductsPageUsing(model);
         assertThat(dom(productsPage),
                 hasSelector("#products td",
-                        inOrder(image(imageUrl),
+                        inOrder(image(photoUrl),
                                 productName("Labrador"),
                                 description("Friendly"))));
     }
 
     @Test public void
     handlesProductWithNoDescriptionCorrectly() {
-        productsPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador")));
+        productsPage = renderProductsPageUsing(aModelWith(aProduct().withoutDescription()));
         assertThat(dom(productsPage),
                 hasSelector("#products td:nth-child(3)",
                         contains(anEmptyDescription())));
@@ -86,6 +88,18 @@ public class ProductsViewTest {
         productsPage = renderProductsPageUsing(anEmptyModel());
         assertThat(dom(productsPage), hasUniqueSelector("#no-match"));
         assertThat(dom(productsPage), hasNoSelector("#products"));
+    }
+
+    private Matcher<Product> aProductWithoutPhoto() {
+        return aProductWithPhoto(nullValue());
+    }
+
+    private Matcher<Product> aProductWithPhoto(String photoName) {
+        return aProductWithPhoto(equalTo(photoName));
+    }
+
+    private Matcher<Product> aProductWithPhoto(Matcher<? super String> photoMatcher) {
+        return Matchers.hasProperty("photoName", photoMatcher);
     }
 
     private Map<String, ?> anEmptyModel() {
@@ -105,7 +119,7 @@ public class ProductsViewTest {
     }
 
     private Matcher<Element> image(String imageUrl) {
-        return hasChild(hasAttribute("src", equalTo(imageUrl)));
+        return hasChild(hasAttribute("src", imageUrl));
     }
 
     private Matcher<Element> description(String description) {
@@ -122,7 +136,7 @@ public class ProductsViewTest {
 
     private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
         ModelMap model = new ModelMap();
-        model.addAttribute(storage);
+        model.addAttribute("attachments", attachmentStorage);
         model.addAttribute(entities(entityBuilders));
         return model;
     }

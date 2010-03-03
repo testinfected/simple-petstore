@@ -3,7 +3,7 @@ package com.pyxis.petstore.domain;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface Storage {
+public interface AttachmentStorage {
 
-    String getLocation(String attachmentUrl);
+    String getAttachmentUrl(Product product);
 }

@@ -11,15 +11,13 @@ import static com.pyxis.petstore.domain.EntityToStringStyle.reflectionToString;
 @AccessType("field") @Table(name = "products")
 public class Product {
 
-    public static final String MISSING_PHOTO_URL = "/missing.png";
-
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
     @Column(nullable = false)
     private String name;
     private String description;
-    private String photoUrl = MISSING_PHOTO_URL;
+    private String photoName;
 
     Product() {}
 
@@ -31,24 +29,28 @@ public class Product {
 		return name;
 	}
 
-	public String getDescription() {
+    public String getDescription() {
 		return description;
 	}
-	
-	public void setDescription(String description) {
+
+    public void setDescription(String description) {
 		this.description = description;
 	}
 
-    public String getPhotoLocation(Storage storage) {
-        return storage.getLocation(photoUrl);
+    public String getPhotoName() {
+        return photoName;
     }
 
-	public void setPhotoUrl(String photoUrl) {
-		this.photoUrl = photoUrl;
+    public void setPhotoName(String photoName) {
+		this.photoName = photoName;
 	}
 
-	@Override
+    @Override
     public String toString() {
         return reflectionToString(this);
+    }
+
+    public boolean hasPhoto() {
+        return photoName != null;
     }
 }

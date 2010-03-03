@@ -1,1 +1,1 @@
-ALTER TABLE products ADD COLUMN photo_url VARCHAR(50);
+ALTER TABLE products ADD COLUMN photo_name VARCHAR(50);

@@ -34,7 +34,7 @@ public class SearchFeature {
 
     @Test public void
     displaysAListOfProductsWhoseNameOrDescriptionIncludeKeyword() throws Exception {
-        Product aLabrador = aProduct().withName("Labrador Retriever").withPhotoUrl("/labrador.jpg").build();
+        Product aLabrador = aProduct().withName("Labrador Retriever").build();
         Product aChesapeake = aProduct().withName("Chesapeake").describedAs("Chesapeake bay retriever").build();
         Product aDalmatian = aProduct().withName("Dalmatian").build();
         given(aLabrador, aChesapeake, aDalmatian);

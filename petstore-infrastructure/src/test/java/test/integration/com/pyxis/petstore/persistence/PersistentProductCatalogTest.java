@@ -44,8 +44,8 @@ public class PersistentProductCatalogTest {
     }
 
     @Test public void
-    wontFindAnythingIfNoProductNameMatches() throws Exception {
-        havingPersisted(aProduct().withName("Dalmatian"));
+    wontFindAnythingIfNoProductMatches() throws Exception {
+        havingPersisted(aProduct().withName("Dalmatian").describedAs("A big dog"));
 
         List<Product> matchingProducts = productCatalog.findProductsByKeyword("bulldog");
         assertTrue(matchingProducts.isEmpty());
@@ -77,7 +77,7 @@ public class PersistentProductCatalogTest {
 
     @Test (expected = PropertyValueException.class)
     public void cannotPersistAProductWithoutAName() throws Exception {
-    	productCatalog.add(aNamelessProduct());
+        productCatalog.add(aProduct().withoutName().build());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class PersistentProductCatalogTest {
         final Product product = aProduct().
                 withName("Labrador").
                 describedAs("Labrador Retriever").
-                withPhotoUrl("/labrador.png").
+                withPhoto("labrador.png").
                 build();
 
     	productCatalog.add(product);
@@ -99,10 +99,6 @@ public class PersistentProductCatalogTest {
                 assertThat(persisted, samePersistentFieldsAs(product));
             }
         });
-    }
-
-    private Product aNamelessProduct() {
-        return aProduct().withName(null).build();
     }
 
     private void havingPersisted(EntityBuilder<?>... builders) throws Exception {

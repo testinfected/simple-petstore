@@ -6,7 +6,7 @@ public class ProductBuilder implements EntityBuilder<Product> {
 
     private String name = "a product";
 	private String description;
-	private String photoUrl;
+	private String photoName;
 
     public static ProductBuilder aProduct() {
         return new ProductBuilder();
@@ -17,20 +17,32 @@ public class ProductBuilder implements EntityBuilder<Product> {
         return this;
     }
 
-    public Product build() {
-        Product product = new Product(name);
-        product.setDescription(description);
-        if (photoUrl != null) product.setPhotoUrl(photoUrl);
-		return product;
+    public ProductBuilder withoutName() {
+        return withName(null);
     }
 
-	public ProductBuilder describedAs(String description) {
+    public ProductBuilder describedAs(String description) {
 		this.description = description;
 		return this;
 	}
 
-	public ProductBuilder withPhotoUrl(String url) {
-		this.photoUrl = url;
+    public ProductBuilder withoutDescription() {
+        return describedAs(null);
+    }
+
+    public ProductBuilder withPhoto(String url) {
+		this.photoName = url;
 		return this;
 	}
+
+    public ProductBuilder withNoPhoto() {
+        return withPhoto(null);
+    }
+
+    public Product build() {
+        Product product = new Product(name);
+        product.setDescription(description);
+        product.setPhotoName(photoName);
+        return product;
+    }
 }
