@@ -6,6 +6,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.core.AllOf;
 
+import javax.persistence.Embeddable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static test.support.com.pyxis.petstore.matchers.HasFieldWithValue.fieldValueOf;
+import static test.support.com.pyxis.petstore.matchers.HasFieldWithValue.hasField;
 
 public class SamePersistentFieldsAs<T> extends TypeSafeDiagnosingMatcher<T> {
 
@@ -31,8 +33,11 @@ public class SamePersistentFieldsAs<T> extends TypeSafeDiagnosingMatcher<T> {
     private static <T> Iterable<Matcher<? super T>> persistentFieldsValuesOf(T entity) {
         Collection<Matcher<? super T>> valueMatchers = new ArrayList<Matcher<? super T>>();
 
-        for (Field field : persistentFieldsOf(entity)) {
-            valueMatchers.add(new HasFieldWithValue<T>(nameOf(field), equalTo(fieldValueOf(entity, field))));
+        for (Field basic : persistentFieldsOf(entity)) {
+            valueMatchers.add(hasField(nameOf(basic), equalTo(fieldValueOf(entity, basic))));
+        }
+        for (Field embedded : embeddedFieldsOf(entity)) {
+            valueMatchers.add(hasField(nameOf(embedded), samePersistentFieldsAs(fieldValueOf(entity, embedded))));
         }
         return valueMatchers;
     }
@@ -42,12 +47,33 @@ public class SamePersistentFieldsAs<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     private static <T> Field[] persistentFieldsOf(T entity) {
-        Field[] allFields = entity.getClass().getDeclaredFields();
+        Field[] allFields = fieldsOf(entity);
         List<Field> persistentFields = new ArrayList<Field>();
         for (Field each : allFields) {
-            if (!isStatic(each) && !isTransient(each)) persistentFields.add(each);
+            if (isPersistent(each) && !isEmbedded(each)) persistentFields.add(each);
         }
         return persistentFields.toArray(new Field[persistentFields.size()]);
+    }
+
+    private static boolean isPersistent(Field each) {
+        return !isStatic(each) && !isTransient(each);
+    }
+
+    private static <T> Field[] fieldsOf(Object entity) {
+        return entity.getClass().getDeclaredFields();
+    }
+
+    private static <T> Field[] embeddedFieldsOf(T entity) {
+        Field[] allFields = fieldsOf(entity);
+        List<Field> embeddedFields = new ArrayList<Field>();
+        for (Field each : allFields) {
+            if (isPersistent(each) && isEmbedded(each)) embeddedFields.add(each);
+        }
+        return embeddedFields.toArray(new Field[embeddedFields.size()]);
+    }
+
+    private static boolean isEmbedded(Field field) {
+        return field.getType().getAnnotation(Embeddable.class) != null;
     }
 
     private static boolean isTransient(Field each) {

@@ -12,7 +12,7 @@ public class SimplePhotoFileStore implements AttachmentStorage {
     }
 
     public String getAttachmentUrl(Product product) {
-        return product.hasPhoto() ? urlOf(product.getPhotoName()) : urlOf(MISSING_PHOTO);
+        return product.hasPhoto() ? urlOf(product.getPhotoFileName()) : urlOf(MISSING_PHOTO);
     }
 
     private String urlOf(String photoName) {

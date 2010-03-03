@@ -99,7 +99,7 @@ public class ProductsViewTest {
     }
 
     private Matcher<Product> aProductWithPhoto(Matcher<? super String> photoMatcher) {
-        return Matchers.hasProperty("photoName", photoMatcher);
+        return Matchers.hasProperty("photoFileName", photoMatcher);
     }
 
     private Map<String, ?> anEmptyModel() {

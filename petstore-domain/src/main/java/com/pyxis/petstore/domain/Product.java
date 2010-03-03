@@ -17,11 +17,16 @@ public class Product {
     @Column(nullable = false)
     private String name;
     private String description;
-    private String photoName;
+
+    @Embedded
+    @AttributeOverrides(
+        @AttributeOverride(name = "fileName", column = @Column(name = "photo_file_name"))
+    )
+    private Attachment photo;
 
     Product() {}
 
-	public Product(String name) {
+    public Product(String name) {
 		this.name = name;
 	}
 	
@@ -37,20 +42,25 @@ public class Product {
 		this.description = description;
 	}
 
-    public String getPhotoName() {
-        return photoName;
+    public String getPhotoFileName() {
+        return getPhoto().getFileName();
+    }
+
+    private Attachment getPhoto() {
+        if (photo == null) photo = new Attachment();
+        return photo;
     }
 
     public void setPhotoName(String photoName) {
-		this.photoName = photoName;
+		getPhoto().setFileName(photoName);
 	}
+
+    public boolean hasPhoto() {
+        return getPhoto().getFileName() != null;
+    }
 
     @Override
     public String toString() {
         return reflectionToString(this);
-    }
-
-    public boolean hasPhoto() {
-        return photoName != null;
     }
 }

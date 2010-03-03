@@ -18,7 +18,7 @@ public class SimplePhotoFileStoreTest {
     @Test public void
     photoIsStoredRelativelyToStorageRoot() {
         Product withPhoto = aProduct().withPhoto("photo.png").build();
-        assertThat(attachmentStorage.getAttachmentUrl(withPhoto), equalTo(urlOf(withPhoto.getPhotoName())));
+        assertThat(attachmentStorage.getAttachmentUrl(withPhoto), equalTo(urlOf(withPhoto.getPhotoFileName())));
     }
 
     @Test public void
