@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.db.Database.idOf;
 
@@ -16,11 +17,13 @@ import java.util.List;
 import org.hamcrest.Matcher;
 import org.hibernate.PropertyValueException;
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
+import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.PersistenceContext;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
@@ -78,7 +81,7 @@ public class PersistentProductCatalogTest {
 
     @Test (expected = PropertyValueException.class)
     public void cannotPersistAProductWithoutAName() throws Exception {
-        productCatalog.add(aProduct().withoutName().build());
+        productCatalog.add(aProduct().withoutAName().build());
     }
 
     @Test
@@ -92,6 +95,23 @@ public class PersistentProductCatalogTest {
             assertCanBeReloadedWithSameState(product);
         }
     }
+
+    @Test (expected = PropertyValueException.class)
+    public void cannotPersistAProductWithoutANumber() throws Exception {
+        productCatalog.add(aProduct().withoutANumber().build());
+    }    
+    
+    @Test
+    public void productNumberShouldBeUnique() throws Exception {
+        ProductBuilder someProduct = aProduct().withNumber("123");
+        database.persist(someProduct);
+        try {
+			productCatalog.add(someProduct.build());
+			fail("Should have thrown an exception.");
+		} catch (ConstraintViolationException e) {
+			assertTrue(true);
+		}
+    }    
 
     private void assertCanBeReloadedWithSameState(final Product product) throws Exception {
         database.perform(new UnitOfWork() {

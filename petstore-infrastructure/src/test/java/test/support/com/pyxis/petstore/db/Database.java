@@ -38,7 +38,7 @@ public class Database {
     }
 
     public void persist(final EntityBuilder<?>... builders) throws Exception {
-        for (final EntityBuilder builder : builders) {
+        for (final EntityBuilder<?> builder : builders) {
             persist(builder.build());
         }
     }

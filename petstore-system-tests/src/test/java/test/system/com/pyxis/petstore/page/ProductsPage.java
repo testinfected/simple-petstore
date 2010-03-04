@@ -9,8 +9,10 @@ import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.element
 import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.selector;
 
 import org.openqa.selenium.WebDriver;
+import static org.openqa.selenium.lift.Finders.*;
 
 import test.support.com.pyxis.petstore.web.PageObject;
+import test.system.com.pyxis.petstore.page.ItemsPage;
 
 import com.pyxis.petstore.domain.Product;
 
@@ -40,4 +42,9 @@ public class ProductsPage extends PageObject {
     private void displaysNumberOfMatches(int matchCount) {
         assertPresenceOf(element("match-count").with(text(being(matchCount))));
     }
+
+	public ItemsPage browseItemsOf(String productName) {
+		clickOn(link().with(text(being(productName))));
+		return nowOn(ItemsPage.class);
+	}
 }

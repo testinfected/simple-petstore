@@ -14,6 +14,9 @@ public class Product {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String number;
+
     @Column(nullable = false)
     private String name;
     private String description;
@@ -24,13 +27,22 @@ public class Product {
     )
     private Attachment photo;
 
+
     Product() {}
 
     public Product(String name) {
 		this.name = name;
 	}
-	
-    public String getName() {
+
+    public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+    	this.number = number;
+    }
+
+	public String getName() {
 		return name;
 	}
 
@@ -62,5 +74,6 @@ public class Product {
     @Override
     public String toString() {
         return reflectionToString(this);
-    }
+	}
+
 }
