@@ -4,7 +4,7 @@ import org.hamcrest.Factory;
 import org.openqa.selenium.lift.find.HtmlTagFinder;
 
 import static org.openqa.selenium.lift.Matchers.text;
-import static com.pyxis.matchers.selenium.WebMatchers.being;
+import static com.pyxis.matchers.selenium.SeleniumMatchers.being;
 
 public class ButtonFinder extends HtmlTagFinder {
 

@@ -1,7 +1,7 @@
 package test.system.com.pyxis.petstore.page;
 
-import static com.pyxis.matchers.selenium.WebMatchers.being;
-import static com.pyxis.matchers.selenium.WebMatchers.className;
+import static com.pyxis.matchers.selenium.SeleniumMatchers.being;
+import static com.pyxis.matchers.selenium.SeleniumMatchers.className;
 import static org.openqa.selenium.lift.Finders.cell;
 import static org.openqa.selenium.lift.Matchers.exactly;
 import static org.openqa.selenium.lift.Matchers.text;

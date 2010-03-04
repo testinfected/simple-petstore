@@ -4,7 +4,7 @@ import org.openqa.selenium.WebDriver;
 import test.support.com.pyxis.petstore.web.PageObject;
 
 import static org.openqa.selenium.lift.Finders.textbox;
-import static com.pyxis.matchers.selenium.WebMatchers.id;
+import static com.pyxis.matchers.selenium.SeleniumMatchers.id;
 import static test.support.com.pyxis.petstore.web.find.ButtonFinder.button;
 
 public class HomePage extends PageObject {
