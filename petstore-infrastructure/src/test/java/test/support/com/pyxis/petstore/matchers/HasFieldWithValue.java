@@ -12,9 +12,9 @@ import java.lang.reflect.Field;
 public class HasFieldWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
 
     private final String fieldName;
-    private final Matcher valueMatcher;
+    private final Matcher<?> valueMatcher;
 
-    public HasFieldWithValue(String fieldName, Matcher valueMatcher) {
+    public HasFieldWithValue(String fieldName, Matcher<?> valueMatcher) {
         this.fieldName = fieldName;
         this.valueMatcher = valueMatcher;
     }
@@ -27,7 +27,7 @@ public class HasFieldWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
         Object fieldValue = fieldValueOf(argument, field);
         boolean valueMatches = valueMatcher.matches(fieldValue);
         if (!valueMatches) {
-            mismatchDescription.appendText("field \"" + fieldName + "\" ");
+            mismatchDescription.appendText("\"" + fieldName + "\" ");
             valueMatcher.describeMismatch(fieldValue, mismatchDescription);
         }
         return valueMatches;
@@ -66,7 +66,7 @@ public class HasFieldWithValue<T> extends TypeSafeDiagnosingMatcher<T> {
     public void describeTo(Description description) {
         description.appendText("has field \"");
         description.appendText(fieldName);
-        description.appendText("\" ");
+        description.appendText("\": ");
         description.appendDescriptionOf(valueMatcher);
     }
 

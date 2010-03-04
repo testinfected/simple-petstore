@@ -7,8 +7,10 @@ import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.db.Database.idOf;
+import static test.support.com.pyxis.petstore.matchers.HasFieldWithValue.hasField;
 import static test.support.com.pyxis.petstore.matchers.SamePersistentFieldsAs.samePersistentFieldsAs;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -82,14 +84,14 @@ public class PersistentProductCatalogTest {
 
     @Test
     public void canRoundTripProducts() throws Exception {
-        final Product product = aProduct().
-                withName("Labrador").
-                describedAs("Labrador Retriever").
-                withPhoto("labrador.png").
-                build();
+        final Collection<Product> products = Arrays.asList(
+                aProduct().withName("Labrador").describedAs("Labrador Retriever").withPhoto("labrador.png").build(),
+                aProduct().withName("Dalmatian").build());
 
-    	productCatalog.add(product);
-        assertCanBeReloadedWithSameState(product);
+        for (Product product : products) {
+            productCatalog.add(product);
+            assertCanBeReloadedWithSameState(product);
+        }
     }
 
     private void assertCanBeReloadedWithSameState(final Product product) throws Exception {

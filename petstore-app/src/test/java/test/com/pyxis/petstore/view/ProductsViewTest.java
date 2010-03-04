@@ -3,7 +3,6 @@ package test.com.pyxis.petstore.view;
 import com.pyxis.petstore.domain.AttachmentStorage;
 import com.pyxis.petstore.domain.Product;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -19,9 +18,7 @@ import java.util.Map;
 
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.matchers.DomMatchers.*;
@@ -99,11 +96,18 @@ public class ProductsViewTest {
     }
 
     private Matcher<Product> aProductWithPhoto(Matcher<? super String> photoMatcher) {
-        return Matchers.hasProperty("photoFileName", photoMatcher);
+        return hasProperty("photoFileName", photoMatcher);
     }
 
     private Map<String, ?> anEmptyModel() {
         return aModelWith();
+    }
+
+    private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
+        ModelMap model = new ModelMap();
+        model.addAttribute("attachments", attachmentStorage);
+        model.addAttribute(entities(entityBuilders));
+        return model;
     }
 
     private String renderProductsPageUsing(Map<String, ?> model) {
@@ -118,12 +122,12 @@ public class ProductsViewTest {
         return description("");
     }
 
-    private Matcher<Element> image(String imageUrl) {
-        return hasChild(hasAttribute("src", imageUrl));
-    }
-
     private Matcher<Element> description(String description) {
         return withText(description);
+    }
+
+    private Matcher<Element> image(String imageUrl) {
+        return hasChild(hasAttribute("src", imageUrl));
     }
 
     private Matcher<Element> productName(String name) {
@@ -132,12 +136,5 @@ public class ProductsViewTest {
 
     private Matcher<Iterable<Element>> inOrder(Matcher<Element>... elementMatchers) {
         return contains(elementMatchers);
-    }
-
-    private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
-        ModelMap model = new ModelMap();
-        model.addAttribute("attachments", attachmentStorage);
-        model.addAttribute(entities(entityBuilders));
-        return model;
     }
 }

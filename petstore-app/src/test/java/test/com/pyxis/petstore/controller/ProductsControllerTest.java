@@ -27,6 +27,14 @@ public class ProductsControllerTest {
     Mockery context = new JUnit4Mockery();
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
+
+    @Before
+    public void searchWillNotYieldAnyResult() {
+        context.checking(new Expectations() {{
+            allowing(productCatalog).findProductsByKeyword(ANY_PRODUCT); will(returnValue(emptyList()));
+        }});
+    }
+
     ProductsController productsController = new ProductsController(productCatalog, attachmentStorage);
 
     @Test public void
@@ -44,13 +52,6 @@ public class ProductsControllerTest {
     doesNotAddProductListToModelIfNoMatchIsFound() {
         ModelMap map = productsController.index(ANY_PRODUCT);
         assertThat(map, not(hasKey("productList")));
-    }
-
-    @Before
-    public void searchWillNotYieldAnyResult() {
-        context.checking(new Expectations() {{
-            allowing(productCatalog).findProductsByKeyword(ANY_PRODUCT); will(returnValue(emptyList()));
-        }});
     }
 
     @Test public void
