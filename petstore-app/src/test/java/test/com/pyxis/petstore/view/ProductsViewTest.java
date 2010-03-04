@@ -21,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.matchers.DomMatchers.*;
+import static com.pyxis.matchers.dom.DomMatchers.*;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
 @RunWith(JMock.class)

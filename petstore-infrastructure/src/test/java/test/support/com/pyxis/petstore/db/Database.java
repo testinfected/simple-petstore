@@ -8,7 +8,7 @@ import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import javax.persistence.Id;
 import java.lang.reflect.Field;
 
-import static test.support.com.pyxis.petstore.matchers.HasFieldWithValue.fieldValueOf;
+import static com.pyxis.matchers.persistence.HasFieldWithValue.fieldValueOf;
 
 public class Database {
 

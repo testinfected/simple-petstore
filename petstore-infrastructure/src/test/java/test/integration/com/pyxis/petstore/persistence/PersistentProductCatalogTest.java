@@ -1,5 +1,6 @@
 package test.integration.com.pyxis.petstore.persistence;
 
+import static com.pyxis.matchers.persistence.SamePersistentFieldsAs.samePersistentFieldsAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
@@ -7,8 +8,6 @@ import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.db.Database.idOf;
-import static test.support.com.pyxis.petstore.matchers.HasFieldWithValue.hasField;
-import static test.support.com.pyxis.petstore.matchers.SamePersistentFieldsAs.samePersistentFieldsAs;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,8 +24,8 @@ import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.PersistenceContext;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
-import test.support.com.pyxis.petstore.matchers.HasFieldWithValue;
 
+import com.pyxis.matchers.persistence.HasFieldWithValue;
 import com.pyxis.petstore.domain.Product;
 import com.pyxis.petstore.domain.ProductCatalog;
 

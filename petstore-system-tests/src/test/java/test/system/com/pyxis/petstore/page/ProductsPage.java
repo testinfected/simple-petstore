@@ -1,17 +1,18 @@
 package test.system.com.pyxis.petstore.page;
 
-import com.pyxis.petstore.domain.Product;
-import org.openqa.selenium.WebDriver;
-import test.support.com.pyxis.petstore.web.PageObject;
-
+import static com.pyxis.matchers.selenium.WebMatchers.being;
+import static com.pyxis.matchers.selenium.WebMatchers.className;
 import static org.openqa.selenium.lift.Finders.cell;
-import static org.openqa.selenium.lift.Finders.title;
 import static org.openqa.selenium.lift.Matchers.exactly;
 import static org.openqa.selenium.lift.Matchers.text;
-import static test.support.com.pyxis.petstore.web.WebMatchers.being;
-import static test.support.com.pyxis.petstore.web.WebMatchers.className;
 import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.element;
 import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.selector;
+
+import org.openqa.selenium.WebDriver;
+
+import test.support.com.pyxis.petstore.web.PageObject;
+
+import com.pyxis.petstore.domain.Product;
 
 public class ProductsPage extends PageObject {
 
