@@ -284,7 +284,7 @@
 		<downloadUrl>${pyxis.distributionManagement.downloadUrl}</downloadUrl>
 	</distributionManagement>
 	<scm>
-		<connection>scm:git:git://github.com/mathibodeau/cssselectors.git</connection>
-		<url>scm:git:git://github.com/mathibodeau/cssselectors.git</url>
+		<connection>scm:git:git://github.com/mathibodeau/petstore.git</connection>
+		<url>scm:git:git://github.com/mathibodeau/petstore.git</url>
 	</scm>
 </project>
