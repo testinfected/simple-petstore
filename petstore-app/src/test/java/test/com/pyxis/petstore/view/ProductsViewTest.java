@@ -127,7 +127,7 @@ public class ProductsViewTest {
     }
 
     private Matcher<Element> image(String imageUrl) {
-        return hasChild(hasAttribute("src", imageUrl));
+        return hasChild(withAttribute("src", imageUrl));
     }
 
     private Matcher<Element> productName(String name) {
