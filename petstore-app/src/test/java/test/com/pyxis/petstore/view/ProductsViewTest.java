@@ -3,6 +3,7 @@ package test.com.pyxis.petstore.view;
 import com.pyxis.petstore.domain.AttachmentStorage;
 import com.pyxis.petstore.domain.Product;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -74,7 +75,7 @@ public class ProductsViewTest {
 
     @Test public void
     handlesProductWithNoDescriptionCorrectly() {
-        productsPage = renderProductsPageUsing(aModelWith(aProduct().withoutDescription()));
+        productsPage = renderProductsPageUsing(aModelWith(aProduct().withoutADescription()));
         assertThat(dom(productsPage),
                 hasSelector("#products td:nth-child(3)",
                         contains(anEmptyDescription())));
@@ -85,6 +86,14 @@ public class ProductsViewTest {
         productsPage = renderProductsPageUsing(anEmptyModel());
         assertThat(dom(productsPage), hasUniqueSelector("#no-match"));
         assertThat(dom(productsPage), hasNoSelector("#products"));
+    }
+    
+    @Test
+    public void displaysLinksOnProductNamesToBrowseItemsOfThatProduct() {
+    	productsPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("123")));
+    	assertThat(dom(productsPage),
+    			hasUniqueSelector("td a", 
+    					hasAttribute("href", containsString("products/123/items"))));
     }
 
     private Matcher<Product> aProductWithoutPhoto() {

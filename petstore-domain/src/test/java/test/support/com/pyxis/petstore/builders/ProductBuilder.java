@@ -1,10 +1,16 @@
 package test.support.com.pyxis.petstore.builders;
 
+import java.util.Random;
+
+import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.Product;
 
 public class ProductBuilder implements EntityBuilder<Product> {
 
-    private String name = "a product";
+	private static final String DEFAULT_NAME = "a product";
+    
+	private String number = fakeNumber();
+	private String name = DEFAULT_NAME;
 	private String description;
 	private String photoName;
 
@@ -17,7 +23,7 @@ public class ProductBuilder implements EntityBuilder<Product> {
         return this;
     }
 
-    public ProductBuilder withoutName() {
+    public ProductBuilder withoutAName() {
         return withName(null);
     }
 
@@ -26,7 +32,7 @@ public class ProductBuilder implements EntityBuilder<Product> {
 		return this;
 	}
 
-    public ProductBuilder withoutDescription() {
+    public ProductBuilder withoutADescription() {
         return describedAs(null);
     }
 
@@ -35,14 +41,34 @@ public class ProductBuilder implements EntityBuilder<Product> {
 		return this;
 	}
 
-    public ProductBuilder withNoPhoto() {
+    public ProductBuilder withoutAPhoto() {
         return withPhoto(null);
     }
 
+    public ProductBuilder withNumber(String number) {
+    	this.number = number;
+    	return this;
+    }
+    
     public Product build() {
         Product product = new Product(name);
         product.setDescription(description);
         product.setPhotoName(photoName);
+        product.setNumber(this.number);
         return product;
     }
+
+    private String fakeNumber() {
+    	Random random = new Random();
+    	int number = random.nextInt(Integer.MAX_VALUE);
+    	return String.valueOf(number);
+    }
+
+	public ProductBuilder withoutANumber() {
+		return withNumber(null);
+	}
+
+	public ProductBuilder with(Item item) {
+		return this;
+	}
 }

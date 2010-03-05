@@ -23,7 +23,7 @@ public class SimplePhotoFileStoreTest {
 
     @Test public void
     defaultPhotoIsUsedWhenProductHasNone() {
-        Product noPhoto = aProduct().withNoPhoto().build();
+        Product noPhoto = aProduct().withoutAPhoto().build();
         assertThat(attachmentStorage.getAttachmentUrl(noPhoto), equalTo(urlOf(DEFAULT_PHOTO)));
     }
 
