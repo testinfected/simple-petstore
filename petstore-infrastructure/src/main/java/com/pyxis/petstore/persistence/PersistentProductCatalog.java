@@ -40,4 +40,5 @@ public class PersistentProductCatalog implements ProductCatalog {
 	public void add(Product product) {
 		this.sessionFactory.getCurrentSession().save(product);
 	}
+
 }

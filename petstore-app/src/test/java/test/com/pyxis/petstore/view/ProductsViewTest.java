@@ -1,9 +1,25 @@
 package test.com.pyxis.petstore.view;
 
-import com.pyxis.petstore.domain.AttachmentStorage;
-import com.pyxis.petstore.domain.Product;
+import static com.pyxis.matchers.dom.DomMatchers.withAttribute;
+import static com.pyxis.matchers.dom.DomMatchers.hasChild;
+import static com.pyxis.matchers.dom.DomMatchers.hasNoSelector;
+import static com.pyxis.matchers.dom.DomMatchers.hasSelector;
+import static com.pyxis.matchers.dom.DomMatchers.hasUniqueSelector;
+import static com.pyxis.matchers.dom.DomMatchers.withText;
+import static com.threelevers.css.DocumentBuilder.dom;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.nullValue;
+import static test.support.com.pyxis.petstore.builders.Entities.entities;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
+
+import java.util.Map;
+
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -13,17 +29,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.ui.ModelMap;
 import org.w3c.dom.Element;
+
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 
-import java.util.Map;
-
-import static com.threelevers.css.DocumentBuilder.dom;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static test.support.com.pyxis.petstore.builders.Entities.entities;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static com.pyxis.matchers.dom.DomMatchers.*;
-import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
+import com.pyxis.petstore.domain.AttachmentStorage;
+import com.pyxis.petstore.domain.Product;
 
 @RunWith(JMock.class)
 public class ProductsViewTest {
@@ -93,7 +103,7 @@ public class ProductsViewTest {
     	productsPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("123")));
     	assertThat(dom(productsPage),
     			hasUniqueSelector("td a", 
-    					hasAttribute("href", containsString("products/123/items"))));
+    					withAttribute("href", containsString("items?product_number=123"))));
     }
 
     private Matcher<Product> aProductWithoutPhoto() {

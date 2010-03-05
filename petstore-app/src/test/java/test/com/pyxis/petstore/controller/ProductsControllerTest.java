@@ -1,8 +1,15 @@
 package test.com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.controller.ProductsController;
-import com.pyxis.petstore.domain.AttachmentStorage;
-import com.pyxis.petstore.domain.ProductCatalog;
+import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
+import static java.util.Collections.emptyList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.not;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+
+import java.util.Arrays;
+
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -12,12 +19,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.ui.ModelMap;
 
-import java.util.Arrays;
-
-import static java.util.Collections.emptyList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import com.pyxis.petstore.controller.ProductsController;
+import com.pyxis.petstore.domain.AttachmentStorage;
+import com.pyxis.petstore.domain.ProductCatalog;
 
 @RunWith(JMock.class)
 public class ProductsControllerTest {
@@ -27,6 +31,7 @@ public class ProductsControllerTest {
     Mockery context = new JUnit4Mockery();
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
+    ProductsController productsController = new ProductsController(productCatalog, attachmentStorage);
 
     @Before
     public void searchWillNotYieldAnyResult() {
@@ -35,7 +40,6 @@ public class ProductsControllerTest {
         }});
     }
 
-    ProductsController productsController = new ProductsController(productCatalog, attachmentStorage);
 
     @Test public void
     listsProductsMatchingKeywordAndMakesThemAvailableToView() {
@@ -45,10 +49,10 @@ public class ProductsControllerTest {
         }});
 
         ModelMap map = productsController.index("Dog");
-        assertThat(map, hasEntry("productList", matchingProducts));
+        assertThat(map, hasAttribute("productList", matchingProducts));
     }
 
-    @Test public void
+	@Test public void
     doesNotAddProductListToModelIfNoMatchIsFound() {
         ModelMap map = productsController.index(ANY_PRODUCT);
         assertThat(map, not(hasKey("productList")));
@@ -59,4 +63,5 @@ public class ProductsControllerTest {
         ModelMap map = productsController.index(ANY_PRODUCT);
         assertThat(map, hasEntry("attachments", (Object) attachmentStorage));
     }
+    
 }

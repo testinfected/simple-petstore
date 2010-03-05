@@ -6,6 +6,7 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import com.pyxis.petstore.ExceptionImposter;
+import com.pyxis.petstore.domain.ItemRepository;
 import com.pyxis.petstore.domain.ProductCatalog;
 import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
@@ -79,4 +80,8 @@ public class PersistenceContext {
     public static ProductCatalog productCatalog() {
         return applicationContext.getBean(ProductCatalog.class);
     }
+
+	public static ItemRepository itemRepository() {
+		return applicationContext.getBean(ItemRepository.class);
+	}
 }

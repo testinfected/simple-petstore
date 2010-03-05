@@ -10,5 +10,6 @@
 
         <mapping package="com.pyxis.petstore.domain"/>
         <mapping class="com.pyxis.petstore.domain.Product"/>
+        <mapping class="com.pyxis.petstore.domain.Item"/>
     </session-factory>
 </hibernate-configuration>
