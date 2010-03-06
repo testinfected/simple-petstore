@@ -1,5 +1,6 @@
 package test.support.com.pyxis.petstore.db;
 
+import com.pyxis.helpers.Reflection;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -7,8 +8,6 @@ import test.support.com.pyxis.petstore.builders.EntityBuilder;
 
 import javax.persistence.Id;
 import java.lang.reflect.Field;
-
-import static com.pyxis.matchers.persistence.HasFieldWithValue.fieldValueOf;
 
 public class Database {
 
@@ -67,7 +66,7 @@ public class Database {
     public static long idOf(Object entity) throws Exception {
         Field[] fields =  entity.getClass().getDeclaredFields();
         for (Field field : fields) {
-            if (field.getAnnotation(Id.class) != null) return (Long) fieldValueOf(entity, field);
+            if (field.getAnnotation(Id.class) != null) return (Long) Reflection.readField(entity, field);
         }
         throw new AssertionError("Entity has no id : " + entity );
     }

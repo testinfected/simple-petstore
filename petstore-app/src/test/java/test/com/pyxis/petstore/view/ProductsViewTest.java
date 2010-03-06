@@ -3,7 +3,6 @@ package test.com.pyxis.petstore.view;
 import com.pyxis.petstore.domain.AttachmentStorage;
 import com.pyxis.petstore.domain.Product;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -17,12 +16,12 @@ import test.support.com.pyxis.petstore.builders.EntityBuilder;
 
 import java.util.Map;
 
+import static com.pyxis.matchers.dom.DomMatchers.*;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static com.pyxis.matchers.dom.DomMatchers.*;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
 @RunWith(JMock.class)
@@ -93,7 +92,7 @@ public class ProductsViewTest {
     	productsPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("123")));
     	assertThat(dom(productsPage),
     			hasUniqueSelector("td a", 
-    					hasAttribute("href", containsString("products/123/items"))));
+    					withAttribute("href", containsString("products/123/items"))));
     }
 
     private Matcher<Product> aProductWithoutPhoto() {
