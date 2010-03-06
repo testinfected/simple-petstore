@@ -1,9 +1,9 @@
 package test.support.com.pyxis.petstore.builders;
 
-import java.util.Random;
-
 import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.Product;
+
+import java.util.Random;
 
 public class ProductBuilder implements EntityBuilder<Product> {
 
@@ -66,9 +66,5 @@ public class ProductBuilder implements EntityBuilder<Product> {
 
 	public ProductBuilder withoutANumber() {
 		return withNumber(null);
-	}
-
-	public ProductBuilder with(Item item) {
-		return this;
 	}
 }

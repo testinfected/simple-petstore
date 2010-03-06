@@ -10,4 +10,5 @@ public interface ProductCatalog {
 	List<Product> findProductsByKeyword(String keyword);
 
 	void add(Product product);
+
 }

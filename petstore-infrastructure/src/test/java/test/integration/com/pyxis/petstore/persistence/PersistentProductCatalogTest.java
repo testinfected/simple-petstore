@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.db.Database.idOf;
+import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,6 +18,7 @@ import java.util.List;
 import org.hamcrest.Matcher;
 import org.hibernate.PropertyValueException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
 import org.junit.Before;
@@ -25,7 +27,6 @@ import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.db.Database;
-import test.support.com.pyxis.petstore.db.PersistenceContext;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
 
 import com.pyxis.matchers.persistence.HasFieldWithValue;
@@ -34,8 +35,8 @@ import com.pyxis.petstore.domain.ProductCatalog;
 
 public class PersistentProductCatalogTest {
 
-    ProductCatalog productCatalog = PersistenceContext.productCatalog();
-    Database database = Database.connect(PersistenceContext.sessionFactory());
+    ProductCatalog productCatalog = get(ProductCatalog.class);
+    Database database = Database.connect(get(SessionFactory.class));
 
     @Before
     public void cleanDatabase() {

@@ -1,5 +1,6 @@
 package test.support.com.pyxis.petstore.db;
 
+import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.Product;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -7,6 +8,7 @@ import org.hibernate.Transaction;
 public class DatabaseCleaner {
 
     private static final Class<?>[] ENTITY_TYPES = {
+    	Item.class,
         Product.class
     };
 
