@@ -1,11 +1,6 @@
 package test.com.pyxis.petstore.view;
 
-import static com.pyxis.matchers.dom.DomMatchers.withAttribute;
-import static com.pyxis.matchers.dom.DomMatchers.hasChild;
-import static com.pyxis.matchers.dom.DomMatchers.hasNoSelector;
-import static com.pyxis.matchers.dom.DomMatchers.hasSelector;
-import static com.pyxis.matchers.dom.DomMatchers.hasUniqueSelector;
-import static com.pyxis.matchers.dom.DomMatchers.withText;
+import static com.pyxis.matchers.dom.DomMatchers.*;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -55,6 +50,7 @@ public class ProductsViewTest {
     displaysNumberOfProductsFound() {
         productsPage = renderProductsPageUsing(aModelWith(aProduct(), aProduct()));
         assertThat(dom(productsPage), hasUniqueSelector("#match-count", withText("2")));
+        assertThat(dom(productsPage), hasSelector("#products tr.product", withSize(2)));
     }
 
     @Test public void
@@ -62,14 +58,19 @@ public class ProductsViewTest {
         productsPage = renderProductsPageUsing(aModelWith(aProduct()));
         assertThat(dom(productsPage),
                 hasSelector("#products th",
-                        inOrder(withEmptyText(),
+                        inOrder(withText("Number"),
+                                withEmptyText(),
                                 withText("Name"),
                                 withText("Description"))));
     }
 
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
-        Map<String, ?> model = aModelWith(aProduct().withName("Labrador").describedAs("Friendly").withPhoto("labrador.png"));
+        Map<String, ?> model = aModelWith(aProduct().
+                withNumber("LAB-1234").
+                withName("Labrador").
+                describedAs("Friendly").
+                withPhoto("labrador.png"));
         final String photoUrl = "/path/to/attachment/labrador.png";
         context.checking(new Expectations() {{
             allowing(attachmentStorage).getAttachmentUrl(with(aProductWithPhoto("labrador.png"))); will(returnValue(photoUrl));
@@ -78,7 +79,8 @@ public class ProductsViewTest {
         productsPage = renderProductsPageUsing(model);
         assertThat(dom(productsPage),
                 hasSelector("#products td",
-                        inOrder(image(photoUrl),
+                        inOrder(productNumber("LAB-1234"),
+                                image(photoUrl),
                                 productName("Labrador"),
                                 description("Friendly"))));
     }
@@ -87,7 +89,7 @@ public class ProductsViewTest {
     handlesProductWithNoDescriptionCorrectly() {
         productsPage = renderProductsPageUsing(aModelWith(aProduct().withoutADescription()));
         assertThat(dom(productsPage),
-                hasSelector("#products td:nth-child(3)",
+                hasSelector("#products td:nth-child(4)",
                         contains(anEmptyDescription())));
     }
 
@@ -147,6 +149,10 @@ public class ProductsViewTest {
 
     private Matcher<Element> image(String imageUrl) {
         return hasChild(withAttribute("src", imageUrl));
+    }
+
+    private Matcher<Element> productNumber(String number) {
+        return withText(number);
     }
 
     private Matcher<Element> productName(String name) {

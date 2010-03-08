@@ -80,12 +80,12 @@ public class PersistentProductCatalogTest {
 
     @Test (expected = PropertyValueException.class)
     public void cannotPersistAProductWithoutAName() throws Exception {
-        productCatalog.add(aProduct().withoutAName().build());
+        productCatalog.add(aProduct().withName(null).build());
     }
 
     @Test (expected = PropertyValueException.class)
     public void cannotPersistAProductWithoutANumber() throws Exception {
-        productCatalog.add(aProduct().withoutANumber().build());
+        productCatalog.add(aProduct().withNumber(null).build());
     }
 
     @Test

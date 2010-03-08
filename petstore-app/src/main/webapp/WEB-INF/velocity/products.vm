@@ -3,27 +3,29 @@
     <title>PetStore - Products</title>
 </head>
 <body>
-#if ($productList)
-Found <span id="match-count">$productList.size()</span> result(s)
+    #if ($productList)
+    Found <span id="match-count">$productList.size()</span> result(s)
 
-<table id="products">
-<thead>
-<tr>
-	<th></th>
-	<th>Name</th>
-	<th>Description</th>
-</tr>
-</thead>
-#foreach ($product in $productList)
-	<tr class="product">
-		<td><img class="photo" src="$attachments.getAttachmentUrl($product)"></td>
-		<td class="name"><a href="items?product_number=$product.getNumber()">$product.Name</a></td>
-		<td>$!product.Description</td>
-	</tr>
-#end
-</table>
+    <table id="products">
+        <thead>
+        <tr>
+            <th>Number</th>
+            <th></th>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        #foreach ($product in $productList)
+            <tr class="product">
+                <td class="number">$product.Number</td>
+                <td><img class="photo" src="$attachments.getAttachmentUrl($product)"></td>
+                <td class="name"><a href="items?product_number=$product.Number">$product.Name</a></td>
+                <td>$!product.Description</td>
+            </tr>
+        #end
+    </table>
     #else
     <div id="no-match"><p>No matching product found</p></div>
-        #end
+    #end
 </body>
 </html>

@@ -22,10 +22,6 @@ public class ProductBuilder implements EntityBuilder<Product> {
         return this;
     }
 
-    public ProductBuilder withoutAName() {
-        return withName(null);
-    }
-
     public ProductBuilder describedAs(String description) {
 		this.description = description;
 		return this;
@@ -55,8 +51,4 @@ public class ProductBuilder implements EntityBuilder<Product> {
         product.setPhotoName(photoName);
         return product;
     }
-
-	public ProductBuilder withoutANumber() {
-		return withNumber(null);
-	}
 }
