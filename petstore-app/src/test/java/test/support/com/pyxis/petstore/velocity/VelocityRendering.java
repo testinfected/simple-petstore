@@ -16,15 +16,11 @@ import com.pyxis.petstore.ExceptionImposter;
 public class VelocityRendering {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
-
 	private static final String TEMPLATES_BASE_URL_KEY = "templates.base.url";
-
 	private static final String VIEWS_PROPERTIES_FILENAME = "/views.properties";
-
 	private static final String VELOCITY_EXTENSION = ".vm";
 
 	private static VelocityEngine velocityEngine;
-
 	private final String template;
 
 	private String encoding = DEFAULT_ENCODING;
@@ -69,5 +65,4 @@ public class VelocityRendering {
 	private String templateFileName() {
 		return template + VELOCITY_EXTENSION;
 	}
-
 }

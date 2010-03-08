@@ -7,9 +7,8 @@ public class Entities {
 
     private Entities() {}
 
-    @SuppressWarnings("unchecked")
-	public static List entities(EntityBuilder... entityBuilders) {
-        List entities = new ArrayList();
+	public static List<?> entities(EntityBuilder<?>... entityBuilders) {
+        List<Object> entities = new ArrayList<Object>();
         for (EntityBuilder entityBuilder : entityBuilders) {
             entities.add(entityBuilder.build());
         }

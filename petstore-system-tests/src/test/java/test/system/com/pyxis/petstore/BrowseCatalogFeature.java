@@ -17,12 +17,12 @@ public class BrowseCatalogFeature {
 	
 	PetStoreDriver petstore = new PetStoreDriver();
 	DatabaseDriver database = new DatabaseDriver();
-	private HomePage homePage;
+	HomePage homePage;
 	
 	@Before
 	public void setUp() throws Exception {
-		homePage = petstore.start();
-		database.open();
+        database.start();
+        homePage = petstore.start();
 	}
 
 	@Test
@@ -39,7 +39,6 @@ public class BrowseCatalogFeature {
 	@After
 	public void tearDown() {
 		petstore.close();
-		database.close();
+		database.stop();
 	}
-	
 }

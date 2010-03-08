@@ -1,20 +1,34 @@
 package test.support.com.pyxis.petstore.web;
 
-import org.hibernate.SessionFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ApplicationContext {
 
-    private static org.springframework.context.ApplicationContext applicationContext;
+    private static final String[] CONFIG_LOCATIONS = new String[] {
+            "dataSource.xml",
+            "persistenceContext.xml",
+    };
+    private static ApplicationContext context;
+    private org.springframework.context.ApplicationContext springContext;
 
-    static {
-        applicationContext = new ClassPathXmlApplicationContext(new String[] {
-                "dataSource.xml",
-                "persistenceContext.xml",
-        });
+    public static <T> T get(Class<T> beanType) {
+        return get().getBean(beanType);
     }
 
-    public static SessionFactory sessionFactory() {
-        return applicationContext.getBean(SessionFactory.class);
+    public static ApplicationContext get() {
+        if (context == null) context = new ApplicationContext();
+        return context;
+    }
+
+    public ApplicationContext() {
+        loadSpringContext();
+    }
+
+    private void loadSpringContext() {
+        springContext = new ClassPathXmlApplicationContext(CONFIG_LOCATIONS);
+    }
+
+    public <T> T getBean(Class<T> type) {
+        return springContext.getBean(type);
     }
 }

@@ -40,7 +40,6 @@ public class ProductsControllerTest {
         }});
     }
 
-
     @Test public void
     listsProductsMatchingKeywordAndMakesThemAvailableToView() {
 
@@ -62,7 +61,7 @@ public class ProductsControllerTest {
     @Test public void
     makesStorageAvailableToView() {
         ModelMap map = productsController.index(ANY_PRODUCT);
-        assertThat(map, hasEntry("attachments", (Object) attachmentStorage));
+        assertThat(map, hasAttribute("attachments", attachmentStorage));
     }
     
 }

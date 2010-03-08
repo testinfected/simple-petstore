@@ -31,6 +31,7 @@ public class ProductsPage extends PageObject {
         displaysTableContaining(expectedProducts);
     }
 
+    // TODO use product attributes instead of product
     private void displaysTableContaining(Product... expectedProducts) {
         assertPresenceOf(exactly(expectedProducts.length), selector("tr.product"));
 

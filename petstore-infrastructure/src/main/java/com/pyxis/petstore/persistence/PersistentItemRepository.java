@@ -11,6 +11,7 @@ import static org.hibernate.criterion.Restrictions.*;
 import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.ItemRepository;
 
+// TODO use query instead ?
 public class PersistentItemRepository implements ItemRepository {
 
 	private SessionFactory sessionFactory;

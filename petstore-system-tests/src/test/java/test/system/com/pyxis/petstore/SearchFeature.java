@@ -21,7 +21,7 @@ public class SearchFeature {
 
     @Before
     public void setUp() throws Exception {
-        database.open();
+        database.start();
         home = petstore.start();
     }
 
@@ -44,7 +44,7 @@ public class SearchFeature {
 
     @After
     public void tearDown() {
-    	database.close();
+    	database.stop();
         petstore.close();
     }
 

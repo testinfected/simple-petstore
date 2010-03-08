@@ -18,8 +18,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.AccessType;
 
 
-@Entity()
-@AccessType("field") @Table(name = "products")
+@Entity @AccessType("field") @Table(name = "products")
 public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -86,9 +85,4 @@ public class Product {
     public String toString() {
         return reflectionToString(this);
 	}
-
-	public List<Item> getItems() {
-		return Collections.emptyList();
-	}
-
 }

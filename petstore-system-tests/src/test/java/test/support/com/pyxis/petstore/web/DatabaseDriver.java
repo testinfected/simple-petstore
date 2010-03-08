@@ -1,20 +1,21 @@
 package test.support.com.pyxis.petstore.web;
 
+import org.hibernate.SessionFactory;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 
-import static test.support.com.pyxis.petstore.web.ApplicationContext.sessionFactory;
+import static test.support.com.pyxis.petstore.web.ApplicationContext.get;
 
 public class DatabaseDriver {
 
-	private Database database = new Database(sessionFactory());
+	private Database database = new Database(get(SessionFactory.class));
 
-	public void open() {
+	public void start() {
 		database.openConnection();
 		database.clean();
 	}
 	
-	public void close() {
+	public void stop() {
 		database.disconnect();
 	}
 	
@@ -25,5 +26,4 @@ public class DatabaseDriver {
     public void given(EntityBuilder<?>... builders) throws Exception {
         database.persist(builders);
     }
-
 }

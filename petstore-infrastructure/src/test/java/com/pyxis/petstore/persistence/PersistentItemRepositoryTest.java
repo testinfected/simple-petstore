@@ -35,18 +35,16 @@ public class PersistentItemRepositoryTest {
         database.disconnect();
     }
 
-	@Test
-	public void findsItemsOfAProductGivenAProductNumber() throws Exception
-	{
-		Product aProduct = aProduct().withNumber("123").build();
-		database.persist(aProduct);
-		database.persist(anItem().of(aProduct));
-		List<Item> itemsFound = itemRepository.findItemsByProductNumber("123");
-		assertThat(itemsFound, contains(itemWithProduct(hasField("number", equalTo("123")))));
-	}
+    @Test
+    public void findsItemsOfAProductGivenAProductNumber() throws Exception {
+        Product product = aProduct().withNumber("123").build();
+        database.persist(product);
+        database.persist(anItem().of(product), anItem().of(product));
+        List<Item> itemsFound = itemRepository.findItemsByProductNumber("123");
+        assertThat(itemsFound, contains(itemWithProduct(hasField("number", equalTo("123")))));
+    }
 
-	private Matcher<Item> itemWithProduct(Matcher<? super Product> productMatcher) {
-		return hasField("product", productMatcher);
-	}
-	
+    private Matcher<Item> itemWithProduct(Matcher<? super Product> productMatcher) {
+        return hasField("product", productMatcher);
+    }
 }

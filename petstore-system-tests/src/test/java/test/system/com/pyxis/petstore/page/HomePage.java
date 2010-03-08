@@ -18,5 +18,4 @@ public class HomePage extends PageObject {
         clickOn(button());
         return nowOn(ProductsPage.class);
 	}
-
 }
