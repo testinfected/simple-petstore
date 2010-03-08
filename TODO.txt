@@ -1,0 +1,2 @@
+o Afficher le numéro de produit dans les résultats rechercher
+o Règles de validation business dans les objets du domaine

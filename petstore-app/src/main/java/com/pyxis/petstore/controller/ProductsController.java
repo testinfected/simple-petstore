@@ -26,7 +26,7 @@ public class ProductsController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelMap index(@RequestParam("keyword") String keyword) {
-        List<Product> matchingProducts = productCatalog.findProductsByKeyword(keyword);
+        List<Product> matchingProducts = productCatalog.findByKeyword(keyword);
         ModelMap modelMap = new ModelMap();
         modelMap.addAttribute("attachments", attachmentStorage);
         modelMap.addAttribute(matchingProducts);

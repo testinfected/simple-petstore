@@ -22,10 +22,9 @@ public class PersistentItemRepository implements ItemRepository {
 
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-	public List<Item> findItemsByProductNumber(String productNumber) {
+	public List<Item> findByProductNumber(String productNumber) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Item.class);
 		criteria.createCriteria("product").add(eq("number", productNumber));
 		return criteria.list();
 	}
-
 }

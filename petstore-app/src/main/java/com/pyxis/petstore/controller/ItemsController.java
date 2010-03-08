@@ -24,7 +24,7 @@ public class ItemsController {
 	
     @RequestMapping(method = RequestMethod.GET)
 	public ModelMap index(@RequestParam("product_number") String productNumber) {
-		List<Item> items = itemRepository.findItemsByProductNumber(productNumber);
+		List<Item> items = itemRepository.findByProductNumber(productNumber);
 		return new ModelMap(items);
 	}
 

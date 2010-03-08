@@ -29,10 +29,10 @@ public class ItemsControllerTest {
     public void listsItemsByProductNumberAndMakeThemAvailableToView() {
     	final List<Item> anItemList = Arrays.asList(anItem().build());
     	context.checking(new Expectations(){{
-    		oneOf(itemRepository).findItemsByProductNumber("1234");
+    		oneOf(itemRepository).findByProductNumber("LAB-1234");
 			will(returnValue(anItemList));
     	}});
-    	ModelMap map = itemController.index("1234");
+    	ModelMap map = itemController.index("LAB-1234");
     	assertThat(map, hasAttribute("itemList", anItemList));
     }
 }

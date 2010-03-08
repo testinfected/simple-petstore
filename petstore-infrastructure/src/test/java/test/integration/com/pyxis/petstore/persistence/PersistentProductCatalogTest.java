@@ -1,20 +1,7 @@
 package test.integration.com.pyxis.petstore.persistence;
 
-import static com.pyxis.matchers.persistence.SamePersistentFieldsAs.samePersistentFieldsAs;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.iterableWithSize;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.db.Database.idOf;
-import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
+import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.ProductCatalog;
 import org.hamcrest.Matcher;
 import org.hibernate.PropertyValueException;
 import org.hibernate.Session;
@@ -23,15 +10,24 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
 
-import com.pyxis.matchers.persistence.HasFieldWithValue;
-import com.pyxis.petstore.domain.Product;
-import com.pyxis.petstore.domain.ProductCatalog;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import static com.pyxis.matchers.persistence.HasFieldWithValue.hasField;
+import static com.pyxis.matchers.persistence.SamePersistentFieldsAs.samePersistentFieldsAs;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.db.Database.idOf;
+import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
 
 public class PersistentProductCatalogTest {
 
@@ -52,7 +48,7 @@ public class PersistentProductCatalogTest {
     wontFindAnythingIfNoProductMatches() throws Exception {
         havingPersisted(aProduct().withName("Dalmatian").describedAs("A big dog"));
 
-        List<Product> matchingProducts = productCatalog.findProductsByKeyword("bulldog");
+        List<Product> matchingProducts = productCatalog.findByKeyword("bulldog");
         assertTrue(matchingProducts.isEmpty());
     }
 
@@ -64,7 +60,7 @@ public class PersistentProductCatalogTest {
                 and(aProduct().withName("Labrador Retriever"))
         );
 
-        Collection<Product> matches = productCatalog.findProductsByKeyword("bull");
+        Collection<Product> matches = productCatalog.findByKeyword("bull");
         assertThat(matches, hasSize(equalTo(2)));
         assertThat(matches, containsProduct(productNamed("English Bulldog"), productNamed("French Bulldog")));
     }
@@ -73,16 +69,23 @@ public class PersistentProductCatalogTest {
     canFindProductsByMatchingDescription() throws Exception {
         havingPersisted(
                 aProduct().withName("Labrador").describedAs("Friendly"),
+                and(aProduct().withName("Golden").describedAs("Kids best friend")),
                 and(aProduct().withName("Poodle").describedAs("Annoying"))
         );
 
-        List<Product> matches = productCatalog.findProductsByKeyword("friend");
-        assertThat(matches, containsInAnyOrder(productNamed("Labrador")));
+        List<Product> matches = productCatalog.findByKeyword("friend");
+        assertThat(matches, hasSize(equalTo(2)));
+        assertThat(matches, containsProduct(productNamed("Labrador"), productNamed("Golden")));
     }
 
     @Test (expected = PropertyValueException.class)
     public void cannotPersistAProductWithoutAName() throws Exception {
         productCatalog.add(aProduct().withoutAName().build());
+    }
+
+    @Test (expected = PropertyValueException.class)
+    public void cannotPersistAProductWithoutANumber() throws Exception {
+        productCatalog.add(aProduct().withoutANumber().build());
     }
 
     @Test
@@ -97,18 +100,13 @@ public class PersistentProductCatalogTest {
         }
     }
 
-    @Test (expected = PropertyValueException.class)
-    public void cannotPersistAProductWithoutANumber() throws Exception {
-        productCatalog.add(aProduct().withoutANumber().build());
-    }    
-    
     @Test
     public void productNumberShouldBeUnique() throws Exception {
-        ProductBuilder someProduct = aProduct().withNumber("123");
+        ProductBuilder someProduct = aProduct().withNumber("LAB-1234");
         database.persist(someProduct);
         try {
 			productCatalog.add(someProduct.build());
-			fail("Should have thrown an exception.");
+			fail("Expected a ConstraintViolationException");
 		} catch (ConstraintViolationException e) {
 			assertTrue(true);
 		}
@@ -140,6 +138,6 @@ public class PersistentProductCatalogTest {
     }
 
     private Matcher<Product> productNamed(String name) {
-        return HasFieldWithValue.hasField("name", equalTo(name));
+        return hasField("name", equalTo(name));
     }
 }

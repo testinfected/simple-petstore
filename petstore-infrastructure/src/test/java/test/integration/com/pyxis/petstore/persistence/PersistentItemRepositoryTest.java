@@ -1,9 +1,10 @@
-package com.pyxis.petstore.persistence;
+package test.integration.com.pyxis.petstore.persistence;
 
 import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.ItemRepository;
 import com.pyxis.petstore.domain.Product;
 import org.hamcrest.Matcher;
+import org.hibernate.PropertyValueException;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -14,8 +15,9 @@ import java.util.List;
 
 import static com.pyxis.matchers.persistence.HasFieldWithValue.hasField;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
+import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
@@ -35,13 +37,30 @@ public class PersistentItemRepositoryTest {
         database.disconnect();
     }
 
-    @Test
-    public void findsItemsOfAProductGivenAProductNumber() throws Exception {
-        Product product = aProduct().withNumber("123").build();
+    @Test public void
+    canFindItemsByProductNumber() throws Exception {
+        Product product = aProduct().withNumber("LAB-1234").build();
         database.persist(product);
         database.persist(anItem().of(product), anItem().of(product));
-        List<Item> itemsFound = itemRepository.findItemsByProductNumber("123");
-        assertThat(itemsFound, contains(itemWithProduct(hasField("number", equalTo("123")))));
+        List<Item> itemsFound = itemRepository.findByProductNumber("LAB-1234");
+        assertThat(itemsFound, everyItem(itemWithProduct(hasField("number", equalTo("LAB-1234")))));
+    }
+
+    @Test public void
+    itemIsInvalidWithoutAnItemNumber() throws Exception {
+        Product product = aProduct().build();
+        database.persist(product);
+
+        try {
+            database.persist(anItem().of(product).withNumber(null));
+            fail("Expected PropertyValueException");
+        } catch (PropertyValueException expected) {
+        }
+    }
+
+    @Test(expected = PropertyValueException.class) public void
+    itemIsInvalidWithoutAnAssociatedProduct() throws Exception {
+        database.persist(anItem().of((Product) null));
     }
 
     private Matcher<Item> itemWithProduct(Matcher<? super Product> productMatcher) {

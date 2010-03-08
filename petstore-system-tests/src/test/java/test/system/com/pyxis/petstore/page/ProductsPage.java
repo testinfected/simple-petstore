@@ -12,7 +12,6 @@ import org.openqa.selenium.WebDriver;
 import static org.openqa.selenium.lift.Finders.*;
 
 import test.support.com.pyxis.petstore.web.PageObject;
-import test.system.com.pyxis.petstore.page.ItemsPage;
 
 import com.pyxis.petstore.domain.Product;
 
@@ -26,6 +25,7 @@ public class ProductsPage extends PageObject {
         assertPresenceOf(element("no-match"));
     }
 
+    // TODO use product attributes instead of product
     public void displays(Product... expectedProducts) {
         displaysNumberOfMatches(expectedProducts.length);
         displaysTableContaining(expectedProducts);

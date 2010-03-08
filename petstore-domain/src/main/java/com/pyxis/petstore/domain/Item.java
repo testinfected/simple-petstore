@@ -7,23 +7,28 @@ import javax.persistence.*;
 @Entity @AccessType("field") @Table(name = "items")
 public class Item {
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String number;
-
-	@ManyToOne() @JoinColumn(name = "product_id")
+    @Embedded @AttributeOverrides(
+        @AttributeOverride(name = "number", column = @Column(name = "reference_number", nullable = false, unique = true))
+    )
+    private ItemNumber referenceNumber;
+    @ManyToOne() @JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 
 	Item() {}
 
-    // TODO get rid of number and use generated id as identity
-    // TODO product should be a ctor parameter
-	public Item(String number) {
-		this.number = number;
+	public Item(ItemNumber referenceNumber, Product product) {
+        this.referenceNumber = referenceNumber;
+        this.product = product;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
-	}
+    public String getNumber() {
+        return referenceNumber.getNumber();
+    }
+
+    @Override public String toString() {
+        return referenceNumber + " (" + product.getNumber() + ")";
+    }
 }

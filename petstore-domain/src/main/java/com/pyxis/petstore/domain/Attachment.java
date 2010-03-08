@@ -3,8 +3,6 @@ package com.pyxis.petstore.domain;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
-import static com.pyxis.petstore.domain.EntityToStringStyle.reflectionToString;
-
 @Embeddable
 public class Attachment implements Serializable {
 
@@ -20,6 +18,6 @@ public class Attachment implements Serializable {
 
     @Override
     public String toString() {
-        return reflectionToString(this);
+        return fileName;
     }
 }

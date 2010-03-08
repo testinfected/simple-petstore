@@ -100,10 +100,10 @@ public class ProductsViewTest {
     
     @Test
     public void displaysLinksOnProductNamesToBrowseItemsOfThatProduct() {
-    	productsPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("123")));
+    	productsPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("LAB-1234")));
     	assertThat(dom(productsPage),
     			hasUniqueSelector("td a", 
-    					withAttribute("href", containsString("items?product_number=123"))));
+    					withAttribute("href", containsString("items?product_number=LAB-1234"))));
     }
 
     private Matcher<Product> aProductWithoutPhoto() {

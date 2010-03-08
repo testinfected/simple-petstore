@@ -25,7 +25,7 @@ public class PersistentProductCatalog implements ProductCatalog {
 
     @SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
-	public List<Product> findProductsByKeyword(String keyword) {
+	public List<Product> findByKeyword(String keyword) {
         Session session = sessionFactory.getCurrentSession();
         return session.createCriteria(Product.class)
         	.add(Restrictions.or(

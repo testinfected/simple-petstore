@@ -1,27 +1,14 @@
 package com.pyxis.petstore.domain;
 
-import static com.pyxis.petstore.domain.EntityToStringStyle.reflectionToString;
-
-import java.util.Collections;
-import java.util.List;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import org.hibernate.annotations.AccessType;
+
+import javax.persistence.*;
 
 
 @Entity @AccessType("field") @Table(name = "products")
 public class Product {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
     @Column(nullable = false, unique = true)
@@ -31,26 +18,21 @@ public class Product {
     private String name;
     private String description;
 
-    @Embedded
-    @AttributeOverrides(
+    @Embedded @AttributeOverrides(
         @AttributeOverride(name = "fileName", column = @Column(name = "photo_file_name"))
     )
     private Attachment photo;
 
-
     Product() {}
 
-    public Product(String name) {
+    public Product(String number, String name) {
+        this.number = number;
 		this.name = name;
 	}
 
     public String getNumber() {
 		return number;
 	}
-
-	public void setNumber(String number) {
-    	this.number = number;
-    }
 
 	public String getName() {
 		return name;
@@ -83,6 +65,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return reflectionToString(this);
+        return number + " (" + name + ")"; 
 	}
 }

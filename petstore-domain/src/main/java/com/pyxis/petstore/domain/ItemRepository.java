@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface ItemRepository {
 
-	List<Item> findItemsByProductNumber(String productNumber);
+	List<Item> findByProductNumber(String productNumber);
 }

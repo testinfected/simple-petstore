@@ -1,15 +1,8 @@
 package test.com.pyxis.petstore.controller;
 
-import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
-import static java.util.Collections.emptyList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.not;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-
-import java.util.Arrays;
-
+import com.pyxis.petstore.controller.ProductsController;
+import com.pyxis.petstore.domain.AttachmentStorage;
+import com.pyxis.petstore.domain.ProductCatalog;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -19,9 +12,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.ui.ModelMap;
 
-import com.pyxis.petstore.controller.ProductsController;
-import com.pyxis.petstore.domain.AttachmentStorage;
-import com.pyxis.petstore.domain.ProductCatalog;
+import java.util.Arrays;
+
+import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
+import static java.util.Collections.emptyList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.not;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 @RunWith(JMock.class)
 public class ProductsControllerTest {
@@ -36,7 +34,7 @@ public class ProductsControllerTest {
     @Before
     public void searchWillNotYieldAnyResult() {
         context.checking(new Expectations() {{
-            allowing(productCatalog).findProductsByKeyword(ANY_PRODUCT); will(returnValue(emptyList()));
+            allowing(productCatalog).findByKeyword(ANY_PRODUCT); will(returnValue(emptyList()));
         }});
     }
 
@@ -45,7 +43,7 @@ public class ProductsControllerTest {
 
         final Object matchingProducts = Arrays.asList(aProduct().build());
         context.checking(new Expectations() {{
-            oneOf(productCatalog).findProductsByKeyword("Dog"); will(returnValue(matchingProducts));
+            oneOf(productCatalog).findByKeyword("Dog"); will(returnValue(matchingProducts));
         }});
 
         ModelMap map = productsController.index("Dog");
