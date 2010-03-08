@@ -26,20 +26,23 @@ public class PersistentProductCatalog implements ProductCatalog {
     @SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public List<Product> findByKeyword(String keyword) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createCriteria(Product.class)
+        return currentSession().createCriteria(Product.class)
         	.add(Restrictions.or(
-        			fieldMatchesKeyword("name", keyword), 
+        			fieldMatchesKeyword("name", keyword),
         			fieldMatchesKeyword("description", keyword)))
     	    .list();
 	}
 
-	private Criterion fieldMatchesKeyword(String field, String keyword) {
+    private Session currentSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
+    private Criterion fieldMatchesKeyword(String field, String keyword) {
 		return ilike(field, keyword, MatchMode.ANYWHERE);
 	}
 
-	@Transactional
+    @Transactional
 	public void add(Product product) {
-		this.sessionFactory.getCurrentSession().save(product);
+		currentSession().save(product);
 	}
 }
