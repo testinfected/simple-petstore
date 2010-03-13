@@ -3,10 +3,8 @@ package test.integration.com.pyxis.petstore.persistence;
 import com.pyxis.petstore.domain.Product;
 import com.pyxis.petstore.domain.ProductCatalog;
 import org.hamcrest.Matcher;
-import org.hibernate.PropertyValueException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +13,7 @@ import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -78,14 +77,22 @@ public class PersistentProductCatalogTest {
         assertThat(matches, containsProduct(productNamed("Labrador"), productNamed("Golden")));
     }
 
-    @Test (expected = PropertyValueException.class)
+    @Test (expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutAName() throws Exception {
-        productCatalog.add(aProduct().withName(null).build());
+        productCatalog.add(aProductWithoutAName());
     }
 
-    @Test (expected = PropertyValueException.class)
+    private Product aProductWithoutAName() {
+        return aProduct().withName(null).build();
+    }
+
+    @Test (expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutANumber() throws Exception {
-        productCatalog.add(aProduct().withNumber(null).build());
+        productCatalog.add(aProductWithoutANumber());
+    }
+
+    private Product aProductWithoutANumber() {
+        return aProduct().withNumber(null).build();
     }
 
     @Test
@@ -107,7 +114,7 @@ public class PersistentProductCatalogTest {
         try {
 			productCatalog.add(someProduct.build());
 			fail("Expected a ConstraintViolationException");
-		} catch (ConstraintViolationException e) {
+		} catch (org.hibernate.exception.ConstraintViolationException expected) {
 			assertTrue(true);
 		}
     }    

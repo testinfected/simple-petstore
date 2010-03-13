@@ -1,0 +1,1 @@
+- Ajouter validation sur le numéro de produit (ABCD-123)

@@ -2,7 +2,7 @@ package test.com.pyxis.petstore.controller;
 
 import com.pyxis.petstore.controller.ItemsController;
 import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.ItemRepository;
+import com.pyxis.petstore.domain.ItemInventory;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -22,14 +22,14 @@ import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 public class ItemsControllerTest {
 
     Mockery context = new JUnit4Mockery();
-    ItemRepository itemRepository = context.mock(ItemRepository.class);
-    ItemsController itemController = new ItemsController(itemRepository);
-    
+    ItemInventory itemInventory = context.mock(ItemInventory.class);
+    ItemsController itemController = new ItemsController(itemInventory);
+
     @Test
     public void listsItemsByProductNumberAndMakeThemAvailableToView() {
     	final List<Item> anItemList = Arrays.asList(anItem().build());
     	context.checking(new Expectations(){{
-    		oneOf(itemRepository).findByProductNumber("LAB-1234");
+    		oneOf(itemInventory).findByProductNumber("LAB-1234");
 			will(returnValue(anItemList));
     	}});
     	ModelMap map = itemController.index("LAB-1234");

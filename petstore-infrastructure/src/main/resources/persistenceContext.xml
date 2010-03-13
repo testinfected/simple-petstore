@@ -17,7 +17,7 @@
         <constructor-arg ref="sessionFactory"/>
     </bean>
     
-    <bean id="itemRepository" class="com.pyxis.petstore.persistence.PersistentItemRepository">
+    <bean id="itemRepository" class="com.pyxis.petstore.persistence.PersistentItemInventory">
     	<constructor-arg ref="sessionFactory"/>
     </bean>
 </beans>

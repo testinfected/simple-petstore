@@ -1,1 +1,0 @@
-o Règles de validation business dans les objets du domaine

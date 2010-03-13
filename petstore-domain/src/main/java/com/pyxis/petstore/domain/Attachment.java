@@ -1,10 +1,8 @@
 package com.pyxis.petstore.domain;
 
 import javax.persistence.Embeddable;
-import java.io.Serializable;
 
-@Embeddable
-public class Attachment implements Serializable {
+public @Embeddable class Attachment {
 
     private String fileName;
 
@@ -16,7 +14,6 @@ public class Attachment implements Serializable {
         this.fileName = name;
     }
 
-    @Override
     public String toString() {
         return fileName;
     }

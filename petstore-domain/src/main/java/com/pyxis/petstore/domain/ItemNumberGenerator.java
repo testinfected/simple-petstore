@@ -1,6 +1,8 @@
 package com.pyxis.petstore.domain;
 
-public interface ItemNumberGenerator {
+import org.springframework.stereotype.Service;
+
+public @Service interface ItemNumberGenerator {
 
     ItemNumber nextItemNumber();
 }

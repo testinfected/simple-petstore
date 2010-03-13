@@ -3,19 +3,22 @@ package com.pyxis.petstore.domain;
 import org.hibernate.annotations.AccessType;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
-@Entity @AccessType("field") @Table(name = "items")
-public class Item {
+@AccessType("field") @Table(name = "items")
+public @Entity class Item {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private @Id Long id;
 
     @Embedded @AttributeOverrides(
-        @AttributeOverride(name = "number", column = @Column(name = "reference_number", nullable = false, unique = true))
+        @AttributeOverride(name = "number", column = @Column(name = "reference_number", unique = true))
     )
-    private ItemNumber referenceNumber;
-    @ManyToOne() @JoinColumn(name = "product_id", nullable = false)
-	private Product product;
+    private @NotNull @Valid ItemNumber referenceNumber;
+
+    @ManyToOne() @JoinColumn(name = "product_id")
+	private @NotNull Product product;
 
 	Item() {}
 
@@ -28,7 +31,7 @@ public class Item {
         return referenceNumber.getNumber();
     }
 
-    @Override public String toString() {
+    public String toString() {
         return referenceNumber + " (" + product.getNumber() + ")";
     }
 }

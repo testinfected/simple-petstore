@@ -1,14 +1,14 @@
 package com.pyxis.petstore.domain;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
-@Embeddable
-public class ItemNumber {
 
-    private String number;
+public @Embeddable class ItemNumber {
 
-    ItemNumber() {
-    }
+    private @NotNull String number;
+
+    ItemNumber() {}
 
     public ItemNumber(String number) {
         this.number = number;
@@ -18,7 +18,7 @@ public class ItemNumber {
         return number;
     }
 
-    @Override public String toString() {
+    public String toString() {
         return number;
     }
 }
