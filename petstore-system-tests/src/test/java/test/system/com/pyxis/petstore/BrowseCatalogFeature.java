@@ -20,8 +20,8 @@ public class BrowseCatalogFeature {
 	DatabaseDriver database = new DatabaseDriver();
 	HomePage homePage;
 	
-	@Before
-	public void setUp() throws Exception {
+	@Before public void
+    startApplication() throws Exception {
         database.start();
         homePage = petstore.start();
 	}
@@ -39,8 +39,8 @@ public class BrowseCatalogFeature {
 		itemsPage.displaysItem("12345678", "Green Adult", 18.5f);
 	}
 	
-	@After
-	public void tearDown() {
+	@After public void
+    stopApplication() {
 		petstore.close();
 		database.stop();
 	}

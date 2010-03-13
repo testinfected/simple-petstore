@@ -1,17 +1,14 @@
 package test.system.com.pyxis.petstore;
 
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
 import test.system.com.pyxis.petstore.page.HomePage;
 import test.system.com.pyxis.petstore.page.ProductsPage;
 
-import com.pyxis.petstore.domain.Product;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class SearchFeature {
 
@@ -19,8 +16,8 @@ public class SearchFeature {
     DatabaseDriver database = new DatabaseDriver();
     HomePage home;
 
-    @Before
-    public void setUp() throws Exception {
+    @Before public void
+    startApplication() throws Exception {
         database.start();
         home = petstore.start();
     }
@@ -44,8 +41,8 @@ public class SearchFeature {
         resultsPage.displaysProduct("CHE-5678", "Chesapeake");
     }
 
-    @After
-    public void tearDown() {
+    @After public void
+    stopApplication() {
     	database.stop();
         petstore.close();
     }
