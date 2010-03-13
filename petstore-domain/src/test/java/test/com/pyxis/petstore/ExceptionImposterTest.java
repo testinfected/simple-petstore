@@ -1,4 +1,4 @@
-package com.pyxis.petstore;
+package test.com.pyxis.petstore;
 
 import org.junit.Test;
 
