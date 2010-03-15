@@ -14,10 +14,10 @@ public class ItemsPage extends PageObject {
 		super(driver);
 	}
 
-	public void displaysItem(String number, String description, float price) {
-/*		assertPresenceOf(cell().with(text(being(number))));
+	public void displaysItem(String number, String description, String price) {
+		assertPresenceOf(cell().with(text(being(number))));
 		assertPresenceOf(cell().with(text(being(description))));
-		assertPresenceOf(cell().with(text(being(String.valueOf(price)))));
-*/	}
+		assertPresenceOf(cell().with(text(being(price))));
+	}
 
 }

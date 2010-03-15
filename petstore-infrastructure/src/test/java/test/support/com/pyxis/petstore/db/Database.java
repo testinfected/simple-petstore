@@ -9,6 +9,9 @@ import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import javax.persistence.Id;
 import java.lang.reflect.Field;
 
+import static com.pyxis.matchers.persistence.SamePersistentFieldsAs.samePersistentFieldsAs;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 public class Database {
 
     private final SessionFactory sessionFactory;
@@ -61,6 +64,15 @@ public class Database {
             transaction.rollback();
             throw e;
         }
+    }
+
+    public void assertCanBeReloadedWithSameState(final Object entity) throws Exception {
+        perform(new UnitOfWork() {
+            public void work(Session session) throws Exception {
+                Object persisted = session.get(entity.getClass(), idOf(entity));
+                assertThat(persisted, samePersistentFieldsAs(entity));
+            }
+        });
     }
 
     public static long idOf(Object entity) throws Exception {

@@ -8,10 +8,14 @@ import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.builders.ItemBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 
 import javax.validation.ConstraintViolationException;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static com.pyxis.matchers.persistence.HasFieldWithValue.hasField;
@@ -40,12 +44,20 @@ public class PersistentItemInventoryTest {
     }
 
     @Test public void
+    findsNothingIfProductHasNoItemInInventory() throws Exception {
+        havingPersisted(aProduct().withNumber("DAL-54321"));
+
+        List<Item> itemsAvailable = itemInventory.findByProductNumber("DAL-54321");
+        assertTrue(itemsAvailable.isEmpty());
+    }
+
+    @Test public void
     canFindItemsByProductNumber() throws Exception {
         Product product = aProduct().withNumber("LAB-1234").build();
-        database.persist(product);
-        database.persist(anItem().of(product), anItem().of(product));
-        List<Item> itemsFound = itemInventory.findByProductNumber("LAB-1234");
-        assertThat(itemsFound, everyItem(itemWithProduct(hasField("number", equalTo("LAB-1234")))));
+        havingPersisted(product);
+        havingPersisted(anItem().of(product), anItem().of(product));
+        List<Item> itemsAvailable = itemInventory.findByProductNumber("LAB-1234");
+        assertThat(itemsAvailable, everyItem(itemWithProduct(hasField("number", equalTo("LAB-1234")))));
     }
 
     @Test public void
@@ -55,15 +67,16 @@ public class PersistentItemInventoryTest {
         assertFailsPersisting(anItemWithoutAReferenceNumber(product));
     }
 
-    private ItemBuilder anItemWithoutAReferenceNumber(Product product) {
-        return anItem().of(product).withNumber(null);
-    }
-
-    private void assertFailsPersisting(ItemBuilder item) throws Exception {
+    @Test public void
+    referenceNumberShouldBeUnique() throws Exception {
+        Product aProduct = aProduct().build();
+        havingPersisted(aProduct);
+        ItemBuilder item = anItem().of(aProduct).withNumber("LAB-1234");
+        havingPersisted(item.build());
         try {
-            database.persist(item);
-            fail("Expected ConstraintViolationException");
-        } catch (ConstraintViolationException expected) {
+            database.persist(item.build());
+            fail("Expected a ConstraintViolationException");
+        } catch (org.hibernate.exception.ConstraintViolationException expected) {
             assertTrue(true);
         }
     }
@@ -73,11 +86,55 @@ public class PersistentItemInventoryTest {
         database.persist(anItemWithoutAnAssociatedProduct());
     }
 
-    private ItemBuilder anItemWithoutAnAssociatedProduct() {
-        return anItem().of((Product) null);
+    @Test(expected = ConstraintViolationException.class) public void
+    itemIsInvalidWithoutAPrice() throws Exception {
+        database.persist(anItemWithoutAPrice());
+    }
+
+    @Test public void
+    canRoundTripItems() throws Exception {
+        Product product = aProduct().build();
+        final Collection<Item> items = Arrays.asList(
+                anItem().of(product).withNumber("12345678").describedAs("Chocolate male").priced("58.00").build(),
+                anItem().of(product).withNumber("87654321").build());
+
+        database.persist(product);
+        for (Item item : items) {
+            database.persist(item);
+            database.assertCanBeReloadedWithSameState(item);
+        }
+    }
+
+    private void havingPersisted(Object... entities) throws Exception {
+        database.persist(entities);
+    }
+
+    private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
+        database.persist(builders);
     }
 
     private Matcher<Item> itemWithProduct(Matcher<? super Product> productMatcher) {
         return hasField("product", productMatcher);
+    }
+
+    private ItemBuilder anItemWithoutAReferenceNumber(Product product) {
+        return anItem().of(product).withNumber(null);
+    }
+
+    private ItemBuilder anItemWithoutAnAssociatedProduct() {
+        return anItem().of((Product) null);
+    }
+
+    private ItemBuilder anItemWithoutAPrice() {
+        return anItem().priced((BigDecimal) null);
+    }
+
+    private void assertFailsPersisting(ItemBuilder item) throws Exception {
+        try {
+            database.persist(item);
+            fail("Expected ConstraintViolationException");
+        } catch (ConstraintViolationException expected) {
+            assertTrue(true);
+        }
     }
 }

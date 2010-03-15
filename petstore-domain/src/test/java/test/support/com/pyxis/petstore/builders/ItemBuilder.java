@@ -4,23 +4,24 @@ import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.ItemNumber;
 import com.pyxis.petstore.domain.Product;
 
+import java.math.BigDecimal;
+
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class ItemBuilder implements EntityBuilder<Item> {
 
-    private final ItemNumberFaker faker = new ItemNumberFaker();
-
-    private ItemNumber number = faker.nextItemNumber();
+    private ItemNumber number = ItemNumberFaker.aNumber();
     private Product product = aProduct().build();
     private String description;
-    private float price;
+    private BigDecimal price = PriceFaker.aPrice();
 
     public static ItemBuilder anItem() {
 		return new ItemBuilder();
 	}
 	
 	public Item build() {
-		Item item = new Item(number, product);
+		Item item = new Item(number, product, price);
+        item.setDescription(description);
 		return item;
 	}
 
@@ -47,7 +48,11 @@ public class ItemBuilder implements EntityBuilder<Item> {
 		return this;
 	}
 
-    public ItemBuilder priced(float price) {
+    public ItemBuilder priced(String price) {
+		return priced(new BigDecimal(price));
+	}
+
+    public ItemBuilder priced(BigDecimal price) {
 		this.price = price;
 		return this;
 	}

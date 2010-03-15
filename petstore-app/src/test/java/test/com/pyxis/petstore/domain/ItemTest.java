@@ -4,9 +4,12 @@ import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.Product;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 import static com.pyxis.matchers.validation.ViolationMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.validation.ValidationOf.validationOf;
 
 public class ItemTest {
@@ -30,8 +33,14 @@ public class ItemTest {
     }
 
     @Test public void
-    isValidWithAValidNumberAndAnAssociatedProduct() {
-        Item aValidItem = anItem().build();
+    isInvalidWithoutAPrice() {
+        Item anItemWithoutAPrice = anItem().priced((BigDecimal) null).build();
+        assertThat(validationOf(anItemWithoutAPrice), violates(on("price"), withError("NotNull")));
+    }
+
+    @Test public void
+    isValidWithAValidNumberAPriceAndAnAssociatedProduct() {
+        Item aValidItem = anItem().withNumber("12345678").of(aProduct()).priced("100.00").build();
         assertThat(validationOf(aValidItem), succeeds());
     }
 }

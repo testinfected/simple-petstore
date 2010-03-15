@@ -1,6 +1,6 @@
 CREATE TABLE items (
   id BIGINT NOT NULL AUTO_INCREMENT,
-  reference_number VARCHAR (8) NOT NULL,  
+  reference_number VARCHAR (8) NOT NULL UNIQUE,  
   product_id BIGINT NOT NULL,
   PRIMARY KEY (id),
   INDEX (product_id),

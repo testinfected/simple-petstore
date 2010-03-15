@@ -3,7 +3,6 @@ package test.integration.com.pyxis.petstore.persistence;
 import com.pyxis.petstore.domain.Product;
 import com.pyxis.petstore.domain.ProductCatalog;
 import org.hamcrest.Matcher;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -11,7 +10,6 @@ import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.EntityBuilder;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.db.Database;
-import test.support.com.pyxis.petstore.db.UnitOfWork;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
@@ -19,13 +17,11 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.pyxis.matchers.persistence.HasFieldWithValue.hasField;
-import static com.pyxis.matchers.persistence.SamePersistentFieldsAs.samePersistentFieldsAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.db.Database.idOf;
 import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
 
 public class PersistentProductCatalogTest {
@@ -95,20 +91,20 @@ public class PersistentProductCatalogTest {
         return aProduct().withNumber(null).build();
     }
 
-    @Test
-    public void canRoundTripProducts() throws Exception {
+    @Test public void
+    canRoundTripProducts() throws Exception {
         final Collection<Product> products = Arrays.asList(
                 aProduct().withName("Labrador").describedAs("Labrador Retriever").withPhoto("labrador.png").build(),
                 aProduct().withName("Dalmatian").build());
 
         for (Product product : products) {
             productCatalog.add(product);
-            assertCanBeReloadedWithSameState(product);
+            database.assertCanBeReloadedWithSameState(product);
         }
     }
 
-    @Test
-    public void productNumberShouldBeUnique() throws Exception {
+    @Test public void
+    productNumberShouldBeUnique() throws Exception {
         ProductBuilder someProduct = aProduct().withNumber("LAB-1234");
         database.persist(someProduct);
         try {
@@ -118,15 +114,6 @@ public class PersistentProductCatalogTest {
 			assertTrue(true);
 		}
     }    
-
-    private void assertCanBeReloadedWithSameState(final Product product) throws Exception {
-        database.perform(new UnitOfWork() {
-            public void work(Session session) throws Exception {
-                Product persisted = (Product) session.get(Product.class, idOf(product));
-                assertThat(persisted, samePersistentFieldsAs(product));
-            }
-        });
-    }
 
     private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
         database.persist(builders);

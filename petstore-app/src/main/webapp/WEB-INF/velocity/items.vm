@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>PetStore - Items</title>
+</head>
+<body>
+#if (!$itemList)
+    <div id="out-of-stock"><p>No item left in inventory</p></div>
+#else
+    <p><span id="inventory-count">$itemList.size()</span> item(s) is(are) available for purchase</p>
+
+    <table id="items">
+    <thead>
+        <tr>
+            <th>Reference number</th>
+            <th>Description</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+    #foreach ($item in $itemList)
+        <tr class="item">
+            <td>$item.Number</td>
+            <td>$!item.Description</td>
+            <td>$item.Price</td>
+        </tr>
+    #end
+    </tbody>
+    </table>
+#end
+</body>
+</html>

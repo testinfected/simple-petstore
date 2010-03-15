@@ -32,11 +32,11 @@ public class BrowseCatalogFeature {
         Item greenAdult = anItem().of(iguana)
                 .withNumber("12345678")
                 .describedAs("Green Adult")
-                .priced(18.5f).build();
+                .priced("18.50").build();
         database.given(iguana, greenAdult);
 		ProductsPage productsPage = homePage.searchFor("Iguana");
 		ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
-		itemsPage.displaysItem("12345678", "Green Adult", 18.5f);
+		itemsPage.displaysItem("12345678", "Green Adult", "18.50");
 	}
 	
 	@After public void

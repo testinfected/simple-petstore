@@ -1,6 +1,7 @@
 package test.com.pyxis.petstore.view;
 
 import static com.pyxis.matchers.dom.DomMatchers.*;
+import static com.pyxis.matchers.dom.DomMatchers.inOrder;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -37,7 +38,7 @@ public class ProductsViewTest {
 
     Mockery context = new JUnit4Mockery();
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
-    String productsPage;
+    String renderedPage;
 
     @Before public void
     setUpDefaultPhoto() {
@@ -48,18 +49,18 @@ public class ProductsViewTest {
 
     @Test public void
     displaysNumberOfProductsFound() {
-        productsPage = renderProductsPageUsing(aModelWith(aProduct(), aProduct()));
-        assertThat(dom(productsPage), hasUniqueSelector("#match-count", withText("2")));
-        assertThat(dom(productsPage), hasSelector("#products tr.product", withSize(2)));
+        renderedPage = renderProductsPageUsing(aModelWith(aProduct(), aProduct()));
+        assertThat(dom(renderedPage), hasUniqueSelector("#match-count", withText("2")));
+        assertThat(dom(renderedPage), hasSelector("#products tr.product", withSize(2)));
     }
 
     @Test public void
-    displaysColumnHeadingsOfProductTable() {
-        productsPage = renderProductsPageUsing(aModelWith(aProduct()));
-        assertThat(dom(productsPage),
+    displaysColumnHeadingsOnProductTable() {
+        renderedPage = renderProductsPageUsing(aModelWith(aProduct()));
+        assertThat(dom(renderedPage),
                 hasSelector("#products th",
                         inOrder(withText("Number"),
-                                withEmptyText(),
+                                withBlankText(),
                                 withText("Name"),
                                 withText("Description"))));
     }
@@ -76,8 +77,8 @@ public class ProductsViewTest {
             allowing(attachmentStorage).getAttachmentUrl(with(aProductWithPhoto("labrador.png"))); will(returnValue(photoUrl));
         }});
 
-        productsPage = renderProductsPageUsing(model);
-        assertThat(dom(productsPage),
+        renderedPage = renderProductsPageUsing(model);
+        assertThat(dom(renderedPage),
                 hasSelector("#products td",
                         inOrder(productNumber("LAB-1234"),
                                 image(photoUrl),
@@ -87,23 +88,23 @@ public class ProductsViewTest {
 
     @Test public void
     handlesProductWithNoDescriptionCorrectly() {
-        productsPage = renderProductsPageUsing(aModelWith(aProduct().withoutADescription()));
-        assertThat(dom(productsPage),
+        renderedPage = renderProductsPageUsing(aModelWith(aProduct().withoutADescription()));
+        assertThat(dom(renderedPage),
                 hasSelector("#products td:nth-child(4)",
                         contains(anEmptyDescription())));
     }
 
     @Test public void
-    displaysNoProductsTableIfNoProductIsFound() {
-        productsPage = renderProductsPageUsing(anEmptyModel());
-        assertThat(dom(productsPage), hasUniqueSelector("#no-match"));
-        assertThat(dom(productsPage), hasNoSelector("#products"));
+    doesNotDisplayProductsTableIfNoProductIsFound() {
+        renderedPage = renderProductsPageUsing(anEmptyModel());
+        assertThat(dom(renderedPage), hasUniqueSelector("#no-match"));
+        assertThat(dom(renderedPage), hasNoSelector("#products"));
     }
     
     @Test
     public void displaysLinksOnProductNamesToBrowseItemsOfThatProduct() {
-    	productsPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("LAB-1234")));
-    	assertThat(dom(productsPage),
+    	renderedPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("LAB-1234")));
+    	assertThat(dom(renderedPage),
     			hasUniqueSelector("td a", 
     					withAttribute("href", containsString("items?product_number=LAB-1234"))));
     }
@@ -135,10 +136,6 @@ public class ProductsViewTest {
         return render(PRODUCTS_VIEW).using(model);
     }
 
-    private Matcher<Element> withEmptyText() {
-        return withText("");
-    }
-
     private Matcher<Element> anEmptyDescription() {
         return description("");
     }
@@ -157,9 +154,5 @@ public class ProductsViewTest {
 
     private Matcher<Element> productName(String name) {
         return withText(name);
-    }
-
-    private Matcher<Iterable<Element>> inOrder(Matcher<Element>... elementMatchers) {
-        return contains(elementMatchers);
     }
 }
