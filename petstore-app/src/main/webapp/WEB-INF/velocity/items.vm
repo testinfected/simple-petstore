@@ -19,9 +19,9 @@
     <tbody>
     #foreach ($item in $itemList)
         <tr class="item">
-            <td>$item.Number</td>
+            <td class="number">$item.Number</td>
             <td>$!item.Description</td>
-            <td>$item.Price</td>
+            <td class="price">$item.Price</td>
         </tr>
     #end
     </tbody>

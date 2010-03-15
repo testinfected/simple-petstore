@@ -5,6 +5,7 @@ import com.pyxis.petstore.domain.Product;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
 import test.system.com.pyxis.petstore.page.HomePage;
@@ -18,22 +19,36 @@ public class BrowseCatalogFeature {
 	
 	PetStoreDriver petstore = new PetStoreDriver();
 	DatabaseDriver database = new DatabaseDriver();
-	HomePage homePage;
-	
-	@Before public void
+
+    HomePage homePage;
+    Product product;
+
+    @Before public void
     startApplication() throws Exception {
         database.start();
         homePage = petstore.start();
+        given(aProduct().withName("Iguana"));
 	}
+
+    private void given(final ProductBuilder product) throws Exception {
+        this.product = product.build();
+        database.given(this.product);
+    }
+
+    @Test public void
+    displaysAnEmptyItemListWhenProductIsOutOfStock() throws Exception {
+        ProductsPage productsPage = homePage.searchFor("Iguana");
+        ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
+        itemsPage.displaysOutOfStock();
+    }
 
 	@Test
 	public void listsItemsOfProductsAvailableInCatalog() throws Exception {
-		Product iguana = aProduct().withName("Iguana").build();
-        Item greenAdult = anItem().of(iguana)
+        Item greenAdult = anItem().of(product)
                 .withNumber("12345678")
                 .describedAs("Green Adult")
                 .priced("18.50").build();
-        database.given(iguana, greenAdult);
+        database.given(product, greenAdult);
 		ProductsPage productsPage = homePage.searchFor("Iguana");
 		ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
 		itemsPage.displaysItem("12345678", "Green Adult", "18.50");
