@@ -24,15 +24,15 @@ import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 @RunWith(JMock.class)
 public class ProductsControllerTest {
 
-    private static final String ANY_PRODUCT = "a product";
+    String ANY_PRODUCT = "a product";
     
     Mockery context = new JUnit4Mockery();
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
     ProductsController productsController = new ProductsController(productCatalog, attachmentStorage);
 
-    @Before
-    public void searchWillNotYieldAnyResult() {
+    @Before public void
+    searchWillNotYieldAnyResult() {
         context.checking(new Expectations() {{
             allowing(productCatalog).findByKeyword(ANY_PRODUCT); will(returnValue(emptyList()));
         }});
@@ -62,4 +62,9 @@ public class ProductsControllerTest {
         assertThat(map, hasAttribute("attachments", attachmentStorage));
     }
     
+    @Test public void
+    makesSearchKeywordAvailableToView() {
+        ModelMap map = productsController.index(ANY_PRODUCT);
+        assertThat(map, hasAttribute("keyword", ANY_PRODUCT));
+    }
 }

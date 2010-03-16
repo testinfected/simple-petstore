@@ -3,7 +3,7 @@
 <head>
     <meta content="text/html;charset=UTF-8" http-equiv="Content-Type"/>
     <link href="${base}/stylesheets/main.css?$date.systemTime" media="screen" rel="stylesheet" type="text/css" />
-	<link rel="shortcut icon" href="${base}//imagesfavicon.ico" />
+	<link rel="shortcut icon" href="${base}/imagesfavicon.ico" />
     <title>$title</title>
 	$head    
 </head>

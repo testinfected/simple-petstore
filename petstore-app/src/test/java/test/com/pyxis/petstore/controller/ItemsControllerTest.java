@@ -24,8 +24,8 @@ public class ItemsControllerTest {
     ItemInventory itemInventory = context.mock(ItemInventory.class);
     ItemsController itemController = new ItemsController(itemInventory);
 
-    @Test
-    public void listsItemsByProductNumberAndMakeThemAvailableToView() {
+    @Test public void
+    listsItemsByProductNumberAndMakeThemAvailableToView() {
     	final List<Item> anItemList = Arrays.asList(anItem().build());
     	context.checking(new Expectations(){{
     		oneOf(itemInventory).findByProductNumber("LAB-1234");

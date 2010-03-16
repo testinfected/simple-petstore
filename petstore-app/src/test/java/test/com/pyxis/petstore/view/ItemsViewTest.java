@@ -16,6 +16,7 @@ import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 public class ItemsViewTest {
 
     String ITEMS_VIEW = "items";
+    String keyword = "Iguana";
     String renderedPage;
 
     @Test public void
@@ -64,6 +65,7 @@ public class ItemsViewTest {
 
     private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
         ModelMap model = new ModelMap();
+        model.addAttribute("keyword", keyword);
         model.addAttribute("itemList", entities(entityBuilders));
         return model;
     }
