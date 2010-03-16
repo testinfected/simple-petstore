@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ public class PersistentProductCatalog implements ProductCatalog {
 
     private final SessionFactory sessionFactory;
 
+    @Autowired
     public PersistentProductCatalog(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}

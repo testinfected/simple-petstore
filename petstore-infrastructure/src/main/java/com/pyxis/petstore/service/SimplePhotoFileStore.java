@@ -2,8 +2,9 @@ package com.pyxis.petstore.service;
 
 import com.pyxis.petstore.domain.AttachmentStorage;
 import com.pyxis.petstore.domain.Product;
+import org.springframework.stereotype.Service;
 
-public class SimplePhotoFileStore implements AttachmentStorage {
+public @Service class SimplePhotoFileStore implements AttachmentStorage {
     private static final String MISSING_PHOTO = "missing.png";
     private final String rootPath;
 

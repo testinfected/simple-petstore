@@ -7,10 +7,6 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="com.pyxis.petstore.controller" />
-
-	<context:annotation-config />
-
 	<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
 		<property name="resourceLoaderPath" value="/WEB-INF/velocity/" />
 	</bean>
@@ -19,6 +15,7 @@
 		<property name="cache" value="true" />
 		<property name="prefix" value="" />
 		<property name="suffix" value=".vm" />
+        <!--<property name="exposeRequestAttributes" value="true"/>-->
 	</bean>
 	
 	<bean id="openSessionInView" class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor">
@@ -30,11 +27,15 @@
 		<constructor-arg ref="openSessionInView"/>
 	</bean>
 	
-	<bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping">
 		<property name="interceptors" ref="openSessionInViewHandlerInterceptor"/>
+        <property name="rootHandler" value="homeController"/>
 	</bean>
 
-    <bean id="attachments" class="com.pyxis.petstore.service.SimplePhotoFileStore">
+    <bean class="com.pyxis.petstore.service.SimplePhotoFileStore">
         <constructor-arg value="attachments/products"/>
     </bean>
+
+    <context:annotation-config />
+    <context:component-scan base-package="com.pyxis.petstore.controller" />
 </beans>

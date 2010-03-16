@@ -3,7 +3,7 @@
     <title>PetStore - Items</title>
 </head>
 <body>
-#if (!$itemList)
+#if ($itemList.Empty)
     <div id="out-of-stock"><p>No item left in inventory</p></div>
 #else
     <p><span id="inventory-count">$itemList.size()</span> item(s) is(are) available for purchase</p>

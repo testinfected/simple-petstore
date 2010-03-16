@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Controller @RequestMapping("/products")
+@Controller
 public class ProductsController {
 
 	private final ProductCatalog productCatalog;
@@ -27,10 +27,14 @@ public class ProductsController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelMap index(@RequestParam("keyword") String keyword) {
         List<Product> matchingProducts = productCatalog.findByKeyword(keyword);
-        ModelMap modelMap = new ModelMap();
-        modelMap.addAttribute("attachments", attachmentStorage);
+        ModelMap modelMap = model();
         modelMap.addAttribute(matchingProducts);
         return modelMap;
     }
 
+    private ModelMap model() {
+        ModelMap modelMap = new ModelMap();
+        modelMap.addAttribute("attachments", attachmentStorage);
+        return modelMap;
+    }
 }
