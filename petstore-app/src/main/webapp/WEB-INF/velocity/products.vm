@@ -4,9 +4,13 @@
 </head>
 <body>
     #if (!$productList)
-    <div id="no-match"><p>No matching product found</p></div>
-    #else
-    <p>Found <span id="match-count">$productList.size()</span> result(s)</p>
+    <p id="no-match">No product matching "$request.Keyword" was found</p></p>
+	#else
+	    #if ($productList.size() == 1)
+	    <p>Found <span id="match-count">$productList.size()</span> result for "$request.Keyword"</p>
+		#else
+    	<p>Found <span id="match-count">$productList.size()</span> results for "$request.Keyword"</p>
+		#end
 
     <table id="products">
         <thead>
