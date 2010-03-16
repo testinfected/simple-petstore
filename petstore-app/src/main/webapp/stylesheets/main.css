@@ -6,6 +6,18 @@ body {
 
 img {border-width: 0;}
 
+#header {
+   background:#6cf;
+}
+
+#footer {
+   position:absolute;
+   bottom:0;
+   width:960px;
+   height:60px;   /* Height of the footer */
+   background:#6cf;
+}
+
 ol, ul, p {
     font-size: 1.2em;
     line-height: 1.5;
@@ -51,9 +63,8 @@ button {
     color: #333;
     cursor: pointer;
     font-size: .9em;
-    font-weight: bold;
-    letter-spacing: .3em;
-    padding: .2em .5em;
+    letter-spacing: .2em;
+    padding: .1em;
 }
 
 img.photo {
@@ -61,9 +72,6 @@ img.photo {
 	border: 1px solid black;	
 }
 
-table#products {
-  width: 500px;
-} 
 
 th {
   border-bottom:1px solid black;
@@ -77,3 +85,10 @@ th {
 
 a#homelink {background: #fff url(../images/logo.png) no-repeat; display: inline-block; height: 100px; text-indent: -9999px; width: 75px;}
 a#homelink:hover {background: #fff url(../images/logo-home.png) no-repeat;}
+
+./images/logo-home.png) no-repeat;}
+
+ome.png) no-repeat;}
+
+}
+
