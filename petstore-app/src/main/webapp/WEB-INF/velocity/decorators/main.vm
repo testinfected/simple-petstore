@@ -3,23 +3,30 @@
 <head>
     <meta content="text/html;charset=UTF-8" http-equiv="Content-Type"/>
     <link href="${base}/stylesheets/main.css?$date.systemTime" media="screen" rel="stylesheet" type="text/css" />
-	<link rel="shortcut icon" href="${base}/imagesfavicon.ico" />
+	<link rel="shortcut icon" href="${base}/images/favicon.ico" />
     <title>$title</title>
 	$head    
 </head>
 <body>
 <div id="header">
     <a href="/petstore/" id="homelink">Home</a>
-
     <div id="search-box">
         #parse("/WEB-INF/velocity/includes/searchForm.vm")
+    </div>
+    <div id="shopping-cart">
+		X items
     </div>
 </div>
 <div id="content">
     $body
 </div>
 <div id="footer">
-    note: footer will go here
+<ul>
+	<li>iguana</li>
+	<li>dog</li>
+	<li>cat</li>
+	<li>bird</li>
+</ul>
 </div>
 </body>
 </html>
