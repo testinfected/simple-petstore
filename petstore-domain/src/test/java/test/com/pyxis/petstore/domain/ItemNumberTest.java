@@ -10,6 +10,8 @@ import static test.support.com.pyxis.petstore.validation.ValidationOf.validation
 
 public class ItemNumberTest {
 
+    String SHOULD_NOT_BE_NULL = "{javax.validation.constraints.NotNull.message}";
+
     @Test public void
     isValidWithANonNullNumber() {
         ItemNumber aValidItemNumber = ItemNumberFaker.aNumber();
@@ -19,6 +21,6 @@ public class ItemNumberTest {
     @Test public void
     isInvalidWithANullNumber() {
         ItemNumber anItemNumberWithoutANumber = new ItemNumber(null);
-        assertThat(validationOf(anItemNumberWithoutANumber), violates(on("number"), withError("NotNull")));
+        assertThat(validationOf(anItemNumberWithoutANumber), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
     }
 }

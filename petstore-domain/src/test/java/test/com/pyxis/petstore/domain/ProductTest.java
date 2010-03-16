@@ -10,16 +10,18 @@ import static test.support.com.pyxis.petstore.validation.ValidationOf.validation
 
 public class ProductTest {
 
+    String SHOULD_NOT_BE_NULL = "{javax.validation.constraints.NotNull.message}";
+
     @Test public void
     isInvalidWithoutAName() {
         Product aProductWithoutAName = aProduct().withName(null).build();
-        assertThat(validationOf(aProductWithoutAName), violates(on("name"), withError("NotNull")));
+        assertThat(validationOf(aProductWithoutAName), violates(on("name"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutANumber() {
         Product aProductWithoutANumber = aProduct().withNumber(null).build();
-        assertThat(validationOf(aProductWithoutANumber), violates(on("number"), withError("NotNull")));
+        assertThat(validationOf(aProductWithoutANumber), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void

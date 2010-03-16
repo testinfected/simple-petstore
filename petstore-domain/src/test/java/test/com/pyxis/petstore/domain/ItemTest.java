@@ -14,28 +14,30 @@ import static test.support.com.pyxis.petstore.validation.ValidationOf.validation
 
 public class ItemTest {
 
+    String SHOULD_NOT_BE_NULL = "{javax.validation.constraints.NotNull.message}";
+
     @Test public void
     isInvalidWithoutAProduct() {
         Item anItemWithNoAssociatedProduct = anItem().of((Product) null).build();
-        assertThat(validationOf(anItemWithNoAssociatedProduct), violates(on("product"), withError("NotNull")));
+        assertThat(validationOf(anItemWithNoAssociatedProduct), violates(on("product"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutANumber() {
         Item anItemWithoutANumber = anItem().with(null).build();
-        assertThat(validationOf(anItemWithoutANumber), violates(on("referenceNumber"), withError("NotNull")));
+        assertThat(validationOf(anItemWithoutANumber), violates(on("referenceNumber"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutAValidNumber() {
         Item anItemWithAnInvalidNumber = anItem().withNumber(null).build();
-        assertThat(validationOf(anItemWithAnInvalidNumber), violates(on("referenceNumber.number"), withError("NotNull")));
+        assertThat(validationOf(anItemWithAnInvalidNumber), violates(on("referenceNumber.number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutAPrice() {
         Item anItemWithoutAPrice = anItem().priced((BigDecimal) null).build();
-        assertThat(validationOf(anItemWithoutAPrice), violates(on("price"), withError("NotNull")));
+        assertThat(validationOf(anItemWithoutAPrice), violates(on("price"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
