@@ -6,7 +6,7 @@ public class ApplicationContext {
 
     private static final String[] CONFIG_LOCATIONS = new String[] {
             "dataSource.xml",
-            "persistenceContext.xml",
+            "persistence.xml",
     };
     private static ApplicationContext context;
     private org.springframework.context.ApplicationContext springContext;

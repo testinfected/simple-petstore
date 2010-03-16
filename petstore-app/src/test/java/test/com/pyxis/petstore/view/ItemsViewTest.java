@@ -64,7 +64,7 @@ public class ItemsViewTest {
 
     private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
         ModelMap model = new ModelMap();
-        model.addAttribute(entities(entityBuilders));
+        model.addAttribute("itemList", entities(entityBuilders));
         return model;
     }
 

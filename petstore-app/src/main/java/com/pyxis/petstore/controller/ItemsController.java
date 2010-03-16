@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.pyxis.petstore.domain.Item;
 
-@Controller @RequestMapping("/items")
+@Controller
 public class ItemsController {
 
 	private final ItemInventory itemInventory;
@@ -23,9 +23,7 @@ public class ItemsController {
 	}
 	
     @RequestMapping(method = RequestMethod.GET)
-	public ModelMap index(@RequestParam("product_number") String productNumber) {
-		List<Item> items = itemInventory.findByProductNumber(productNumber);
-		return new ModelMap(items);
+	public List<Item> index(@RequestParam("product_number") String productNumber) {
+		return itemInventory.findByProductNumber(productNumber);
 	}
-
 }
