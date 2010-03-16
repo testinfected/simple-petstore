@@ -59,8 +59,7 @@ public class ProductsViewTest {
         renderedPage = renderProductsPageUsing(aModelWith(aProduct()));
         assertThat(dom(renderedPage),
                 hasSelector("#products th",
-                        inOrder(withText("Number"),
-                                withBlankText(),
+                        inOrder(withBlankText(),
                                 withText("Name"),
                                 withText("Description"))));
     }
@@ -80,8 +79,7 @@ public class ProductsViewTest {
         renderedPage = renderProductsPageUsing(model);
         assertThat(dom(renderedPage),
                 hasSelector("#products td",
-                        inOrder(productNumber("LAB-1234"),
-                                image(photoUrl),
+                        inOrder(image(photoUrl),
                                 productName("Labrador"),
                                 description("Friendly"))));
     }
@@ -90,7 +88,7 @@ public class ProductsViewTest {
     handlesProductWithNoDescriptionCorrectly() {
         renderedPage = renderProductsPageUsing(aModelWith(aProduct().withoutADescription()));
         assertThat(dom(renderedPage),
-                hasSelector("#products td:nth-child(4)",
+                hasSelector("#products td:nth-child(3)",
                         contains(anEmptyDescription())));
     }
 

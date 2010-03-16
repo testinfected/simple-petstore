@@ -24,8 +24,7 @@ public class ProductsPage extends PageObject {
         assertPresenceOf(element("match-count").with(text(being(matchCount))));
     }
 
-    public void displaysProduct(String productNumber, String productName) {
-        assertPresenceOf(cell().with(className("number")).with(text(being(productNumber))));
+    public void displaysProduct(String productName) {
         assertPresenceOf(cell().with(className("name")).with(text(being(productName))));
     }
 

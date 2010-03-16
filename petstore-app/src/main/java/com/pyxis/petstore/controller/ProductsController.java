@@ -28,6 +28,7 @@ public class ProductsController {
     public ModelMap index(@RequestParam("keyword") String keyword) {
         List<Product> matchingProducts = productCatalog.findByKeyword(keyword);
         ModelMap modelMap = model();
+        modelMap.addAttribute("keyword", keyword);
         modelMap.addAttribute(matchingProducts);
         return modelMap;
     }

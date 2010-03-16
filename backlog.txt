@@ -1,4 +1,5 @@
 - Ajouter validation sur le numéro de produit (ABCD-123)
-- Ajouter validation sur le numéro de référence de l'item (12345678)
+- Ajouter validation sur le numéro de référence de l'article (12345678)
 - Introduire la notion de devise (Money)
 - Séquence bd pour les numéros d'articles
+- Ne rien retourner quand on cherche rien

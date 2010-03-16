@@ -1,0 +1,7 @@
+<toolbox>
+    <tool>
+        <key>display</key>
+        <scope>application</scope>
+        <class>org.apache.velocity.tools.generic.DisplayTool</class>
+    </tool>
+</toolbox>

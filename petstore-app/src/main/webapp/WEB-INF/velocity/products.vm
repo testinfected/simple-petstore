@@ -4,13 +4,9 @@
 </head>
 <body>
     #if (!$productList)
-    <p id="no-match">No product matching "$request.Keyword" was found</p>
-	#else
-	    #if ($productList.size() == 1)
-	    <p>Found <span id="match-count">1</span> result for "$request.Keyword"</p>
-		#else
-    	<p>Found <span id="match-count">$productList.size()</span> results for "$request.Keyword"</p>
-		#end
+    <p id="no-match">No product matching "$keyword" was found</p>
+    #else
+    <p>Found <span id="match-count">$productList.size()</span> $display.plural($productList.size(), "result") for "$keyword"</p>
 
     <table id="products">
         <thead>
@@ -18,20 +14,18 @@
             <th></th>
             <th>Name</th>
             <th>Description</th>
-            <th>Number</th>
         </tr>
         </thead>
         <tbody>
-        #foreach ($product in $productList)
-        <tr class="product">
-            <td><img class="photo" src="$attachments.getAttachmentUrl($product)"></td>
-            <td class="name"><a href="items?product_number=$product.Number">$product.Name</a></td>
-            <td>$!product.Description</td>
-            <td class="number">$product.Number</td>
-        </tr>
-        #end
+            #foreach ($product in $productList)
+            <tr class="product">
+                <td><img class="photo" src="$attachments.getAttachmentUrl($product)"></td>
+                <td class="name"><a href="items?product_number=$product.Number">$product.Name</a></td>
+                <td>$!product.Description</td>
+            </tr>
+            #end
         </tbody>
     </table>
     #end
 </body>
-</html>
+        </html>

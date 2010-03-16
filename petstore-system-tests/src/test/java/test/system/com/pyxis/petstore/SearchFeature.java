@@ -37,8 +37,8 @@ public class SearchFeature {
                 aProduct().withName("Dalmatian"));
         ProductsPage resultsPage = home.searchFor("retriever");
         resultsPage.displaysNumberOfResults(2);
-        resultsPage.displaysProduct("LAB-1234", "Labrador Retriever");
-        resultsPage.displaysProduct("CHE-5678", "Chesapeake");
+        resultsPage.displaysProduct("Labrador Retriever");
+        resultsPage.displaysProduct("Chesapeake");
     }
 
     @After public void
