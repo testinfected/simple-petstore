@@ -6,7 +6,7 @@
 #if ($itemList.Empty)
     <div id="out-of-stock"><p>No item left in inventory</p></div>
 #else
-    <p><span id="inventory-count">$itemList.size()</span> item(s) is(are) available for purchase</p>
+    <p><span id="inventory-count">$itemList.size()</span> $display.plural($itemList.size(), "item") $display.plural($itemList.size(), "is", "are") available for purchase</p>
 
     <table id="items">
     <thead>
