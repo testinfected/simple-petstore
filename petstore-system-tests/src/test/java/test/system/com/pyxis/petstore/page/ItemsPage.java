@@ -1,13 +1,16 @@
 package test.system.com.pyxis.petstore.page;
 
 import org.openqa.selenium.WebDriver;
-import static org.openqa.selenium.lift.Finders.*;
-import static org.openqa.selenium.lift.Matchers.*;
-
-import static com.pyxis.matchers.selenium.SeleniumMatchers.*;
-import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.element;
-
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.lift.find.Finder;
 import test.support.com.pyxis.petstore.web.PageObject;
+
+import static com.pyxis.matchers.selenium.SeleniumMatchers.being;
+import static com.pyxis.matchers.selenium.SeleniumMatchers.className;
+import static org.openqa.selenium.lift.Finders.cell;
+import static org.openqa.selenium.lift.Matchers.text;
+import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.element;
+import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.selector;
 
 public class ItemsPage extends PageObject {
 
@@ -23,5 +26,14 @@ public class ItemsPage extends PageObject {
 
     public void displaysOutOfStock() {
         assertPresenceOf(element("out-of-stock"));
+    }
+
+    public CartPage addToCart(String itemNumber) {
+        clickOn(addToCarButtonFor(itemNumber));
+        return nowOn(CartPage.class);
+    }
+
+    private Finder<WebElement, WebDriver> addToCarButtonFor(String itemNumber) {
+        return selector(String.format("#item_%s button", itemNumber));
     }
 }

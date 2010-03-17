@@ -45,9 +45,9 @@ public class PersistentItemInventoryTest {
 
     @Test public void
     findsNothingIfProductHasNoItemInInventory() throws Exception {
-        havingPersisted(aProduct().withNumber("DAL-54321"));
+        havingPersisted(aProduct().withNumber("DAL-5432"));
 
-        List<Item> itemsAvailable = itemInventory.findByProductNumber("DAL-54321");
+        List<Item> itemsAvailable = itemInventory.findByProductNumber("DAL-5432");
         assertTrue(itemsAvailable.isEmpty());
     }
 

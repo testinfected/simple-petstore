@@ -14,14 +14,21 @@
             <th>Reference number</th>
             <th>Description</th>
             <th>Price</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
     #foreach ($item in $itemList)
-        <tr class="item">
+        <tr id="item_$item.Number" class="item">
             <td class="number">$item.Number</td>
             <td>$!item.Description</td>
             <td class="price">$item.Price</td>
+            <td>
+                <form action="cart_items" method="post">
+                    <input type="hidden" name="item_number" value="$item.Number"/>
+                    <button id="add_to_cart" type="submit">Add to cart</button>
+                </form>
+            </td>
         </tr>
     #end
     </tbody>

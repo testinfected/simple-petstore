@@ -9,6 +9,7 @@ import java.util.Map;
 import static com.pyxis.matchers.dom.DomMatchers.*;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.AllOf.allOf;
 import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
@@ -16,7 +17,6 @@ import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 public class ItemsViewTest {
 
     String ITEMS_VIEW = "items";
-    String keyword = "Iguana";
     String renderedPage;
 
     @Test public void
@@ -41,7 +41,8 @@ public class ItemsViewTest {
                 hasSelector("#items th",
                         inOrder(withText("Reference number"),
                                 withText("Description"),
-                                withText("Price"))));
+                                withText("Price"),
+                                withBlankText())));
     }
 
     @Test public void
@@ -53,10 +54,25 @@ public class ItemsViewTest {
 
         renderedPage = renderItemsPageUsing(model);
         assertThat(dom(renderedPage),
-                hasSelector("#items td",
+                hasSelector("tr#item_12345678 td",
                         inOrder(withText("12345678"),
                                 withText("Green Adult"),
-                                withText("18.50"))));
+                                withText("18.50"),
+                                hasChild(withTag("form")))));
+    }
+
+    @Test public void
+    buttonAddsItemToShoppingCart() {
+        renderedPage = renderItemsPageUsing(aModelWith(anItem().withNumber("12345678")));
+        assertThat(dom(renderedPage),
+                hasUniqueSelector("form",
+                        withAttribute("action", "cart_items"),
+                        withAttribute("method", "post"),
+                        hasChild(withTag("button"))));
+        assertThat(dom(renderedPage),
+                hasUniqueSelector("form input[type='hidden']",
+                        withAttribute("name", "item_number"),
+                        withAttribute("value", "12345678")));
     }
 
     private Map<String, ?> anEmptyModel() {
@@ -65,7 +81,6 @@ public class ItemsViewTest {
 
     private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
         ModelMap model = new ModelMap();
-        model.addAttribute("keyword", keyword);
         model.addAttribute("itemList", entities(entityBuilders));
         return model;
     }

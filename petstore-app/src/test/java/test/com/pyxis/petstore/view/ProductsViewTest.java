@@ -33,8 +33,9 @@ import com.pyxis.petstore.domain.Product;
 
 @RunWith(JMock.class)
 public class ProductsViewTest {
-    private static final String PRODUCTS_VIEW = "products";
-    private static final Object DEFAULT_PHOTO_URL = "/url/of/missing.png";
+    String PRODUCTS_VIEW = "products";
+    Object DEFAULT_PHOTO_URL = "/url/of/missing.png";
+    String keyword = "Iguana";
 
     Mockery context = new JUnit4Mockery();
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
@@ -99,11 +100,11 @@ public class ProductsViewTest {
         assertThat(dom(renderedPage), hasNoSelector("#products"));
     }
     
-    @Test
-    public void displaysLinksOnProductNamesToBrowseItemsOfThatProduct() {
+    @Test public void
+    productNameLinksToProductInventory() {
     	renderedPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("LAB-1234")));
     	assertThat(dom(renderedPage),
-    			hasUniqueSelector("td a", 
+    			hasUniqueSelector("td.name a", 
     					withAttribute("href", containsString("items?product_number=LAB-1234"))));
     }
 
@@ -125,6 +126,7 @@ public class ProductsViewTest {
 
     private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
         ModelMap model = new ModelMap();
+        model.addAttribute("keyword", keyword);
         model.addAttribute("attachments", attachmentStorage);
         model.addAttribute(entities(entityBuilders));
         return model;
@@ -144,10 +146,6 @@ public class ProductsViewTest {
 
     private Matcher<Element> image(String imageUrl) {
         return hasChild(withAttribute("src", imageUrl));
-    }
-
-    private Matcher<Element> productNumber(String number) {
-        return withText(number);
     }
 
     private Matcher<Element> productName(String name) {
