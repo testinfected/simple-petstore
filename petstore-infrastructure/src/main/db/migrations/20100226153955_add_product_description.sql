@@ -1,1 +1,1 @@
-ALTER TABLE products ADD COLUMN description TEXT;
+alter table products add column description text;

@@ -1,1 +1,1 @@
-ALTER TABLE products ADD COLUMN number VARCHAR(8) NOT NULL UNIQUE;
+alter table products add column number varchar(8) not null unique;

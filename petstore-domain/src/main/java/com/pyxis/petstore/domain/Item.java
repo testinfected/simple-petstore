@@ -48,6 +48,24 @@ public @Entity class Item {
         return price;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        if (referenceNumber != null ? !referenceNumber.equals(item.referenceNumber) : item.referenceNumber != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return referenceNumber != null ? referenceNumber.hashCode() : 0;
+    }
+
     public String toString() {
         return referenceNumber + " (" + product.getNumber() + ")";
     }
