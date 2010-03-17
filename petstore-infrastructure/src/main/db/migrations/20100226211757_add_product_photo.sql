@@ -1,1 +1,1 @@
-ALTER TABLE products ADD COLUMN photo_file_name VARCHAR(50);
+ALTER TABLE products ADD COLUMN photo_file_name VARCHAR(255);
