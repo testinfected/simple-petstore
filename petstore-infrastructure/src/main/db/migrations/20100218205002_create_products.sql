@@ -1,5 +1,5 @@
-CREATE TABLE products (
-  id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  name VARCHAR (255) NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB;
+create table products (
+  id bigint(20) unsigned not null auto_increment,
+  name varchar(255) not null,
+  primary key(id)
+) engine=InnoDB;

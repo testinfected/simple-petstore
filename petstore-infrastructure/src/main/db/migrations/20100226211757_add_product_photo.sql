@@ -1,1 +1,1 @@
-ALTER TABLE products ADD COLUMN photo_file_name VARCHAR(255);
+alter table products add column photo_file_name varchar(255);

@@ -1,2 +1,2 @@
-ALTER TABLE items ADD COLUMN description TEXT;
-ALTER TABLE items ADD COLUMN price DECIMAL(10,2) NOT NULL;
+alter table items add column description text;
+alter table items add column price decimal(10,2) not null;
