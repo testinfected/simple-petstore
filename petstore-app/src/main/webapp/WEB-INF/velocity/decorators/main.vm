@@ -14,7 +14,7 @@
         #parse("/WEB-INF/velocity/includes/searchForm.vm")
     </div>
     <div id="shopping-cart">
-		X items
+		<a href="#">X items</a>
     </div>
 </div>
 <div id="content">

@@ -3,10 +3,13 @@
     <title>PetStore - Items</title>
 </head>
 <body>
+<fieldset>
+<legend>
 #if ($itemList.Empty)
-    <div id="out-of-stock"><p>No item left in inventory</p></div>
+    <span id="out-of-stock">No item left in inventory</span>
 #else
-    <p><span id="inventory-count">$itemList.size()</span> $display.plural($itemList.size(), "item") $display.plural($itemList.size(), "is", "are") available for purchase</p>
+    <span id="inventory-count">$itemList.size()</span> $display.plural($itemList.size(), "item") $display.plural($itemList.size(), "is", "are") available for purchase
+</legend>
 
     <table id="items">
     <thead>
@@ -19,7 +22,13 @@
     </thead>
     <tbody>
     #foreach ($item in $itemList)
-        <tr id="item_$item.Number" class="item">
+  #if( $velocityCount % 2 == 0 )
+    #set( $style = 'evenrow' )
+  #else
+    #set( $style = 'oddrow' )
+  #end
+
+        <tr id="item_$item.Number" class="item $style">
             <td class="number">$item.Number</td>
             <td>$!item.Description</td>
             <td class="price">$item.Price</td>
@@ -33,6 +42,7 @@
     #end
     </tbody>
     </table>
+</fieldset>
 #end
 </body>
 </html>

@@ -3,11 +3,13 @@
     <title>PetStore - Products</title>
 </head>
 <body>
+<fieldset>
+<legend>
     #if (!$productList)
-    <p id="no-match">No product matching "$keyword" was found</p>
+    <span id="no-match">No product matching "$keyword" was found</span>
     #else
-    <p>Found <span id="match-count">$productList.size()</span> $display.plural($productList.size(), "result") for "$keyword"</p>
-
+    Found <span id="match-count">$productList.size()</span> $display.plural($productList.size(), "result") for "$keyword"
+</legend>
     <table id="products">
         <thead>
         <tr>
@@ -18,14 +20,20 @@
         </thead>
         <tbody>
             #foreach ($product in $productList)
-            <tr class="product">
-                <td><img class="photo" src="$attachments.getAttachmentUrl($product)"></td>
+  #if( $velocityCount % 2 == 0 )
+    #set( $style = 'evenrow' )
+  #else
+    #set( $style = 'oddrow' )
+  #end
+            <tr class="product $style">
+                <td class="photo"><a href="items?product_number=$product.Number"><img src="$attachments.getAttachmentUrl($product)"></a></td>
                 <td class="name"><a href="items?product_number=$product.Number">$product.Name</a></td>
                 <td>$!product.Description</td>
             </tr>
             #end
         </tbody>
     </table>
+</fieldset>
     #end
 </body>
         </html>
