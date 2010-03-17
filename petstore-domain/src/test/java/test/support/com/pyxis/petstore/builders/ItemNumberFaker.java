@@ -1,9 +1,9 @@
 package test.support.com.pyxis.petstore.builders;
 
 import com.pyxis.petstore.domain.ItemNumber;
-import com.pyxis.petstore.domain.ItemNumberGenerator;
+import com.pyxis.petstore.domain.ItemNumberSequence;
 
-public class ItemNumberFaker implements ItemNumberGenerator {
+public class ItemNumberFaker implements ItemNumberSequence {
 
     private static final int MAX_ITEM_NUMBER = 100000000;
     private final RandomNumberGenerator faker = new RandomNumberGenerator(MAX_ITEM_NUMBER);
