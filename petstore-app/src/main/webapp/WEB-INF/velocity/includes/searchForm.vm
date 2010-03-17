@@ -1,15 +1,15 @@
 <form action="$base/products" method="get">
-    <fieldset class="inputs">
+    <fieldset>
         <ol>
             <li>
                 <input id="keyword" name="keyword" type="text"/>
             </li>
         </ol>
     </fieldset>
-    <fieldset class="buttons">
+    <fieldset>
         <ol>
-            <li class="commit">
-                <button id="search" class="button" type="submit">Search</button>
+            <li>
+                <button id="search" type="submit">Search</button>
             </li>
         </ol>
     </fieldset>

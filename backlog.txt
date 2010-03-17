@@ -3,3 +3,5 @@
 - Introduire la notion de devise (Money)
 - Séquence bd pour les numéros d'articles
 - Ne rien retourner quand on cherche rien
+- Afficher le nombre d'articles en stock par produit
+- Consultation du catalogue
