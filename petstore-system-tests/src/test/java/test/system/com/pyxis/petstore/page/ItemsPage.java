@@ -34,6 +34,6 @@ public class ItemsPage extends PageObject {
     }
 
     private Finder<WebElement, WebDriver> addToCarButtonFor(String itemNumber) {
-        return selector(String.format("#item_%s button", itemNumber));
+        return selector(String.format("#add_to_cart_%s", itemNumber));
     }
 }
