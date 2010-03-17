@@ -9,6 +9,7 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.web.ModelAndViewAssert;
 
 import java.util.Arrays;
 import java.util.List;

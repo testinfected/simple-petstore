@@ -1,5 +1,4 @@
 package test.com.pyxis.petstore.domain;
-
 import com.pyxis.petstore.domain.ItemNumber;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.ItemNumberFaker;

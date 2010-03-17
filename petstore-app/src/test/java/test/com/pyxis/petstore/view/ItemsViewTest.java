@@ -65,7 +65,7 @@ public class ItemsViewTest {
         renderedPage = renderItemsPageUsing(aModelWith(anItem().withNumber("12345678")));
         assertThat(dom(renderedPage),
                 hasUniqueSelector("form",
-                        withAttribute("action", "cart_items"),
+                        withAttribute("action", "cartitems"),
                         withAttribute("method", "post"),
                         hasUniqueSelector("button", withId("add_to_cart_12345678"))));
         assertThat(dom(renderedPage),

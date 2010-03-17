@@ -24,7 +24,7 @@
             <td>$!item.Description</td>
             <td class="price">$item.Price</td>
             <td>
-                <form action="cart_items" method="post">
+                <form action="cartitems" method="post">
                     <input type="hidden" name="item_number" value="$item.Number"/>
                     <button id="add_to_cart_$item.Number" type="submit">Add to cart</button>
                 </form>

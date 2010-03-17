@@ -1,4 +1,4 @@
-package test.com.pyxis.petstore.domain;
+package com.pyxis.petstore.domain;
 
 import com.pyxis.petstore.domain.Item;
 

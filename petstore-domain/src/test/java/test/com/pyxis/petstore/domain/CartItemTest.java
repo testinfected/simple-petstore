@@ -1,5 +1,6 @@
 package test.com.pyxis.petstore.domain;
 
+import com.pyxis.petstore.domain.CartItem;
 import com.pyxis.petstore.domain.Item;
 import org.junit.Test;
 

@@ -1,2 +1,1 @@
-- where are the unit tests for the search form ???
 - add an id attribute on product table rows

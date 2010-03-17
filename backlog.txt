@@ -1,3 +1,4 @@
+- Test unitaires manquants sur le formulaire de recherche
 - Ajouter validation sur le numéro de produit (ABCD-123)
 - Ajouter validation sur le numéro de référence de l'article (12345678)
 - Introduire la notion de devise (Money)

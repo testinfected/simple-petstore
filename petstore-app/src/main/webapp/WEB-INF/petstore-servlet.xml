@@ -37,6 +37,8 @@
         <constructor-arg value="attachments/products"/>
     </bean>
 
+    <bean class="com.pyxis.petstore.domain.Cart"/>
+
     <context:annotation-config/>
     <context:component-scan base-package="com.pyxis.petstore.controller"/>
 </beans>

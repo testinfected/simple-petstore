@@ -1,5 +1,7 @@
 package test.com.pyxis.petstore.domain;
 
+import com.pyxis.petstore.domain.Cart;
+import com.pyxis.petstore.domain.CartItem;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
