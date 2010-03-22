@@ -1,4 +1,5 @@
 - Test unitaires manquants sur le formulaire de recherche
+- Traiter le cas d'une recherche d'article par numéro introuvable
 - Ajouter validation sur le numéro de produit (ABCD-123)
 - Ajouter validation sur le numéro de référence de l'article (12345678)
 - Introduire la notion de devise (Money)
@@ -6,3 +7,8 @@
 - Ne rien retourner quand on cherche rien
 - Afficher le nombre d'articles en stock par produit
 - Consultation du catalogue
+- Panier d'achat sauvegardé entre chaque visite
+- Indiquer quand le panier d'achat est vide
+- Enlever un article du panier
+- Changer la quantité d'un article au panier
+- Vérifier les stocks disponibles avant ajout au panier

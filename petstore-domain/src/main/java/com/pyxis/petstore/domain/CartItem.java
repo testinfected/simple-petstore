@@ -1,7 +1,5 @@
 package com.pyxis.petstore.domain;
 
-import com.pyxis.petstore.domain.Item;
-
 import java.math.BigDecimal;
 
 public class CartItem {
@@ -38,7 +36,7 @@ public class CartItem {
         quantity++;
     }
 
-    public boolean isFor(Item item) {
+    public boolean holds(Item item) {
         return this.item.equals(item);
     }
 }

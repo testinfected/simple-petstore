@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
-public class ItemBuilder implements EntityBuilder<Item> {
+public class ItemBuilder implements Builder<Item> {
 
     private ItemNumber number = ItemNumberFaker.aNumber();
     private Product product = aProduct().build();

@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title>PetStore - Cart content</title>
+</head>
+<body>
+<fieldset>
+    <legend>
+        <span>Your cart contains the following items:</span>
+    </legend>
+
+    <table id="cart_items">
+        <thead>
+        <tr>
+            <th>Quantity</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+            #foreach ($cartItem in $cart.Items)
+                #if( $velocityCount % 2 == 0 )
+                    #set( $rowStyle = 'evenrow' )
+                #else
+                    #set( $rowStyle = 'oddrow' )
+                #end
+
+            <tr id="cart_item_$cartItem.ItemNumber" class="cart-item $rowStyle">
+                <td class="count">$cartItem.Quantity</td>
+                <td class="item">$!cartItem.ItemDescription</td>
+                <td class="price">$cartItem.ItemUnitPrice</td>
+                <td class="total">$cartItem.TotalPrice</td>
+            </tr>
+            #end
+        </tbody>
+    </table>
+</fieldset>
+</body>
+</html>

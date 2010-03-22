@@ -39,10 +39,11 @@ public class ShopFeature {
 
     @Test public void
     buysASingleItem() throws Exception {
+        homePage.showsCartIsEmpty();
         ProductsPage productsPage = homePage.searchFor("Iguana");
         ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
         CartPage cartPage = itemsPage.addToCart("12345678");
-        cartPage.showsItemInCart("12345678", "Green Adult", "18.50");
+        cartPage.showsItemInCart("Green Adult", 1);
 	}
 
 	@After public void

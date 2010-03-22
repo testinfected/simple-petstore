@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 import org.springframework.ui.ModelMap;
 import org.w3c.dom.Element;
 
-import test.support.com.pyxis.petstore.builders.EntityBuilder;
+import test.support.com.pyxis.petstore.builders.Builder;
 
 import com.pyxis.petstore.domain.AttachmentStorage;
 import com.pyxis.petstore.domain.Product;
@@ -80,7 +80,7 @@ public class ProductsViewTest {
         renderedPage = renderProductsPageUsing(model);
         assertThat(dom(renderedPage),
                 hasSelector("#products td",
-                        inOrder(image(photoUrl),
+                        inOrder(hasChild(image(photoUrl)),
                                 productName("Labrador"),
                                 description("Friendly"))));
     }
@@ -124,11 +124,11 @@ public class ProductsViewTest {
         return aModelWith();
     }
 
-    private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
+    private Map<String, ?> aModelWith(Builder<?>... builders) {
         ModelMap model = new ModelMap();
         model.addAttribute("keyword", keyword);
         model.addAttribute("attachments", attachmentStorage);
-        model.addAttribute(entities(entityBuilders));
+        model.addAttribute(entities(builders));
         return model;
     }
 

@@ -7,10 +7,10 @@ public class Entities {
 
     private Entities() {}
 
-	public static List<?> entities(EntityBuilder<?>... entityBuilders) {
+	public static List<?> entities(Builder<?>... builders) {
         List<Object> entities = new ArrayList<Object>();
-        for (EntityBuilder entityBuilder : entityBuilders) {
-            entities.add(entityBuilder.build());
+        for (Builder builder : builders) {
+            entities.add(builder.build());
         }
         return entities;
     }

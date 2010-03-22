@@ -6,5 +6,5 @@ public interface ProductCatalog {
 
 	List<Product> findByKeyword(String keyword);
 
-	void add(Product product);
+	void store(Product product);
 }

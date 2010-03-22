@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.builders.EntityBuilder;
+import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 
@@ -75,7 +75,7 @@ public class PersistentProductCatalogTest {
 
     @Test (expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutAName() throws Exception {
-        productCatalog.add(aProductWithoutAName());
+        productCatalog.store(aProductWithoutAName());
     }
 
     private Product aProductWithoutAName() {
@@ -84,7 +84,7 @@ public class PersistentProductCatalogTest {
 
     @Test (expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutANumber() throws Exception {
-        productCatalog.add(aProductWithoutANumber());
+        productCatalog.store(aProductWithoutANumber());
     }
 
     private Product aProductWithoutANumber() {
@@ -98,7 +98,7 @@ public class PersistentProductCatalogTest {
                 aProduct().withName("Dalmatian").build());
 
         for (Product product : products) {
-            productCatalog.add(product);
+            productCatalog.store(product);
             database.assertCanBeReloadedWithSameState(product);
         }
     }
@@ -108,18 +108,18 @@ public class PersistentProductCatalogTest {
         ProductBuilder someProduct = aProduct().withNumber("LAB-1234");
         database.persist(someProduct);
         try {
-			productCatalog.add(someProduct.build());
+			productCatalog.store(someProduct.build());
 			fail("Expected a ConstraintViolationException");
 		} catch (org.hibernate.exception.ConstraintViolationException expected) {
 			assertTrue(true);
 		}
     }    
 
-    private void havingPersisted(EntityBuilder<?>... builders) throws Exception {
+    private void havingPersisted(Builder<?>... builders) throws Exception {
         database.persist(builders);
     }
 
-    private EntityBuilder<?> and(EntityBuilder<?> builder) {
+    private Builder<?> and(Builder<?> builder) {
         return builder;
     }
 

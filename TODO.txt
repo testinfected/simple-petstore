@@ -1,1 +1,6 @@
-- add an id attribute on product table rows
+- verifier version cglib
+- add an id attribute on product table rows in products page
+- Activer le lien vers le panier
+- Afficher le nombre d'articles dans le panier
+- Panier vide
+

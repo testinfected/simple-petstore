@@ -2,7 +2,7 @@ package test.com.pyxis.petstore.view;
 
 import org.junit.Test;
 import org.springframework.ui.ModelMap;
-import test.support.com.pyxis.petstore.builders.EntityBuilder;
+import test.support.com.pyxis.petstore.builders.Builder;
 
 import java.util.Map;
 
@@ -78,9 +78,9 @@ public class ItemsViewTest {
         return aModelWith();
     }
 
-    private Map<String, ?> aModelWith(EntityBuilder<?>... entityBuilders) {
+    private Map<String, ?> aModelWith(Builder<?>... builders) {
         ModelMap model = new ModelMap();
-        model.addAttribute("itemList", entities(entityBuilders));
+        model.addAttribute("itemList", entities(builders));
         return model;
     }
 

@@ -4,7 +4,7 @@ import com.pyxis.helpers.Reflection;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import test.support.com.pyxis.petstore.builders.EntityBuilder;
+import test.support.com.pyxis.petstore.builders.Builder;
 
 import javax.persistence.Id;
 import java.lang.reflect.Field;
@@ -39,8 +39,8 @@ public class Database {
         session.close();
     }
 
-    public void persist(final EntityBuilder<?>... builders) throws Exception {
-        for (final EntityBuilder<?> builder : builders) {
+    public void persist(final Builder<?>... builders) throws Exception {
+        for (final Builder<?> builder : builders) {
             persist(builder.build());
         }
     }

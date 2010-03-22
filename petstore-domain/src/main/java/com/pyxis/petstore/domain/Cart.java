@@ -1,13 +1,11 @@
 package com.pyxis.petstore.domain;
 
-import com.pyxis.petstore.domain.Item;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Cart {
+public class Cart implements Basket {
 
     private final List<CartItem> cartItems = new ArrayList<CartItem>();
 
@@ -38,7 +36,7 @@ public class Cart {
 
     private CartItem findCartItemFor(Item item) {
         for (CartItem cartItem : cartItems) {
-            if (cartItem.isFor(item)) return cartItem;
+            if (cartItem.holds(item)) return cartItem;
         }
         return null;
     }

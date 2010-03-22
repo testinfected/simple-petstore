@@ -2,7 +2,7 @@ package test.support.com.pyxis.petstore.builders;
 
 import com.pyxis.petstore.domain.Product;
 
-public class ProductBuilder implements EntityBuilder<Product> {
+public class ProductBuilder implements Builder<Product> {
 
     private static final String DEFAULT_NAME = "a product";
     private static final int MAX_PRODUCT_NUMBER = 100000000;

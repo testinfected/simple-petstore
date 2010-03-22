@@ -6,7 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.hibernate.criterion.Restrictions.ilike;
+import static org.hibernate.criterion.Restrictions.or;
 
 @Repository
 public class PersistentProductCatalog implements ProductCatalog {
@@ -29,8 +29,7 @@ public class PersistentProductCatalog implements ProductCatalog {
 	@Transactional(readOnly = true)
 	public List<Product> findByKeyword(String keyword) {
         return currentSession().createCriteria(Product.class)
-        	.add(Restrictions.or(
-        			fieldMatchesKeyword("name", keyword),
+        	.add(or(fieldMatchesKeyword("name", keyword),
         			fieldMatchesKeyword("description", keyword)))
     	    .list();
 	}
@@ -44,7 +43,7 @@ public class PersistentProductCatalog implements ProductCatalog {
 	}
 
     @Transactional
-	public void add(Product product) {
+	public void store(Product product) {
 		currentSession().save(product);
 	}
 }

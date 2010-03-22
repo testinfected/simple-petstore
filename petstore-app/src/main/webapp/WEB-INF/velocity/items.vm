@@ -22,13 +22,13 @@
     </thead>
     <tbody>
     #foreach ($item in $itemList)
-  #if( $velocityCount % 2 == 0 )
-    #set( $style = 'evenrow' )
-  #else
-    #set( $style = 'oddrow' )
-  #end
+        #if( $velocityCount % 2 == 0 )
+            #set( $style = 'evenrow' )
+        #else
+            #set( $style = 'oddrow' )
+        #end
 
-        <tr id="item_$item.Number" class="item $style">
+    <tr id="item_$item.Number" class="item $style">
             <td class="number">$item.Number</td>
             <td>$!item.Description</td>
             <td class="price">$item.Price</td>

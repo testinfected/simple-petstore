@@ -1,5 +1,5 @@
 package test.support.com.pyxis.petstore.builders;
 
-public interface EntityBuilder<T> {
+public interface Builder<T> {
     T build();
 }

@@ -1,19 +1,21 @@
 package com.pyxis.petstore.persistence;
 
-import java.util.List;
-
+import com.pyxis.petstore.domain.Item;
 import com.pyxis.petstore.domain.ItemInventory;
+import com.pyxis.petstore.domain.ItemNumber;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pyxis.petstore.domain.Item;
+import java.util.List;
+
+import static org.hibernate.criterion.Restrictions.eq;
 
 public @Repository class PersistentItemInventory implements ItemInventory {
 
-	private SessionFactory sessionFactory;
+	private final SessionFactory sessionFactory;
 
     @Autowired
 	public PersistentItemInventory(SessionFactory sessionFactory) {
@@ -23,12 +25,18 @@ public @Repository class PersistentItemInventory implements ItemInventory {
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public List<Item> findByProductNumber(String productNumber) {
-		return currentSession().createQuery("from Item where product.number = :pnumber").
-                setString("pnumber", productNumber)
-                .list();
-//		criteria.createCriteria("product").add(eq("number", productNumber));
-//		return criteria.list();
+		return currentSession().createCriteria(Item.class).
+                createCriteria("product").
+                add(eq("number", productNumber)).
+                list();
 	}
+
+    @Transactional(readOnly = true)
+    public Item find(ItemNumber itemNumber) {
+        return (Item) currentSession().createCriteria(Item.class).
+                add(eq("referenceNumber", itemNumber)).
+                uniqueResult();
+    }
 
     private Session currentSession() {
         return sessionFactory.getCurrentSession();

@@ -1,7 +1,7 @@
 package test.support.com.pyxis.petstore.web;
 
 import org.hibernate.SessionFactory;
-import test.support.com.pyxis.petstore.builders.EntityBuilder;
+import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.db.Database;
 
 import static test.support.com.pyxis.petstore.web.ApplicationContext.get;
@@ -23,7 +23,7 @@ public class DatabaseDriver {
         database.persist(entities);
     }
 
-    public void given(EntityBuilder<?>... builders) throws Exception {
+    public void given(Builder<?>... builders) throws Exception {
         database.persist(builders);
     }
 }
