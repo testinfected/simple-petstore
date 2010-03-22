@@ -19,14 +19,15 @@ public class CartItemsController {
         this.itemInventory = itemInventory;
     }
 
-    @ModelAttribute("cart")
-    public Basket basket() {
+    @ModelAttribute("cart") @RequestMapping(method = RequestMethod.GET)
+    public Basket index() {
         return basket;
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void create(@RequestParam("item_number") String number) {
+    public String create(@RequestParam("item_number") String number) {
         Item item = itemInventory.find(new ItemNumber(number));
         basket.add(item);
+        return "redirect:cartitems";
     }
 }

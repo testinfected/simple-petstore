@@ -1,10 +1,7 @@
 package test.com.pyxis.petstore.controller;
 
 import com.pyxis.petstore.controller.CartItemsController;
-import com.pyxis.petstore.domain.Basket;
-import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.ItemInventory;
-import com.pyxis.petstore.domain.ItemNumber;
+import com.pyxis.petstore.domain.*;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -13,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.sameInstance;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 
@@ -26,17 +24,19 @@ public class CartItemsControllerTest {
     String ITEM_NUMBER = "11111111";
 
     @Test public void
-    addsItemToCartAfterCheckingInventory() {
+    addsItemToCartAfterCheckingInventoryAndRedirectsToCart() {
         final Item item = anItem().withNumber(ITEM_NUMBER).build();
         context.checking(new Expectations() {{
             allowing(itemInventory).find(with(equal(new ItemNumber(ITEM_NUMBER)))); will(returnValue(item));
             oneOf(basket).add(with(equal(item)));
         }});
-        controller.create(ITEM_NUMBER);
+        String view = controller.create(ITEM_NUMBER);
+        assertThat(view, equalTo("redirect:cartitems"));
     }
 
     @Test public void
-    makesCartAvailableToViews() {
-        assertThat(controller.basket(), sameInstance(basket));
+    makesCartAvailableToView() {
+        Basket model = controller.index();
+        assertThat(model, sameInstance(basket));
     }
 }
