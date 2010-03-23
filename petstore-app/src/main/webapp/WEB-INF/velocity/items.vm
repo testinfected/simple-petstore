@@ -5,7 +5,7 @@
 <body>
 <fieldset>
 <legend>
-#if ($itemList.Empty)
+#if (!$itemList)
     <span id="out-of-stock">No item left in inventory</span>
 #else
     <span id="inventory-count">$itemList.size()</span> $display.plural($itemList.size(), "item") $display.plural($itemList.size(), "is", "are") available for purchase
@@ -33,7 +33,8 @@
             <td>$!item.Description</td>
             <td class="price">$item.Price</td>
             <td>
-                <form action="cartitems" method="post">
+                <!-- TODO add toolbox for $base and use in products view as well -->
+                <form action="$request.contextPath/cartitems" method="post">
                     <input type="hidden" name="item_number" value="$item.Number"/>
                     <button id="add_to_cart_$item.Number" type="submit">Add to cart</button>
                 </form>

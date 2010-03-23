@@ -9,11 +9,12 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.web.ModelAndViewAssert;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
@@ -32,7 +33,8 @@ public class ItemsControllerTest {
     		oneOf(itemInventory).findByProductNumber("LAB-1234");
 			will(returnValue(anItemList));
     	}});
-        List<Item> actualItems = itemController.index("LAB-1234");
-        assertThat(actualItems, equalTo(anItemList));
+        ModelAndView modelAndView = itemController.index("LAB-1234");
+        assertThat(modelAndView.getViewName(), equalTo("items"));
+        assertThat(modelAndView.getModelMap(), hasAttribute("itemList", anItemList));
     }
 }

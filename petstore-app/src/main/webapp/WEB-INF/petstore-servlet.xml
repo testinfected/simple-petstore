@@ -36,6 +36,9 @@
         <property name="interceptors" ref="openSessionInViewHandlerInterceptor"/>
         <property name="rootHandler" value="homeController"/>
     </bean>
+    <!-- to use truly RESTful routes, we still have to annotate methods when dealing with nested resources
+    this is why we need the DefaultAnnotationHandlerMapping (see ItemsController#index) -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
 
     <bean class="com.pyxis.petstore.service.SimplePhotoFileStore">
         <constructor-arg value="attachments/products"/>

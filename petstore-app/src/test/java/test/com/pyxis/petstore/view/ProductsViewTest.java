@@ -4,11 +4,7 @@ import static com.pyxis.matchers.dom.DomMatchers.*;
 import static com.pyxis.matchers.dom.DomMatchers.inOrder;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
@@ -101,11 +97,11 @@ public class ProductsViewTest {
     }
     
     @Test public void
-    productNameLinksToProductInventory() {
+    productNameAndPhotoLinkToProductInventory() {
     	renderedPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("LAB-1234")));
     	assertThat(dom(renderedPage),
-    			hasUniqueSelector("td.name a", 
-    					withAttribute("href", containsString("items?product_number=LAB-1234"))));
+    			hasSelector("td a", everyItem(
+    					withAttribute("href", containsString("products/LAB-1234/items")))));
     }
 
     private Matcher<Product> aProductWithoutPhoto() {

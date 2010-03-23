@@ -26,8 +26,8 @@
     #set( $style = 'oddrow' )
   #end
             <tr class="product $style">
-                <td class="photo"><a href="items?product_number=$product.Number"><img src="$attachments.getAttachmentUrl($product)"></a></td>
-                <td class="name"><a href="items?product_number=$product.Number">$product.Name</a></td>
+                <td class="photo"><a href="products/$product.Number/items"><img src="$attachments.getAttachmentUrl($product)"></a></td>
+                <td class="name"><a href="products/$product.Number/items">$product.Name</a></td>
                 <td>$!product.Description</td>
             </tr>
             #end
