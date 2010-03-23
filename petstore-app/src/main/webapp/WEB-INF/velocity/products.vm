@@ -20,15 +20,15 @@
         </thead>
         <tbody>
             #foreach ($product in $productList)
-  #if( $velocityCount % 2 == 0 )
-    #set( $style = 'evenrow' )
+  #if( $count % 2 == 0 )
+    #set( $rowStyle = 'evenrow' )
   #else
-    #set( $style = 'oddrow' )
+    #set( $rowStyle = 'oddrow' )
   #end
-            <tr class="product $style">
-                <td class="photo"><a href="products/$product.Number/items"><img src="$attachments.getAttachmentUrl($product)"></a></td>
-                <td class="name"><a href="products/$product.Number/items">$product.Name</a></td>
-                <td>$!product.Description</td>
+            <tr class="product $rowStyle">
+                <td class="photo"><a href="$base/products/$product.number/items"><img src="$base/$attachments.getAttachmentUrl($product)"></a></td>
+                <td class="name"><a href="$base/products/$product.number/items">$product.name</a></td>
+                <td>$!product.description</td>
             </tr>
             #end
         </tbody>

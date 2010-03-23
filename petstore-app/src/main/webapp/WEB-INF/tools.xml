@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<tools>
+    <data key="base" value="/petstore"/>
+    <!-- example tool definition -->
+    <!--<toolbox scope="application">-->
+        <!--<tool key="display" class="org.apache.velocity.tools.generic.DisplayTool"/>-->
+    <!--</toolbox>-->
+</tools>

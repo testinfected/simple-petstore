@@ -12,6 +12,7 @@
         http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
     <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="configLocation" value="/WEB-INF/velocity.properties"/>
         <property name="resourceLoaderPath" value="/WEB-INF/velocity/"/>
     </bean>
 
@@ -19,7 +20,7 @@
         <property name="cache" value="true"/>
         <property name="prefix" value=""/>
         <property name="suffix" value=".vm"/>
-        <property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml"/>
+        <property name="toolboxConfigLocation" value="/WEB-INF/tools.xml"/>
     </bean>
 
     <bean id="openSessionInView" class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor">

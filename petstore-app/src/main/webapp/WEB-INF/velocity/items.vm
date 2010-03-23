@@ -22,21 +22,20 @@
     </thead>
     <tbody>
     #foreach ($item in $itemList)
-        #if( $velocityCount % 2 == 0 )
-            #set( $style = 'evenrow' )
+        #if( $count % 2 == 0 )
+            #set( $rowStyle = 'evenrow' )
         #else
-            #set( $style = 'oddrow' )
+            #set( $rowStyle = 'oddrow' )
         #end
 
-    <tr id="item_$item.Number" class="item $style">
-            <td class="number">$item.Number</td>
-            <td>$!item.Description</td>
-            <td class="price">$item.Price</td>
+    <tr id="item_$item.Number" class="item $rowStyle">
+            <td class="number">$item.number</td>
+            <td>$!item.description</td>
+            <td class="price">$item.price</td>
             <td>
-                <!-- TODO add toolbox for $base and use in products view as well -->
-                <form action="$request.contextPath/cartitems" method="post">
-                    <input type="hidden" name="item_number" value="$item.Number"/>
-                    <button id="add_to_cart_$item.Number" type="submit">Add to cart</button>
+                <form action="$base/cartitems" method="post">
+                    <input type="hidden" name="item_number" value="$item.number"/>
+                    <button id="add_to_cart_$item.number" type="submit">Add to cart</button>
                 </form>
             </td>
         </tr>
