@@ -13,12 +13,12 @@ public class Cart implements Basket {
         return cartItems.isEmpty();
     }
 
-    public BigDecimal getSubTotal() {
-        BigDecimal subTotal = BigDecimal.ZERO;
+    public BigDecimal getGrandTotal() {
+        BigDecimal grandTotal = BigDecimal.ZERO;
         for (CartItem cartItem : cartItems) {
-            subTotal = subTotal.add(cartItem.getTotalPrice());
+            grandTotal = grandTotal.add(cartItem.getTotalPrice());
         }
-        return subTotal;
+        return grandTotal;
     }
 
     public int getTotalQuantity() {

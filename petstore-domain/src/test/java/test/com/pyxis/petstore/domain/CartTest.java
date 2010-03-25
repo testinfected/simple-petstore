@@ -19,7 +19,7 @@ public class CartTest {
     @Test public void
     isEmptyByDefault() {
         assertTrue("contains item(s)", cart.isEmpty());
-        assertThat(cart.getSubTotal(), equalTo(BigDecimal.ZERO));
+        assertThat(cart.getGrandTotal(), equalTo(BigDecimal.ZERO));
         assertThat(cart.getTotalQuantity(), equalTo(0));
     }
 
@@ -43,14 +43,14 @@ public class CartTest {
     }
 
     @Test public void
-    calculatesSubTotal() {
+    calculatesGrandTotal() {
         String[] prices = { "50", "75.50", "12.75" };
         BigDecimal expectedSubTotal = new BigDecimal("138.25");
 
         for (String price : prices) {
             cart.add(anItem().priced(price).build());
         }
-        assertThat(cart.getSubTotal(), equalTo(expectedSubTotal));
+        assertThat(cart.getGrandTotal(), equalTo(expectedSubTotal));
     }
 
     @Test public void

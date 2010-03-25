@@ -45,13 +45,16 @@ public class ShopFeature {
         CartPage cartPage = itemsPage.addToCart("12345678");
         cartPage.showsItemInCart("12345678", "Green Adult", 1, "18.50");
         homePage.showsCartTotalQuantity(1);
+        cartPage.showsGrandTotal("18.50");
 
         productsPage = homePage.searchFor("Iguana");
         itemsPage = productsPage.browseItemsOf("Iguana");
         cartPage = itemsPage.addToCart("87654321");
         cartPage.showsItemInCart("87654321", "Blue Female", 1, "58.97");
+
         homePage.showsCartTotalQuantity(2);
-	}
+        cartPage.showsGrandTotal("77.47");
+    }
 
     @Test public void
     shopsForTheSameItemMultipleTimes() throws Exception {

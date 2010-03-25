@@ -23,7 +23,7 @@ public class CartItemsViewTest {
 
     @Test public void
     displaysColumnHeadings() {
-        renderedPage = renderItemsPageUsing(aModelWith(aCart()));
+        renderedPage = renderCartItemsPageUsing(aModelWith(aCart()));
         assertThat(dom(renderedPage),
                 hasSelector("#cart_items th",
                         inOrder(withText("Quantity"),
@@ -36,7 +36,7 @@ public class CartItemsViewTest {
     displaysProductDetailsInColumns() throws Exception {
         Item item = anItem().withNumber("12345678").priced("18.50").describedAs("Green Adult").build();
 
-        renderedPage = renderItemsPageUsing(aModelWith(aCart().with(item).with(item)));
+        renderedPage = renderCartItemsPageUsing(aModelWith(aCart().with(item).with(item)));
         assertThat(dom(renderedPage),
                 hasSelector("tr#cart_item_12345678 td",
                         inOrder(withText("2"),
@@ -49,11 +49,22 @@ public class CartItemsViewTest {
     displaysOneCartItemPerLine() {
         ItemBuilder anItem = anItem();
         ItemBuilder anotherItem = anItem();
-        renderedPage = renderItemsPageUsing(aModelWith(aCart().
+        renderedPage = renderCartItemsPageUsing(aModelWith(aCart().
                 with(anItem).
                 with(anItem).
                 with(anotherItem)));
         assertThat(dom(renderedPage), hasSelector("#cart_items tr.cart-item", withSize(2)));
+    }
+
+    @Test public void
+    displaysCartGrandTotal() {
+        renderedPage = renderCartItemsPageUsing(aModelWith(aCart().
+            with(anItem().priced("20.00")).
+            with(anItem().priced("12.99")).
+            with(anItem().priced("43.97"))));
+        String grandTotal = "76.96";
+
+        assertThat(dom(renderedPage), hasUniqueSelector("#cart_items .calculations .total", withText(grandTotal)));
     }
 
     private Map<String, Object> aModelWith(Builder<?> builder) {
@@ -62,7 +73,7 @@ public class CartItemsViewTest {
         return model;
     }
 
-    private String renderItemsPageUsing(Map<String, Object> model) {
+    private String renderCartItemsPageUsing(Map<String, Object> model) {
         return render(CART_ITEMS_VIEW).using(model);
     }
 }

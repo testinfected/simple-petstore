@@ -22,6 +22,10 @@ public class CartPage extends PageObject {
         assertPresenceOf(cellShowingTotalFor(itemNumber).with(text(being(totalPrice))));
     }
 
+    public void showsGrandTotal(String price) {
+        assertPresenceOf(selector("#cart-grand-total").with(text(being(price))));
+    }
+
     private Finder<WebElement, WebDriver> cellShowingTotalFor(String itemNumber) {
         return selector(domIdOf(itemNumber) + " td.total");
     }
