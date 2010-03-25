@@ -181,6 +181,15 @@
                             <goal>deploy</goal>
                         </goals>
                         <configuration>
+                            <configuration>
+                                <configfiles>
+                                    <!-- Override Cargo's default log4j.xml -->
+                                    <configfile>
+                                        <file>${basedir}/src/test/resources/log4j.xml</file>
+                                        <tofile>conf/log4j.xml</tofile>
+                                    </configfile>
+                                </configfiles>
+                            </configuration>
                             <deployer>
                                 <deployables>
                                     <deployable>

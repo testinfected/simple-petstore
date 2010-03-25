@@ -15,9 +15,9 @@ import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
-public class CartLinkTest {
+public class CartPartialTest {
 
-    String CART_LINK_FRAGMENT = "includes/cartLink";
+    String CART_LINK_FRAGMENT = "includes/_cart";
     String renderedFragment;
 
     @Test public void

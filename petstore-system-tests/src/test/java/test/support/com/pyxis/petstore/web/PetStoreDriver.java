@@ -1,19 +1,22 @@
 package test.support.com.pyxis.petstore.web;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import test.system.com.pyxis.petstore.page.HomePage;
+
+import static test.support.com.pyxis.petstore.web.WebDriverFactory.getInstance;
 
 public class PetStoreDriver {
 
     private final WebDriver webdriver;
 
     public PetStoreDriver() {
-        this.webdriver = new FirefoxDriver();
+        webdriver = getInstance().newWebDriver();
     }
 
     public HomePage start() throws Exception {
-        return goToHomePage();
+        HomePage home = goToHomePage();
+        home.logout();
+        return home;
     }
 
     public HomePage goToHomePage() throws Exception {
