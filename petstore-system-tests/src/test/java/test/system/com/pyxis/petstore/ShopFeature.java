@@ -31,19 +31,43 @@ public class ShopFeature {
     private void seedDatabase() throws Exception {
         Product iguana = aProduct().withName("Iguana").build();
         database.given(iguana);
-        database.given(anItem().of(iguana)
-                .withNumber("12345678")
-                .describedAs("Green Adult")
-                .priced("18.50").build());
+        database.given(
+            anItem().of(iguana).withNumber("12345678").describedAs("Green Adult").priced("18.50"),
+            anItem().of(iguana).withNumber("87654321").describedAs("Blue Female").priced("58.97"));
     }
 
     @Test public void
-    buysASingleItem() throws Exception {
+    shopsForItemsAndAddsThemToCart() throws Exception {
         homePage.showsCartIsEmpty();
+
         ProductsPage productsPage = homePage.searchFor("Iguana");
         ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
         CartPage cartPage = itemsPage.addToCart("12345678");
-        cartPage.showsItemInCart("Green Adult", 1);
+        cartPage.showsItemInCart("12345678", "Green Adult", 1, "18.50");
+        homePage.showsCartTotalQuantity(1);
+
+        productsPage = homePage.searchFor("Iguana");
+        itemsPage = productsPage.browseItemsOf("Iguana");
+        cartPage = itemsPage.addToCart("87654321");
+        cartPage.showsItemInCart("87654321", "Blue Female", 1, "58.97");
+        homePage.showsCartTotalQuantity(2);
+	}
+
+    @Test public void
+    shopsForTheSameItemMultipleTimes() throws Exception {
+        homePage.showsCartIsEmpty();
+
+        ProductsPage productsPage = homePage.searchFor("Iguana");
+        ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
+        CartPage cartPage = itemsPage.addToCart("12345678");
+        cartPage.showsItemInCart("12345678", "Green Adult", 1, "18.50");
+        homePage.showsCartTotalQuantity(1);
+
+        productsPage = homePage.searchFor("Iguana");
+        itemsPage = productsPage.browseItemsOf("Iguana");
+        cartPage = itemsPage.addToCart("12345678");
+        cartPage.showsItemInCart("12345678", "Green Adult", 2, "37.00");
+        homePage.showsCartTotalQuantity(2);
 	}
 
 	@After public void

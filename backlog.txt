@@ -1,14 +1,17 @@
-- Test unitaires manquants sur le formulaire de recherche
+- Afficher le total global du panier
+- Indiquer quand le panier d'achat est vide
+- Permettre de continuer le magasinage depuis le panier d'achat
+- Enlever un article du panier
+- Changer la quantité d'un article au panier
+- Afficher le nombre d'articles en stock par produit
+- Vérifier les stocks disponibles avant ajout au panier
 - Traiter le cas d'une recherche d'article par numéro introuvable
 - Ajouter validation sur le numéro de produit (ABCD-123)
 - Ajouter validation sur le numéro de référence de l'article (12345678)
 - Introduire la notion de devise (Money)
 - Séquence bd pour les numéros d'articles
 - Ne rien retourner quand on cherche rien
-- Afficher le nombre d'articles en stock par produit
 - Consultation du catalogue
+- Support des profils utilisateurs avec information de paiement
 - Panier d'achat sauvegardé entre chaque visite
-- Indiquer quand le panier d'achat est vide
-- Enlever un article du panier
-- Changer la quantité d'un article au panier
-- Vérifier les stocks disponibles avant ajout au panier
+

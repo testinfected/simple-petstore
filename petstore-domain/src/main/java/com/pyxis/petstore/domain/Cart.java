@@ -21,6 +21,14 @@ public class Cart implements Basket {
         return subTotal;
     }
 
+    public int getTotalQuantity() {
+        int total = 0;
+        for (CartItem cartItem : cartItems) {
+            total += cartItem.getQuantity();
+        }
+        return total;
+    }
+
     public List<CartItem> getItems() {
         return Collections.unmodifiableList(cartItems);
     }

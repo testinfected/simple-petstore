@@ -35,9 +35,8 @@ public class CartItemsViewTest {
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
         Item item = anItem().withNumber("12345678").priced("18.50").describedAs("Green Adult").build();
-        Map<String, ?> model = aModelWith(aCart().with(item).with(item));
 
-        renderedPage = renderItemsPageUsing(model);
+        renderedPage = renderItemsPageUsing(aModelWith(aCart().with(item).with(item)));
         assertThat(dom(renderedPage),
                 hasSelector("tr#cart_item_12345678 td",
                         inOrder(withText("2"),
@@ -57,13 +56,13 @@ public class CartItemsViewTest {
         assertThat(dom(renderedPage), hasSelector("#cart_items tr.cart-item", withSize(2)));
     }
 
-    private Map<String, ?> aModelWith(Builder<?> builder) {
+    private Map<String, Object> aModelWith(Builder<?> builder) {
         ModelMap model = new ModelMap();
         model.addAttribute(builder.build());
         return model;
     }
 
-    private String renderItemsPageUsing(Map<String, ?> model) {
+    private String renderItemsPageUsing(Map<String, Object> model) {
         return render(CART_ITEMS_VIEW).using(model);
     }
 }

@@ -68,11 +68,16 @@ public class VelocityRendering {
 		this.encoding = encoding;
 	}
 
-	public String using(Map<String, ?> model) {		
-		return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, templateFileName(), this.encoding, model);
+	public String using(Map<String, Object> model) {
+        setupTools(model);
+        return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, templateFileName(), this.encoding, model);
 	}
 
-	private String templateFileName() {
+    private void setupTools(Map<String, Object> model) {
+        model.put("display", new org.apache.velocity.tools.generic.DisplayTool());
+    }
+
+    private String templateFileName() {
 		return template + VELOCITY_EXTENSION;
 	}
 }

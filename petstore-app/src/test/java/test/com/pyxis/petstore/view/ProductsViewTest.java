@@ -1,16 +1,7 @@
 package test.com.pyxis.petstore.view;
 
-import static com.pyxis.matchers.dom.DomMatchers.*;
-import static com.pyxis.matchers.dom.DomMatchers.inOrder;
-import static com.threelevers.css.DocumentBuilder.dom;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static test.support.com.pyxis.petstore.builders.Entities.entities;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
-
-import java.util.Map;
-
+import com.pyxis.petstore.domain.AttachmentStorage;
+import com.pyxis.petstore.domain.Product;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -21,11 +12,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.ui.ModelMap;
 import org.w3c.dom.Element;
-
 import test.support.com.pyxis.petstore.builders.Builder;
 
-import com.pyxis.petstore.domain.AttachmentStorage;
-import com.pyxis.petstore.domain.Product;
+import java.util.Map;
+
+import static com.pyxis.matchers.dom.DomMatchers.*;
+import static com.threelevers.css.DocumentBuilder.dom;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static test.support.com.pyxis.petstore.builders.Entities.entities;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
 @RunWith(JMock.class)
 public class ProductsViewTest {
@@ -63,12 +60,12 @@ public class ProductsViewTest {
 
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
-        Map<String, ?> model = aModelWith(aProduct().
+        Map<String, Object> model = aModelWith(aProduct().
                 withNumber("LAB-1234").
                 withName("Labrador").
                 describedAs("Friendly").
                 withPhoto("labrador.png"));
-        final String photoUrl = "/path/to/attachment/labrador.png";
+        final String photoUrl = "path/to/attachment/labrador.png";
         context.checking(new Expectations() {{
             allowing(attachmentStorage).getAttachmentUrl(with(aProductWithPhoto("labrador.png"))); will(returnValue(photoUrl));
         }});
@@ -116,11 +113,11 @@ public class ProductsViewTest {
         return hasProperty("photoFileName", photoMatcher);
     }
 
-    private Map<String, ?> anEmptyModel() {
+    private Map<String, Object> anEmptyModel() {
         return aModelWith();
     }
 
-    private Map<String, ?> aModelWith(Builder<?>... builders) {
+    private Map<String, Object> aModelWith(Builder<?>... builders) {
         ModelMap model = new ModelMap();
         model.addAttribute("keyword", keyword);
         model.addAttribute("attachments", attachmentStorage);
@@ -128,7 +125,7 @@ public class ProductsViewTest {
         return model;
     }
 
-    private String renderProductsPageUsing(Map<String, ?> model) {
+    private String renderProductsPageUsing(Map<String, Object> model) {
         return render(PRODUCTS_VIEW).using(model);
     }
 
@@ -141,7 +138,7 @@ public class ProductsViewTest {
     }
 
     private Matcher<Element> image(String imageUrl) {
-        return hasChild(withAttribute("src", imageUrl));
+        return hasChild(withAttribute("src", endsWith(imageUrl)));
     }
 
     private Matcher<Element> productName(String name) {

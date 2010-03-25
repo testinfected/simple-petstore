@@ -22,7 +22,7 @@ public class CssSelectorFinder extends BaseFinder<WebElement, WebDriver> {
     }
 
     protected void describeTargetTo(Description description) {
-        description.appendText("Selector ");
+        description.appendText("selector ");
         description.appendText(selector);
     }
 

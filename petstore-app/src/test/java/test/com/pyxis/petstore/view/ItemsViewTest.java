@@ -47,12 +47,11 @@ public class ItemsViewTest {
 
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
-        Map<String, ?> model = aModelWith(anItem().
+
+        renderedPage = renderItemsPageUsing(aModelWith(anItem().
                 withNumber("12345678").
                 describedAs("Green Adult").
-                priced("18.50"));
-
-        renderedPage = renderItemsPageUsing(model);
+                priced("18.50")));
         assertThat(dom(renderedPage),
                 hasSelector("tr#item_12345678 td",
                         inOrder(withText("12345678"),
@@ -75,17 +74,17 @@ public class ItemsViewTest {
                         withAttribute("value", "12345678")));
     }
 
-    private Map<String, ?> anEmptyModel() {
+    private Map<String, Object> anEmptyModel() {
         return aModelWith();
     }
 
-    private Map<String, ?> aModelWith(Builder<?>... builders) {
+    private Map<String, Object> aModelWith(Builder<?>... builders) {
         ModelMap model = new ModelMap();
         model.addAttribute(entities(builders));
         return model;
     }
 
-    private String renderItemsPageUsing(Map<String, ?> model) {
+    private String renderItemsPageUsing(Map<String, Object> model) {
         return render(ITEMS_VIEW).using(model);
     }
 }

@@ -8,7 +8,7 @@ public class PriceFaker {
     private final RandomNumberGenerator decimalPartGenerator;
 
     public static BigDecimal aPrice() {
-        return new PriceFaker().fake();
+        return new PriceFaker().fakePrice();
     }
 
     public PriceFaker() {
@@ -16,7 +16,7 @@ public class PriceFaker {
         decimalPartGenerator = new RandomNumberGenerator(100);
     }
 
-    public BigDecimal fake() {
+    public BigDecimal fakePrice() {
         return new BigDecimal(integerPart() + "." + decimalPart());
     }
 

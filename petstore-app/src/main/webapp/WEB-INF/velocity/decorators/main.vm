@@ -14,7 +14,8 @@
         #parse("/WEB-INF/velocity/includes/searchForm.vm")
     </div>
     <div id="shopping-cart">
-		<a href="#">X items</a>
+        #set( $cart = $session.getAttribute('scopedTarget.cart') )        
+        #parse("/WEB-INF/velocity/includes/cartLink.vm")
     </div>
 </div>
 <div id="content">

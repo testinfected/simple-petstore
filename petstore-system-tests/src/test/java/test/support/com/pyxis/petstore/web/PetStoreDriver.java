@@ -13,6 +13,10 @@ public class PetStoreDriver {
     }
 
     public HomePage start() throws Exception {
+        return goToHomePage();
+    }
+
+    public HomePage goToHomePage() throws Exception {
         return navigateTo(HomePage.class);
     }
 

@@ -2,13 +2,12 @@ package test.support.com.pyxis.petstore.builders;
 
 import com.pyxis.petstore.domain.Product;
 
+import static test.support.com.pyxis.petstore.builders.ProductNumberFaker.aProductNumber;
+
 public class ProductBuilder implements Builder<Product> {
 
     private static final String DEFAULT_NAME = "a product";
-    private static final int MAX_PRODUCT_NUMBER = 100000000;
-
-    private final RandomNumberGenerator faker = new RandomNumberGenerator(MAX_PRODUCT_NUMBER);
-    private String number = faker.generateNumber();
+    private String number = aProductNumber();
     private String name = DEFAULT_NAME;
     private String description;
     private String photoName;

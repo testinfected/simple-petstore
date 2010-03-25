@@ -8,6 +8,7 @@ import org.openqa.selenium.lift.WebDriverTestContext;
 import org.openqa.selenium.lift.find.Finder;
 import org.openqa.selenium.support.PageFactory;
 
+import static org.jmock.Expectations.equal;
 import static org.openqa.selenium.lift.match.NumericalMatchers.exactly;
 import static org.openqa.selenium.lift.match.SelectionMatcher.selection;
 
@@ -33,6 +34,10 @@ public abstract class PageObject {
 
     protected void clickOn(Finder<WebElement, WebDriver> finder) {
         context.clickOn(finder);
+    }
+
+    protected void assertNotPresent(Finder<WebElement, WebDriver> finder) {
+        context.assertPresenceOf(equal(0), finder);
     }
 
     protected void assertPresenceOf(Finder<WebElement, WebDriver> finder) {

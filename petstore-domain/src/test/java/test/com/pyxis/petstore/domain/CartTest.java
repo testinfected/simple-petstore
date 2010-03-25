@@ -9,9 +9,7 @@ import java.math.BigDecimal;
 
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 
@@ -22,6 +20,7 @@ public class CartTest {
     isEmptyByDefault() {
         assertTrue("contains item(s)", cart.isEmpty());
         assertThat(cart.getSubTotal(), equalTo(BigDecimal.ZERO));
+        assertThat(cart.getTotalQuantity(), equalTo(0));
     }
 
     @Test public void
@@ -35,6 +34,7 @@ public class CartTest {
                 number("11111111"),
                 number("22222222"),
                 number("33333333")));
+        assertThat(cart.getTotalQuantity(), equalTo(3));
     }
 
     @Test(expected = UnsupportedOperationException.class) public void
@@ -63,6 +63,7 @@ public class CartTest {
         assertThat(cart.getItems(), containsItems(
                 with(number("11111111"), quantity(2)),
                 with(number("22222222"), quantity(1))));
+        assertThat(cart.getTotalQuantity(), equalTo(3));
     }
 
     private Matcher<Iterable<CartItem>> containsItems(Matcher<CartItem>... cartItemMatchers) {
