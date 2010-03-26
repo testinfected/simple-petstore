@@ -75,7 +75,7 @@ public class ShopFeature {
 
 	@After public void
     stopApplication() {
-		petstore.close();
+		petstore.stop();
 		database.stop();
 	}
 }

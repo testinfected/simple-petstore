@@ -23,12 +23,20 @@ public class WebDriverWindow implements InvocationHandler {
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (method.getName().equals("close")) {
+        if (closeCalled(method) || quitClosed(method)) {
             closeWindow();
             return null;
         } else {
             return method.invoke(webdriver, args);
         }
+    }
+
+    private boolean quitClosed(Method method) {
+        return method.getName().equals("quit");
+    }
+
+    private boolean closeCalled(Method method) {
+        return method.getName().equals("close");
     }
 
     private void closeWindow() {

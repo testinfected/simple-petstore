@@ -44,7 +44,7 @@ public class SearchFeature {
     @After public void
     stopApplication() {
     	database.stop();
-        petstore.close();
+        petstore.stop();
     }
 
 }

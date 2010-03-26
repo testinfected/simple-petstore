@@ -3,14 +3,12 @@ package test.support.com.pyxis.petstore.web;
 import org.openqa.selenium.WebDriver;
 import test.system.com.pyxis.petstore.page.HomePage;
 
-import static test.support.com.pyxis.petstore.web.WebDriverFactory.getInstance;
-
 public class PetStoreDriver {
 
     private final WebDriver webdriver;
 
     public PetStoreDriver() {
-        webdriver = getInstance().newWebDriver();
+        webdriver = SharedInstanceWebDriverFactory.getInstance().newWebDriver();
     }
 
     public HomePage start() throws Exception {
@@ -28,7 +26,7 @@ public class PetStoreDriver {
         return PageObject.onPage(webdriver, pageClass);
     }
 
-    public void close() {
-        webdriver.close();
+    public void stop() {
+        webdriver.quit();
     }
 }

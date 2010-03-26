@@ -56,7 +56,7 @@ public class BrowseCatalogFeature {
 	
 	@After public void
     stopApplication() {
-		petstore.close();
+		petstore.stop();
 		database.stop();
 	}
 }
