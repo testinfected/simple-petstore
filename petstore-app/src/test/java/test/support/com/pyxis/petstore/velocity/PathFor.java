@@ -21,4 +21,12 @@ public final class PathFor {
     public static String cartItemsPath() {
         return pathFor("/cartitems");
     }
+
+    public static String cartPath() {
+        return pathFor("/cart");
+    }
+
+    public static String newPurchasePath() {
+        return pathFor("/purchase/new");
+    }
 }

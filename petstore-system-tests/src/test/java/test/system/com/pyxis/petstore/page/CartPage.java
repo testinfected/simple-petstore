@@ -50,6 +50,7 @@ public class CartPage extends PageObject {
     }
 
     public PurchasePage checkout() {
+        clickOn(link().with(id("checkout")));
         return anInstanceOf(PurchasePage.class);
     }
 }

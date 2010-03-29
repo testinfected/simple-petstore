@@ -1,6 +1,9 @@
 package com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.domain.*;
+import com.pyxis.petstore.domain.Basket;
+import com.pyxis.petstore.domain.Item;
+import com.pyxis.petstore.domain.ItemInventory;
+import com.pyxis.petstore.domain.ItemNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,7 +22,7 @@ public class CartItemsController {
         this.itemInventory = itemInventory;
     }
 
-    @ModelAttribute("cart") @RequestMapping(method = RequestMethod.GET)
+    @ModelAttribute("cart") @RequestMapping(method = RequestMethod.GET, value = "/cart")
     public Basket index() {
         return basket;
     }
@@ -28,6 +31,6 @@ public class CartItemsController {
     public String create(@RequestParam("item_number") String number) {
         Item item = itemInventory.find(new ItemNumber(number));
         basket.add(item);
-        return "redirect:cartitems";
+        return "redirect:cart";
     }
 }

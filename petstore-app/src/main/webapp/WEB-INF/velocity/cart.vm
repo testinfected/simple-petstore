@@ -8,7 +8,7 @@
         <span>Your cart contains the following items:</span>
     </legend>
 
-    <table id="cart_items">
+    <table id="cart">
         <thead>
         <tr>
             <th>Quantity</th>
@@ -48,6 +48,7 @@
 <div id="actions">
     <ol>
         <li><a id="continue-shopping" href="$base">Continue Shopping</a></li>
+        <li><a id="checkout" href="$base/purchase/new">Checkout</a></li>
     </ol>
 </div>
 </body>

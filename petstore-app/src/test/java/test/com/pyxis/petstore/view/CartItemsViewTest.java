@@ -14,20 +14,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.velocity.PathFor.homePath;
+import static test.support.com.pyxis.petstore.velocity.PathFor.newPurchasePath;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
 public class CartItemsViewTest {
 
-    String CART_ITEMS_VIEW = "cartitems";
+    String CART_ITEMS_VIEW = "cart";
     String renderedPage;
 
     @Test public void
     displaysColumnHeadings() {
         renderedPage = renderCartItemsPageUsing(aModelWith(aCart()));
         assertThat(dom(renderedPage),
-                hasSelector("#cart_items th",
+                hasSelector("#cart th",
                         inOrder(withText("Quantity"),
                                 withText("Item"),
                                 withText("Price"),
@@ -55,7 +55,7 @@ public class CartItemsViewTest {
                 with(anItem).
                 with(anItem).
                 with(anotherItem)));
-        assertThat(dom(renderedPage), hasSelector("#cart_items tr.cart-item", withSize(2)));
+        assertThat(dom(renderedPage), hasSelector("#cart tr.cart-item", withSize(2)));
     }
 
     @Test public void
@@ -66,15 +66,23 @@ public class CartItemsViewTest {
             with(anItem().priced("43.97"))));
         String grandTotal = "76.96";
 
-        assertThat(dom(renderedPage), hasUniqueSelector("#cart_items .calculations .total", withText(grandTotal)));
+        assertThat(dom(renderedPage), hasUniqueSelector("#cart .calculations .total", withText(grandTotal)));
     }
 
     @Test public void
     returnsToHomePageToContinueShopping() {
-        Map<String, Object> model = aModelWith(
-                aCart().with(anItem().priced("20.00").of(aProduct().withNumber("LAB-1234"))));
-        renderedPage = renderCartItemsPageUsing(model);
+        renderedPage = renderCartItemsPageUsing(aModelWithACartContainingItems());
         assertThat(dom(renderedPage), hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
+    }
+
+    @Test public void
+    checkingOutRendersPaymentForm() {
+        renderedPage = renderCartItemsPageUsing(aModelWithACartContainingItems());
+        assertThat(dom(renderedPage), hasUniqueSelector("a#checkout", withAttribute("href", newPurchasePath())));
+    }
+
+    private Map<String, Object> aModelWithACartContainingItems() {
+        return aModelWith(aCart().with(anItem()));
     }
 
     private Map<String, Object> aModelWith(Builder<?> builder) {
