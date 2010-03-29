@@ -14,6 +14,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.velocity.PathFor.homePath;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
 public class CartItemsViewTest {
@@ -65,6 +67,14 @@ public class CartItemsViewTest {
         String grandTotal = "76.96";
 
         assertThat(dom(renderedPage), hasUniqueSelector("#cart_items .calculations .total", withText(grandTotal)));
+    }
+
+    @Test public void
+    returnsToHomePageToContinueShopping() {
+        Map<String, Object> model = aModelWith(
+                aCart().with(anItem().priced("20.00").of(aProduct().withNumber("LAB-1234"))));
+        renderedPage = renderCartItemsPageUsing(model);
+        assertThat(dom(renderedPage), hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
     }
 
     private Map<String, Object> aModelWith(Builder<?> builder) {

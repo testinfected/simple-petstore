@@ -24,12 +24,7 @@ public class ItemsController {
 
     @RequestMapping( value = "/items", method = RequestMethod.GET)
 	public ModelAndView index(@PathVariable("productNumber") String productNumber) {
-        return itemsView(itemInventory.findByProductNumber(productNumber));
-	}
-
-    private ModelAndView itemsView(List<Item> items) {
-        ModelAndView modelAndView = new ModelAndView("items");
-        modelAndView.addObject(items);
-        return modelAndView;
+        List<Item> items = itemInventory.findByProductNumber(productNumber);
+        return new ModelAndView("items").addObject(items);
     }
 }

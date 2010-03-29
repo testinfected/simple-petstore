@@ -6,7 +6,9 @@ import org.openqa.selenium.lift.find.Finder;
 import test.support.com.pyxis.petstore.web.PageObject;
 
 import static com.pyxis.matchers.selenium.SeleniumMatchers.being;
+import static com.pyxis.matchers.selenium.SeleniumMatchers.id;
 import static org.hamcrest.Matchers.containsString;
+import static org.openqa.selenium.lift.Finders.link;
 import static org.openqa.selenium.lift.Matchers.text;
 import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.selector;
 
@@ -26,6 +28,11 @@ public class CartPage extends PageObject {
         assertPresenceOf(selector("#cart-grand-total").with(text(being(price))));
     }
 
+    public ItemsPage continueShopping() {
+        clickOn(link().with(id("continue-shopping")));
+        return anInstanceOf(ItemsPage.class);
+    }
+
     private Finder<WebElement, WebDriver> cellShowingTotalFor(String itemNumber) {
         return selector(domIdOf(itemNumber) + " td.total");
     }
@@ -40,6 +47,10 @@ public class CartPage extends PageObject {
 
     private String domIdOf(String itemNumber) {
         return "#cart_item_" + itemNumber;
+    }
+
+    public PurchasePage checkout() {
+        return anInstanceOf(PurchasePage.class);
     }
 }
 

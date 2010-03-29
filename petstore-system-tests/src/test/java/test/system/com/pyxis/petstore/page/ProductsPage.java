@@ -30,6 +30,6 @@ public class ProductsPage extends PageObject {
 
     public ItemsPage browseItemsOf(String productName) {
 		clickOn(link().with(text(being(productName))));
-		return nowOn(ItemsPage.class);
+		return anInstanceOf(ItemsPage.class);
 	}
 }

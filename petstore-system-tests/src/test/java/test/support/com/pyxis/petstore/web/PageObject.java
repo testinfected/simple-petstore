@@ -24,11 +24,11 @@ public abstract class PageObject {
         this.context = new WebDriverTestContext(driver);
     }
 
-    public <T extends PageObject> T nowOn(Class<T> pageClass) {
-        return onPage(webdriver, pageClass);
+    public <T extends PageObject> T anInstanceOf(Class<T> pageClass) {
+        return aPage(webdriver, pageClass);
     }
 
-    public static <T extends PageObject> T onPage(WebDriver webdriver, Class<T> pageClass) {
+    public static <T extends PageObject> T aPage(WebDriver webdriver, Class<T> pageClass) {
         return PageFactory.initElements(webdriver, pageClass);
     }
 

@@ -23,7 +23,7 @@ public class PetStoreDriver {
 
     public <T extends PageObject> T navigateTo(Class<T> pageClass) throws Exception {
         webdriver.navigate().to(Routes.urlFor(pageClass));
-        return PageObject.onPage(webdriver, pageClass);
+        return PageObject.aPage(webdriver, pageClass);
     }
 
     public void stop() {

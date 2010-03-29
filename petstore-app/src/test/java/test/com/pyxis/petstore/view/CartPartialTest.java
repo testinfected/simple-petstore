@@ -10,9 +10,9 @@ import static com.pyxis.matchers.dom.DomMatchers.*;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.endsWith;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.velocity.PathFor.cartItemsPath;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
 public class CartPartialTest {
@@ -33,7 +33,7 @@ public class CartPartialTest {
                 aModelWith(aCart().with(anItem()).with(anItem())));
         assertThat(dom(renderedFragment),
                 hasUniqueSelector("a",
-                        withAttribute("href", endsWith("/cartitems")),
+                        withAttribute("href", cartItemsPath()),
                         withText(containsString("2 items"))));
     }
 

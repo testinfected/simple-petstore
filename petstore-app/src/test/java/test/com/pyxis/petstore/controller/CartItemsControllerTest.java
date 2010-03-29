@@ -1,7 +1,10 @@
 package test.com.pyxis.petstore.controller;
 
 import com.pyxis.petstore.controller.CartItemsController;
-import com.pyxis.petstore.domain.*;
+import com.pyxis.petstore.domain.Basket;
+import com.pyxis.petstore.domain.Item;
+import com.pyxis.petstore.domain.ItemInventory;
+import com.pyxis.petstore.domain.ItemNumber;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -21,16 +24,17 @@ public class CartItemsControllerTest {
     Basket basket = context.mock(Basket.class);
     ItemInventory itemInventory = context.mock(ItemInventory.class);
     CartItemsController controller = new CartItemsController(basket, itemInventory);
-    String ITEM_NUMBER = "11111111";
 
     @Test public void
     addsItemToCartAfterCheckingInventoryAndRedirectsToCart() {
-        final Item item = anItem().withNumber(ITEM_NUMBER).build();
+        final String itemNumber = "12345678";
+        final Item item = anItem().withNumber(itemNumber).build();
         context.checking(new Expectations() {{
-            allowing(itemInventory).find(with(equal(new ItemNumber(ITEM_NUMBER)))); will(returnValue(item));
+            allowing(itemInventory).find(with(equal(new ItemNumber(itemNumber)))); will(returnValue(item));
             oneOf(basket).add(with(equal(item)));
         }});
-        String view = controller.create(ITEM_NUMBER);
+
+        String view = controller.create(itemNumber);
         assertThat(view, equalTo("redirect:cartitems"));
     }
 

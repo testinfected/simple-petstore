@@ -18,8 +18,8 @@ public class CartBuilder implements Builder<Cart> {
         return with(itemBuilder.build());
     }
 
-    public CartBuilder with(Item item) {
-        items.add(item);
+    public CartBuilder with(Item anItem) {
+        items.add(anItem);
         return this;
     }
 

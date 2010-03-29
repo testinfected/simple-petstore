@@ -6,11 +6,13 @@ import com.pyxis.petstore.domain.ProductCatalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ProductsController {
@@ -24,18 +26,16 @@ public class ProductsController {
         this.attachmentStorage = attachmentStorage;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelMap index(@RequestParam("keyword") String keyword) {
-        List<Product> matchingProducts = productCatalog.findByKeyword(keyword);
-        ModelMap modelMap = model();
-        modelMap.addAttribute("keyword", keyword);
-        modelMap.addAttribute(matchingProducts);
-        return modelMap;
+    @ModelAttribute("attachments")
+    public AttachmentStorage getAttachmentStorage() {
+        return attachmentStorage;
     }
 
-    private ModelMap model() {
-        ModelMap modelMap = new ModelMap();
-        modelMap.addAttribute("attachments", attachmentStorage);
-        return modelMap;
+    @RequestMapping(method = RequestMethod.GET)
+    public Map<String, ?> index(@RequestParam("keyword") String keyword) {
+        List<Product> matchingProducts = productCatalog.findByKeyword(keyword);
+        return new ModelMap().
+                addAttribute("keyword", keyword).
+                addAttribute(matchingProducts);
     }
 }

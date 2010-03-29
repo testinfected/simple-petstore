@@ -9,9 +9,9 @@ import java.util.Map;
 import static com.pyxis.matchers.dom.DomMatchers.*;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.endsWith;
 import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.velocity.PathFor.cartItemsPath;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
 public class ItemsViewTest {
@@ -65,7 +65,7 @@ public class ItemsViewTest {
         renderedPage = renderItemsPageUsing(aModelWith(anItem().withNumber("12345678")));
         assertThat(dom(renderedPage),
                 hasUniqueSelector("form",
-                        withAttribute("action", endsWith("/cartitems")),
+                        withAttribute("action", cartItemsPath()),
                         withAttribute("method", "post"),
                         hasUniqueSelector("button", withId("add_to_cart_12345678"))));
         assertThat(dom(renderedPage),

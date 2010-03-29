@@ -74,6 +74,7 @@ public class VelocityRendering {
 	}
 
     private void setupTools(Map<String, Object> model) {
+        model.put("base", PathFor.BASE_URL);
         model.put("display", new org.apache.velocity.tools.generic.DisplayTool());
     }
 

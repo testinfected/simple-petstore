@@ -30,7 +30,7 @@ public class ItemsPage extends PageObject {
 
     public CartPage addToCart(String itemNumber) {
         clickOn(addToCarButtonFor(itemNumber));
-        return nowOn(CartPage.class);
+        return anInstanceOf(CartPage.class);
     }
 
     private Finder<WebElement, WebDriver> addToCarButtonFor(String itemNumber) {

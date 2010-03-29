@@ -45,7 +45,7 @@
     </bean>
 
     <bean class="com.pyxis.petstore.service.SimplePhotoFileStore">
-        <constructor-arg value="attachments/products"/>
+        <constructor-arg value="/attachments/products"/>
     </bean>
 
     <bean name="cart" id="cart" class="com.pyxis.petstore.domain.Cart" scope="session">

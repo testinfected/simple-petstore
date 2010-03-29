@@ -1,4 +1,3 @@
-- Afficher le total global du panier
 - Indiquer quand le panier d'achat est vide
 - Permettre de continuer le magasinage depuis le panier d'achat
 - Enlever un article du panier

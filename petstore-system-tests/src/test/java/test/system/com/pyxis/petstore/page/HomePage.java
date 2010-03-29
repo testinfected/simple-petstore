@@ -21,7 +21,7 @@ public class HomePage extends PageObject {
 	public ProductsPage searchFor(String keyword) {
         type(keyword, into(textbox().with(id("keyword"))));
         clickOn(element("search"));
-        return nowOn(ProductsPage.class);
+        return anInstanceOf(ProductsPage.class);
 	}
 
     public void showsCartIsEmpty() {

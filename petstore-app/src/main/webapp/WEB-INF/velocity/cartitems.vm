@@ -45,5 +45,10 @@
         </tbody>
     </table>
 </fieldset>
+<div id="actions">
+    <ol>
+        <li><a id="continue-shopping" href="$base">Continue Shopping</a></li>
+    </ol>
+</div>
 </body>
 </html>

@@ -22,12 +22,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.velocity.PathFor.itemsPath;
+import static test.support.com.pyxis.petstore.velocity.PathFor.pathFor;
 import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 
 @RunWith(JMock.class)
 public class ProductsViewTest {
     String PRODUCTS_VIEW = "products";
-    Object DEFAULT_PHOTO_URL = "/url/of/missing.png";
+    Object DEFAULT_PHOTO_URL = "url/of/missing.png";
     String keyword = "Iguana";
 
     Mockery context = new JUnit4Mockery();
@@ -73,7 +75,7 @@ public class ProductsViewTest {
         renderedPage = renderProductsPageUsing(model);
         assertThat(dom(renderedPage),
                 hasSelector("#products td",
-                        inOrder(hasChild(image(photoUrl)),
+                        inOrder(hasChild(image(pathFor(photoUrl))),
                                 productName("Labrador"),
                                 description("Friendly"))));
     }
@@ -98,7 +100,7 @@ public class ProductsViewTest {
     	renderedPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("LAB-1234")));
     	assertThat(dom(renderedPage),
     			hasSelector("td a", everyItem(
-    					withAttribute("href", containsString("products/LAB-1234/items")))));
+    					withAttribute("href", equalTo(itemsPath("LAB-1234"))))));
     }
 
     private Matcher<Product> aProductWithoutPhoto() {
@@ -138,7 +140,7 @@ public class ProductsViewTest {
     }
 
     private Matcher<Element> image(String imageUrl) {
-        return hasChild(withAttribute("src", endsWith(imageUrl)));
+        return hasChild(withAttribute("src", equalTo(imageUrl)));
     }
 
     private Matcher<Element> productName(String name) {
