@@ -48,7 +48,7 @@
 <div id="actions">
     <ol>
         <li><a id="continue-shopping" href="$base">Continue Shopping</a></li>
-        <li><a id="checkout" href="$base/purchase/new">Checkout</a></li>
+        <li><a id="checkout" href="$base/checkout">Checkout</a></li>
     </ol>
 </div>
 </body>

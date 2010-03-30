@@ -22,14 +22,14 @@ public class CartPartialTest {
 
     @Test public void
     linkIsInactiveWhenCartIsEmpty() {
-        renderedFragment = renderCartLinkFragmentUsing(aModelWith(aCart()));
+        renderedFragment = renderCartPartialUsing(aModelWith(aCart()));
         assertThat(dom(renderedFragment), hasNoSelector("a"));
         assertThat(dom(renderedFragment), withText(containsString("Empty")));
     }
 
     @Test public void
     displaysTotalItemsInCartAndLinksToCart() throws Exception {
-        renderedFragment = renderCartLinkFragmentUsing(
+        renderedFragment = renderCartPartialUsing(
                 aModelWith(aCart().with(anItem()).with(anItem())));
         assertThat(dom(renderedFragment),
                 hasUniqueSelector("a",
@@ -43,7 +43,7 @@ public class CartPartialTest {
         return model;
     }
 
-    private String renderCartLinkFragmentUsing(Map<String, Object> model) {
+    private String renderCartPartialUsing(Map<String, Object> model) {
         return render(CART_LINK_FRAGMENT).using(model);
     }
 }

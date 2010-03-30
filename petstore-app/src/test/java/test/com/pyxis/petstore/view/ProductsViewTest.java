@@ -34,7 +34,7 @@ public class ProductsViewTest {
 
     Mockery context = new JUnit4Mockery();
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
-    String renderedPage;
+    String renderedView;
 
     @Before public void
     setUpDefaultPhoto() {
@@ -45,15 +45,15 @@ public class ProductsViewTest {
 
     @Test public void
     displaysNumberOfProductsFound() {
-        renderedPage = renderProductsPageUsing(aModelWith(aProduct(), aProduct()));
-        assertThat(dom(renderedPage), hasUniqueSelector("#match-count", withText("2")));
-        assertThat(dom(renderedPage), hasSelector("#products tr.product", withSize(2)));
+        renderedView = renderProductsViewUsing(aModelWith(aProduct(), aProduct()));
+        assertThat(dom(renderedView), hasUniqueSelector("#match-count", withText("2")));
+        assertThat(dom(renderedView), hasSelector("#products tr.product", withSize(2)));
     }
 
     @Test public void
     displaysColumnHeadingsOnProductTable() {
-        renderedPage = renderProductsPageUsing(aModelWith(aProduct()));
-        assertThat(dom(renderedPage),
+        renderedView = renderProductsViewUsing(aModelWith(aProduct()));
+        assertThat(dom(renderedView),
                 hasSelector("#products th",
                         inOrder(withBlankText(),
                                 withText("Name"),
@@ -72,8 +72,8 @@ public class ProductsViewTest {
             allowing(attachmentStorage).getAttachmentUrl(with(aProductWithPhoto("labrador.png"))); will(returnValue(photoUrl));
         }});
 
-        renderedPage = renderProductsPageUsing(model);
-        assertThat(dom(renderedPage),
+        renderedView = renderProductsViewUsing(model);
+        assertThat(dom(renderedView),
                 hasSelector("#products td",
                         inOrder(hasChild(image(pathFor(photoUrl))),
                                 productName("Labrador"),
@@ -82,23 +82,23 @@ public class ProductsViewTest {
 
     @Test public void
     handlesProductWithNoDescriptionCorrectly() {
-        renderedPage = renderProductsPageUsing(aModelWith(aProduct().withoutADescription()));
-        assertThat(dom(renderedPage),
+        renderedView = renderProductsViewUsing(aModelWith(aProduct().withoutADescription()));
+        assertThat(dom(renderedView),
                 hasSelector("#products td:nth-child(3)",
                         contains(anEmptyDescription())));
     }
 
     @Test public void
     doesNotDisplayProductsTableIfNoProductIsFound() {
-        renderedPage = renderProductsPageUsing(anEmptyModel());
-        assertThat(dom(renderedPage), hasUniqueSelector("#no-match"));
-        assertThat(dom(renderedPage), hasNoSelector("#products"));
+        renderedView = renderProductsViewUsing(anEmptyModel());
+        assertThat(dom(renderedView), hasUniqueSelector("#no-match"));
+        assertThat(dom(renderedView), hasNoSelector("#products"));
     }
     
     @Test public void
     productNameAndPhotoLinkToProductInventory() {
-    	renderedPage = renderProductsPageUsing(aModelWith(aProduct().withName("Labrador").withNumber("LAB-1234")));
-    	assertThat(dom(renderedPage),
+    	renderedView = renderProductsViewUsing(aModelWith(aProduct().withName("Labrador").withNumber("LAB-1234")));
+    	assertThat(dom(renderedView),
     			hasSelector("td a", everyItem(
     					withAttribute("href", equalTo(itemsPath("LAB-1234"))))));
     }
@@ -127,7 +127,7 @@ public class ProductsViewTest {
         return model;
     }
 
-    private String renderProductsPageUsing(Map<String, Object> model) {
+    private String renderProductsViewUsing(Map<String, Object> model) {
         return render(PRODUCTS_VIEW).using(model);
     }
 

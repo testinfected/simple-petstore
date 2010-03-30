@@ -17,27 +17,27 @@ import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
 public class ItemsViewTest {
 
     String ITEMS_VIEW = "items";
-    String renderedPage;
+    String renderedView;
 
     @Test public void
     notifiesWhenInventoryIsEmpty() {
-        renderedPage = renderItemsPageUsing(anEmptyModel());
+        renderedView = renderItemsViewUsing(anEmptyModel());
 
-        assertThat(dom(renderedPage), hasUniqueSelector("#out-of-stock"));
-        assertThat(dom(renderedPage), hasNoSelector("#items"));
+        assertThat(dom(renderedView), hasUniqueSelector("#out-of-stock"));
+        assertThat(dom(renderedView), hasNoSelector("#items"));
     }
 
     @Test public void
     displaysNumberOfItemsAvailable() {
-        renderedPage = renderItemsPageUsing(aModelWith(anItem(), anItem()));
-        assertThat(dom(renderedPage), hasUniqueSelector("#inventory-count", withText("2")));
-        assertThat(dom(renderedPage), hasSelector("#items tr.item", withSize(2)));
+        renderedView = renderItemsViewUsing(aModelWith(anItem(), anItem()));
+        assertThat(dom(renderedView), hasUniqueSelector("#inventory-count", withText("2")));
+        assertThat(dom(renderedView), hasSelector("#items tr.item", withSize(2)));
     }
 
     @Test public void
     displaysColumnHeadingsOnItemsTable() {
-        renderedPage = renderItemsPageUsing(aModelWith(anItem()));
-        assertThat(dom(renderedPage),
+        renderedView = renderItemsViewUsing(aModelWith(anItem()));
+        assertThat(dom(renderedView),
                 hasSelector("#items th",
                         inOrder(withText("Reference number"),
                                 withText("Description"),
@@ -48,11 +48,11 @@ public class ItemsViewTest {
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
 
-        renderedPage = renderItemsPageUsing(aModelWith(anItem().
+        renderedView = renderItemsViewUsing(aModelWith(anItem().
                 withNumber("12345678").
                 describedAs("Green Adult").
                 priced("18.50")));
-        assertThat(dom(renderedPage),
+        assertThat(dom(renderedView),
                 hasSelector("tr#item_12345678 td",
                         inOrder(withText("12345678"),
                                 withText("Green Adult"),
@@ -62,13 +62,13 @@ public class ItemsViewTest {
 
     @Test public void
     buttonAddsItemToShoppingCart() {
-        renderedPage = renderItemsPageUsing(aModelWith(anItem().withNumber("12345678")));
-        assertThat(dom(renderedPage),
+        renderedView = renderItemsViewUsing(aModelWith(anItem().withNumber("12345678")));
+        assertThat(dom(renderedView),
                 hasUniqueSelector("form",
                         withAttribute("action", cartItemsPath()),
                         withAttribute("method", "post"),
                         hasUniqueSelector("button", withId("add_to_cart_12345678"))));
-        assertThat(dom(renderedPage),
+        assertThat(dom(renderedView),
                 hasUniqueSelector("form input[type='hidden']",
                         withAttribute("name", "item_number"),
                         withAttribute("value", "12345678")));
@@ -84,7 +84,7 @@ public class ItemsViewTest {
         return model;
     }
 
-    private String renderItemsPageUsing(Map<String, Object> model) {
+    private String renderItemsViewUsing(Map<String, Object> model) {
         return render(ITEMS_VIEW).using(model);
     }
 }
