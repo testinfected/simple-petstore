@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 <head>
     <meta content="text/html;charset=UTF-8" http-equiv="Content-Type"/>
@@ -19,6 +19,7 @@
             #parse("/WEB-INF/velocity/includes/_logout.vm")
         </div>
         <div id="shopping-cart">
+            <!-- Spring stores proxied objects in the session with a "scopedTarget." prefix -->
             #set( $cart = $session.getAttribute('scopedTarget.cart') )
         #parse("/WEB-INF/velocity/includes/_cart.vm")
         </div>

@@ -48,7 +48,7 @@ public class PurchaseFeature {
         itemsPage = productsPage.browseItemsOf("Labrador Retriever");
         cartPage = itemsPage.addToCart("22222222");
         
-        PurchasePage purchasePage = cartPage.checkout();
-        purchasePage.showsTotalToPay(total);
+        OrderPage orderPage = cartPage.checkout();
+        orderPage.showsTotalToPay(total);
     }
 }

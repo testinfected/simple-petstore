@@ -49,9 +49,9 @@ public class CartPage extends PageObject {
         return "#cart_item_" + itemNumber;
     }
 
-    public PurchasePage checkout() {
+    public OrderPage checkout() {
         clickOn(link().with(id("checkout")));
-        return anInstanceOf(PurchasePage.class);
+        return anInstanceOf(OrderPage.class);
     }
 }
 

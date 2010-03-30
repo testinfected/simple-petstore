@@ -35,7 +35,7 @@
         <property name="cache" value="true"/>
         <property name="prefix" value=""/>
         <property name="suffix" value=".vm"/>
-        <property name="exposeSessionAttributes" value="true"/>
+        <!--<property name="exposeSessionAttributes" value="true"/>-->
         <property name="toolboxConfigLocation" value="/WEB-INF/tools.xml"/>
     </bean>
 
@@ -48,7 +48,7 @@
         <constructor-arg value="/attachments/products"/>
     </bean>
 
-    <bean name="cart" id="cart" class="com.pyxis.petstore.domain.Cart" scope="session">
+    <bean id="cart" class="com.pyxis.petstore.domain.Cart" scope="session">
         <aop:scoped-proxy/>     
     </bean>
 </beans>
