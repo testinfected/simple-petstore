@@ -14,12 +14,17 @@ public class CartBuilder implements Builder<Cart> {
         return new CartBuilder();
     }
 
-    public CartBuilder with(ItemBuilder itemBuilder) {
-        return with(itemBuilder.build());
+    public CartBuilder containing(ItemBuilder... itemBuilders) {
+        for (ItemBuilder itemBuilder : itemBuilders) {
+            containing(itemBuilder.build());
+        }
+        return this;
     }
 
-    public CartBuilder with(Item anItem) {
-        items.add(anItem);
+    public CartBuilder containing(Item... someItems) {
+        for (Item anItem : someItems) {
+            items.add(anItem);
+        }
         return this;
     }
 

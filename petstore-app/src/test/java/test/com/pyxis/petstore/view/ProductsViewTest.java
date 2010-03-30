@@ -10,21 +10,18 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.ui.ModelMap;
 import org.w3c.dom.Element;
-import test.support.com.pyxis.petstore.builders.Builder;
-
-import java.util.Map;
+import test.support.com.pyxis.petstore.views.ModelBuilder;
+import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import static com.pyxis.matchers.dom.DomMatchers.*;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static test.support.com.pyxis.petstore.builders.Entities.entities;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.velocity.PathFor.itemsPath;
-import static test.support.com.pyxis.petstore.velocity.PathFor.pathFor;
-import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
+import static test.support.com.pyxis.petstore.views.PathFor.itemsPath;
+import static test.support.com.pyxis.petstore.views.PathFor.pathFor;
+import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 @RunWith(JMock.class)
 public class ProductsViewTest {
@@ -34,7 +31,14 @@ public class ProductsViewTest {
 
     Mockery context = new JUnit4Mockery();
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
+    ModelBuilder model = new ModelBuilder();
     String renderedView;
+
+    @Before public void
+    setupModel() {
+        model.with("keyword", keyword);
+        model.with("attachments", attachmentStorage);
+    }
 
     @Before public void
     setUpDefaultPhoto() {
@@ -45,14 +49,14 @@ public class ProductsViewTest {
 
     @Test public void
     displaysNumberOfProductsFound() {
-        renderedView = renderProductsViewUsing(aModelWith(aProduct(), aProduct()));
+        renderedView = renderProductsView().using(model.listing(aProduct(), aProduct()));
         assertThat(dom(renderedView), hasUniqueSelector("#match-count", withText("2")));
         assertThat(dom(renderedView), hasSelector("#products tr.product", withSize(2)));
     }
 
     @Test public void
     displaysColumnHeadingsOnProductTable() {
-        renderedView = renderProductsViewUsing(aModelWith(aProduct()));
+        renderedView = renderProductsView().using(model.listing(aProduct()));
         assertThat(dom(renderedView),
                 hasSelector("#products th",
                         inOrder(withBlankText(),
@@ -62,7 +66,7 @@ public class ProductsViewTest {
 
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
-        Map<String, Object> model = aModelWith(aProduct().
+        model.listing(aProduct().
                 withNumber("LAB-1234").
                 withName("Labrador").
                 describedAs("Friendly").
@@ -72,7 +76,7 @@ public class ProductsViewTest {
             allowing(attachmentStorage).getAttachmentUrl(with(aProductWithPhoto("labrador.png"))); will(returnValue(photoUrl));
         }});
 
-        renderedView = renderProductsViewUsing(model);
+        renderedView = renderProductsView().using(model);
         assertThat(dom(renderedView),
                 hasSelector("#products td",
                         inOrder(hasChild(image(pathFor(photoUrl))),
@@ -82,7 +86,7 @@ public class ProductsViewTest {
 
     @Test public void
     handlesProductWithNoDescriptionCorrectly() {
-        renderedView = renderProductsViewUsing(aModelWith(aProduct().withoutADescription()));
+        renderedView = renderProductsView().using(model.listing(aProduct().withoutADescription()));
         assertThat(dom(renderedView),
                 hasSelector("#products td:nth-child(3)",
                         contains(anEmptyDescription())));
@@ -90,14 +94,14 @@ public class ProductsViewTest {
 
     @Test public void
     doesNotDisplayProductsTableIfNoProductIsFound() {
-        renderedView = renderProductsViewUsing(anEmptyModel());
+        renderedView = renderProductsView().using(model);
         assertThat(dom(renderedView), hasUniqueSelector("#no-match"));
         assertThat(dom(renderedView), hasNoSelector("#products"));
     }
     
     @Test public void
     productNameAndPhotoLinkToProductInventory() {
-    	renderedView = renderProductsViewUsing(aModelWith(aProduct().withName("Labrador").withNumber("LAB-1234")));
+        renderedView = renderProductsView().using(model.listing(aProduct().withName("Labrador").withNumber("LAB-1234")));
     	assertThat(dom(renderedView),
     			hasSelector("td a", everyItem(
     					withAttribute("href", equalTo(itemsPath("LAB-1234"))))));
@@ -115,22 +119,6 @@ public class ProductsViewTest {
         return hasProperty("photoFileName", photoMatcher);
     }
 
-    private Map<String, Object> anEmptyModel() {
-        return aModelWith();
-    }
-
-    private Map<String, Object> aModelWith(Builder<?>... builders) {
-        ModelMap model = new ModelMap();
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("attachments", attachmentStorage);
-        model.addAttribute(entities(builders));
-        return model;
-    }
-
-    private String renderProductsViewUsing(Map<String, Object> model) {
-        return render(PRODUCTS_VIEW).using(model);
-    }
-
     private Matcher<Element> anEmptyDescription() {
         return description("");
     }
@@ -145,5 +133,9 @@ public class ProductsViewTest {
 
     private Matcher<Element> productName(String name) {
         return withText(name);
+    }
+
+    private VelocityRendering renderProductsView() {
+        return render(PRODUCTS_VIEW);
     }
 }

@@ -2,11 +2,8 @@ package test.com.pyxis.petstore.view;
 
 import com.pyxis.petstore.domain.Item;
 import org.junit.Test;
-import org.springframework.ui.ModelMap;
-import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.builders.ItemBuilder;
-
-import java.util.Map;
+import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import static com.pyxis.matchers.dom.DomMatchers.*;
 import static com.threelevers.css.DocumentBuilder.dom;
@@ -14,9 +11,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
-import static test.support.com.pyxis.petstore.velocity.PathFor.checkoutPath;
-import static test.support.com.pyxis.petstore.velocity.PathFor.homePath;
-import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
+import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
+import static test.support.com.pyxis.petstore.views.PathFor.checkoutPath;
+import static test.support.com.pyxis.petstore.views.PathFor.homePath;
+import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class CartViewTest {
 
@@ -25,7 +23,7 @@ public class CartViewTest {
 
     @Test public void
     displaysColumnHeadings() {
-        renderedView = renderCartViewUsing(aModelWith(aCart()));
+        renderedView = renderCartView().using(aModel().with(aCart()));
         assertThat(dom(renderedView),
                 hasSelector("#cart th",
                         inOrder(withText("Quantity"),
@@ -38,7 +36,7 @@ public class CartViewTest {
     displaysProductDetailsInColumns() throws Exception {
         Item item = anItem().withNumber("12345678").priced("18.50").describedAs("Green Adult").build();
 
-        renderedView = renderCartViewUsing(aModelWith(aCart().with(item).with(item)));
+        renderedView = renderCartView().using(aModel().with(aCart().containing(item, item)));
         assertThat(dom(renderedView),
                 hasSelector("tr#cart_item_12345678 td",
                         inOrder(withText("2"),
@@ -51,19 +49,16 @@ public class CartViewTest {
     displaysOneCartItemPerLine() {
         ItemBuilder anItem = anItem();
         ItemBuilder anotherItem = anItem();
-        renderedView = renderCartViewUsing(aModelWith(aCart().
-                with(anItem).
-                with(anItem).
-                with(anotherItem)));
+        renderedView = renderCartView().using(aModel().with(aCart().containing(anItem, anItem, anotherItem)));
         assertThat(dom(renderedView), hasSelector("#cart tr.cart-item", withSize(2)));
     }
 
     @Test public void
     displaysCartGrandTotal() {
-        renderedView = renderCartViewUsing(aModelWith(aCart().
-            with(anItem().priced("20.00")).
-            with(anItem().priced("12.99")).
-            with(anItem().priced("43.97"))));
+        renderedView = renderCartView().using(aModel().with(aCart().containing(
+                anItem().priced("20.00"),
+                anItem().priced("12.99"),
+                anItem().priced("43.97"))));
         String grandTotal = "76.96";
 
         assertThat(dom(renderedView), hasUniqueSelector("#cart .calculations .total", withText(grandTotal)));
@@ -71,27 +66,17 @@ public class CartViewTest {
 
     @Test public void
     returnsToHomePageToContinueShopping() {
-        renderedView = renderCartViewUsing(aModelWithACartContainingItems());
+        renderedView = renderCartView().using(aModel().with(aCart().containing(anItem())));
         assertThat(dom(renderedView), hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
     }
 
     @Test public void
     checkingOutRendersPaymentForm() {
-        renderedView = renderCartViewUsing(aModelWithACartContainingItems());
+        renderedView = renderCartView().using(aModel().with(aCart().containing(anItem())));
         assertThat(dom(renderedView), hasUniqueSelector("a#checkout", withAttribute("href", checkoutPath())));
     }
 
-    private Map<String, Object> aModelWithACartContainingItems() {
-        return aModelWith(aCart().with(anItem()));
-    }
-
-    private Map<String, Object> aModelWith(Builder<?> builder) {
-        ModelMap model = new ModelMap();
-        model.addAttribute(builder.build());
-        return model;
-    }
-
-    private String renderCartViewUsing(Map<String, Object> model) {
-        return render(CART_VIEW).using(model);
+    private VelocityRendering renderCartView() {
+        return render(CART_VIEW);
     }
 }

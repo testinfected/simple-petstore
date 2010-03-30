@@ -1,4 +1,4 @@
-package test.support.com.pyxis.petstore.velocity;
+package test.support.com.pyxis.petstore.views;
 
 public final class PathFor {
 

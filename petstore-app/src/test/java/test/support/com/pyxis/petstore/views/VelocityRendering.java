@@ -1,4 +1,4 @@
-package test.support.com.pyxis.petstore.velocity;
+package test.support.com.pyxis.petstore.views;
 
 import com.pyxis.petstore.ExceptionImposter;
 import org.apache.velocity.app.VelocityEngine;
@@ -67,6 +67,10 @@ public class VelocityRendering {
 			throw new IllegalArgumentException("Invalid encoding: " + encoding);
 		this.encoding = encoding;
 	}
+
+    public String using(ModelBuilder modelBuilder) {
+        return using(modelBuilder.asMap());
+    }
 
 	public String using(Map<String, Object> model) {
         setupTools(model);

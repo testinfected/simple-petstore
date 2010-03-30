@@ -1,10 +1,7 @@
 package test.com.pyxis.petstore.view;
 
 import org.junit.Test;
-import org.springframework.ui.ModelMap;
-import test.support.com.pyxis.petstore.builders.Builder;
-
-import java.util.Map;
+import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import static com.pyxis.matchers.dom.DomMatchers.*;
 import static com.threelevers.css.DocumentBuilder.dom;
@@ -12,38 +9,32 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
-import static test.support.com.pyxis.petstore.velocity.PathFor.cartPath;
-import static test.support.com.pyxis.petstore.velocity.VelocityRendering.render;
+import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
+import static test.support.com.pyxis.petstore.views.PathFor.cartPath;
+import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class CartPartialTest {
 
-    String CART_LINK_FRAGMENT = "includes/_cart";
-    String renderedFragment;
+    String CART_PARTIAL = "includes/_cart";
+    String renderedPartial;
 
     @Test public void
     linkIsInactiveWhenCartIsEmpty() {
-        renderedFragment = renderCartPartialUsing(aModelWith(aCart()));
-        assertThat(dom(renderedFragment), hasNoSelector("a"));
-        assertThat(dom(renderedFragment), withText(containsString("Empty")));
+        renderedPartial = renderCartPartial().using(aModel().with(aCart()));
+        assertThat(dom(renderedPartial), hasNoSelector("a"));
+        assertThat(dom(renderedPartial), withText(containsString("Empty")));
     }
 
     @Test public void
     displaysTotalItemsInCartAndLinksToCart() throws Exception {
-        renderedFragment = renderCartPartialUsing(
-                aModelWith(aCart().with(anItem()).with(anItem())));
-        assertThat(dom(renderedFragment),
+        renderedPartial = renderCartPartial().using(aModel().with(aCart().containing(anItem(), anItem())));
+        assertThat(dom(renderedPartial),
                 hasUniqueSelector("a",
                         withAttribute("href", cartPath()),
                         withText(containsString("2 items"))));
     }
 
-    private Map<String, Object> aModelWith(Builder<?> builder) {
-        ModelMap model = new ModelMap();
-        model.addAttribute(builder.build());
-        return model;
-    }
-
-    private String renderCartPartialUsing(Map<String, Object> model) {
-        return render(CART_LINK_FRAGMENT).using(model);
+    private VelocityRendering renderCartPartial() {
+        return render(CART_PARTIAL);
     }
 }
