@@ -21,7 +21,7 @@
         <div id="shopping-cart">
             <!-- Spring stores proxied objects in the session with a "scopedTarget." prefix -->
             #set( $cart = $session.getAttribute('scopedTarget.cart') )
-        #parse("_cart.vm")
+            #parse("_cart.vm")
         </div>
     </div>
     <div id="content">
