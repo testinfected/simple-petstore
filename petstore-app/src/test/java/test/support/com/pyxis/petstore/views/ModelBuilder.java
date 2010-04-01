@@ -41,6 +41,14 @@ public class ModelBuilder {
         return this;
     }
 
+    public ModelBuilder and(Object attribute) {
+        return with(attribute);
+    }
+
+    public ModelBuilder and(String name, Object attribute) {
+        return with(name, attribute);
+    }
+
     public Map<String, Object> asMap() {
         return new ModelMap().addAllAttributes(attributes);
     }

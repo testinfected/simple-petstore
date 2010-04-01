@@ -31,14 +31,14 @@ public class CartItemTest {
         assertThat(cartItem.getTotalPrice(), equalTo(expectedPrice));
     }
 
-    private void increaseQuantityTo(int quantity) {
-        for (int i = cartItem.getQuantity(); i < quantity; i++) cartItem.incrementQuantity();
-    }
-
     @Test public void
     providesDetailsOnItem() {
         assertThat(cartItem.getItemUnitPrice(), equalTo(unitPrice));
         assertThat(cartItem.getItemDescription(), equalTo(itemDescription));
         assertThat(cartItem.getItemNumber(), equalTo(itemNumber));
+    }
+
+    private void increaseQuantityTo(int quantity) {
+        for (int i = cartItem.getQuantity(); i < quantity; i++) cartItem.incrementQuantity();
     }
 }

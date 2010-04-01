@@ -1,6 +1,7 @@
 package com.pyxis.petstore.controller;
 
 import com.pyxis.petstore.domain.Cart;
+import com.pyxis.petstore.domain.CreditCardType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -28,6 +29,11 @@ public class OrdersController {
     @ModelAttribute("cart") 
     public Cart getCart() {
         return cart;
+    }
+
+    @ModelAttribute("cardTypes")
+    public CreditCardType[] getCreditCardTypes() {
+        return CreditCardType.values();
     }
 
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)

@@ -36,6 +36,7 @@ public class PurchaseFeature {
         total = new BigDecimal("1248.00");
     }
 
+//    @Ignore("in development")
     @Test public void
     purchasesItemsUsingCreditCard() throws Exception {
         ProductsPage productsPage = homePage.searchFor("Labrador");
@@ -50,5 +51,8 @@ public class PurchaseFeature {
         
         OrderPage orderPage = cartPage.checkout();
         orderPage.showsTotalToPay(total);
+        orderPage.willBillTo("John", "Leclair", "jleclair@gmail.com");
+        orderPage.willPayUsingCreditCard("Visa", "9999 9999 9999 9999", "12/12");
+        orderPage.confirmOrder();
     }
 }

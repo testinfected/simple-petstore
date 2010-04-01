@@ -6,6 +6,7 @@
 - Vérifier les stocks disponibles avant ajout au panier
 - Traiter le cas d'une recherche d'article par numéro introuvable
 - Ajouter validation sur le numéro de produit (ABCD-123)
+- S'assurer que le nom de produit n'est pas vide
 - Ajouter validation sur le numéro de référence de l'article (12345678)
 - Introduire la notion de devise (Money)
 - Séquence bd pour les numéros d'articles

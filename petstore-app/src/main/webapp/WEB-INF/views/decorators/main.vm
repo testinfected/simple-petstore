@@ -8,33 +8,31 @@
     $head
 </head>
 <body>
-<div id="petstore">
-    <div id="header">
-        <a href="$base" id="homelink">Home</a>
+<div id="header">
+    <a href="$base" id="homelink">Home</a>
 
-        <div id="search-box">
-            #parse("_search.vm")
-        </div>
-        <div id="logout">
-            #parse("_logout.vm")
-        </div>
-        <div id="shopping-cart">
-            <!-- Spring stores proxied objects in the session with a "scopedTarget." prefix -->
-            #set( $cart = $session.getAttribute('scopedTarget.cart') )
-            #parse("_cart.vm")
-        </div>
+    <div id="search-box">
+        #parse("_search.vm")
     </div>
-    <div id="content">
-        $body
+    <div id="logout">
+        #parse("_logout.vm")
     </div>
-    <div id="footer">
-        <ul>
-            <li>iguana</li>
-            <li>dog</li>
-            <li>cat</li>
-            <li>bird</li>
-        </ul>
+    <div id="shopping-cart">
+        <!-- Spring stores proxied objects in the session with a "scopedTarget." prefix -->
+        #set( $cart = $session.getAttribute('scopedTarget.cart') )
+        #parse("_cart.vm")
     </div>
+</div>
+<div id="content">
+    $body
+</div>
+<div id="footer">
+    <ul>
+        <li>iguana</li>
+        <li>dog</li>
+        <li>cat</li>
+        <li>bird</li>
+    </ul>
 </div>
 </body>
 </html>

@@ -1,0 +1,65 @@
+<html>
+<head>
+    <title>PetStore - Checkout </title>
+</head>
+<body>
+<fieldset>
+    <legend>Billing Information</legend>
+    
+    <div id="summary">
+        <ol class="calculations">
+            <li>
+                <span class="label">Total: </span>
+                <span id="order-total" class="total">$cart.grandTotal</span>
+            </li>
+        </ol>
+    </div>
+
+    <form id="checkout" action="$base/orders" method="post">
+        <fieldset id="billing-address">
+            <ol>
+                <li>
+                    <label for="first-name">First name</label>
+                    <input id="first-name" name="firstName" type="text"/>
+                </li>
+                <li>
+                    <label for="last-name">Last name</label>
+                    <input id="last-name" name="lastName" type="text"/>
+                </li>
+                <li>
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="text"/>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset id="payment">
+            <ol>
+                <li>
+                    <label for="card-type">Card type</label>
+                    <select id="card-type" name="cardType">
+                        #foreach($cardType in $cardTypes)
+                            <option value="$cardType">$cardType.commonName</option>
+                        #end
+                    </select>
+                </li>
+                <li>
+                    <label for="card-number">Card number</label>
+                    <input id="card-number" name="cardNumber" type="text"/>
+                </li>
+                <li>
+                    <label for="expiry-date">Expiration date</label>
+                    <input id="expiry-date" name="expiryDate" type="text"/>
+                </li>
+            </ol>
+        </fieldset>
+        <fieldset>
+            <ol>
+                <li>
+                    <button id="submit" type="submit">Submit Order</button>
+                </li>
+            </ol>
+        </fieldset>
+    </form>
+</fieldset>
+</body>
+</html>

@@ -29,4 +29,8 @@ public final class PathFor {
     public static String checkoutPath() {
         return pathFor("/checkout");
     }
+
+    public static String ordersPath() {
+        return pathFor("/orders");
+    }
 }

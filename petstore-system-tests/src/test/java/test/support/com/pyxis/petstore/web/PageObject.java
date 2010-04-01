@@ -7,6 +7,9 @@ import org.openqa.selenium.lift.TestContext;
 import org.openqa.selenium.lift.WebDriverTestContext;
 import org.openqa.selenium.lift.find.Finder;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
+
+import java.util.Collection;
 
 import static org.jmock.Expectations.equal;
 import static org.openqa.selenium.lift.match.NumericalMatchers.exactly;
@@ -66,6 +69,26 @@ public abstract class PageObject {
     }
 
     /**
+     * Select an option from a selection list by displayed text
+     *
+     * @param visibleText  - the text of the option to select
+     * @param selectFinder - specification for the selection list element
+     */
+    protected void select(String visibleText, Finder<WebElement, WebDriver> selectFinder) {
+        Select select = new Select(findOneElementTo("select from", selectFinder));
+        select.selectByVisibleText(visibleText);
+    }
+
+    /**
+     * Syntactic sugar to use with {@link PageObject#select(String, Finder<WebElement, WebDriver>)},
+     * e.g. select("Cheese", from(selectionList()));
+     * The from() method simply returns its argument.
+     */
+    protected Finder<WebElement, WebDriver> from(Finder<WebElement, WebDriver> select) {
+        return select;
+    }
+
+    /**
      * Type characters into an element of the page, typically an input field
      *
      * @param text        - characters to type
@@ -111,5 +134,21 @@ public abstract class PageObject {
 
     protected void assertNotSelected(Finder<WebElement, WebDriver> finder) {
         assertPresenceOf(exactly(0), finder.with(selection()));
+    }
+
+    // Copied from WebDriverTextContext since method is private
+    private WebElement findOneElementTo(String action, Finder<WebElement, WebDriver> finder) {
+        Collection<WebElement> foundElements = finder.findFrom(webdriver);
+        if (foundElements.isEmpty()) {
+            failWith("could not find element to " + action);
+        } else if (foundElements.size() > 1) {
+            failWith("did not know what to " + action + " - ambiguous");
+        }
+
+        return foundElements.iterator().next();
+    }
+
+    private void failWith(String message) throws AssertionError {
+        throw new java.lang.AssertionError(message);
     }
 }
