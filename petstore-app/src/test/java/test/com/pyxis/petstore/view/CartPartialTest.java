@@ -15,7 +15,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class CartPartialTest {
 
-    String CART_PARTIAL = "includes/_cart";
+    String CART_PARTIAL = "decorators/_cart";
     String renderedPartial;
 
     @Test public void
