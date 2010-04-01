@@ -19,20 +19,21 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
-import static test.support.com.pyxis.petstore.views.PathFor.ordersPath;
+import static test.support.com.pyxis.petstore.views.PathFor.purchasesPath;
 import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
-public class NewOrderViewTest {
+public class NewPurchaseViewTest {
 
-    String NEW_ORDER_VIEW = "orders/new";
+    String NEW_ORDER_VIEW = "purchases/new";
     String renderedView;
     ModelBuilder model;
 
     @Before public void
     renderView() {
         model = aModel().
-                with(aCart().containing(anItem().priced("100.00"))).
+                with(anOrder().from(aCart().containing(anItem().priced("100.00")))).
                 and("cardTypes", CreditCardType.values());
         renderedView = renderNewOrderView().using(model);
     }
@@ -45,7 +46,7 @@ public class NewOrderViewTest {
     @Test public void
     displaysPurchaseForm() {
         assertThat(dom(renderedView), hasUniqueSelector("form#checkout",
-                withAttribute("action", ordersPath()),
+                withAttribute("action", purchasesPath()),
                 withAttribute("method", "post"),
                 withBillingInformation(),
                 withPaymentDetails(),

@@ -13,9 +13,9 @@ import static test.support.com.pyxis.petstore.web.find.ButtonFinder.button;
 import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.selector;
 import static test.support.com.pyxis.petstore.web.find.SelectFinder.selectionList;
 
-public class OrderPage extends PageObject {
+public class PurchasePage extends PageObject {
 
-    public OrderPage(WebDriver driver) {
+    public PurchasePage(WebDriver driver) {
         super(driver);
     }
 

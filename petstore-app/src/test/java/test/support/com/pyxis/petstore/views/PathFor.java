@@ -30,7 +30,7 @@ public final class PathFor {
         return pathFor("/checkout");
     }
 
-    public static String ordersPath() {
-        return pathFor("/orders");
+    public static String purchasesPath() {
+        return pathFor("/purchases");
     }
 }

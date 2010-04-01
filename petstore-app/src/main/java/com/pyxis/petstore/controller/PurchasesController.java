@@ -1,7 +1,9 @@
 package com.pyxis.petstore.controller;
 
 import com.pyxis.petstore.domain.Cart;
+import com.pyxis.petstore.domain.CheckoutAssistant;
 import com.pyxis.petstore.domain.CreditCardType;
+import com.pyxis.petstore.domain.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -9,14 +11,17 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class OrdersController {
+public class PurchasesController {
     private final Cart cart;
+    private final CheckoutAssistant checkoutAssistant;
 
     @Autowired
-    public OrdersController(Cart cart) {
+    public PurchasesController(Cart cart, CheckoutAssistant checkoutAssistant) {
         this.cart = cart;
+        this.checkoutAssistant = checkoutAssistant;
     }
 
     @InitBinder
@@ -26,19 +31,15 @@ public class OrdersController {
 //        binder.initDirectFieldAccess();
     }
 
-    @ModelAttribute("cart") 
-    public Cart getCart() {
-        return cart;
-    }
-
     @ModelAttribute("cardTypes")
     public CreditCardType[] getCreditCardTypes() {
         return CreditCardType.values();
     }
 
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
-    public String checkout() {
-        return "orders/new";
+    public ModelAndView checkout() {
+        Order order = checkoutAssistant.checkout(cart);
+        return new ModelAndView("purchases/new").addObject(order);
     }
 
     @RequestMapping(method = RequestMethod.POST)

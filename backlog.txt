@@ -1,17 +1,23 @@
-- Indiquer quand le panier d'achat est vide
-- Permettre de continuer le magasinage depuis le panier d'achat
-- Enlever un article du panier
-- Changer la quantité d'un article au panier
-- Afficher le nombre d'articles en stock par produit
-- Vérifier les stocks disponibles avant ajout au panier
+- Ne rien retourner quand on cherche rien
 - Traiter le cas d'une recherche d'article par numéro introuvable
+
+- Afficher le nombre d'articles en stock par produit
 - Ajouter validation sur le numéro de produit (ABCD-123)
 - S'assurer que le nom de produit n'est pas vide
 - Ajouter validation sur le numéro de référence de l'article (12345678)
 - Introduire la notion de devise (Money)
 - Séquence bd pour les numéros d'articles
-- Ne rien retourner quand on cherche rien
+
 - Consultation du catalogue
-- Support des profils utilisateurs avec information de paiement
+
+- Vider le panier d'achat
+- Indiquer quand le panier d'achat est vide
+- Changer la quantité d'un article au panier
+- Enlever un article du panier
+- Vérifier les stocks disponibles avant ajout au panier
 - Panier d'achat sauvegardé entre chaque visite
+
+- Support des profils utilisateurs avec information de paiement
+- Valider la date d'expiration
+- Entrer mois et année de la date d'expiration indépendamment 
 

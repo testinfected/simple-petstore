@@ -50,6 +50,8 @@
         <constructor-arg value="/attachments/products"/>
     </bean>
 
+    <bean class="com.pyxis.petstore.domain.Cashier"/>
+
     <bean id="cart" class="com.pyxis.petstore.domain.Cart" scope="session">
         <aop:scoped-proxy/>     
     </bean>

@@ -10,12 +10,12 @@
         <ol class="calculations">
             <li>
                 <span class="label">Total: </span>
-                <span id="order-total" class="total">$cart.grandTotal</span>
+                <span id="order-total" class="total">$order.totalPrice</span>
             </li>
         </ol>
     </div>
 
-    <form id="checkout" action="$base/orders" method="post">
+    <form id="checkout" action="$base/purchases" method="post">
         <fieldset id="billing-address">
             <ol>
                 <li>

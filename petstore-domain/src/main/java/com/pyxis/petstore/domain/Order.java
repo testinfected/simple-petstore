@@ -1,11 +1,28 @@
 package com.pyxis.petstore.domain;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Order {
+    private final List<LineItem> items = new ArrayList<LineItem>();
 
-    private String firstName;
+    public void addItemsFromCart(Cart cart) {
+        for (CartItem cartItem : cart.getItems()) {
+            items.add(LineItem.from(cartItem));
+        }
+    }
 
-    private String lastName;
+    public BigDecimal getTotalPrice() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (LineItem lineItem : items) {
+            total = total.add(lineItem.getTotalPrice());
+        }
+        return total;
+    }
 
-    private String email;
-
+    public List<LineItem> getLineItems() {
+        return Collections.unmodifiableList(items);
+    }
 }

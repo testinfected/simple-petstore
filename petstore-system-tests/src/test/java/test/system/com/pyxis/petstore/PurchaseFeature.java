@@ -49,10 +49,10 @@ public class PurchaseFeature {
         itemsPage = productsPage.browseItemsOf("Labrador Retriever");
         cartPage = itemsPage.addToCart("22222222");
         
-        OrderPage orderPage = cartPage.checkout();
-        orderPage.showsTotalToPay(total);
-        orderPage.willBillTo("John", "Leclair", "jleclair@gmail.com");
-        orderPage.willPayUsingCreditCard("Visa", "9999 9999 9999 9999", "12/12");
-        orderPage.confirmOrder();
+        PurchasePage purchasePage = cartPage.checkout();
+        purchasePage.showsTotalToPay(total);
+        purchasePage.willBillTo("John", "Leclair", "jleclair@gmail.com");
+        purchasePage.willPayUsingCreditCard("Visa", "9999 9999 9999 9999", "12/12");
+        purchasePage.confirmOrder();
     }
 }

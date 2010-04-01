@@ -4,11 +4,16 @@ import com.pyxis.petstore.domain.Cart;
 import com.pyxis.petstore.domain.Item;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CartBuilder implements Builder<Cart> {
 
     private List<Item> items = new ArrayList<Item>();
+
+    public static CartBuilder anEmptyCart() {
+        return aCart();
+    }
 
     public static CartBuilder aCart() {
         return new CartBuilder();
@@ -22,9 +27,7 @@ public class CartBuilder implements Builder<Cart> {
     }
 
     public CartBuilder containing(Item... someItems) {
-        for (Item anItem : someItems) {
-            items.add(anItem);
-        }
+        items.addAll(Arrays.asList(someItems));
         return this;
     }
 
