@@ -1,4 +1,4 @@
-<decorators defaultdir="/WEB-INF/velocity/decorators">
+<decorators defaultdir="/WEB-INF/views/decorators">
 	<decorator name="main" page="main.vm">
           <pattern>/*</pattern>
     </decorator>

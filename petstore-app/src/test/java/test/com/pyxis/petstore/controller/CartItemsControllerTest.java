@@ -35,7 +35,7 @@ public class CartItemsControllerTest {
         }});
 
         String view = controller.create(itemNumber);
-        assertThat(view, equalTo("redirect:cart"));
+        assertThat(view, equalTo("redirect:/cart"));
     }
 
     @Test public void

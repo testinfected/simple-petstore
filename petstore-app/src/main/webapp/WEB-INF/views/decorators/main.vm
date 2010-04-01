@@ -13,15 +13,15 @@
         <a href="$base" id="homelink">Home</a>
 
         <div id="search-box">
-            #parse("/WEB-INF/velocity/includes/_search.vm")
+            #parse("/WEB-INF/views/includes/_search.vm")
         </div>
         <div id="logout">
-            #parse("/WEB-INF/velocity/includes/_logout.vm")
+            #parse("/WEB-INF/views/includes/_logout.vm")
         </div>
         <div id="shopping-cart">
             <!-- Spring stores proxied objects in the session with a "scopedTarget." prefix -->
             #set( $cart = $session.getAttribute('scopedTarget.cart') )
-        #parse("/WEB-INF/velocity/includes/_cart.vm")
+        #parse("/WEB-INF/views/includes/_cart.vm")
         </div>
     </div>
     <div id="content">

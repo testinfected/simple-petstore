@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>PetStore - Products</title>
+</head>
+<body>
+<fieldset>
+<legend>
+    #if (!$productList)
+        <span id="no-match">No product matching "$keyword" was found</span>
+    #else
+        Found <span id="match-count">$productList.size()</span> $display.plural($productList.size(), "result") for
+        "$keyword"
+    </legend>
+        <table id="products">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+                #foreach ($product in $productList)
+                    #if( $count % 2 == 0 )
+                        #set( $rowStyle = 'evenrow' )
+                    #else
+                        #set( $rowStyle = 'oddrow' )
+                    #end
+                <tr class="product $rowStyle">
+                    <td class="photo"><a href="$base/products/$product.number/items"><img
+                            src="$base$attachments.getAttachmentUrl($product)"></a></td>
+                    <td class="name"><a href="$base/products/$product.number/items">$product.name</a></td>
+                    <td>$!product.description</td>
+                </tr>
+                #end
+            </tbody>
+        </table>
+    </fieldset>
+    #end
+</body>
+</html>

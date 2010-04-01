@@ -12,6 +12,6 @@ public class SessionController {
     @RequestMapping(value = "/logout", method = RequestMethod.DELETE)
     public String delete(HttpSession session) {
         session.invalidate();
-        return "redirect:home";
+        return "redirect:/";
     }
 }

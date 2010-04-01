@@ -31,6 +31,6 @@ public class CartItemsController {
     public String create(@RequestParam("item_number") String number) {
         Item item = itemInventory.find(new ItemNumber(number));
         basket.add(item);
-        return "redirect:cart";
+        return "redirect:/cart";
     }
 }
