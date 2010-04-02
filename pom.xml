@@ -290,6 +290,9 @@
 
     <properties>
         <app.context>petstore</app.context>
+        <jdbc.username>petstore</jdbc.username>
+        <jdbc.password>petstore</jdbc.password>
+        <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
     </properties>
 
     <profiles>
@@ -305,13 +308,27 @@
             <properties>
                 <server.port>8080</server.port>
                 <log.file>development</log.file>
+                <jdbc.url>jdbc:mysql://localhost:3306/petstore_dev</jdbc.url>
             </properties>
         </profile>
+        <profile>
+            <id>test</id>
+            <activation>
+                <property>
+                    <name>env.type</name>
+                    <value>test</value>
+                </property>
+            </activation>
+            <properties>
+                <jdbc.url>jdbc:mysql://localhost:3306/petstore_test</jdbc.url>
+            </properties>
+        </profile>        
         <profile>
             <id>system</id>
             <properties>
                 <server.port>8280</server.port>
                 <log.file>system</log.file>
+                <jdbc.url>jdbc:mysql://localhost:3306/petstore</jdbc.url>
             </properties>
             <activation>
                 <property>

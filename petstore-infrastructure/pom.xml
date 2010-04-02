@@ -136,12 +136,6 @@
         </testResources>
     </build>
 
-    <properties>
-        <jdbc.username>petstore</jdbc.username>
-        <jdbc.password>petstore</jdbc.password>
-        <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
-    </properties>
-
     <profiles>
         <profile>
             <id>development</id>
@@ -152,9 +146,6 @@
                     <value>dev</value>
                 </property>
             </activation>
-            <properties>
-                <jdbc.url>jdbc:mysql://localhost:3306/petstore_dev</jdbc.url>
-            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -201,7 +192,7 @@
                         <version>0.9.9-m2</version>
                         <!-- use custom naming strategy to fit hibernate defaults -->
                         <configuration>
-                            <url>jdbc:mysql://localhost:3306/petstore_test</url>
+                            <url>${jdbc.url}</url>
                             <username>${jdbc.username}</username>
                             <password>${jdbc.password}</password>
                         </configuration>
@@ -224,9 +215,6 @@
                     <value>system</value>
                 </property>
             </activation>
-            <properties>
-                <jdbc.url>jdbc:mysql://localhost:3306/petstore</jdbc.url>
-            </properties>
             <build>
                 <plugins>
                     <plugin>
