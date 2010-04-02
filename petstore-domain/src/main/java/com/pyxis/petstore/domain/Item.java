@@ -7,8 +7,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@AccessType("field") @Table(name = "items")
-public @Entity class Item {
+@Entity @AccessType("field") @Table(name = "items")
+public class Item {
 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private @Id Long id;

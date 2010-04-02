@@ -13,7 +13,8 @@ import java.util.List;
 
 import static org.hibernate.criterion.Restrictions.eq;
 
-public @Repository class PersistentItemInventory implements ItemInventory {
+@Repository 
+public class PersistentItemInventory implements ItemInventory {
 
 	private final SessionFactory sessionFactory;
 

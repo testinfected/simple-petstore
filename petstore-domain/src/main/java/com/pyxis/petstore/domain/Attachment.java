@@ -2,7 +2,8 @@ package com.pyxis.petstore.domain;
 
 import javax.persistence.Embeddable;
 
-public @Embeddable class Attachment {
+@Embeddable
+public class Attachment {
 
     private String fileName;
 

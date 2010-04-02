@@ -6,8 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 
-@AccessType("field") @Table(name = "products")
-public @Entity class Product {
+@Entity @AccessType("field") @Table(name = "products")
+public class Product {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private @Id Long id;

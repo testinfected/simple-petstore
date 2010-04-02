@@ -3,8 +3,8 @@ package com.pyxis.petstore.domain;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
-
-public @Embeddable class ItemNumber {
+@Embeddable
+public class ItemNumber {
 
     private @NotNull String number;
 
