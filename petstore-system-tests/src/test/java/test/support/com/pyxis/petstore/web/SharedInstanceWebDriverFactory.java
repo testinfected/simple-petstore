@@ -1,24 +1,14 @@
 package test.support.com.pyxis.petstore.web;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class SharedInstanceWebDriverFactory implements WebDriverFactory {
-
-    private static WebDriverFactory factory;
+public class SharedInstanceWebDriverFactory extends WebDriverFactory {
 
     private final BoostPage boostPage;
     private final WebDriver webdriver;
 
-    public static WebDriverFactory getInstance() {
-        if (factory == null) {
-            factory = new SharedInstanceWebDriverFactory();
-        }
-        return factory;
-    }
-
     public SharedInstanceWebDriverFactory() {
-        this.webdriver = new FirefoxDriver();
+        this.webdriver = newWebDriverInstance();
         this.boostPage = new BoostPage(webdriver);
         init();
     }
@@ -28,7 +18,7 @@ public class SharedInstanceWebDriverFactory implements WebDriverFactory {
         registerHookToQuitWebDriverOnShutdown();
     }
 
-    public WebDriver newWebDriver() {
+    public WebDriver createWebDriver() {
         boostPage.switchTo();
         boostPage.openNewWindow();
         return WebDriverWindow.newInstance(webdriver);

@@ -5,10 +5,11 @@ import test.system.com.pyxis.petstore.page.HomePage;
 
 public class PetStoreDriver {
 
+    private final WebDriverFactory webDriverFactory = WebDriverFactory.getInstance();
     private final WebDriver webdriver;
 
     public PetStoreDriver() {
-        webdriver = SharedInstanceWebDriverFactory.getInstance().newWebDriver();
+        webdriver = webDriverFactory.createWebDriver();
     }
 
     public HomePage start() throws Exception {
