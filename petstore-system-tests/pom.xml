@@ -94,18 +94,11 @@
     </dependencies>
 
     <properties>
-        <webdriver.factory.class>test.support.com.pyxis.petstore.web.SharedInstanceWebDriverFactory</webdriver.factory.class>
+        <webdriver.factory.class>test.support.com.pyxis.petstore.web.SharedInstanceWebDriverFactory
+        </webdriver.factory.class>
     </properties>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.5</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -135,9 +128,10 @@
                 </executions>
             </plugin>
 
+            <!-- *** Failsafe plugin: run integration tests *** -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
+                <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
                     <includes>
@@ -152,9 +146,9 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>integration-test</phase>
                         <goals>
-                            <goal>test</goal>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -166,6 +160,7 @@
                 <configuration>
                     <wait>false</wait>
                     <container>
+                        <log>${project.build.directory}/cargo.log</log>
                         <containerId>jetty6x</containerId>
                         <zipUrlInstaller>
                             <url>http://dist.codehaus.org/jetty/jetty-6.1.21/jetty-6.1.21.zip</url>
