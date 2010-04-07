@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 @Embeddable
 public class ItemNumber {
 
-    private @NotNull String number;
+    @NotNull private String number;
 
     ItemNumber() {}
 
