@@ -12,14 +12,14 @@ public abstract class WebDriverFactory {
 
     public static WebDriverFactory getInstance() {
         if (factory == null) {
-            factory = instanciateWebDriverFactory();
+            factory = instantiateWebDriverFactory();
         }
         return factory;
     }
 
-    private static WebDriverFactory instanciateWebDriverFactory() {
+    private static WebDriverFactory instantiateWebDriverFactory() {
         try {
-            return webDriverFactoryClass().newInstance();
+            return WebDriverFactory.class.cast(webDriverFactoryClass().newInstance());
         } catch (Exception e) {
             throw ExceptionImposter.imposterize(e);
         }
@@ -27,9 +27,8 @@ public abstract class WebDriverFactory {
 
     public abstract WebDriver createWebDriver();
 
-    @SuppressWarnings("unchecked")
-    private static Class<WebDriverFactory> webDriverFactoryClass() throws ClassNotFoundException {
-        return (Class<WebDriverFactory>) Class.forName(getWebDriverFactoryClassName());
+    private static Class<?> webDriverFactoryClass() throws ClassNotFoundException {
+        return Class.forName(getWebDriverFactoryClassName());
     }
 
     private static String getWebDriverFactoryClassName() {
@@ -38,15 +37,14 @@ public abstract class WebDriverFactory {
 
     protected WebDriver newWebDriverInstance() {
         try {
-            return webDriverClass().newInstance();
+            return WebDriver.class.cast(webDriverClass().newInstance());
         } catch (Exception e) {
             throw ExceptionImposter.imposterize(e);
         }
     }
 
-    @SuppressWarnings("unchecked")
-    protected Class<WebDriver> webDriverClass() throws ClassNotFoundException {
-        return (Class<WebDriver>) Class.forName(getWebDriverClassName());
+    protected Class<?> webDriverClass() throws ClassNotFoundException {
+        return Class.forName(getWebDriverClassName());
     }
 
     protected String getWebDriverClassName() {

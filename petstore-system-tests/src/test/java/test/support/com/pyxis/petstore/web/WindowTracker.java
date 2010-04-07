@@ -4,25 +4,37 @@ import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
-public class WebDriverWindow implements InvocationHandler {
+public class WindowTracker {
 
+    private final WebDriver proxy;
     private final WebDriver webdriver;
     private final String windowHandle;
 
-    public static WebDriver newInstance(WebDriver webdriver) {
-        return (WebDriver) java.lang.reflect.Proxy.newProxyInstance(
-                webdriver.getClass().getClassLoader(),
-                webdriver.getClass().getInterfaces(),
-                new WebDriverWindow(webdriver));
+    public static WindowTracker tracking(WebDriver webdriver) {
+        return new WindowTracker(webdriver);
     }
 
-    private WebDriverWindow(WebDriver webdriver) {
+    public WindowTracker(WebDriver webdriver) {
+        Class<? extends WebDriver> type = webdriver.getClass();
+        proxy = WebDriver.class.cast(Proxy.newProxyInstance(
+                type.getClassLoader(),
+                type.getInterfaces(),
+                new InvocationHandler() {
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        return forward(method, args);
+                    }
+                }));
         this.webdriver = webdriver;
         this.windowHandle = webdriver.getWindowHandle();
     }
 
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public WebDriver inWindow() {
+        return proxy;
+    }
+
+    public Object forward(Method method, Object[] args) throws Throwable {
         if (closeCalled(method) || quitClosed(method)) {
             closeWindow();
             return null;

@@ -4,35 +4,34 @@ import org.openqa.selenium.WebDriver;
 
 public class SharedInstanceWebDriverFactory extends WebDriverFactory {
 
-    private final BoostPage boostPage;
-    private final WebDriver webdriver;
+    private WebDriver sharedWebDriver;
+    private ControlPage controlPage;
 
     public SharedInstanceWebDriverFactory() {
-        this.webdriver = newWebDriverInstance();
-        this.boostPage = new BoostPage(webdriver);
-        init();
+        takeControlOf(newWebDriverInstance());
+        quitWebDriverOnShutdown();
     }
 
-    private void init() {
-        boostPage.load();
-        registerHookToQuitWebDriverOnShutdown();
+    private void takeControlOf(WebDriver webDriver) {
+        sharedWebDriver = webDriver;
+        controlPage = new ControlPage(sharedWebDriver);
+        controlPage.load();
     }
 
     public WebDriver createWebDriver() {
-        boostPage.switchTo();
-        boostPage.openNewWindow();
-        return WebDriverWindow.newInstance(webdriver);
+        controlPage.newTestWindow();
+        return WindowTracker.tracking(sharedWebDriver).inWindow();
     }
 
-    private void registerHookToQuitWebDriverOnShutdown() {
+    public void dispose() {
+        sharedWebDriver.quit();
+    }
+
+    private void quitWebDriverOnShutdown() {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             public void run() {
                 dispose();
             }
         }));
-    }
-
-    public void dispose() {
-        webdriver.quit();
     }
 }
