@@ -13,6 +13,8 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private @Id Long id;
 
+    // todo unique is only used to generate DDL, so remove
+    // todo number is fine as name, remove attribute override
     @Embedded @AttributeOverrides(
         @AttributeOverride(name = "number", column = @Column(name = "reference_number", unique = true))
     )
