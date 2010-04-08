@@ -1,6 +1,6 @@
 package test.system.com.pyxis.petstore;
 
-import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.product.Product;
 import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;

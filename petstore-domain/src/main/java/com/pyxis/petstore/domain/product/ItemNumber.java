@@ -1,4 +1,4 @@
-package com.pyxis.petstore.domain;
+package com.pyxis.petstore.domain.product;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;

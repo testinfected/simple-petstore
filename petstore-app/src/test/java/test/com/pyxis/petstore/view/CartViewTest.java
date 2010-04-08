@@ -1,6 +1,6 @@
 package test.com.pyxis.petstore.view;
 
-import com.pyxis.petstore.domain.Item;
+import com.pyxis.petstore.domain.product.Item;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.ItemBuilder;
 import test.support.com.pyxis.petstore.views.VelocityRendering;

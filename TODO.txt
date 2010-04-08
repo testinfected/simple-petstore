@@ -1,4 +1,3 @@
-- découper en sous-domaines
 - add an id attribute on product table rows in products page
 - uniformiser les ids html
 - se fabriquer un tool velocity pour construire les urls dans les pages (voir classe PathFor)

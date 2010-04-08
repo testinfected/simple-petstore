@@ -1,7 +1,7 @@
 package com.pyxis.petstore.service;
 
-import com.pyxis.petstore.domain.AttachmentStorage;
-import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.product.AttachmentStorage;
+import com.pyxis.petstore.domain.product.Product;
 import org.springframework.stereotype.Service;
 
 @Service

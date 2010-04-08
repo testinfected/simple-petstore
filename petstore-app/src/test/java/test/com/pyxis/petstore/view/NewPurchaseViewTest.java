@@ -1,6 +1,6 @@
 package test.com.pyxis.petstore.view;
 
-import com.pyxis.petstore.domain.CreditCard;
+import com.pyxis.petstore.domain.billing.CreditCard;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Ignore;

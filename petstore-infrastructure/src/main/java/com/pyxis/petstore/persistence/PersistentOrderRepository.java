@@ -1,7 +1,7 @@
 package com.pyxis.petstore.persistence;
 
-import com.pyxis.petstore.domain.Order;
-import com.pyxis.petstore.domain.OrderRepository;
+import com.pyxis.petstore.domain.order.Order;
+import com.pyxis.petstore.domain.order.OrderRepository;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

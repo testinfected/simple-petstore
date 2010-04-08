@@ -1,5 +1,7 @@
-package com.pyxis.petstore.domain;
+package com.pyxis.petstore.domain.order;
 
+import com.pyxis.petstore.domain.billing.Account;
+import com.pyxis.petstore.domain.billing.CreditCard;
 import org.hibernate.annotations.AccessType;
 
 import javax.persistence.*;

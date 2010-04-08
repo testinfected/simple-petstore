@@ -1,7 +1,7 @@
 package com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.ItemInventory;
+import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.product.ItemInventory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

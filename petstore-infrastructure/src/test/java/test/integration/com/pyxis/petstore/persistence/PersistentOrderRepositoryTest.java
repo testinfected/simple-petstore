@@ -1,9 +1,9 @@
 package test.integration.com.pyxis.petstore.persistence;
 
-import com.pyxis.petstore.domain.CartItem;
-import com.pyxis.petstore.domain.LineItem;
-import com.pyxis.petstore.domain.Order;
-import com.pyxis.petstore.domain.OrderRepository;
+import com.pyxis.petstore.domain.order.CartItem;
+import com.pyxis.petstore.domain.order.LineItem;
+import com.pyxis.petstore.domain.order.Order;
+import com.pyxis.petstore.domain.order.OrderRepository;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;

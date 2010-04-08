@@ -1,9 +1,9 @@
 package test.integration.com.pyxis.petstore.persistence;
 
-import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.ItemInventory;
-import com.pyxis.petstore.domain.ItemNumber;
-import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.product.ItemInventory;
+import com.pyxis.petstore.domain.product.ItemNumber;
+import com.pyxis.petstore.domain.product.Product;
 import org.hamcrest.Matcher;
 import org.hibernate.SessionFactory;
 import org.junit.After;

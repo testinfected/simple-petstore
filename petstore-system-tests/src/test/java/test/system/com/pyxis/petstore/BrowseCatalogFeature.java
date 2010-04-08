@@ -1,7 +1,7 @@
 package test.system.com.pyxis.petstore;
 
-import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.product.Product;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

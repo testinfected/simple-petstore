@@ -1,4 +1,6 @@
-package com.pyxis.petstore.domain;
+package com.pyxis.petstore.domain.order;
+
+import com.pyxis.petstore.domain.product.Item;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

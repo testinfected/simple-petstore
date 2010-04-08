@@ -1,8 +1,8 @@
 package com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.domain.AttachmentStorage;
-import com.pyxis.petstore.domain.Product;
-import com.pyxis.petstore.domain.ProductCatalog;
+import com.pyxis.petstore.domain.product.AttachmentStorage;
+import com.pyxis.petstore.domain.product.Product;
+import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

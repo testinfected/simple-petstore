@@ -1,9 +1,9 @@
 package test.support.com.pyxis.petstore.builders;
 
-import com.pyxis.petstore.domain.Account;
-import com.pyxis.petstore.domain.CreditCard;
-import com.pyxis.petstore.domain.Order;
-import com.pyxis.petstore.domain.OrderNumber;
+import com.pyxis.petstore.domain.billing.Account;
+import com.pyxis.petstore.domain.billing.CreditCard;
+import com.pyxis.petstore.domain.order.Order;
+import com.pyxis.petstore.domain.order.OrderNumber;
 
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.OrderNumberFaker.aNumber;

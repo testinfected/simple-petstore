@@ -1,6 +1,6 @@
-package test.com.pyxis.petstore.domain;
+package test.com.pyxis.petstore.domain.order;
 
-import com.pyxis.petstore.domain.OrderNumber;
+import com.pyxis.petstore.domain.order.OrderNumber;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 

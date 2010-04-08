@@ -1,10 +1,10 @@
 package test.com.pyxis.petstore.controller;
 
 import com.pyxis.petstore.controller.CartItemsController;
-import com.pyxis.petstore.domain.Basket;
-import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.ItemInventory;
-import com.pyxis.petstore.domain.ItemNumber;
+import com.pyxis.petstore.domain.order.Basket;
+import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.product.ItemInventory;
+import com.pyxis.petstore.domain.product.ItemNumber;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

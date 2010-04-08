@@ -1,6 +1,6 @@
-package test.com.pyxis.petstore.domain;
+package test.com.pyxis.petstore.domain.product;
 
-import com.pyxis.petstore.domain.ItemNumber;
+import com.pyxis.petstore.domain.product.ItemNumber;
 import org.junit.Test;
 
 import static com.pyxis.matchers.validation.ViolationMatchers.*;

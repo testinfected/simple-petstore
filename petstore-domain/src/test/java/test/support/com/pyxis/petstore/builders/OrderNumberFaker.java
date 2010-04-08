@@ -1,7 +1,7 @@
 package test.support.com.pyxis.petstore.builders;
 
-import com.pyxis.petstore.domain.OrderNumber;
-import com.pyxis.petstore.domain.OrderNumberSequence;
+import com.pyxis.petstore.domain.order.OrderNumber;
+import com.pyxis.petstore.domain.order.OrderNumberSequence;
 
 public class OrderNumberFaker implements OrderNumberSequence {
 

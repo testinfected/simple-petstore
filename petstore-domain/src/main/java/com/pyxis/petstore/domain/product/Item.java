@@ -1,4 +1,4 @@
-package com.pyxis.petstore.domain;
+package com.pyxis.petstore.domain.product;
 
 import org.hibernate.annotations.AccessType;
 

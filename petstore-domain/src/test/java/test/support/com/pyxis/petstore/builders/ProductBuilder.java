@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.builders;
 
-import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.product.Product;
 
 import static test.support.com.pyxis.petstore.builders.ProductNumberFaker.aProductNumber;
 

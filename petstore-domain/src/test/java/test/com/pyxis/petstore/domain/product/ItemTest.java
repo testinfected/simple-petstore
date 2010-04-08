@@ -1,7 +1,7 @@
-package test.com.pyxis.petstore.domain;
+package test.com.pyxis.petstore.domain.product;
 
-import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.product.Product;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -27,13 +27,13 @@ public class ItemTest {
     @Test public void
     isInvalidWithoutANumber() {
         Item anItemWithoutANumber = anItem().with(null).build();
-        assertThat(validationOf(anItemWithoutANumber), violates(on("referenceNumber"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat(validationOf(anItemWithoutANumber), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutAValidNumber() {
         Item anItemWithAnInvalidNumber = anItem().withNumber(null).build();
-        assertThat(validationOf(anItemWithAnInvalidNumber), violates(on("referenceNumber.number"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat(validationOf(anItemWithAnInvalidNumber), violates(on("number.number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void

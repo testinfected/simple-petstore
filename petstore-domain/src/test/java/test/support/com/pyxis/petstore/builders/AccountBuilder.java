@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.builders;
 
-import com.pyxis.petstore.domain.Account;
+import com.pyxis.petstore.domain.billing.Account;
 
 public class AccountBuilder implements Builder<Account> {
 

@@ -1,7 +1,7 @@
 package test.com.pyxis.petstore.view;
 
-import com.pyxis.petstore.domain.AttachmentStorage;
-import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.product.AttachmentStorage;
+import com.pyxis.petstore.domain.product.Product;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;

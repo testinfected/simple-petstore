@@ -9,9 +9,9 @@
         <property name="format_sql">true</property>
 
         <!--<mapping package="com.pyxis.petstore.domain"/>-->
-        <mapping class="com.pyxis.petstore.domain.Product"/>
-        <mapping class="com.pyxis.petstore.domain.Item"/>
-        <mapping class="com.pyxis.petstore.domain.LineItem"/>
-        <mapping class="com.pyxis.petstore.domain.Order"/>
+        <mapping class="com.pyxis.petstore.domain.product.Product"/>
+        <mapping class="com.pyxis.petstore.domain.product.Item"/>
+        <mapping class="com.pyxis.petstore.domain.order.LineItem"/>
+        <mapping class="com.pyxis.petstore.domain.order.Order"/>
     </session-factory>
 </hibernate-configuration>

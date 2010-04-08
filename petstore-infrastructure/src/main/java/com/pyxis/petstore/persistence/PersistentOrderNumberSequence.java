@@ -1,8 +1,8 @@
 package com.pyxis.petstore.persistence;
 
 import com.pyxis.petstore.Factory;
-import com.pyxis.petstore.domain.OrderNumber;
-import com.pyxis.petstore.domain.OrderNumberSequence;
+import com.pyxis.petstore.domain.order.OrderNumber;
+import com.pyxis.petstore.domain.order.OrderNumberSequence;
 import org.hibernate.Hibernate;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;

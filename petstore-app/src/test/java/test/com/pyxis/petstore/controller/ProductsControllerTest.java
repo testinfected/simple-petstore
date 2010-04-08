@@ -1,8 +1,8 @@
 package test.com.pyxis.petstore.controller;
 
 import com.pyxis.petstore.controller.ProductsController;
-import com.pyxis.petstore.domain.AttachmentStorage;
-import com.pyxis.petstore.domain.ProductCatalog;
+import com.pyxis.petstore.domain.product.AttachmentStorage;
+import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

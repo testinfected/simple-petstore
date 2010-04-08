@@ -1,8 +1,8 @@
 package test.support.com.pyxis.petstore.builders;
 
-import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.ItemNumber;
-import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.product.ItemNumber;
+import com.pyxis.petstore.domain.product.Product;
 
 import java.math.BigDecimal;
 

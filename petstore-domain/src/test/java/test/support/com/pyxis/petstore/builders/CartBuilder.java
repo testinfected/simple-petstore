@@ -1,7 +1,7 @@
 package test.support.com.pyxis.petstore.builders;
 
-import com.pyxis.petstore.domain.Cart;
-import com.pyxis.petstore.domain.Item;
+import com.pyxis.petstore.domain.order.Cart;
+import com.pyxis.petstore.domain.product.Item;
 
 import java.util.ArrayList;
 import java.util.Arrays;

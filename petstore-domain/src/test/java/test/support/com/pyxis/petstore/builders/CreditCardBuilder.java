@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.builders;
 
-import com.pyxis.petstore.domain.CreditCard;
+import com.pyxis.petstore.domain.billing.CreditCard;
 
 public class CreditCardBuilder implements Builder<CreditCard> {
 

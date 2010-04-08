@@ -1,6 +1,10 @@
-package test.com.pyxis.petstore.domain;
+package test.com.pyxis.petstore.domain.order;
 
-import com.pyxis.petstore.domain.*;
+import com.pyxis.petstore.domain.order.Cart;
+import com.pyxis.petstore.domain.order.CartItem;
+import com.pyxis.petstore.domain.order.LineItem;
+import com.pyxis.petstore.domain.order.Order;
+import com.pyxis.petstore.domain.product.Item;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -9,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.pyxis.petstore.domain.CreditCard.visa;
+import static com.pyxis.petstore.domain.billing.CreditCard.visa;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;

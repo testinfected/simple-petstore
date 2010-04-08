@@ -1,5 +1,7 @@
-package com.pyxis.petstore.domain;
+package com.pyxis.petstore.domain.order;
 
+import com.pyxis.petstore.domain.billing.Account;
+import com.pyxis.petstore.domain.billing.CreditCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

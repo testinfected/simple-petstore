@@ -1,7 +1,7 @@
-package test.com.pyxis.petstore.domain;
+package test.com.pyxis.petstore.domain.order;
 
-import com.pyxis.petstore.domain.CartItem;
-import com.pyxis.petstore.domain.Item;
+import com.pyxis.petstore.domain.order.CartItem;
+import com.pyxis.petstore.domain.product.Item;
 import org.junit.Test;
 
 import java.math.BigDecimal;

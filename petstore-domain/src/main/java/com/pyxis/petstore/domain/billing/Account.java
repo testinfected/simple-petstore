@@ -1,4 +1,4 @@
-package com.pyxis.petstore.domain;
+package com.pyxis.petstore.domain.billing;
 
 import javax.persistence.Embeddable;
 

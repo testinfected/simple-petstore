@@ -1,7 +1,7 @@
 package test.support.com.pyxis.petstore.builders;
 
-import com.pyxis.petstore.domain.ItemNumber;
-import com.pyxis.petstore.domain.ItemNumberSequence;
+import com.pyxis.petstore.domain.product.ItemNumber;
+import com.pyxis.petstore.domain.product.ItemNumberSequence;
 
 public class ItemNumberFaker implements ItemNumberSequence {
 

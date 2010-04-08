@@ -1,6 +1,10 @@
 package com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.domain.*;
+import com.pyxis.petstore.domain.billing.CreditCard;
+import com.pyxis.petstore.domain.order.Cart;
+import com.pyxis.petstore.domain.order.CheckoutAssistant;
+import com.pyxis.petstore.domain.order.Order;
+import com.pyxis.petstore.domain.order.PaymentCollector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;

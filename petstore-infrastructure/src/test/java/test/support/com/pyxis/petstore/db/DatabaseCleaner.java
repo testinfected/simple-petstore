@@ -1,9 +1,9 @@
 package test.support.com.pyxis.petstore.db;
 
-import com.pyxis.petstore.domain.Item;
-import com.pyxis.petstore.domain.LineItem;
-import com.pyxis.petstore.domain.Order;
-import com.pyxis.petstore.domain.Product;
+import com.pyxis.petstore.domain.order.LineItem;
+import com.pyxis.petstore.domain.order.Order;
+import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.product.Product;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

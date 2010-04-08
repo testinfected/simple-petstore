@@ -1,7 +1,7 @@
 package com.pyxis.petstore.persistence;
 
-import com.pyxis.petstore.domain.Product;
-import com.pyxis.petstore.domain.ProductCatalog;
+import com.pyxis.petstore.domain.product.Product;
+import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;

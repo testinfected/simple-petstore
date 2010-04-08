@@ -2,7 +2,12 @@ package test.com.pyxis.petstore.controller;
 
 import com.pyxis.petstore.controller.PaymentDetails;
 import com.pyxis.petstore.controller.PurchasesController;
-import com.pyxis.petstore.domain.*;
+import com.pyxis.petstore.domain.billing.Account;
+import com.pyxis.petstore.domain.billing.CreditCard;
+import com.pyxis.petstore.domain.order.Cart;
+import com.pyxis.petstore.domain.order.CheckoutAssistant;
+import com.pyxis.petstore.domain.order.Order;
+import com.pyxis.petstore.domain.order.PaymentCollector;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;

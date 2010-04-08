@@ -1,7 +1,7 @@
 package test.integration.com.pyxis.petstore.persistence;
 
-import com.pyxis.petstore.domain.OrderNumber;
-import com.pyxis.petstore.domain.OrderNumberSequence;
+import com.pyxis.petstore.domain.order.OrderNumber;
+import com.pyxis.petstore.domain.order.OrderNumberSequence;
 import org.hamcrest.Matcher;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;

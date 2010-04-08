@@ -1,7 +1,7 @@
 package com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.domain.Account;
-import com.pyxis.petstore.domain.CreditCard;
+import com.pyxis.petstore.domain.billing.Account;
+import com.pyxis.petstore.domain.billing.CreditCard;
 
 import javax.validation.Valid;
 
