@@ -66,11 +66,11 @@ public class Database {
         }
     }
 
-    public void assertCanBeReloadedWithSameState(final Object entity) throws Exception {
+    public void assertCanBeReloadedWithSameStateAs(final Object original) throws Exception {
         perform(new UnitOfWork() {
             public void work(Session session) throws Exception {
-                Object persisted = session.get(entity.getClass(), idOf(entity));
-                assertThat(persisted, samePersistentFieldsAs(entity));
+                Object loaded = session.get(original.getClass(), idOf(original));
+                assertThat(loaded, samePersistentFieldsAs(original));
             }
         });
     }
