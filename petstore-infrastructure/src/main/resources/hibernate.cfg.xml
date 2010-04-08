@@ -8,8 +8,10 @@
         <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
         <property name="format_sql">true</property>
 
-        <mapping package="com.pyxis.petstore.domain"/>
+        <!--<mapping package="com.pyxis.petstore.domain"/>-->
         <mapping class="com.pyxis.petstore.domain.Product"/>
         <mapping class="com.pyxis.petstore.domain.Item"/>
+        <mapping class="com.pyxis.petstore.domain.LineItem"/>
+        <mapping class="com.pyxis.petstore.domain.Order"/>
     </session-factory>
 </hibernate-configuration>

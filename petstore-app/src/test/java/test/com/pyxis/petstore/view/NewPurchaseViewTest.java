@@ -1,6 +1,6 @@
 package test.com.pyxis.petstore.view;
 
-import com.pyxis.petstore.domain.CreditCardType;
+import com.pyxis.petstore.domain.CreditCard;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -34,7 +34,7 @@ public class NewPurchaseViewTest {
     renderView() {
         model = aModel().
                 with(anOrder().from(aCart().containing(anItem().priced("100.00")))).
-                and("cardTypes", CreditCardType.values());
+                and("cardTypes", CreditCard.Type.values());
         renderedView = renderNewOrderView().using(model);
     }
 
@@ -60,9 +60,9 @@ public class NewPurchaseViewTest {
 
     private Matcher<Element> withBillingInformation() {
         return hasUniqueSelector("#billing-address", withInputFields(
-                withName("firstName"),
-                withName("lastName"),
-                withName("email")));
+                withName("billingAccount.firstName"),
+                withName("billingAccount.lastName"),
+                withName("billingAccount.emailAddress")));
     }
 
     private Matcher<Element> withPaymentDetails() {
@@ -71,7 +71,7 @@ public class NewPurchaseViewTest {
                         withName("cardType")),
                 withInputFields(
                         withName("cardNumber"),
-                        withName("expiryDate"))
+                        withName("cardExpiryDate"))
         );
     }
 
@@ -85,7 +85,7 @@ public class NewPurchaseViewTest {
 
     private Matcher<Iterable<Element>> withCreditCardOptions() {
         List<Matcher<? super Element>> matchers = new ArrayList<Matcher<? super Element>>();
-        for (CreditCardType type : CreditCardType.values()) {
+        for (CreditCard.Type type : CreditCard.Type.values()) {
             matchers.add(withOption(type.name(), type.getCommonName()));
         }
         return containsInAnyOrder(matchers);
@@ -95,7 +95,7 @@ public class NewPurchaseViewTest {
         return allOf(withAttribute("value", value), withText(text));
     }
 
-    @Ignore @Test public void indicatesWhenCartIsEmpty() {    }
+    @Ignore @Test public void indicatesWhenCartIsEmpty() {}
 
 
     @Ignore @Test public void returnsToCartPageToReviewOrder() {}

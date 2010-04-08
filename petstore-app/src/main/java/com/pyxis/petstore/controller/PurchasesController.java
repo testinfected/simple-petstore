@@ -1,27 +1,25 @@
 package com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.domain.Cart;
-import com.pyxis.petstore.domain.CheckoutAssistant;
-import com.pyxis.petstore.domain.CreditCardType;
-import com.pyxis.petstore.domain.Order;
+import com.pyxis.petstore.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@SessionAttributes("order")
 public class PurchasesController {
     private final Cart cart;
     private final CheckoutAssistant checkoutAssistant;
+    private final PaymentCollector paymentCollector;
 
     @Autowired
-    public PurchasesController(Cart cart, CheckoutAssistant checkoutAssistant) {
+    public PurchasesController(Cart cart, CheckoutAssistant checkoutAssistant, PaymentCollector paymentCollector) {
         this.cart = cart;
         this.checkoutAssistant = checkoutAssistant;
+        this.paymentCollector = paymentCollector;
     }
 
     @InitBinder
@@ -29,11 +27,14 @@ public class PurchasesController {
         // Here's how to configure field access. To set it globally configure the
         // AnnotationMethodHandlerAdapter to use a custom WebBindingInitializer
 //        binder.initDirectFieldAccess();
+        // todo Convert credit card type to CreditCard.Type
+        // todo Convert expiration date to Date
+        
     }
 
     @ModelAttribute("cardTypes")
-    public CreditCardType[] getCreditCardTypes() {
-        return CreditCardType.values();
+    public CreditCard.Type[] getCreditCardTypes() {
+        return CreditCard.Type.values();
     }
 
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
@@ -43,6 +44,8 @@ public class PurchasesController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void create() {
+    public String create(Order order, PaymentDetails paymentDetails, BindingResult form) {
+        paymentCollector.collectPayment(order, paymentDetails.getCreditCard(), paymentDetails.getBillingAccount());
+        return "redirect:/receipts/" + order.getNumber();
     }
 }

@@ -93,13 +93,13 @@ public class PersistentProductCatalogTest {
 
     @Test public void
     canRoundTripProducts() throws Exception {
-        final Collection<Product> products = Arrays.asList(
+        final Collection<Product> sampleProducts = Arrays.asList(
                 aProduct().withName("Labrador").describedAs("Labrador Retriever").withPhoto("labrador.png").build(),
                 aProduct().withName("Dalmatian").build());
 
-        for (Product product : products) {
+        for (Product product : sampleProducts) {
             productCatalog.store(product);
-            database.assertCanBeReloadedWithSameState(product);
+            database.assertCanBeReloadedWithSameStateAs(product);
         }
     }
 

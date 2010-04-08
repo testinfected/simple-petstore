@@ -20,15 +20,15 @@
             <ol>
                 <li>
                     <label for="first-name">First name</label>
-                    <input id="first-name" name="firstName" type="text"/>
+                    <input id="first-name" name="billingAccount.firstName" type="text"/>
                 </li>
                 <li>
                     <label for="last-name">Last name</label>
-                    <input id="last-name" name="lastName" type="text"/>
+                    <input id="last-name" name="billingAccount.lastName" type="text"/>
                 </li>
                 <li>
                     <label for="email">Email</label>
-                    <input id="email" name="email" type="text"/>
+                    <input id="email" name="billingAccount.emailAddress" type="text"/>
                 </li>
             </ol>
         </fieldset>
@@ -48,7 +48,7 @@
                 </li>
                 <li>
                     <label for="expiry-date">Expiration date</label>
-                    <input id="expiry-date" name="expiryDate" type="text"/>
+                    <input id="expiry-date" name="cardExpiryDate" type="text"/>
                 </li>
             </ol>
         </fieldset>

@@ -9,17 +9,21 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.pyxis.petstore.domain.CreditCard.visa;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.anEmptyCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 
 public class OrderTest {
 
-    Order order = new Order();
+    Order order = anOrder().build();
 
     @Test public void
     consistsOfNoItemByDefault() {
@@ -63,6 +67,14 @@ public class OrderTest {
         Cart cart = aCartWithManyItems();
         order.addItemsFromCart(cart);
         assertThat(order.getTotalPrice(), equalTo(cart.getGrandTotal()));
+    }
+    
+    @Test public void
+    indicatesPaidWhenPaymentWasReceived() {
+        Order order = anOrder().build();
+        assertFalse(order.isPaid());
+        order.paidWith(visa("9999 9999 9999", "12/12"));
+        assertTrue(order.isPaid());
     }
 
     private Cart aCartWithSomeItemsAddedMultipleTimes() {

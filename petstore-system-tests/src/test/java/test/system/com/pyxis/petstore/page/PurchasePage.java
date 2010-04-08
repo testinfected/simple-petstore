@@ -35,7 +35,8 @@ public class PurchasePage extends PageObject {
         type(expirationDate, into(textbox().with(id("expiry-date"))));
     }
 
-    public void confirmOrder() {
+    public ReceiptPage confirmOrder() {
         clickOn(button("Submit Order"));
+        return anInstanceOf(ReceiptPage.class);
     }
 }

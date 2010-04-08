@@ -21,9 +21,7 @@ import java.util.List;
 
 import static com.pyxis.matchers.persistence.HasFieldWithValue.hasField;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
@@ -83,9 +81,14 @@ public class PersistentItemInventoryTest {
     referenceNumberShouldBeUnique() throws Exception {
         havingPersisted(product);
         ItemBuilder item = anItem().of(product).withNumber("LAB-1234");
-        havingPersisted(item.build());
+        havingPersisted(item);
+
+        assertViolatesUniqueness(item);
+    }
+
+    private void assertViolatesUniqueness(ItemBuilder builder) throws Exception {
         try {
-            database.persist(item.build());
+            database.persist(builder.build());
             fail("Expected a ConstraintViolationException");
         } catch (org.hibernate.exception.ConstraintViolationException expected) {
             assertTrue(true);
@@ -105,14 +108,14 @@ public class PersistentItemInventoryTest {
     @Test public void
     canRoundTripItems() throws Exception {
         Product product = aProduct().build();
-        final Collection<Item> items = Arrays.asList(
+        final Collection<Item> sampleItems = Arrays.asList(
                 anItem().of(product).withNumber("12345678").describedAs("Chocolate male").priced("58.00").build(),
                 anItem().of(product).withNumber("87654321").build());
 
         database.persist(product);
-        for (Item item : items) {
+        for (Item item : sampleItems) {
             database.persist(item);
-            database.assertCanBeReloadedWithSameState(item);
+            database.assertCanBeReloadedWithSameStateAs(item);
         }
     }
 
