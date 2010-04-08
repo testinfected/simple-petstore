@@ -13,14 +13,9 @@ public class Item {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private @Id Long id;
 
-    // todo unique is only used to generate DDL, so remove
-    // todo number is fine as name, remove attribute override
-    @Embedded @AttributeOverrides(
-        @AttributeOverride(name = "number", column = @Column(name = "reference_number", unique = true))
-    )
-    private @NotNull @Valid ItemNumber referenceNumber;
+    private @NotNull @Valid ItemNumber number;
 
-    @ManyToOne() @JoinColumn(name = "product_id")
+    @ManyToOne @JoinColumn(name = "product_id")
 	private @NotNull Product product;
     private @NotNull BigDecimal price;
 
@@ -29,13 +24,13 @@ public class Item {
     Item() {}
 
     public Item(ItemNumber number, Product product, BigDecimal price) {
-        this.referenceNumber = number;
+        this.number = number;
         this.product = product;
         this.price = price;
     }
 
     public String getNumber() {
-        return referenceNumber.getNumber();
+        return number.getNumber();
     }
 
     public void setDescription(String description) {
@@ -61,7 +56,7 @@ public class Item {
 
         Item item = (Item) o;
 
-        if (referenceNumber != null ? !referenceNumber.equals(item.referenceNumber) : item.referenceNumber != null)
+        if (number != null ? !number.equals(item.number) : item.number != null)
             return false;
 
         return true;
@@ -69,10 +64,10 @@ public class Item {
 
     @Override
     public int hashCode() {
-        return referenceNumber != null ? referenceNumber.hashCode() : 0;
+        return number != null ? number.hashCode() : 0;
     }
 
     public String toString() {
-        return referenceNumber + " (" + product.getNumber() + ")";
+        return number + " (" + product.getNumber() + ")";
     }
 }

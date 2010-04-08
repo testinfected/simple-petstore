@@ -14,7 +14,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Id Long id;
 
-    private OrderNumber orderNumber;
+    private OrderNumber number;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="order_id", nullable = false)
@@ -36,12 +36,12 @@ public class Order {
 
     Order() {}
 
-    public Order(OrderNumber orderNumber) {
-        this.orderNumber = orderNumber;
+    public Order(OrderNumber number) {
+        this.number = number;
     }
 
     public String getNumber() {
-        return orderNumber.getNumber();
+        return number.getNumber();
     }
 
     public void addItemsFromCart(Cart cart) {

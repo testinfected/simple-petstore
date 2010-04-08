@@ -18,6 +18,7 @@
 - Panier d'achat sauvegardé entre chaque visite
 
 - Support des profils utilisateurs avec information de paiement
+- S'assurer que le numéro de commande ne peut pas être nul
 - Entrer mois et année de la date d'expiration indépendamment
 - Valider le format de la date d'expiration de la carte de credit
 - Valider les détails du paiement (billing account, credit card)

@@ -35,7 +35,7 @@ public class PersistentItemInventory implements ItemInventory {
     @Transactional(readOnly = true)
     public Item find(ItemNumber itemNumber) {
         return (Item) currentSession().createCriteria(Item.class).
-                add(eq("referenceNumber", itemNumber)).
+                add(eq("number", itemNumber)).
                 uniqueResult();
     }
 
