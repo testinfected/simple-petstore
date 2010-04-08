@@ -2,6 +2,7 @@ package test.integration.com.pyxis.petstore.persistence;
 
 import com.pyxis.petstore.domain.OrderNumber;
 import com.pyxis.petstore.domain.OrderNumberSequence;
+import org.hamcrest.Matcher;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -35,12 +36,8 @@ public class PersistentOrderNumberSequenceTest {
     incrementsSequenceNumber() throws Exception {
         seedSequenceNumberWith(100);
 
-        assertThat(nextOrderNumber(), hasProperty("number", equalTo("00000101")));
-        assertThat(nextOrderNumber(), hasProperty("number", equalTo("00000102")));
-    }
-
-    private OrderNumber nextOrderNumber() {
-        return orderNumberSequence.nextOrderNumber();
+        assertThat(nextOrderNumber(), orderWithNumber("00000101"));
+        assertThat(nextOrderNumber(), orderWithNumber("00000102"));
     }
 
     private void seedSequenceNumberWith(final long seed) throws Exception {
@@ -51,5 +48,13 @@ public class PersistentOrderNumberSequenceTest {
                 assertThat(query.executeUpdate(), equalTo(1));
             }
         });
+    }
+
+    private OrderNumber nextOrderNumber() {
+        return orderNumberSequence.nextOrderNumber();
+    }
+
+    private Matcher<Object> orderWithNumber(final String number) {
+        return hasProperty("number", equalTo(number));
     }
 }

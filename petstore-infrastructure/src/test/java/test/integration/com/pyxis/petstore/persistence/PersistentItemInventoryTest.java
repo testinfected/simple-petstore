@@ -50,7 +50,7 @@ public class PersistentItemInventoryTest {
         havingPersisted(anItem().of(product).withNumber("12345678"));
 
         Item found = itemInventory.find(new ItemNumber("12345678"));
-        assertThat(found, hasProperty("number", equalTo("12345678")));
+        assertThat(found, itemWithNumber("12345678"));
     }
 
     @Test public void
@@ -59,7 +59,7 @@ public class PersistentItemInventoryTest {
         havingPersisted(product);
         havingPersisted(anItem().of(product), anItem().of(product));
         List<Item> itemsAvailable = itemInventory.findByProductNumber("LAB-1234");
-        assertThat(itemsAvailable, everyItem(itemWithProduct(hasField("number", equalTo("LAB-1234")))));
+        assertThat(itemsAvailable, everyItem(itemWithProduct(productWithNumber("LAB-1234"))));
     }
 
     @Test public void
@@ -89,7 +89,7 @@ public class PersistentItemInventoryTest {
     private void assertViolatesUniqueness(ItemBuilder builder) throws Exception {
         try {
             database.persist(builder.build());
-            fail("Expected a ConstraintViolationException");
+            fail("Expected a constraint violation");
         } catch (org.hibernate.exception.ConstraintViolationException expected) {
             assertTrue(true);
         }
@@ -127,8 +127,16 @@ public class PersistentItemInventoryTest {
         database.persist(builders);
     }
 
+    private Matcher<Item> itemWithNumber(final String number) {
+        return hasProperty("number", equalTo(number));
+    }
+
     private Matcher<Item> itemWithProduct(Matcher<? super Product> productMatcher) {
         return hasField("product", productMatcher);
+    }
+
+    private Matcher<Product> productWithNumber(final String number) {
+        return hasField("number", equalTo(number));
     }
 
     private ItemBuilder anItemWithoutAReferenceNumber(Product product) {
@@ -146,7 +154,7 @@ public class PersistentItemInventoryTest {
     private void assertFailsPersisting(ItemBuilder item) throws Exception {
         try {
             database.persist(item);
-            fail("Expected ConstraintViolationException");
+            fail("Expected a validation violation");
         } catch (ConstraintViolationException expected) {
             assertTrue(true);
         }

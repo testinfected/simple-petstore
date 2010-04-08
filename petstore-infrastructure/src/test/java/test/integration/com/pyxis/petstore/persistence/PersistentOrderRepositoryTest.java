@@ -79,7 +79,7 @@ public class PersistentOrderRepositoryTest {
     private void assertViolatesUniqueness(Order order) throws Exception {
         try {
             orderRepository.store(order);
-            fail("Expected ConstraintViolationException");
+            fail("Expected constraint violation");
         } catch (ConstraintViolationException expected) {
             assertTrue(true);
         }

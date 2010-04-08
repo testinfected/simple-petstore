@@ -33,8 +33,7 @@ public class PurchasesControllerTest {
     checkoutCartsAndRendersPurchaseForm() {
         final Order order = anOrder().build();
         context.checking(new Expectations() {{
-            oneOf(checkoutAssistant).checkout(cart);
-            will(returnValue(order));
+            oneOf(checkoutAssistant).checkout(cart); will(returnValue(order));
         }});
         ModelAndView modelAndView = controller.checkout();
         assertThat(modelAndView.getViewName(), equalTo("purchases/new"));

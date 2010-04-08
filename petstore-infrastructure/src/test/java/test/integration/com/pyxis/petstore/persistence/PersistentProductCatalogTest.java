@@ -109,7 +109,7 @@ public class PersistentProductCatalogTest {
         database.persist(someProduct);
         try {
 			productCatalog.store(someProduct.build());
-			fail("Expected a ConstraintViolationException");
+			fail("Expected a constraint violation");
 		} catch (org.hibernate.exception.ConstraintViolationException expected) {
 			assertTrue(true);
 		}
