@@ -9,7 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -36,20 +40,20 @@ public class PurchasesController {
         
     }
 
-    @ModelAttribute("cardTypes")
-    public CreditCard.Type[] getCreditCardTypes() {
-        return CreditCard.Type.values();
-    }
-
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
     public ModelAndView checkout() {
         Order order = checkoutAssistant.checkout(cart);
-        return new ModelAndView("purchases/new").addObject(order);
+        return new ModelAndView("purchases/new").addObject(order).addObject("cardTypes", availableCardTypes());
+    }
+
+    private CreditCard.Type[] availableCardTypes() {
+        return CreditCard.Type.values();
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(Order order, PaymentDetails paymentDetails, BindingResult form) {
+    public String create(Order order, SessionStatus status, PaymentDetails paymentDetails, BindingResult form) {
         paymentCollector.collectPayment(order, paymentDetails.getCreditCard(), paymentDetails.getBillingAccount());
+        status.setComplete();
         return "redirect:/receipts/" + order.getNumber();
     }
 }

@@ -17,12 +17,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.bind.support.SimpleSessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 
 @RunWith(JMock.class)
@@ -33,6 +36,7 @@ public class PurchasesControllerTest {
     PaymentCollector paymentCollector = context.mock(PaymentCollector.class);
     Cart cart = new Cart();
     PurchasesController controller = new PurchasesController(cart, checkoutAssistant, paymentCollector);
+    SessionStatus sessionStatus = new SimpleSessionStatus();
 
     @Test public void
     checkoutCartsAndRendersPurchaseForm() {
@@ -43,11 +47,7 @@ public class PurchasesControllerTest {
         ModelAndView modelAndView = controller.checkout();
         assertThat(modelAndView.getViewName(), equalTo("purchases/new"));
         assertThat(modelAndView.getModel(), hasAttribute("order", order));
-    }
-
-    @Test public void
-    makesCreditCardTypesAvailableToView() {
-        assertThat(controller.getCreditCardTypes(), equalTo(CreditCard.Type.values()));
+        assertThat(modelAndView.getModel(), hasAttribute("cardTypes", CreditCard.Type.values()));
     }
 
     @Test public void
@@ -68,8 +68,9 @@ public class PurchasesControllerTest {
                     with(samePaymentMethodAs(paymentDetails.getCreditCard())),
                     with(sameAccountInformationAs(paymentDetails.getBillingAccount())));
         }});
-        String view = controller.create(order, paymentDetails, dummyBindingOn(paymentDetails));
+        String view = controller.create(order, sessionStatus, paymentDetails, dummyBindingOn(paymentDetails));
         assertThat(view, equalTo("redirect:/receipts/" + order.getNumber()));
+        assertTrue(sessionStatus.isComplete());
     }
 
     private BindingResult dummyBindingOn(PaymentDetails paymentDetails) {
