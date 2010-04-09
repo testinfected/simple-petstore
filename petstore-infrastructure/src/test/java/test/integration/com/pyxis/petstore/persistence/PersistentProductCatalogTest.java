@@ -75,7 +75,7 @@ public class PersistentProductCatalogTest {
 
     @Test (expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutAName() throws Exception {
-        productCatalog.store(aProductWithoutAName());
+        productCatalog.add(aProductWithoutAName());
     }
 
     private Product aProductWithoutAName() {
@@ -84,7 +84,7 @@ public class PersistentProductCatalogTest {
 
     @Test (expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutANumber() throws Exception {
-        productCatalog.store(aProductWithoutANumber());
+        productCatalog.add(aProductWithoutANumber());
     }
 
     private Product aProductWithoutANumber() {
@@ -98,7 +98,7 @@ public class PersistentProductCatalogTest {
                 aProduct().withName("Dalmatian").build());
 
         for (Product product : sampleProducts) {
-            productCatalog.store(product);
+            productCatalog.add(product);
             database.assertCanBeReloadedWithSameStateAs(product);
         }
     }
@@ -108,7 +108,7 @@ public class PersistentProductCatalogTest {
         ProductBuilder someProduct = aProduct().withNumber("LAB-1234");
         database.persist(someProduct);
         try {
-			productCatalog.store(someProduct.build());
+			productCatalog.add(someProduct.build());
 			fail("Expected a constraint violation");
 		} catch (org.hibernate.exception.ConstraintViolationException expected) {
 			assertTrue(true);

@@ -1,6 +1,8 @@
+==== Recherche de produit
 - Ne rien retourner quand on cherche rien
 - Traiter le cas d'une recherche d'article par numéro introuvable
 
+==== Consultation de l'inventaires
 - Afficher le nombre d'articles en stock par produit
 - Ajouter validation sur le numéro de produit (ABCD-123)
 - S'assurer que le nom de produit n'est pas vide
@@ -8,8 +10,10 @@
 - Introduire la notion de devise (Money)
 - Séquence bd pour les numéros d'articles
 
+==== Catalogue de produits
 - Consultation du catalogue
 
+==== Panier d'achat
 - Vider le panier d'achat
 - Indiquer quand le panier d'achat est vide
 - Changer la quantité d'un article au panier
@@ -17,6 +21,7 @@
 - Vérifier les stocks disponibles avant ajout au panier
 - Panier d'achat sauvegardé entre chaque visite
 
+==== Commande
 - Support des profils utilisateurs avec information de paiement
 - S'assurer que le numéro de commande ne peut pas être nul
 - Entrer mois et année de la date d'expiration indépendamment
@@ -24,3 +29,5 @@
 - Valider les détails du paiement (billing account, credit card)
 - Ordonner les lignes de la commande
 
+==== Consulation de reçu
+- Traiter le cas d'une commande inexistante

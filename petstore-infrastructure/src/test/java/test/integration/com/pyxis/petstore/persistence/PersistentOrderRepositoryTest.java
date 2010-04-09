@@ -1,9 +1,8 @@
 package test.integration.com.pyxis.petstore.persistence;
 
-import com.pyxis.petstore.domain.order.CartItem;
-import com.pyxis.petstore.domain.order.LineItem;
-import com.pyxis.petstore.domain.order.Order;
-import com.pyxis.petstore.domain.order.OrderRepository;
+import com.pyxis.petstore.domain.order.*;
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
@@ -16,6 +15,8 @@ import test.support.com.pyxis.petstore.db.Database;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.AccountBuilder.anAccount;
@@ -28,7 +29,7 @@ import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
 public class PersistentOrderRepositoryTest {
 
     Database database = Database.connect(get(SessionFactory.class));
-    OrderRepository orderRepository = get(OrderRepository.class);
+    OrderLog orderLog = get(OrderLog.class);
 
     @Before
     public void cleanDatabase() {
@@ -71,6 +72,22 @@ public class PersistentOrderRepositoryTest {
             database.assertCanBeReloadedWithSameStateAs(order);
         }
     }
+    
+    @Test public void
+    findsOrdersByNumber() throws Exception {
+        havingPersisted(anOrder().withNumber("00000100"));
+
+        Order found = orderLog.find(new OrderNumber("00000100"));
+        assertThat(found, orderWithNumber("00000100"));
+    }
+
+    private Matcher<? super Order> orderWithNumber(String orderNumber) {
+        return new FeatureMatcher<Order, String>(equalTo(orderNumber), "an order with number", "order number") {
+            @Override protected String featureValueOf(Order order) {
+                return order.getNumber();
+            }
+        };
+    }
 
     private void havingPersisted(Builder<?>... builders) throws Exception {
         database.persist(builders);
@@ -78,7 +95,7 @@ public class PersistentOrderRepositoryTest {
 
     private void assertViolatesUniqueness(Order order) throws Exception {
         try {
-            orderRepository.store(order);
+            orderLog.record(order);
             fail("Expected constraint violation");
         } catch (ConstraintViolationException expected) {
             assertTrue(true);

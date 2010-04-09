@@ -5,6 +5,7 @@ import com.pyxis.petstore.domain.order.Basket;
 import com.pyxis.petstore.domain.product.Item;
 import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ItemNumber;
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -35,12 +36,16 @@ public class CartItemsControllerTest {
         }});
 
         String view = controller.create(itemNumber);
-        assertThat(view, equalTo("redirect:/cart"));
+        assertThat(view, isRedirectedTo("/cart"));
     }
 
     @Test public void
     makesCartAvailableToView() {
         Basket model = controller.index();
         assertThat(model, sameInstance(basket));
+    }
+
+    private Matcher<? super String> isRedirectedTo(final String view) {
+        return equalTo("redirect:" + view);
     }
 }

@@ -43,7 +43,7 @@ public class PersistentProductCatalog implements ProductCatalog {
 	}
 
     @Transactional
-	public void store(Product product) {
+	public void add(Product product) {
 		currentSession().save(product);
 	}
 }
