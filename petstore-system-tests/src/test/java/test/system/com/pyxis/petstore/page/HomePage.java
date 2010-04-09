@@ -27,7 +27,7 @@ public class HomePage extends PageObject {
         assertNotPresent(selector("#shopping-cart a"));
     }
 
-    public void showsCartTotalQuantity(int quantity) {
+    public void showsCartTotalQuantityIs(int quantity) {
         assertPresenceOf(selector("#shopping-cart a").with(text(containsString(valueOf(quantity)))));
     }
 

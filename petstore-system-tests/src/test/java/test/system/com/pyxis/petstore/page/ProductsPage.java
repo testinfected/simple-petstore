@@ -16,7 +16,7 @@ public class ProductsPage extends PageObject {
         super(webDriver);
     }
 
-    public void displaysNoResult() {
+    public void showsNoMatch() {
         assertPresenceOf(element("no-match"));
     }
 

@@ -2,6 +2,7 @@ package test.system.com.pyxis.petstore;
 
 import com.pyxis.petstore.domain.product.Product;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
@@ -36,9 +37,9 @@ public class PurchaseFeature {
         total = new BigDecimal("1248.00");
     }
 
-//    @Ignore("in development")
+    @Ignore("in development")
     @Test public void
-    purchasesItemsUsingCreditCard() throws Exception {
+    purchasesItemsUsingACreditCard() throws Exception {
         ProductsPage productsPage = homePage.searchFor("Labrador");
         ItemsPage itemsPage = productsPage.browseItemsOf("Labrador Retriever");
         CartPage cartPage = itemsPage.addToCart("11111111");
@@ -55,9 +56,7 @@ public class PurchaseFeature {
         purchasePage.willPayUsingCreditCard("Visa", "9999 9999 9999 9999", "12/12");
         ReceiptPage receiptPage = purchasePage.confirmOrder();
 
-//        receiptPage.showsTotalPaid(total);
-//
-//        homePage.showsCartIsEmpty();
-//
+        receiptPage.showsTotalPaid(total);
+        homePage.showsCartIsEmpty();
     }
 }

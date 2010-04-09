@@ -36,14 +36,14 @@ public class BrowseCatalogFeature {
     }
 
     @Test public void
-    displaysAnEmptyItemListWhenProductIsOutOfStock() throws Exception {
+    consultsAProductCurrentlyOutOfStock() throws Exception {
         ProductsPage productsPage = homePage.searchFor("Iguana");
         ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
-        itemsPage.displaysOutOfStock();
+        itemsPage.showsNoItemAvailable();
     }
 
-	@Test
-	public void listsItemsOfProductsAvailableInCatalog() throws Exception {
+	@Test public void
+    consultsAProductAvailableItems() throws Exception {
         Item greenAdult = anItem().of(product)
                 .withNumber("12345678")
                 .describedAs("Green Adult")

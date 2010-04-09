@@ -43,17 +43,16 @@ public class ShopFeature {
         ProductsPage productsPage = homePage.searchFor("Iguana");
         ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
         CartPage cartPage = itemsPage.addToCart("12345678");
-        cartPage.showsItemInCart("12345678", "Green Adult", 1, "18.50");
-        homePage.showsCartTotalQuantity(1);
-        cartPage.showsGrandTotal("18.50");
+        cartPage.showsItemInCart("12345678", "Green Adult", "18.50");
+        cartPage.showsAGrandTotalOf("18.50");
+        homePage.showsCartTotalQuantityIs(1);
 
         productsPage = homePage.searchFor("Iguana");
         itemsPage = productsPage.browseItemsOf("Iguana");
         cartPage = itemsPage.addToCart("87654321");
-        cartPage.showsItemInCart("87654321", "Blue Female", 1, "58.97");
-
-        homePage.showsCartTotalQuantity(2);
-        cartPage.showsGrandTotal("77.47");
+        cartPage.showsItemInCart("87654321", "Blue Female", "58.97");
+        cartPage.showsAGrandTotalOf("77.47");
+        homePage.showsCartTotalQuantityIs(2);
     }
 
     @Test public void
@@ -63,14 +62,14 @@ public class ShopFeature {
         ProductsPage productsPage = homePage.searchFor("Iguana");
         ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
         CartPage cartPage = itemsPage.addToCart("12345678");
-        cartPage.showsItemInCart("12345678", "Green Adult", 1, "18.50");
-        homePage.showsCartTotalQuantity(1);
+        cartPage.showsItemQuantity("12345678", 1);
+        homePage.showsCartTotalQuantityIs(1);
 
         productsPage = homePage.searchFor("Iguana");
         itemsPage = productsPage.browseItemsOf("Iguana");
         cartPage = itemsPage.addToCart("12345678");
-        cartPage.showsItemInCart("12345678", "Green Adult", 2, "37.00");
-        homePage.showsCartTotalQuantity(2);
+        cartPage.showsItemQuantity("12345678", 2);
+        homePage.showsCartTotalQuantityIs(2);
 	}
 
 	@After public void

@@ -24,7 +24,7 @@ public class ItemsPage extends PageObject {
 		assertPresenceOf(cell().with(className("price")).with(text(being(price))));
 	}
 
-    public void displaysOutOfStock() {
+    public void showsNoItemAvailable() {
         assertPresenceOf(element("out-of-stock"));
     }
 

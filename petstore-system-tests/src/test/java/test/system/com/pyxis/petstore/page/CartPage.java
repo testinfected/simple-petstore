@@ -18,13 +18,16 @@ public class CartPage extends PageObject {
         super(driver);
     }
 
-    public void showsItemInCart(String itemNumber, String itemDescription, int quantity, String totalPrice) {
+    public void showsItemInCart(String itemNumber, String itemDescription, String totalPrice) {
         assertPresenceOf(cellShowingNameFor(itemNumber).with(text(containsString(itemDescription))));
-        assertPresenceOf(cellShowingQuantityFor(itemNumber).with(text(being(quantity))));
         assertPresenceOf(cellShowingTotalFor(itemNumber).with(text(being(totalPrice))));
     }
 
-    public void showsGrandTotal(String price) {
+    public void showsItemQuantity(String itemNumber, int quantity) {
+        assertPresenceOf(cellShowingQuantityFor(itemNumber).with(text(being(quantity))));
+    }
+
+    public void showsAGrandTotalOf(String price) {
         assertPresenceOf(selector("#cart-grand-total").with(text(being(price))));
     }
 
