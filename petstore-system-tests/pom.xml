@@ -162,6 +162,7 @@
                     <container>
                         <log>${project.build.directory}/cargo.log</log>
                         <containerId>jetty6x</containerId>
+                        <timeout>60000</timeout>
                         <zipUrlInstaller>
                             <url>http://dist.codehaus.org/jetty/jetty-6.1.21/jetty-6.1.21.zip</url>
                             <installDir>${basedir}/appserver</installDir>
