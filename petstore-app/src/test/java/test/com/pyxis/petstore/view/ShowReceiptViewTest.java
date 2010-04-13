@@ -9,7 +9,6 @@ import test.support.com.pyxis.petstore.views.ModelBuilder;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import static com.pyxis.matchers.dom.DomMatchers.*;
-import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
@@ -24,8 +23,8 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class ShowReceiptViewTest {
 
-    String SHOW_RECEIPT_VIEW = "receipts/show";
-    Element renderedView;
+    String SHOW_RECEIPT_VIEW_NAME = "receipts/show";
+    Element showReceiptView;
     ModelBuilder model;
     String orderTotal = "458.97";
 
@@ -46,18 +45,18 @@ public class ShowReceiptViewTest {
                         paidWith(aVisa().withNumber("9999 9999 9999").withExpiryDate("12/12"))
                 );
 
-        renderedView = dom(renderShowReceiptView().using(model));
+        showReceiptView = renderShowReceiptView().using(model).asDom();
     }
 
     @Test public void
     displaysOrderSummary() {
-        assertThat(renderedView, hasOrderNumber("00000100"));
-        assertThat(renderedView, hasOrderTotal(orderTotal));
+        assertThat(showReceiptView, hasOrderNumber("00000100"));
+        assertThat(showReceiptView, hasOrderTotal(orderTotal));
     }
 
     @Test public void
     setsUpOrderDetailsColumnHeadings() {
-        assertThat(renderedView,
+        assertThat(showReceiptView,
                 hasSelector("#order-details th",
                         inOrder(withText("Quantity"),
                                 withText("Item"),
@@ -67,7 +66,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysOrderLineItemsInColumns() {
-        assertThat(renderedView, hasSelector("#order-details tr#line_item_12345678 td",
+        assertThat(showReceiptView, hasSelector("#order-details tr#line_item_12345678 td",
                 inOrder(withText("2"),
                         withText(containsString("Green Adult")),
                         withText("100.00"),
@@ -76,7 +75,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysOneOrderLineItemPerLine() {
-        assertThat(renderedView, hasSelector("#order-details tr.line-item", withSize(2)));
+        assertThat(showReceiptView, hasSelector("#order-details tr.line-item", withSize(2)));
     }
 
     private Matcher<Element> hasOrderTotal(final String orderTotal) {
@@ -91,7 +90,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysPaymentDetails() {
-        assertThat(renderedView, hasSelector("#payment-details li span:nth-child(2)", inOrder(
+        assertThat(showReceiptView, hasSelector("#payment-details li span:nth-child(2)", inOrder(
                 withText("Visa"),
                 withText("9999 9999 9999"),
                 withText("12/12"))));
@@ -99,7 +98,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysBillingInformation() {
-        assertThat(renderedView, hasSelector("#billing-address li span:nth-child(2)", inOrder(
+        assertThat(showReceiptView, hasSelector("#billing-address li span:nth-child(2)", inOrder(
                 withText("John"),
                 withText("Doe"),
                 withText("jdoe@gmail.com"))));
@@ -107,10 +106,10 @@ public class ShowReceiptViewTest {
 
     @Test public void
     returnsToHomePageToContinueShopping() {
-        assertThat(renderedView, hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
+        assertThat(showReceiptView, hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
     }
 
     private VelocityRendering renderShowReceiptView() {
-        return render(SHOW_RECEIPT_VIEW);
+        return render(SHOW_RECEIPT_VIEW_NAME);
     }
 }

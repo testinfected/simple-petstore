@@ -7,11 +7,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
+import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.threelevers.css.DocumentBuilder.dom;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
 
@@ -28,6 +30,7 @@ public class VelocityRendering {
 
     private final String template;
     private String encoding = DEFAULT_ENCODING;
+    private String renderedView;
 
     private VelocityRendering(String template) {
 		this.template = template;
@@ -75,14 +78,23 @@ public class VelocityRendering {
 		this.encoding = encoding;
 	}
 
-    public String using(ModelBuilder modelBuilder) {
+    public VelocityRendering using(ModelBuilder modelBuilder) {
         return using(modelBuilder.asMap());
     }
 
-	public String using(Map<String, Object> model) {
+	public VelocityRendering using(Map<String, Object> model) {
         setupTools(model);
-        return VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, templateFileName(), this.encoding, model);
+        renderedView = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, templateFileName(), this.encoding, model);
+        return this;
 	}
+
+    public String asString() {
+        return renderedView;
+    }
+
+    public Element asDom() {
+        return dom(renderedView);
+    }
 
     private void setupTools(Map<String, Object> model) {
         model.put("base", PathFor.BASE_URL);

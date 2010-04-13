@@ -18,7 +18,6 @@
         #parse("_logout.vm")
     </div>
     <div id="shopping-cart">
-        <!-- Spring stores proxied objects in the session with a "scopedTarget." prefix -->
         #set( $cart = $session.getAttribute('scopedTarget.cart') )
         #parse("_cart.vm")
     </div>

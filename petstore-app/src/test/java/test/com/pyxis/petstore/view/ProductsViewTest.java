@@ -15,7 +15,6 @@ import test.support.com.pyxis.petstore.views.ModelBuilder;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import static com.pyxis.matchers.dom.DomMatchers.*;
-import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
@@ -25,15 +24,14 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 @RunWith(JMock.class)
 public class ProductsViewTest {
-    String PRODUCTS_VIEW = "products";
+    String PRODUCTS_VIEW_NAME = "products";
     Object DEFAULT_PHOTO_URL = "url/of/missing.png";
     String keyword = "Iguana";
 
     Mockery context = new JUnit4Mockery();
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
     ModelBuilder model = new ModelBuilder();
-    //todo keep dom representation instead
-    String renderedView;
+    Element productsView;
 
     @Before public void
     setupModel() {
@@ -50,15 +48,15 @@ public class ProductsViewTest {
 
     @Test public void
     displaysNumberOfProductsFound() {
-        renderedView = renderProductsView().using(model.listing(aProduct(), aProduct()));
-        assertThat(dom(renderedView), hasUniqueSelector("#match-count", withText("2")));
-        assertThat(dom(renderedView), hasSelector("#products tr.product", withSize(2)));
+        productsView = renderProductsView().using(model.listing(aProduct(), aProduct())).asDom();
+        assertThat(productsView, hasUniqueSelector("#match-count", withText("2")));
+        assertThat(productsView, hasSelector("#products tr.product", withSize(2)));
     }
 
     @Test public void
     displaysColumnHeadingsOnProductTable() {
-        renderedView = renderProductsView().using(model.listing(aProduct()));
-        assertThat(dom(renderedView),
+        productsView = renderProductsView().using(model.listing(aProduct())).asDom();
+        assertThat(productsView,
                 hasSelector("#products th",
                         inOrder(withBlankText(),
                                 withText("Name"),
@@ -77,8 +75,8 @@ public class ProductsViewTest {
             allowing(attachmentStorage).getAttachmentUrl(with(aProductWithPhoto("labrador.png"))); will(returnValue(photoUrl));
         }});
 
-        renderedView = renderProductsView().using(model);
-        assertThat(dom(renderedView),
+        productsView = renderProductsView().using(model).asDom();
+        assertThat(productsView,
                 hasSelector("#products td",
                         inOrder(hasChild(image(pathFor(photoUrl))),
                                 productName("Labrador"),
@@ -87,23 +85,23 @@ public class ProductsViewTest {
 
     @Test public void
     handlesProductWithNoDescriptionCorrectly() {
-        renderedView = renderProductsView().using(model.listing(aProduct().withoutADescription()));
-        assertThat(dom(renderedView),
+        productsView = renderProductsView().using(model.listing(aProduct().withoutADescription())).asDom();
+        assertThat(productsView,
                 hasSelector("#products td:nth-child(3)",
                         contains(anEmptyDescription())));
     }
 
     @Test public void
     doesNotDisplayProductsTableIfNoProductIsFound() {
-        renderedView = renderProductsView().using(model);
-        assertThat(dom(renderedView), hasUniqueSelector("#no-match"));
-        assertThat(dom(renderedView), hasNoSelector("#products"));
+        productsView = renderProductsView().using(model).asDom();
+        assertThat(productsView, hasUniqueSelector("#no-match"));
+        assertThat(productsView, hasNoSelector("#products"));
     }
     
     @Test public void
     productNameAndPhotoLinkToProductInventory() {
-        renderedView = renderProductsView().using(model.listing(aProduct().withName("Labrador").withNumber("LAB-1234")));
-    	assertThat(dom(renderedView),
+        productsView = renderProductsView().using(model.listing(aProduct().withName("Labrador").withNumber("LAB-1234"))).asDom();
+    	assertThat(productsView,
     			hasSelector("td a", everyItem(
     					withAttribute("href", equalTo(itemsPath("LAB-1234"))))));
     }
@@ -137,6 +135,6 @@ public class ProductsViewTest {
     }
 
     private VelocityRendering renderProductsView() {
-        return render(PRODUCTS_VIEW);
+        return render(PRODUCTS_VIEW_NAME);
     }
 }

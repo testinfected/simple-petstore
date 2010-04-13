@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.pyxis.matchers.dom.DomMatchers.*;
-import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -26,9 +25,8 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class NewPurchaseViewTest {
 
-    String NEW_ORDER_VIEW = "purchases/new";
-    //todo keep dom representation instead
-    String renderedView;
+    String NEW_PURCHASE_VIEW_NAME = "purchases/new";
+    Element newPurchaseView;
     ModelBuilder model;
 
     @Before public void
@@ -36,17 +34,17 @@ public class NewPurchaseViewTest {
         model = aModel().
                 with(anOrder().from(aCart().containing(anItem().priced("100.00")))).
                 and("cardTypes", CreditCard.Type.values());
-        renderedView = renderNewOrderView().using(model);
+        newPurchaseView = renderNewPurchaseView().using(model).asDom();
     }
 
     @Test public void
     displaysOrderSummary() {
-        assertThat(dom(renderedView), hasUniqueSelector("#summary .calculations .total", withText("100.00")));
+        assertThat(newPurchaseView, hasUniqueSelector("#summary .calculations .total", withText("100.00")));
     }
 
     @Test public void
     displaysPurchaseForm() {
-        assertThat(dom(renderedView), hasUniqueSelector("form#checkout",
+        assertThat(newPurchaseView, hasUniqueSelector("form#checkout",
                 withAttribute("action", purchasesPath()),
                 withAttribute("method", "post"),
                 withBillingInformation(),
@@ -56,7 +54,7 @@ public class NewPurchaseViewTest {
 
     @Test public void
     fillsCardTypeSelectionList() {
-        assertThat(dom(renderedView), hasSelector("#card-type option", withCreditCardOptions()));
+        assertThat(newPurchaseView, hasSelector("#card-type option", withCreditCardOptions()));
     }
 
     private Matcher<Element> withBillingInformation() {
@@ -105,7 +103,7 @@ public class NewPurchaseViewTest {
         return hasSelector("input[type='text']", fieldMatchers);
     }
 
-    private VelocityRendering renderNewOrderView() {
-        return render(NEW_ORDER_VIEW);
+    private VelocityRendering renderNewPurchaseView() {
+        return render(NEW_PURCHASE_VIEW_NAME);
     }
 }

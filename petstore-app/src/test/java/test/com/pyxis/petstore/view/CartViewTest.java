@@ -2,11 +2,11 @@ package test.com.pyxis.petstore.view;
 
 import com.pyxis.petstore.domain.product.Item;
 import org.junit.Test;
+import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.ItemBuilder;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import static com.pyxis.matchers.dom.DomMatchers.*;
-import static com.threelevers.css.DocumentBuilder.dom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
@@ -18,14 +18,13 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class CartViewTest {
 
-    String CART_VIEW = "cart";
-    //todo keep dom representation instead
-    String renderedView;
+    String CART_VIEW_NAME = "cart";
+    Element cartView;
 
     @Test public void
     displaysColumnHeadings() {
-        renderedView = renderCartView().using(aModel().with(aCart()));
-        assertThat(dom(renderedView),
+        cartView = renderCartView().using(aModel().with(aCart())).asDom();
+        assertThat(cartView,
                 hasSelector("#cart th",
                         inOrder(withText("Quantity"),
                                 withText("Item"),
@@ -37,8 +36,8 @@ public class CartViewTest {
     displaysProductDetailsInColumns() throws Exception {
         Item item = anItem().withNumber("12345678").priced("18.50").describedAs("Green Adult").build();
 
-        renderedView = renderCartView().using(aModel().with(aCart().containing(item, item)));
-        assertThat(dom(renderedView),
+        cartView = renderCartView().using(aModel().with(aCart().containing(item, item))).asDom();
+        assertThat(cartView,
                 hasSelector("tr#cart_item_12345678 td",
                         inOrder(withText("2"),
                                 withText(containsString("Green Adult")),
@@ -50,34 +49,34 @@ public class CartViewTest {
     displaysOneCartItemPerLine() {
         ItemBuilder anItem = anItem();
         ItemBuilder anotherItem = anItem();
-        renderedView = renderCartView().using(aModel().with(aCart().containing(anItem, anItem, anotherItem)));
-        assertThat(dom(renderedView), hasSelector("#cart tr.cart-item", withSize(2)));
+        cartView = renderCartView().using(aModel().with(aCart().containing(anItem, anItem, anotherItem))).asDom();
+        assertThat(cartView, hasSelector("#cart tr.cart-item", withSize(2)));
     }
 
     @Test public void
     displaysCartGrandTotal() {
-        renderedView = renderCartView().using(aModel().with(aCart().containing(
+        cartView = renderCartView().using(aModel().with(aCart().containing(
                 anItem().priced("20.00"),
                 anItem().priced("12.99"),
-                anItem().priced("43.97"))));
+                anItem().priced("43.97")))).asDom();
         String grandTotal = "76.96";
 
-        assertThat(dom(renderedView), hasUniqueSelector("#cart .calculations .total", withText(grandTotal)));
+        assertThat(cartView, hasUniqueSelector("#cart .calculations .total", withText(grandTotal)));
     }
 
     @Test public void
     returnsToHomePageToContinueShopping() {
-        renderedView = renderCartView().using(aModel().with(aCart().containing(anItem())));
-        assertThat(dom(renderedView), hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
+        cartView = renderCartView().using(aModel().with(aCart().containing(anItem()))).asDom();
+        assertThat(cartView, hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
     }
 
     @Test public void
     checkingOutRendersPaymentForm() {
-        renderedView = renderCartView().using(aModel().with(aCart().containing(anItem())));
-        assertThat(dom(renderedView), hasUniqueSelector("a#checkout", withAttribute("href", checkoutPath())));
+        cartView = renderCartView().using(aModel().with(aCart().containing(anItem()))).asDom();
+        assertThat(cartView, hasUniqueSelector("a#checkout", withAttribute("href", checkoutPath())));
     }
 
     private VelocityRendering renderCartView() {
-        return render(CART_VIEW);
+        return render(CART_VIEW_NAME);
     }
 }
