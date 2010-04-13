@@ -2,7 +2,9 @@ package test.support.com.pyxis.petstore.views;
 
 import com.pyxis.petstore.ExceptionImposter;
 import org.apache.velocity.app.VelocityEngine;
-import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 
@@ -22,9 +24,10 @@ public class VelocityRendering {
 	private static final String VELOCITY_EXTENSION = ".vm";
 
 	private static VelocityEngine velocityEngine;
-	private final String template;
+    private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
-	private String encoding = DEFAULT_ENCODING;
+    private final String template;
+    private String encoding = DEFAULT_ENCODING;
 
     private VelocityRendering(String template) {
 		this.template = template;
@@ -39,7 +42,7 @@ public class VelocityRendering {
 	private static void loadVelocityEngine() {
 		try {
 			VelocityConfigurer velocityConfigurer = new VelocityConfigurer();
-            velocityConfigurer.setConfigLocation(new UrlResource(velocityPropertyFileUrl()));
+            velocityConfigurer.setConfigLocation(getResource(velocityPropertyFileUrl()));
 			velocityConfigurer.setResourceLoaderPath(templatesBaseUrl());
 			velocityConfigurer.afterPropertiesSet();
 			velocityEngine = velocityConfigurer.getVelocityEngine();
@@ -47,6 +50,10 @@ public class VelocityRendering {
 			throw ExceptionImposter.imposterize(e);
 		}
 	}
+
+    private static Resource getResource(final String location) throws IOException {
+        return resourceLoader.getResource(location);
+    }
 
     private static String velocityPropertyFileUrl() throws IOException {
         return getViewProperty(VELOCITY_CONFIG_FILE_URL_KEY);
