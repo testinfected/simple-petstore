@@ -18,7 +18,6 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
-import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
 import static test.support.com.pyxis.petstore.views.PathFor.purchasesPath;
 import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
@@ -32,7 +31,7 @@ public class NewPurchaseViewTest {
     @Before public void
     renderView() {
         model = aModel().
-                with(anOrder().from(aCart().containing(anItem().priced("100.00")))).
+                with(aCart().containing(anItem().priced("100.00"))).
                 and("cardTypes", CreditCard.Type.values());
         newPurchaseView = renderNewPurchaseView().using(model).asDom();
     }

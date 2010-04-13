@@ -27,7 +27,7 @@ public class LineItem {
         this.itemNumber = cartItem.getItemNumber();
         this.quantity = cartItem.getQuantity();
         this.totalPrice = cartItem.getTotalPrice();
-        this.itemUnitPrice = cartItem.getItemUnitPrice();
+        this.itemUnitPrice = cartItem.getUnitPrice();
         this.itemDescription = cartItem.getItemDescription();
     }
 

@@ -25,7 +25,6 @@ import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
@@ -42,13 +41,9 @@ public class PurchasesControllerTest {
 
     @Test public void
     checkoutCartsAndRendersPurchaseForm() {
-        final Order order = anOrder().from(cart).build();
-        context.checking(new Expectations() {{
-            oneOf(checkoutAssistant).checkout(cart); will(returnValue(order));
-        }});
         ModelAndView modelAndView = controller.checkout();
         assertThat(modelAndView.getViewName(), equalTo("purchases/new"));
-        assertThat(modelAndView.getModel(), hasAttribute("order", order));
+        assertThat(modelAndView.getModel(), hasAttribute("cart", cart));
         assertThat(modelAndView.getModel(), hasAttribute("cardTypes", CreditCard.Type.values()));
     }
 
@@ -65,14 +60,14 @@ public class PurchasesControllerTest {
         paymentDetails.setCardExpiryDate("12/12");
 
         context.checking(new Expectations() {{
+            oneOf(checkoutAssistant).checkout(cart); will(returnValue(order));
             oneOf(paymentCollector).collectPayment(
                     with(equal(order)),
                     with(samePaymentMethodAs(paymentDetails.getCreditCard())),
                     with(sameAccountInformationAs(paymentDetails.getBillingAccount())));
         }});
-        String view = controller.create(order, sessionStatus, paymentDetails, dummyBindingOn(paymentDetails));
+        String view = controller.create(paymentDetails, dummyBindingOn(paymentDetails));
         assertThat(view, equalTo("redirect:/receipts/" + order.getNumber()));
-        assertTrue(sessionStatus.isComplete());
     }
 
     private BindingResult dummyBindingOn(PaymentDetails paymentDetails) {

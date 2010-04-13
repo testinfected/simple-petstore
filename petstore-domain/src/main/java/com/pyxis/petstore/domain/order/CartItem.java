@@ -8,22 +8,24 @@ public class CartItem {
 
     private final Item item;
     private int quantity;
+    private BigDecimal unitPrice;
 
     public CartItem(Item item) {
         this.item = item;
         this.quantity = 1;
+        this.unitPrice = item.getPrice();
     }
 
     public BigDecimal getTotalPrice() {
-        return getItemUnitPrice().multiply(new BigDecimal(quantity));
+        return getUnitPrice().multiply(new BigDecimal(quantity));
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public BigDecimal getItemUnitPrice() {
-        return item.getPrice();
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
     }
 
     public String getItemDescription() {

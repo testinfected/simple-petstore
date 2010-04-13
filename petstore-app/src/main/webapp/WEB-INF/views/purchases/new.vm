@@ -10,7 +10,7 @@
         <ol class="calculations">
             <li>
                 <span class="label">Total: </span>
-                <span id="order-total" class="total">$order.totalPrice</span>
+                <span id="order-total" class="total">$cart.grandTotal</span>
             </li>
         </ol>
     </div>

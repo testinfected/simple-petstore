@@ -33,9 +33,17 @@ public class CartItemTest {
 
     @Test public void
     providesDetailsOnItem() {
-        assertThat(cartItem.getItemUnitPrice(), equalTo(unitPrice));
+        assertThat(cartItem.getUnitPrice(), equalTo(unitPrice));
         assertThat(cartItem.getItemDescription(), equalTo(itemDescription));
         assertThat(cartItem.getItemNumber(), equalTo(itemNumber));
+    }
+    
+    @Test public void
+    isInsensitiveToChangeInItemPrice() {
+        BigDecimal originalPrice = cartItem.getTotalPrice();
+        BigDecimal updatedPrice = new BigDecimal("84.99");
+        item.setPrice(updatedPrice);
+        assertThat(cartItem.getTotalPrice(), equalTo(originalPrice));
     }
 
     private void increaseQuantityTo(int quantity) {
