@@ -83,6 +83,11 @@
         </dependency>
     </dependencies>
 
+    <properties>
+        <!-- maven-resources-plugin does not seen to interpolate project.baseUri, help it out -->
+        <projectBaseUri>${project.baseUri}</projectBaseUri>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
