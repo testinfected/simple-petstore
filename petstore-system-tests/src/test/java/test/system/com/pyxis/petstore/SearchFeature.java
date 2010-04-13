@@ -25,6 +25,7 @@ public class SearchFeature {
     @Test public void
     searchDoesNotMatchAnyProduct() throws Exception {
         database.given(aProduct().withName("Labrador Retriever"));
+        
         ProductsPage resultsPage = home.searchFor("Dalmatian");
         resultsPage.showsNoMatch();
     }
@@ -35,6 +36,7 @@ public class SearchFeature {
                 aProduct().withNumber("LAB-1234").withName("Labrador Retriever"),
                 aProduct().withNumber("CHE-5678").withName("Chesapeake").describedAs("Chesapeake bay retriever"),
                 aProduct().withName("Dalmatian"));
+
         ProductsPage resultsPage = home.searchFor("retriever");
         resultsPage.displaysNumberOfResults(2);
         resultsPage.displaysProduct("Labrador Retriever");

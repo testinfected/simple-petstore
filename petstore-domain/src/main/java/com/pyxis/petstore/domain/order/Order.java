@@ -3,6 +3,7 @@ package com.pyxis.petstore.domain.order;
 import com.pyxis.petstore.domain.billing.Account;
 import com.pyxis.petstore.domain.billing.CreditCard;
 import org.hibernate.annotations.AccessType;
+import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -20,7 +21,8 @@ public class Order {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name="order_id", nullable = false)
-    private List<LineItem> items = new ArrayList<LineItem>();
+    @IndexColumn(name = "order_line", base=1)
+    private List<LineItem> lines = new ArrayList<LineItem>();
 
     @Embedded @AttributeOverrides({
         @AttributeOverride(name = "firstName", column = @Column(name = "billing_first_name")),
@@ -48,20 +50,20 @@ public class Order {
 
     public void addItemsFromCart(Cart cart) {
         for (CartItem cartItem : cart.getItems()) {
-            items.add(LineItem.from(cartItem));
+            lines.add(LineItem.from(cartItem));
         }
     }
 
     public BigDecimal getTotalPrice() {
         BigDecimal total = BigDecimal.ZERO;
-        for (LineItem lineItem : items) {
+        for (LineItem lineItem : lines) {
             total = total.add(lineItem.getTotalPrice());
         }
         return total;
     }
 
     public List<LineItem> getLineItems() {
-        return Collections.unmodifiableList(items);
+        return Collections.unmodifiableList(lines);
     }
 
     public void billedTo(Account billingAccount) {
@@ -72,7 +74,21 @@ public class Order {
         this.creditCard = creditCard;
     }
 
+    // todo billingAccount should be a component (or association) of credit card 
+    public Account getBillingAccount() {
+        return billingAccount;
+    }
+
+    // todo return a payment method (and for a first version, assume in view it is a credit card)
+    public CreditCard getCreditCardDetails() {
+        return creditCard;
+    }
+
     public boolean isPaid() {
         return creditCard != null;
+    }
+
+    public int getLineItemCount() {
+        return lines.size();
     }
 }

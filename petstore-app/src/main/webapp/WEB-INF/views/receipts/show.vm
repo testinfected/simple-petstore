@@ -1,0 +1,77 @@
+<html>
+<head>
+    <title>PetStore - Order receipt</title>
+</head>
+<body>
+<div>
+    <p>Thank you, your order has been confirmed.</p>
+</div>
+<fieldset id="order">
+    <legend>Order details</legend>
+    <ol>
+        <li class="number">Order #$order.number</li>
+        <li>
+            <table id="order-details">
+                <thead>
+                <tr>
+                    <th>Quantity</th>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                #foreach ($lineItem in $order.lineItems)
+                    #if( $count % 2 == 0 )
+                        #set( $rowStyle = 'evenrow' )
+                    #else
+                        #set( $rowStyle = 'oddrow' )
+                    #end
+
+                <tr id="line_item_$lineItem.itemNumber" class="line-item $rowStyle">
+                    <td>$lineItem.quantity</td>
+                    <td class="item">$!lineItem.itemDescription</td>
+                    <td class="price">$lineItem.itemUnitPrice</td>
+                    <td class="total">$lineItem.totalPrice</td>
+                </tr>
+                #end
+
+                <tr class="summary">
+                    <ol class="calculations">
+                        <li>
+                            <span class="label">Total: </span>
+                            <span id="order-total" class="total">$order.totalPrice</span>
+                        </li>
+                    </ol>
+                </tr>
+                </tbody>
+            </table>
+        </li>
+    </ol>
+</fieldset>
+
+<fieldset id="payment-details">
+    <legend>Payment details</legend>
+    <ol>
+        <li><span>Card type: </span><span>$order.creditCardDetails.type</span></li>
+        <li><span>Card number: </span><span class="number">$order.creditCardDetails.number</span></li>
+        <li><span>Card expiry date: </span><span class="date">$order.creditCardDetails.expiryDate</span></li>
+    </ol>
+</fieldset>
+
+<fieldset id="billing-address">
+    <legend>Billing Address</legend>
+    <ol>
+        <li><span>First name: </span><span>$order.billingAccount.firstName</span></li>
+        <li><span>Last name: </span><span>$order.billingAccount.lastName</span></li>
+        <li><span>Email address: </span><span class="email">$order.billingAccount.emailAddress</span></li>
+    </ol>
+</fieldset>
+
+<div id="actions">
+    <ol>
+        <li><a id="continue-shopping" href="$base">Continue Shopping</a></li>
+    </ol>
+</div>
+</body>
+</html>

@@ -31,6 +31,11 @@ public class HomePage extends PageObject {
         assertPresenceOf(selector("#shopping-cart a").with(text(containsString(valueOf(quantity)))));
     }
 
+    public CartPage showCartContent() {
+        clickOn(selector("#shopping-cart a"));
+        return anInstanceOf(CartPage.class);
+    }
+
     public void logout() {
         clickOn(button("Logout"));
     }

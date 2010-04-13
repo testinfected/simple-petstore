@@ -14,6 +14,8 @@ public class LineItem {
     private String itemNumber;
     private BigDecimal totalPrice;
     private int quantity;
+    private BigDecimal itemUnitPrice;
+    private String itemDescription;
 
     public static LineItem from(CartItem cartItem) {
         return new LineItem(cartItem);
@@ -25,14 +27,24 @@ public class LineItem {
         this.itemNumber = cartItem.getItemNumber();
         this.quantity = cartItem.getQuantity();
         this.totalPrice = cartItem.getTotalPrice();
+        this.itemUnitPrice = cartItem.getItemUnitPrice();
+        this.itemDescription = cartItem.getItemDescription();
     }
 
     public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
+    public BigDecimal getItemUnitPrice() {
+        return itemUnitPrice;
+    }
+
     public String getItemNumber() {
         return itemNumber;
+    }
+
+    public String getItemDescription() {
+        return itemDescription;
     }
 
     public int getQuantity() {

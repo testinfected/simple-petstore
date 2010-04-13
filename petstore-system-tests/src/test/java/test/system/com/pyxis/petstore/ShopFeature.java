@@ -40,41 +40,46 @@ public class ShopFeature {
     shopsForItemsAndAddsThemToCart() throws Exception {
         homePage.showsCartIsEmpty();
 
-        ProductsPage productsPage = homePage.searchFor("Iguana");
-        ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
+        ItemsPage itemsPage = havingListedItemsOf("Iguana");
+
         CartPage cartPage = itemsPage.addToCart("12345678");
         cartPage.showsItemInCart("12345678", "Green Adult", "18.50");
         cartPage.showsAGrandTotalOf("18.50");
+        cartPage.continueShopping();
         homePage.showsCartTotalQuantityIs(1);
 
-        productsPage = homePage.searchFor("Iguana");
-        itemsPage = productsPage.browseItemsOf("Iguana");
+        itemsPage = havingListedItemsOf("Iguana");
+
         cartPage = itemsPage.addToCart("87654321");
         cartPage.showsItemInCart("87654321", "Blue Female", "58.97");
         cartPage.showsAGrandTotalOf("77.47");
+        cartPage.continueShopping();
         homePage.showsCartTotalQuantityIs(2);
     }
 
     @Test public void
     shopsForTheSameItemMultipleTimes() throws Exception {
-        homePage.showsCartIsEmpty();
+        ItemsPage itemsPage = havingListedItemsOf("Iguana");
 
-        ProductsPage productsPage = homePage.searchFor("Iguana");
-        ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
         CartPage cartPage = itemsPage.addToCart("12345678");
         cartPage.showsItemQuantity("12345678", 1);
-        homePage.showsCartTotalQuantityIs(1);
+        cartPage.continueShopping();
 
-        productsPage = homePage.searchFor("Iguana");
-        itemsPage = productsPage.browseItemsOf("Iguana");
+        itemsPage = havingListedItemsOf("Iguana");
+        
         cartPage = itemsPage.addToCart("12345678");
         cartPage.showsItemQuantity("12345678", 2);
-        homePage.showsCartTotalQuantityIs(2);
+        cartPage.continueShopping();
 	}
 
-	@After public void
+    @After public void
     stopApplication() {
 		petstore.stop();
 		database.stop();
 	}
+
+    private ItemsPage havingListedItemsOf(final String productName) {
+        ProductsPage productsPage = homePage.searchFor(productName);
+        return productsPage.browseItemsOf(productName);
+    }
 }

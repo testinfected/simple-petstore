@@ -26,6 +26,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertTrue;
+import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 
 @RunWith(JMock.class)
@@ -34,13 +36,13 @@ public class PurchasesControllerTest {
     Mockery context = new JUnit4Mockery();
     CheckoutAssistant checkoutAssistant = context.mock(CheckoutAssistant.class);
     PaymentCollector paymentCollector = context.mock(PaymentCollector.class);
-    Cart cart = new Cart();
+    Cart cart = aCart().containing(anItem()).build();
     PurchasesController controller = new PurchasesController(cart, checkoutAssistant, paymentCollector);
     SessionStatus sessionStatus = new SimpleSessionStatus();
 
     @Test public void
     checkoutCartsAndRendersPurchaseForm() {
-        final Order order = anOrder().build();
+        final Order order = anOrder().from(cart).build();
         context.checking(new Expectations() {{
             oneOf(checkoutAssistant).checkout(cart); will(returnValue(order));
         }});
@@ -52,7 +54,7 @@ public class PurchasesControllerTest {
 
     @Test public void
     collectsPaymentAndRedirectToReceiptView() {
-        final Order order = anOrder().withNumber("12345678").build();
+        final Order order = anOrder().from(cart).withNumber("12345678").build();
 
         final PaymentDetails paymentDetails = new PaymentDetails();
         paymentDetails.getBillingAccount().setFirstName("John");

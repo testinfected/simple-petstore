@@ -16,6 +16,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 public class CartPartialTest {
 
     String CART_PARTIAL = "decorators/_cart";
+    //todo keep dom representation instead
     String renderedPartial;
 
     @Test public void

@@ -99,7 +99,7 @@ public class PersistentProductCatalogTest {
 
         for (Product product : sampleProducts) {
             productCatalog.add(product);
-            database.assertCanBeReloadedWithSameStateAs(product);
+            database.assertCanBeReloadedWithSameState(product);
         }
     }
 

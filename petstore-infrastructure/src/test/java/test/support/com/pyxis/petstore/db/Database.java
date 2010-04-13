@@ -39,6 +39,10 @@ public class Database {
         session.close();
     }
 
+    public void clearCache() {
+        session.clear();
+    }
+
     public void persist(final Builder<?>... builders) throws Exception {
         for (final Builder<?> builder : builders) {
             persist(builder.build());
@@ -53,6 +57,11 @@ public class Database {
                 }
             });
         }
+        makeSureSubsequentLoadOperationsHitTheDatabase();
+    }
+
+    private void makeSureSubsequentLoadOperationsHitTheDatabase() {
+        clearCache();
     }
 
     public void perform(UnitOfWork work) throws Exception {
@@ -66,7 +75,7 @@ public class Database {
         }
     }
 
-    public void assertCanBeReloadedWithSameStateAs(final Object original) throws Exception {
+    public void assertCanBeReloadedWithSameState(final Object original) throws Exception {
         perform(new UnitOfWork() {
             public void work(Session session) throws Exception {
                 Object loaded = session.get(original.getClass(), idOf(original));

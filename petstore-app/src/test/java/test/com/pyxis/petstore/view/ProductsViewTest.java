@@ -32,6 +32,7 @@ public class ProductsViewTest {
     Mockery context = new JUnit4Mockery();
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
     ModelBuilder model = new ModelBuilder();
+    //todo keep dom representation instead
     String renderedView;
 
     @Before public void

@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import static com.pyxis.matchers.validation.ViolationMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.validation.ValidationOf.validationOf;
 
@@ -28,5 +30,15 @@ public class ProductTest {
     isValidWithANameAndANumber() {
         Product aValidProduct = aProduct().build();
         assertThat(validationOf(aValidProduct), succeeds());
+    }
+    
+    @Test public void
+    productIsUniquelyIdentifiedByItsNumber() {
+        Product product = aProduct().withNumber("AAA-123").build();
+        Product shouldMatch = aProduct().withNumber("AAA-123").build();
+        Product shouldNotMatch = aProduct().withNumber("BBB-456").build();
+        assertThat("products should match", product, equalTo(shouldMatch));
+        assertThat("products hash codes should match", product.hashCode(), equalTo(shouldMatch.hashCode()));
+        assertThat("products should not match", product, not(equalTo(shouldNotMatch)));
     }
 }

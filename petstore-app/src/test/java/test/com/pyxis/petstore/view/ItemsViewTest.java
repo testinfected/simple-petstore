@@ -15,6 +15,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 public class ItemsViewTest {
 
     String ITEMS_VIEW = "items";
+    //todo keep dom representation instead
     String renderedView;
 
     @Test public void

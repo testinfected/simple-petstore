@@ -22,6 +22,8 @@
 - Panier d'achat sauvegardé entre chaque visite
 
 ==== Commande
+- Indiquer quand le panier d'achat est vide
+- Permettre de retourner au panier d'achat
 - Support des profils utilisateurs avec information de paiement
 - S'assurer que le numéro de commande ne peut pas être nul
 - Entrer mois et année de la date d'expiration indépendamment

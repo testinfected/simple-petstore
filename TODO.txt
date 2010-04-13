@@ -1,4 +1,5 @@
 - drop usage of ModelAndView and ModelMap in favor of Model
+- revoir les classes utilisées dans le html
 - add an id attribute on product table rows in products page
 - uniformiser les ids html
 - se fabriquer un tool velocity pour construire les urls dans les pages (voir classe PathFor)

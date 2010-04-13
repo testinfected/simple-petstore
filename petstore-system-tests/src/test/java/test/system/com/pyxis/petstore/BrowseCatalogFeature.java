@@ -48,7 +48,8 @@ public class BrowseCatalogFeature {
                 .withNumber("12345678")
                 .describedAs("Green Adult")
                 .priced("18.50").build();
-        database.given(product, greenAdult);
+        database.given(greenAdult);
+        
 		ProductsPage productsPage = homePage.searchFor("Iguana");
 		ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
 		itemsPage.displaysItem("12345678", "Green Adult", "18.50");

@@ -5,6 +5,7 @@ import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ItemNumber;
 import com.pyxis.petstore.domain.product.Product;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -59,7 +60,7 @@ public class PersistentItemInventoryTest {
         havingPersisted(product);
         havingPersisted(anItem().of(product), anItem().of(product));
         List<Item> itemsAvailable = itemInventory.findByProductNumber("LAB-1234");
-        assertThat(itemsAvailable, everyItem(itemWithProduct(productWithNumber("LAB-1234"))));
+        assertThat(itemsAvailable, everyItem(itemOfProduct(productWithNumber("LAB-1234"))));
     }
 
     @Test public void
@@ -67,7 +68,7 @@ public class PersistentItemInventoryTest {
         havingPersisted(aProduct().withNumber("DAL-5432"));
 
         List<Item> itemsAvailable = itemInventory.findByProductNumber("DAL-5432");
-        assertTrue(itemsAvailable.isEmpty());
+        assertThat(itemsAvailable, Matchers.<Item>empty());
     }
 
     @Test public void
@@ -81,14 +82,14 @@ public class PersistentItemInventoryTest {
     referenceNumberShouldBeUnique() throws Exception {
         havingPersisted(product);
         ItemBuilder item = anItem().of(product).withNumber("LAB-1234");
-        havingPersisted(item);
+        havingPersisted(item.build());
 
-        assertViolatesUniqueness(item);
+        assertViolatesUniqueness(item.build());
     }
 
-    private void assertViolatesUniqueness(ItemBuilder builder) throws Exception {
+    private void assertViolatesUniqueness(Item item) throws Exception {
         try {
-            database.persist(builder.build());
+            database.persist(item);
             fail("Expected a constraint violation");
         } catch (org.hibernate.exception.ConstraintViolationException expected) {
             assertTrue(true);
@@ -115,7 +116,7 @@ public class PersistentItemInventoryTest {
         database.persist(product);
         for (Item item : sampleItems) {
             database.persist(item);
-            database.assertCanBeReloadedWithSameStateAs(item);
+            database.assertCanBeReloadedWithSameState(item);
         }
     }
 
@@ -131,7 +132,7 @@ public class PersistentItemInventoryTest {
         return hasProperty("number", equalTo(number));
     }
 
-    private Matcher<Item> itemWithProduct(Matcher<? super Product> productMatcher) {
+    private Matcher<Item> itemOfProduct(Matcher<? super Product> productMatcher) {
         return hasField("product", productMatcher);
     }
 

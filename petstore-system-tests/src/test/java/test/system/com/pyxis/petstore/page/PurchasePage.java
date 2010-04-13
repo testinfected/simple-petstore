@@ -10,7 +10,7 @@ import static com.pyxis.matchers.selenium.SeleniumMatchers.id;
 import static org.openqa.selenium.lift.Finders.textbox;
 import static org.openqa.selenium.lift.Matchers.text;
 import static test.support.com.pyxis.petstore.web.find.ButtonFinder.button;
-import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.selector;
+import static test.support.com.pyxis.petstore.web.find.CssSelectorFinder.element;
 import static test.support.com.pyxis.petstore.web.find.SelectFinder.selectionList;
 
 public class PurchasePage extends PageObject {
@@ -20,7 +20,7 @@ public class PurchasePage extends PageObject {
     }
 
     public void showsTotalToPay(BigDecimal total) {
-        assertPresenceOf(selector("#order-total").with(text(being(total))));
+        assertPresenceOf(element("order-total").with(text(being(total))));
     }
 
     public void willBillTo(String firstName, String lastName, String email) {
