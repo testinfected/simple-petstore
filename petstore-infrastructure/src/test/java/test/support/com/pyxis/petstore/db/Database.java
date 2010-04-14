@@ -85,10 +85,20 @@ public class Database {
     }
 
     public static long idOf(Object entity) throws Exception {
-        Field[] fields =  entity.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            if (field.getAnnotation(Id.class) != null) return (Long) Reflection.readField(entity, field);
+        Class<?> type = entity.getClass();
+        while (type != Object.class) {
+            Field id = getId(type);
+            if (id != null) return (Long) Reflection.readField(entity, id);
+            type = type.getSuperclass();
         }
         throw new AssertionError("Entity has no id : " + entity );
+    }
+
+    private static Field getId(Class<?> type) {
+        Field[] fields =  type.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getAnnotation(Id.class) != null) return field;
+        }
+        return null;
     }
 }

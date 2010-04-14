@@ -2,11 +2,9 @@ package com.pyxis.petstore.domain.billing;
 
 import javax.persistence.*;
 
-@Entity @Access(AccessType.FIELD) @Table(name = "payments")
-public class CreditCardDetails {
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private @Id Long id;
+@Entity @Access(AccessType.FIELD)
+@DiscriminatorValue("credit_card")
+public class CreditCardDetails extends PaymentMethod {
 
     @Enumerated(EnumType.STRING)
     private CreditCardType cardType;
@@ -65,7 +63,7 @@ public class CreditCardDetails {
         this.billingAddress = billingAddress;
     }
 
-    public static CreditCardDetails visa(String cardNumber, String cardExpiryDate, Address billingAddress) {
+    public static PaymentMethod visa(String cardNumber, String cardExpiryDate, Address billingAddress) {
         return new CreditCardDetails(CreditCardType.visa, cardNumber, cardExpiryDate, billingAddress);
     }
 }

@@ -80,7 +80,7 @@ public class PersistentOrderLogTest {
         for (final Order order : sampleOrders) {
             database.persist(order);
             database.assertCanBeReloadedWithSameState(order);
-            if (order.isPaid()) database.assertCanBeReloadedWithSameState(order.getCreditCardDetails());
+            if (order.isPaid()) database.assertCanBeReloadedWithSameState(order.getPaymentMethod());
         }
     }
 

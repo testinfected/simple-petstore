@@ -1,6 +1,6 @@
 package com.pyxis.petstore.domain.order;
 
-import com.pyxis.petstore.domain.billing.CreditCardDetails;
+import com.pyxis.petstore.domain.billing.PaymentMethod;
 import org.hibernate.annotations.AccessType;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.IndexColumn;
@@ -25,7 +25,7 @@ public class Order {
 
     @ManyToOne(cascade = CascadeType.PERSIST) @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "payment_id")
-    private CreditCardDetails creditCardDetails;
+    private PaymentMethod paymentMethod;
 
     Order() {}
 
@@ -55,16 +55,16 @@ public class Order {
         return Collections.unmodifiableList(lines);
     }
 
-    public void markPaidWith(CreditCardDetails creditCardDetails) {
-        this.creditCardDetails = creditCardDetails;
+    public void markPaidWith(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
-    public CreditCardDetails getCreditCardDetails() {
-        return creditCardDetails;
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
     }
 
     public boolean isPaid() {
-        return creditCardDetails != null;
+        return paymentMethod != null;
     }
 
     public int getLineItemCount() {

@@ -3,6 +3,7 @@ package test.com.pyxis.petstore.controller;
 import com.pyxis.petstore.controller.PurchasesController;
 import com.pyxis.petstore.domain.billing.CreditCardDetails;
 import com.pyxis.petstore.domain.billing.CreditCardType;
+import com.pyxis.petstore.domain.billing.PaymentMethod;
 import com.pyxis.petstore.domain.order.Cart;
 import com.pyxis.petstore.domain.order.CheckoutAssistant;
 import com.pyxis.petstore.domain.order.Order;
@@ -67,11 +68,11 @@ public class PurchasesControllerTest {
         assertThat(view, equalTo("redirect:/receipts/" + order.getNumber()));
     }
 
-    private BindingResult dummyBindingOn(CreditCardDetails paymentDetails) {
+    private BindingResult dummyBindingOn(PaymentMethod paymentDetails) {
         return new BeanPropertyBindingResult(paymentDetails, "paymentDetails");
     }
 
-    private Matcher<CreditCardDetails> samePaymentMethodAs(CreditCardDetails paymentMethod) {
+    private Matcher<? extends PaymentMethod> samePaymentMethodAs(CreditCardDetails paymentMethod) {
         return samePropertyValuesAs(paymentMethod);
     }
 }

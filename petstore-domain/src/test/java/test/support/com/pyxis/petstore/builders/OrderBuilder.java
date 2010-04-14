@@ -1,7 +1,7 @@
 package test.support.com.pyxis.petstore.builders;
 
 import com.pyxis.petstore.domain.billing.Address;
-import com.pyxis.petstore.domain.billing.CreditCardDetails;
+import com.pyxis.petstore.domain.billing.PaymentMethod;
 import com.pyxis.petstore.domain.order.Cart;
 import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.order.OrderNumber;
@@ -14,7 +14,7 @@ public class OrderBuilder implements Builder<Order> {
     private OrderNumber orderNumber = aNumber();
     private Cart cart = aCart().build();
     private Address billingAddress;
-    private CreditCardDetails creditCardDetails;
+    private PaymentMethod paymentMethod;
 
     public static OrderBuilder anOrder() {
         return new OrderBuilder();
@@ -32,7 +32,7 @@ public class OrderBuilder implements Builder<Order> {
     public Order build() {
         Order order = new Order(orderNumber);
         order.addItemsFromCart(cart);
-        order.markPaidWith(creditCardDetails);
+        order.markPaidWith(paymentMethod);
         return order;
     }
 
@@ -45,8 +45,8 @@ public class OrderBuilder implements Builder<Order> {
         return this;
     }
 
-    public OrderBuilder paidWith(CreditCardBuilder creditCardBuilder) {
-        this.creditCardDetails = creditCardBuilder.build();
+    public OrderBuilder paidWith(Builder<? extends PaymentMethod> paymentMethodBuilder) {
+        this.paymentMethod = paymentMethodBuilder.build();
         return this;
     }
 

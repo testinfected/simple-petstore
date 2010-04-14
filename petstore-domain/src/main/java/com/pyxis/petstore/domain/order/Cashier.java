@@ -1,6 +1,6 @@
 package com.pyxis.petstore.domain.order;
 
-import com.pyxis.petstore.domain.billing.CreditCardDetails;
+import com.pyxis.petstore.domain.billing.PaymentMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +21,9 @@ public class Cashier implements CheckoutAssistant, PaymentCollector {
         return order;
     }
 
-    public void collectPayment(Order order, CreditCardDetails creditCardDetails) {
+    public void collectPayment(Order order, PaymentMethod paymentMethod) {
 //        paymentGateway.purchase(order.getTotalPrice(), creditCardDetails);
-        order.markPaidWith(creditCardDetails);
+        order.markPaidWith(paymentMethod);
         orderLog.record(order);
     }
 }

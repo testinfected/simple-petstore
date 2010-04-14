@@ -1,8 +1,8 @@
 package com.pyxis.petstore.domain.order;
 
-import com.pyxis.petstore.domain.billing.CreditCardDetails;
+import com.pyxis.petstore.domain.billing.PaymentMethod;
 
 public interface PaymentCollector {
 
-    void collectPayment(Order order, CreditCardDetails creditCardDetails);
+    void collectPayment(Order order, PaymentMethod paymentMethod);
 }

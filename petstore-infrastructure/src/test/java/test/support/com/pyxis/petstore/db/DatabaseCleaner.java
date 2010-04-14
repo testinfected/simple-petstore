@@ -1,5 +1,6 @@
 package test.support.com.pyxis.petstore.db;
 
+import com.pyxis.petstore.domain.billing.PaymentMethod;
 import com.pyxis.petstore.domain.order.LineItem;
 import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.product.Item;
@@ -12,6 +13,7 @@ public class DatabaseCleaner {
     private static final Class<?>[] ENTITY_TYPES = {
             LineItem.class,
             Order.class,
+            PaymentMethod.class,
             Item.class,
             Product.class
     };
