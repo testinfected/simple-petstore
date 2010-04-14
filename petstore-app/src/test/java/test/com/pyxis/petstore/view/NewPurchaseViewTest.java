@@ -1,6 +1,6 @@
 package test.com.pyxis.petstore.view;
 
-import com.pyxis.petstore.domain.billing.CreditCard;
+import com.pyxis.petstore.domain.billing.CreditCardType;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -32,7 +32,7 @@ public class NewPurchaseViewTest {
     renderView() {
         model = aModel().
                 with(aCart().containing(anItem().priced("100.00"))).
-                and("cardTypes", CreditCard.Type.values());
+                and("cardTypes", CreditCardType.values());
         newPurchaseView = renderNewPurchaseView().using(model).asDom();
     }
 
@@ -58,18 +58,18 @@ public class NewPurchaseViewTest {
 
     private Matcher<Element> withBillingInformation() {
         return hasUniqueSelector("#billing-address", withInputFields(
-                withName("billingAccount.firstName"),
-                withName("billingAccount.lastName"),
-                withName("billingAccount.emailAddress")));
+                withName("billingAddress.firstName"),
+                withName("billingAddress.lastName"),
+                withName("billingAddress.emailAddress")));
     }
 
     private Matcher<Element> withPaymentDetails() {
         return hasUniqueSelector("#payment",
                 withSelectionLists(
-                        withName("cardType")),
+                        withName("type")),
                 withInputFields(
-                        withName("cardNumber"),
-                        withName("cardExpiryDate"))
+                        withName("number"),
+                        withName("expiryDate"))
         );
     }
 
@@ -83,7 +83,7 @@ public class NewPurchaseViewTest {
 
     private Matcher<Iterable<Element>> withCreditCardOptions() {
         List<Matcher<? super Element>> matchers = new ArrayList<Matcher<? super Element>>();
-        for (CreditCard.Type type : CreditCard.Type.values()) {
+        for (CreditCardType type : CreditCardType.values()) {
             matchers.add(withOption(type.name(), type.getCommonName()));
         }
         return containsInAnyOrder(matchers);

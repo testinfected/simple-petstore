@@ -1,26 +1,31 @@
 package test.support.com.pyxis.petstore.builders;
 
-import com.pyxis.petstore.domain.billing.CreditCard;
+import com.pyxis.petstore.domain.billing.Address;
+import com.pyxis.petstore.domain.billing.CreditCardDetails;
+import com.pyxis.petstore.domain.billing.CreditCardType;
 
-public class CreditCardBuilder implements Builder<CreditCard> {
+import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 
-    private CreditCard.Type cardType;
+public class CreditCardBuilder implements Builder<CreditCardDetails> {
+
+    private CreditCardType cardType;
     private String cardNumber;
     private String cardExpiryDate;
+    private Address billingAddress = anAddress().build();
 
     public static CreditCardBuilder aVisa() {
-        return aCreditCard().ofType(CreditCard.Type.visa);
+        return aCreditCard().ofType(CreditCardType.visa);
     }
 
     public static CreditCardBuilder aCreditCard() {
         return new CreditCardBuilder();
     }
 
-    public CreditCard build() {
-        return new CreditCard(cardType, cardNumber, cardExpiryDate);
+    public CreditCardDetails build() {
+        return new CreditCardDetails(cardType, cardNumber, cardExpiryDate, billingAddress);
     }
 
-    public CreditCardBuilder ofType(CreditCard.Type type) {
+    public CreditCardBuilder ofType(CreditCardType type) {
         this.cardType = type;
         return this;
     }
@@ -32,6 +37,11 @@ public class CreditCardBuilder implements Builder<CreditCard> {
 
     public CreditCardBuilder withExpiryDate(String cardExpiryDate) {
         this.cardExpiryDate = cardExpiryDate;
+        return this;
+    }
+
+    public CreditCardBuilder billedTo(AddressBuilder addressBuilder) {
+        this.billingAddress = addressBuilder.build();
         return this;
     }
 }

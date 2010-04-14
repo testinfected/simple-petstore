@@ -1,7 +1,6 @@
 package com.pyxis.petstore.domain.order;
 
-import com.pyxis.petstore.domain.billing.Account;
-import com.pyxis.petstore.domain.billing.CreditCard;
+import com.pyxis.petstore.domain.billing.CreditCardDetails;
 import org.hibernate.annotations.AccessType;
 import org.hibernate.annotations.IndexColumn;
 
@@ -25,18 +24,11 @@ public class Order {
     private List<LineItem> lines = new ArrayList<LineItem>();
 
     @Embedded @AttributeOverrides({
-        @AttributeOverride(name = "firstName", column = @Column(name = "billing_first_name")),
-        @AttributeOverride(name = "lastName", column = @Column(name = "billing_last_name")),
-        @AttributeOverride(name = "emailAddress", column = @Column(name = "billing_email"))
-    })
-    private Account billingAccount;
-
-    @Embedded @AttributeOverrides({
         @AttributeOverride(name = "type", column = @Column(name = "credit_card_type")),
         @AttributeOverride(name = "number", column = @Column(name = "credit_card_number")),
         @AttributeOverride(name = "expiryDate", column = @Column(name = "credit_card_expiry_date"))
     })
-    private CreditCard creditCard;
+    private CreditCardDetails creditCardDetails;
 
     Order() {}
 
@@ -66,26 +58,16 @@ public class Order {
         return Collections.unmodifiableList(lines);
     }
 
-    public void billedTo(Account billingAccount) {
-        this.billingAccount = billingAccount;
+    public void markPaidWith(CreditCardDetails creditCardDetails) {
+        this.creditCardDetails = creditCardDetails;
     }
 
-    public void paidWith(CreditCard creditCard) {
-        this.creditCard = creditCard;
-    }
-
-    // todo billingAccount should be a component (or association) of credit card 
-    public Account getBillingAccount() {
-        return billingAccount;
-    }
-
-    // todo return a payment method (and for a first version, assume in view it is a credit card)
-    public CreditCard getCreditCardDetails() {
-        return creditCard;
+    public CreditCardDetails getCreditCardDetails() {
+        return creditCardDetails;
     }
 
     public boolean isPaid() {
-        return creditCard != null;
+        return creditCardDetails != null;
     }
 
     public int getLineItemCount() {

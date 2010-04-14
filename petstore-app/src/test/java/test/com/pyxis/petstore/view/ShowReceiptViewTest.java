@@ -12,7 +12,7 @@ import static com.pyxis.matchers.dom.DomMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.endsWith;
-import static test.support.com.pyxis.petstore.builders.AccountBuilder.anAccount;
+import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
@@ -35,15 +35,23 @@ public class ShowReceiptViewTest {
                 describedAs("Green Adult").
                 priced("100.00").build();
         Item anItemOrderedOnce = anItem().priced("258.97").build();
-        model = aModel().
-                with(anOrder().withNumber("00000100").
+        model = aModel().with(
+                    anOrder().
+                        withNumber("00000100").
                         from(aCart().containing(
                                 anItemOrderedSeveralTimes,
                                 anItemOrderedSeveralTimes,
                                 anItemOrderedOnce)).
-                        billedTo(anAccount().withFirstName("John").withLastName("Doe").withEmail("jdoe@gmail.com")).
-                        paidWith(aVisa().withNumber("9999 9999 9999").withExpiryDate("12/12"))
-                );
+                        paidWith(aVisa().
+                            withNumber("9999 9999 9999").
+                            withExpiryDate("12/12").
+                            billedTo(anAddress().
+                                withFirstName("John").
+                                withLastName("Doe").
+                                withEmail("jdoe@gmail.com")
+                            )
+                        )
+                    );
 
         showReceiptView = renderShowReceiptView().using(model).asDom();
     }

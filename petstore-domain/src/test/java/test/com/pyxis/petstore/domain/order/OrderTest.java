@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.pyxis.petstore.domain.billing.CreditCard.visa;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
@@ -22,6 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.anEmptyCart;
+import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 
@@ -77,7 +77,7 @@ public class OrderTest {
     indicatesPaidWhenPaymentWasReceived() {
         Order order = anOrder().build();
         assertFalse(order.isPaid());
-        order.paidWith(visa("9999 9999 9999", "12/12"));
+        order.markPaidWith(aVisa().build());
         assertTrue(order.isPaid());
     }
 

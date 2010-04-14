@@ -1,6 +1,7 @@
 package com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.domain.billing.CreditCard;
+import com.pyxis.petstore.domain.billing.CreditCardDetails;
+import com.pyxis.petstore.domain.billing.CreditCardType;
 import com.pyxis.petstore.domain.order.Cart;
 import com.pyxis.petstore.domain.order.CheckoutAssistant;
 import com.pyxis.petstore.domain.order.Order;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.beans.PropertyEditorSupport;
 
 @Controller
 public class PurchasesController {
@@ -29,12 +32,12 @@ public class PurchasesController {
 
     @InitBinder
     public void configureDataBinding(WebDataBinder binder) {
-        // Here's how to configure field access. To set it globally configure the
-        // AnnotationMethodHandlerAdapter to use a custom WebBindingInitializer
-//        binder.initDirectFieldAccess();
-        // todo Convert credit card type to CreditCard.Type
-        // todo Convert expiration date to Date
-        
+        // todo Convert expiry date to Date
+        binder.registerCustomEditor(CreditCardType.class, new PropertyEditorSupport() {
+            @Override public void setAsText(String text) throws IllegalArgumentException {
+                setValue(CreditCardType.valueOf(text));
+            }
+        });
     }
 
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
@@ -42,14 +45,14 @@ public class PurchasesController {
         return new ModelAndView("purchases/new").addObject(cart).addObject("cardTypes", availableCardTypes());
     }
 
-    private CreditCard.Type[] availableCardTypes() {
-        return CreditCard.Type.values();
+    private CreditCardType[] availableCardTypes() {
+        return CreditCardType.values();
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String create(PaymentDetails paymentDetails, BindingResult form) {
+    public String create(CreditCardDetails paymentDetails, BindingResult form) {
         Order order = checkoutAssistant.checkout(cart);
-        paymentCollector.collectPayment(order, paymentDetails.getCreditCard(), paymentDetails.getBillingAccount());
+        paymentCollector.collectPayment(order, paymentDetails);
         return "redirect:/receipts/" + order.getNumber();
     }
 }

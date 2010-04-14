@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static test.support.com.pyxis.petstore.builders.AccountBuilder.anAccount;
+import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
@@ -66,8 +66,15 @@ public class PersistentOrderLogTest {
     canRoundTripOrders() throws Exception {
         OrderBuilder aPendingOrder = anOrder();
         OrderBuilder aPaidOrder = anOrder().
-                billedTo(anAccount().withFirstName("John").withLastName("Leclair").withEmail("jleclair@gmail.com")).
-                paidWith(aVisa().withNumber("9999 9999 9999").withExpiryDate("12 dec 2012"));
+                paidWith(aVisa().
+                        withNumber("9999 9999 9999").
+                        withExpiryDate("12 dec 2012").
+                        billedTo(anAddress().
+                            withFirstName("John").
+                            withLastName("Leclair").
+                            withEmail("jleclair@gmail.com")
+                        )
+                );
         Collection<Order> sampleOrders = Arrays.asList(aPendingOrder.build(), aPaidOrder.build());
 
         for (Order order : sampleOrders) {

@@ -1,5 +1,7 @@
 package test.support.com.pyxis.petstore.builders;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.math.BigDecimal;
 
 public class PriceFaker {
@@ -21,7 +23,7 @@ public class PriceFaker {
     }
 
     private String decimalPart() {
-        return decimalPartGenerator.generateNumber();
+        return StringUtils.leftPad(decimalPartGenerator.generateNumber(), 2, "0");
     }
 
     private String integerPart() {

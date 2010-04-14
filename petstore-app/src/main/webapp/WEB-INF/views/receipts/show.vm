@@ -53,7 +53,7 @@
 <fieldset id="payment-details">
     <legend>Payment details</legend>
     <ol>
-        <li><span>Card type: </span><span>$order.creditCardDetails.type</span></li>
+        <li><span>Card type: </span><span>$order.creditCardDetails.type.commonName</span></li>
         <li><span>Card number: </span><span class="number">$order.creditCardDetails.number</span></li>
         <li><span>Card expiry date: </span><span class="date">$order.creditCardDetails.expiryDate</span></li>
     </ol>
@@ -62,9 +62,9 @@
 <fieldset id="billing-address">
     <legend>Billing Address</legend>
     <ol>
-        <li><span>First name: </span><span>$order.billingAccount.firstName</span></li>
-        <li><span>Last name: </span><span>$order.billingAccount.lastName</span></li>
-        <li><span>Email address: </span><span class="email">$order.billingAccount.emailAddress</span></li>
+        <li><span>First name: </span><span>$order.creditCardDetails.billingAddress.firstName</span></li>
+        <li><span>Last name: </span><span>$order.creditCardDetails.billingAddress.lastName</span></li>
+        <li><span>Email address: </span><span class="email">$order.creditCardDetails.billingAddress.emailAddress</span></li>
     </ol>
 </fieldset>
 
