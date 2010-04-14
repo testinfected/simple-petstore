@@ -2,6 +2,7 @@ package com.pyxis.petstore.domain.order;
 
 import com.pyxis.petstore.domain.billing.CreditCardDetails;
 import org.hibernate.annotations.AccessType;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
@@ -18,16 +19,12 @@ public class Order {
 
     private OrderNumber number;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="order_id", nullable = false)
+    @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name="order_id", nullable = false)
     @IndexColumn(name = "order_line", base=1)
     private List<LineItem> lines = new ArrayList<LineItem>();
 
-    @Embedded @AttributeOverrides({
-        @AttributeOverride(name = "type", column = @Column(name = "credit_card_type")),
-        @AttributeOverride(name = "number", column = @Column(name = "credit_card_number")),
-        @AttributeOverride(name = "expiryDate", column = @Column(name = "credit_card_expiry_date"))
-    })
+    @ManyToOne(cascade = CascadeType.PERSIST) @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @JoinColumn(name = "payment_id")
     private CreditCardDetails creditCardDetails;
 
     Order() {}

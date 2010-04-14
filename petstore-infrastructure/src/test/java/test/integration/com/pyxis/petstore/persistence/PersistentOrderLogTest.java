@@ -77,9 +77,10 @@ public class PersistentOrderLogTest {
                 );
         Collection<Order> sampleOrders = Arrays.asList(aPendingOrder.build(), aPaidOrder.build());
 
-        for (Order order : sampleOrders) {
+        for (final Order order : sampleOrders) {
             database.persist(order);
             database.assertCanBeReloadedWithSameState(order);
+            if (order.isPaid()) database.assertCanBeReloadedWithSameState(order.getCreditCardDetails());
         }
     }
 

@@ -2,13 +2,16 @@ package com.pyxis.petstore.domain.billing;
 
 import javax.persistence.*;
 
-@Embeddable
+@Entity @Access(AccessType.FIELD) @Table(name = "payments")
 public class CreditCardDetails {
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private @Id Long id;
+
     @Enumerated(EnumType.STRING)
-    private CreditCardType type;
-    private String number;
-    private String expiryDate;
+    private CreditCardType cardType;
+    private String cardNumber;
+    private String cardExpiryDate;
 
     @Embedded @AttributeOverrides({
         @AttributeOverride(name = "firstName", column = @Column(name = "billing_first_name")),
@@ -20,34 +23,38 @@ public class CreditCardDetails {
     CreditCardDetails() {}
 
     public CreditCardDetails(CreditCardType cardType, String cardNumber, String cardExpiryDate, Address billingAddress) {
-        this.type = cardType;
-        this.number = cardNumber;
-        this.expiryDate = cardExpiryDate;
+        this.cardType = cardType;
+        this.cardNumber = cardNumber;
+        this.cardExpiryDate = cardExpiryDate;
         this.billingAddress = billingAddress;
     }
 
-    public CreditCardType getType() {
-        return type;
+    public CreditCardType getCardType() {
+        return cardType;
     }
 
-    public void setType(CreditCardType type) {
-        this.type = type;
+    public void setCardType(CreditCardType cardType) {
+        this.cardType = cardType;
     }
 
-    public String getNumber() {
-        return number;
+    public String getCardCommonName() {
+        return cardType.getCommonName();
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public String getCardNumber() {
+        return cardNumber;
     }
 
-    public void setExpiryDate(String expiryDate) {
-        this.expiryDate = expiryDate;
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
-    public String getExpiryDate() {
-        return expiryDate;
+    public void setCardExpiryDate(String cardExpiryDate) {
+        this.cardExpiryDate = cardExpiryDate;
+    }
+
+    public String getCardExpiryDate() {
+        return cardExpiryDate;
     }
 
     public Address getBillingAddress() {

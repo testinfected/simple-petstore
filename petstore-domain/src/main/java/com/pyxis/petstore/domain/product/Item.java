@@ -15,6 +15,7 @@ public class Item {
 
     private @NotNull @Valid ItemNumber number;
 
+    //todo check if product_id not already the default name of the join column
     @ManyToOne @JoinColumn(name = "product_id")
 	private @NotNull Product product;
     private @NotNull BigDecimal price;

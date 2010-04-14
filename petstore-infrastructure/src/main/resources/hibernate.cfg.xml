@@ -13,5 +13,6 @@
         <mapping class="com.pyxis.petstore.domain.product.Item"/>
         <mapping class="com.pyxis.petstore.domain.order.LineItem"/>
         <mapping class="com.pyxis.petstore.domain.order.Order"/>
+        <mapping class="com.pyxis.petstore.domain.billing.CreditCardDetails"/>
     </session-factory>
 </hibernate-configuration>

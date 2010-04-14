@@ -66,10 +66,10 @@ public class NewPurchaseViewTest {
     private Matcher<Element> withPaymentDetails() {
         return hasUniqueSelector("#payment",
                 withSelectionLists(
-                        withName("type")),
+                        withName("cardType")),
                 withInputFields(
-                        withName("number"),
-                        withName("expiryDate"))
+                        withName("cardNumber"),
+                        withName("cardExpiryDate"))
         );
     }
 

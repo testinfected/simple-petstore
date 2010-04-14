@@ -36,7 +36,7 @@
             <ol>
                 <li>
                     <label for="card-type">Card type</label>
-                    <select id="card-type" name="type">
+                    <select id="card-type" name="cardType">
                         #foreach($cardType in $cardTypes)
                             <option value="$cardType">$cardType.commonName</option>
                         #end
@@ -44,11 +44,11 @@
                 </li>
                 <li>
                     <label for="card-number">Card number</label>
-                    <input id="card-number" name="number" type="text"/>
+                    <input id="card-number" name="cardNumber" type="text"/>
                 </li>
                 <li>
                     <label for="expiry-date">Expiration date</label>
-                    <input id="expiry-date" name="expiryDate" type="text"/>
+                    <input id="expiry-date" name="cardExpiryDate" type="text"/>
                 </li>
             </ol>
         </fieldset>
