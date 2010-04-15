@@ -142,5 +142,5 @@ text-align: left;
 #search-box {float: right; padding: 10px 0;}
 #search-box fieldset {display: inline;}
 
-a#homelink {background: #fff url(../images/logo.png) no-repeat; display: inline-block; height: 100px; text-indent: -9999px; width: 395px;}
-a#homelink:hover {background: #fff url(../images/logo-home.png) no-repeat;}
+a#home-link {background: #fff url(../images/logo.png) no-repeat; display: inline-block; height: 100px; text-indent: -9999px; width: 395px;}
+a#home-link:hover {background: #fff url(../images/logo-home.png) no-repeat;}

@@ -9,7 +9,7 @@
 </head>
 <body>
 <div id="header">
-    <a href="$base" id="homelink">Home</a>
+    <a href="$base" id="home-link">Home</a>
 
     <div id="search-box">
         #parse("_search.vm")
