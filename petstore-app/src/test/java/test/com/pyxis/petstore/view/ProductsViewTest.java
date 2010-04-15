@@ -50,7 +50,7 @@ public class ProductsViewTest {
     displaysNumberOfProductsFound() {
         productsView = renderProductsView().using(model.listing(aProduct(), aProduct())).asDom();
         assertThat(productsView, hasUniqueSelector("#match-count", withText("2")));
-        assertThat(productsView, hasSelector("#products tr.product", withSize(2)));
+        assertThat(productsView, hasSelector("#products tr[id^='product']", withSize(2)));
     }
 
     @Test public void

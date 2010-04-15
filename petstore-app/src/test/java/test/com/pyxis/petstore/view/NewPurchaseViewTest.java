@@ -38,7 +38,7 @@ public class NewPurchaseViewTest {
 
     @Test public void
     displaysOrderSummary() {
-        assertThat(newPurchaseView, hasUniqueSelector("#summary .calculations .total", withText("100.00")));
+        assertThat(newPurchaseView, hasUniqueSelector("#calculations .total", withText("100.00")));
     }
 
     @Test public void

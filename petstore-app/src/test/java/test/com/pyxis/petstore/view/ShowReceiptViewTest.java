@@ -83,12 +83,12 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysOneOrderLineItemPerLine() {
-        assertThat(showReceiptView, hasSelector("#order-details tr.line-item", withSize(2)));
+        assertThat(showReceiptView, hasSelector("#order-details tr[id^='line-item']", withSize(2)));
     }
 
     private Matcher<Element> hasOrderTotal(final String orderTotal) {
         return hasUniqueSelector("#order-details",
-                hasUniqueSelector(".calculations .total", withText(orderTotal))
+                hasUniqueSelector("#calculations .total", withText(orderTotal))
         );
     }
 

@@ -28,7 +28,7 @@
             #set( $rowStyle = 'oddrow' )
         #end
 
-    <tr id="item-$item.Number" class="item $rowStyle">
+    <tr id="item-$item.Number" class="$rowStyle">
             <td class="number">$item.number</td>
             <td>$!item.description</td>
             <td class="price">$item.price</td>

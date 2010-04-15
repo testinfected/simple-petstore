@@ -1,4 +1,3 @@
-- revoir les classes utilisées dans le html
 - se fabriquer un tool velocity pour construire les urls dans les pages (voir classe PathFor)
 (voir possibilité d'utiliser les tools velocity existants) 
 

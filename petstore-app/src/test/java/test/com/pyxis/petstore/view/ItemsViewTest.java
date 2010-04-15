@@ -29,7 +29,7 @@ public class ItemsViewTest {
     displaysNumberOfItemsAvailable() {
         itemsView = renderItemsView().using(aModel().listing(anItem(), anItem())).asDom();
         assertThat(itemsView, hasUniqueSelector("#inventory-count", withText("2")));
-        assertThat(itemsView, hasSelector("#items tr.item", withSize(2)));
+        assertThat(itemsView, hasSelector("#items tr[id^='item']", withSize(2)));
     }
 
     @Test public void

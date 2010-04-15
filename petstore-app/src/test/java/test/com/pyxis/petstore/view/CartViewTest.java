@@ -50,7 +50,7 @@ public class CartViewTest {
         ItemBuilder anItem = anItem();
         ItemBuilder anotherItem = anItem();
         cartView = renderCartView().using(aModel().with(aCart().containing(anItem, anItem, anotherItem))).asDom();
-        assertThat(cartView, hasSelector("#cart tr.cart-item", withSize(2)));
+        assertThat(cartView, hasSelector("#cart tr[id^='cart-item']", withSize(2)));
     }
 
     @Test public void
@@ -61,7 +61,7 @@ public class CartViewTest {
                 anItem().priced("43.97")))).asDom();
         String grandTotal = "76.96";
 
-        assertThat(cartView, hasUniqueSelector("#cart .calculations .total", withText(grandTotal)));
+        assertThat(cartView, hasUniqueSelector("#calculations .total", withText(grandTotal)));
     }
 
     @Test public void

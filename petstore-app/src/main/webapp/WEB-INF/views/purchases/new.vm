@@ -7,7 +7,7 @@
     <legend>Billing Information</legend>
     
     <div id="summary">
-        <ol class="calculations">
+        <ol id="calculations">
             <li>
                 <span class="label">Total: </span>
                 <span id="order-total" class="total">$cart.grandTotal</span>

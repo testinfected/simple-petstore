@@ -45,7 +45,7 @@ public class ReceiptPage extends PageObject {
     }
 
     private Finder<WebElement, WebDriver> cellShowingNameFor(String itemNumber) {
-        return selector(domIdOf(itemNumber) + " td.item");
+        return selector(domIdOf(itemNumber) + " td.text");
     }
 
     private Finder<WebElement, WebDriver> cellShowingTotalFor(String itemNumber) {

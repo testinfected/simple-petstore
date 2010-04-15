@@ -28,16 +28,16 @@
                         #set( $rowStyle = 'oddrow' )
                     #end
 
-                <tr id="line-item-$lineItem.itemNumber" class="line-item $rowStyle">
-                    <td>$lineItem.quantity</td>
-                    <td class="item">$!lineItem.itemDescription</td>
+                <tr id="line-item-$lineItem.itemNumber" class="$rowStyle">
+                    <td class="count">$lineItem.quantity</td>
+                    <td class="text">$!lineItem.itemDescription</td>
                     <td class="price">$lineItem.itemUnitPrice</td>
                     <td class="total">$lineItem.totalPrice</td>
                 </tr>
                 #end
 
-                <tr class="summary">
-                    <ol class="calculations">
+                <tr id="summary">
+                    <ol id="calculations">
                         <li>
                             <span class="label">Total: </span>
                             <span id="order-total" class="total">$order.totalPrice</span>
