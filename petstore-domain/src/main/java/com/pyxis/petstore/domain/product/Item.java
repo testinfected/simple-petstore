@@ -1,13 +1,11 @@
 package com.pyxis.petstore.domain.product;
 
-import org.hibernate.annotations.AccessType;
-
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-@Entity @AccessType("field") @Table(name = "items")
+@Entity @Access(AccessType.FIELD) @Table(name = "items")
 public class Item {
 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +13,6 @@ public class Item {
 
     private @NotNull @Valid ItemNumber number;
 
-    //todo check if product_id not already the default name of the join column
     @ManyToOne @JoinColumn(name = "product_id")
 	private @NotNull Product product;
     private @NotNull BigDecimal price;

@@ -1,7 +1,6 @@
 package com.pyxis.petstore.domain.order;
 
 import com.pyxis.petstore.domain.billing.PaymentMethod;
-import org.hibernate.annotations.AccessType;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.IndexColumn;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Entity  @AccessType("field") @Table(name = "orders")
+@Entity  @Access(AccessType.FIELD) @Table(name = "orders")
 public class Order {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

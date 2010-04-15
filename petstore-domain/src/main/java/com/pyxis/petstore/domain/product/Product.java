@@ -1,12 +1,9 @@
 package com.pyxis.petstore.domain.product;
 
-import org.hibernate.annotations.AccessType;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-
-@Entity @AccessType("field") @Table(name = "products")
+@Entity @Access(AccessType.FIELD) @Table(name = "products")
 public class Product {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,11 +1,9 @@
 package com.pyxis.petstore.domain.order;
 
-import org.hibernate.annotations.AccessType;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity  @AccessType("field") @Table(name = "line_items")
+@Entity  @Access(AccessType.FIELD) @Table(name = "line_items")
 public class LineItem {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
