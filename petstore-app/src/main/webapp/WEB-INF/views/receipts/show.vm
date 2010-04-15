@@ -28,7 +28,7 @@
                         #set( $rowStyle = 'oddrow' )
                     #end
 
-                <tr id="line_item_$lineItem.itemNumber" class="line-item $rowStyle">
+                <tr id="line-item-$lineItem.itemNumber" class="line-item $rowStyle">
                     <td>$lineItem.quantity</td>
                     <td class="item">$!lineItem.itemDescription</td>
                     <td class="price">$lineItem.itemUnitPrice</td>

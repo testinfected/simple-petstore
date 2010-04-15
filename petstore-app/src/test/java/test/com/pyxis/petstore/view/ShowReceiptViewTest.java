@@ -74,7 +74,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysOrderLineItemsInColumns() {
-        assertThat(showReceiptView, hasSelector("#order-details tr#line_item_12345678 td",
+        assertThat(showReceiptView, hasSelector("#order-details tr#line-item-12345678 td",
                 inOrder(withText("2"),
                         withText(containsString("Green Adult")),
                         withText("100.00"),

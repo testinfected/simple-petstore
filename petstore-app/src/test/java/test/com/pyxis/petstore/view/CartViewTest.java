@@ -38,7 +38,7 @@ public class CartViewTest {
 
         cartView = renderCartView().using(aModel().with(aCart().containing(item, item))).asDom();
         assertThat(cartView,
-                hasSelector("tr#cart_item_12345678 td",
+                hasSelector("tr#cart-item-12345678 td",
                         inOrder(withText("2"),
                                 withText(containsString("Green Adult")),
                                 withText("18.50"),

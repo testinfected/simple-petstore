@@ -49,7 +49,7 @@ public class CartPage extends PageObject {
     }
 
     private String domIdOf(String itemNumber) {
-        return "#cart_item_" + itemNumber;
+        return "#cart-item-" + itemNumber;
     }
 
     public PurchasePage checkout() {

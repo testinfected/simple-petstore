@@ -28,14 +28,14 @@
             #set( $rowStyle = 'oddrow' )
         #end
 
-    <tr id="item_$item.Number" class="item $rowStyle">
+    <tr id="item-$item.Number" class="item $rowStyle">
             <td class="number">$item.number</td>
             <td>$!item.description</td>
             <td class="price">$item.price</td>
             <td>
                 <form action="$base/cartitems" method="post">
                     <input type="hidden" name="item_number" value="$item.number"/>
-                    <button id="add_to_cart_$item.number" type="submit">Add to cart</button>
+                    <button id="add-to-cart-$item.number" type="submit">Add to cart</button>
                 </form>
             </td>
         </tr>

@@ -53,6 +53,6 @@ public class ReceiptPage extends PageObject {
     }
 
     private String domIdOf(String itemNumber) {
-        return "#line_item_" + itemNumber;
+        return "#line-item-" + itemNumber;
     }
 }

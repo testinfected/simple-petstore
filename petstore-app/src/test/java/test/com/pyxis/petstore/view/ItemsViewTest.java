@@ -50,7 +50,7 @@ public class ItemsViewTest {
                 describedAs("Green Adult").
                 priced("18.50"))).asDom();
         assertThat(itemsView,
-                hasSelector("tr#item_12345678 td",
+                hasSelector("tr#item-12345678 td",
                         inOrder(withText("12345678"),
                                 withText("Green Adult"),
                                 withText("18.50"),
@@ -64,7 +64,7 @@ public class ItemsViewTest {
                 hasUniqueSelector("form",
                         withAttribute("action", cartItemsPath()),
                         withAttribute("method", "post"),
-                        hasUniqueSelector("button", withId("add_to_cart_12345678"))));
+                        hasUniqueSelector("button", withId("add-to-cart-12345678"))));
         assertThat(itemsView,
                 hasUniqueSelector("form input[type='hidden']",
                         withAttribute("name", "item_number"),

@@ -26,7 +26,7 @@
                 #set( $rowStyle = 'oddrow' )
             #end
 
-        <tr id="cart_item_$cartItem.itemNumber" class="cart-item $rowStyle">
+        <tr id="cart-item-$cartItem.itemNumber" class="cart-item $rowStyle">
             <td class="count">$cartItem.quantity</td>
             <td class="item">$!cartItem.itemDescription</td>
             <td class="price">$cartItem.unitPrice</td>
