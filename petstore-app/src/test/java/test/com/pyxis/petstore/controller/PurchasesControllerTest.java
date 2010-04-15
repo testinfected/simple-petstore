@@ -15,11 +15,13 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.ui.ExtendedModelMap;
+import org.springframework.ui.Model;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.ModelAndView;
 
-import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
+import static com.pyxis.matchers.spring.MVCMatchers.hasAttribute;
+import static com.pyxis.matchers.spring.MVCMatchers.isRedirectedTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
@@ -37,13 +39,14 @@ public class PurchasesControllerTest {
     PaymentCollector paymentCollector = context.mock(PaymentCollector.class);
     Cart cart = aCart().containing(anItem()).build();
     PurchasesController controller = new PurchasesController(cart, checkoutAssistant, paymentCollector);
+    Model model = new ExtendedModelMap();
 
     @Test public void
     checkoutCartsAndRendersPurchaseForm() {
-        ModelAndView modelAndView = controller.checkout();
-        assertThat(modelAndView.getViewName(), equalTo("purchases/new"));
-        assertThat(modelAndView.getModel(), hasAttribute("cart", cart));
-        assertThat(modelAndView.getModel(), hasAttribute("cardTypes", CreditCardType.values()));
+        String view = controller.checkout(model);
+        assertThat(view, equalTo("purchases/new"));
+        assertThat(model, hasAttribute("cart", cart));
+        assertThat(model, hasAttribute("cardTypes", CreditCardType.values()));
     }
 
     @Test public void
@@ -65,7 +68,7 @@ public class PurchasesControllerTest {
                     with(samePaymentMethodAs(paymentDetails)));
         }});
         String view = controller.create(paymentDetails, dummyBindingOn(paymentDetails));
-        assertThat(view, equalTo("redirect:/receipts/" + order.getNumber()));
+        assertThat(view, isRedirectedTo("/receipts/" + order.getNumber()));
     }
 
     private BindingResult dummyBindingOn(PaymentMethod paymentDetails) {

@@ -5,7 +5,6 @@ import com.pyxis.petstore.domain.order.Basket;
 import com.pyxis.petstore.domain.product.Item;
 import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ItemNumber;
-import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -13,8 +12,8 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.pyxis.matchers.spring.MVCMatchers.isRedirectedTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.sameInstance;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 
@@ -43,9 +42,5 @@ public class CartItemsControllerTest {
     makesCartAvailableToView() {
         Basket model = controller.index();
         assertThat(model, sameInstance(basket));
-    }
-
-    private Matcher<? super String> isRedirectedTo(final String view) {
-        return equalTo("redirect:" + view);
     }
 }

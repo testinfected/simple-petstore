@@ -8,12 +8,12 @@ import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.order.PaymentCollector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.beans.PropertyEditorSupport;
 
@@ -41,8 +41,10 @@ public class PurchasesController {
     }
 
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
-    public ModelAndView checkout() {
-        return new ModelAndView("purchases/new").addObject(cart).addObject("cardTypes", availableCardTypes());
+    public String checkout(Model model) {
+        model.addAttribute(cart);
+        model.addAttribute("cardTypes", availableCardTypes());
+        return "purchases/new";
     }
 
     private CreditCardType[] availableCardTypes() {

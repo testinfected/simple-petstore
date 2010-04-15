@@ -4,8 +4,8 @@ import com.pyxis.petstore.controller.SessionController;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpSession;
 
+import static com.pyxis.matchers.spring.MVCMatchers.isRedirectedTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertTrue;
 
 public class SessionControllerTest {
@@ -17,6 +17,6 @@ public class SessionControllerTest {
     invalidatesSessionAndRedirectsToHomePage() {
         String view = controller.delete(mockSession);
         assertTrue(mockSession.isInvalid());
-        assertThat(view, equalTo("redirect:/"));
+        assertThat(view, isRedirectedTo("/"));
     }
 }

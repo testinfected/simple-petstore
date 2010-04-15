@@ -9,12 +9,13 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.ui.ExtendedModelMap;
+import org.springframework.ui.Model;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
+import static com.pyxis.matchers.spring.MVCMatchers.hasAttribute;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
@@ -25,6 +26,7 @@ public class ItemsControllerTest {
     Mockery context = new JUnit4Mockery();
     ItemInventory itemInventory = context.mock(ItemInventory.class);
     ItemsController itemController = new ItemsController(itemInventory);
+    Model model = new ExtendedModelMap();
 
     @Test public void
     listsItemsByProductNumberAndMakeThemAvailableToView() {
@@ -33,8 +35,8 @@ public class ItemsControllerTest {
     		oneOf(itemInventory).findByProductNumber("LAB-1234");
 			will(returnValue(anItemList));
     	}});
-        ModelAndView modelAndView = itemController.index("LAB-1234");
-        assertThat(modelAndView.getViewName(), equalTo("items"));
-        assertThat(modelAndView.getModelMap(), hasAttribute("itemList", anItemList));
+        String view = itemController.index("LAB-1234", model);
+        assertThat(view, equalTo("items"));
+        assertThat(model, hasAttribute("itemList", anItemList));
     }
 }

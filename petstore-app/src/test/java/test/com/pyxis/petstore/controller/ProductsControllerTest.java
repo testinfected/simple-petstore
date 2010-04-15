@@ -10,14 +10,17 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.ui.ExtendedModelMap;
+import org.springframework.ui.Model;
 
 import java.util.Arrays;
-import java.util.Map;
 
-import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
+import static com.pyxis.matchers.spring.MVCMatchers.containsAttribute;
+import static com.pyxis.matchers.spring.MVCMatchers.hasAttribute;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.sameInstance;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 @RunWith(JMock.class)
@@ -30,7 +33,7 @@ public class ProductsControllerTest {
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
     ProductsController productsController = new ProductsController(productCatalog, attachmentStorage);
 
-    Map<String, ?> model;
+    Model model = new ExtendedModelMap();
 
     @Before public void
     searchWillNotYieldAnyResult() {
@@ -46,14 +49,14 @@ public class ProductsControllerTest {
             oneOf(productCatalog).findByKeyword("Dog"); will(returnValue(matchingProducts));
         }});
 
-        model = productsController.index("Dog");
+        productsController.index("Dog", model);
         assertThat(model, hasAttribute("productList", matchingProducts));
     }
 
 	@Test public void
     doesNotAddProductListToModelIfNoMatchIsFound() {
-        model = productsController.index(ANY_PRODUCT);
-        assertThat(model, not(hasKey("productList")));
+        productsController.index(ANY_PRODUCT, model);
+        assertThat(model, not(containsAttribute("productList")));
     }
 
     @Test public void
@@ -64,7 +67,7 @@ public class ProductsControllerTest {
     
     @Test public void
     makesSearchKeywordAvailableToView() {
-        model = productsController.index(ANY_PRODUCT);
-        assertThat(model , hasAttribute("keyword", ANY_PRODUCT));
+        productsController.index(ANY_PRODUCT, model);
+        assertThat(model, hasAttribute("keyword", ANY_PRODUCT));
     }
 }
