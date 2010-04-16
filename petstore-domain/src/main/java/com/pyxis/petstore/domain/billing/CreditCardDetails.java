@@ -1,5 +1,7 @@
 package com.pyxis.petstore.domain.billing;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 
 @Entity @Access(AccessType.FIELD)
@@ -8,6 +10,7 @@ public class CreditCardDetails extends PaymentMethod {
 
     @Enumerated(EnumType.STRING)
     private CreditCardType cardType;
+    @NotEmpty 
     private String cardNumber;
     private String cardExpiryDate;
 
@@ -18,7 +21,7 @@ public class CreditCardDetails extends PaymentMethod {
     })
     private Address billingAddress;
 
-    CreditCardDetails() {}
+    public CreditCardDetails() {}
 
     public CreditCardDetails(CreditCardType cardType, String cardNumber, String cardExpiryDate, Address billingAddress) {
         this.cardType = cardType;

@@ -5,7 +5,18 @@
 <body>
 <fieldset>
     <legend>Billing Information</legend>
-    
+
+    #springBind( "paymentDetails" )
+    #if ($status.error)
+    <div>
+    <ol>
+        #foreach($error in $status.errorMessages)
+        <li>$error</li>
+        #end
+    </ol>
+    </div>
+    #end
+
     <div id="summary">
         <ol id="calculations">
             <li>
@@ -45,6 +56,14 @@
                 <li>
                     <label for="card-number">Card number</label>
                     <input id="card-number" name="cardNumber" type="text"/>
+                    #springBind( "paymentDetails.cardNumber" )
+                    #if ($status.error)
+                    <ol>
+                        #foreach($error in $status.errorMessages)
+                        <li>$error</li>
+                        #end
+                    </ol>
+                    #end
                 </li>
                 <li>
                     <label for="expiry-date">Expiration date</label>

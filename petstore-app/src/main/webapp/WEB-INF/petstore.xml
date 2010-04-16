@@ -33,7 +33,7 @@
         </bean>
     </mvc:interceptors>
 
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+    <bean class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
         <property name="cache" value="true"/>
         <property name="prefix" value=""/>
         <property name="suffix" value=".vm"/>
@@ -43,10 +43,14 @@
         <property name="viewClass" value="com.pyxis.petstore.helpers.VelocityToolbox2View"/>
     </bean>
 
-    <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+    <bean class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
         <property name="configLocation" value="/WEB-INF/velocity.properties"/>
         <property name="overrideLogging" value="false"/>
         <property name="resourceLoaderPath" value="/WEB-INF/views/"/>
+    </bean>
+
+    <bean class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="errors"/>
     </bean>
 
     <bean class="com.pyxis.petstore.service.SimplePhotoFileStore">
@@ -56,6 +60,6 @@
     <bean class="com.pyxis.petstore.domain.order.Cashier"/>
 
     <bean id="cart" class="com.pyxis.petstore.domain.order.Cart" scope="session">
-        <aop:scoped-proxy/>     
+        <aop:scoped-proxy/>
     </bean>
 </beans>
