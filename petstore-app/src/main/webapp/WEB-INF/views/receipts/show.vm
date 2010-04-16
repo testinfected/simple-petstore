@@ -7,37 +7,37 @@
     <p>Thank you, your order has been confirmed.</p>
 </div>
 <fieldset id="order">
-    <legend>Order #$order.number details</legend>
-            <table id="order-details">
-                <thead>
-                <tr>
-                    <th>Quantity</th>
-                    <th>Item</th>
-                    <th>Price</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tbody>
-                #foreach ($lineItem in $order.lineItems)
-                    #if( $count % 2 == 0 )
-                        #set( $rowStyle = 'evenrow' )
-                    #else
-                        #set( $rowStyle = 'oddrow' )
-                    #end
-
-                <tr id="line-item-$lineItem.itemNumber" class="$rowStyle">
-                    <td class="count">$lineItem.quantity</td>
-                    <td class="text">$!lineItem.itemDescription</td>
-                    <td class="price">$lineItem.itemUnitPrice</td>
-                    <td class="total">$lineItem.totalPrice</td>
-                </tr>
+    <legend>Order <span id="order-number">#$order.number</span> details</legend>
+    <table id="order-details">
+        <thead>
+        <tr>
+            <th>Quantity</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+            #foreach ($lineItem in $order.lineItems)
+                #if( $count % 2 == 0 )
+                    #set( $rowStyle = 'evenrow' )
+                #else
+                    #set( $rowStyle = 'oddrow' )
                 #end
+
+            <tr id="line-item-$lineItem.itemNumber" class="$rowStyle">
+                <td class="count">$lineItem.quantity</td>
+                <td class="text">$!lineItem.itemDescription</td>
+                <td class="price">$lineItem.itemUnitPrice</td>
+                <td class="total">$lineItem.totalPrice</td>
+            </tr>
+            #end
         <tr id="summary">
             <td colspan="3" class="price">Grand Total:</td>
             <td class="total" id="order-total">$order.totalPrice</td>
         </tr>
-                </tbody>
-            </table>
+        </tbody>
+    </table>
 </fieldset>
 
 <fieldset id="billing-address">
@@ -45,7 +45,8 @@
     <ol>
         <li><label>First name: </label><span>$order.paymentMethod.billingAddress.firstName</span></li>
         <li><label>Last name: </label><span>$order.paymentMethod.billingAddress.lastName</span></li>
-        <li><label>Email address: </label><span class="email">$order.paymentMethod.billingAddress.emailAddress</span></li>
+        <li><label>Email address: </label><span class="email">$order.paymentMethod.billingAddress.emailAddress</span>
+        </li>
     </ol>
 </fieldset>
 

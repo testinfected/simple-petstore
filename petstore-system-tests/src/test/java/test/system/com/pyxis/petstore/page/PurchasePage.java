@@ -20,7 +20,7 @@ public class PurchasePage extends PageObject {
     }
 
     public void showsTotalToPay(BigDecimal total) {
-        assertPresenceOf(element("order-total").with(text(being(total))));
+        assertPresenceOf(element("cart-grand-total").with(text(being(total))));
     }
 
     public void willBillTo(String firstName, String lastName, String email) {

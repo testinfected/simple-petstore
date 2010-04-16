@@ -87,13 +87,11 @@ public class ShowReceiptViewTest {
     }
 
     private Matcher<Element> hasOrderTotal(final String orderTotal) {
-        return hasUniqueSelector("#order-details",
-                hasUniqueSelector("#calculations .total", withText(orderTotal))
-        );
+        return hasUniqueSelector("#order-total", withText(orderTotal));
     }
 
     private Matcher<Element> hasOrderNumber(final String orderNumber) {
-        return hasUniqueSelector("#order .number", withText(endsWith(orderNumber)));
+        return hasUniqueSelector("#order-number", withText(endsWith(orderNumber)));
     }
 
     @Test public void

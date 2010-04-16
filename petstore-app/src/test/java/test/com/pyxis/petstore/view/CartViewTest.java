@@ -61,7 +61,7 @@ public class CartViewTest {
                 anItem().priced("43.97")))).asDom();
         String grandTotal = "76.96";
 
-        assertThat(cartView, hasUniqueSelector("#calculations .total", withText(grandTotal)));
+        assertThat(cartView, hasUniqueSelector("#cart-grand-total", withText(grandTotal)));
     }
 
     @Test public void

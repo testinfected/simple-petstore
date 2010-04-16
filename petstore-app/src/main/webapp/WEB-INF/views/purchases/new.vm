@@ -4,7 +4,7 @@
 </head>
 <body>
 <fieldset>
-    <legend>Billing Information - Cart Total: $cart.grandTotal</legend>
+    <legend>Billing Information - Cart Total: <span id="cart-grand-total">$cart.grandTotal</span></legend>
 
     #springBind( "paymentDetails" )
     #if ($status.error)
