@@ -49,7 +49,7 @@
         <property name="resourceLoaderPath" value="/WEB-INF/views/"/>
     </bean>
 
-    <bean class="org.springframework.context.support.ResourceBundleMessageSource">
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="errors"/>
     </bean>
 
