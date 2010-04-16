@@ -23,7 +23,7 @@ z-index: 10;
 }
 
 #content {
-
+margin-bottom: 100px;
 }
 
 #logout {
@@ -35,9 +35,9 @@ z-index: 100;
 
 
 #footer {
-/* position:absolute; 
+position:fixed; 
 bottom:0;
-width:960px; */
+width:960px;
 clear: both;
 height:75px;   /* Height of the footer */
 background:#6cf;
