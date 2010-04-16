@@ -12,23 +12,33 @@ position: relative;
 }
 
 #header #shopping-cart{
-background: #fff url(../images/shoppingcart.png) no-repeat;
+background: transparent url(../images/shoppingcart.png) no-repeat;
 font-size: 1.1em;
 height: 50px;
 padding: 10px 0 0 50px;
 position: absolute;
 right: 10px;
-top: 50px;
+top: 65px;
+z-index: 10;
 }
 
 #content {
-
+margin-bottom: 100px;
 }
 
+#logout {
+position: absolute;
+right: 0px;
+top: 45px;
+z-index: 100;
+}
+
+
 #footer {
-position:absolute;
+position:fixed; 
 bottom:0;
 width:960px;
+clear: both;
 height:75px;   /* Height of the footer */
 background:#6cf;
 }
@@ -75,7 +85,7 @@ margin: 0;
 padding: 0;
 }
 
-input {
+input, select {
 background: #ddd;
 font: 1em Arial, Helvetica, sans-serif;
 padding: 1px 3px;
@@ -108,9 +118,20 @@ padding-bottom: .5em;
 }
 
 
-table#products, table#items {
+table#products, table#items, table#cart, table#order-details {
 margin: 0 auto;
 width: 700px;
+}
+
+td.price, td.total {
+text-align: right;
+}
+
+#cart-summary td, #summary td {
+border: 1px solid #ccc;
+border-width: 1px 0;
+font-size: 1.25em;
+padding: 10px 0;
 }
 
 tr.oddrow td {
@@ -139,8 +160,45 @@ border-bottom:1px solid black;
 text-align: left;
 }
 
+#calculations {list-style-type: none;}
+
 #search-box {float: right; padding: 10px 0;}
 #search-box fieldset {display: inline;}
 
 a#home-link {background: #fff url(../images/logo.png) no-repeat; display: inline-block; height: 100px; text-indent: -9999px; width: 395px;}
 a#home-link:hover {background: #fff url(../images/logo-home.png) no-repeat;}
+
+#actions li {
+list-style-type: none;
+float: left;
+width: 45%;
+}
+
+#actions li {
+text-align: left;
+}
+#actions li+li {
+text-align: right;
+}
+
+#checkout, #payment-details ol, #billing-address ol {
+margin: 0 auto;
+width: 700px;
+}
+
+#payment-details ol li, #billing-address ol li{
+list-style-type: none;
+}
+
+#checkout fieldset {
+border: 0;
+}
+
+#checkout #submit {
+margin-left: 200px;
+}
+
+#checkout label, #payment-details label, #billing-address label {
+display: inline-block;
+width: 200px;
+}
