@@ -7,10 +7,7 @@
     <p>Thank you, your order has been confirmed.</p>
 </div>
 <fieldset id="order">
-    <legend>Order details</legend>
-    <ol>
-        <li class="number">Order #$order.number</li>
-        <li>
+    <legend>Order #$order.number details</legend>
             <table id="order-details">
                 <thead>
                 <tr>
@@ -35,36 +32,29 @@
                     <td class="total">$lineItem.totalPrice</td>
                 </tr>
                 #end
-
-                <tr id="summary">
-                    <ol id="calculations">
-                        <li>
-                            <span class="label">Total: </span>
-                            <span id="order-total" class="total">$order.totalPrice</span>
-                        </li>
-                    </ol>
-                </tr>
+        <tr id="summary">
+            <td colspan="3" class="price">Grand Total:</td>
+            <td class="total" id="order-total">$order.totalPrice</td>
+        </tr>
                 </tbody>
             </table>
-        </li>
-    </ol>
 </fieldset>
 
 <fieldset id="payment-details">
     <legend>Payment details</legend>
     <ol>
-        <li><span>Card type: </span><span>$order.paymentMethod.cardCommonName</span></li>
-        <li><span>Card number: </span><span class="number">$order.paymentMethod.cardNumber</span></li>
-        <li><span>Card expiry date: </span><span class="date">$order.paymentMethod.cardExpiryDate</span></li>
+        <li><label>Card type: </label><span>$order.paymentMethod.cardCommonName</span></li>
+        <li><label>Card number: </label><span class="number">$order.paymentMethod.cardNumber</span></li>
+        <li><label>Card expiry date: </label><span class="date">$order.paymentMethod.cardExpiryDate</span></li>
     </ol>
 </fieldset>
 
 <fieldset id="billing-address">
     <legend>Billing Address</legend>
     <ol>
-        <li><span>First name: </span><span>$order.paymentMethod.billingAddress.firstName</span></li>
-        <li><span>Last name: </span><span>$order.paymentMethod.billingAddress.lastName</span></li>
-        <li><span>Email address: </span><span class="email">$order.paymentMethod.billingAddress.emailAddress</span></li>
+        <li><label>First name: </label><span>$order.paymentMethod.billingAddress.firstName</span></li>
+        <li><label>Last name: </label><span>$order.paymentMethod.billingAddress.lastName</span></li>
+        <li><label>Email address: </label><span class="email">$order.paymentMethod.billingAddress.emailAddress</span></li>
     </ol>
 </fieldset>
 

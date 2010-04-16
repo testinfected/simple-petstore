@@ -1,4 +1,3 @@
-
 <html>
 <head>
     <title>PetStore - Cart content</title>
@@ -34,14 +33,8 @@
         </tr>
         #end
         <tr id="cart-summary">
-            <td colspan="4">
-                <ol id="calculations">
-                    <li>
-                        <span class="label">Grand Total: </span>
-                        <span id="cart-grand-total" class="total">$cart.grandTotal</span>
-                    </li>
-                </ol>
-            </td>
+            <td colspan="3" class="price">Grand Total:</td>
+            <td class="total" id="cart-grand-total">$cart.grandTotal</td>
         </tr>
         </tbody>
     </table>
