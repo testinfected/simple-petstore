@@ -65,6 +65,20 @@ public class CartTest {
                 with(number("22222222"), quantity(1))));
         assertThat(cart.getTotalQuantity(), equalTo(3));
     }
+    
+    @Test public void
+    canBeCleared() {
+        havingAddedItemsToCart();
+
+        cart.clear();
+        assertTrue(cart.isEmpty());
+    }
+
+    private void havingAddedItemsToCart() {
+        cart.add(anItem().build());
+        cart.add(anItem().build());
+        cart.add(anItem().build());
+    }
 
     private Matcher<Iterable<CartItem>> containsItems(Matcher<CartItem>... cartItemMatchers) {
         return contains(cartItemMatchers);

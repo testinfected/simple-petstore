@@ -18,6 +18,7 @@ public class Cashier implements CheckoutAssistant, PaymentCollector {
     public Order checkout(Cart cart) {
         Order order = new Order(orderNumberSequence.nextOrderNumber());
         order.addItemsFromCart(cart);
+        cart.clear();
         return order;
     }
 

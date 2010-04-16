@@ -50,4 +50,8 @@ public class Cart implements Basket {
         }
         return null;
     }
+
+    public void clear() {
+        cartItems.clear();
+    }
 }

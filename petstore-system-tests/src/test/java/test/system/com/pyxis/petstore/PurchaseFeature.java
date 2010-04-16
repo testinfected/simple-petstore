@@ -55,7 +55,7 @@ public class PurchaseFeature {
         receiptPage.showsBillingInformation("John", "Leclair", "jleclair@gmail.com");
 
         receiptPage.continueShopping();
-//        homePage.showsCartIsEmpty();
+        homePage.showsCartIsEmpty();
     }
 
     private void havingAddedToCart(final String keyword, final String productName, final String itemNumber) {
