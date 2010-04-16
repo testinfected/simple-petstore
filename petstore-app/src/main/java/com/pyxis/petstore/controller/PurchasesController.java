@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.beans.PropertyEditorSupport;
-
 @Controller
 public class PurchasesController {
     private final Cart cart;
@@ -32,12 +30,7 @@ public class PurchasesController {
 
     @InitBinder
     public void configureDataBinding(WebDataBinder binder) {
-        // todo Convert expiry date to Date
-        binder.registerCustomEditor(CreditCardType.class, new PropertyEditorSupport() {
-            @Override public void setAsText(String text) throws IllegalArgumentException {
-                setValue(CreditCardType.valueOf(text));
-            }
-        });
+        // todo Convert expiry date to Date or find how to do it automatically 
     }
 
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
