@@ -16,13 +16,13 @@ public class OrderNumberTest {
     String SHOULD_NOT_BE_NULL = "{javax.validation.constraints.NotNull.message}";
 
     @Test public void
-    isValidWithANonNullValue() {
+    isValidWithANumber() {
         OrderNumber aValidOrderNumber = aNumber();
         assertThat(validationOf(aValidOrderNumber), succeeds());
     }
 
     @Test public void
-    isInvalidWithANullValue() {
+    isInvalidWithoutANumber() {
         OrderNumber anEmptyOrderNumber = new OrderNumber(null);
         assertThat(validationOf(anEmptyOrderNumber), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
     }
