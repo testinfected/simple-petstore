@@ -38,11 +38,14 @@
         <property name="prefix" value=""/>
         <property name="suffix" value=".vm"/>
         <!--<property name="exposeSessionAttributes" value="true"/>-->
+        <!--<property name="exposeRequestAttributes" value="true"/>-->
         <property name="toolboxConfigLocation" value="/WEB-INF/tools.xml"/>
+        <property name="viewClass" value="com.pyxis.petstore.helpers.VelocityToolbox2View"/>
     </bean>
 
     <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
         <property name="configLocation" value="/WEB-INF/velocity.properties"/>
+        <property name="overrideLogging" value="false"/>
         <property name="resourceLoaderPath" value="/WEB-INF/views/"/>
     </bean>
 

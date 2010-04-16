@@ -18,6 +18,7 @@
         #parse("_logout.vm")
     </div>
     <div id="shopping-cart">
+##        Spring aop proxy prefix bean names with scopedTarget
         #set( $cart = $session.getAttribute('scopedTarget.cart') )
         #parse("_cart.vm")
     </div>
