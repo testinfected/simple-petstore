@@ -3,7 +3,6 @@ package test.com.pyxis.petstore.view;
 import com.pyxis.petstore.domain.billing.CreditCardType;
 import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.views.MockErrors;
@@ -19,6 +18,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.views.MockErrors.errorsOn;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
 import static test.support.com.pyxis.petstore.views.PathFor.purchasesPath;
 import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
@@ -59,7 +59,7 @@ public class NewPurchaseViewTest {
 
     @Test public void
     rendersErrorsWhenPaymentDetailsAreInvalid() {
-        MockErrors errors = MockErrors.errorsOn("paymentDetails");
+        MockErrors errors = errorsOn("paymentDetails");
         errors.reject("invalid");
         errors.rejectValue("cardNumber", "empty");
         newPurchaseView = renderNewPurchaseView().using(model).bind(errors).asDom();
@@ -108,11 +108,6 @@ public class NewPurchaseViewTest {
     private Matcher<Element> withOption(String value, String text) {
         return allOf(withAttribute("value", value), withText(text));
     }
-
-    @Ignore @Test public void indicatesWhenCartIsEmpty() {}
-
-
-    @Ignore @Test public void returnsToCartPageToReviewOrder() {}
 
     private Matcher<Element> withInputFields(final Matcher<Element>... fieldMatchers) {
         return hasSelector("input[type='text']", fieldMatchers);

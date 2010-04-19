@@ -86,14 +86,6 @@ public class ShowReceiptViewTest {
         assertThat(showReceiptView, hasSelector("#order-details tr[id^='line-item']", withSize(2)));
     }
 
-    private Matcher<Element> hasOrderTotal(final String orderTotal) {
-        return hasUniqueSelector("#order-total", withText(orderTotal));
-    }
-
-    private Matcher<Element> hasOrderNumber(final String orderNumber) {
-        return hasUniqueSelector("#order-number", withText(endsWith(orderNumber)));
-    }
-
     @Test public void
     displaysPaymentDetails() {
         assertThat(showReceiptView, hasSelector("#payment-details li span:nth-child(2)", inOrder(
@@ -117,5 +109,13 @@ public class ShowReceiptViewTest {
 
     private VelocityRendering renderShowReceiptView() {
         return render(SHOW_RECEIPT_VIEW_NAME);
+    }
+
+    private Matcher<Element> hasOrderTotal(final String orderTotal) {
+        return hasUniqueSelector("#order-total", withText(orderTotal));
+    }
+
+    private Matcher<Element> hasOrderNumber(final String orderNumber) {
+        return hasUniqueSelector("#order-number", withText(endsWith(orderNumber)));
     }
 }

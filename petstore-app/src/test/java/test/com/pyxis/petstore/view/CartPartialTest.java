@@ -27,7 +27,9 @@ public class CartPartialTest {
 
     @Test public void
     displaysTotalItemsInCartAndLinksToCart() throws Exception {
-        cartPartial = renderCartPartial().using(aModel().with(aCart().containing(anItem(), anItem()))).asDom();
+        cartPartial = renderCartPartial().using(aModel().with(
+                aCart().containing(anItem(), anItem()))
+        ).asDom();
         assertThat(cartPartial,
                 hasUniqueSelector("a",
                         withAttribute("href", cartPath()),

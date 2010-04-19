@@ -18,9 +18,8 @@ public class ItemsViewTest {
     Element itemsView;
 
     @Test public void
-    notifiesWhenInventoryIsEmpty() {
+    indicatesWhenInventoryIsEmpty() {
         itemsView = renderItemsView().using(anEmptyModel()).asDom();
-
         assertThat(itemsView, hasUniqueSelector("#out-of-stock"));
         assertThat(itemsView, hasNoSelector("#items"));
     }
@@ -58,7 +57,7 @@ public class ItemsViewTest {
     }
 
     @Test public void
-    buttonAddsItemToShoppingCart() {
+    addToCartButtonAddsItemToShoppingCart() {
         itemsView = renderItemsView().using(aModel().listing(anItem().withNumber("12345678"))).asDom();
         assertThat(itemsView,
                 hasUniqueSelector("form",

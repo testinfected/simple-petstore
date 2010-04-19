@@ -2,6 +2,7 @@ package test.com.pyxis.petstore.view;
 
 import com.pyxis.petstore.domain.product.AttachmentStorage;
 import com.pyxis.petstore.domain.product.Product;
+import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -78,9 +79,9 @@ public class ProductsViewTest {
         productsView = renderProductsView().using(model).asDom();
         assertThat(productsView,
                 hasSelector("#products td",
-                        inOrder(hasChild(image(pathFor(photoUrl))),
-                                productName("Labrador"),
-                                description("Friendly"))));
+                        inOrder(hasChild(anImage(pathFor(photoUrl))),
+                                withText("Labrador"),
+                                withText("Friendly"))));
     }
 
     @Test public void
@@ -115,23 +116,19 @@ public class ProductsViewTest {
     }
 
     private Matcher<Product> aProductWithPhoto(Matcher<? super String> photoMatcher) {
-        return hasProperty("photoFileName", photoMatcher);
+        return new FeatureMatcher<Product, String>(photoMatcher, "a product with photo filename", "photo filename") {
+            @Override protected String featureValueOf(Product actual) {
+                return actual.getPhotoFileName();
+            }
+        };
     }
 
     private Matcher<Element> anEmptyDescription() {
-        return description("");
+        return withBlankText();
     }
 
-    private Matcher<Element> description(String description) {
-        return withText(description);
-    }
-
-    private Matcher<Element> image(String imageUrl) {
+    private Matcher<Element> anImage(String imageUrl) {
         return hasChild(withAttribute("src", equalTo(imageUrl)));
-    }
-
-    private Matcher<Element> productName(String name) {
-        return withText(name);
     }
 
     private VelocityRendering renderProductsView() {
