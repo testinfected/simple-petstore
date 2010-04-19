@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Element;
+import test.support.com.pyxis.petstore.views.MockErrors;
 import test.support.com.pyxis.petstore.views.ModelBuilder;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
@@ -54,6 +55,21 @@ public class NewPurchaseViewTest {
     @Test public void
     fillsCardTypeSelectionList() {
         assertThat(newPurchaseView, hasSelector("#card-type option", withCreditCardOptions()));
+    }
+
+    @Test public void
+    rendersErrorsWhenPaymentDetailsAreInvalid() {
+        MockErrors errors = MockErrors.errorsOn("paymentDetails");
+        errors.reject("invalid");
+        errors.rejectValue("cardNumber", "empty");
+        newPurchaseView = renderNewPurchaseView().using(model).bind(errors).asDom();
+
+        assertThat(newPurchaseView, hasUniqueSelector("#global-errors", hasChild(
+                withText("invalid.paymentDetails")
+        )));
+        assertThat(newPurchaseView, hasUniqueSelector("#card-number-errors", hasChild(
+                withText("empty.paymentDetails.cardNumber")
+        )));
     }
 
     private Matcher<Element> withBillingInformation() {

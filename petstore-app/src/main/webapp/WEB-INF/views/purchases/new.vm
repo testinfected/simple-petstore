@@ -9,7 +9,7 @@
     #springBind( "paymentDetails" )
     #if ($status.error)
     <div>
-    <ol>
+    <ol id="global-errors" class="errors">
         #foreach($error in $status.errorMessages)
         <li>$error</li>
         #end
@@ -49,7 +49,7 @@
                     <input id="card-number" name="cardNumber" type="text"/>
                     #springBind( "paymentDetails.cardNumber" )
                     #if ($status.error)
-                    <ol>
+                    <ol id="card-number-errors" class="errors">
                         #foreach($error in $status.errorMessages)
                         <li>$error</li>
                         #end
