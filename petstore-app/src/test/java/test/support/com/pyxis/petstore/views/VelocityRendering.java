@@ -109,10 +109,7 @@ public class VelocityRendering {
     }
 
     private void exposeRequestContext() {
-        // use a mock request context to store errors objects and BindStatus should be able
-        // to play nicely with it. This way we won't need to mock spring velocimacro
         model.put(AbstractTemplateView.SPRING_MACRO_REQUEST_CONTEXT_ATTRIBUTE, mockRequestContext);
-//        model.put("bindings", bindings);
     }
 
     public Element asDom() {
