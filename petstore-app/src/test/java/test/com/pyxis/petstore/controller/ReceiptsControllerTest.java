@@ -30,8 +30,7 @@ public class ReceiptsControllerTest {
     @Test public void
     fetchesOrderByNumberAndDisplaysReceipt() {
         context.checking(new Expectations() {{
-            oneOf(orderLog).find(new OrderNumber("00000100"));
-            will(returnValue(order));
+            oneOf(orderLog).find(new OrderNumber("00000100")); will(returnValue(order));
         }});
         String view = controller.show("00000100", model);
         assertThat(view, equalTo("receipts/show"));

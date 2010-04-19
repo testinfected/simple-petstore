@@ -60,7 +60,7 @@ public class PurchasesControllerTest {
     }
 
     @Test public void
-    collectsPaymentAndRedirectToReceiptView() {
+    collectsPaymentAndRedirectsToReceiptView() {
         final Order order = anOrder().from(cart).withNumber("12345678").build();
 
         final CreditCardDetails paymentDetails = aVisa().

@@ -14,8 +14,8 @@ public final class PathFor {
         return pathFor("");
     }
 
-    public static String itemsPath(String produtNumber) {
-        return pathFor("/products/" + produtNumber + "/items");
+    public static String itemsPath(String productNumber) {
+        return pathFor("/products/" + productNumber + "/items");
     }
 
     public static String cartItemsPath() {

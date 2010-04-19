@@ -43,7 +43,7 @@ public class ProductsControllerTest {
     }
 
     @Test public void
-    listsProductsMatchingKeywordAndMakesThemAvailableToView() {
+    retrievesProductsMatchingKeywordAndMakesThemAvailableToView() {
         final Object matchingProducts = Arrays.asList(aProduct().build());
         context.checking(new Expectations() {{
             oneOf(productCatalog).findByKeyword("Dog"); will(returnValue(matchingProducts));

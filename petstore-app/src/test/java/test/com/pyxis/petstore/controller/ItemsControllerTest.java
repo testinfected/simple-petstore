@@ -29,11 +29,10 @@ public class ItemsControllerTest {
     Model model = new ExtendedModelMap();
 
     @Test public void
-    listsItemsByProductNumberAndMakeThemAvailableToView() {
+    retrievesItemsByProductNumberAndMakeThemAvailableToView() {
     	final List<Item> anItemList = Arrays.asList(anItem().build());
     	context.checking(new Expectations(){{
-    		oneOf(itemInventory).findByProductNumber("LAB-1234");
-			will(returnValue(anItemList));
+    		oneOf(itemInventory).findByProductNumber("LAB-1234"); will(returnValue(anItemList));
     	}});
         String view = itemController.index("LAB-1234", model);
         assertThat(view, equalTo("items"));
