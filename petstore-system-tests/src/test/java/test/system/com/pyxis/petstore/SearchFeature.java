@@ -23,24 +23,24 @@ public class SearchFeature {
     }
 
     @Test public void
-    searchDoesNotMatchAnyProduct() throws Exception {
+    searchDoesNotMatchAnyProductInCatalog() throws Exception {
         database.given(aProduct().withName("Labrador Retriever"));
         
-        ProductsPage resultsPage = home.searchFor("Dalmatian");
-        resultsPage.showsNoMatch();
+        ProductsPage productsPage = home.searchFor("Dalmatian");
+        productsPage.showsNoResult();
     }
 
     @Test public void
-    findsProductsWhoseNamesOrDescriptionMatch() throws Exception {
+    findsProductsInCatalog() throws Exception {
         database.given(
                 aProduct().withNumber("LAB-1234").withName("Labrador Retriever"),
                 aProduct().withNumber("CHE-5678").withName("Chesapeake").describedAs("Chesapeake bay retriever"),
                 aProduct().withName("Dalmatian"));
 
-        ProductsPage resultsPage = home.searchFor("retriever");
-        resultsPage.displaysNumberOfResults(2);
-        resultsPage.displaysProduct("Labrador Retriever");
-        resultsPage.displaysProduct("Chesapeake");
+        ProductsPage productsPage = home.searchFor("retriever");
+        productsPage.displaysNumberOfResults(2);
+        productsPage.displaysProduct("Labrador Retriever");
+        productsPage.displaysProduct("Chesapeake");
     }
 
     @After public void

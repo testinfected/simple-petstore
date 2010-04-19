@@ -2,12 +2,16 @@ package test.support.com.pyxis.petstore.web;
 
 import org.openqa.selenium.WebDriver;
 
-public class SharedInstanceWebDriverFactory extends WebDriverFactory {
+/**
+ * For use in development environments. A factory, which reuses a single
+ * WebDriver instance and creates a new browser window for each test.
+ */
+public class SingleInstanceWebDriverFactory extends WebDriverFactory {
 
     private WebDriver sharedWebDriver;
     private ControlPage controlPage;
 
-    public SharedInstanceWebDriverFactory() {
+    public SingleInstanceWebDriverFactory() {
         takeControlOf(newWebDriverInstance());
         quitWebDriverOnShutdown();
     }

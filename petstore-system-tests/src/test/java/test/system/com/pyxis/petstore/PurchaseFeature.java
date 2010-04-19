@@ -24,10 +24,10 @@ public class PurchaseFeature {
     startApplication() throws Exception {
         database.start();
         homePage = petstore.start();
-        seedDatabase();
+        setupContext();
     }
 
-    private void seedDatabase() throws Exception {
+    private void setupContext() throws Exception {
         Product labrador = aProduct().withName("Labrador Retriever").build();
         database.given(labrador);
         database.given(
@@ -41,7 +41,7 @@ public class PurchaseFeature {
         havingAddedToCart("Labrador", "Labrador Retriever", "11111111");
         havingAddedToCart("Labrador", "Labrador Retriever", "22222222");
 
-        CartPage cartPage = homePage.showCartContent();
+        CartPage cartPage = homePage.lookAtCartContent();
         PurchasePage purchasePage = cartPage.checkout();
         purchasePage.showsTotalToPay(total);
         purchasePage.willBillTo("John", "Leclair", "jleclair@gmail.com");
@@ -51,8 +51,8 @@ public class PurchaseFeature {
         receiptPage.showsTotalPaid(total);
         receiptPage.showsLineItem("11111111", "Male Adult", "599.00");
         receiptPage.showsLineItem("22222222", "Female Adult", "649.00");
-        receiptPage.showsCreditCardDetails("Visa", "9999 9999 9999 9999", "12/12");
         receiptPage.showsBillingInformation("John", "Leclair", "jleclair@gmail.com");
+        receiptPage.showsCreditCardDetails("Visa", "9999 9999 9999 9999", "12/12");
 
         receiptPage.continueShopping();
         homePage.showsCartIsEmpty();

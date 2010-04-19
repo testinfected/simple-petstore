@@ -19,7 +19,6 @@ import java.util.Properties;
 import static com.threelevers.css.DocumentBuilder.dom;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
-
 public class VelocityRendering {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";

@@ -6,13 +6,13 @@ import test.system.com.pyxis.petstore.page.HomePage;
 public class PetStoreDriver {
 
     private final WebDriverFactory webDriverFactory = WebDriverFactory.getInstance();
-    private final WebDriver webdriver;
+    private WebDriver webdriver;
 
     public PetStoreDriver() {
-        webdriver = webDriverFactory.createWebDriver();
     }
 
     public HomePage start() throws Exception {
+        webdriver = webDriverFactory.createWebDriver();
         HomePage home = goToHomePage();
         home.logout();
         return home;

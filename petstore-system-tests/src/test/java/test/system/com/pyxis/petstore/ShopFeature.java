@@ -20,15 +20,17 @@ public class ShopFeature {
 	DatabaseDriver database = new DatabaseDriver();
 
     HomePage homePage;
+    ItemsPage itemsPage;
+    CartPage cartPage;
 
     @Before public void
     startApplication() throws Exception {
         database.start();
         homePage = petstore.start();
-        seedDatabase();
+        setupContext();
 	}
 
-    private void seedDatabase() throws Exception {
+    private void setupContext() throws Exception {
         Product iguana = aProduct().withName("Iguana").build();
         database.given(iguana);
         database.given(
@@ -40,28 +42,28 @@ public class ShopFeature {
     shopsForItemsAndAddsThemToCart() throws Exception {
         homePage.showsCartIsEmpty();
 
-        ItemsPage itemsPage = havingListedItemsOf("Iguana");
+        itemsPage = havingListedItemsOf("Iguana");
 
-        CartPage cartPage = itemsPage.addToCart("12345678");
+        cartPage = itemsPage.addToCart("12345678");
         cartPage.showsItemInCart("12345678", "Green Adult", "18.50");
-        cartPage.showsAGrandTotalOf("18.50");
+        cartPage.showsGrandTotal("18.50");
         cartPage.continueShopping();
-        homePage.showsCartTotalQuantityIs(1);
+        homePage.showsCartTotalQuantity(1);
 
         itemsPage = havingListedItemsOf("Iguana");
 
         cartPage = itemsPage.addToCart("87654321");
         cartPage.showsItemInCart("87654321", "Blue Female", "58.97");
-        cartPage.showsAGrandTotalOf("77.47");
+        cartPage.showsGrandTotal("77.47");
         cartPage.continueShopping();
-        homePage.showsCartTotalQuantityIs(2);
+        homePage.showsCartTotalQuantity(2);
     }
 
     @Test public void
     shopsForTheSameItemMultipleTimes() throws Exception {
-        ItemsPage itemsPage = havingListedItemsOf("Iguana");
+        itemsPage = havingListedItemsOf("Iguana");
 
-        CartPage cartPage = itemsPage.addToCart("12345678");
+        cartPage = itemsPage.addToCart("12345678");
         cartPage.showsItemQuantity("12345678", 1);
         cartPage.continueShopping();
 
@@ -70,6 +72,8 @@ public class ShopFeature {
         cartPage = itemsPage.addToCart("12345678");
         cartPage.showsItemQuantity("12345678", 2);
         cartPage.continueShopping();
+
+        homePage.showsCartTotalQuantity(2);
 	}
 
     @After public void

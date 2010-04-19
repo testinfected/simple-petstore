@@ -27,11 +27,11 @@ public class HomePage extends PageObject {
         assertNotPresent(selector("#shopping-cart a"));
     }
 
-    public void showsCartTotalQuantityIs(int quantity) {
+    public void showsCartTotalQuantity(int quantity) {
         assertPresenceOf(selector("#shopping-cart a").with(text(containsString(valueOf(quantity)))));
     }
 
-    public CartPage showCartContent() {
+    public CartPage lookAtCartContent() {
         clickOn(selector("#shopping-cart a"));
         return anInstanceOf(CartPage.class);
     }

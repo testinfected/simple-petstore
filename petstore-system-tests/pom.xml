@@ -94,7 +94,7 @@
     </dependencies>
 
     <properties>
-        <webdriver.factory.class>test.support.com.pyxis.petstore.web.SharedInstanceWebDriverFactory
+        <webdriver.factory.class>test.support.com.pyxis.petstore.web.SingleInstanceWebDriverFactory
         </webdriver.factory.class>
     </properties>
 

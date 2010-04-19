@@ -26,8 +26,8 @@ public class ReceiptPage extends PageObject {
     }
 
     public void showsLineItem(String itemNumber, String itemDescription, String totalPrice) {
-        assertPresenceOf(cellShowingNameFor(itemNumber).with(text(containsString(itemDescription))));
-        assertPresenceOf(cellShowingTotalFor(itemNumber).with(text(being(totalPrice))));
+        assertPresenceOf(cellDisplayingNameOfItem(itemNumber).with(text(containsString(itemDescription))));
+        assertPresenceOf(cellDisplayingTotalForItem(itemNumber).with(text(being(totalPrice))));
     }
 
     public void showsCreditCardDetails(String cardType, String cardNumber, String cardExpiryDate) {
@@ -47,11 +47,11 @@ public class ReceiptPage extends PageObject {
         return anInstanceOf(HomePage.class);
     }
 
-    private Finder<WebElement, WebDriver> cellShowingNameFor(String itemNumber) {
+    private Finder<WebElement, WebDriver> cellDisplayingNameOfItem(String itemNumber) {
         return selector(domIdOf(itemNumber) + " td.text");
     }
 
-    private Finder<WebElement, WebDriver> cellShowingTotalFor(String itemNumber) {
+    private Finder<WebElement, WebDriver> cellDisplayingTotalForItem(String itemNumber) {
         return selector(domIdOf(itemNumber) + " td.total");
     }
 

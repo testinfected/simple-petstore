@@ -5,10 +5,12 @@ import org.openqa.selenium.WebDriver;
 
 public abstract class WebDriverFactory {
 
-    private static final String DEFAULT_WEBDRIVER_FACTORY_CLASS_NAME = SharedInstanceWebDriverFactory.class.getName();
+    private static final String DEFAULT_WEBDRIVER_FACTORY_CLASS_NAME = SingleInstanceWebDriverFactory.class.getName();
     private static final String DEFAULT_WEBDRIVER_CLASS_NAME = "org.openqa.selenium.firefox.FirefoxDriver";
 
     private static WebDriverFactory factory;
+
+    public abstract WebDriver createWebDriver();
 
     public static WebDriverFactory getInstance() {
         if (factory == null) {
@@ -24,8 +26,6 @@ public abstract class WebDriverFactory {
             throw ExceptionImposter.imposterize(e);
         }
     }
-
-    public abstract WebDriver createWebDriver();
 
     private static Class<?> webDriverFactoryClass() throws ClassNotFoundException {
         return Class.forName(getWebDriverFactoryClassName());

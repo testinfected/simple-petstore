@@ -28,7 +28,7 @@ public class CartPage extends PageObject {
         assertPresenceOf(cellShowingQuantityFor(itemNumber).with(text(being(quantity))));
     }
 
-    public void showsAGrandTotalOf(String price) {
+    public void showsGrandTotal(String price) {
         assertPresenceOf(element("cart-grand-total").with(text(being(price))));
     }
 
