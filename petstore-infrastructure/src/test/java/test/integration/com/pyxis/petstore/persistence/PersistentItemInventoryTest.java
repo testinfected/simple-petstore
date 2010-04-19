@@ -4,6 +4,7 @@ import com.pyxis.petstore.domain.product.Item;
 import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ItemNumber;
 import com.pyxis.petstore.domain.product.Product;
+import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hibernate.SessionFactory;
@@ -22,7 +23,8 @@ import java.util.List;
 
 import static com.pyxis.matchers.persistence.HasFieldWithValue.hasField;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
@@ -59,8 +61,9 @@ public class PersistentItemInventoryTest {
         Product product = aProduct().withNumber("LAB-1234").build();
         havingPersisted(product);
         havingPersisted(anItem().of(product), anItem().of(product));
-        List<Item> itemsAvailable = itemInventory.findByProductNumber("LAB-1234");
-        assertThat(itemsAvailable, everyItem(itemOfProduct(productWithNumber("LAB-1234"))));
+
+        List<Item> availableItems = itemInventory.findByProductNumber("LAB-1234");
+        assertThat(availableItems, everyItem(anItemOfProduct(productWithNumber("LAB-1234"))));
     }
 
     @Test public void
@@ -85,15 +88,6 @@ public class PersistentItemInventoryTest {
         havingPersisted(item.build());
 
         assertViolatesUniqueness(item.build());
-    }
-
-    private void assertViolatesUniqueness(Item item) throws Exception {
-        try {
-            database.persist(item);
-            fail("Expected a constraint violation");
-        } catch (org.hibernate.exception.ConstraintViolationException expected) {
-            assertTrue(true);
-        }
     }
 
     @Test(expected = ConstraintViolationException.class) public void
@@ -129,15 +123,23 @@ public class PersistentItemInventoryTest {
     }
 
     private Matcher<Item> itemWithNumber(final String number) {
-        return hasProperty("number", equalTo(number));
+        return new FeatureMatcher<Item, String>(equalTo(number), "an item with number", "item number") {
+            @Override protected String featureValueOf(Item actual) {
+                return actual.getNumber();
+            }
+        };
     }
 
-    private Matcher<Item> itemOfProduct(Matcher<? super Product> productMatcher) {
+    private Matcher<Item> anItemOfProduct(Matcher<? super Product> productMatcher) {
         return hasField("product", productMatcher);
     }
 
     private Matcher<Product> productWithNumber(final String number) {
-        return hasField("number", equalTo(number));
+        return new FeatureMatcher<Product, String>(equalTo(number), "a product with number", "product number") {
+            @Override protected String featureValueOf(Product actual) {
+                return actual.getNumber();
+            }
+        };
     }
 
     private ItemBuilder anItemWithoutAReferenceNumber(Product product) {
@@ -150,6 +152,15 @@ public class PersistentItemInventoryTest {
 
     private ItemBuilder anItemWithoutAPrice() {
         return anItem().priced((BigDecimal) null);
+    }
+
+    private void assertViolatesUniqueness(Item item) throws Exception {
+        try {
+            database.persist(item);
+            fail("Expected a constraint violation");
+        } catch (org.hibernate.exception.ConstraintViolationException expected) {
+            assertTrue(true);
+        }
     }
 
     private void assertFailsPersisting(ItemBuilder item) throws Exception {

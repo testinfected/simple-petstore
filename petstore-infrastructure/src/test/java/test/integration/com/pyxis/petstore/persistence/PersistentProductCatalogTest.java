@@ -2,7 +2,9 @@ package test.integration.com.pyxis.petstore.persistence;
 
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +18,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static com.pyxis.matchers.persistence.HasFieldWithValue.hasField;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
@@ -43,12 +44,12 @@ public class PersistentProductCatalogTest {
     wontFindAnythingIfNoProductMatches() throws Exception {
         havingPersisted(aProduct().withName("Dalmatian").describedAs("A big dog"));
 
-        List<Product> matchingProducts = productCatalog.findByKeyword("bulldog");
-        assertTrue(matchingProducts.isEmpty());
+        Collection<Product> matchingProducts = productCatalog.findByKeyword("bulldog");
+        assertThat(matchingProducts, Matchers.<Product>empty());
     }
 
     @Test public void
-    canFindProductsByMatchingNames() throws Exception {
+    canFindProductsByMatchingName() throws Exception {
         havingPersisted(
                 aProduct().withName("English Bulldog"),
                 and(aProduct().withName("French Bulldog")),
@@ -57,7 +58,7 @@ public class PersistentProductCatalogTest {
 
         Collection<Product> matches = productCatalog.findByKeyword("bull");
         assertThat(matches, hasSize(equalTo(2)));
-        assertThat(matches, containsProduct(productNamed("English Bulldog"), productNamed("French Bulldog")));
+        assertThat(matches, containsProducts(productNamed("English Bulldog"), productNamed("French Bulldog")));
     }
 
     @Test public void
@@ -70,7 +71,7 @@ public class PersistentProductCatalogTest {
 
         List<Product> matches = productCatalog.findByKeyword("friend");
         assertThat(matches, hasSize(equalTo(2)));
-        assertThat(matches, containsProduct(productNamed("Labrador"), productNamed("Golden")));
+        assertThat(matches, containsProducts(productNamed("Labrador"), productNamed("Golden")));
     }
 
     @Test (expected = ConstraintViolationException.class)
@@ -78,17 +79,9 @@ public class PersistentProductCatalogTest {
         productCatalog.add(aProductWithoutAName());
     }
 
-    private Product aProductWithoutAName() {
-        return aProduct().withName(null).build();
-    }
-
     @Test (expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutANumber() throws Exception {
         productCatalog.add(aProductWithoutANumber());
-    }
-
-    private Product aProductWithoutANumber() {
-        return aProduct().withNumber(null).build();
     }
 
     @Test public void
@@ -113,7 +106,15 @@ public class PersistentProductCatalogTest {
 		} catch (org.hibernate.exception.ConstraintViolationException expected) {
 			assertTrue(true);
 		}
-    }    
+    }
+
+    private Product aProductWithoutAName() {
+        return aProduct().withName(null).build();
+    }
+
+    private Product aProductWithoutANumber() {
+        return aProduct().withNumber(null).build();
+    }
 
     private void havingPersisted(Builder<?>... builders) throws Exception {
         database.persist(builders);
@@ -123,7 +124,7 @@ public class PersistentProductCatalogTest {
         return builder;
     }
 
-    private Matcher<Iterable<Product>> containsProduct(Matcher<Product>... productMatchers) {
+    private Matcher<Iterable<Product>> containsProducts(Matcher<Product>... productMatchers) {
         return containsInAnyOrder(productMatchers);
     }
 
@@ -132,6 +133,10 @@ public class PersistentProductCatalogTest {
     }
 
     private Matcher<Product> productNamed(String name) {
-        return hasField("name", equalTo(name));
+        return new FeatureMatcher<Product, String>(equalTo(name), "a product named", "product name") {
+            @Override protected String featureValueOf(Product actual) {
+                return actual.getName();
+            }
+        };
     }
 }

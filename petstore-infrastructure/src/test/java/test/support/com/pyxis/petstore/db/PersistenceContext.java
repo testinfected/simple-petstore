@@ -21,7 +21,7 @@ public class PersistenceContext {
     };
     private static final String MIGRATION_PROPERTIES_FILE = "/migration.properties";
 
-    private static PersistenceContext context;
+    private static PersistenceContext instance;
 
     private ApplicationContext applicationContext;
 
@@ -30,9 +30,9 @@ public class PersistenceContext {
     }
 
     public static PersistenceContext get() {
-        if (context == null)
-            context = new PersistenceContext();
-        return context;
+        if (instance == null)
+            instance = new PersistenceContext();
+        return instance;
     }
 
     public PersistenceContext() {

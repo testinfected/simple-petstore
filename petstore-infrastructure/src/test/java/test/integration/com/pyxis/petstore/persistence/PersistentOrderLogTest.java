@@ -56,8 +56,16 @@ public class PersistentOrderLogTest {
         assertViolatesUniqueness(order.build());
     }
 
+    @Test public void
+    findsOrdersByNumber() throws Exception {
+        havingPersisted(anOrder().withNumber("00000100"));
+
+        Order found = orderLog.find(new OrderNumber("00000100"));
+        assertThat(found, orderWithNumber("00000100"));
+    }
+
     @Test(expected = ConstraintViolationException.class) public void
-    lineItemsCannotBePersistedIndependently() throws Exception {
+    lineItemsCannotBePersistedInIsolation() throws Exception {
         LineItem shouldFail = LineItem.from(new CartItem(anItem().build()));
         database.persist(shouldFail);
     }
@@ -95,10 +103,18 @@ public class PersistentOrderLogTest {
         database.perform(new UnitOfWork() {
             public void work(Session session) throws Exception {
                 Order reloaded = (Order) session.get(Order.class, idOf(order));
-                assertThat(reloaded.getLineItemCount(), equalTo(order.getLineItemCount()));
+                assertThat(reloaded, sameItemCountAs(order));
                 assertThat(reloaded.getLineItems(), contains(linesWithSameStateAs(order)));
             }
         });
+    }
+
+    private Matcher<? super Order> sameItemCountAs(Order order) {
+        return new FeatureMatcher<Order, Integer>(equalTo(order.getLineItemCount()), "an order with line item count", "line item count") {
+            @Override protected Integer featureValueOf(Order actual) {
+                return actual.getLineItemCount();
+            }
+        };
     }
 
     private List<Matcher<? super LineItem>> linesWithSameStateAs(Order order) {
@@ -109,12 +125,8 @@ public class PersistentOrderLogTest {
         return all;
     }
 
-    @Test public void
-    findsOrdersByNumber() throws Exception {
-        havingPersisted(anOrder().withNumber("00000100"));
-
-        Order found = orderLog.find(new OrderNumber("00000100"));
-        assertThat(found, orderWithNumber("00000100"));
+    private void havingPersisted(Builder<?>... builders) throws Exception {
+        database.persist(builders);
     }
 
     private Matcher<? super Order> orderWithNumber(String orderNumber) {
@@ -123,10 +135,6 @@ public class PersistentOrderLogTest {
                 return order.getNumber();
             }
         };
-    }
-
-    private void havingPersisted(Builder<?>... builders) throws Exception {
-        database.persist(builders);
     }
 
     private void assertViolatesUniqueness(Order order) throws Exception {
