@@ -5,6 +5,7 @@ import com.pyxis.petstore.domain.order.CartItem;
 import com.pyxis.petstore.domain.order.LineItem;
 import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.product.Item;
+import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -16,7 +17,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
@@ -35,7 +35,7 @@ public class OrderTest {
     }
 
     @Test public void
-    consistsOfNoItemIsCartIsEmpty() {
+    consistsOfNoItemIfCartIsEmpty() {
         order.addItemsFromCart(anEmptyCart().build());
         assertThat(order.getLineItems(), Matchers.<LineItem>empty());
     }
@@ -52,12 +52,12 @@ public class OrderTest {
     @Test public void
     isInsensitiveToChangeInItemPrice() {
         BigDecimal originalPrice = new BigDecimal("75.97");
-        Item anItemWhichPriceWillChange = anItem().priced(originalPrice).build();
-        Cart cart = aCart().containing(anItemWhichPriceWillChange).build();
+        Item anItemWhosePriceWillChange = anItem().priced(originalPrice).build();
+        Cart cart = aCart().containing(anItemWhosePriceWillChange).build();
         order.addItemsFromCart(cart);
 
         BigDecimal updatedPrice = new BigDecimal("84.99");
-        anItemWhichPriceWillChange.setPrice(updatedPrice);
+        anItemWhosePriceWillChange.setPrice(updatedPrice);
         assertThat(order.getTotalPrice(), equalTo(originalPrice));
     }
 
@@ -117,14 +117,26 @@ public class OrderTest {
     }
 
     private Matcher<LineItem> quantity(int count) {
-        return hasProperty("quantity", equalTo(count));
+        return new FeatureMatcher<LineItem, Integer>(equalTo(count), " a line item with quantity", "quantity") {
+            @Override protected Integer featureValueOf(LineItem actual) {
+                return actual.getQuantity();
+            }
+        };
     }
 
     private Matcher<LineItem> number(String number) {
-        return hasProperty("itemNumber", equalTo(number));
+        return new FeatureMatcher<LineItem, String>(equalTo(number), "a line item with number", "item number") {
+            @Override protected String featureValueOf(LineItem actual) {
+                return actual.getItemNumber();
+            }
+        };
     }
 
     private Matcher<LineItem> totalPrice(BigDecimal price) {
-        return hasProperty("totalPrice", equalTo(price));
+        return new FeatureMatcher<LineItem, BigDecimal>(equalTo(price), "a line item with total", "total") {
+            @Override protected BigDecimal featureValueOf(LineItem actual) {
+                return actual.getTotalPrice();
+            }
+        };
     }
 }

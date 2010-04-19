@@ -33,10 +33,10 @@ public class OrderNumberTest {
         OrderNumber shouldMatch = new OrderNumber("00000001");
         OrderNumber shouldNotMatch = new OrderNumber("00000002");
 
-        assertThat(orderNumber, equalTo(shouldMatch));
-        assertThat(orderNumber.hashCode(), Matchers.equalTo(shouldMatch.hashCode()));
-        assertThat(orderNumber, not(equalTo(shouldNotMatch)));
-        assertThat(orderNumber.hashCode(), not(equalTo(shouldNotMatch.hashCode())));
+        assertThat("order numbers should match", orderNumber, equalTo(shouldMatch));
+        assertThat("order numbers hash codes should match", orderNumber.hashCode(), Matchers.equalTo(shouldMatch.hashCode()));
+        assertThat("order numbers should not match", orderNumber, not(equalTo(shouldNotMatch)));
+        assertThat("order numbers hash codes should not match", orderNumber.hashCode(), not(equalTo(shouldNotMatch.hashCode())));
     }
     
     @Test public void

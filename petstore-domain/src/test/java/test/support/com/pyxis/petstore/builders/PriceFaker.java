@@ -1,32 +1,30 @@
 package test.support.com.pyxis.petstore.builders;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.math.BigDecimal;
 
 public class PriceFaker {
 
-    private final RandomNumberGenerator integerPartGenerator;
-    private final RandomNumberGenerator decimalPartGenerator;
+    private static final BigDecimal DOLLAR_IN_CENTS = new BigDecimal(100);
+    private final RandomNumberGenerator generator;
 
     public static BigDecimal aPrice() {
         return new PriceFaker().fakePrice();
     }
 
     public PriceFaker() {
-        integerPartGenerator = new RandomNumberGenerator(1000);
-        decimalPartGenerator = new RandomNumberGenerator(100);
+        generator = new RandomNumberGenerator(100000);
     }
 
     public BigDecimal fakePrice() {
-        return new BigDecimal(integerPart() + "." + decimalPart());
+        BigDecimal cents = new BigDecimal(random());
+        return dollars(cents);
     }
 
-    private String decimalPart() {
-        return StringUtils.leftPad(decimalPartGenerator.generateNumber(), 2, "0");
+    private BigDecimal dollars(BigDecimal cents) {
+        return cents.divide(DOLLAR_IN_CENTS).setScale(2);
     }
 
-    private String integerPart() {
-        return integerPartGenerator.generateNumber();
+    private String random() {
+        return generator.generateNumber();
     }
 }

@@ -3,6 +3,7 @@ package test.com.pyxis.petstore.domain.product;
 import com.pyxis.petstore.domain.product.Item;
 import com.pyxis.petstore.domain.product.Product;
 import org.junit.Test;
+import test.support.com.pyxis.petstore.builders.ItemBuilder;
 
 import java.math.BigDecimal;
 
@@ -20,26 +21,22 @@ public class ItemTest {
 
     @Test public void
     isInvalidWithoutAProduct() {
-        Item anItemWithNoAssociatedProduct = anItem().of((Product) null).build();
-        assertThat(validationOf(anItemWithNoAssociatedProduct), violates(on("product"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat(validationOf(anItemWithoutAProduct()), violates(on("product"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutANumber() {
-        Item anItemWithoutANumber = anItem().with(null).build();
-        assertThat(validationOf(anItemWithoutANumber), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat(validationOf(anItemWithoutANumber()), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutAValidNumber() {
-        Item anItemWithAnInvalidNumber = anItem().withNumber(null).build();
-        assertThat(validationOf(anItemWithAnInvalidNumber), violates(on("number.number"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat(validationOf(anItemWithAnInvalidNumber()), violates(on("number.number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutAPrice() {
-        Item anItemWithoutAPrice = anItem().priced((BigDecimal) null).build();
-        assertThat(validationOf(anItemWithoutAPrice), violates(on("price"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat(validationOf(anItemWithoutAPrice()), violates(on("price"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
@@ -56,5 +53,21 @@ public class ItemTest {
         assertThat("items should match", item, equalTo(shouldMatch));
         assertThat("items hash codes should match", item.hashCode(), equalTo(shouldMatch.hashCode()));
         assertThat("items should not match", item, not(equalTo(shouldNotMatch)));
+    }
+
+    private ItemBuilder anItemWithoutAProduct() {
+        return anItem().of((Product) null);
+    }
+
+    private ItemBuilder anItemWithoutANumber() {
+        return anItem().with(null);
+    }
+
+    private ItemBuilder anItemWithAnInvalidNumber() {
+        return anItem().withNumber(null);
+    }
+
+    private ItemBuilder anItemWithoutAPrice() {
+        return anItem().priced((BigDecimal) null);
     }
 }

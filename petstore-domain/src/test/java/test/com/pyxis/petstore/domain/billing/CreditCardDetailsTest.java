@@ -14,9 +14,15 @@ public class CreditCardDetailsTest {
 
     @Test public void
     areInvalidWithoutACardNumber() {
-        CreditCardDetails detailsMissingCardNumber = aVisa().build();
-        assertThat(validationOf(detailsMissingCardNumber), violates(on("cardNumber"), withError(SHOULD_NOT_BE_EMPTY)));
-        CreditCardDetails detailsWithEmptyCardNumber = aVisa().withNumber("").build();
-        assertThat(validationOf(detailsWithEmptyCardNumber), violates(on("cardNumber"), withError(SHOULD_NOT_BE_EMPTY)));
+        assertThat(validationOf(detailsMissingCardNumber()), violates(on("cardNumber"), withError(SHOULD_NOT_BE_EMPTY)));
+        assertThat(validationOf(detailsWithEmptyCardNumber()), violates(on("cardNumber"), withError(SHOULD_NOT_BE_EMPTY)));
+    }
+
+    private CreditCardDetails detailsWithEmptyCardNumber() {
+        return aVisa().withNumber("").build();
+    }
+
+    private CreditCardDetails detailsMissingCardNumber() {
+        return aVisa().build();
     }
 }

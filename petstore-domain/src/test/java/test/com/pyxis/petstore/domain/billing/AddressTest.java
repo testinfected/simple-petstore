@@ -11,7 +11,7 @@ import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 public class AddressTest {
 
     @Test public void
-    addressMatchWhenAllPropertiesMatch() {
+    addressesMatchWhenAllPropertiesMatch() {
         Address address = anAddress().
                 withFirstName("John").
                 withLastName("Doe").

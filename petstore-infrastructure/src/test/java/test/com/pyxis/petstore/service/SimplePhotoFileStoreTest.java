@@ -11,8 +11,8 @@ import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class SimplePhotoFileStoreTest {
 
-    static final String STORAGE_ROOT_PATH = "/path/to/attachmentStore";
-    static final String DEFAULT_PHOTO = "missing.png";
+    String STORAGE_ROOT_PATH = "/path/to/attachmentStore";
+    String DEFAULT_PHOTO = "missing.png";
     AttachmentStorage attachmentStorage = new SimplePhotoFileStore(STORAGE_ROOT_PATH);
 
     @Test public void
