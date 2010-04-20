@@ -25,6 +25,11 @@ public class PersistentProductCatalog implements ProductCatalog {
 		this.sessionFactory = sessionFactory;
 	}
 
+    @Transactional
+    public void add(Product product) {
+        currentSession().save(product);
+    }
+
     @SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public List<Product> findByKeyword(String keyword) {
@@ -40,10 +45,5 @@ public class PersistentProductCatalog implements ProductCatalog {
 
     private Criterion fieldMatchesKeyword(String field, String keyword) {
 		return ilike(field, keyword, MatchMode.ANYWHERE);
-	}
-
-    @Transactional
-	public void add(Product product) {
-		currentSession().save(product);
 	}
 }

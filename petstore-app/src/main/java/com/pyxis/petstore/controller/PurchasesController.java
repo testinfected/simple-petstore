@@ -38,8 +38,7 @@ public class PurchasesController {
 
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)
     public String checkout(Model model) {
-        model.addAttribute(cart);
-        model.addAttribute("cardTypes", availableCardTypes());
+        model.addAttribute(cart).addAttribute("cardTypes", availableCardTypes());
         model.addAttribute("paymentDetails", new CreditCardDetails());
         return "purchases/new";
     }
@@ -48,8 +47,7 @@ public class PurchasesController {
     public String create(@Valid @ModelAttribute("paymentDetails") CreditCardDetails paymentDetails, BindingResult form, SessionStatus status, Model model) {
         if (form.hasErrors()) {
             form.reject("invalid");
-            model.addAttribute(cart);
-            model.addAttribute("cardTypes", availableCardTypes());
+            model.addAttribute(cart).addAttribute("cardTypes", availableCardTypes());
             return "purchases/new";
         }
         status.setComplete();

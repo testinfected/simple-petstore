@@ -7,8 +7,8 @@ import java.math.BigDecimal;
 public class CartItem {
 
     private final Item item;
+    private final BigDecimal unitPrice;
     private int quantity;
-    private BigDecimal unitPrice;
 
     public CartItem(Item item) {
         this.item = item;

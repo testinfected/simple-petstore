@@ -44,14 +44,14 @@ public class Cart implements Basket {
         }
     }
 
+    public void clear() {
+        cartItems.clear();
+    }
+
     private CartItem findCartItemFor(Item item) {
         for (CartItem cartItem : cartItems) {
             if (cartItem.holds(item)) return cartItem;
         }
         return null;
-    }
-
-    public void clear() {
-        cartItems.clear();
     }
 }
