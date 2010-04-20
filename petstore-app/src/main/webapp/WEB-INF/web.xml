@@ -71,7 +71,6 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
                 /WEB-INF/petstore.xml
-                classpath:dataSource.xml
                 classpath:persistence.xml
             </param-value>
 		</init-param>

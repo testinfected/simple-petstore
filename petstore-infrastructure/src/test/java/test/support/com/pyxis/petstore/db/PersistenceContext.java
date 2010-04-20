@@ -16,7 +16,6 @@ public class PersistenceContext {
     private static final String JDBC_URL = "jdbc.url";
     private static final String DEFAULT_MYSQL_TEST_DATABASE = "jdbc:mysql://localhost:3306/petstore_test";
     private static final String[] CONFIG_LOCATIONS = new String[] {
-            "dataSource.xml",
             "persistence.xml"
     };
     private static final String MIGRATION_PROPERTIES_FILE = "/migration.properties";
