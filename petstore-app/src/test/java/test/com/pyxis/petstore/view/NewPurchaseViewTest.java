@@ -1,28 +1,42 @@
 package test.com.pyxis.petstore.view;
 
-import com.pyxis.petstore.domain.billing.CreditCardType;
-import org.hamcrest.Matcher;
-import org.junit.Before;
-import org.junit.Test;
-import org.w3c.dom.Element;
-import test.support.com.pyxis.petstore.views.MockErrors;
-import test.support.com.pyxis.petstore.views.ModelBuilder;
-import test.support.com.pyxis.petstore.views.VelocityRendering;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.pyxis.matchers.dom.DomMatchers.*;
+import static com.pyxis.matchers.dom.DomMatchers.hasChild;
+import static com.pyxis.matchers.dom.DomMatchers.hasSelector;
+import static com.pyxis.matchers.dom.DomMatchers.hasUniqueSelector;
+import static com.pyxis.matchers.dom.DomMatchers.withAttribute;
+import static com.pyxis.matchers.dom.DomMatchers.withName;
+import static com.pyxis.matchers.dom.DomMatchers.withText;
+import static com.pyxis.petstore.domain.billing.CreditCardType.mastercard;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
+import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aCreditCard;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.views.MockErrors.errorsOn;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
 import static test.support.com.pyxis.petstore.views.PathFor.purchasesPath;
 import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hamcrest.Matcher;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.w3c.dom.Element;
+
+import test.support.com.pyxis.petstore.builders.AddressBuilder;
+import test.support.com.pyxis.petstore.views.MockErrors;
+import test.support.com.pyxis.petstore.views.ModelBuilder;
+import test.support.com.pyxis.petstore.views.VelocityRendering;
+
+import com.pyxis.petstore.domain.billing.CreditCardDetails;
+import com.pyxis.petstore.domain.billing.CreditCardType;
+
+@SuppressWarnings("unchecked")
 public class NewPurchaseViewTest {
 
     String NEW_PURCHASE_VIEW_NAME = "purchases/new";
@@ -42,12 +56,12 @@ public class NewPurchaseViewTest {
         assertThat(newPurchaseView, hasUniqueSelector("#cart-grand-total", withText("100.00")));
     }
 
-    @Test public void
+	@Test public void
     displaysPurchaseForm() {
         assertThat(newPurchaseView, hasUniqueSelector("form#checkout",
                 withAttribute("action", purchasesPath()),
                 withAttribute("method", "post"),
-                withBillingInformation(),
+                withEmptyBillingInformation(),
                 withPaymentDetails(),
                 withSubmitOrderButton()));
     }
@@ -72,22 +86,58 @@ public class NewPurchaseViewTest {
         )));
     }
 
-    private Matcher<Element> withBillingInformation() {
-        return hasUniqueSelector("#billing-address", withInputFields(
-                withName("billingAddress.firstName"),
-                withName("billingAddress.lastName"),
-                withName("billingAddress.emailAddress")));
+	@Test public void
+    displaysPurchaseFormWithPrePopulatedValuesWhenAValidationErrorHappens() {
+    	AddressBuilder billingAddress = anAddress().withName("Jack", "Johnson").withEmail("jack@gmail.com");
+		CreditCardDetails creditCardDetails = aCreditCard().ofType(mastercard).withNumber("1111 2222 3333 4444").withExpiryDate("2010-10-10").billedTo(billingAddress).build();
+    	VelocityRendering rendering = renderNewPurchaseView().using(model.with("paymentDetails", creditCardDetails)).bind(validationErrorsOn("paymentDetails", creditCardDetails));
+		assertThat(rendering.asDom(), hasUniqueSelector("form#checkout",
+    			withBillingInformation("Jack", "Johnson", "jack@gmail.com"), 
+    			withCreditCardDetails(mastercard, "1111 2222 3333 4444", "2010-10-10")));
+    }
+
+	private BeanPropertyBindingResult validationErrorsOn(String objectName, CreditCardDetails creditCardDetails) {
+		return new BeanPropertyBindingResult(creditCardDetails, objectName);
+	}
+    
+	private Matcher<Element> withCreditCardDetails(CreditCardType cardType, String cardNumber, String cardExpiryDate) {
+		return hasUniqueSelector("#payment", 
+				withCardNumberAndExpiryDate(cardNumber, cardExpiryDate),
+	            withSelectedCardType(cardType));
+	}
+
+	private Matcher<Element> withSelectedCardType(CreditCardType cardType) {
+		return withSelectionLists(
+			allOf(withName("cardType"), hasChild(allOf(withText(cardType.getCommonName()), withAttribute("selected", "selected")))));
+	}
+
+	private Matcher<Element> withCardNumberAndExpiryDate(String cardNumber, String cardExpiryDate) {
+		return withInputFields(
+		    allOf(withName("cardNumber"), withAttribute("value", cardNumber)),
+		    allOf(withName("cardExpiryDate"), withAttribute("value", cardExpiryDate)));
+	}
+
+	private Matcher<Element> withBillingInformation(String firstName, String lastName, String email) {
+		return hasUniqueSelector("#billing-address", withInputFields(
+                allOf(withName("billingAddress.firstName"), withAttribute("value", firstName)),
+                allOf(withName("billingAddress.lastName"), withAttribute("value", lastName)),
+                allOf(withName("billingAddress.emailAddress"), withAttribute("value", email))));
+	}
+
+	private Matcher<Element> withEmptyBillingInformation() {
+        return withBillingInformation("", "", "");
     }
 
     private Matcher<Element> withPaymentDetails() {
         return hasUniqueSelector("#payment",
-                withSelectionLists(
-                        withName("cardType")),
-                withInputFields(
-                        withName("cardNumber"),
-                        withName("cardExpiryDate"))
+                withSelectionLists(withName("cardType")),
+                withEmptyCardNumberAndExpiryDate()
         );
     }
+
+	private Matcher<Element> withEmptyCardNumberAndExpiryDate() {
+		return withCardNumberAndExpiryDate("", "");
+	}
 
     private Matcher<Element> withSelectionLists(final Matcher<Element>... dropDownMatchers) {
         return hasSelector("select", dropDownMatchers);
