@@ -22,15 +22,15 @@
             <ol>
                 <li>
                     <label for="first-name">First name</label>
-                    <input id="first-name" name="billingAddress.firstName" type="text"/>
+                    <input id="first-name" name="billingAddress.firstName" type="text" value="$!paymentDetails.billingAddress.firstName"/>
                 </li>
                 <li>
                     <label for="last-name">Last name</label>
-                    <input id="last-name" name="billingAddress.lastName" type="text"/>
+                    <input id="last-name" name="billingAddress.lastName" type="text" value="$!paymentDetails.billingAddress.lastName"/>
                 </li>
                 <li>
                     <label for="email">Email</label>
-                    <input id="email" name="billingAddress.emailAddress" type="text"/>
+                    <input id="email" name="billingAddress.emailAddress" type="text" value="$!paymentDetails.billingAddress.emailAddress"/>
                 </li>
             </ol>
         </fieldset>
@@ -38,15 +38,16 @@
             <ol>
                 <li>
                     <label for="card-type">Card type</label>
+                    #springBind( "paymentDetails.cardType" )
                     <select id="card-type" name="cardType">
                         #foreach($cardType in $cardTypes)
-                            <option value="$cardType">$cardType.commonName</option>
+                            <option value="$cardType" #if($!status.value == $cardType) selected="selected"#end>$cardType.commonName</option>
                         #end
                     </select>
                 </li>
                 <li>
                     <label for="card-number">Card number</label>
-                    <input id="card-number" name="cardNumber" type="text"/>
+                    <input id="card-number" name="cardNumber" type="text" value="$!paymentDetails.cardNumber"/>
                     #springBind( "paymentDetails.cardNumber" )
                     #if ($status.error)
                     <ol id="card-number-errors" class="errors">
@@ -58,7 +59,7 @@
                 </li>
                 <li>
                     <label for="expiry-date">Expiration date</label>
-                    <input id="expiry-date" name="cardExpiryDate" type="text"/>
+                    <input id="expiry-date" name="cardExpiryDate" type="text" value="$!paymentDetails.cardExpiryDate"/>
                 </li>
             </ol>
         </fieldset>

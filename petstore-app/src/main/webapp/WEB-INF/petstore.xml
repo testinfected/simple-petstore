@@ -41,6 +41,7 @@
         <!--<property name="exposeRequestAttributes" value="true"/>-->
         <property name="toolboxConfigLocation" value="/WEB-INF/tools.xml"/>
         <property name="viewClass" value="com.pyxis.petstore.helpers.VelocityToolbox2View"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
     </bean>
 
     <bean class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">

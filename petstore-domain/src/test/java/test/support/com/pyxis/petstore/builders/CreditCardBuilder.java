@@ -17,6 +17,10 @@ public class CreditCardBuilder implements Builder<CreditCardDetails> {
         return aCreditCard().ofType(CreditCardType.visa);
     }
 
+    public static CreditCardBuilder aMasterCard() {
+        return aCreditCard().ofType(CreditCardType.mastercard);
+    }
+
     public static CreditCardBuilder aCreditCard() {
         return new CreditCardBuilder();
     }
