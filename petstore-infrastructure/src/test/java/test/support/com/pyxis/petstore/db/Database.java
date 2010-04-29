@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.db;
 
-import com.pyxis.helpers.Reflection;
+import com.pyxis.matchers.jpa.Reflection;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -9,7 +9,7 @@ import test.support.com.pyxis.petstore.builders.Builder;
 import javax.persistence.Id;
 import java.lang.reflect.Field;
 
-import static com.pyxis.matchers.persistence.SamePersistentFieldsAs.samePersistentFieldsAs;
+import static com.pyxis.matchers.jpa.SamePersistentFieldsAs.samePersistentFieldsAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class Database {

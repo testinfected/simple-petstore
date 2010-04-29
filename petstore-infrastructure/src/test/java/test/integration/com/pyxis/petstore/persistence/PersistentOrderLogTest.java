@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static com.pyxis.matchers.persistence.PersistenceMatchers.samePersistentFieldsAs;
+import static com.pyxis.matchers.jpa.PersistenceMatchers.samePersistentFieldsAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;

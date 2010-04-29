@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
-import static com.pyxis.matchers.spring.MVCMatchers.hasAttribute;
+import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;

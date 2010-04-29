@@ -15,8 +15,8 @@ import org.springframework.ui.Model;
 
 import java.util.Arrays;
 
-import static com.pyxis.matchers.spring.MVCMatchers.containsAttribute;
-import static com.pyxis.matchers.spring.MVCMatchers.hasAttribute;
+import static com.pyxis.matchers.spring.SpringMatchers.containsAttribute;
+import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
