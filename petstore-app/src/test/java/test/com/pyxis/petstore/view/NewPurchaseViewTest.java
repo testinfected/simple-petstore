@@ -44,12 +44,17 @@ public class NewPurchaseViewTest {
 
     @Test public void
     displaysPurchaseForm() {
-        assertThat(newPurchaseView, hasUniqueSelector("form#checkout",
-                withAttribute("action", purchasesPath()),
-                withAttribute("method", "post"),
-                withBillingInformation(),
-                withPaymentDetails(),
-                withSubmitOrderButton()));
+        assertThat(newPurchaseView, checkoutForm(
+                    withAttribute("action", purchasesPath()),
+                    withAttribute("method", "post")
+                ));
+        assertThat(newPurchaseView, checkoutForm(withBillingInformation()));
+        assertThat(newPurchaseView, checkoutForm(withPaymentDetails()));
+        assertThat(newPurchaseView, checkoutForm(withSubmitOrderButton()));
+    }
+
+    private Matcher<? super Element> checkoutForm(Matcher<Element>... elementMatchers) {
+        return hasUniqueSelector("form#checkout", elementMatchers);
     }
 
     @Test public void
