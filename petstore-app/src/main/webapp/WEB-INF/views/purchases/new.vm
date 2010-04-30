@@ -7,15 +7,7 @@
     <legend>Billing Information - Cart Total: <span id="cart-grand-total">$cart.grandTotal</span></legend>
 
     #springBind( "paymentDetails" )
-    #if ($status.error)
-    <div>
-    <ol id="global-errors" class="errors">
-        #foreach($error in $status.errorMessages)
-        <li>$error</li>
-        #end
-    </ol>
-    </div>
-    #end
+    #showErrors({"id": "payment-details"})
 
     <form id="checkout" action="$base/purchases" method="post">
         <fieldset id="billing-address">
@@ -47,14 +39,7 @@
                 </li>
                 <li>
                     <label for="card-number">Card number</label>
-                    #input("paymentDetails.cardNumber", {"id": "card-number"})
-                    #if ($status.error)
-                    <ol id="card-number-errors" class="errors">
-                        #foreach($error in $status.errorMessages)
-                        <li>$error</li>
-                        #end
-                    </ol>
-                    #end
+                    #input("paymentDetails.cardNumber", {"id": "card-number", "class": "petstore"})
                 </li>
                 <li>
                     <label for="expiry-date">Expiration date</label>

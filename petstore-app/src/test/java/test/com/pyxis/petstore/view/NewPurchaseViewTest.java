@@ -75,8 +75,9 @@ public class NewPurchaseViewTest {
         errors.reject("invalid");
         errors.rejectValue("cardNumber", "empty");
         newPurchaseView = renderNewPurchaseView().using(model).bind(errors).asDom();
+        String s = renderNewPurchaseView().using(model).bind(errors).asString();
 
-        assertThat(newPurchaseView, hasUniqueSelector("#global-errors", hasChild(
+        assertThat(newPurchaseView, hasUniqueSelector("#payment-details-errors", hasChild(
                 withText("invalid.paymentDetails")
         )));
         assertThat(newPurchaseView, hasUniqueSelector("#card-number-errors", hasChild(

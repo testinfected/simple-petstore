@@ -14,8 +14,18 @@
     #foreach($attribute in $attributes.keySet())#if($attribute != "id")$attribute="${attributes.get($attribute)}"#end #end
 #end
 
-#macro( input $path $attributes )
+#macro( input $path $options )
     #bind($path)
-    <input id="#domId($attributes)" type="text" name="${status.expression}" value="$!status.value" #html($attributes)/>
+    <input id="#domId($options)" type="text" name="${status.expression}" value="$!status.value" #html($options)/>
+    #showErrors($options)
 #end
 
+#macro( showErrors $options )
+    #if ($status.error)
+    <ol id="#domId($options)-errors" class="errors">
+        #foreach($error in $status.errorMessages)
+        <li>$error</li>
+        #end
+    </ol>
+    #end
+#end
