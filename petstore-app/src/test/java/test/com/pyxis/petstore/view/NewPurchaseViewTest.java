@@ -40,7 +40,7 @@ public class NewPurchaseViewTest {
     renderView() {
         model = aModel().
                 with(aCart().containing(anItem().priced("100.00"))).
-                and("cardTypes", CreditCardType.values());
+                and("cardTypes", CreditCardType.options());
         newPurchaseView = renderNewPurchaseView().using(model).asDom();
     }
 
@@ -75,7 +75,6 @@ public class NewPurchaseViewTest {
         errors.reject("invalid");
         errors.rejectValue("cardNumber", "empty");
         newPurchaseView = renderNewPurchaseView().using(model).bind(errors).asDom();
-        String s = renderNewPurchaseView().using(model).bind(errors).asString();
 
         assertThat(newPurchaseView, hasUniqueSelector("#payment-details-errors", hasChild(
                 withText("invalid.paymentDetails")
@@ -111,7 +110,7 @@ public class NewPurchaseViewTest {
 
 	private Matcher<Element> withSelectedCardType(CreditCardType cardType) {
 		return withSelectionLists(
-			allOf(withName("cardType"), hasChild(allOf(withText(cardType.getCommonName()), withAttribute("selected", "selected")))));
+			allOf(withName("cardType"), hasChild(allOf(withText(cardType.commonName()), withAttribute("selected", "selected")))));
 	}
 
 	private Matcher<Element> withCardNumberAndExpiryDate(String cardNumber, String cardExpiryDate) {
@@ -153,7 +152,7 @@ public class NewPurchaseViewTest {
     private Matcher<Iterable<Element>> withCreditCardOptions() {
         List<Matcher<? super Element>> matchers = new ArrayList<Matcher<? super Element>>();
         for (CreditCardType type : CreditCardType.values()) {
-            matchers.add(withOption(type.name(), type.getCommonName()));
+            matchers.add(withOption(type.name(), type.commonName()));
         }
         return containsInAnyOrder(matchers);
     }

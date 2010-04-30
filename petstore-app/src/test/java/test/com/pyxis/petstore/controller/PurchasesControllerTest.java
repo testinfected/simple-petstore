@@ -56,7 +56,7 @@ public class PurchasesControllerTest {
     private void assertRendersNewPurchaseView(String view) {
         assertThat(view, equalTo("purchases/new"));
         assertThat(model, hasAttribute("cart", cart));
-        assertThat(model, hasAttribute("cardTypes", CreditCardType.values()));
+        assertThat(model, hasAttribute("cardTypes", CreditCardType.options()));
     }
 
     @Test public void

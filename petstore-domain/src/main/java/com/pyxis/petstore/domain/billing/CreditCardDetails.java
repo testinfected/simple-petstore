@@ -39,7 +39,7 @@ public class CreditCardDetails extends PaymentMethod {
     }
 
     public String getCardCommonName() {
-        return cardType.getCommonName();
+        return cardType.commonName();
     }
 
     public String getCardNumber() {

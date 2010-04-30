@@ -14,15 +14,15 @@
             <ol>
                 <li>
                     <label for="first-name">First name</label>
-                    <input id="first-name" name="billingAddress.firstName" type="text" value="$!paymentDetails.billingAddress.firstName"/>
+                    #input("paymentDetails.billingAddress.firstName", {"id": "first-name"})
                 </li>
                 <li>
                     <label for="last-name">Last name</label>
-                    <input id="last-name" name="billingAddress.lastName" type="text" value="$!paymentDetails.billingAddress.lastName"/>
+                    #input("paymentDetails.billingAddress.lastName", {"id": "last-name"})
                 </li>
                 <li>
                     <label for="email">Email</label>
-                    <input id="email" name="billingAddress.emailAddress" type="text" value="$!paymentDetails.billingAddress.emailAddress"/>
+                    #input("paymentDetails.billingAddress.emailAddress", {"id": "email"})
                 </li>
             </ol>
         </fieldset>
@@ -30,20 +30,15 @@
             <ol>
                 <li>
                     <label for="card-type">Card type</label>
-                    #springBind( "paymentDetails.cardType" )
-                    <select id="card-type" name="cardType">
-                        #foreach($cardType in $cardTypes)
-                            <option value="$cardType" #if($!status.value == $cardType) selected="selected"#end>$cardType.commonName</option>
-                        #end
-                    </select>
+                    #select("paymentDetails.cardType", $cardTypes, {"id": "card-type"})  
                 </li>
                 <li>
                     <label for="card-number">Card number</label>
-                    #input("paymentDetails.cardNumber", {"id": "card-number", "class": "petstore"})
+                    #input("paymentDetails.cardNumber", {"id": "card-number"})
                 </li>
                 <li>
                     <label for="expiry-date">Expiration date</label>
-                    <input id="expiry-date" name="cardExpiryDate" type="text" value="$!paymentDetails.cardExpiryDate"/>
+                    #input("paymentDetails.cardExpiryDate", {"id": "expiry-date"})
                 </li>
             </ol>
         </fieldset>

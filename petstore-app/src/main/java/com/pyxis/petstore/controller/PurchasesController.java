@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @Controller
 @SessionAttributes("paymentDetails")
@@ -32,8 +33,8 @@ public class PurchasesController {
         this.paymentCollector = paymentCollector;
     }
 
-    public CreditCardType[] availableCardTypes() {
-        return CreditCardType.values();
+    public Map<CreditCardType, String> availableCardTypes() {
+        return CreditCardType.options();
     }
 
     @RequestMapping(value = "/checkout", method = RequestMethod.GET)

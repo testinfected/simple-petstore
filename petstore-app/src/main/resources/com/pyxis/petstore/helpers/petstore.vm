@@ -14,15 +14,25 @@
     #foreach($attribute in $attributes.keySet())#if($attribute != "id")$attribute="${attributes.get($attribute)}"#end #end
 #end
 
-#macro( input $path $options )
+#macro( input $path $attributes )
     #bind($path)
-    <input id="#domId($options)" type="text" name="${status.expression}" value="$!status.value" #html($options)/>
-    #showErrors($options)
+    <input id="#domId($attributes)" type="text" name="${status.expression}" value="$!status.value" #html($attributes)/>
+    #showErrors($attributes)
 #end
 
-#macro( showErrors $options )
+#macro( select $path $options $attributes)
+    #bind($path)
+    <select id="#domId($attributes)" name="${status.expression}">
+        #foreach($option in $options.keySet())
+            <option value="$option" #if($!status.value == $option) selected="selected"#end>$options.get($option)</option>
+        #end
+    </select>
+    #showErrors($attributes)
+#end
+
+#macro( showErrors $attributes )
     #if ($status.error)
-    <ol id="#domId($options)-errors" class="errors">
+    <ol id="#domId($attributes)-errors" class="errors">
         #foreach($error in $status.errorMessages)
         <li>$error</li>
         #end
