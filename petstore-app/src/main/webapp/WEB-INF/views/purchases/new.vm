@@ -47,8 +47,7 @@
                 </li>
                 <li>
                     <label for="card-number">Card number</label>
-                    <input id="card-number" name="cardNumber" type="text" value="$!paymentDetails.cardNumber"/>
-                    #springBind( "paymentDetails.cardNumber" )
+                    #input("paymentDetails.cardNumber", {"id": "card-number"})
                     #if ($status.error)
                     <ol id="card-number-errors" class="errors">
                         #foreach($error in $status.errorMessages)

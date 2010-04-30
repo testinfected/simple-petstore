@@ -26,10 +26,11 @@ public class VelocityRendering {
 	private static final String TEMPLATES_BASE_URL_KEY = "templates.base.url";
 	private static final String VIEWS_PROPERTIES_FILENAME = "/views.properties";
 	private static final String VELOCITY_EXTENSION = ".vm";
+    private static final String PETSTORE_MACRO_LIBRARY = "com/pyxis/petstore/helpers/petstore.vm";
+    
+    private VelocityEngine velocityEngine;
 
-	private VelocityEngine velocityEngine;
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
-
     private final String template;
     private String encoding = DEFAULT_ENCODING;
     private String renderedView;
@@ -49,7 +50,13 @@ public class VelocityRendering {
 
 	private void loadVelocityEngine() {
 		try {
-			VelocityConfigurer velocityConfigurer = new VelocityConfigurer();
+			VelocityConfigurer velocityConfigurer = new VelocityConfigurer() {
+                @Override protected void postProcessVelocityEngine(VelocityEngine velocityEngine) {
+                    super.postProcessVelocityEngine(velocityEngine);
+                    velocityEngine.addProperty(
+                            VelocityEngine.VM_LIBRARY, PETSTORE_MACRO_LIBRARY);
+                }
+            };
             velocityConfigurer.setConfigLocation(getResource(velocityPropertyFileUrl()));
 			velocityConfigurer.setResourceLoaderPath(templatesBaseUrl());
             velocityConfigurer.setOverrideLogging(false);

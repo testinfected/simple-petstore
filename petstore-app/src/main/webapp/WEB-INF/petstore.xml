@@ -48,6 +48,11 @@
         <property name="configLocation" value="/WEB-INF/velocity.properties"/>
         <property name="overrideLogging" value="false"/>
         <property name="resourceLoaderPath" value="/WEB-INF/views/"/>
+        <property name="velocityPropertiesMap">
+            <map>
+                <entry key="velocimacro.library" value="com/pyxis/petstore/helpers/petstore.vm"/>
+            </map>
+        </property>
     </bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
