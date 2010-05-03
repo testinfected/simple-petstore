@@ -7,7 +7,7 @@ import test.support.com.pyxis.petstore.web.PageObject;
 
 import java.math.BigDecimal;
 
-import static com.pyxis.matchers.selenium.SeleniumMatchers.being;
+import static com.pyxis.matchers.core.CoreMatchers.being;
 import static com.pyxis.matchers.selenium.SeleniumMatchers.id;
 import static org.hamcrest.Matchers.containsString;
 import static org.openqa.selenium.lift.Finders.link;

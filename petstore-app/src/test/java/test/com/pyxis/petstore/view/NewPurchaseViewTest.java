@@ -108,7 +108,7 @@ public class NewPurchaseViewTest {
 
 	private Matcher<Element> withSelectedCardType(CreditCardType cardType) {
 		return withSelectionLists(
-			allOf(withName("cardType"), hasChild(allOf(withText(cardType.getCommonName()), withAttribute("selected", "selected")))));
+			allOf(withName("cardType"), hasChild(allOf(withAttribute("value", cardType.toString()), withAttribute("selected", "selected")))));
 	}
 
 	private Matcher<Element> withCardNumberAndExpiryDate(String cardNumber, String cardExpiryDate) {
