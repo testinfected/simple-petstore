@@ -7,7 +7,7 @@
         <version>0.9-SNAPSHOT</version>
     </parent>
     <artifactId>petstore-system-tests</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>petstore-system-tests</name>
 
     <dependencies>
