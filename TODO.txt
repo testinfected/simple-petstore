@@ -1,3 +1,4 @@
+o clarify assertion errors by adding assertion messages
 o Upgrade to log4.xml
 o See if we can switch to logback without too much pain
 o Experiment with java config

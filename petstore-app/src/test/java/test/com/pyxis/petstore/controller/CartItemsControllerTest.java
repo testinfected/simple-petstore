@@ -35,12 +35,12 @@ public class CartItemsControllerTest {
         }});
 
         String view = controller.create(itemNumber);
-        assertThat(view, isRedirectedTo("/cart"));
+        assertThat("view", view, isRedirectedTo("/cart"));
     }
 
     @Test public void
     makesCartAvailableToView() {
         Basket model = controller.index();
-        assertThat(model, sameInstance(basket));
+        assertThat("model", model, sameInstance(basket));
     }
 }
