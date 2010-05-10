@@ -1,11 +1,8 @@
 package test.com.pyxis.petstore.domain.product;
 
 import com.pyxis.petstore.domain.product.Item;
-import com.pyxis.petstore.domain.product.Product;
+import com.pyxis.petstore.domain.product.ItemNumber;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.builders.ItemBuilder;
-
-import java.math.BigDecimal;
 
 import static com.pyxis.matchers.validation.ViolationMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,31 +15,32 @@ import static test.support.com.pyxis.petstore.validation.ValidationOf.validation
 public class ItemTest {
 
     String SHOULD_NOT_BE_NULL = "{javax.validation.constraints.NotNull.message}";
+    ItemNumber AN_INVALID_NUMBER = new ItemNumber(null);
 
     @Test public void
     isInvalidWithoutAProduct() {
-        assertThat(validationOf(anItemWithoutAProduct()), violates(on("product"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat("constraint violations", validationOf(anItem().withoutAProduct()), violates(on("product"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutANumber() {
-        assertThat(validationOf(anItemWithoutANumber()), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat("constraint violations", validationOf(anItem().withoutANumber()), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutAValidNumber() {
-        assertThat(validationOf(anItemWithAnInvalidNumber()), violates(on("number.number"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat("constraint violations", validationOf(anItem().with(AN_INVALID_NUMBER)), violates(on("number.number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutAPrice() {
-        assertThat(validationOf(anItemWithoutAPrice()), violates(on("price"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat("constraint violations", validationOf(anItem().withoutAPrice()), violates(on("price"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isValidWithAValidNumberAPriceAndAnAssociatedProduct() {
         Item aValidItem = anItem().withNumber("12345678").of(aProduct()).priced("100.00").build();
-        assertThat(validationOf(aValidItem), succeeds());
+        assertThat("constraint violations", validationOf(aValidItem), succeeds());
     }
 
     @Test public void
@@ -50,24 +48,8 @@ public class ItemTest {
         Item item = anItem().withNumber("12345678").build();
         Item shouldMatch = anItem().withNumber("12345678").build();
         Item shouldNotMatch = anItem().withNumber("87654321").build();
-        assertThat("items should match", item, equalTo(shouldMatch));
-        assertThat("items hash codes should match", item.hashCode(), equalTo(shouldMatch.hashCode()));
-        assertThat("items should not match", item, not(equalTo(shouldNotMatch)));
-    }
-
-    private ItemBuilder anItemWithoutAProduct() {
-        return anItem().of((Product) null);
-    }
-
-    private ItemBuilder anItemWithoutANumber() {
-        return anItem().with(null);
-    }
-
-    private ItemBuilder anItemWithAnInvalidNumber() {
-        return anItem().withNumber(null);
-    }
-
-    private ItemBuilder anItemWithoutAPrice() {
-        return anItem().priced((BigDecimal) null);
+        assertThat("item", item, equalTo(shouldMatch));
+        assertThat("hash code", item.hashCode(), equalTo(shouldMatch.hashCode()));
+        assertThat("item", item, not(equalTo(shouldNotMatch)));
     }
 }

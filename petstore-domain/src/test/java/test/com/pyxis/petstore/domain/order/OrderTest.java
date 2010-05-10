@@ -31,13 +31,13 @@ public class OrderTest {
 
     @Test public void
     consistsOfNoItemByDefault() {
-        assertThat(order.getLineItems(), Matchers.<LineItem>empty());
+        assertThat("line items", order.getLineItems(), Matchers.<LineItem>empty());
     }
 
     @Test public void
     consistsOfNoItemIfCartIsEmpty() {
         order.addItemsFromCart(anEmptyCart().build());
-        assertThat(order.getLineItems(), Matchers.<LineItem>empty());
+        assertThat("line items", order.getLineItems(), Matchers.<LineItem>empty());
     }
 
     @Test public void
@@ -45,8 +45,8 @@ public class OrderTest {
         Cart cart = aCartWithSomeItemsAddedMultipleTimes();
         order.addItemsFromCart(cart);
 
-        assertThat(order.getLineItems(), containsLineItems(matchingItemsOf(cart)));
-        assertThat(cart.getTotalQuantity(), equalTo(cart.getTotalQuantity()));
+        assertThat("line items", order.getLineItems(), containsLineItems(matchingItemsOf(cart)));
+        assertThat("total quantity", order.getTotalQuantity(), equalTo(cart.getTotalQuantity()));
     }
 
     @Test public void
@@ -58,7 +58,7 @@ public class OrderTest {
 
         BigDecimal updatedPrice = new BigDecimal("84.99");
         anItemWhosePriceWillChange.setPrice(updatedPrice);
-        assertThat(order.getTotalPrice(), equalTo(originalPrice));
+        assertThat("total price", order.getTotalPrice(), equalTo(originalPrice));
     }
 
     @Test(expected = UnsupportedOperationException.class) public void
@@ -70,15 +70,15 @@ public class OrderTest {
     calculatesGrandTotal() {
         Cart cart = aCartWithManyItems();
         order.addItemsFromCart(cart);
-        assertThat(order.getTotalPrice(), equalTo(cart.getGrandTotal()));
+        assertThat("total price", order.getTotalPrice(), equalTo(cart.getGrandTotal()));
     }
     
     @Test public void
     indicatesPaidWhenPaymentWasReceived() {
         Order order = anOrder().build();
-        assertFalse(order.isPaid());
+        assertFalse("paid", order.isPaid());
         order.markPaidWith(aVisa().build());
-        assertTrue(order.isPaid());
+        assertTrue("not paid", order.isPaid());
     }
 
     private Cart aCartWithSomeItemsAddedMultipleTimes() {

@@ -16,7 +16,7 @@ public class SessionControllerTest {
     @Test public void
     invalidatesSessionAndRedirectsToHomePage() {
         String view = controller.delete(mockSession);
-        assertTrue(mockSession.isInvalid());
-        assertThat(view, isRedirectedTo("/"));
+        assertTrue("session still valid", mockSession.isInvalid());
+        assertThat("view", view, isRedirectedTo("/"));
     }
 }

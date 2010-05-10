@@ -21,8 +21,8 @@ public class CartPartialTest {
     @Test public void
     linkIsInactiveWhenCartIsEmpty() {
         cartPartial = renderCartPartial().using(aModel().with(aCart())).asDom();
-        assertThat(cartPartial, hasNoSelector("a"));
-        assertThat(cartPartial, withText(containsString("Empty")));
+        assertThat("partial", cartPartial, hasNoSelector("a"));
+        assertThat("partial", cartPartial, withText(containsString("Empty")));
     }
 
     @Test public void
@@ -30,7 +30,7 @@ public class CartPartialTest {
         cartPartial = renderCartPartial().using(aModel().with(
                 aCart().containing(anItem(), anItem()))
         ).asDom();
-        assertThat(cartPartial,
+        assertThat("partial", cartPartial,
                 hasUniqueSelector("a",
                         withAttribute("href", cartPath()),
                         withText(containsString("2 items"))));

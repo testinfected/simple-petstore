@@ -50,6 +50,14 @@ public class Order {
         return total;
     }
 
+    public int getTotalQuantity() {
+        int totalQuantity = 0;
+        for (LineItem lineItem : lines) {
+            totalQuantity += lineItem.getQuantity();
+        }
+        return totalQuantity;
+    }
+
     public List<LineItem> getLineItems() {
         return Collections.unmodifiableList(lines);
     }

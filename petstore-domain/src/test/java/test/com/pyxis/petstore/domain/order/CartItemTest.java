@@ -20,7 +20,7 @@ public class CartItemTest {
     @Test public void
     quantityIsOneByDefault() {
         int expectedQuantity = 1;
-        assertThat(cartItem.getQuantity(), equalTo(expectedQuantity));
+        assertThat("quantity", cartItem.getQuantity(), equalTo(expectedQuantity));
     }
 
     @Test public void
@@ -28,14 +28,14 @@ public class CartItemTest {
         int quantity = 5;
         BigDecimal expectedPrice = unitPrice.multiply(new BigDecimal(quantity));
         increaseQuantityTo(quantity);
-        assertThat(cartItem.getTotalPrice(), equalTo(expectedPrice));
+        assertThat("total price", cartItem.getTotalPrice(), equalTo(expectedPrice));
     }
 
     @Test public void
     providesDetailsOnItem() {
-        assertThat(cartItem.getUnitPrice(), equalTo(unitPrice));
-        assertThat(cartItem.getItemDescription(), equalTo(itemDescription));
-        assertThat(cartItem.getItemNumber(), equalTo(itemNumber));
+        assertThat("unit price", cartItem.getUnitPrice(), equalTo(unitPrice));
+        assertThat("item description", cartItem.getItemDescription(), equalTo(itemDescription));
+        assertThat("item number", cartItem.getItemNumber(), equalTo(itemNumber));
     }
     
     @Test public void
@@ -43,7 +43,7 @@ public class CartItemTest {
         BigDecimal originalPrice = cartItem.getTotalPrice();
         BigDecimal updatedPrice = new BigDecimal("84.99");
         item.setPrice(updatedPrice);
-        assertThat(cartItem.getTotalPrice(), equalTo(originalPrice));
+        assertThat("total price", cartItem.getTotalPrice(), equalTo(originalPrice));
     }
 
     private void increaseQuantityTo(int quantity) {

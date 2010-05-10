@@ -24,9 +24,8 @@ public class AddressTest {
                 withFirstName("Jane").
                 withLastName("Doe").
                 withEmail("jdoe@gmail.com").build();
-        assertThat("addresses should match", address, equalTo(shouldMatch));
-        assertThat("addresses hash codes should match", address.hashCode(), equalTo(shouldMatch.hashCode()));
-        assertThat("addresses should not match", address, not(equalTo(shouldNotMatch)));
-
+        assertThat("address", address, equalTo(shouldMatch));
+        assertThat("hash code", address.hashCode(), equalTo(shouldMatch.hashCode()));
+        assertThat("address ", address, not(equalTo(shouldNotMatch)));
     }
 }

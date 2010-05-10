@@ -1,4 +1,3 @@
-o clarify assertion errors by adding assertion messages
 o provide example on how to deal with product not found 
 o Upgrade to log4.xml
 o See if we can switch to logback without too much pain

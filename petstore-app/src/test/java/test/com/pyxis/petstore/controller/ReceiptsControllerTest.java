@@ -33,7 +33,7 @@ public class ReceiptsControllerTest {
             oneOf(orderLog).find(new OrderNumber("00000100")); will(returnValue(order));
         }});
         String view = controller.show("00000100", model);
-        assertThat(view, equalTo("receipts/show"));
-        assertThat(model, hasAttribute("order", order));
+        assertThat("view", view, equalTo("receipts/show"));
+        assertThat("model", model, hasAttribute("order", order));
     }
 }

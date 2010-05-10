@@ -46,18 +46,18 @@ public class NewPurchaseViewTest {
 
     @Test public void
     displaysOrderSummary() {
-        assertThat(newPurchaseView, hasUniqueSelector("#cart-grand-total", withText("100.00")));
+        assertThat("view", newPurchaseView, hasUniqueSelector("#cart-grand-total", withText("100.00")));
     }
 
 	@Test public void
     displaysPurchaseForm() {
-        assertThat(newPurchaseView, checkoutForm(
+        assertThat("view", newPurchaseView, checkoutForm(
                     withAttribute("action", purchasesPath()),
                     withAttribute("method", "post")
                 ));
-        assertThat(newPurchaseView, checkoutForm(withEmptyBillingInformation()));
-        assertThat(newPurchaseView, checkoutForm(withPaymentDetails()));
-        assertThat(newPurchaseView, checkoutForm(withSubmitOrderButton()));
+        assertThat("view", newPurchaseView, checkoutForm(withEmptyBillingInformation()));
+        assertThat("view", newPurchaseView, checkoutForm(withPaymentDetails()));
+        assertThat("view", newPurchaseView, checkoutForm(withSubmitOrderButton()));
     }
 
     private Matcher<? super Element> checkoutForm(Matcher<Element>... elementMatchers) {
@@ -66,7 +66,7 @@ public class NewPurchaseViewTest {
 
     @Test public void
     fillsCardTypeSelectionList() {
-        assertThat(newPurchaseView, hasSelector("#card-type option", withCreditCardOptions()));
+        assertThat("view", newPurchaseView, hasSelector("#card-type option", withCreditCardOptions()));
     }
 
     @Test public void
@@ -76,10 +76,10 @@ public class NewPurchaseViewTest {
         errors.rejectValue("cardNumber", "empty");
         newPurchaseView = renderNewPurchaseView().using(model).bind(errors).asDom();
 
-        assertThat(newPurchaseView, hasUniqueSelector("#payment-details-errors", hasChild(
+        assertThat("view", newPurchaseView, hasUniqueSelector("#payment-details-errors", hasChild(
                 withText("invalid.paymentDetails")
         )));
-        assertThat(newPurchaseView, hasUniqueSelector("#card-number-errors", hasChild(
+        assertThat("view", newPurchaseView, hasUniqueSelector("#card-number-errors", hasChild(
                 withText("empty.paymentDetails.cardNumber")
         )));
     }
@@ -92,8 +92,8 @@ public class NewPurchaseViewTest {
                 withNumber("1111 2222 3333 4444").
                 withExpiryDate("2010-10-10").
                 billedTo(billingAddress).build();
-    	VelocityRendering rendering = renderNewPurchaseView().using(model.with("paymentDetails", creditCardDetails)).bind(validationErrorsOn("paymentDetails", creditCardDetails));
-		assertThat(rendering.asDom(), checkoutForm(
+    	newPurchaseView = renderNewPurchaseView().using(model.with("paymentDetails", creditCardDetails)).bind(validationErrorsOn("paymentDetails", creditCardDetails)).asDom();
+		assertThat("view", newPurchaseView, checkoutForm(
     			withBillingInformation("Jack", "Johnson", "jack@gmail.com"), 
     			withCreditCardDetails(mastercard, "1111 2222 3333 4444", "2010-10-10")));
     }

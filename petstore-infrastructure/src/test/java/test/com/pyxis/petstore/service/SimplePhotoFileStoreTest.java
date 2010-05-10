@@ -18,13 +18,13 @@ public class SimplePhotoFileStoreTest {
     @Test public void
     photoIsStoredRelativelyToStorageRoot() {
         Product withPhoto = aProduct().withPhoto("photo.png").build();
-        assertThat(attachmentStorage.getAttachmentUrl(withPhoto), equalTo(urlOf(withPhoto.getPhotoFileName())));
+        assertThat("attachment url", attachmentStorage.getAttachmentUrl(withPhoto), equalTo(urlOf(withPhoto.getPhotoFileName())));
     }
 
     @Test public void
     defaultPhotoIsUsedWhenProductHasNone() {
         Product noPhoto = aProduct().withoutAPhoto().build();
-        assertThat(attachmentStorage.getAttachmentUrl(noPhoto), equalTo(urlOf(DEFAULT_PHOTO)));
+        assertThat("attachment url", attachmentStorage.getAttachmentUrl(noPhoto), equalTo(urlOf(DEFAULT_PHOTO)));
     }
 
     private String urlOf(String photoName) {

@@ -34,6 +34,10 @@ public class ItemBuilder implements Builder<Item> {
         return this;
     }
 
+    public ItemBuilder withoutANumber() {
+        return with(null);
+    }
+
     public ItemBuilder of(ProductBuilder product) {
         return of(product.build());
     }
@@ -41,6 +45,10 @@ public class ItemBuilder implements Builder<Item> {
     public ItemBuilder of(Product product) {
         this.product = product;
         return this;
+    }
+
+    public ItemBuilder withoutAProduct() {
+        return of((Product) null);
     }
 
     public ItemBuilder describedAs(String description) {
@@ -56,4 +64,8 @@ public class ItemBuilder implements Builder<Item> {
 		this.price = price;
 		return this;
 	}
+
+    public ItemBuilder withoutAPrice() {
+        return priced((BigDecimal) null);
+    }
 }

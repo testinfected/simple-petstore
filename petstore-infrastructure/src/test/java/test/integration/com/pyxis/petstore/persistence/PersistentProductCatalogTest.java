@@ -45,7 +45,7 @@ public class PersistentProductCatalogTest {
         havingPersisted(aProduct().withName("Dalmatian").describedAs("A big dog"));
 
         Collection<Product> matchingProducts = productCatalog.findByKeyword("bulldog");
-        assertThat(matchingProducts, Matchers.<Product>empty());
+        assertThat("matching products", matchingProducts, Matchers.<Product>empty());
     }
 
     @Test public void
@@ -57,8 +57,8 @@ public class PersistentProductCatalogTest {
         );
 
         Collection<Product> matches = productCatalog.findByKeyword("bull");
-        assertThat(matches, hasSize(equalTo(2)));
-        assertThat(matches, containsProducts(productNamed("English Bulldog"), productNamed("French Bulldog")));
+        assertThat("matching products", matches, hasSize(equalTo(2)));
+        assertThat("matches", matches, containsProducts(productNamed("English Bulldog"), productNamed("French Bulldog")));
     }
 
     @Test public void
@@ -70,18 +70,18 @@ public class PersistentProductCatalogTest {
         );
 
         List<Product> matches = productCatalog.findByKeyword("friend");
-        assertThat(matches, hasSize(equalTo(2)));
-        assertThat(matches, containsProducts(productNamed("Labrador"), productNamed("Golden")));
+        assertThat("matching products", matches, hasSize(equalTo(2)));
+        assertThat("matches", matches, containsProducts(productNamed("Labrador"), productNamed("Golden")));
     }
 
     @Test (expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutAName() throws Exception {
-        productCatalog.add(aProductWithoutAName());
+        productCatalog.add(aProduct().withoutAName().build());
     }
 
     @Test (expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutANumber() throws Exception {
-        productCatalog.add(aProductWithoutANumber());
+        productCatalog.add(aProduct().withoutANumber().build());
     }
 
     @Test public void
@@ -102,18 +102,10 @@ public class PersistentProductCatalogTest {
         database.persist(someProduct);
         try {
 			productCatalog.add(someProduct.build());
-			fail("Expected a constraint violation");
+			fail("No constraint violation");
 		} catch (org.hibernate.exception.ConstraintViolationException expected) {
 			assertTrue(true);
 		}
-    }
-
-    private Product aProductWithoutAName() {
-        return aProduct().withName(null).build();
-    }
-
-    private Product aProductWithoutANumber() {
-        return aProduct().withNumber(null).build();
     }
 
     private void havingPersisted(Builder<?>... builders) throws Exception {

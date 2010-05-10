@@ -20,21 +20,21 @@ public class ItemsViewTest {
     @Test public void
     indicatesWhenInventoryIsEmpty() {
         itemsView = renderItemsView().using(anEmptyModel()).asDom();
-        assertThat(itemsView, hasUniqueSelector("#out-of-stock"));
-        assertThat(itemsView, hasNoSelector("#items"));
+        assertThat("view", itemsView, hasUniqueSelector("#out-of-stock"));
+        assertThat("view", itemsView, hasNoSelector("#items"));
     }
 
     @Test public void
     displaysNumberOfItemsAvailable() {
         itemsView = renderItemsView().using(aModel().listing(anItem(), anItem())).asDom();
-        assertThat(itemsView, hasUniqueSelector("#inventory-count", withText("2")));
-        assertThat(itemsView, hasSelector("#items tr[id^='item']", withSize(2)));
+        assertThat("view", itemsView, hasUniqueSelector("#inventory-count", withText("2")));
+        assertThat("view", itemsView, hasSelector("#items tr[id^='item']", withSize(2)));
     }
 
     @Test public void
     displaysColumnHeadingsOnItemsTable() {
         itemsView = renderItemsView().using(aModel().listing(anItem())).asDom();
-        assertThat(itemsView,
+        assertThat("view", itemsView,
                 hasSelector("#items th",
                         inOrder(withText("Reference number"),
                                 withText("Description"),
@@ -48,7 +48,7 @@ public class ItemsViewTest {
                 withNumber("12345678").
                 describedAs("Green Adult").
                 priced("18.50"))).asDom();
-        assertThat(itemsView,
+        assertThat("view", itemsView,
                 hasSelector("tr#item-12345678 td",
                         inOrder(withText("12345678"),
                                 withText("Green Adult"),
@@ -59,12 +59,12 @@ public class ItemsViewTest {
     @Test public void
     addToCartButtonAddsItemToShoppingCart() {
         itemsView = renderItemsView().using(aModel().listing(anItem().withNumber("12345678"))).asDom();
-        assertThat(itemsView,
+        assertThat("view", itemsView,
                 hasUniqueSelector("form",
                         withAttribute("action", cartItemsPath()),
                         withAttribute("method", "post"),
                         hasUniqueSelector("button", withId("add-to-cart-12345678"))));
-        assertThat(itemsView,
+        assertThat("view", itemsView,
                 hasUniqueSelector("form input[type='hidden']",
                         withAttribute("name", "item_number"),
                         withAttribute("value", "12345678")));

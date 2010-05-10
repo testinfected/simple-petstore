@@ -36,8 +36,8 @@ public class PersistentOrderNumberSequenceTest {
     incrementsSequenceNumber() throws Exception {
         seedSequenceNumberWith(100);
 
-        assertThat(nextOrderNumber(), orderNumber("00000101"));
-        assertThat(nextOrderNumber(), orderNumber("00000102"));
+        assertThat("next order number", nextOrderNumber(), orderNumber("00000101"));
+        assertThat("next order number", nextOrderNumber(), orderNumber("00000102"));
     }
 
     private void seedSequenceNumberWith(final long seed) throws Exception {
@@ -51,7 +51,7 @@ public class PersistentOrderNumberSequenceTest {
     }
 
     private void assertUpdateExecutes(SQLQuery query) {
-        assertThat(query.executeUpdate(), equalTo(1));
+        assertThat("update count", query.executeUpdate(), equalTo(1));
     }
 
     private OrderNumber nextOrderNumber() {

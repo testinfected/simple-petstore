@@ -54,9 +54,9 @@ public class PurchasesControllerTest {
     }
 
     private void assertRendersNewPurchaseView(String view) {
-        assertThat(view, equalTo("purchases/new"));
-        assertThat(model, hasAttribute("cart", cart));
-        assertThat(model, hasAttribute("cardTypes", CreditCardType.options()));
+        assertThat("view", view, equalTo("purchases/new"));
+        assertThat("model", model, hasAttribute("cart", cart));
+        assertThat("model", model, hasAttribute("cardTypes", CreditCardType.options()));
     }
 
     @Test public void
@@ -78,8 +78,8 @@ public class PurchasesControllerTest {
                     with(samePaymentMethodAs(paymentDetails)));
         }});
         String view = controller.create(paymentDetails, bindingFor(paymentDetails), status, model);
-        assertThat(view, isRedirectedTo("/receipts/" + order.getNumber()));
-        assertTrue(status.isComplete());
+        assertThat("view", view, isRedirectedTo("/receipts/" + order.getNumber()));
+        assertTrue("status not completed", status.isComplete());
     }
 
     @Test public void
@@ -92,8 +92,8 @@ public class PurchasesControllerTest {
 
         BindingResult result = reportErrorsOn(incompleteDetails);
         String view = controller.create(incompleteDetails, result, status, model);
-        assertThat(result, hasGlobalError("invalid"));
-        assertFalse(status.isComplete());
+        assertThat("result", result, hasGlobalError("invalid"));
+        assertFalse("status not completed", status.isComplete());
         assertRendersNewPurchaseView(view);
     }
 

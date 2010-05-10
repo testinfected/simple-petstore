@@ -79,7 +79,7 @@ public class Database {
         perform(new UnitOfWork() {
             public void work(Session session) throws Exception {
                 Object loaded = session.get(original.getClass(), idOf(original));
-                assertThat(loaded, samePersistentFieldsAs(original));
+                assertThat("entity", loaded, samePersistentFieldsAs(original));
             }
         });
     }

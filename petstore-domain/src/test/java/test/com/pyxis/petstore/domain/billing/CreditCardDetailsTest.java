@@ -14,8 +14,8 @@ public class CreditCardDetailsTest {
 
     @Test public void
     areInvalidWithoutACardNumber() {
-        assertThat(validationOf(detailsMissingCardNumber()), violates(on("cardNumber"), withError(SHOULD_NOT_BE_EMPTY)));
-        assertThat(validationOf(detailsWithEmptyCardNumber()), violates(on("cardNumber"), withError(SHOULD_NOT_BE_EMPTY)));
+        assertThat("constraint violations", validationOf(detailsMissingCardNumber()), violates(on("cardNumber"), withError(SHOULD_NOT_BE_EMPTY)));
+        assertThat("constraint violations", validationOf(detailsWithEmptyCardNumber()), violates(on("cardNumber"), withError(SHOULD_NOT_BE_EMPTY)));
     }
 
     private CreditCardDetails detailsWithEmptyCardNumber() {

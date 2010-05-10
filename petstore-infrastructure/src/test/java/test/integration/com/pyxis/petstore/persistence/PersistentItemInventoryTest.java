@@ -53,7 +53,7 @@ public class PersistentItemInventoryTest {
         havingPersisted(anItem().of(product).withNumber("12345678"));
 
         Item found = itemInventory.find(new ItemNumber("12345678"));
-        assertThat(found, itemWithNumber("12345678"));
+        assertThat("match", found, itemWithNumber("12345678"));
     }
 
     @Test public void
@@ -63,15 +63,15 @@ public class PersistentItemInventoryTest {
         havingPersisted(anItem().of(product), anItem().of(product));
 
         List<Item> availableItems = itemInventory.findByProductNumber("LAB-1234");
-        assertThat(availableItems, everyItem(anItemOfProduct(productWithNumber("LAB-1234"))));
+        assertThat("available items", availableItems, everyItem(anItemOfProduct(productWithNumber("LAB-1234"))));
     }
 
     @Test public void
     findsNothingIfProductHasNoItemInInventory() throws Exception {
         havingPersisted(aProduct().withNumber("DAL-5432"));
 
-        List<Item> itemsAvailable = itemInventory.findByProductNumber("DAL-5432");
-        assertThat(itemsAvailable, Matchers.<Item>empty());
+        List<Item> availableItems = itemInventory.findByProductNumber("DAL-5432");
+        assertThat("available items", availableItems, Matchers.<Item>empty());
     }
 
     @Test public void
@@ -157,7 +157,7 @@ public class PersistentItemInventoryTest {
     private void assertViolatesUniqueness(Item item) throws Exception {
         try {
             database.persist(item);
-            fail("Expected a constraint violation");
+            fail("No constraint violation");
         } catch (org.hibernate.exception.ConstraintViolationException expected) {
             assertTrue(true);
         }
@@ -166,7 +166,7 @@ public class PersistentItemInventoryTest {
     private void assertFailsPersisting(ItemBuilder item) throws Exception {
         try {
             database.persist(item);
-            fail("Expected a validation violation");
+            fail("No validation violation");
         } catch (ConstraintViolationException expected) {
             assertTrue(true);
         }

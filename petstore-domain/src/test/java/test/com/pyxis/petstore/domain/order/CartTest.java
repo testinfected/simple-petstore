@@ -19,8 +19,8 @@ public class CartTest {
     @Test public void
     isEmptyByDefault() {
         assertTrue("contains item(s)", cart.isEmpty());
-        assertThat(cart.getGrandTotal(), equalTo(BigDecimal.ZERO));
-        assertThat(cart.getTotalQuantity(), equalTo(0));
+        assertThat("grand total", cart.getGrandTotal(), equalTo(BigDecimal.ZERO));
+        assertThat("total quantity", cart.getTotalQuantity(), equalTo(0));
     }
 
     @Test public void
@@ -29,12 +29,12 @@ public class CartTest {
         for (String itemNumber : itemNumbers) {
             cart.add(anItem().withNumber(itemNumber).build());
         }
-        assertTrue("cart is empty", !cart.isEmpty());
-        assertThat(cart.getItems(), containsItems(
+        assertTrue("empty", !cart.isEmpty());
+        assertThat("items", cart.getItems(), containsItems(
                 number("11111111"),
                 number("22222222"),
                 number("33333333")));
-        assertThat(cart.getTotalQuantity(), equalTo(3));
+        assertThat("total quantity", cart.getTotalQuantity(), equalTo(3));
     }
 
     @Test(expected = UnsupportedOperationException.class) public void
@@ -50,7 +50,7 @@ public class CartTest {
         for (String price : prices) {
             cart.add(anItem().priced(price).build());
         }
-        assertThat(cart.getGrandTotal(), equalTo(expectedTotal));
+        assertThat("grand total", cart.getGrandTotal(), equalTo(expectedTotal));
     }
 
     @Test public void
@@ -60,10 +60,10 @@ public class CartTest {
         for (String number : itemNumbers) {
             cart.add(anItem().withNumber(number).build());
         }
-        assertThat(cart.getItems(), containsItems(
+        assertThat("items", cart.getItems(), containsItems(
                 with(number("11111111"), quantity(2)),
                 with(number("22222222"), quantity(1))));
-        assertThat(cart.getTotalQuantity(), equalTo(3));
+        assertThat("total quantity", cart.getTotalQuantity(), equalTo(3));
     }
     
     @Test public void
@@ -71,7 +71,7 @@ public class CartTest {
         havingAddedItemsToCart();
 
         cart.clear();
-        assertTrue(cart.isEmpty());
+        assertTrue("contains item(s)", cart.isEmpty());
     }
 
     private void havingAddedItemsToCart() {

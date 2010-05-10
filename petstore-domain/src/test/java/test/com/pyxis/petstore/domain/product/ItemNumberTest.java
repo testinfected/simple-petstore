@@ -15,12 +15,12 @@ public class ItemNumberTest {
     @Test public void
     isValidWithANumber() {
         ItemNumber aValidItemNumber = aNumber();
-        assertThat(validationOf(aValidItemNumber), succeeds());
+        assertThat("constraint violations", validationOf(aValidItemNumber), succeeds());
     }
 
     @Test public void
     isInvalidWithoutANumber() {
         ItemNumber anEmptyItemNumber = new ItemNumber(null);
-        assertThat(validationOf(anEmptyItemNumber), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat("constraint violations", validationOf(anEmptyItemNumber), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
     }
 }

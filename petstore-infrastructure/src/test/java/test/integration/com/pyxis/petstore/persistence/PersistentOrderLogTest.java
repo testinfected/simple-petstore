@@ -61,7 +61,7 @@ public class PersistentOrderLogTest {
         havingPersisted(anOrder().withNumber("00000100"));
 
         Order found = orderLog.find(new OrderNumber("00000100"));
-        assertThat(found, orderWithNumber("00000100"));
+        assertThat("match", found, orderWithNumber("00000100"));
     }
 
     @Test(expected = ConstraintViolationException.class) public void
@@ -103,8 +103,8 @@ public class PersistentOrderLogTest {
         database.perform(new UnitOfWork() {
             public void work(Session session) throws Exception {
                 Order reloaded = (Order) session.get(Order.class, idOf(order));
-                assertThat(reloaded, sameItemCountAs(order));
-                assertThat(reloaded.getLineItems(), contains(linesWithSameStateAs(order)));
+                assertThat("loaded", reloaded, sameItemCountAs(order));
+                assertThat("loaded line items", reloaded.getLineItems(), contains(linesWithSameStateAs(order)));
             }
         });
     }
@@ -140,7 +140,7 @@ public class PersistentOrderLogTest {
     private void assertViolatesUniqueness(Order order) throws Exception {
         try {
             orderLog.record(order);
-            fail("Expected constraint violation");
+            fail("No constraint violation");
         } catch (ConstraintViolationException expected) {
             assertTrue(true);
         }

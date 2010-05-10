@@ -24,7 +24,7 @@ public class CartViewTest {
     @Test public void
     displaysColumnHeadings() {
         cartView = renderCartView().using(aModel().with(aCart())).asDom();
-        assertThat(cartView,
+        assertThat("view", cartView,
                 hasSelector("#cart th",
                         inOrder(withText("Quantity"),
                                 withText("Item"),
@@ -37,7 +37,7 @@ public class CartViewTest {
         Item item = anItem().withNumber("12345678").priced("18.50").describedAs("Green Adult").build();
 
         cartView = renderCartView().using(aModel().with(aCart().containing(item, item))).asDom();
-        assertThat(cartView,
+        assertThat("view", cartView,
                 hasSelector("tr#cart-item-12345678 td",
                         inOrder(withText("2"),
                                 withText(containsString("Green Adult")),
@@ -50,7 +50,7 @@ public class CartViewTest {
         ItemBuilder anItem = anItem();
         ItemBuilder anotherItem = anItem();
         cartView = renderCartView().using(aModel().with(aCart().containing(anItem, anItem, anotherItem))).asDom();
-        assertThat(cartView, hasSelector("#cart tr[id^='cart-item']", withSize(2)));
+        assertThat("view", cartView, hasSelector("#cart tr[id^='cart-item']", withSize(2)));
     }
 
     @Test public void
@@ -61,19 +61,19 @@ public class CartViewTest {
                 anItem().priced("43.97")))).asDom();
         String grandTotal = "76.96";
 
-        assertThat(cartView, hasUniqueSelector("#cart-grand-total", withText(grandTotal)));
+        assertThat("view", cartView, hasUniqueSelector("#cart-grand-total", withText(grandTotal)));
     }
 
     @Test public void
     returnsToHomePageToContinueShopping() {
         cartView = renderCartView().using(aModel().with(aCart().containing(anItem()))).asDom();
-        assertThat(cartView, hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
+        assertThat("view", cartView, hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
     }
 
     @Test public void
     checkingOutRendersPaymentForm() {
         cartView = renderCartView().using(aModel().with(aCart().containing(anItem()))).asDom();
-        assertThat(cartView, hasUniqueSelector("a#checkout", withAttribute("href", checkoutPath())));
+        assertThat("view", cartView, hasUniqueSelector("a#checkout", withAttribute("href", checkoutPath())));
     }
 
     private VelocityRendering renderCartView() {

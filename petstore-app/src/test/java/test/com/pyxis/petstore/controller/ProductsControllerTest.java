@@ -50,24 +50,24 @@ public class ProductsControllerTest {
         }});
 
         productsController.index("Dog", model);
-        assertThat(model, hasAttribute("productList", matchingProducts));
+        assertThat("model", model, hasAttribute("productList", matchingProducts));
     }
 
 	@Test public void
     doesNotAddProductListToModelIfNoMatchIsFound() {
         productsController.index(ANY_PRODUCT, model);
-        assertThat(model, not(containsAttribute("productList")));
+        assertThat("model", model, not(containsAttribute("productList")));
     }
 
     @Test public void
     makesStorageAvailableToView() {
         AttachmentStorage storage = productsController.getAttachmentStorage();
-        assertThat(storage, sameInstance(attachmentStorage));
+        assertThat("attachment storage", storage, sameInstance(attachmentStorage));
     }
     
     @Test public void
     makesSearchKeywordAvailableToView() {
         productsController.index(ANY_PRODUCT, model);
-        assertThat(model, hasAttribute("keyword", ANY_PRODUCT));
+        assertThat("model", model, hasAttribute("keyword", ANY_PRODUCT));
     }
 }

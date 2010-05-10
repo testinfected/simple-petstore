@@ -35,7 +35,7 @@ public class ItemsControllerTest {
     		oneOf(itemInventory).findByProductNumber("LAB-1234"); will(returnValue(anItemList));
     	}});
         String view = itemController.index("LAB-1234", model);
-        assertThat(view, equalTo("items"));
-        assertThat(model, hasAttribute("itemList", anItemList));
+        assertThat("view", view, equalTo("items"));
+        assertThat("model", model, hasAttribute("itemList", anItemList));
     }
 }

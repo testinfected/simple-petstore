@@ -58,13 +58,13 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysOrderSummary() {
-        assertThat(showReceiptView, hasOrderNumber("00000100"));
-        assertThat(showReceiptView, hasOrderTotal(orderTotal));
+        assertThat("view", showReceiptView, hasOrderNumber("00000100"));
+        assertThat("view", showReceiptView, hasOrderTotal(orderTotal));
     }
 
     @Test public void
     setsUpOrderDetailsColumnHeadings() {
-        assertThat(showReceiptView,
+        assertThat("view", showReceiptView,
                 hasSelector("#order-details th",
                         inOrder(withText("Quantity"),
                                 withText("Item"),
@@ -74,7 +74,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysOrderLineItemsInColumns() {
-        assertThat(showReceiptView, hasSelector("#order-details tr#line-item-12345678 td",
+        assertThat("view", showReceiptView, hasSelector("#order-details tr#line-item-12345678 td",
                 inOrder(withText("2"),
                         withText(containsString("Green Adult")),
                         withText("100.00"),
@@ -83,12 +83,12 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysOneOrderLineItemPerLine() {
-        assertThat(showReceiptView, hasSelector("#order-details tr[id^='line-item']", withSize(2)));
+        assertThat("view", showReceiptView, hasSelector("#order-details tr[id^='line-item']", withSize(2)));
     }
 
     @Test public void
     displaysPaymentDetails() {
-        assertThat(showReceiptView, hasSelector("#payment-details li span:nth-child(2)", inOrder(
+        assertThat("view", showReceiptView, hasSelector("#payment-details li span:nth-child(2)", inOrder(
                 withText("Visa"),
                 withText("9999 9999 9999"),
                 withText("12/12"))));
@@ -96,7 +96,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysBillingInformation() {
-        assertThat(showReceiptView, hasSelector("#billing-address li span:nth-child(2)", inOrder(
+        assertThat("view", showReceiptView, hasSelector("#billing-address li span:nth-child(2)", inOrder(
                 withText("John"),
                 withText("Doe"),
                 withText("jdoe@gmail.com"))));
@@ -104,7 +104,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     returnsToHomePageToContinueShopping() {
-        assertThat(showReceiptView, hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
+        assertThat("view", showReceiptView, hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
     }
 
     private VelocityRendering renderShowReceiptView() {

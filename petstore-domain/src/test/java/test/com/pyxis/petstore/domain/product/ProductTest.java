@@ -17,17 +17,17 @@ public class ProductTest {
 
     @Test public void
     isInvalidWithoutAName() {
-        assertThat(validationOf(aProductWithoutAName()), violates(on("name"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat("constraint violations", validationOf(aProductWithoutAName()), violates(on("name"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isInvalidWithoutANumber() {
-        assertThat(validationOf(aProductWithoutANumber()), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
+        assertThat("constraint violations", validationOf(aProductWithoutANumber()), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
     @Test public void
     isValidWithANameAndANumber() {
-        assertThat(validationOf(aValidProduct()), succeeds());
+        assertThat("constraint violations", validationOf(aValidProduct()), succeeds());
     }
 
     @Test public void
@@ -35,9 +35,9 @@ public class ProductTest {
         Product product = aProduct().withNumber("AAA-123").build();
         Product shouldMatch = aProduct().withNumber("AAA-123").build();
         Product shouldNotMatch = aProduct().withNumber("BBB-456").build();
-        assertThat("products should match", product, equalTo(shouldMatch));
-        assertThat("products hash codes should match", product.hashCode(), equalTo(shouldMatch.hashCode()));
-        assertThat("products should not match", product, not(equalTo(shouldNotMatch)));
+        assertThat("product", product, equalTo(shouldMatch));
+        assertThat("hash code", product.hashCode(), equalTo(shouldMatch.hashCode()));
+        assertThat("product", product, not(equalTo(shouldNotMatch)));
     }
 
     private ProductBuilder aProductWithoutAName() {
