@@ -1,5 +1,6 @@
 package test.integration.com.pyxis.petstore.persistence;
 
+import com.pyxis.petstore.domain.Maybe;
 import com.pyxis.petstore.domain.order.*;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
@@ -60,8 +61,9 @@ public class PersistentOrderLogTest {
     findsOrdersByNumber() throws Exception {
         havingPersisted(anOrder().withNumber("00000100"));
 
-        Order found = orderLog.find(new OrderNumber("00000100"));
-        assertThat("match", found, orderWithNumber("00000100"));
+        Maybe<Order> order = orderLog.find(new OrderNumber("00000100"));
+        assertTrue("no match", order.exists());
+        assertThat("match", order.value(), orderWithNumber("00000100"));
     }
 
     @Test(expected = ConstraintViolationException.class) public void
