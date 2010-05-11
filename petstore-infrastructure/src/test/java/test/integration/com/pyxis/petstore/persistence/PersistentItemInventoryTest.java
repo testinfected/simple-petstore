@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static com.pyxis.matchers.jpa.HasFieldWithValue.hasField;
+import static com.pyxis.matchers.core.HasFieldWithValue.hasField;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;

@@ -3,7 +3,7 @@ package test.system.com.pyxis.petstore.page;
 import org.openqa.selenium.WebDriver;
 import test.support.com.pyxis.petstore.web.PageObject;
 
-import static com.pyxis.matchers.selenium.SeleniumMatchers.being;
+import static com.pyxis.matchers.core.CoreMatchers.being;
 import static com.pyxis.matchers.selenium.SeleniumMatchers.className;
 import static org.openqa.selenium.lift.Finders.cell;
 import static org.openqa.selenium.lift.Finders.link;

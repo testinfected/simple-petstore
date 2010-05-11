@@ -3,8 +3,8 @@ package test.support.com.pyxis.petstore.web.find;
 import org.hamcrest.Factory;
 import org.openqa.selenium.lift.find.HtmlTagFinder;
 
+import static com.pyxis.matchers.core.CoreMatchers.being;
 import static org.openqa.selenium.lift.Matchers.text;
-import static com.pyxis.matchers.selenium.SeleniumMatchers.being;
 
 public class ButtonFinder extends HtmlTagFinder {
 
