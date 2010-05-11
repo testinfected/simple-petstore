@@ -30,6 +30,7 @@
             <td class="text">$!cartItem.itemDescription</td>
             <td class="price">$cartItem.unitPrice</td>
             <td class="total">$cartItem.totalPrice</td>
+            <td class="deleteitem"><img src="$base/images/garbage.png" alt="delete item"></td>
         </tr>
         #end
         <tr id="cart-summary">

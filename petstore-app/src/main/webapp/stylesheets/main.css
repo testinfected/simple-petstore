@@ -23,7 +23,6 @@ z-index: 10;
 }
 
 #content {
-margin-bottom: 100px;
 }
 
 #logout {
@@ -33,24 +32,6 @@ top: 45px;
 z-index: 100;
 }
 
-
-#footer {
-position:fixed; 
-bottom:0;
-width:960px;
-clear: both;
-height:75px;   /* Height of the footer */
-background:#6cf;
-}
-
-#footer ul {
-font-size: 0.9em;
-margin: 0 auto;
-}
-#footer ul li {
-display: inline;
-padding: 0 15px;
-}
 
 ol, ul, p {
 font-size: 1.2em;
@@ -127,6 +108,11 @@ td.price, td.total {
 text-align: right;
 }
 
+td.deleteitem {
+text-align: center;
+width: 35px;
+}
+
 #cart-summary td, #summary td {
 border: 1px solid #ccc;
 border-width: 1px 0;
@@ -200,5 +186,21 @@ margin-left: 200px;
 
 #checkout label, #payment-details label, #billing-address label {
 display: inline-block;
+width: 200px;
+}
+
+ol.errors {
+background-color: pink;
+color: red;
+font-size: 20px;
+list-style-type: none;
+margin: 2px 0;
+}
+}th: 200px;
+}width: 200px;
+}ock;
+width: 200px;
+}dth: 200px;
+}line-block;
 width: 200px;
 }

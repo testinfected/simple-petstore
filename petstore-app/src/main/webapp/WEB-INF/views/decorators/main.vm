@@ -26,13 +26,5 @@
 <div id="content">
     $body
 </div>
-<div id="footer">
-    <ul>
-        <li>iguana</li>
-        <li>dog</li>
-        <li>cat</li>
-        <li>bird</li>
-    </ul>
-</div>
 </body>
 </html>
