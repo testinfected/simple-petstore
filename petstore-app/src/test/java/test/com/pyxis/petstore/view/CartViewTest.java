@@ -42,7 +42,8 @@ public class CartViewTest {
                         inOrder(withText("2"),
                                 withText(containsString("Green Adult")),
                                 withText("18.50"),
-                                withText("37.00"))));
+                                withText("37.00"),
+                                withBlankText())));
     }
 
     @Test public void
