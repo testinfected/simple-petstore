@@ -14,6 +14,7 @@
 - Consultation du catalogue
 
 ==== Panier d'achat
+- afficher la quantité après le nom de l'élément dans le panier
 - Vider le panier d'achat
 - Indiquer quand le panier d'achat est vide
 - Changer la quantité d'un article au panier
