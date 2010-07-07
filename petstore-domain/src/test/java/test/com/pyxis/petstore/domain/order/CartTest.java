@@ -29,7 +29,7 @@ public class CartTest {
         for (String itemNumber : itemNumbers) {
             cart.add(anItem().withNumber(itemNumber).build());
         }
-        assertTrue("empty", !cart.isEmpty());
+        assertTrue("empty cart", !cart.isEmpty());
         assertThat("items", cart.getItems(), containsItems(
                 number("11111111"),
                 number("22222222"),

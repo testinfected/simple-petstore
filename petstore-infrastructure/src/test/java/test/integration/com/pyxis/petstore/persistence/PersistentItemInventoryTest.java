@@ -53,7 +53,7 @@ public class PersistentItemInventoryTest {
         havingPersisted(anItem().of(product).withNumber("12345678"));
 
         Item found = itemInventory.find(new ItemNumber("12345678"));
-        assertThat("match", found, itemWithNumber("12345678"));
+        assertThat("inventory", found, itemWithNumber("12345678"));
     }
 
     @Test public void
