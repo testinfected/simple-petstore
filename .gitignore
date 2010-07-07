@@ -7,3 +7,4 @@ target
 *.log
 logs
 release.properties
+.DS_Store
