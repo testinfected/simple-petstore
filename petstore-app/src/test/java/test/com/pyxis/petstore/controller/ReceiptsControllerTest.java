@@ -13,8 +13,8 @@ import org.junit.runner.RunWith;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
+import static com.natpryce.maybe.Maybe.definitely;
 import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
-import static com.pyxis.petstore.domain.Maybe.maybe;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
@@ -31,7 +31,7 @@ public class ReceiptsControllerTest {
     @Test public void
     fetchesOrderByNumberAndDisplaysReceipt() {
         context.checking(new Expectations() {{
-            oneOf(orderLog).find(new OrderNumber("00000100")); will(returnValue(maybe(order)));
+            oneOf(orderLog).find(new OrderNumber("00000100")); will(returnValue(definitely(order)));
         }});
         String view = controller.show("00000100", model);
         assertThat("view", view, equalTo("receipts/show"));

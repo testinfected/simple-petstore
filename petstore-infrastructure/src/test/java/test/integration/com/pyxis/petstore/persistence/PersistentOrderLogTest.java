@@ -1,6 +1,6 @@
 package test.integration.com.pyxis.petstore.persistence;
 
-import com.pyxis.petstore.domain.Maybe;
+import com.natpryce.maybe.Maybe;
 import com.pyxis.petstore.domain.order.*;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
@@ -24,7 +24,6 @@ import static com.pyxis.matchers.jpa.PersistenceMatchers.samePersistentFieldsAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
@@ -61,9 +60,11 @@ public class PersistentOrderLogTest {
     findsOrdersByNumber() throws Exception {
         havingPersisted(anOrder().withNumber("00000100"));
 
-        Maybe<Order> order = orderLog.find(new OrderNumber("00000100"));
-        assertTrue("no match", order.exists());
-        assertThat("match", order.value(), orderWithNumber("00000100"));
+        Maybe<Order> entry = orderLog.find(new OrderNumber("00000100"));
+        assertThat("no match", entry.isKnown());
+        for (Order order : entry) {
+            assertThat("match", order, orderWithNumber("00000100"));
+        }
     }
 
     @Test(expected = ConstraintViolationException.class) public void
@@ -144,7 +145,6 @@ public class PersistentOrderLogTest {
             orderLog.record(order);
             fail("No constraint violation");
         } catch (ConstraintViolationException expected) {
-            assertTrue(true);
         }
     }
 }
