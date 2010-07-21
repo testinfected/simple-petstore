@@ -1,13 +1,7 @@
 package com.pyxis.petstore.domain.product;
 
-import com.natpryce.maybe.Maybe;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-
-import static com.natpryce.maybe.Maybe.possibly;
+import javax.validation.constraints.NotNull;             
 
 @Entity @Access(AccessType.FIELD) @Table(name = "products")
 public class Product {

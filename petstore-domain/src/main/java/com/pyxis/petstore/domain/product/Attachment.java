@@ -2,7 +2,6 @@ package com.pyxis.petstore.domain.product;
 
 import javax.persistence.Access;
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
 
 import static javax.persistence.AccessType.FIELD;
 
