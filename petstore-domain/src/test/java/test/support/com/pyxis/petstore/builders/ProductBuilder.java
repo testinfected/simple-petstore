@@ -1,5 +1,6 @@
 package test.support.com.pyxis.petstore.builders;
 
+import com.pyxis.petstore.domain.product.Attachment;
 import com.pyxis.petstore.domain.product.Product;
 
 import static test.support.com.pyxis.petstore.builders.ProductNumberFaker.aProductNumber;
@@ -10,7 +11,7 @@ public class ProductBuilder implements Builder<Product> {
     private String number = aProductNumber();
     private String name = DEFAULT_NAME;
     private String description;
-    private String photoName;
+    private Attachment photo;
 
     public static ProductBuilder aProduct() {
         return new ProductBuilder();
@@ -34,13 +35,14 @@ public class ProductBuilder implements Builder<Product> {
         return describedAs(null);
     }
 
-    public ProductBuilder withPhoto(String url) {
-		this.photoName = url;
+    public ProductBuilder withPhoto(String name) {
+		this.photo = new Attachment(name);
 		return this;
 	}
 
     public ProductBuilder withoutAPhoto() {
-        return withPhoto(null);
+        this.photo = null;
+        return this;
     }
 
     public ProductBuilder withNumber(String number) {
@@ -55,7 +57,7 @@ public class ProductBuilder implements Builder<Product> {
     public Product build() {
         Product product = new Product(number, name);
         product.setDescription(description);
-        product.setPhotoName(photoName);
+        product.attachPhoto(photo);
         return product;
     }
 }

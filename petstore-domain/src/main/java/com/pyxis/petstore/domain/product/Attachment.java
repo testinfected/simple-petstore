@@ -1,18 +1,24 @@
 package com.pyxis.petstore.domain.product;
 
+import javax.persistence.Access;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
-@Embeddable
+import static javax.persistence.AccessType.FIELD;
+
+@Embeddable @Access(FIELD)
 public class Attachment {
 
     private String fileName;
 
-    public String getFileName() {
-        return fileName;
+    Attachment() {}
+
+    public Attachment(String fileName) {
+        this.fileName = fileName;
     }
 
-    public void setFileName(String name) {
-        this.fileName = name;
+    public String getFileName() {
+        return fileName;
     }
 
     public String toString() {

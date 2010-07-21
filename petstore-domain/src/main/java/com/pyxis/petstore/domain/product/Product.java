@@ -1,7 +1,13 @@
 package com.pyxis.petstore.domain.product;
 
+import com.natpryce.maybe.Maybe;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import static com.natpryce.maybe.Maybe.possibly;
 
 @Entity @Access(AccessType.FIELD) @Table(name = "products")
 public class Product {
@@ -43,20 +49,15 @@ public class Product {
 	}
 
     public String getPhotoFileName() {
-        return getPhoto().getFileName();
+        return photo != null ? photo.getFileName() : null;
     }
 
-    private Attachment getPhoto() {
-        if (photo == null) photo = new Attachment();
-        return photo;
-    }
-
-    public void setPhotoName(String photoName) {
-		getPhoto().setFileName(photoName);
+    public void attachPhoto(Attachment photo) {
+        this.photo = photo;
 	}
 
     public boolean hasPhoto() {
-        return getPhoto().getFileName() != null;
+        return photo != null;
     }
 
     @Override
