@@ -36,14 +36,14 @@ public class OrderTest {
 
     @Test public void
     consistsOfNoItemIfCartIsEmpty() {
-        order.addItemsFromCart(anEmptyCart().build());
+        order.addItemsFrom(anEmptyCart().build());
         assertThat("line items", order.getLineItems(), Matchers.<LineItem>empty());
     }
 
     @Test public void
     addsLineItemsFromCart() {
         Cart cart = aCartWithSomeItemsAddedMultipleTimes();
-        order.addItemsFromCart(cart);
+        order.addItemsFrom(cart);
 
         assertThat("line items", order.getLineItems(), containsLineItems(matchingItemsOf(cart)));
         assertThat("total quantity", order.getTotalQuantity(), equalTo(cart.getTotalQuantity()));
@@ -54,7 +54,7 @@ public class OrderTest {
         BigDecimal originalPrice = new BigDecimal("75.97");
         Item anItemWhosePriceWillChange = anItem().priced(originalPrice).build();
         Cart cart = aCart().containing(anItemWhosePriceWillChange).build();
-        order.addItemsFromCart(cart);
+        order.addItemsFrom(cart);
 
         BigDecimal updatedPrice = new BigDecimal("84.99");
         anItemWhosePriceWillChange.setPrice(updatedPrice);
@@ -69,7 +69,7 @@ public class OrderTest {
     @Test public void
     calculatesGrandTotal() {
         Cart cart = aCartWithManyItems();
-        order.addItemsFromCart(cart);
+        order.addItemsFrom(cart);
         assertThat("total price", order.getTotalPrice(), equalTo(cart.getGrandTotal()));
     }
     

@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
 
-import static com.pyxis.petstore.ExceptionImposter.imposterize;
+import static com.pyxis.matchers.ExceptionImposter.imposterize;
 
 public class PersistenceContext {
 

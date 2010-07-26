@@ -36,7 +36,7 @@ public class Order {
         return number.getNumber();
     }
 
-    public void addItemsFromCart(Cart cart) {
+    public void addItemsFrom(Cart cart) {
         for (CartItem cartItem : cart.getItems()) {
             lines.add(LineItem.from(cartItem));
         }

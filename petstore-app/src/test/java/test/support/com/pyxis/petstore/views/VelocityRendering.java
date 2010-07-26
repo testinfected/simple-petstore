@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.views;
 
-import com.pyxis.petstore.ExceptionImposter;
+import com.pyxis.matchers.ExceptionImposter;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;

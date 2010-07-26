@@ -1,6 +1,6 @@
 package com.pyxis.petstore.domain.order;
 
-import com.natpryce.maybe.Maybe;
+import com.pyxis.petstore.Maybe;
 
 public interface OrderLog {
 

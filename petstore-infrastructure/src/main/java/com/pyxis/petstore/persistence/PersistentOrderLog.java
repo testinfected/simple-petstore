@@ -1,6 +1,6 @@
 package com.pyxis.petstore.persistence;
 
-import com.natpryce.maybe.Maybe;
+import com.pyxis.petstore.Maybe;
 import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.order.OrderLog;
 import com.pyxis.petstore.domain.order.OrderNumber;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.natpryce.maybe.Maybe.possibly;
+import static com.pyxis.petstore.Maybe.possibly;
 import static org.hibernate.criterion.Restrictions.eq;
 
 @Repository

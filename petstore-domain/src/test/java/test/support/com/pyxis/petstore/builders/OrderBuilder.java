@@ -31,7 +31,7 @@ public class OrderBuilder implements Builder<Order> {
 
     public Order build() {
         Order order = new Order(orderNumber);
-        order.addItemsFromCart(cart);
+        order.addItemsFrom(cart);
         order.markPaidWith(paymentMethod);
         return order;
     }
