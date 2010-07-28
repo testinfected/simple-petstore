@@ -1,7 +1,5 @@
-o provide example on how to deal with product not found 
-o Upgrade to log4.xml
+o Upgrade to log4j.xml
 o See if we can switch to logback without too much pain
-o Experiment with java config
 o Experiment with externalized hibernate config
 o Velocity macros form helpers
 
