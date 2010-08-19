@@ -27,6 +27,7 @@ import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
 import static com.pyxis.matchers.spring.SpringMatchers.isRedirectedTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -54,7 +55,7 @@ public class PurchasesControllerTest {
     }
 
     private void assertRendersNewPurchaseView(String view) {
-        assertThat("view", view, equalTo("purchases/new"));
+        assertThat("view", view, is("purchases/new"));
         assertThat("model", model, hasAttribute("cart", cart));
         assertThat("model", model, hasAttribute("cardTypes", CreditCardType.options()));
     }

@@ -15,6 +15,7 @@ import test.support.com.pyxis.petstore.db.UnitOfWork;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
 
 public class PersistentOrderNumberSequenceTest {
@@ -51,7 +52,7 @@ public class PersistentOrderNumberSequenceTest {
     }
 
     private void assertUpdateExecutes(SQLQuery query) {
-        assertThat("update count", query.executeUpdate(), equalTo(1));
+        assertThat("update count", query.executeUpdate(), is(1));
     }
 
     private OrderNumber nextOrderNumber() {
