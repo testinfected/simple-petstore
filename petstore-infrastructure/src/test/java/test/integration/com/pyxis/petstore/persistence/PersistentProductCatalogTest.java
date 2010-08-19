@@ -45,7 +45,11 @@ public class PersistentProductCatalogTest {
         havingPersisted(aProduct().withName("Dalmatian").describedAs("A big dog"));
 
         Collection<Product> matchingProducts = productCatalog.findByKeyword("bulldog");
-        assertThat("matching products", matchingProducts, Matchers.<Product>empty());
+        assertThat("matching products", matchingProducts, is(empty()));
+    }
+
+    private Matcher<Collection<Product>> empty() {
+        return Matchers.empty();
     }
 
     @Test public void
