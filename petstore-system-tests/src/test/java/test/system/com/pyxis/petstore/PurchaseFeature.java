@@ -37,7 +37,7 @@ public class PurchaseFeature {
     }
 
     @Test public void
-    purchasesItemsUsingACreditCard() throws Exception {
+    purchasesSeveralItemsUsingACreditCard() throws Exception {
         havingAddedToCart("Labrador", "Labrador Retriever", "11111111");
         havingAddedToCart("Labrador", "Labrador Retriever", "22222222");
 

@@ -1,0 +1,1 @@
+alter table orders modify number varchar(8) not null unique;

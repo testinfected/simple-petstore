@@ -39,10 +39,6 @@ public class Database {
         session.close();
     }
 
-    public void clearCache() {
-        session.clear();
-    }
-
     public void persist(final Builder<?>... builders) throws Exception {
         for (final Builder<?> builder : builders) {
             persist(builder.build());
@@ -61,7 +57,7 @@ public class Database {
     }
 
     private void makeSureSubsequentLoadOperationsHitTheDatabase() {
-        clearCache();
+        session.clear();
     }
 
     public void perform(UnitOfWork work) throws Exception {

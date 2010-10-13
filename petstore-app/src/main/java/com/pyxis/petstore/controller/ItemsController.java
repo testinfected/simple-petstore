@@ -22,7 +22,7 @@ public class ItemsController {
 		this.itemInventory = itemInventory;
 	}
 
-    @RequestMapping( value = "/items", method = RequestMethod.GET)
+    @RequestMapping(value = "/items", method = RequestMethod.GET)
 	public String index(@PathVariable("productNumber") String productNumber, Model model) {
         List<Item> items = itemInventory.findByProductNumber(productNumber);
         model.addAttribute(items);
