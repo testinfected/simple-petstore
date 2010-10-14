@@ -1,0 +1,10 @@
+<form action="$base/logout" method="post">
+    <input type="hidden" name="_method" value="delete"/>
+    <fieldset>
+        <ol>
+            <li>
+                <button type="submit">Logout</button>
+            </li>
+        </ol>
+    </fieldset>
+</form>

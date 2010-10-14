@@ -1,0 +1,50 @@
+<html>
+<head>
+    <title>PetStore - Cart content</title>
+</head>
+<body>
+<fieldset>
+    <legend>
+        <span>Your cart contains the following items:</span>
+    </legend>
+
+    <table id="cart">
+        <thead>
+        <tr>
+            <th>Quantity</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        #foreach ($cartItem in $cart.items)
+            #if( $count % 2 == 0 )
+                #set( $rowStyle = 'evenrow' )
+            #else
+                #set( $rowStyle = 'oddrow' )
+            #end
+
+        <tr id="cart-item-$cartItem.itemNumber" class="$rowStyle">
+            <td class="count">$cartItem.quantity</td>
+            <td class="text">$!cartItem.itemDescription</td>
+            <td class="price">$cartItem.unitPrice</td>
+            <td class="total">$cartItem.totalPrice</td>
+            <td class="deleteitem"><img src="$base/images/garbage.png" alt="delete item"></td>
+        </tr>
+        #end
+        <tr id="cart-summary">
+            <td colspan="3" class="price">Grand Total:</td>
+            <td class="total" id="cart-grand-total">$cart.grandTotal</td>
+        </tr>
+        </tbody>
+    </table>
+</fieldset>
+<div id="actions">
+    <ol>
+        <li><a id="continue-shopping" href="$base">Continue Shopping</a></li>
+        <li><a id="checkout" href="$base/checkout">Checkout</a></li>
+    </ol>
+</div>
+</body>
+</html>

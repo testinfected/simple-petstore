@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+    <!--
+    Use MVC annotation defaults. Uses method annotation request mapping.
+    If customization is required, import mvc.xml instead.
+    -->
+    <mvc:annotation-driven/>
+    <!-- Support mapping based on controller class names as well -->
+    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
+    <mvc:view-controller path="/" view-name="home"/>
+
+    <context:component-scan base-package="com.pyxis.petstore.controller"/>
+
+    <mvc:interceptors>
+        <!-- Apply to all handler mappings -->
+        <bean id="openSessionInView" class="org.springframework.orm.hibernate3.support.OpenSessionInViewInterceptor">
+            <property name="sessionFactory" ref="sessionFactory"/>
+            <property name="singleSession" value="false"/>
+        </bean>
+    </mvc:interceptors>
+
+    <bean class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+        <property name="cache" value="true"/>
+        <property name="prefix" value=""/>
+        <property name="suffix" value=".vm"/>
+        <!--<property name="exposeSessionAttributes" value="true"/>-->
+        <!--<property name="exposeRequestAttributes" value="true"/>-->
+        <property name="toolboxConfigLocation" value="/WEB-INF/tools.xml"/>
+        <property name="viewClass" value="com.pyxis.petstore.helpers.VelocityToolbox2View"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="configLocation" value="/WEB-INF/velocity.properties"/>
+        <property name="overrideLogging" value="false"/>
+        <property name="resourceLoaderPath" value="/WEB-INF/views/"/>
+        <property name="velocityPropertiesMap">
+            <map>
+                <entry key="velocimacro.library" value="com/pyxis/petstore/helpers/petstore.vm"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="errors"/>
+    </bean>
+
+    <bean class="com.pyxis.petstore.service.SimplePhotoFileStore">
+        <constructor-arg value="/attachments/products"/>
+    </bean>
+
+    <context:component-scan base-package="com.pyxis.petstore.domain"/>
+
+    <bean id="cart" class="com.pyxis.petstore.domain.order.Cart" scope="session">
+        <aop:scoped-proxy/>
+    </bean>
+</beans>

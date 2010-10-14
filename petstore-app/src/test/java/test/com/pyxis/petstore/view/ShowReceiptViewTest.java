@@ -46,7 +46,7 @@ public class ShowReceiptViewTest {
                             withNumber("9999 9999 9999").
                             withExpiryDate("12/12").
                             billedTo(anAddress().
-                                withFirstName("John").
+                                withFirstName("John").                                    
                                 withLastName("Doe").
                                 withEmail("jdoe@gmail.com")
                             )
@@ -116,6 +116,6 @@ public class ShowReceiptViewTest {
     }
 
     private Matcher<Element> hasOrderNumber(final String orderNumber) {
-        return hasUniqueSelector("#order-number", withText(endsWith(orderNumber)));
+        return hasUniqueSelector("#order-number", withText(orderNumber));
     }
 }

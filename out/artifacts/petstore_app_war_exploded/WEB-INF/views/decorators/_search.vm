@@ -1,0 +1,16 @@
+<form action="$base/products" method="get">
+    <fieldset>
+        <ol>
+            <li>
+                <input id="keyword" name="keyword" type="text"/>
+            </li>
+        </ol>
+    </fieldset>
+    <fieldset>
+        <ol>
+            <li>
+                <button id="search" type="submit">Search</button>
+            </li>
+        </ol>
+    </fieldset>
+</form>			

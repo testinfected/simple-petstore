@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>PetStore - Items</title>
+</head>
+<body>
+<fieldset>
+<legend>
+#if (!$itemList)
+    <span id="out-of-stock">No item left in inventory</span>
+#else
+    <span id="inventory-count">$itemList.size()</span> $display.plural($itemList.size(), "item") $display.plural($itemList.size(), "is", "are") available for purchase
+</legend>
+
+    <table id="items">
+    <thead>
+        <tr>
+            <th>Reference number</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    #foreach ($item in $itemList)
+        #if( $count % 2 == 0 )
+            #set( $rowStyle = 'evenrow' )
+        #else
+            #set( $rowStyle = 'oddrow' )
+        #end
+
+    <tr id="item-$item.Number" class="$rowStyle">
+            <td class="number">$item.number</td>
+            <td>$!item.description</td>
+            <td class="price">$item.price</td>
+            <td>
+                <form action="$base/cartitems" method="post">
+                    <input type="hidden" name="item_number" value="$item.number"/>
+                    <button id="add-to-cart-$item.number" type="submit">Add to cart</button>
+                </form>
+            </td>
+        </tr>
+    #end
+    </tbody>
+    </table>
+</fieldset>
+#end
+</body>
+</html>
