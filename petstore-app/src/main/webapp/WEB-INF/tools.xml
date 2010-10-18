@@ -3,5 +3,6 @@
     <data key="base" value="/petstore"/>
     <toolbox scope="application">
         <tool key="display" class="org.apache.velocity.tools.generic.DisplayTool"/>
+        <tool key="date" class="org.apache.velocity.tools.generic.DateTool" format="yyyy-MM-dd"/>
     </toolbox>
 </tools>

@@ -5,13 +5,20 @@ import com.pyxis.petstore.domain.order.CartItem;
 import com.pyxis.petstore.domain.order.LineItem;
 import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.time.Clock;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +32,11 @@ import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 
+@RunWith(JMock.class)
 public class OrderTest {
+
+    Mockery context = new JUnit4Mockery();
+    Clock clock = context.mock(Clock.class);
 
     Order order = anOrder().build();
 
@@ -74,11 +85,38 @@ public class OrderTest {
     }
     
     @Test public void
-    indicatesPaidWhenPaymentWasReceived() {
+    indicatesdWhenOrderWasProcessed() {
+        final Date aDate = new Date();
         Order order = anOrder().build();
-        assertFalse("paid", order.isPaid());
-        order.markPaidWith(aVisa().build());
-        assertTrue("not paid", order.isPaid());
+        assertFalse("processed", order.isProcessed());
+
+        context.checking(new Expectations() {{
+            allowing(clock).today(); will(returnValue(aDate));
+        }});
+
+        order.process(clock, aVisa().build());
+        assertTrue("not processed", order.isProcessed());
+    }
+
+    @Test public void
+    recordsProcessingDate() {
+        final Date today = today();
+        context.checking(new Expectations() {{
+            oneOf(clock).today(); will(returnValue(today));
+        }});
+
+        order.process(clock, aVisa().build());
+
+        assertThat("order date", order.getProcessingDate(), equalTo(today));
+    }
+
+    private Date today() {
+        return new Date() {
+            @Override
+            public String toString() {
+                return "today";
+            }
+        };
     }
 
     private Cart aCartWithSomeItemsAddedMultipleTimes() {

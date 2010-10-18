@@ -10,6 +10,7 @@
     <legend>Order details</legend>
     <ol>
         <li><label>Order number: </label><span id="order-number">$order.number</span></li>
+        <li><label>Order date: </label><span id="order-date">$date.format($order.processingDate)</span></li>
         <li>
             <table id="order-details">
                 <thead>

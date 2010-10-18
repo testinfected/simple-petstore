@@ -25,6 +25,10 @@ public class ReceiptPage extends PageObject {
         assertPresenceOf(element("order-total").with(text(being(total))));
     }
 
+    public void showsProcessedAt(String date) {
+        assertPresenceOf(element("order-date").with(text(being(date))));
+    }
+
     public void showsLineItem(String itemNumber, String itemDescription, String totalPrice) {
         assertPresenceOf(cellDisplayingNameOfItem(itemNumber).with(text(containsString(itemDescription))));
         assertPresenceOf(cellDisplayingTotalForItem(itemNumber).with(text(being(totalPrice))));

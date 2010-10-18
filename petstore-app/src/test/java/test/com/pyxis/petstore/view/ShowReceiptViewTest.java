@@ -1,5 +1,6 @@
 package test.com.pyxis.petstore.view;
 
+import com.pyxis.matchers.ExceptionImposter;
 import com.pyxis.petstore.domain.product.Item;
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -7,6 +8,10 @@ import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.views.ModelBuilder;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static com.pyxis.matchers.dom.DomMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,6 +32,15 @@ public class ShowReceiptViewTest {
     Element showReceiptView;
     ModelBuilder model;
     String orderTotal = "458.97";
+    Date orderDate;
+
+    {
+        try {
+            orderDate = new SimpleDateFormat("yyyy-MM-dd").parse("2010-10-15");
+        } catch (ParseException e) {
+            throw ExceptionImposter.imposterize(e);
+        }
+    }
 
     @Before public void
     renderView() {
@@ -42,6 +56,7 @@ public class ShowReceiptViewTest {
                                 anItemOrderedSeveralTimes,
                                 anItemOrderedSeveralTimes,
                                 anItemOrderedOnce)).
+                        processedAt(orderDate).
                         paidWith(aVisa().
                             withNumber("9999 9999 9999").
                             withExpiryDate("12/12").
@@ -59,6 +74,7 @@ public class ShowReceiptViewTest {
     @Test public void
     displaysOrderSummary() {
         assertThat("view", showReceiptView, hasOrderNumber("00000100"));
+        assertThat("view", showReceiptView, hasOrderProcessingDate("2010-10-15"));
         assertThat("view", showReceiptView, hasOrderTotal(orderTotal));
     }
 
@@ -117,5 +133,9 @@ public class ShowReceiptViewTest {
 
     private Matcher<Element> hasOrderNumber(final String orderNumber) {
         return hasUniqueSelector("#order-number", withText(orderNumber));
+    }
+
+    private Matcher<? super Element> hasOrderProcessingDate(String orderDate) {
+        return hasUniqueSelector("#order-date", withText(orderDate));
     }
 }
