@@ -1,7 +1,6 @@
 package com.pyxis.petstore.domain.order;
 
 import com.pyxis.petstore.domain.billing.PaymentMethod;
-import com.pyxis.petstore.domain.time.Clock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,13 +8,11 @@ import org.springframework.stereotype.Service;
 public class Cashier implements CheckoutAssistant, PaymentCollector {
     private final OrderNumberSequence orderNumberSequence;
     private final OrderLog orderLog;
-    private final Clock clock;
 
     @Autowired
-    public Cashier(OrderNumberSequence orderNumberSequence, OrderLog orderLog, Clock clock) {
+    public Cashier(OrderNumberSequence orderNumberSequence, OrderLog orderLog) {
         this.orderNumberSequence = orderNumberSequence;
         this.orderLog = orderLog;
-        this.clock = clock;
     }
 
     public Order checkout(Cart cart) {
@@ -26,7 +23,7 @@ public class Cashier implements CheckoutAssistant, PaymentCollector {
     }
 
     public void collectPayment(Order order, PaymentMethod paymentMethod) {
-        order.process(clock, paymentMethod);
+        order.markPaidWith(paymentMethod);
         orderLog.record(order);
     }
 }

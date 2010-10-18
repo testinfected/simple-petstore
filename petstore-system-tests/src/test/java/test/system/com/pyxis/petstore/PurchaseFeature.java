@@ -48,9 +48,7 @@ public class PurchaseFeature {
         purchasePage.willPayUsingCreditCard("Visa", "9999 9999 9999 9999", "12/12");
 
         ReceiptPage receiptPage = purchasePage.confirmOrder();
-
         receiptPage.showsTotalPaid(total);
-        receiptPage.showsProcessedAt("2010-10-18");
         receiptPage.showsLineItem("11111111", "Male Adult", "599.00");
         receiptPage.showsLineItem("22222222", "Female Adult", "649.00");
         receiptPage.showsBillingInformation("John", "Leclair", "jleclair@gmail.com");

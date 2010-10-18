@@ -15,9 +15,10 @@ import test.support.com.pyxis.petstore.builders.OrderBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import static com.pyxis.matchers.jpa.PersistenceMatchers.samePersistentFieldsAs;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -73,8 +74,7 @@ public class PersistentOrderLogTest {
     @Test public void
     canRoundTripOrders() throws Exception {
         OrderBuilder aPendingOrder = anOrder();
-        OrderBuilder aProcessedOrder = anOrder().
-                processedAt(date("2010-10-15")).
+        OrderBuilder aPaidOrder = anOrder().
                 paidWith(aVisa().
                         withNumber("9999 9999 9999").
                         withExpiryDate("12 dec 2012").
@@ -84,19 +84,13 @@ public class PersistentOrderLogTest {
                             withEmail("jleclair@gmail.com")
                         )
                 );
+        Collection<Order> sampleOrders = Arrays.asList(aPendingOrder.build(), aPaidOrder.build());
 
-        assertCanRoundTrip("pending order", aPendingOrder.build());
-        assertCanRoundTrip("processed order", aProcessedOrder.build());
-    }
-
-    private Date date(String date) throws ParseException {
-        return new SimpleDateFormat("yyyy-MM-dd").parse(date);
-    }
-
-    private void assertCanRoundTrip(String entity, Order order) throws Exception {
-        database.persist(order);
-        database.assertCanBeReloadedWithSameState(entity, order);
-        if (order.isProcessed()) database.assertCanBeReloadedWithSameState(order.getPaymentMethod());
+        for (final Order order : sampleOrders) {
+            database.persist(order);
+            database.assertCanBeReloadedWithSameState(order);
+            if (order.isPaid()) database.assertCanBeReloadedWithSameState(order.getPaymentMethod());
+        }
     }
 
     @Test public void

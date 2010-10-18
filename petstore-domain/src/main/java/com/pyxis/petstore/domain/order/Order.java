@@ -1,7 +1,6 @@
 package com.pyxis.petstore.domain.order;
 
 import com.pyxis.petstore.domain.billing.PaymentMethod;
-import com.pyxis.petstore.domain.time.Clock;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.IndexColumn;
 
@@ -9,7 +8,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Entity  @Access(AccessType.FIELD) @Table(name = "orders")
@@ -27,9 +25,6 @@ public class Order {
     @ManyToOne(cascade = CascadeType.PERSIST) @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinColumn(name = "payment_id")
     private PaymentMethod paymentMethod;
-
-    @Temporal(TemporalType.DATE)
-    private Date processingDate;
 
     Order() {}
 
@@ -67,7 +62,7 @@ public class Order {
         return Collections.unmodifiableList(lines);
     }
 
-    public void pay(PaymentMethod paymentMethod) {
+    public void markPaidWith(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
@@ -75,20 +70,11 @@ public class Order {
         return paymentMethod;
     }
 
-    public boolean isProcessed() {
-        return processingDate != null;
+    public boolean isPaid() {
+        return paymentMethod != null;
     }
 
     public int getLineItemCount() {
         return lines.size();
-    }
-
-    public void process(Clock clock, PaymentMethod paymentMethod) {
-        pay(paymentMethod);
-        processingDate = clock.today();
-    }
-
-    public Date getProcessingDate() {
-        return processingDate;
     }
 }
