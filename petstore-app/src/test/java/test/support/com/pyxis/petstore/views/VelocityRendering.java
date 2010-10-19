@@ -2,6 +2,8 @@ package test.support.com.pyxis.petstore.views;
 
 import com.pyxis.matchers.ExceptionImposter;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.tools.generic.DateTool;
+import org.apache.velocity.tools.generic.DisplayTool;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.view.velocity.VelocityConfigurer;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -124,7 +127,16 @@ public class VelocityRendering {
 
     private void setupTools() {
         model.put("base", PathFor.BASE_URL);
-        model.put("display", new org.apache.velocity.tools.generic.DisplayTool());
+        model.put("display", new DisplayTool());
+        model.put("date", dateTool());
+    }
+
+    private DateTool dateTool() {
+        DateTool dateTool = new DateTool();
+        Map<String, String> dateToolParams = new HashMap<String, String>();
+        dateToolParams.put("format", "yyyy-MM-dd");
+        dateTool.configure(dateToolParams);
+        return dateTool;
     }
 
     private String templateFileName() {
