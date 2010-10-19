@@ -16,8 +16,6 @@ import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static com.pyxis.matchers.jpa.PersistenceMatchers.samePersistentFieldsAs;
@@ -84,13 +82,14 @@ public class PersistentOrderLogTest {
                             withEmail("jleclair@gmail.com")
                         )
                 );
-        Collection<Order> sampleOrders = Arrays.asList(aPendingOrder.build(), aPaidOrder.build());
+        assertCanPersistAndReload("pending order", aPendingOrder.build());
+        assertCanPersistAndReload("paid order", aPaidOrder.build());
+    }
 
-        for (final Order order : sampleOrders) {
-            database.persist(order);
-            database.assertCanBeReloadedWithSameState(order);
-            if (order.isPaid()) database.assertCanBeReloadedWithSameState(order.getPaymentMethod());
-        }
+    private void assertCanPersistAndReload(String orderName, Order order) throws Exception {
+        database.persist(order);
+        database.assertCanBeReloadedWithSameState(orderName, order);
+        if (order.isPaid()) database.assertCanBeReloadedWithSameState(order.getPaymentMethod());
     }
 
     @Test public void

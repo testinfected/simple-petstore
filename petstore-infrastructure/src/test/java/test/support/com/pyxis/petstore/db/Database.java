@@ -55,7 +55,7 @@ public class Database {
         }
         makeSureSubsequentLoadOperationsHitTheDatabase();
     }
-
+                                                                                                                                                   
     private void makeSureSubsequentLoadOperationsHitTheDatabase() {
         session.clear();
     }
@@ -72,6 +72,10 @@ public class Database {
     }
 
     public void assertCanBeReloadedWithSameState(final Object original) throws Exception {
+        assertCanBeReloadedWithSameState("entity", original);
+    }
+
+    public void assertCanBeReloadedWithSameState(String entityName, final Object original) throws Exception {
         perform(new UnitOfWork() {
             public void work(Session session) throws Exception {
                 Object loaded = session.get(original.getClass(), idOf(original));
