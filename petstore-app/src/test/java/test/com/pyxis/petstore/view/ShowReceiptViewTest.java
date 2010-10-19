@@ -11,7 +11,6 @@ import test.support.com.pyxis.petstore.views.VelocityRendering;
 import static com.pyxis.matchers.dom.DomMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.endsWith;
 import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
@@ -112,10 +111,10 @@ public class ShowReceiptViewTest {
     }
 
     private Matcher<Element> hasOrderTotal(final String orderTotal) {
-        return hasUniqueSelector("#order-total", withText(orderTotal));
+        return hasUniqueSelector("#order ol li #order-total", withText(orderTotal));
     }
 
     private Matcher<Element> hasOrderNumber(final String orderNumber) {
-        return hasUniqueSelector("#order-number", withText(orderNumber));
+        return hasUniqueSelector("#order ol li #order-number", withText(orderNumber));
     }
 }
