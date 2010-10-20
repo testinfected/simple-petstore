@@ -14,6 +14,8 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
+    <context:property-placeholder location="classpath:database.properties" system-properties-mode="OVERRIDE"/>
+
     <!--
     Use MVC annotation defaults. Uses method annotation request mapping.
     If customization is required, import mvc.xml instead.
@@ -68,4 +70,6 @@
     <bean id="cart" class="com.pyxis.petstore.domain.order.Cart" scope="session">
         <aop:scoped-proxy/>
     </bean>
+
+    <import resource="classpath:persistence.xml"/>
 </beans>

@@ -137,7 +137,6 @@
                         <include>**/*Feature.java</include>
                     </includes>
                     <systemPropertyVariables>
-                        <jdbc.url>${jdbc.url}</jdbc.url>
                         <webdriver.factory.class>${webdriver.factory.class}</webdriver.factory.class>
                         <server.port>${server.port}</server.port>
                         <app.context>${app.context}</app.context>

@@ -311,28 +311,16 @@
             </properties>
         </profile>
         <profile>
-            <id>test</id>
-            <activation>
-                <property>
-                    <name>env.type</name>
-                    <value>test</value>
-                </property>
-            </activation>
-            <properties>
-                <jdbc.url>jdbc:mysql://localhost:3306/petstore_test</jdbc.url>
-            </properties>
-        </profile>
-        <profile>
-            <id>system</id>
+            <id>production</id>
             <properties>
                 <server.port>8280</server.port>
-                <log.file>system</log.file>
+                <log.file>production</log.file>
                 <jdbc.url>jdbc:mysql://localhost:3306/petstore</jdbc.url>
             </properties>
             <activation>
                 <property>
                     <name>env.type</name>
-                    <value>system</value>
+                    <value>production</value>
                 </property>
             </activation>
         </profile>
