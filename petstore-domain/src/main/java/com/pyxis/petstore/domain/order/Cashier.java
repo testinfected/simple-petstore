@@ -23,7 +23,7 @@ public class Cashier implements CheckoutAssistant, PaymentCollector {
     }
 
     public void collectPayment(Order order, PaymentMethod paymentMethod) {
-        order.markPaidWith(paymentMethod);
+        order.pay(paymentMethod);
         orderLog.record(order);
     }
 }
