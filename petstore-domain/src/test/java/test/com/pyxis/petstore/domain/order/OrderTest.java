@@ -77,7 +77,7 @@ public class OrderTest {
     indicatesPaidWhenPaymentWasReceived() {
         Order order = anOrder().build();
         assertFalse("paid", order.isPaid());
-        order.markPaidWith(aVisa().build());
+        order.pay(aVisa().build());
         assertTrue("not paid", order.isPaid());
     }
 

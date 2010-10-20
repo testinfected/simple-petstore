@@ -62,7 +62,7 @@ public class Order {
         return Collections.unmodifiableList(lines);
     }
 
-    public void markPaidWith(PaymentMethod paymentMethod) {
+    public void pay(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
