@@ -308,19 +308,39 @@
                 <server.port>8080</server.port>
                 <log.file>development</log.file>
                 <jdbc.url>jdbc:mysql://localhost:3306/petstore_dev</jdbc.url>
+                <timeServer.host>localhost</timeServer.host>
+                <timeServer.port>10000</timeServer.port>
             </properties>
         </profile>
+        <profile>
+            <id>pre-production</id>
+            <properties>
+                <server.port>8180</server.port>
+                <log.file>pre-production</log.file>
+                <jdbc.url>jdbc:mysql://localhost:3306/petstore</jdbc.url>
+                <timeServer.host>localhost</timeServer.host>
+                <timeServer.port>10013</timeServer.port>
+            </properties>
+            <activation>
+                <property>
+                    <name>env.type</name>
+                    <value>pre-prod</value>
+                 </property>
+             </activation>
+         </profile>
         <profile>
             <id>production</id>
             <properties>
                 <server.port>8280</server.port>
                 <log.file>production</log.file>
                 <jdbc.url>jdbc:mysql://localhost:3306/petstore</jdbc.url>
+                <timeServer.host>time.nist.gov</timeServer.host>
+                <timeServer.port>13</timeServer.port>
             </properties>
             <activation>
                 <property>
                     <name>env.type</name>
-                    <value>production</value>
+                    <value>prod</value>
                 </property>
             </activation>
         </profile>

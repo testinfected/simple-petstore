@@ -14,7 +14,7 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-    <context:property-placeholder location="classpath:database.properties" system-properties-mode="OVERRIDE"/>
+    <context:property-placeholder location="classpath:database.properties, classpath:timeServer.properties" system-properties-mode="OVERRIDE"/>
 
     <!--
     Use MVC annotation defaults. Uses method annotation request mapping.
@@ -72,4 +72,5 @@
     </bean>
 
     <import resource="classpath:persistence.xml"/>
+    <import resource="classpath:clock.xml"/>
 </beans>

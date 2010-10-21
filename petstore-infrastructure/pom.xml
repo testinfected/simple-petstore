@@ -184,11 +184,11 @@
             </build>
         </profile>
         <profile>
-            <id>production</id>
+            <id>pre-production</id>
             <activation>
                 <property>
                     <name>env.type</name>
-                    <value>production</value>
+                    <value>pre-prod</value>
                 </property>
             </activation>
             <build>
