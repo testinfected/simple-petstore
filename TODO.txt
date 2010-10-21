@@ -3,3 +3,5 @@ o See if we can switch to logback without too much pain
 o Experiment with externalized hibernate config
 o Velocity macros form helpers
 
+o Enhance InternetTimeServer
+

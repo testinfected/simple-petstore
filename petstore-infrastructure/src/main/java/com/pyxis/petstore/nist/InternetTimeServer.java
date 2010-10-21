@@ -29,7 +29,7 @@ public class InternetTimeServer {
     private static final TimeZone utc = TimeZone.getTimeZone("UTC");
     private static final String DATE_FORMAT = "yy-MM-dd";
     private static final String TIME_FORMAT = "HH:mm:ss";
-    private static final String TIME_CODE_FORMAT = "JJJJJ %s %s TT L H msADV UTC(NIST) *";
+    private static final String TIME_CODE_FORMAT = "\nJJJJJ %s %s TT L H msADV UTC(NIST) *\n";
 
     private ServerSocket server;
     private Clock internalClock = new SystemClock();
@@ -80,7 +80,6 @@ public class InternetTimeServer {
     private void respondTo(Socket client) {
         try {
             Writer writer = new OutputStreamWriter(client.getOutputStream());
-            writer.write("\n");
             writer.write(timeCode());
             writer.flush();
         } catch (IOException e) {
@@ -116,7 +115,7 @@ public class InternetTimeServer {
     private static String time(Date pointInTime) {
         return formatter(TIME_FORMAT).format(pointInTime);
     }
-
+                                    
     private static String date(Date pointInTime) {
         return formatter(DATE_FORMAT).format(pointInTime);
     }
@@ -129,5 +128,27 @@ public class InternetTimeServer {
 
     public static InternetTimeServer listeningOnPort(int port) {
         return new InternetTimeServer(port);
+    }
+
+    public static void main(String[] args) throws Exception {
+        int port = Integer.parseInt(args[0]);
+        System.out.println("Listening on port " + port + "...");
+        final InternetTimeServer server = InternetTimeServer.listeningOnPort(port);
+        closeServerOnShutdown(server);
+        server.start();
+    }
+
+    private static void closeServerOnShutdown(final InternetTimeServer server) {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                try {
+                    System.out.println("\nShutting down...");
+                    server.stop();
+                    System.out.println("Bye.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
