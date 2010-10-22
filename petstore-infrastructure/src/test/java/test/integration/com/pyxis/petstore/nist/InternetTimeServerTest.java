@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,14 +20,14 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
-import static test.integration.com.pyxis.petstore.nist.BrokenClock.clockedStoppedAt;
+import static test.com.pyxis.petstore.domain.time.BrokenClock.clockedStoppedAt;
 import static test.support.com.pyxis.petstore.builders.DateBuilder.aDate;
 
 public class InternetTimeServerTest {
 
     int serverPort = 10013;
     InternetTimeServer server = InternetTimeServer.listeningOnPort(serverPort);
-    Date serverTime = aDate().onCalendar(2010, 10, 23).atTime(15, 15, 20).build();
+    Date serverTime = aDate().onCalendar(2010, 10, 23).atTime(15, 15, 20).inZone("UTC").build();
 
     int clientCount = 25;
     ExecutorService clients = Executors.newCachedThreadPool();

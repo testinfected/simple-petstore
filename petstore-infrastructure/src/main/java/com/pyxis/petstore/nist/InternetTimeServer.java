@@ -29,8 +29,9 @@ public class InternetTimeServer {
     private static final TimeZone utc = TimeZone.getTimeZone("UTC");
     private static final String DATE_FORMAT = "yy-MM-dd";
     private static final String TIME_FORMAT = "HH:mm:ss";
-    private static final String TIME_CODE_FORMAT = "\nJJJJJ %s %s TT L H msADV UTC(NIST) *\n";
-
+    private static final String TIME_CODE_FORMAT = "JJJJJ %s %s TT L H msADV UTC(NIST) *";
+    private static final String LINE_FEED = "\n";
+    
     private ServerSocket server;
     private Clock internalClock = new SystemClock();
 
@@ -80,7 +81,9 @@ public class InternetTimeServer {
     private void respondTo(Socket client) {
         try {
             Writer writer = new OutputStreamWriter(client.getOutputStream());
+            writer.write(LINE_FEED);
             writer.write(timeCode());
+            writer.write(LINE_FEED);
             writer.flush();
         } catch (IOException e) {
             exceptionOccured(e);
@@ -113,14 +116,14 @@ public class InternetTimeServer {
     }
 
     private static String time(Date pointInTime) {
-        return formatter(TIME_FORMAT).format(pointInTime);
+        return using(TIME_FORMAT).format(pointInTime);
     }
                                     
     private static String date(Date pointInTime) {
-        return formatter(DATE_FORMAT).format(pointInTime);
+        return using(DATE_FORMAT).format(pointInTime);
     }
 
-    private static DateFormat formatter(String pattern) {
+    private static DateFormat using(String pattern) {
         DateFormat format = new SimpleDateFormat(pattern);
         format.setTimeZone(utc);
         return format;

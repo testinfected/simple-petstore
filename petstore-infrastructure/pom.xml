@@ -31,7 +31,7 @@
             <artifactId>petstore-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+        <dependency>                   
             <groupId>${project.groupId}</groupId>
             <artifactId>petstore-domain</artifactId>
             <version>${project.version}</version>

@@ -138,6 +138,8 @@
                     </includes>
                     <systemPropertyVariables>
                         <webdriver.factory.class>${webdriver.factory.class}</webdriver.factory.class>
+                        <timeServer.host>${timeServer.host}</timeServer.host>
+                        <timeServer.port>${timeServer.port}</timeServer.port>
                         <server.port>${server.port}</server.port>
                         <app.context>${app.context}</app.context>
                     </systemPropertyVariables>

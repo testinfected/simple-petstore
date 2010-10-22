@@ -17,7 +17,7 @@ import java.util.Date;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static test.integration.com.pyxis.petstore.nist.BrokenClock.clockedStoppedAt;
+import static test.com.pyxis.petstore.domain.time.BrokenClock.clockedStoppedAt;
 import static test.support.com.pyxis.petstore.builders.DateBuilder.aDate;
 
 @RunWith(JMock.class)

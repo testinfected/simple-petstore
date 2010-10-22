@@ -26,6 +26,10 @@ public class DateBuilder {
         return onCalendar(year, month, day).atTime(hour, minute, second);
     }
 
+    public DateBuilder inZone(String zone) {
+        return in(TimeZone.getTimeZone(zone));
+    }
+
     public DateBuilder in(TimeZone zone) {
         timeZone = zone;
         return this;
@@ -55,7 +59,7 @@ public class DateBuilder {
     }
 
     public DateBuilder inMillis(long millis) {
-        Calendar calendar = Calendar.getInstance(gmt);
+        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(millis);
         timeZone = calendar.getTimeZone();
         year = calendar.get(Calendar.YEAR);

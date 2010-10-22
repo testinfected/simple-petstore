@@ -1,4 +1,4 @@
-package test.integration.com.pyxis.petstore.nist;
+package test.com.pyxis.petstore.domain.time;
 
 import com.pyxis.petstore.domain.time.Clock;
 
