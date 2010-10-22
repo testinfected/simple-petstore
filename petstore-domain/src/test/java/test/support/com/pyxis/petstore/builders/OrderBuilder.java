@@ -32,7 +32,7 @@ public class OrderBuilder implements Builder<Order> {
     public Order build() {
         Order order = new Order(orderNumber);
         order.addItemsFrom(cart);
-        if (paymentMethod != null) order.pay(paymentMethod);
+        order.pay(paymentMethod);
         return order;
     }
 
