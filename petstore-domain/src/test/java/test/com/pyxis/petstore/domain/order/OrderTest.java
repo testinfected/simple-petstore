@@ -8,7 +8,11 @@ import com.pyxis.petstore.domain.product.Item;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,8 +29,10 @@ import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 
+@RunWith(JMock.class)
 public class OrderTest {
 
+    Mockery context = new JUnit4Mockery();
     Order order = anOrder().build();
 
     @Test public void
