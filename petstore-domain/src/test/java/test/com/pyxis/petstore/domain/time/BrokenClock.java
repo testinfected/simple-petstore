@@ -11,7 +11,7 @@ public class BrokenClock implements Clock {
         this.pointInTime = pointInTime;
     }
 
-    public static Clock clockedStoppedAt(Date pointInTime) {
+    public static Clock clockStoppedAt(Date pointInTime) {
         return new BrokenClock(pointInTime);
     }
 

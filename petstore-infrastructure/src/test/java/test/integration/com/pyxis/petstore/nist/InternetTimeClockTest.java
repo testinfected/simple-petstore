@@ -17,7 +17,7 @@ import java.util.Date;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static test.com.pyxis.petstore.domain.time.BrokenClock.clockedStoppedAt;
+import static test.com.pyxis.petstore.domain.time.BrokenClock.clockStoppedAt;
 import static test.support.com.pyxis.petstore.builders.DateBuilder.aDate;
 
 @RunWith(JMock.class)
@@ -33,7 +33,7 @@ public class InternetTimeClockTest {
 
     @Before
     public void startTimeServer() throws IOException {
-        server.setInternalClock(clockedStoppedAt(serverTime));
+        server.setInternalClock(clockStoppedAt(serverTime));
         server.start();
     }
 

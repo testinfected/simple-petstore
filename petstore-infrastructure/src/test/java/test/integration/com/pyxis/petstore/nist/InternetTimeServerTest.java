@@ -12,7 +12,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.TimeZone;
 import java.util.concurrent.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,7 +19,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
-import static test.com.pyxis.petstore.domain.time.BrokenClock.clockedStoppedAt;
+import static test.com.pyxis.petstore.domain.time.BrokenClock.clockStoppedAt;
 import static test.support.com.pyxis.petstore.builders.DateBuilder.aDate;
 
 public class InternetTimeServerTest {
@@ -34,7 +33,7 @@ public class InternetTimeServerTest {
 
     @Before public void
     startServer() throws IOException {
-        server.setInternalClock(clockedStoppedAt(serverTime));
+        server.setInternalClock(clockStoppedAt(serverTime));
         server.start();
     }
 
