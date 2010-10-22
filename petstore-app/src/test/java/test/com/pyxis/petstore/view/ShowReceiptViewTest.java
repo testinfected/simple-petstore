@@ -45,7 +45,7 @@ public class ShowReceiptViewTest {
                             withNumber("9999 9999 9999").
                             withExpiryDate("12/12").
                             billedTo(anAddress().
-                                withFirstName("John").                                    
+                                withFirstName("John").
                                 withLastName("Doe").
                                 withEmail("jdoe@gmail.com")
                             )
@@ -87,7 +87,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysPaymentDetails() {
-        assertThat("view", showReceiptView, hasSelector("#payment-details li span:nth-child(2)", inOrder(
+        assertThat("view", showReceiptView, hasSelector("#payment-details li span", inOrder(
                 withText("Visa"),
                 withText("9999 9999 9999"),
                 withText("12/12"))));
@@ -95,7 +95,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysBillingInformation() {
-        assertThat("view", showReceiptView, hasSelector("#billing-address li span:nth-child(2)", inOrder(
+        assertThat("view", showReceiptView, hasSelector("#billing-address li span", inOrder(
                 withText("John"),
                 withText("Doe"),
                 withText("jdoe@gmail.com"))));
