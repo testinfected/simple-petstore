@@ -51,7 +51,11 @@ public class OrderBuilder implements Builder<Order> {
     }
 
     public OrderBuilder billedTo(AddressBuilder addressBuilder) {
-        this.billingAddress = addressBuilder.build();
+        return billedTo(addressBuilder.build());
+    }
+
+    public OrderBuilder billedTo(Address address) {
+        this.billingAddress = address;
         return this;
     }
 }
