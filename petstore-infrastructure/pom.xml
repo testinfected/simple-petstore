@@ -31,7 +31,7 @@
             <artifactId>petstore-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>                   
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>petstore-domain</artifactId>
             <version>${project.version}</version>
@@ -110,6 +110,30 @@
                     </arguments>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.4</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.11</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>com.mysql.jdbc.Driver</driver>
+                    <url>${jdbc.url}</url>
+                    <username>${jdbc.username}</username>
+                    <password>${jdbc.password}</password>
+                    <fileset>
+                        <basedir>${pom.build.scriptSourceDirectory}/seeds</basedir>
+                        <includes>
+                            <include>*.sql</include>
+                        </includes>
+                    </fileset>
+                </configuration>
+            </plugin>
         </plugins>
 
         <resources>
@@ -145,6 +169,7 @@
                             <url>${jdbc.url}</url>
                             <username>${jdbc.username}</username>
                             <password>${jdbc.password}</password>
+                            <migrationsPath>${pom.build.scriptSourceDirectory}/migrations</migrationsPath>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -183,6 +208,7 @@
                             <url>jdbc:mysql://localhost:3306/petstore_test</url>
                             <username>${jdbc.username}</username>
                             <password>${jdbc.password}</password>
+                            <migrationsPath>${pom.build.scriptSourceDirectory}/migrations</migrationsPath>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -213,6 +239,7 @@
                             <url>${jdbc.url}</url>
                             <username>${jdbc.username}</username>
                             <password>${jdbc.password}</password>
+                            <migrationsPath>${pom.build.scriptSourceDirectory}/migrations</migrationsPath>
                         </configuration>
                         <dependencies>
                             <dependency>
