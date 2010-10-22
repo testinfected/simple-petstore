@@ -1,3 +1,6 @@
+o Ditch webdriver lift interface in favor of windowlicker to support browsers with native events without wait code
+and also to have better error reporting
+
 o Upgrade to log4j.xml
 o See if we can switch to logback without too much pain
 o Experiment with externalized hibernate config
