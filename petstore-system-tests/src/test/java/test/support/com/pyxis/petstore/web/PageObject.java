@@ -1,6 +1,7 @@
 package test.support.com.pyxis.petstore.web;
 
 import org.hamcrest.Matcher;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.lift.TestContext;
@@ -10,6 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 import static org.jmock.Expectations.equal;
 import static org.openqa.selenium.lift.match.NumericalMatchers.exactly;
@@ -37,6 +39,17 @@ public abstract class PageObject {
 
     protected void clickOn(Finder<WebElement, WebDriver> finder) {
         context.clickOn(finder);
+        terriblyBadCodeToLookForServerErrorAndFailIfAnyInOrderToObserveProgressInTheSystemTestTomorrow();
+    }
+
+    private void terriblyBadCodeToLookForServerErrorAndFailIfAnyInOrderToObserveProgressInTheSystemTestTomorrow() {
+        if (webdriver.getTitle().equals("Apache Tomcat/5.5.20 - Error report")) {
+            Pattern pattern = Pattern.compile("<b>root cause</b>.*?<pre>(.*)</pre>", Pattern.DOTALL);
+            java.util.regex.Matcher matcher = pattern.matcher(webdriver.getPageSource());
+            boolean found = matcher.find();
+            String error = matcher.group(1);
+            failWith(error);
+        }
     }
 
     protected void assertNotPresent(Finder<WebElement, WebDriver> finder) {
