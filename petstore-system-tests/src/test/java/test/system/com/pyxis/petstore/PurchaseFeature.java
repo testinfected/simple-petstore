@@ -3,7 +3,6 @@ package test.system.com.pyxis.petstore;
 import com.pyxis.petstore.domain.product.Product;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.builders.ItemBuilder;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
 import test.system.com.pyxis.petstore.page.*;
@@ -11,7 +10,6 @@ import test.system.com.pyxis.petstore.page.*;
 import java.math.BigDecimal;
 
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class PurchaseFeature {
