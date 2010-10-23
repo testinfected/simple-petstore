@@ -23,8 +23,8 @@ public class PurchaseFeature {
     @Before public void
     startApplication() throws Exception {
         database.start();
-        homePage = petstore.start();
         setupContext();
+        homePage = petstore.start();
     }
 
     private void setupContext() throws Exception {
