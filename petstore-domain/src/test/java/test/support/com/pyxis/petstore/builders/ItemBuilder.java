@@ -38,6 +38,14 @@ public class ItemBuilder implements Builder<Item> {
         return with(null);
     }
 
+    public static ItemBuilder a(ProductBuilder productBuilder) {
+        return a(productBuilder.build());
+    }
+
+    public static ItemBuilder a(Product product) {
+        return anItem().of(product);
+    }
+
     public ItemBuilder of(ProductBuilder product) {
         return of(product.build());
     }

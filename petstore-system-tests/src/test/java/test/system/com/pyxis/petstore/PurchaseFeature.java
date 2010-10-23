@@ -3,12 +3,14 @@ package test.system.com.pyxis.petstore;
 import com.pyxis.petstore.domain.product.Product;
 import org.junit.Before;
 import org.junit.Test;
+import test.support.com.pyxis.petstore.builders.ItemBuilder;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
 import test.system.com.pyxis.petstore.page.*;
 
 import java.math.BigDecimal;
 
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
@@ -29,17 +31,18 @@ public class PurchaseFeature {
 
     private void setupContext() throws Exception {
         Product labrador = aProduct().withName("Labrador Retriever").build();
-        database.given(labrador);
+        Product golden = aProduct().withName("Golden Retriever").build();
+        database.given(labrador, golden);
         database.given(
-                anItem().of(labrador).withNumber("11111111").describedAs("Male Adult").priced("599.00"),
-                anItem().of(labrador).withNumber("22222222").describedAs("Female Adult").priced("649.00"));
+                a(labrador).withNumber("11111111").describedAs("Male Adult").priced("599.00"),
+                a(golden).withNumber("22222222").describedAs("Female Adult").priced("649.00"));
         total = new BigDecimal("1248.00");
     }
 
     @Test public void
     purchasesSeveralItemsUsingACreditCard() throws Exception {
-        havingAddedToCart("Labrador", "Labrador Retriever", "11111111");
-        havingAddedToCart("Labrador", "Labrador Retriever", "22222222");
+        havingAddedToCart("Labrador Retriever", "11111111");
+        havingAddedToCart("Golden Retriever", "22222222");
 
         CartPage cartPage = homePage.lookAtCartContent();
         PurchasePage purchasePage = cartPage.checkout();
@@ -58,9 +61,9 @@ public class PurchaseFeature {
         homePage.showsCartIsEmpty();
     }
 
-    private void havingAddedToCart(final String keyword, final String productName, final String itemNumber) {
-        ProductsPage productsPage = homePage.searchFor(keyword);
-        ItemsPage itemsPage = productsPage.browseItemsOf(productName);
+    private void havingAddedToCart(String product, String itemNumber) {
+        ProductsPage productsPage = homePage.searchFor(product);
+        ItemsPage itemsPage = productsPage.browseItemsOf(product);
         CartPage cartPage = itemsPage.addToCart(itemNumber);
         cartPage.continueShopping();
     }
