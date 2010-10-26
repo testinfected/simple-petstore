@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
-import test.system.com.pyxis.petstore.page.HomePage;
-import test.system.com.pyxis.petstore.page.ProductsPage;
+import test.support.com.pyxis.petstore.web.page.HomePage;
+import test.support.com.pyxis.petstore.web.page.ProductsPage;
 
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
@@ -39,14 +39,14 @@ public class SearchFeature {
 
         ProductsPage productsPage = home.searchFor("retriever");
         productsPage.displaysNumberOfResults(2);
-        productsPage.displaysProduct("Labrador Retriever");
-        productsPage.displaysProduct("Chesapeake");
+        productsPage.displaysProduct("LAB-1234", "Labrador Retriever");
+        productsPage.displaysProduct("CHE-5678", "Chesapeake");
     }
 
     @After public void
     stopApplication() {
-    	database.stop();
         petstore.stop();
+        database.stop();
     }
 
 }

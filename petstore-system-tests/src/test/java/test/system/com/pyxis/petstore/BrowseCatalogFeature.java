@@ -8,9 +8,9 @@ import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
-import test.system.com.pyxis.petstore.page.HomePage;
-import test.system.com.pyxis.petstore.page.ItemsPage;
-import test.system.com.pyxis.petstore.page.ProductsPage;
+import test.support.com.pyxis.petstore.web.page.HomePage;
+import test.support.com.pyxis.petstore.web.page.ItemsPage;
+import test.support.com.pyxis.petstore.web.page.ProductsPage;
 
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;

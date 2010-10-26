@@ -1,17 +1,15 @@
 package test.support.com.pyxis.petstore.web;
 
+import static java.lang.Integer.parseInt;
+import static java.lang.String.format;
 import static java.lang.System.getProperty;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import test.system.com.pyxis.petstore.page.HomePage;
+import test.support.com.pyxis.petstore.web.page.HomePage;
 
 public final class Routes {
-
-    private static final String HTTP = "http";
 
     private static Map<Class<?>, String> urlMappings = new HashMap<Class<?>, String>();
 
@@ -19,15 +17,14 @@ public final class Routes {
         urlMappings.put(HomePage.class, "/");
 	}
 
-    private Routes() {
-    }
+    private Routes() {}
 
-    public static URL urlFor(Class<?> pageClass) throws MalformedURLException {
-        return new URL(HTTP, serverHost(), serverPort(), path(pageClass));
+    public static String urlFor(Class<?> pageClass) {
+        return format("http://%s:%s/%s%s", serverHost(), serverPort(), context(), path(pageClass));
     }
 
     private static String path(Class<?> pageClass) {
-        return "/" + context() + urlMappings.get(pageClass);
+        return urlMappings.get(pageClass);
     }
 
     private static String serverHost() {
@@ -43,6 +40,6 @@ public final class Routes {
     }
 
     private static int getPropertyAsInt(final String name, final String defaultValue) {
-        return Integer.parseInt(getProperty(name, defaultValue));
+        return parseInt(getProperty(name, defaultValue));
     }
 }

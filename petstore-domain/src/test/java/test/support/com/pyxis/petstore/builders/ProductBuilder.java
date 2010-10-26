@@ -31,7 +31,7 @@ public class ProductBuilder implements Builder<Product> {
 		return this;
 	}
 
-    public ProductBuilder withoutADescription() {
+    public ProductBuilder withNoDescription() {
         return describedAs(null);
     }
 

@@ -1,4 +1,4 @@
-package test.support.com.pyxis.petstore.web;
+package test.support.com.pyxis.petstore.web.webdriver;
 
 import org.openqa.selenium.WebDriver;
 
@@ -22,7 +22,7 @@ public class SingleInstanceWebDriverFactory extends WebDriverFactory {
         controlPage.load();
     }
 
-    public WebDriver createWebDriver() {
+    public WebDriver getWebDriver() {
         controlPage.newTestWindow();
         return WindowTracker.tracking(sharedWebDriver).inWindow();
     }

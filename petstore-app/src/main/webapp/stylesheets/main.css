@@ -25,13 +25,12 @@ z-index: 10;
 #content {
 }
 
-#logout {
+#logout-box {
 position: absolute;
 right: 0px;
 top: 45px;
 z-index: 100;
 }
-
 
 ol, ul, p {
 font-size: 1.2em;

@@ -1,11 +1,12 @@
 package test.system.com.pyxis.petstore;
 
 import com.pyxis.petstore.domain.product.Product;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
-import test.system.com.pyxis.petstore.page.*;
+import test.support.com.pyxis.petstore.web.page.*;
 
 import java.math.BigDecimal;
 
@@ -25,6 +26,11 @@ public class PurchaseFeature {
         database.start();
         setupContext();
         homePage = petstore.start();
+    }
+
+    @After public void
+    stopApplication() {
+        petstore.stop();
     }
 
     private void setupContext() throws Exception {

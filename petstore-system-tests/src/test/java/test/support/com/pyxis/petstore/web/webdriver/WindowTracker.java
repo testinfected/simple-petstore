@@ -1,8 +1,9 @@
-package test.support.com.pyxis.petstore.web;
+package test.support.com.pyxis.petstore.web.webdriver;
 
 import org.openqa.selenium.WebDriver;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -44,7 +45,15 @@ public class WindowTracker {
             closeWindow();
             return null;
         } else {
+            return invoke(method, args);
+        }
+    }
+
+    private Object invoke(Method method, Object[] args) throws Throwable {
+        try {
             return method.invoke(webdriver, args);
+        } catch (InvocationTargetException e) {
+            throw e.getTargetException();
         }
     }
 

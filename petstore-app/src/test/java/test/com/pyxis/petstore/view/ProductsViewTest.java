@@ -43,7 +43,7 @@ public class ProductsViewTest {
     @Before public void
     setUpDefaultPhoto() {
         context.checking(new Expectations() {{
-            allowing(attachmentStorage).getAttachmentUrl(with(aProductWithoutPhoto())); will(returnValue(DEFAULT_PHOTO_URL));
+            allowing(attachmentStorage).getAttachmentUrl(with(aProductWithNoPhoto())); will(returnValue(DEFAULT_PHOTO_URL));
         }});
     }
 
@@ -86,7 +86,7 @@ public class ProductsViewTest {
 
     @Test public void
     handlesProductWithNoDescriptionCorrectly() {
-        productsView = renderProductsView().using(model.listing(aProduct().withoutADescription())).asDom();
+        productsView = renderProductsView().using(model.listing(aProduct().withNoDescription())).asDom();
         assertThat("view", productsView,
                 hasSelector("#products td:nth-child(3)",
                         contains(anEmptyDescription())));
@@ -107,7 +107,7 @@ public class ProductsViewTest {
     					withAttribute("href", equalTo(itemsPath("LAB-1234"))))));
     }
 
-    private Matcher<Product> aProductWithoutPhoto() {
+    private Matcher<Product> aProductWithNoPhoto() {
         return aProductWithPhoto(nullValue());
     }
 

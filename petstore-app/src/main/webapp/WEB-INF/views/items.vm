@@ -30,7 +30,7 @@
 
     <tr id="item-$item.Number" class="$rowStyle">
             <td class="number">$item.number</td>
-            <td>$!item.description</td>
+            <td class="description">$!item.description</td>
             <td class="price">$item.price</td>
             <td>
                 <form action="$base/cartitems" method="post">

@@ -14,7 +14,7 @@
     <div id="search-box">
         #parse("_search.vm")
     </div>
-    <div id="logout">
+    <div id="logout-box">
         #parse("_logout.vm")
     </div>
     <div id="shopping-cart">

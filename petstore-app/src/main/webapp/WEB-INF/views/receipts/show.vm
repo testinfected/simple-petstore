@@ -48,18 +48,18 @@
 <fieldset id="billing-address">
     <legend>Billing Address</legend>
     <ol>
-        <li><label>First name: </label><span>$order.paymentMethod.billingAddress.firstName</span></li>
-        <li><label>Last name: </label><span>$order.paymentMethod.billingAddress.lastName</span></li>
-        <li><label>Email address: </label><span class="email">$order.paymentMethod.billingAddress.emailAddress</span></li>
+        <li id="first-name"><label>First name: </label><span>$order.paymentMethod.billingAddress.firstName</span></li>
+        <li id="last-name"><label>Last name: </label><span>$order.paymentMethod.billingAddress.lastName</span></li>
+        <li id="email"><label>Email address: </label><span class="email">$order.paymentMethod.billingAddress.emailAddress</span></li>
     </ol>
 </fieldset>
 
 <fieldset id="payment-details">
     <legend>Payment details</legend>
     <ol>
-        <li><label>Card type: </label><span>$order.paymentMethod.cardCommonName</span></li>
-        <li><label>Card number: </label><span class="number">$order.paymentMethod.cardNumber</span></li>
-        <li><label>Card expiry date: </label><span class="date">$order.paymentMethod.cardExpiryDate</span></li>
+        <li id="card-type"><label>Card type: </label><span>$order.paymentMethod.cardCommonName</span></li>
+        <li id="card-number"><label>Card number: </label><span class="number">$order.paymentMethod.cardNumber</span></li>
+        <li id="card-expiry"><label>Card expiry date: </label><span class="date">$order.paymentMethod.cardExpiryDate</span></li>
     </ol>
 </fieldset>
 

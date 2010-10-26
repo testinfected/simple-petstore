@@ -1,4 +1,4 @@
-package test.support.com.pyxis.petstore.web;
+package test.support.com.pyxis.petstore.web.webdriver;
 
 import org.openqa.selenium.WebDriver;
 
@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
  */
 public class ClassicWebDriverFactory extends WebDriverFactory {
 
-    public WebDriver createWebDriver() {
+    public WebDriver getWebDriver() {
         return newWebDriverInstance();
     }
 }

@@ -1,4 +1,4 @@
-package test.support.com.pyxis.petstore.web;
+package test.support.com.pyxis.petstore.web.webdriver;
 
 import com.pyxis.matchers.ExceptionImposter;
 import org.openqa.selenium.WebDriver;
@@ -10,7 +10,7 @@ public abstract class WebDriverFactory {
 
     private static WebDriverFactory factory;
 
-    public abstract WebDriver createWebDriver();
+    public abstract WebDriver getWebDriver();
 
     public static WebDriverFactory getInstance() {
         if (factory == null) {

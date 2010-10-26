@@ -1,36 +1,32 @@
 package test.support.com.pyxis.petstore.web;
 
+import com.objogate.wl.UnsynchronizedProber;
+import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.WebDriver;
-import test.system.com.pyxis.petstore.page.HomePage;
+import test.support.com.pyxis.petstore.web.webdriver.WebDriverFactory;
+import test.support.com.pyxis.petstore.web.page.HomePage;
+import test.support.com.pyxis.petstore.web.page.Page;
 
 public class PetStoreDriver {
 
-    private final WebDriver webdriver;
+    private final AsyncWebDriver browser;
 
     public PetStoreDriver() {
-        webdriver = createWebDriver();
-    }
-
-    private WebDriver createWebDriver() {
-        return WebDriverFactory.getInstance().createWebDriver();
+        browser = new AsyncWebDriver(new UnsynchronizedProber(), getWebDriver());
     }
 
     public HomePage start() throws Exception {
-        HomePage home = goToHomePage();
+        HomePage home = Page.home(browser);
+        home.go();
         home.logout();
         return home;
     }
 
-    public HomePage goToHomePage() throws Exception {
-        return navigateTo(HomePage.class);
-    }
-
-    public <T extends PageObject> T navigateTo(Class<T> pageClass) throws Exception {
-        webdriver.navigate().to(Routes.urlFor(pageClass));
-        return PageObject.aPage(webdriver, pageClass);
-    }
-
     public void stop() {
-        webdriver.quit();
+        browser.quit();
+    }
+
+    private WebDriver getWebDriver() {
+        return WebDriverFactory.getInstance().getWebDriver();
     }
 }
