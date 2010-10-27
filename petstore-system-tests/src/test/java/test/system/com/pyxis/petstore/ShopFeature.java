@@ -19,16 +19,18 @@ public class ShopFeature {
 	PetStoreDriver petstore = new PetStoreDriver();
 	DatabaseDriver database = new DatabaseDriver();
 
-    HomePage homePage;
-    ItemsPage itemsPage;
-    CartPage cartPage;
-
     @Before public void
     startApplication() throws Exception {
         database.start();
-        homePage = petstore.start();
+        petstore.start();
         setupContext();
 	}
+
+    @After public void
+    stopApplication() {
+        petstore.stop();
+        database.stop();
+    }
 
     private void setupContext() throws Exception {
         Product iguana = aProduct().withName("Iguana").build();
@@ -40,50 +42,40 @@ public class ShopFeature {
 
     @Test public void
     shopsForItemsAndAddsThemToCart() throws Exception {
-        homePage.showsCartIsEmpty();
+        petstore.showsCartIsEmpty();
 
-        itemsPage = havingListedItemsOf("Iguana");
+        havingListedItemsOf("Iguana");
+        petstore.addToCart("12345678");
+        petstore.showsItemInCart("12345678", "Green Adult", "18.50");
+        petstore.showsGrandTotal("18.50");
+        petstore.continueShopping();
+        petstore.showsCartTotalQuantity(1);
 
-        cartPage = itemsPage.addToCart("12345678");
-        cartPage.showsItemInCart("12345678", "Green Adult", "18.50");
-        cartPage.showsGrandTotal("18.50");
-        cartPage.continueShopping();
-        homePage.showsCartTotalQuantity(1);
-
-        itemsPage = havingListedItemsOf("Iguana");
-
-        cartPage = itemsPage.addToCart("87654321");
-        cartPage.showsItemInCart("87654321", "Blue Female", "58.97");
-        cartPage.showsGrandTotal("77.47");
-        cartPage.continueShopping();
-        homePage.showsCartTotalQuantity(2);
+        havingListedItemsOf("Iguana");
+        petstore.addToCart("87654321");
+        petstore.showsItemInCart("87654321", "Blue Female", "58.97");
+        petstore.showsGrandTotal("77.47");
+        petstore.continueShopping();
+        petstore.showsCartTotalQuantity(2);
     }
 
     @Test public void
     shopsForTheSameItemMultipleTimes() throws Exception {
-        itemsPage = havingListedItemsOf("Iguana");
+        havingListedItemsOf("Iguana");
+        petstore.addToCart("12345678");
+        petstore.showsItemQuantity("12345678", 1);
+        petstore.continueShopping();
 
-        cartPage = itemsPage.addToCart("12345678");
-        cartPage.showsItemQuantity("12345678", 1);
-        cartPage.continueShopping();
+        havingListedItemsOf("Iguana");
+        petstore.addToCart("12345678");
+        petstore.showsItemQuantity("12345678", 2);
+        petstore.continueShopping();
 
-        itemsPage = havingListedItemsOf("Iguana");
-        
-        cartPage = itemsPage.addToCart("12345678");
-        cartPage.showsItemQuantity("12345678", 2);
-        cartPage.continueShopping();
-
-        homePage.showsCartTotalQuantity(2);
+        petstore.showsCartTotalQuantity(2);
 	}
 
-    @After public void
-    stopApplication() {
-		petstore.stop();
-		database.stop();
-	}
-
-    private ItemsPage havingListedItemsOf(final String productName) {
-        ProductsPage productsPage = homePage.searchFor(productName);
-        return productsPage.browseItemsOf(productName);
+    private void havingListedItemsOf(final String productName) {
+        petstore.searchFor(productName);
+        petstore.browseItemsOf(productName);
     }
 }

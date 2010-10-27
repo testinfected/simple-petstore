@@ -46,6 +46,14 @@ public class ItemBuilder implements Builder<Item> {
         return anItem().of(product);
     }
 
+    public static ItemBuilder an(ProductBuilder productBuilder) {
+        return a(productBuilder);
+    }
+
+    public static ItemBuilder an(Product product) {
+        return a(product);
+    }
+
     public ItemBuilder of(ProductBuilder product) {
         return of(product.build());
     }

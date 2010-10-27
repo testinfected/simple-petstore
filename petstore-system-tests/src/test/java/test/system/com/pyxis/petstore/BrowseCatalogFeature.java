@@ -8,11 +8,8 @@ import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
-import test.support.com.pyxis.petstore.web.page.HomePage;
-import test.support.com.pyxis.petstore.web.page.ItemsPage;
-import test.support.com.pyxis.petstore.web.page.ProductsPage;
 
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.an;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class BrowseCatalogFeature {
@@ -20,39 +17,38 @@ public class BrowseCatalogFeature {
 	PetStoreDriver petstore = new PetStoreDriver();
 	DatabaseDriver database = new DatabaseDriver();
 
-    HomePage homePage;
-    Product product;
+    Product iguana;
 
     @Before public void
     startApplication() throws Exception {
         database.start();
-        homePage = petstore.start();
+        petstore.start();
         given(aProduct().withName("Iguana"));
 	}
 
     private void given(final ProductBuilder product) throws Exception {
-        this.product = product.build();
-        database.given(this.product);
+        this.iguana = product.build();
+        database.given(this.iguana);
     }
 
     @Test public void
     consultsAProductCurrentlyOutOfStock() throws Exception {
-        ProductsPage productsPage = homePage.searchFor("Iguana");
-        ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
-        itemsPage.showsNoItemAvailable();
+        petstore.searchFor("Iguana");
+        petstore.browseItemsOf("Iguana");
+        petstore.showsNoItemAvailable();
     }
 
 	@Test public void
     consultsAProductAvailableItems() throws Exception {
-        Item greenAdult = anItem().of(product)
+        Item greenAdult = an(iguana)
                 .withNumber("12345678")
                 .describedAs("Green Adult")
                 .priced("18.50").build();
         database.given(greenAdult);
         
-		ProductsPage productsPage = homePage.searchFor("Iguana");
-		ItemsPage itemsPage = productsPage.browseItemsOf("Iguana");
-		itemsPage.displaysItem("12345678", "Green Adult", "18.50");
+		petstore.searchFor("Iguana");
+		petstore.browseItemsOf("Iguana");
+		petstore.displaysItem("12345678", "Green Adult", "18.50");
 	}
 	
 	@After public void

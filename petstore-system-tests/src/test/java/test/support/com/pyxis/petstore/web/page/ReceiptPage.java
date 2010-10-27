@@ -37,9 +37,8 @@ public class ReceiptPage extends Page {
         browser.element(cssSelector("#email span")).assertText(being(emailAddress));
     }
 
-    public HomePage continueShopping() {
+    public void continueShopping() {
         browser.element(id("continue-shopping")).click();
-        return homePage();
     }
 
     private By cellDisplayingNameOfItem(String itemNumber) {

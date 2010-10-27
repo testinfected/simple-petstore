@@ -35,8 +35,7 @@ public class PurchasePage extends Page {
         return By.xpath(".//option[. = '" + optionText + "']");
     }
 
-    public ReceiptPage confirmOrder() {
+    public void confirmOrder() {
         browser.element(id("submit")).click();
-        return receiptPage();
     }
 }

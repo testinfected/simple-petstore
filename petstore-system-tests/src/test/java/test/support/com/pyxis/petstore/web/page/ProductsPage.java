@@ -23,8 +23,7 @@ public class ProductsPage extends Page {
         browser.element(cssSelector("#product-" + number + " .name")).assertText(being(name));
     }
 
-    public ItemsPage browseItemsOf(String productName) {
+    public void browseItemsOf(String productName) {
         browser.element(linkText(productName)).click();
-		return itemsPage();
 	}
 }

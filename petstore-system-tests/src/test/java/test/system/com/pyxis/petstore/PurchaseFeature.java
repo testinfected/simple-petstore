@@ -18,19 +18,19 @@ public class PurchaseFeature {
     PetStoreDriver petstore = new PetStoreDriver();
     DatabaseDriver database = new DatabaseDriver();
 
-    HomePage homePage;
     BigDecimal total;
 
     @Before public void
     startApplication() throws Exception {
         database.start();
         setupContext();
-        homePage = petstore.start();
+        petstore.start();
     }
 
     @After public void
     stopApplication() {
         petstore.stop();
+        database.stop();
     }
 
     private void setupContext() throws Exception {
@@ -48,27 +48,27 @@ public class PurchaseFeature {
         havingAddedToCart("Labrador Retriever", "11111111");
         havingAddedToCart("Golden Retriever", "22222222");
 
-        CartPage cartPage = homePage.lookAtCartContent();
-        PurchasePage purchasePage = cartPage.checkout();
-        purchasePage.showsTotalToPay(total);
-        purchasePage.willBillTo("John", "Leclair", "jleclair@gmail.com");
-        purchasePage.willPayUsingCreditCard("Visa", "9999 9999 9999 9999", "12/12");
+        petstore.viewCart();
+        petstore.checkout();
+        petstore.showsTotalToPay(total);
+        petstore.billTo("John", "Leclair", "jleclair@gmail.com");
+        petstore.payUsingCreditCard("Visa", "9999 9999 9999 9999", "12/12");
 
-        ReceiptPage receiptPage = purchasePage.confirmOrder();
-        receiptPage.showsTotalPaid(total);
-        receiptPage.showsLineItem("11111111", "Male Adult", "599.00");
-        receiptPage.showsLineItem("22222222", "Female Adult", "649.00");
-        receiptPage.showsBillingInformation("John", "Leclair", "jleclair@gmail.com");
-        receiptPage.showsCreditCardDetails("Visa", "9999 9999 9999 9999", "12/12");
+        petstore.confirmOrder();
+        petstore.showsTotalPaid(total);
+        petstore.showsLineItem("11111111", "Male Adult", "599.00");
+        petstore.showsLineItem("22222222", "Female Adult", "649.00");
+        petstore.showsBillingInformation("John", "Leclair", "jleclair@gmail.com");
+        petstore.showsCreditCardDetails("Visa", "9999 9999 9999 9999", "12/12");
 
-        receiptPage.continueShopping();
-        homePage.showsCartIsEmpty();
+        petstore.returnShopping();
+        petstore.showsCartIsEmpty();
     }
 
     private void havingAddedToCart(String product, String itemNumber) {
-        ProductsPage productsPage = homePage.searchFor(product);
-        ItemsPage itemsPage = productsPage.browseItemsOf(product);
-        CartPage cartPage = itemsPage.addToCart(itemNumber);
-        cartPage.continueShopping();
+        petstore.searchFor(product);
+        petstore.browseItemsOf(product);
+        petstore.addToCart(itemNumber);
+        petstore.continueShopping();
     }
 }

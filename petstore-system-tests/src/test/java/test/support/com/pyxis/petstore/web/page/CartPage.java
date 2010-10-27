@@ -9,6 +9,7 @@ import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
 
 public class CartPage extends Page {
+
     public CartPage(AsyncWebDriver browser) {
         super(browser);
     }
@@ -26,9 +27,8 @@ public class CartPage extends Page {
         browser.element(id("cart-grand-total")).assertText(being(price));
     }
 
-    public ItemsPage continueShopping() {
+    public void continueShopping() {
         browser.element(id("continue-shopping")).click();
-        return itemsPage();
     }
 
     private By cellShowingTotalFor(String itemNumber) {
@@ -47,9 +47,8 @@ public class CartPage extends Page {
         return "#cart-item-" + itemNumber;
     }
 
-    public PurchasePage checkout() {
+    public void checkout() {
         browser.element(id("checkout")).click();
-        return purchasePage();
     }
 }
 

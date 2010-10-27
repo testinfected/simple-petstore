@@ -8,6 +8,7 @@ import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
 
 public class ItemsPage extends Page {
+
     public ItemsPage(AsyncWebDriver browser) {
         super(browser);
     }
@@ -34,9 +35,8 @@ public class ItemsPage extends Page {
         browser.element(id("out-of-stock")).assertExists();
     }
 
-    public CartPage addToCart(String itemNumber) {
+    public void addToCart(String itemNumber) {
         browser.element(add(itemNumber)).click();
-        return cartPage();
     }
 
     private String domIdOf(String itemNumber) {

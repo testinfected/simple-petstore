@@ -14,20 +14,19 @@ public class SearchFeature {
 
     PetStoreDriver petstore = new PetStoreDriver();
     DatabaseDriver database = new DatabaseDriver();
-    HomePage home;
 
     @Before public void
     startApplication() throws Exception {
         database.start();
-        home = petstore.start();
+        petstore.start();
     }
 
     @Test public void
     searchDoesNotMatchAnyProductInCatalog() throws Exception {
         database.given(aProduct().withName("Labrador Retriever"));
         
-        ProductsPage productsPage = home.searchFor("Dalmatian");
-        productsPage.showsNoResult();
+        petstore.searchFor("Dalmatian");
+        petstore.showsNoResult();
     }
 
     @Test public void
@@ -37,10 +36,10 @@ public class SearchFeature {
                 aProduct().withNumber("CHE-5678").withName("Chesapeake").describedAs("Chesapeake bay retriever"),
                 aProduct().withName("Dalmatian"));
 
-        ProductsPage productsPage = home.searchFor("retriever");
-        productsPage.displaysNumberOfResults(2);
-        productsPage.displaysProduct("LAB-1234", "Labrador Retriever");
-        productsPage.displaysProduct("CHE-5678", "Chesapeake");
+        petstore.searchFor("retriever");
+        petstore.displaysNumberOfResults(2);
+        petstore.displaysProduct("LAB-1234", "Labrador Retriever");
+        petstore.displaysProduct("CHE-5678", "Chesapeake");
     }
 
     @After public void

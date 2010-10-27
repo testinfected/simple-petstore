@@ -13,10 +13,9 @@ public class HomePage extends Page {
         super(browser);
     }
 
-    public ProductsPage searchFor(String keyword) {
+    public void searchFor(String keyword) {
         browser.element(id("keyword")).type(keyword);
         browser.element(id("search")).click();
-        return productsPage();
 	}
 
     public void showsCartIsEmpty() {
@@ -27,9 +26,8 @@ public class HomePage extends Page {
         browser.element(cssSelector("#shopping-cart a")).assertText(containsString(valueOf(quantity)));
     }
 
-    public CartPage lookAtCartContent() {
+    public void lookAtCartContent() {
         browser.element(cssSelector("#shopping-cart a")).click();
-        return cartPage();
     }
 
     public void logout() {
