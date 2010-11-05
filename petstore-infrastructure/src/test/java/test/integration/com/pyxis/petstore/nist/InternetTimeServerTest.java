@@ -38,9 +38,9 @@ public class InternetTimeServerTest {
     }
 
     @After public void
-    stopServer() throws IOException {
+    stopServer() throws Exception {
         server.stop();
-        clients.shutdownNow();
+        clients.awaitTermination(250, TimeUnit.MILLISECONDS);
     }
 
     @Test public void
