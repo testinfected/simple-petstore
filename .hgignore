@@ -1,6 +1,6 @@
 syntax: glob
 
-﻿target
+target
 logs
 appserver
 .classpath
