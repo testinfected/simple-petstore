@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
-import test.support.com.pyxis.petstore.web.page.*;
 
 import java.math.BigDecimal;
 
