@@ -21,7 +21,7 @@ th {
 }
 
 .add-to-cart {
-    margin-right: 0px;
+    margin-right: 0;
     font: 14px "Georgia", "Arial", serif;
     padding: 5px 10px;
     text-align: center;
@@ -78,7 +78,7 @@ th {
 
 .title {
     font-weight: bold;
-    margin-left: 0px;
+    margin-left: 0;
     color: #84a208;
 }
 
@@ -90,7 +90,7 @@ th {
 
 #order-actions {
     margin-top: 45px;
-    margin-left: 145px;
+    margin-left: 188px;
     margin-bottom: 40px;
 }
 
@@ -102,7 +102,7 @@ th {
 
 #receipt-actions {
     margin-top: 45px;
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 #billing-address {
@@ -119,7 +119,7 @@ th {
 
 #billing-address ul, #payment-details ul {
     list-style-type: none;
-    padding-left: 0px;
+    padding-left: 0;
 }
 
 #cart, #items {
@@ -163,19 +163,13 @@ th {
     font-size: 20px;
 }
 
-#cash select {
-    width: 312px;
-    padding: 5px;
-    height: 30px;
-}
-
 #cash ul {
     margin-top: 30px;
 }
 
 #cash ul li {
     list-style-type: none;
-    padding-left: 0px;
+    padding-left: 0;
     margin-top: 10px;
 }
 
@@ -184,6 +178,13 @@ th {
     border: solid gray 1px;
     -moz-border-radius: 4px 4px 4px 4px;
     height: 23px;
+    width: 300px;
+}
+
+#cash select {
+    width: 302px;
+    padding: 5px;
+    height: 30px;
 }
 
 #cash label {
@@ -332,6 +333,15 @@ th {
     border: solid #c5c5c5 1px;
 }
 
+#search-box input {
+    height: 24px;
+    position: absolute;
+    top: 29px;
+    left: 701px;
+    border: solid gray 2px;
+    -moz-border-radius: 4px 0 0 4px;
+}
+
 #search {
     position: absolute;
     width: 34px;
@@ -339,9 +349,9 @@ th {
     padding: 0;
     background-color: #c6ee22;
     top: 29px;
-    left: 872px;
+    left: 882px;
     border: solid gray 2px;
-    -moz-border-radius: 0px 4px 4px 0px;
+    -moz-border-radius: 0 4px 4px 0;
     cursor: pointer;
 }
 
@@ -366,12 +376,12 @@ th {
 }
 
 #home-tab {
-    margin-top: 0px;
+    margin-top: -1px;
     margin-left: 792px;
 }
 
 #cart-tab {
-    margin-top: 0px;
+    margin-top: -1px;
     margin-left: 875px;
 }
 
@@ -400,11 +410,3 @@ th {
     margin-top: 20px;
 }
 
-#search-box input {
-    height: 24px;
-    position: absolute;
-    top: 29px;
-    left: 685px;
-    border: solid gray 2px;
-    -moz-border-radius: 4px 0px 0px 4px;
-}
