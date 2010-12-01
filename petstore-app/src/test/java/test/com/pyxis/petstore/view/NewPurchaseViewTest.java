@@ -61,7 +61,7 @@ public class NewPurchaseViewTest {
     }
 
     private Matcher<? super Element> checkoutForm(Matcher<Element>... elementMatchers) {
-        return hasUniqueSelector("form#checkout", elementMatchers);
+        return hasUniqueSelector("form#checkout-form", elementMatchers);
     }
 
     @Test public void
@@ -103,7 +103,7 @@ public class NewPurchaseViewTest {
 	}
     
 	private Matcher<Element> withCreditCardDetails(CreditCardType cardType, String cardNumber, String cardExpiryDate) {
-		return hasUniqueSelector("#payment", 
+		return allOf( 
 				withCardNumberAndExpiryDate(cardNumber, cardExpiryDate),
 	            withSelectedCardType(cardType));
 	}
@@ -120,10 +120,10 @@ public class NewPurchaseViewTest {
 	}
 
 	private Matcher<Element> withBillingInformation(String firstName, String lastName, String email) {
-		return hasUniqueSelector("#billing-address", withInputFields(
+		return withInputFields(
                 allOf(withName("billingAddress.firstName"), withAttribute("value", firstName)),
                 allOf(withName("billingAddress.lastName"), withAttribute("value", lastName)),
-                allOf(withName("billingAddress.emailAddress"), withAttribute("value", email))));
+                allOf(withName("billingAddress.emailAddress"), withAttribute("value", email)));
 	}
 
 	private Matcher<Element> withEmptyBillingInformation() {
@@ -131,7 +131,7 @@ public class NewPurchaseViewTest {
     }
 
     private Matcher<Element> withPaymentDetails() {
-        return hasUniqueSelector("#payment",
+        return allOf(
                 withSelectionLists(withName("cardType")),
                 withEmptyCardNumberAndExpiryDate()
         );
@@ -146,7 +146,7 @@ public class NewPurchaseViewTest {
     }
 
     private Matcher<Element> withSubmitOrderButton() {
-        return hasUniqueSelector("button#submit");
+        return hasUniqueSelector("#checkout_action");
     }
 
     private Matcher<Iterable<Element>> withCreditCardOptions() {

@@ -36,6 +36,6 @@ public class PurchasePage extends Page {
     }
 
     public void confirmOrder() {
-        browser.element(id("submit")).click();
+        browser.element(id("checkout_action")).click();
     }
 }

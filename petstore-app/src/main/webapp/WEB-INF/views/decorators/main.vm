@@ -7,24 +7,33 @@
     <title>$title</title>
     $head
 </head>
-<body>
+<body class="petstore">
 <div id="header">
-    <a href="$base" id="home-link">Home</a>
-
-    <div id="search-box">
-        #parse("_search.vm")
-    </div>
-    <div id="logout-box">
-        #parse("_logout.vm")
-    </div>
-    <div id="shopping-cart">
-##        Spring aop proxy prefix bean names with scopedTarget
-        #set( $cart = $session.getAttribute('scopedTarget.cart') )
-        #parse("_cart.vm")
+ 	<div class="content">
+		<a href="$base" id="home-link">
+			<img src="$base/images/fulllogo.png" />
+		</a>
+		
+	    <div id="search-box">
+	        #parse("_search.vm")
+	    </div>
+		<div id="menu">
+			#parse("_menu.vm")
+	   </div>
     </div>
 </div>
-<div id="content">
+<div class="content">
     $body
 </div>
+
+<div id="footer"> 
+	<hr/>
+	<span id="footer_text">jPetStore &copy; 2010 - PSD @</span>
+	<a href="http://pyxis-tech.com/en/home"><img src="$base/images/logoPyxis.png"/></a>
+</div>
+<div id="logout-box">
+    #parse("_logout.vm")
+</div>
+
 </body>
 </html>

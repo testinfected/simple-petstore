@@ -25,7 +25,7 @@ public class CartViewTest {
     displaysColumnHeadings() {
         cartView = renderCartView().using(aModel().with(aCart())).asDom();
         assertThat("view", cartView,
-                hasSelector("#cart th",
+                hasSelector("#cart-content th",
                         inOrder(withText("Quantity"),
                                 withText("Item"),
                                 withText("Price"),
@@ -51,7 +51,7 @@ public class CartViewTest {
         ItemBuilder anItem = anItem();
         ItemBuilder anotherItem = anItem();
         cartView = renderCartView().using(aModel().with(aCart().containing(anItem, anItem, anotherItem))).asDom();
-        assertThat("view", cartView, hasSelector("#cart tr[id^='cart-item']", withSize(2)));
+        assertThat("view", cartView, hasSelector("#cart-content tr[id^='cart-item']", withSize(2)));
     }
 
     @Test public void
@@ -74,7 +74,7 @@ public class CartViewTest {
     @Test public void
     checkingOutRendersPaymentForm() {
         cartView = renderCartView().using(aModel().with(aCart().containing(anItem()))).asDom();
-        assertThat("view", cartView, hasUniqueSelector("a#checkout", withAttribute("href", checkoutPath())));
+        assertThat("view", cartView, hasUniqueSelector("#checkout a", withAttribute("href", checkoutPath())));
     }
 
     private VelocityRendering renderCartView() {

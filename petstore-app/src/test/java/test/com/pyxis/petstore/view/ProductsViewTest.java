@@ -51,21 +51,11 @@ public class ProductsViewTest {
     displaysNumberOfProductsFound() {
         productsView = renderProductsView().using(model.listing(aProduct(), aProduct())).asDom();
         assertThat("view", productsView, hasUniqueSelector("#match-count", withText("2")));
-        assertThat("view", productsView, hasSelector("#products tr[id^='product']", withSize(2)));
+        assertThat("view", productsView, hasSelector("#catalog li[id^='product']", withSize(2)));
     }
 
     @Test public void
-    displaysColumnHeadingsOnProductTable() {
-        productsView = renderProductsView().using(model.listing(aProduct())).asDom();
-        assertThat("view", productsView,
-                hasSelector("#products th",
-                        inOrder(withBlankText(),
-                                withText("Name"),
-                                withText("Description"))));
-    }
-
-    @Test public void
-    displaysProductDetailsInColumns() throws Exception {
+    displaysProductDetails() throws Exception {
         model.listing(aProduct().
                 withNumber("LAB-1234").
                 withName("Labrador").
@@ -78,32 +68,33 @@ public class ProductsViewTest {
 
         productsView = renderProductsView().using(model).asDom();
         assertThat("view", productsView,
-                hasSelector("#products td",
-                        inOrder(hasChild(anImage(pathFor(photoUrl))),
-                                withText("Labrador"),
-                                withText("Friendly"))));
+                hasSelector(".product-link", contains(anImage(pathFor(photoUrl)))));
+        assertThat("view", productsView,
+                hasSelector(".product-name", contains(withText("Labrador"))));
+        assertThat("view", productsView,
+                hasSelector(".product-description", contains(withText("Friendly"))));
     }
 
     @Test public void
     handlesProductWithNoDescriptionCorrectly() {
         productsView = renderProductsView().using(model.listing(aProduct().withNoDescription())).asDom();
         assertThat("view", productsView,
-                hasSelector("#products td:nth-child(3)",
+                hasSelector(".product-description",
                         contains(anEmptyDescription())));
     }
 
     @Test public void
-    doesNotDisplayProductsTableIfNoProductIsFound() {
+    doesNotDisplayProductsIfNoProductIsFound() {
         productsView = renderProductsView().using(model).asDom();
         assertThat("view", productsView, hasUniqueSelector("#no-match"));
-        assertThat("view", productsView, hasNoSelector("#products"));
+        assertThat("view", productsView, hasNoSelector("#catalog li"));
     }
     
     @Test public void
     productNameAndPhotoLinkToProductInventory() {
         productsView = renderProductsView().using(model.listing(aProduct().withName("Labrador").withNumber("LAB-1234"))).asDom();
     	assertThat("view", productsView,
-    			hasSelector("td a", everyItem(
+    			hasSelector("li a", everyItem(
     					withAttribute("href", equalTo(itemsPath("LAB-1234"))))));
     }
 

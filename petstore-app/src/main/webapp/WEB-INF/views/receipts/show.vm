@@ -3,70 +3,75 @@
     <title>PetStore - Order receipt</title>
 </head>
 <body>
-<div>
-    <p>Thank you, your order has been confirmed.</p>
-</div>
-<fieldset id="order">
-    <legend>Order details</legend>
-    <ol>
-        <li><label>Order number: </label><span id="order-number">$order.number</span></li>
-        <li>
-            <table id="order-details">
-                <thead>
-                <tr>
-                    <th>Quantity</th>
-                    <th>Item</th>
-                    <th>Price</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tbody>
-                    #foreach ($lineItem in $order.lineItems)
-                        #if( $count % 2 == 0 )
-                            #set( $rowStyle = 'evenrow' )
-                        #else
-                            #set( $rowStyle = 'oddrow' )
-                        #end
+<div id="receipt">
+    <p>Thank you, order number <span id="order-number">$order.number</span> has been confirmed.</p>
 
-                    <tr id="line-item-$lineItem.itemNumber" class="$rowStyle">
-                        <td class="count">$lineItem.quantity</td>
-                        <td class="text">$!lineItem.itemDescription</td>
-                        <td class="price">$lineItem.itemUnitPrice</td>
-                        <td class="total">$lineItem.totalPrice</td>
-                    </tr>
-                    #end
-                <tr id="summary">
-                    <td colspan="3" class="price">Grand Total:</td>
-                    <td class="total" id="order-total">$order.totalPrice</td>
-                </tr>
-                </tbody>
-            </table>
-        </li>        
-    </ol>
-</fieldset>
+    <table id="order-details" width="85%">
+        <tr>
+            <th>Quantity</th>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+        #foreach ($lineItem in $order.lineItems)
+            #if( $count % 2 == 0 )
+                #set( $rowStyle = 'backgrounded' )
+            #else
+                #set( $rowStyle = 'oddrow' )
+            #end
+            <tr id="line-item-$lineItem.itemNumber" class="$rowStyle">
+                <td class="count">$lineItem.quantity</td>
+                <td class="text">$!lineItem.itemDescription</td>
+                <td class="price">$lineItem.itemUnitPrice</td>
+                <td class="total">$lineItem.totalPrice</td>
+            </tr>
+        #end
+        <tr id="order-summary" height="35px;">
+            <td colspan="3" class="price">Grand total:</td>
+            <td id="order-total" class="total">$order.totalPrice</td>
+        </tr>
+    </table>
+    <br/><br/>
 
-<fieldset id="billing-address">
-    <legend>Billing Address</legend>
-    <ol>
-        <li id="first-name"><label>First name: </label><span>$order.paymentMethod.billingAddress.firstName</span></li>
-        <li id="last-name"><label>Last name: </label><span>$order.paymentMethod.billingAddress.lastName</span></li>
-        <li id="email"><label>Email address: </label><span class="email">$order.paymentMethod.billingAddress.emailAddress</span></li>
-    </ol>
-</fieldset>
+    <div id="billing-address">
+        <p class="title">Billing address</p>
+        <ul>
+            <li id="first-name">
+                <label>First name:</label>
+                <span>$order.paymentMethod.billingAddress.firstName</span><br/>
+            </li>
+            <li id="last-name">
+                <label>Last name:</label>
+                <span>$order.paymentMethod.billingAddress.lastName</span><br/>
+            </li>
+            <li id="email">
+                <label>Email address:</label>
+                <span>$order.paymentMethod.billingAddress.emailAddress</span><br/>
+            </li>
+        </ul>
+    </div>
 
-<fieldset id="payment-details">
-    <legend>Payment details</legend>
-    <ol>
-        <li id="card-type"><label>Card type: </label><span>$order.paymentMethod.cardCommonName</span></li>
-        <li id="card-number"><label>Card number: </label><span class="number">$order.paymentMethod.cardNumber</span></li>
-        <li id="card-expiry"><label>Card expiry date: </label><span class="date">$order.paymentMethod.cardExpiryDate</span></li>
-    </ol>
-</fieldset>
+    <div id="payment-details">
+        <p class="title">Payment details</p>
+        <ul>
+            <li id="card-type">
+                <label>Card type:</label>
+                <span>$order.paymentMethod.cardCommonName</span><br/>
+            </li>
+            <li id="card-number">
+                <label>Card number:</label>
+                <span>$order.paymentMethod.cardNumber</span><br/>
+            </li>
+            <li id="card-expiry">
+                <label>Card expiry date:</label>
+                <span>$order.paymentMethod.cardExpiryDate</span><br/>
+            </li>
+        </ul>
+    </div>
 
-<div id="actions">
-    <ol>
-        <li><a id="continue-shopping" href="$base">Continue Shopping</a></li>
-    </ol>
+    <div id="action_receipt">
+        <a id="continue-shopping" class="continue" href="$base">&laquo; continue shopping</a>
+    </div>
 </div>
 </body>
 </html>

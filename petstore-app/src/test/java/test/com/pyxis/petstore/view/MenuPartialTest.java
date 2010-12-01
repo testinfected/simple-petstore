@@ -13,30 +13,30 @@ import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
 import static test.support.com.pyxis.petstore.views.PathFor.cartPath;
 import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
-public class CartPartialTest {
+public class MenuPartialTest {
 
-    String CART_PARTIAL_NAME = "decorators/_cart";
-    Element cartPartial;
+    String MENU_PARTIAL_NAME = "decorators/_menu";
+    Element partial;
 
     @Test public void
     linkIsInactiveWhenCartIsEmpty() {
-        cartPartial = renderCartPartial().using(aModel().with(aCart())).asDom();
-        assertThat("partial", cartPartial, hasNoSelector("a"));
-        assertThat("partial", cartPartial, withText(containsString("Empty")));
+        partial = renderMenuPartial().using(aModel().with(aCart())).asDom();
+        assertThat("partial", partial, hasNoSelector("#shopping-cart a"));
+        assertThat("partial", partial, withText(containsString("0")));
     }
 
     @Test public void
     displaysTotalItemsInCartAndLinksToCart() throws Exception {
-        cartPartial = renderCartPartial().using(aModel().with(
+        partial = renderMenuPartial().using(aModel().with(
                 aCart().containing(anItem(), anItem()))
         ).asDom();
-        assertThat("partial", cartPartial,
-                hasUniqueSelector("a",
+        assertThat("partial", partial,
+                hasUniqueSelector("#shopping-cart a",
                         withAttribute("href", cartPath()),
-                        withText(containsString("2 items"))));
+                        withText(containsString("2"))));
     }
 
-    private VelocityRendering renderCartPartial() {
-        return render(CART_PARTIAL_NAME);
+    private VelocityRendering renderMenuPartial() {
+        return render(MENU_PARTIAL_NAME);
     }
 }

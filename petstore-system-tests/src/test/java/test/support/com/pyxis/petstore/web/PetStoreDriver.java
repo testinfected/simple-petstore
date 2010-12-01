@@ -8,6 +8,7 @@ import test.support.com.pyxis.petstore.web.webdriver.WebDriverFactory;
 
 import java.math.BigDecimal;
 
+import static org.openqa.selenium.By.id;
 import static test.support.com.pyxis.petstore.web.Routes.urlFor;
 
 public class PetStoreDriver {
@@ -23,7 +24,7 @@ public class PetStoreDriver {
 
     public void start() throws Exception {
         browser.navigate().to(urlFor(HomePage.class));
-        logout();
+        clearSession();
     }
 
     public void stop() {
@@ -46,8 +47,8 @@ public class PetStoreDriver {
         homePage.lookAtCartContent();
     }
 
-    public void logout() {
-        homePage.logout();
+    public void clearSession() {
+        browser.element(id("logout")).click();
     }
 
     public void showsNoResult() {

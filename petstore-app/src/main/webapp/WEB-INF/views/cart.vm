@@ -1,50 +1,46 @@
 <html>
 <head>
     <title>PetStore - Cart content</title>
+    <meta name="section" content="cart">
 </head>
 <body>
-<fieldset>
-    <legend>
-        <span>Your cart contains the following items:</span>
-    </legend>
+	<div id="cart"> 
 
-    <table id="cart">
-        <thead>
-        <tr>
-            <th>Quantity</th>
-            <th>Item</th>
-            <th>Price</th>
-            <th>Total</th>
-        </tr>
-        </thead>
-        <tbody>
+	Your cart contains the following items:
+	<table id="cart-content" width="85%">
+		<tr>
+			<th>Quantity</th>
+			<th>Item</th>
+			<th>Price</th>
+			<th>Total</th>
+		</tr>
         #foreach ($cartItem in $cart.items)
-            #if( $count % 2 == 0 )
-                #set( $rowStyle = 'evenrow' )
+            #if( $count % 2 != 0 )
+                #set( $rowStyle = 'backgrounded' )
             #else
-                #set( $rowStyle = 'oddrow' )
+                #set( $rowStyle = '' )
             #end
-
-        <tr id="cart-item-$cartItem.itemNumber" class="$rowStyle">
-            <td class="count">$cartItem.quantity</td>
-            <td class="text">$!cartItem.itemDescription</td>
-            <td class="price">$cartItem.unitPrice</td>
-            <td class="total">$cartItem.totalPrice</td>
-            <td class="deleteitem"><img src="$base/images/garbage.png" alt="delete item"></td>
-        </tr>
+			<tr id="cart-item-$cartItem.itemNumber" class="$rowStyle">
+				<td class="count">$cartItem.quantity</td>
+				<td class="text">$!cartItem.itemDescription</td>
+				<td class="price">$cartItem.unitPrice</td>
+				<td class="total">$cartItem.totalPrice</td>
+				<td><a href=""><img src="$base/images/remove.png" onmouseover="this.src='$base/images/remove_over.png';" onmouseout="this.src='$base/images/remove.png';" alt="delete item"/></a></td>
+			</tr>
         #end
-        <tr id="cart-summary">
-            <td colspan="3" class="price">Grand Total:</td>
-            <td class="total" id="cart-grand-total">$cart.grandTotal</td>
-        </tr>
-        </tbody>
-    </table>
-</fieldset>
-<div id="actions">
-    <ol>
-        <li><a id="continue-shopping" href="$base">Continue Shopping</a></li>
-        <li><a id="checkout" href="$base/checkout">Checkout</a></li>
-    </ol>
-</div>
+		<tr id="cart-summary" height="35px;">
+			<td></td>
+			<td></td>
+			<td class="price">Grand total:</td>
+			<td class="total" id="cart-grand-total">$cart.grandTotal</td>
+			<td></td>
+		</tr>
+	 </table>
+	 <div id="action_cart">
+		<a id="continue-shopping" class="continue" href="$base">&laquo; continue shopping</a>
+		<div id="checkout"><a href="$base/checkout">Checkout</a></div>
+	 </div>
+
+	 </div>
 </body>
 </html>

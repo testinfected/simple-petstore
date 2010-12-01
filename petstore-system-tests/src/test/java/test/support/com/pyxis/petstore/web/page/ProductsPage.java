@@ -20,7 +20,7 @@ public class ProductsPage extends Page {
     }
 
     public void displaysProduct(String number, String name) {
-        browser.element(cssSelector("#product-" + number + " .name")).assertText(being(name));
+        browser.element(cssSelector("#product-" + number + " .product-name")).assertText(being(name));
     }
 
     public void browseItemsOf(String productName) {

@@ -21,14 +21,14 @@ public class ItemsViewTest {
     indicatesWhenInventoryIsEmpty() {
         itemsView = renderItemsView().using(anEmptyModel()).asDom();
         assertThat("view", itemsView, hasUniqueSelector("#out-of-stock"));
-        assertThat("view", itemsView, hasNoSelector("#items"));
+        assertThat("view", itemsView, hasNoSelector("#inventory"));
     }
 
     @Test public void
     displaysNumberOfItemsAvailable() {
         itemsView = renderItemsView().using(aModel().listing(anItem(), anItem())).asDom();
         assertThat("view", itemsView, hasUniqueSelector("#inventory-count", withText("2")));
-        assertThat("view", itemsView, hasSelector("#items tr[id^='item']", withSize(2)));
+        assertThat("view", itemsView, hasSelector("#inventory tr[id^='item']", withSize(2)));
     }
 
     @Test public void

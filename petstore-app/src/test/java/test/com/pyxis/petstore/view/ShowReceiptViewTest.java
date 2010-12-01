@@ -87,7 +87,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysPaymentDetails() {
-        assertThat("view", showReceiptView, hasSelector("#payment-details li span", inOrder(
+        assertThat("view", showReceiptView, hasSelector("#payment-details span", inOrder(
                 withText("Visa"),
                 withText("9999 9999 9999"),
                 withText("12/12"))));
@@ -95,7 +95,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     displaysBillingInformation() {
-        assertThat("view", showReceiptView, hasSelector("#billing-address li span", inOrder(
+        assertThat("view", showReceiptView, hasSelector("#billing-address span", inOrder(
                 withText("John"),
                 withText("Doe"),
                 withText("jdoe@gmail.com"))));
@@ -111,10 +111,10 @@ public class ShowReceiptViewTest {
     }
 
     private Matcher<Element> hasOrderTotal(final String orderTotal) {
-        return hasUniqueSelector("#order ol li #order-total", withText(orderTotal));
+        return hasUniqueSelector("#order-total", withText(orderTotal));
     }
 
     private Matcher<Element> hasOrderNumber(final String orderNumber) {
-        return hasUniqueSelector("#order ol li #order-number", withText(orderNumber));
+        return hasUniqueSelector("#order-number", withText(orderNumber));
     }
 }

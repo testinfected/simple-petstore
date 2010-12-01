@@ -48,7 +48,7 @@ public class CartPage extends Page {
     }
 
     public void checkout() {
-        browser.element(id("checkout")).click();
+        browser.element(cssSelector("#checkout a")).click();
     }
 }
 

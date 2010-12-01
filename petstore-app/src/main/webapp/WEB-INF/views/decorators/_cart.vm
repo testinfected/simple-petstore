@@ -1,5 +1,0 @@
-#if ($cart && !$cart.empty)
-<a href="$base/cart">$cart.totalQuantity $display.plural($cart.totalQuantity, "item")</a>
-#else
-Empty
-#end

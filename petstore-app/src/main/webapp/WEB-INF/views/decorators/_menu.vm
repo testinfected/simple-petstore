@@ -1,0 +1,18 @@
+<ul>
+	#set ($section = $page.getProperty("meta.section"))
+	<li #if (!$section) class="overline" #end>
+	<a href="$base/home">Home</a></li>
+	
+	##  Spring aop proxy prefix bean names with scopedTarget
+    #set( $cart = $session.getAttribute('scopedTarget.cart') )
+	<li id="shopping-cart" #if($section == 'cart') class="overline" #end>
+		#if ($cart && !$cart.empty)
+		<a href="$base/cart" id="view_cart">Cart ($cart.totalQuantity)</a>
+		#else
+			Cart (0)
+		#end
+	</li>
+</ul>
+<div #if(!$section) id="onglet_home" #else id="onglet_cart" #end>
+	<img src="$base/images/onglet.png"/>
+</div>

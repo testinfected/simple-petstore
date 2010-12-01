@@ -1,16 +1,18 @@
 package test.system.com.pyxis.petstore;
 
-import com.pyxis.petstore.domain.product.Product;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import test.support.com.pyxis.petstore.web.DatabaseDriver;
-import test.support.com.pyxis.petstore.web.PetStoreDriver;
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 import java.math.BigDecimal;
 
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import test.support.com.pyxis.petstore.web.DatabaseDriver;
+import test.support.com.pyxis.petstore.web.PetStoreDriver;
+
+import com.pyxis.petstore.domain.product.Product;
 
 public class PurchaseFeature {
 

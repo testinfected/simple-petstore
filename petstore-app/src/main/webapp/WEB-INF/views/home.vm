@@ -3,6 +3,7 @@
     <title>PetStore</title>
 </head>
 <body>
-<h1>Pet Store Home</h1>
+	<div id="content"> 
+ 	</div>
 </body>
 </html>
