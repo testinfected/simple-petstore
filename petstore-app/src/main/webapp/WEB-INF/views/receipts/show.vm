@@ -6,7 +6,7 @@
 <div id="receipt">
     <p>Thank you, order number <span id="order-number">$order.number</span> has been confirmed.</p>
 
-    <table id="order-details" width="85%">
+    <table id="order-details">
         <tr>
             <th>Quantity</th>
             <th>Item</th>
@@ -27,7 +27,8 @@
             </tr>
         #end
         <tr id="order-summary" height="35px;">
-            <td colspan="3" class="price">Grand total:</td>
+            <td colspan="2"></td>
+            <td class="price">Grand total:</td>
             <td id="order-total" class="total">$order.totalPrice</td>
         </tr>
     </table>
@@ -69,7 +70,7 @@
         </ul>
     </div>
 
-    <div id="action_receipt">
+    <div id="receipt-actions">
         <a id="continue-shopping" class="continue" href="$base">&laquo; continue shopping</a>
     </div>
 </div>

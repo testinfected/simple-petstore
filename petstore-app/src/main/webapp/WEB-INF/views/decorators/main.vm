@@ -8,28 +8,30 @@
     $head
 </head>
 <body class="petstore">
+
 <div id="header">
- 	<div class="content">
-		<a href="$base" id="home-link">
-			<img src="$base/images/fulllogo.png" />
-		</a>
-		
-	    <div id="search-box">
-	        #parse("_search.vm")
-	    </div>
-		<div id="menu">
-			#parse("_menu.vm")
-	   </div>
+    <div class="content">
+        <a href="$base" id="home-link">
+            <img src="$base/images/logo.png"/>
+        </a>
+
+        <div id="search-box">
+            #parse("_search.vm")
+        </div>
+        <div id="menu">
+            #parse("_menu.vm")
+        </div>
     </div>
 </div>
+
 <div class="content">
     $body
 </div>
 
-<div id="footer"> 
-	<hr/>
-	<span id="footer_text">jPetStore &copy; 2010 - PSD @</span>
-	<a href="http://pyxis-tech.com/en/home"><img src="$base/images/logoPyxis.png"/></a>
+<div id="footer">
+    <hr/>
+    <span id="footer_text">jPetStore &copy; 2010 - PSD @</span>
+    <a href="http://www.pyxis-tech.com/en/home"><img src="$base/images/pyxis.png"/></a>
 </div>
 <div id="logout-box">
     #parse("_logout.vm")

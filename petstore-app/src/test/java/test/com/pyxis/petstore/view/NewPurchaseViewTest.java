@@ -61,7 +61,7 @@ public class NewPurchaseViewTest {
     }
 
     private Matcher<? super Element> checkoutForm(Matcher<Element>... elementMatchers) {
-        return hasUniqueSelector("form#checkout-form", elementMatchers);
+        return hasUniqueSelector("form#order-form", elementMatchers);
     }
 
     @Test public void
@@ -146,7 +146,7 @@ public class NewPurchaseViewTest {
     }
 
     private Matcher<Element> withSubmitOrderButton() {
-        return hasUniqueSelector("#checkout_action");
+        return hasUniqueSelector("#order");
     }
 
     private Matcher<Iterable<Element>> withCreditCardOptions() {

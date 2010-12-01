@@ -11,7 +11,7 @@
     #springBind( "paymentDetails" )
     #showErrors({"id": "payment-details"})
                          
-    <form name="pay" id="checkout-form" action="$base/purchases" method="post"> 
+    <form id="order-form" action="$base/purchases" method="post">
        <ul>
          <li> 
             <label for="first-name">First name:</label> 
@@ -38,9 +38,9 @@
             #input("paymentDetails.cardExpiryDate", {"id": "expiry-date", "size": "33"})            
         </li> 
       </ul>
-      <div id="action_checkout">
+      <div id="order-actions">
 		<a id="continue-shopping" class="continue" href="$base">&laquo; continue shopping</a>
-		<button id="checkout_action">Submit order</button>
+		<button id="order">Submit order</button>
 	 </div>
     </form> 
 </div>

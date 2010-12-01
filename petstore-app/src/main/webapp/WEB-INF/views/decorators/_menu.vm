@@ -13,6 +13,6 @@
 		#end
 	</li>
 </ul>
-<div #if(!$section) id="onglet_home" #else id="onglet_cart" #end>
-	<img src="$base/images/onglet.png"/>
+<div #if(!$section) id="home-tab" #else id="cart-tab" #end>
+	<img src="$base/images/tab.png"/>
 </div>

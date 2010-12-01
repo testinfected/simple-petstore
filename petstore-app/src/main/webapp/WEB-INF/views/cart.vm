@@ -7,7 +7,7 @@
 	<div id="cart"> 
 
 	Your cart contains the following items:
-	<table id="cart-content" width="85%">
+	<table id="cart-content">
 		<tr>
 			<th>Quantity</th>
 			<th>Item</th>
@@ -25,10 +25,10 @@
 				<td class="text">$!cartItem.itemDescription</td>
 				<td class="price">$cartItem.unitPrice</td>
 				<td class="total">$cartItem.totalPrice</td>
-				<td><a href=""><img src="$base/images/remove.png" onmouseover="this.src='$base/images/remove_over.png';" onmouseout="this.src='$base/images/remove.png';" alt="delete item"/></a></td>
+				<td><a href=""><img src="$base/images/remove.png" alt="delete item"/></a></td>
 			</tr>
         #end
-		<tr id="cart-summary" height="35px;">
+		<tr id="cart-summary">
 			<td></td>
 			<td></td>
 			<td class="price">Grand total:</td>
@@ -36,7 +36,7 @@
 			<td></td>
 		</tr>
 	 </table>
-	 <div id="action_cart">
+	 <div id="cart-actions">
 		<a id="continue-shopping" class="continue" href="$base">&laquo; continue shopping</a>
 		<div id="checkout"><a href="$base/checkout">Checkout</a></div>
 	 </div>

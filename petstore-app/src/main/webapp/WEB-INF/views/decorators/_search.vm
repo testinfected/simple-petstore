@@ -1,6 +1,6 @@
-	<form name="search" action="$base/products" method="get"> 
-		<input id="keyword" name="keyword" type="text" size="20"/>
-		<button id="search-button">
-			<img src="$base/images/loupe.png"/>
-		</button>
-	</form>			
+<form action="$base/products" method="get">
+    <input id="keyword" name="keyword" type="text" size="20"/>
+    <button id="search">
+        <img src="$base/images/magnifier.png"/>
+    </button>
+</form>

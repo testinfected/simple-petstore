@@ -24,7 +24,7 @@ public class PetStoreDriver {
 
     public void start() throws Exception {
         browser.navigate().to(urlFor(HomePage.class));
-        clearSession();
+        homePage.logout();
     }
 
     public void stop() {
@@ -45,10 +45,6 @@ public class PetStoreDriver {
 
     public void viewCart() {
         homePage.lookAtCartContent();
-    }
-
-    public void clearSession() {
-        browser.element(id("logout")).click();
     }
 
     public void showsNoResult() {

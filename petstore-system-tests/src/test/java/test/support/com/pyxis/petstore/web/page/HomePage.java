@@ -15,8 +15,8 @@ public class HomePage extends Page {
 
     public void searchFor(String keyword) {
         browser.element(id("keyword")).type(keyword);
-        browser.element(id("search-button")).click();
-	}
+        browser.element(id("search")).click();
+    }
 
     public void showsCartIsEmpty() {
         browser.element(cssSelector("#shopping-cart")).assertText(containsString(valueOf(0)));
@@ -28,5 +28,9 @@ public class HomePage extends Page {
 
     public void lookAtCartContent() {
         browser.element(cssSelector("#shopping-cart a")).click();
+    }
+
+    public void logout() {
+        browser.element(id("logout")).click();
     }
 }
