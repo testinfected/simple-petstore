@@ -8,3 +8,4 @@ target
 logs
 release.properties
 .DS_Store
+.springBeans

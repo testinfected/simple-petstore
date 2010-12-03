@@ -9,6 +9,8 @@
 </head>
 <body class="petstore">
 
+<div id="wrapper">
+
 <div id="header">
     <div class="content">
         <a href="$base" id="home-link">
@@ -25,16 +27,19 @@
 </div>
 
 <div class="content">
-    $body
+	$body
+</div>
+
+<div class="push" ></div>
 </div>
 
 <div id="footer">
     <hr/>
-    <span id="footer_text">jPetStore &copy; 2010 - PSD @</span>
+	<div id="logout-box">
+    	#parse("_logout.vm")
+	</div>
     <a href="http://www.pyxis-tech.com/en/home"><img src="$base/images/pyxis.png"/></a>
-</div>
-<div id="logout-box">
-    #parse("_logout.vm")
+    <span>jPetStore &copy; 2010 - PSD @</span>
 </div>
 
 </body>
