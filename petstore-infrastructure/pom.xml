@@ -127,7 +127,7 @@
                     <username>${jdbc.username}</username>
                     <password>${jdbc.password}</password>
                     <fileset>
-                        <basedir>${pom.build.scriptSourceDirectory}/seeds</basedir>
+                        <basedir>${project.build.scriptSourceDirectory}/seeds</basedir>
                         <includes>
                             <include>*.sql</include>
                         </includes>
@@ -169,7 +169,7 @@
                             <url>${jdbc.url}</url>
                             <username>${jdbc.username}</username>
                             <password>${jdbc.password}</password>
-                            <migrationsPath>${pom.build.scriptSourceDirectory}/migrations</migrationsPath>
+                            <migrationsPath>${project.build.scriptSourceDirectory}/migrations</migrationsPath>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -208,7 +208,7 @@
                             <url>jdbc:mysql://localhost:3306/petstore_test</url>
                             <username>${jdbc.username}</username>
                             <password>${jdbc.password}</password>
-                            <migrationsPath>${pom.build.scriptSourceDirectory}/migrations</migrationsPath>
+                            <migrationsPath>${project.build.scriptSourceDirectory}/migrations</migrationsPath>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -239,7 +239,7 @@
                             <url>${jdbc.url}</url>
                             <username>${jdbc.username}</username>
                             <password>${jdbc.password}</password>
-                            <migrationsPath>${pom.build.scriptSourceDirectory}/migrations</migrationsPath>
+                            <migrationsPath>${project.build.scriptSourceDirectory}/migrations</migrationsPath>
                         </configuration>
                         <dependencies>
                             <dependency>
