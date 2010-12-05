@@ -87,6 +87,8 @@
     </dependencies>
 
     <build>
+        <!-- Make sure Maven2 generates an absolute path, since Hudson does not support Maven3 yet -->
+        <scriptSourceDirectory>${project.basedir}/src/main/scripts</scriptSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
