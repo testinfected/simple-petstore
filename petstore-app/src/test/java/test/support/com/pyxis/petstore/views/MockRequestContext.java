@@ -32,6 +32,10 @@ public class MockRequestContext extends RequestContext {
         return errorsOn(name);
     }
 
+    @Override public String getMessage(String code) throws NoSuchMessageException {
+        return code;
+    }
+
     @Override public String getMessage(MessageSourceResolvable resolvable, boolean htmlEscape) throws NoSuchMessageException {
         if (errorCodesEmpty(resolvable)) throw new IllegalArgumentException("No error codes to get message from");
         return firstErrorCode(resolvable);

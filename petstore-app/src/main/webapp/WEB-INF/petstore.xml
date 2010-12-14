@@ -23,7 +23,6 @@
     <mvc:annotation-driven/>
     <!-- Support mapping based on controller class names as well -->
     <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
-    <mvc:view-controller path="/" view-name="home"/>
 
     <context:component-scan base-package="com.pyxis.petstore.controller"/>
 
@@ -58,7 +57,7 @@
     </bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basename" value="errors"/>
+        <property name="basename" value="ValidationMessages"/>
     </bean>
 
     <bean class="com.pyxis.petstore.service.SimplePhotoFileStore">

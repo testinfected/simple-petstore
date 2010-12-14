@@ -1,7 +1,7 @@
 <ul>
 	#set ($section = $page.getProperty("meta.section"))
 	<li #if (!$section) class="overline" #end>
-	<a href="$base/home">Home</a></li>
+	<a href="$base">Home</a></li>
 	
 	##  Spring aop proxy prefix bean names with scopedTarget
     #set( $cart = $session.getAttribute('scopedTarget.cart') )
