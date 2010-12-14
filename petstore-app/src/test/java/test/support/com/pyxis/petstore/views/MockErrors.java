@@ -6,11 +6,13 @@ import java.util.HashMap;
 
 public class MockErrors extends MapBindingResult {
 
-    public MockErrors(final HashMap target, String objectName) {
+	private static final long serialVersionUID = -4190022982496012574L;
+
+	public MockErrors(final HashMap<?, ?> target, String objectName) {
         super(target, objectName);
     }
 
     public static MockErrors errorsOn(String objectName) {
-        return new MockErrors(new HashMap(), objectName);
+        return new MockErrors(new HashMap<String, Object>(), objectName);
     }
 }

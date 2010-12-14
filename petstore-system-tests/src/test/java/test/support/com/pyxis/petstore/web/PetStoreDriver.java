@@ -8,7 +8,6 @@ import test.support.com.pyxis.petstore.web.webdriver.WebDriverFactory;
 
 import java.math.BigDecimal;
 
-import static org.openqa.selenium.By.id;
 import static test.support.com.pyxis.petstore.web.Routes.urlFor;
 
 public class PetStoreDriver {

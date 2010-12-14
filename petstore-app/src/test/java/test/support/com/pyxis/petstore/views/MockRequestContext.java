@@ -1,5 +1,7 @@
 package test.support.com.pyxis.petstore.views;
 
+import static test.support.com.pyxis.petstore.views.MockErrors.errorsOn;
+
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.validation.BindingResult;
@@ -27,7 +29,7 @@ public class MockRequestContext extends RequestContext {
     }
 
     private MockErrors noErrors(String name) {
-        return new MockErrors(new HashMap(), name);
+        return errorsOn(name);
     }
 
     @Override public String getMessage(MessageSourceResolvable resolvable, boolean htmlEscape) throws NoSuchMessageException {

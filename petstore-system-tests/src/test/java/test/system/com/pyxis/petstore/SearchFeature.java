@@ -5,8 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
-import test.support.com.pyxis.petstore.web.page.HomePage;
-import test.support.com.pyxis.petstore.web.page.ProductsPage;
 
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 

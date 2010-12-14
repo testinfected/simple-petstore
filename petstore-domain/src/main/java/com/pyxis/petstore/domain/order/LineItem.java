@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 @Entity  @Access(AccessType.FIELD) @Table(name = "line_items")
 public class LineItem {
 
+	@SuppressWarnings("unused")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Id Long id;
 

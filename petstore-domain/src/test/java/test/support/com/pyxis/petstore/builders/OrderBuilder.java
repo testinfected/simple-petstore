@@ -13,7 +13,8 @@ public class OrderBuilder implements Builder<Order> {
 
     private OrderNumber orderNumber = aNumber();
     private Cart cart = aCart().build();
-    private Address billingAddress;
+    @SuppressWarnings("unused")
+	private Address billingAddress;
     private PaymentMethod paymentMethod;
 
     public static OrderBuilder anOrder() {

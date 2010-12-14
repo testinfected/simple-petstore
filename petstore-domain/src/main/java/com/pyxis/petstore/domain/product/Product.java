@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 @Entity @Access(AccessType.FIELD) @Table(name = "products")
 public class Product {
 
+	@SuppressWarnings("unused")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private @Id Long id;
 

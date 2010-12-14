@@ -74,7 +74,7 @@ public abstract class Maybe<T> {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            Something that = (Something) o;
+            Something<?> that = (Something<?>) o;
 
             return value.equals(that.value);
 

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Entity @Access(AccessType.FIELD) @Table(name = "items")
 public class Item {
 
+	@SuppressWarnings("unused")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private @Id Long id;
 

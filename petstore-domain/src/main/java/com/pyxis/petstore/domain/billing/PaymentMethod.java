@@ -7,6 +7,7 @@ import javax.persistence.*;
 @DiscriminatorColumn(name="payment_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class PaymentMethod {
 
+	@SuppressWarnings("unused")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Id Long id;
 }

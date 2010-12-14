@@ -13,6 +13,7 @@ import java.util.List;
 @Entity  @Access(AccessType.FIELD) @Table(name = "orders")
 public class Order {
 
+	@SuppressWarnings("unused")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Id Long id;
 

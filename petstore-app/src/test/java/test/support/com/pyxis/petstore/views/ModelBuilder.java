@@ -21,7 +21,7 @@ public class ModelBuilder {
 
     public ModelBuilder listing(Builder<?>... builders) {
         List<Object> list = new ArrayList<Object>();
-        for (Builder builder : builders) {
+        for (Builder<?> builder : builders) {
             list.add(builder.build());
         }
         return with(list);
