@@ -23,7 +23,7 @@ public class ShopFeature {
 	}
 
     @After public void
-    stopApplication() {
+    stopApplication() throws Exception {
         petstore.stop();
         database.stop();
     }

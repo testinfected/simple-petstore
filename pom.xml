@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pyxis</groupId>
@@ -21,7 +22,19 @@
             <name>Pyxis Nexus Maven Repository</name>
             <url>https://www.pyxis-tech.ca/nexus/content/groups/public</url>
         </repository>
+        <repository>
+            <id>c5-public-repository</id>
+            <name>Carbon 5 repository</name>
+            <url>http://mvn.carbonfive.com/public</url>
+        </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>c5-public-repository</id>
+            <name>Carbon 5 repository</name>
+            <url>http://mvn.carbonfive.com/public</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencies>
         <dependency>
@@ -140,7 +153,7 @@
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
-                <version>2.4</version>
+                <version>2.5</version>
             </dependency>
             <!--  URL Rewrite -->
             <dependency>
@@ -288,10 +301,19 @@
     </build>
 
     <properties>
-        <app.context>petstore</app.context>
-        <jdbc.username>petstore</jdbc.username>
-        <jdbc.password>petstore</jdbc.password>
-        <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
+        <context.path>/petstore</context.path>
+        <!-- Log files go to parent/logs -->
+        <log.dir>${project.basedir}/../logs</log.dir>
+        <test.server.host>localhost</test.server.host>
+        <test.server.port>8180</test.server.port>
+        <test.log.file>test.log</test.log.file>
+        <test.jdbc.driverClassName>com.mysql.jdbc.Driver</test.jdbc.driverClassName>
+        <test.jdbc.url>jdbc:mysql://localhost:3306/petstore_test</test.jdbc.url>
+        <test.jdbc.username>petstore</test.jdbc.username>
+        <test.jdbc.password>petstore</test.jdbc.password>
+        <test.hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</test.hibernate.dialect>
+        <test.timeServer.host>localhost</test.timeServer.host>
+        <test.timeServer.port>10013</test.timeServer.port>
     </properties>
 
     <profiles>
@@ -300,46 +322,38 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
-                    <name>env.type</name>
+                    <name>env</name>
                     <value>dev</value>
                 </property>
             </activation>
             <properties>
                 <server.port>8080</server.port>
-                <log.file>development</log.file>
+                <log.file>development.log</log.file>
+                <jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
                 <jdbc.url>jdbc:mysql://localhost:3306/petstore_dev</jdbc.url>
+                <jdbc.username>petstore</jdbc.username>
+                <jdbc.password>petstore</jdbc.password>
+                <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
                 <timeServer.host>localhost</timeServer.host>
                 <timeServer.port>10000</timeServer.port>
             </properties>
         </profile>
         <profile>
-            <id>pre-production</id>
-            <properties>
-                <server.port>8180</server.port>
-                <log.file>pre-production</log.file>
-                <jdbc.url>jdbc:mysql://localhost:3306/petstore</jdbc.url>
-                <timeServer.host>localhost</timeServer.host>
-                <timeServer.port>10013</timeServer.port>
-            </properties>
-            <activation>
-                <property>
-                    <name>env.type</name>
-                    <value>pre-prod</value>
-                 </property>
-             </activation>
-         </profile>
-        <profile>
             <id>production</id>
             <properties>
                 <server.port>8280</server.port>
-                <log.file>production</log.file>
+                <log.file>production.log</log.file>
+                <jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
                 <jdbc.url>jdbc:mysql://localhost:3306/petstore</jdbc.url>
+                <jdbc.username>petstore</jdbc.username>
+                <jdbc.password>petstore</jdbc.password>
+                <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
                 <timeServer.host>time.nist.gov</timeServer.host>
                 <timeServer.port>13</timeServer.port>
             </properties>
             <activation>
                 <property>
-                    <name>env.type</name>
+                    <name>env</name>
                     <value>prod</value>
                 </property>
             </activation>

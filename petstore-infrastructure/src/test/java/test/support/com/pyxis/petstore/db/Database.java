@@ -55,7 +55,7 @@ public class Database {
         }
         makeSureSubsequentLoadOperationsHitTheDatabase();
     }
-                                                                                                                                                   
+
     private void makeSureSubsequentLoadOperationsHitTheDatabase() {
         session.clear();
     }
@@ -91,11 +91,11 @@ public class Database {
             if (id != null) return (Long) Reflection.readField(entity, id);
             type = type.getSuperclass();
         }
-        throw new AssertionError("Entity has no id : " + entity );
+        throw new AssertionError("Entity has no id : " + entity);
     }
 
     private static Field getId(Class<?> type) {
-        Field[] fields =  type.getDeclaredFields();
+        Field[] fields = type.getDeclaredFields();
         for (Field field : fields) {
             if (field.getAnnotation(Id.class) != null) return field;
         }

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -21,6 +22,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>petstore-domain</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -33,12 +35,18 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>petstore-infrastructure</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>petstore-infrastructure</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.carbonfive.db-support</groupId>
+            <artifactId>db-migration</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -57,11 +65,13 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-support</artifactId>
             <version>2.0a6</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-chrome-driver</artifactId>
             <version>2.0a6</version>
+            <scope>test</scope>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -73,6 +83,7 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-firefox-driver</artifactId>
             <version>2.0a6</version>
+            <scope>test</scope>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -84,145 +95,76 @@
             <groupId>com.objenesis.windowlicker</groupId>
             <artifactId>windowlicker-web</artifactId>
             <version>DEV</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Run the petstore application in embedded jetty server -->
+        <dependency>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty-embedded</artifactId>
+            <version>6.1.26</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>petstore-app</artifactId>
+            <version>${project.version}</version>
+            <classifier>jar</classifier>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>opensymphony</groupId>
+            <artifactId>sitemesh</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.tuckey</groupId>
+            <artifactId>urlrewritefilter</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-tools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
-    <properties>
-        <webdriver.factory.class>test.support.com.pyxis.petstore.web.webdriver.SingleInstanceWebDriverFactory
-        </webdriver.factory.class>
-    </properties>
-
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>testResources</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- *** Failsafe plugin: run integration tests *** -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Feature.java</include>
-                    </includes>
-                    <systemPropertyVariables>
-                        <webdriver.factory.class>${webdriver.factory.class}</webdriver.factory.class>
-                        <timeServer.host>${timeServer.host}</timeServer.host>
-                        <timeServer.port>${timeServer.port}</timeServer.port>
-                        <server.port>${server.port}</server.port>
-                        <app.context>${app.context}</app.context>
-                    </systemPropertyVariables>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.0.1-sr-1</version>
-                <configuration>
-                    <wait>false</wait>
-                    <container>
-                        <log>${project.build.directory}/cargo.log</log>
-                        <containerId>jetty6x</containerId>
-                        <timeout>60000</timeout>
-                        <zipUrlInstaller>
-                            <url>http://dist.codehaus.org/jetty/jetty-6.1.21/jetty-6.1.21.zip</url>
-                            <installDir>${basedir}/appserver</installDir>
-                        </zipUrlInstaller>
-                    </container>
-                    <configuration>
-                        <properties>
-                            <cargo.servlet.port>${server.port}</cargo.servlet.port>
-                        </properties>
-                    </configuration>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>start-container</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>start</goal>
-                            <goal>deploy</goal>
-                        </goals>
-                        <configuration>
-                            <configuration>
-                                <configfiles>
-                                    <!-- Override Cargo's default log4j.xml -->
-                                    <configfile>
-                                        <file>${basedir}/src/test/resources/log4j.xml</file>
-                                        <tofile>conf/log4j.xml</tofile>
-                                    </configfile>
-                                </configfiles>
-                            </configuration>
-                            <deployer>
-                                <deployables>
-                                    <deployable>
-                                        <groupId>${pom.groupId}</groupId>
-                                        <artifactId>petstore-app</artifactId>
-                                        <type>war</type>
-                                        <pingURL>http://localhost:${server.port}/${app.context}</pingURL>
-                                        <properties>
-                                            <context>${app.context}</context>
-                                        </properties>
-                                    </deployable>
-                                </deployables>
-                            </deployer>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>stop-container</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
@@ -230,4 +172,174 @@
             </testResource>
         </testResources>
     </build>
+
+    <profiles>
+        <profile>
+            <id>development</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env</name>
+                    <value>dev</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.5</version>
+                        <configuration>
+                            <includes>
+                                <include>**/*Feature.java</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <timeServer.host>${test.timeServer.host}</timeServer.host>
+                                <timeServer.port>${test.timeServer.port}</timeServer.port>
+                                <server.port>${test.server.port}</server.port>
+                                <context.path>${context.path}</context.path>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>integration</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>int</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.carbonfive.db-support</groupId>
+                        <artifactId>db-migration-maven-plugin</artifactId>
+                        <version>0.9.9-m2</version>
+                        <configuration>
+                            <url>${test.jdbc.url}</url>
+                            <username>${test.jdbc.username}</username>
+                            <password>${test.jdbc.password}</password>
+                            <migrationsPath>${project.basedir}/../petstore-infrastructure/src/main/scripts/migrations</migrationsPath>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>5.1.11</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>reset</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!--*** Failsafe plugin: run integration tests ***-->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.5</version>
+                        <configuration>
+                            <includes>
+                                <include>**/*Feature.java</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <!-- Uncomment to change webdriver and jetty runtime options -->
+                                <!--<webdriver.factory.class>test.support.com.pyxis.petstore.web.webdriver.SingletonWebDriverFactorydriver.factory.class>-->
+                                <!--<webdriver.class>org.openqa.selenium.chrome.ChromeDriver</webdriver.class>-->
+                                <!--<serverdriver.factory.class>test.support.com.pyxis.petstore.web.serverdriver.SingletonServerDriverFactory</serverdriver.factory.class>-->
+                                <timeServer.host>${test.timeServer.host}</timeServer.host>
+                                <timeServer.port>${test.timeServer.port}</timeServer.port>
+                                <server.port>${test.server.port}</server.port>
+                                <context.path>${context.path}</context.path>
+                            </systemPropertyVariables>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.0.1-sr-1</version>
+                        <configuration>
+                            <wait>false</wait>
+                            <container>
+                                <log>${project.basedir}/../logs/cargo.log</log>
+                                <containerId>jetty6x</containerId>
+                                <timeout>60000</timeout>
+                                <zipUrlInstaller>
+                                    <url>http://dist.codehaus.org/jetty/jetty-6.1.21/jetty-6.1.21.zip</url>
+                                    <installDir>${project.basedir}/appserver</installDir>
+                                </zipUrlInstaller>
+                                <systemProperties>
+                                    <jdbc.driverClassName>${test.jdbc.driverClassName}</jdbc.driverClassName>
+                                    <jdbc.url>${test.jdbc.url}</jdbc.url>
+                                    <jdbc.username>${test.jdbc.username}</jdbc.username>
+                                    <jdbc.password>${test.jdbc.password}</jdbc.password>
+                                    <hibernate.dialect>${test.hibernate.dialect}</hibernate.dialect>
+                                    <timeServer.host>${test.timeServer.host}</timeServer.host>
+                                    <timeServer.port>${test.timeServer.port}</timeServer.port>
+                                    <log4j.configuration>${project.basedir}/src/test/resources/log4j.xml</log4j.configuration>
+        \                        </systemProperties>
+                            </container>
+                            <configuration>
+                                <properties>
+                                    <cargo.servlet.port>${test.server.port}</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                    <goal>deploy</goal>
+                                </goals>
+                                <configuration>
+                                    <deployer>
+                                        <deployables>
+                                            <deployable>
+                                                <groupId>${project.groupId}</groupId>
+                                                <artifactId>petstore-app</artifactId>
+                                                <type>war</type>
+                                                <pingURL>http://localhost:${test.server.port}${context.path}</pingURL>
+                                                <properties>
+                                                    <context>${context.path}</context>
+                                                </properties>
+                                            </deployable>
+                                        </deployables>
+                                    </deployer>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
 </project>

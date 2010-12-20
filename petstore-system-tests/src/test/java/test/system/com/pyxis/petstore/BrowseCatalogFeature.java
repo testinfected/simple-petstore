@@ -26,6 +26,12 @@ public class BrowseCatalogFeature {
         given(aProduct().withName("Iguana"));
 	}
 
+    @After public void
+    stopApplication() throws Exception {
+        petstore.stop();
+        database.stop();
+    }
+
     private void given(final ProductBuilder product) throws Exception {
         this.iguana = product.build();
         database.given(this.iguana);
@@ -45,15 +51,9 @@ public class BrowseCatalogFeature {
                 .describedAs("Green Adult")
                 .priced("18.50").build();
         database.given(greenAdult);
-        
+
 		petstore.searchFor("Iguana");
 		petstore.browseItemsOf("Iguana");
 		petstore.displaysItem("12345678", "Green Adult", "18.50");
-	}
-	
-	@After public void
-    stopApplication() {
-		petstore.stop();
-		database.stop();
 	}
 }

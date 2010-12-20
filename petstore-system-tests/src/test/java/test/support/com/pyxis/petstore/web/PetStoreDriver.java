@@ -4,30 +4,69 @@ import com.objogate.wl.UnsynchronizedProber;
 import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.WebDriver;
 import test.support.com.pyxis.petstore.web.page.*;
+import test.support.com.pyxis.petstore.web.serverdriver.ServerDriver;
+import test.support.com.pyxis.petstore.web.serverdriver.ServerDriverFactory;
 import test.support.com.pyxis.petstore.web.webdriver.WebDriverFactory;
 
 import java.math.BigDecimal;
 
 import static test.support.com.pyxis.petstore.web.Routes.urlFor;
+import static test.support.com.pyxis.petstore.web.serverdriver.AbstractServerDriverFactory.serverDriverFactory;
+import static test.support.com.pyxis.petstore.web.webdriver.AbstractWebDriverFactory.webDriverFactory;
 
 public class PetStoreDriver {
 
-    private final AsyncWebDriver browser = new AsyncWebDriver(new UnsynchronizedProber(), getWebDriver());
+    private final ServerDriverFactory serverDriverFactory = serverDriverFactory();
+    private final WebDriverFactory webDriverFactory = webDriverFactory();
 
-    private final HomePage homePage = new HomePage(browser);
-    private final ProductsPage productsPage = new ProductsPage(browser);
-    private final ItemsPage itemsPage = new ItemsPage(browser);
-    private final CartPage cartPage = new CartPage(browser);
-    private final PurchasePage purchasePage = new PurchasePage(browser);
-    private final ReceiptPage receiptPage = new ReceiptPage(browser);
+    private ServerDriver serverDriver;
+    private WebDriver webdriver;
+    private AsyncWebDriver browser;
+
+    private HomePage homePage;
+    private ProductsPage productsPage;
+    private ItemsPage itemsPage;
+    private CartPage cartPage;
+    private PurchasePage purchasePage;
+    private ReceiptPage receiptPage;
 
     public void start() throws Exception {
+        createDrivers();
+        startBrowser();
+    }
+
+    private void createDrivers() throws Exception {
+        createServerDriver();
+        createWebDriver();
+        createPageDrivers();
+    }
+
+    private void createServerDriver() throws Exception {
+        serverDriver = serverDriverFactory.newServerDriver();
+    }
+
+    private void createWebDriver() {
+        webdriver = webDriverFactory.newWebDriver();
+        browser = new AsyncWebDriver(new UnsynchronizedProber(), webdriver);
+    }
+
+    private void createPageDrivers() {
+        homePage = new HomePage(browser);
+        productsPage = new ProductsPage(browser);
+        itemsPage = new ItemsPage(browser);
+        cartPage = new CartPage(browser);
+        purchasePage = new PurchasePage(browser);
+        receiptPage = new ReceiptPage(browser);
+    }
+
+    private void startBrowser() {
         browser.navigate().to(urlFor(HomePage.class));
         homePage.logout();
     }
 
-    public void stop() {
-        browser.quit();
+    public void stop() throws Exception {
+        webDriverFactory.disposeWebDriver(webdriver);
+        serverDriverFactory.disposeServerDriver(serverDriver);
     }
 
     public void searchFor(String keyword) {
@@ -128,9 +167,5 @@ public class PetStoreDriver {
 
     public void returnShopping() {
         receiptPage.continueShopping();
-    }
-
-    private WebDriver getWebDriver() {
-        return WebDriverFactory.getInstance().getWebDriver();
     }
 }

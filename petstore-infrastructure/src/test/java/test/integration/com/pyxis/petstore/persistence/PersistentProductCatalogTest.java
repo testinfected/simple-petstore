@@ -52,6 +52,7 @@ public class PersistentProductCatalogTest {
         return Matchers.empty();
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     canFindProductsByMatchingName() throws Exception {
         havingPersisted(
@@ -65,6 +66,7 @@ public class PersistentProductCatalogTest {
         assertThat("matches", matches, containsProducts(productNamed("English Bulldog"), productNamed("French Bulldog")));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     canFindProductsByMatchingDescription() throws Exception {
         havingPersisted(

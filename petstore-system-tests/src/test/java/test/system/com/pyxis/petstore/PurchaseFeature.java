@@ -29,7 +29,7 @@ public class PurchaseFeature {
     }
 
     @After public void
-    stopApplication() {
+    stopApplication() throws Exception {
         petstore.stop();
         database.stop();
     }

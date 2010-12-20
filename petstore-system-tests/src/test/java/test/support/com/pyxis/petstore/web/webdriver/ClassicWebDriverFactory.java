@@ -6,9 +6,13 @@ import org.openqa.selenium.WebDriver;
  * For use in continuous integration environments. A classic factory, which creates
  * new WebDriver instances for each test.
  */
-public class ClassicWebDriverFactory extends WebDriverFactory {
+public class ClassicWebDriverFactory extends AbstractWebDriverFactory {
 
-    public WebDriver getWebDriver() {
+    public WebDriver newWebDriver() {
         return newWebDriverInstance();
+    }
+
+    public void disposeWebDriver(WebDriver webDriver) {
+        webDriver.close();
     }
 }

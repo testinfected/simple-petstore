@@ -19,10 +19,16 @@ public class SearchFeature {
         petstore.start();
     }
 
+    @After public void
+    stopApplication() throws Exception {
+        petstore.stop();
+        database.stop();
+    }
+
     @Test public void
     searchDoesNotMatchAnyProductInCatalog() throws Exception {
         database.given(aProduct().withName("Labrador Retriever"));
-        
+
         petstore.searchFor("Dalmatian");
         petstore.showsNoResult();
     }
@@ -38,12 +44,6 @@ public class SearchFeature {
         petstore.displaysNumberOfResults(2);
         petstore.displaysProduct("LAB-1234", "Labrador Retriever");
         petstore.displaysProduct("CHE-5678", "Chesapeake");
-    }
-
-    @After public void
-    stopApplication() {
-        petstore.stop();
-        database.stop();
     }
 
 }

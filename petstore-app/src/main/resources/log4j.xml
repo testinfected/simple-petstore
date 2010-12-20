@@ -8,17 +8,18 @@
         </layout>
     </appender>
     <appender name="file" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="${log.dir}/${test.log.file}"/>
+        <param name="file" value="${log.dir}/${log.file}"/>
         <param name="maxFileSize" value="512KB"/>
         <param name="maxBackupIndex" value="3"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="conversionPattern" value="%d{dd MMM yyyy HH:mm:ss.SSS} [%t] %-5p %c - %m%n"/>
         </layout>
     </appender>
+
     <root>
         <priority value="info"/>
-        <appender-ref ref="file"/>
         <!--<appender-ref ref="console"/>-->
+        <appender-ref ref="file"/>
     </root>
 </log4j:configuration>
 

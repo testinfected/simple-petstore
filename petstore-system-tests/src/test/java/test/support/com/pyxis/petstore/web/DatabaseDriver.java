@@ -3,8 +3,7 @@ package test.support.com.pyxis.petstore.web;
 import org.hibernate.SessionFactory;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.db.Database;
-
-import static test.support.com.pyxis.petstore.web.ApplicationContext.get;
+import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
 
 public class DatabaseDriver {
 

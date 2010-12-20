@@ -65,8 +65,4 @@ public class CreditCardDetails extends PaymentMethod {
     public void setBillingAddress(Address billingAddress) {
         this.billingAddress = billingAddress;
     }
-
-    public static PaymentMethod visa(String cardNumber, String cardExpiryDate, Address billingAddress) {
-        return new CreditCardDetails(CreditCardType.visa, cardNumber, cardExpiryDate, billingAddress);
-    }
 }
