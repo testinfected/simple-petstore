@@ -31,6 +31,7 @@ public class ItemsViewTest {
         assertThat("view", itemsView, hasSelector("#inventory tr[id^='item']", withSize(2)));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     displaysColumnHeadingsOnItemsTable() {
         itemsView = renderItemsView().using(aModel().listing(anItem())).asDom();
@@ -42,6 +43,7 @@ public class ItemsViewTest {
                                 withBlankText())));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
         itemsView = renderItemsView().using(aModel().listing(anItem().
@@ -56,6 +58,7 @@ public class ItemsViewTest {
                                 hasChild(withTag("form")))));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     addToCartButtonAddsItemToShoppingCart() {
         itemsView = renderItemsView().using(aModel().listing(anItem().withNumber("12345678"))).asDom();

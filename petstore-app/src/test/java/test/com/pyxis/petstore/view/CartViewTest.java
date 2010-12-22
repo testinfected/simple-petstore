@@ -21,6 +21,7 @@ public class CartViewTest {
     String CART_VIEW_NAME = "cart";
     Element cartView;
 
+    @SuppressWarnings("unchecked")
     @Test public void
     displaysColumnHeadings() {
         cartView = renderCartView().using(aModel().with(aCart())).asDom();
@@ -32,6 +33,7 @@ public class CartViewTest {
                                 withText("Total"))));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
         Item item = anItem().withNumber("12345678").priced("18.50").describedAs("Green Adult").build();

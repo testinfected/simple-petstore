@@ -18,6 +18,7 @@ public class ItemNumberTest {
         assertThat("constraint violations", validationOf(aValidItemNumber), succeeds());
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     isInvalidWithoutANumber() {
         ItemNumber anEmptyItemNumber = new ItemNumber(null);

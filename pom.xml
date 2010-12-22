@@ -377,8 +377,4 @@
         </snapshotRepository>
         <downloadUrl>${pyxis.distributionManagement.downloadUrl}</downloadUrl>
     </distributionManagement>
-    <scm>
-        <connection>scm:git:git://github.com/testinfected/petstore.git</connection>
-        <url>scm:git:git://github.com/testinfected/petstore.git</url>
-    </scm>
 </project>

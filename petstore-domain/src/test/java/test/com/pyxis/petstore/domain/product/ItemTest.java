@@ -17,21 +17,25 @@ public class ItemTest {
     String SHOULD_NOT_BE_NULL = "{javax.validation.constraints.NotNull.message}";
     ItemNumber AN_INVALID_NUMBER = new ItemNumber(null);
 
+    @SuppressWarnings("unchecked")
     @Test public void
     isInvalidWithoutAProduct() {
         assertThat("constraint violations", validationOf(anItem().withoutAProduct()), violates(on("product"), withError(SHOULD_NOT_BE_NULL)));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     isInvalidWithoutANumber() {
         assertThat("constraint violations", validationOf(anItem().withoutANumber()), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     isInvalidWithoutAValidNumber() {
         assertThat("constraint violations", validationOf(anItem().with(AN_INVALID_NUMBER)), violates(on("number.number"), withError(SHOULD_NOT_BE_NULL)));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     isInvalidWithoutAPrice() {
         assertThat("constraint violations", validationOf(anItem().withoutAPrice()), violates(on("price"), withError(SHOULD_NOT_BE_NULL)));

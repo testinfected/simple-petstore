@@ -61,6 +61,7 @@ public class ShowReceiptViewTest {
         assertThat("view", showReceiptView, hasOrderTotal(orderTotal));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     setsUpOrderDetailsColumnHeadings() {
         assertThat("view", showReceiptView,
@@ -71,6 +72,7 @@ public class ShowReceiptViewTest {
                                 withText("Total"))));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     displaysOrderLineItemsInColumns() {
         assertThat("view", showReceiptView, hasSelector("#order-details tr#line-item-12345678 td",
@@ -85,6 +87,7 @@ public class ShowReceiptViewTest {
         assertThat("view", showReceiptView, hasSelector("#order-details tr[id^='line-item']", withSize(2)));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     displaysPaymentDetails() {
         assertThat("view", showReceiptView, hasSelector("#payment-details span", inOrder(
@@ -93,6 +96,7 @@ public class ShowReceiptViewTest {
                 withText("12/12"))));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     displaysBillingInformation() {
         assertThat("view", showReceiptView, hasSelector("#billing-address span", inOrder(
