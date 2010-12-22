@@ -21,6 +21,7 @@ public class OrderNumberTest {
         assertThat("constraint violations", validationOf(aValidOrderNumber), succeeds());
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     isInvalidWithoutANumber() {
         OrderNumber anEmptyOrderNumber = new OrderNumber(null);

@@ -15,11 +15,13 @@ public class ProductTest {
 
     String SHOULD_NOT_BE_NULL = "{javax.validation.constraints.NotNull.message}";
 
+    @SuppressWarnings("unchecked")
     @Test public void
     isInvalidWithoutAName() {
         assertThat("constraint violations", validationOf(aProductWithoutAName()), violates(on("name"), withError(SHOULD_NOT_BE_NULL)));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     isInvalidWithoutANumber() {
         assertThat("constraint violations", validationOf(aProductWithoutANumber()), violates(on("number"), withError(SHOULD_NOT_BE_NULL)));

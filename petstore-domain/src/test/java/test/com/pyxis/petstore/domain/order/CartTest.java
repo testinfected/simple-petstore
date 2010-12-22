@@ -23,6 +23,7 @@ public class CartTest {
         assertThat("total quantity", cart.getTotalQuantity(), equalTo(0));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     containsCartItemsInBuyingOrder() {
         String[] itemNumbers = { "11111111", "22222222", "33333333" };
@@ -53,6 +54,7 @@ public class CartTest {
         assertThat("grand total", cart.getGrandTotal(), equalTo(expectedTotal));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     groupsItemsByNumber() {
         String[] itemNumbers = { "11111111", "11111111", "22222222" };

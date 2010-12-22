@@ -114,6 +114,7 @@ public class OrderTest {
         return all;
     }
 
+    @SuppressWarnings("unchecked")
     private Matcher<LineItem> matchingCartItem(CartItem cartItem) {
         return with(number(cartItem.getItemNumber()), quantity(cartItem.getQuantity()), totalPrice(cartItem.getTotalPrice()));
     }

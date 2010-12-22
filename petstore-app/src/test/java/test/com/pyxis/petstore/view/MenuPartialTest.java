@@ -25,6 +25,7 @@ public class MenuPartialTest {
         assertThat("partial", partial, withText(containsString("0")));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     displaysTotalItemsInCartAndLinksToCart() throws Exception {
         partial = renderMenuPartial().using(aModel().with(

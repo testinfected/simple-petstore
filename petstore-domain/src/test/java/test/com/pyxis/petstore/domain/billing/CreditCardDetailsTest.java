@@ -12,6 +12,7 @@ public class CreditCardDetailsTest {
 
     String SHOULD_NOT_BE_EMPTY = "{org.hibernate.validator.constraints.NotEmpty.message}";
 
+    @SuppressWarnings("unchecked")
     @Test public void
     areInvalidWithoutACardNumber() {
         assertThat("constraint violations", validationOf(detailsMissingCardNumber()), violates(on("cardNumber"), withError(SHOULD_NOT_BE_EMPTY)));
