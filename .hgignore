@@ -7,3 +7,7 @@ appserver
 .project
 .springBeans
 .settings
+*.iml
+*.ipr
+*.iws
+*.ids
