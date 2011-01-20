@@ -73,18 +73,6 @@ public class PetStoreDriver {
         homePage.searchFor(keyword);
     }
 
-    public void showsCartIsEmpty() {
-        homePage.showsCartIsEmpty();
-    }
-
-    public void showsCartTotalQuantity(int quantity) {
-        homePage.showsCartTotalQuantity(quantity);
-    }
-
-    public void viewCart() {
-        homePage.lookAtCartContent();
-    }
-
     public void showsNoResult() {
         productsPage.showsNoResult();
     }
@@ -97,20 +85,34 @@ public class PetStoreDriver {
         productsPage.displaysProduct(number, name);
     }
 
-    public void browseItemsOf(String productName) {
-        productsPage.browseItemsOf(productName);
-    }
-
-    public void displaysItem(String number, String description, String price) {
-        itemsPage.displaysItem(number, description, price);
+    public void consultInventoryOf(String product) {
+        searchFor(product);
+        productsPage.browseItemsOf(product);
     }
 
     public void showsNoItemAvailable() {
         itemsPage.showsNoItemAvailable();
     }
 
-    public void addToCart(String itemNumber) {
+    public void displaysItem(String number, String description, String price) {
+        itemsPage.displaysItem(number, description, price);
+    }
+
+    public void buy(String product, String itemNumber) {
+        consultInventoryOf(product);
         itemsPage.addToCart(itemNumber);
+    }
+
+    public void checkout() {
+        cartPage.checkout();
+    }
+
+    public void showsCartIsEmpty() {
+        homePage.showsCartIsEmpty();
+    }
+
+    public void showsCartTotalQuantity(int quantity) {
+        homePage.showsCartTotalQuantity(quantity);
     }
 
     public void showsItemInCart(String itemNumber, String itemDescription, String totalPrice) {
@@ -125,32 +127,18 @@ public class PetStoreDriver {
         cartPage.showsGrandTotal(price);
     }
 
-    public void continueShopping() {
-        cartPage.continueShopping();
+    public void showsTotalToPay(String total) {
+        purchasePage.showsTotalToPay(new BigDecimal(total));
     }
 
-    public void checkout() {
-        cartPage.checkout();
-    }
-
-    public void showsTotalToPay(BigDecimal total) {
-        purchasePage.showsTotalToPay(total);
-    }
-
-    public void billTo(String firstName, String lastName, String email) {
+    public void pay(String firstName, String lastName, String email, String cardType, String cardNumber, String cardExpiryDate) {
         purchasePage.willBillTo(firstName, lastName, email);
-    }
-
-    public void payUsingCreditCard(String cardType, String cardNumber, String expiryDate) {
-        purchasePage.willPayUsingCreditCard(cardType, cardNumber, expiryDate);
-    }
-
-    public void confirmOrder() {
+        purchasePage.willPayUsingCreditCard(cardType, cardNumber, cardExpiryDate);
         purchasePage.confirmOrder();
     }
 
-    public void showsTotalPaid(BigDecimal total) {
-        receiptPage.showsTotalPaid(total);
+    public void showsTotalPaid(String total) {
+        receiptPage.showsTotalPaid(new BigDecimal(total));
     }
 
     public void showsLineItem(String itemNumber, String itemDescription, String totalPrice) {
@@ -163,9 +151,5 @@ public class PetStoreDriver {
 
     public void showsBillingInformation(String firstName, String lastName, String emailAddress) {
         receiptPage.showsBillingInformation(firstName, lastName, emailAddress);
-    }
-
-    public void returnShopping() {
-        receiptPage.continueShopping();
     }
 }

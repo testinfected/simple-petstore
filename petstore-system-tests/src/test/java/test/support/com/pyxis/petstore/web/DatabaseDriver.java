@@ -3,6 +3,7 @@ package test.support.com.pyxis.petstore.web;
 import org.hibernate.SessionFactory;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.db.Database;
+
 import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
 
 public class DatabaseDriver {
@@ -18,11 +19,17 @@ public class DatabaseDriver {
 		database.disconnect();
 	}
 	
-    public <T> void given(T... entities) throws Exception {
+    public <T> void contain(T... entities) throws Exception {
         database.persist(entities);
     }
 
-    public void given(Builder<?>... builders) throws Exception {
+    public void contain(Builder<?>... builders) throws Exception {
         database.persist(builders);
+    }
+
+    public <T> T contain(final Builder<T> builder) throws Exception {
+        T entity = builder.build();
+        contain(entity);
+        return entity;
     }
 }

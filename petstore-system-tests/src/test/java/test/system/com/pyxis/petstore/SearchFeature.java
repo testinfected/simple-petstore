@@ -3,6 +3,7 @@ package test.system.com.pyxis.petstore;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.web.DatabaseDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
 
@@ -25,20 +26,23 @@ public class SearchFeature {
         database.stop();
     }
 
+    private void given(Builder<?>... builders) throws Exception {
+        database.contain(builders);
+    }
+
     @Test public void
-    searchDoesNotMatchAnyProductInCatalog() throws Exception {
-        database.given(aProduct().withName("Labrador Retriever"));
+    searchesForAProductNotAvailableInStore() throws Exception {
+        given(aProduct().withName("Labrador Retriever"));
 
         petstore.searchFor("Dalmatian");
         petstore.showsNoResult();
     }
 
     @Test public void
-    findsProductsInCatalog() throws Exception {
-        database.given(
-                aProduct().withNumber("LAB-1234").withName("Labrador Retriever"),
-                aProduct().withNumber("CHE-5678").withName("Chesapeake").describedAs("Chesapeake bay retriever"),
-                aProduct().withName("Dalmatian"));
+    searchesAndFindsProductsInCatalog() throws Exception {
+        given(aProduct().withNumber("LAB-1234").withName("Labrador Retriever"),
+              aProduct().withNumber("CHE-5678").withName("Chesapeake").describedAs("Chesapeake bay retriever"),
+              aProduct().withName("Dalmatian"));
 
         petstore.searchFor("retriever");
         petstore.displaysNumberOfResults(2);

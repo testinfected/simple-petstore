@@ -3,8 +3,6 @@ package test.system.com.pyxis.petstore;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
-import java.math.BigDecimal;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,12 +17,19 @@ public class PurchaseFeature {
     PetStoreDriver petstore = new PetStoreDriver();
     DatabaseDriver database = new DatabaseDriver();
 
-    BigDecimal total;
+    @Before public void
+    labradorsAreForSale() throws Exception {
+        database.start();
+        Product labrador = aProduct().withName("Labrador Retriever").build();
+        Product golden = aProduct().withName("Golden Retriever").build();
+        database.contain(labrador, golden);
+        database.contain(
+                a(labrador).withNumber("11111111").describedAs("Male Adult").priced("599.00"),
+                a(golden).withNumber("22222222").describedAs("Female Adult").priced("649.00"));
+    }
 
     @Before public void
     startApplication() throws Exception {
-        database.start();
-        setupContext();
         petstore.start();
     }
 
@@ -34,42 +39,20 @@ public class PurchaseFeature {
         database.stop();
     }
 
-    private void setupContext() throws Exception {
-        Product labrador = aProduct().withName("Labrador Retriever").build();
-        Product golden = aProduct().withName("Golden Retriever").build();
-        database.given(labrador, golden);
-        database.given(
-                a(labrador).withNumber("11111111").describedAs("Male Adult").priced("599.00"),
-                a(golden).withNumber("22222222").describedAs("Female Adult").priced("649.00"));
-        total = new BigDecimal("1248.00");
-    }
-
     @Test public void
     purchasesSeveralItemsUsingACreditCard() throws Exception {
-        havingAddedToCart("Labrador Retriever", "11111111");
-        havingAddedToCart("Golden Retriever", "22222222");
-
-        petstore.viewCart();
+        petstore.buy("Labrador Retriever", "11111111");
+        petstore.buy("Golden Retriever", "22222222");
         petstore.checkout();
-        petstore.showsTotalToPay(total);
-        petstore.billTo("John", "Leclair", "jleclair@gmail.com");
-        petstore.payUsingCreditCard("Visa", "9999 9999 9999 9999", "12/12");
+        petstore.showsTotalToPay("1248.00");
 
-        petstore.confirmOrder();
-        petstore.showsTotalPaid(total);
+        petstore.pay("John", "Leclair", "jleclair@gmail.com", "Visa", "9999 9999 9999 9999", "12/12");
+        petstore.showsTotalPaid("1248.00");
         petstore.showsLineItem("11111111", "Male Adult", "599.00");
         petstore.showsLineItem("22222222", "Female Adult", "649.00");
         petstore.showsBillingInformation("John", "Leclair", "jleclair@gmail.com");
         petstore.showsCreditCardDetails("Visa", "9999 9999 9999 9999", "12/12");
 
-        petstore.returnShopping();
         petstore.showsCartIsEmpty();
-    }
-
-    private void havingAddedToCart(String product, String itemNumber) {
-        petstore.searchFor(product);
-        petstore.browseItemsOf(product);
-        petstore.addToCart(itemNumber);
-        petstore.continueShopping();
     }
 }
