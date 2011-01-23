@@ -18,9 +18,10 @@
 
     <!--
     Use MVC annotation defaults. Uses method annotation request mapping.
-    If customization is required, import mvc.xml instead.
+    Equivalent to <mvc:annotation-driven/>
     -->
-    <mvc:annotation-driven/>
+    <import resource="mvc.xml"/>
+
     <!-- Support mapping based on controller class names as well -->
     <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
 

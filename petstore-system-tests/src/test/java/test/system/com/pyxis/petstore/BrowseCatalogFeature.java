@@ -23,8 +23,8 @@ public class BrowseCatalogFeature {
         petstore.start();
     }
 
-    @Before
-    public void storeSellsIguana() throws Exception {
+    @Before public void
+    iguanaAreForSale() throws Exception {
         database.start();
         iguana = given(aProduct().withName("Iguana"));
     }
