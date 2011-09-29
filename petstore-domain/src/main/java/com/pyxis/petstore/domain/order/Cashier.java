@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class Cashier implements CheckoutAssistant, PaymentCollector {
     private final OrderNumberSequence orderNumberSequence;
-    private final OrderLog orderLog;
+    private final OrderBook orderBook;
 
     @Autowired
-    public Cashier(OrderNumberSequence orderNumberSequence, OrderLog orderLog) {
+    public Cashier(OrderNumberSequence orderNumberSequence, OrderBook orderBook) {
         this.orderNumberSequence = orderNumberSequence;
-        this.orderLog = orderLog;
+        this.orderBook = orderBook;
     }
 
     public Order checkout(Cart cart) {
@@ -24,6 +24,6 @@ public class Cashier implements CheckoutAssistant, PaymentCollector {
 
     public void collectPayment(Order order, PaymentMethod paymentMethod) {
         order.pay(paymentMethod);
-        orderLog.record(order);
+        orderBook.record(order);
     }
 }
