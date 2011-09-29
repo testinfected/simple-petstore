@@ -2,7 +2,7 @@ package test.com.pyxis.petstore.controller;
 
 import com.pyxis.petstore.controller.ReceiptsController;
 import com.pyxis.petstore.domain.order.Order;
-import com.pyxis.petstore.domain.order.OrderLog;
+import com.pyxis.petstore.domain.order.OrderBook;
 import com.pyxis.petstore.domain.order.OrderNumber;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -23,15 +23,15 @@ import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 public class ReceiptsControllerTest {
 
     Mockery context = new JUnit4Mockery();
-    OrderLog orderLog = context.mock(OrderLog.class);
-    ReceiptsController controller = new ReceiptsController(orderLog);
+    OrderBook orderBook = context.mock(OrderBook.class);
+    ReceiptsController controller = new ReceiptsController(orderBook);
     Model model = new ExtendedModelMap();
     Order order = anOrder().build();
 
     @Test public void
     fetchesOrderByNumberAndDisplaysReceipt() {
         context.checking(new Expectations() {{
-            oneOf(orderLog).find(new OrderNumber("00000100")); will(returnValue(some(order)));
+            oneOf(orderBook).find(new OrderNumber("00000100")); will(returnValue(some(order)));
         }});
         String view = controller.show("00000100", model);
         assertThat("view", view, equalTo("receipts/show"));

@@ -2,7 +2,7 @@ package com.pyxis.petstore.persistence;
 
 import com.pyxis.petstore.Maybe;
 import com.pyxis.petstore.domain.order.Order;
-import com.pyxis.petstore.domain.order.OrderLog;
+import com.pyxis.petstore.domain.order.OrderBook;
 import com.pyxis.petstore.domain.order.OrderNumber;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
@@ -14,12 +14,12 @@ import static com.pyxis.petstore.Maybe.possibly;
 import static org.hibernate.criterion.Restrictions.eq;
 
 @Repository
-public class PersistentOrderLog implements OrderLog {
+public class PersistentOrderBook implements OrderBook {
 
 	private final SessionFactory sessionFactory;
 
     @Autowired
-	public PersistentOrderLog(SessionFactory sessionFactory) {
+	public PersistentOrderBook(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 

@@ -26,15 +26,16 @@ import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
+import static test.support.com.pyxis.petstore.builders.DateBuilder.aDate;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 import static test.support.com.pyxis.petstore.db.Database.idOf;
 import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
 
-public class PersistentOrderLogTest {
+public class PersistentOrderBookTest {
 
     Database database = Database.connect(get(SessionFactory.class));
-    OrderLog orderLog = get(OrderLog.class);
+    OrderBook orderBook = get(OrderBook.class);
 
     @Before
     public void cleanDatabase() {
@@ -58,7 +59,7 @@ public class PersistentOrderLogTest {
     findsOrdersByNumber() throws Exception {
         havingPersisted(anOrder().withNumber("00000100"));
 
-        Maybe<Order> entry = orderLog.find(new OrderNumber("00000100"));
+        Maybe<Order> entry = orderBook.find(new OrderNumber("00000100"));
         assertThat("no match", entry.exists());
         assertThat("match", entry.bare(), orderWithNumber("00000100"));
     }
@@ -139,7 +140,7 @@ public class PersistentOrderLogTest {
 
     private void assertViolatesUniqueness(Order order) throws Exception {
         try {
-            orderLog.record(order);
+            orderBook.record(order);
             fail("No constraint violation");
         } catch (ConstraintViolationException expected) {
         }
