@@ -30,7 +30,13 @@
             <groupId>com.pyxis.time</groupId>
             <artifactId>time</artifactId>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.pyxis.time</groupId>
+            <artifactId>time</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

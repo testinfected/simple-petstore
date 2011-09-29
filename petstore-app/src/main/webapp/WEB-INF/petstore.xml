@@ -72,5 +72,4 @@
     </bean>
 
     <import resource="classpath:persistence.xml"/>
-    <import resource="classpath:clock.xml"/>
 </beans>
