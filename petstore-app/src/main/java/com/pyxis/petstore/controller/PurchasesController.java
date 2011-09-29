@@ -46,14 +46,14 @@ public class PurchasesController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String create(@Valid @ModelAttribute("paymentDetails") CreditCardDetails paymentDetails, BindingResult form, SessionStatus status, Model model) {
-        if (checkForErrors(form, model, status)) return "purchases/new";
+        if (formContainsErrors(form, model, status)) return "purchases/new";
 
         Order order = checkoutAssistant.checkout(cart);
         paymentCollector.collectPayment(order, paymentDetails);
         return "redirect:/receipts/" + order.getNumber();
     }
 
-    private boolean checkForErrors(BindingResult form, Model model, SessionStatus status) {
+    private boolean formContainsErrors(BindingResult form, Model model, SessionStatus status) {
         if (form.hasErrors()) {
             form.reject("invalid");
             model.addAttribute(cart).addAttribute("cardTypes", availableCardTypes());
