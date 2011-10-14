@@ -55,6 +55,10 @@ public class JettyDriver implements ServerDriver {
         stopJetty();
     }
 
+    public boolean isServerStarted() {
+        return jetty.isStarted();
+    }
+
     private void configureJetty() throws Exception {
         configureThreadPool();
         configureConnector();

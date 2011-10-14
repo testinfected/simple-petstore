@@ -25,7 +25,7 @@ public class PurchasePage extends Page {
     }
 
     public void willPayUsingCreditCard(String cardType, String cardNumber, String expiryDate) {
-        browser.element(option(cardType)).select();
+        browser.element(option(cardType)).click();
 
         browser.element(id("card-number")).type(cardNumber);
         browser.element(id("expiry-date")).type(expiryDate);

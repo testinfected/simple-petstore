@@ -2,11 +2,12 @@ package test.support.com.pyxis.petstore.web.webdriver;
 
 import com.pyxis.matchers.ExceptionImposter;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 public abstract class AbstractWebDriverFactory implements WebDriverFactory {
 
     private static final String DEFAULT_WEBDRIVER_FACTORY_CLASS_NAME = SingletonWebDriverFactory.class.getName();
-    private static final String DEFAULT_WEBDRIVER_CLASS_NAME = "org.openqa.selenium.firefox.FirefoxDriver";
+    private static final String DEFAULT_WEBDRIVER_CLASS_NAME = FirefoxDriver.class.getName();
 
     private static WebDriverFactory factory;
 
