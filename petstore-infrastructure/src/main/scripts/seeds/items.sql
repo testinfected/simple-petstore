@@ -1,5 +1,7 @@
+SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE items;
 TRUNCATE products;
+SET FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO `products` (`id`, `name`, `description`, `photo_file_name`, `number`) VALUES
 (21, 'Reptiles', 'Cold-blooded friends', 'iguana.png', '60090989'),
