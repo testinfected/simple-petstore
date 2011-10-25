@@ -47,16 +47,8 @@ public class JettyDriver implements ServerDriver {
         startJetty();
     }
 
-    public boolean started() {
-        return jetty.isStarted();
-    }
-
     public void stop() throws Exception {
         stopJetty();
-    }
-
-    public boolean isServerStarted() {
-        return jetty.isStarted();
     }
 
     private void configureJetty() throws Exception {

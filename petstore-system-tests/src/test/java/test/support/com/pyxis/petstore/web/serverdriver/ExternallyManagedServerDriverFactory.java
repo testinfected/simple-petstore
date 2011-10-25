@@ -9,10 +9,6 @@ public class ExternallyManagedServerDriverFactory implements ServerDriverFactory
 
             public void stop() throws Exception {
             }
-
-            public boolean isServerStarted() {
-                return false;
-            }
         };
     }
 

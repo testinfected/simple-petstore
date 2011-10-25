@@ -4,6 +4,4 @@ public interface ServerDriver {
     void start() throws Exception;
 
     void stop() throws Exception;
-
-    boolean isServerStarted();
 }
