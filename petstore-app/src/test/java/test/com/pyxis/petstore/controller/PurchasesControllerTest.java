@@ -34,6 +34,7 @@ import static org.junit.Assert.assertTrue;
 import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
+import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 
@@ -61,38 +62,32 @@ public class PurchasesControllerTest {
     }
 
     @Test public void
-    collectsPaymentAndRedirectsToReceiptView() {
+    collectsPaymentAndRedirectsToReceiptViewWhenPaymentDetailsAreValid() {
         final Order order = anOrder().from(cart).withNumber("12345678").build();
 
-        final CreditCardDetails paymentDetails = aVisa().
-                billedTo(anAddress().
-                    withFirstName("John").
-                    withLastName("Leclair").
-                    withEmail("jleclair@gmail.com")).
-                withNumber("9999 9999 9999").
-                withExpiryDate("12/12").build();
+        final CreditCardDetails validPaymentDetails = validVisaDetails().build();
 
         context.checking(new Expectations() {{
             oneOf(checkoutAssistant).checkout(cart); will(returnValue(order));
             oneOf(paymentCollector).collectPayment(
                     with(equal(order)),
-                    with(samePaymentMethodAs(paymentDetails)));
+                    with(samePaymentMethodAs(validPaymentDetails)));
         }});
-        String view = controller.create(paymentDetails, bindingFor(paymentDetails), status, model);
+        String view = controller.create(validPaymentDetails, bindingFor(validPaymentDetails), status, model);
         assertThat("view", view, isRedirectedTo("/receipts/" + order.getNumber()));
         assertTrue("status not completed", status.isComplete());
     }
 
     @Test public void
     rendersErrorsOnCheckoutPageIfPaymentDetailsAreNotValid() {
-        final CreditCardDetails incompleteDetails = aVisa().build();
+        final CreditCardDetails incompletePaymentDetails = aVisa().build();
 
         context.checking(new Expectations() {{
             never(checkoutAssistant).checkout(cart);
         }});
 
-        BindingResult result = reportErrorsOn(incompleteDetails);
-        String view = controller.create(incompleteDetails, result, status, model);
+        BindingResult result = reportErrorsOn(incompletePaymentDetails);
+        String view = controller.create(incompletePaymentDetails, result, status, model);
         assertThat("result", result, hasGlobalError("invalid"));
         assertFalse("status not completed", status.isComplete());
         assertRendersNewPurchaseView(view);

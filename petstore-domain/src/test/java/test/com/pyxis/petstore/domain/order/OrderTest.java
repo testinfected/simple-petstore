@@ -29,10 +29,8 @@ import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 
-@RunWith(JMock.class)
 public class OrderTest {
 
-    Mockery context = new JUnit4Mockery();
     Order order = anOrder().build();
 
     @Test public void

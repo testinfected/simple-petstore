@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
-import static test.support.com.pyxis.petstore.builders.DateBuilder.aDate;
+import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 import static test.support.com.pyxis.petstore.db.Database.idOf;
@@ -73,17 +73,9 @@ public class PersistentOrderBookTest {
     @Test public void
     canRoundTripOrders() throws Exception {
         OrderBuilder aPendingOrder = anOrder();
-        OrderBuilder aPaidOrder = anOrder().
-                paidWith(aVisa().
-                        withNumber("9999 9999 9999").
-                        withExpiryDate("12 dec 2012").
-                        billedTo(anAddress().
-                            withFirstName("John").
-                            withLastName("Leclair").
-                            withEmail("jleclair@gmail.com")
-                        )
-                );
         assertCanPersistAndReload("pending order", aPendingOrder.build());
+
+        OrderBuilder aPaidOrder = anOrder().paidWith(validVisaDetails());
         assertCanPersistAndReload("paid order", aPaidOrder.build());
     }
 
