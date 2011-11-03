@@ -355,7 +355,7 @@
                 <server.port>8280</server.port>
                 <log.file>production.log</log.file>
                 <jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-                <jdbc.url>jdbc:mysql://localhost:3306/petstore</jdbc.url>
+                <jdbc.url>jdbc:mysql://psd-server:3306/petstore</jdbc.url>
                 <jdbc.username>petstore</jdbc.username>
                 <jdbc.password>petstore</jdbc.password>
                 <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
