@@ -4,6 +4,7 @@ import com.pyxis.petstore.domain.billing.Address;
 import com.pyxis.petstore.domain.billing.CreditCardDetails;
 import com.pyxis.petstore.domain.billing.CreditCardType;
 
+import static test.support.com.pyxis.petstore.builders.AddressBuilder.aValidAddress;
 import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 
 public class CreditCardBuilder implements Builder<CreditCardDetails> {
@@ -29,11 +30,7 @@ public class CreditCardBuilder implements Builder<CreditCardDetails> {
         return aVisa().
                 withNumber("9999 9999 9999").
                 withExpiryDate("12/12").
-                billedTo(anAddress().
-                    withFirstName("John").
-                    withLastName("Leclair").
-                    withEmail("jleclair@gmail.com")
-               );
+                billedTo(aValidAddress());
     }
 
     public CreditCardDetails build() {

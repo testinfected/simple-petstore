@@ -12,6 +12,13 @@ public class AddressBuilder implements Builder<Address> {
         return new AddressBuilder();
     }
 
+    static AddressBuilder aValidAddress() {
+        return anAddress().
+                    withFirstName("John").
+                    withLastName("Leclair").
+                    withEmail("jleclair@gmail.com");
+    }
+
     public Address build() {
         return new Address(firstName, lastName, emailAddress);
     }
