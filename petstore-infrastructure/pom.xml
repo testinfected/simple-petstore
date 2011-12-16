@@ -71,14 +71,8 @@
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.pyxis.time</groupId>
+            <groupId>org.testinfected</groupId>
             <artifactId>time</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.pyxis.time</groupId>
-            <artifactId>time</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

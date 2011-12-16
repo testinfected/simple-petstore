@@ -80,12 +80,6 @@
             <groupId>org.tuckey</groupId>
             <artifactId>urlrewritefilter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.pyxis.time</groupId>
-            <artifactId>time</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <properties>

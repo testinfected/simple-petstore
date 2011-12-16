@@ -163,7 +163,7 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.pyxis.time</groupId>
+            <groupId>org.testinfected</groupId>
             <artifactId>time</artifactId>
             <scope>runtime</scope>
         </dependency>
