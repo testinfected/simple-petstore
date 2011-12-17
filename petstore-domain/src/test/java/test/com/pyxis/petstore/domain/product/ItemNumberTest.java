@@ -3,7 +3,7 @@ package test.com.pyxis.petstore.domain.product;
 import com.pyxis.petstore.domain.product.ItemNumber;
 import org.junit.Test;
 
-import static com.pyxis.matchers.validation.ViolationMatchers.*;
+import static org.testinfected.hamcrest.validation.ViolationMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static test.support.com.pyxis.petstore.builders.ItemNumberFaker.aNumber;
 import static test.support.com.pyxis.petstore.validation.ValidationOf.validationOf;

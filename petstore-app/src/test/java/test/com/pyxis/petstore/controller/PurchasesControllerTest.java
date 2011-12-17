@@ -23,8 +23,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.bind.support.SimpleSessionStatus;
 
-import static com.pyxis.matchers.spring.SpringMatchers.hasAttribute;
-import static com.pyxis.matchers.spring.SpringMatchers.isRedirectedTo;
+import static org.testinfected.hamcrest.spring.SpringMatchers.hasAttribute;
+import static org.testinfected.hamcrest.spring.SpringMatchers.isRedirectedTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;

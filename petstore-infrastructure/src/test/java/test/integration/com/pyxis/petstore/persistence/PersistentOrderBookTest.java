@@ -18,7 +18,7 @@ import test.support.com.pyxis.petstore.db.UnitOfWork;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.pyxis.matchers.jpa.PersistenceMatchers.samePersistentFieldsAs;
+import static org.testinfected.hamcrest.jpa.PersistenceMatchers.samePersistentFieldsAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;

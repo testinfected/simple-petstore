@@ -6,7 +6,7 @@ import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.ItemBuilder;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
-import static com.pyxis.matchers.dom.DomMatchers.*;
+import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;

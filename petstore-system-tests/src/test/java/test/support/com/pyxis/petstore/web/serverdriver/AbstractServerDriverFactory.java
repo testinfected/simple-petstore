@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.web.serverdriver;
 
-import com.pyxis.matchers.ExceptionImposter;
+import org.testinfected.hamcrest.ExceptionImposter;
 
 public abstract class AbstractServerDriverFactory {
 

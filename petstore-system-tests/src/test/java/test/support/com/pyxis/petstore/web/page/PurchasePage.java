@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 
 import java.math.BigDecimal;
 
-import static com.pyxis.matchers.core.CoreMatchers.being;
+import static org.testinfected.hamcrest.core.CoreMatchers.being;
 import static org.openqa.selenium.By.id;
 
 public class PurchasePage extends Page {

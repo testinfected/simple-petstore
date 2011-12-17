@@ -3,7 +3,7 @@ package test.support.com.pyxis.petstore.db;
 import java.io.IOException;
 import java.util.Properties;
 
-import static com.pyxis.matchers.ExceptionImposter.imposterize;
+import static org.testinfected.hamcrest.ExceptionImposter.imposterize;
 
 public final class SystemProperties {
 

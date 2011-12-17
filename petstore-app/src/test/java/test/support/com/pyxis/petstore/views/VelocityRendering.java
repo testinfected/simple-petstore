@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.views;
 
-import com.pyxis.matchers.ExceptionImposter;
+import org.testinfected.hamcrest.ExceptionImposter;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.DisplayTool;

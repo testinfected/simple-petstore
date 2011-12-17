@@ -4,7 +4,7 @@ import com.pyxis.petstore.domain.product.Product;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 
-import static com.pyxis.matchers.validation.ViolationMatchers.*;
+import static org.testinfected.hamcrest.validation.ViolationMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;

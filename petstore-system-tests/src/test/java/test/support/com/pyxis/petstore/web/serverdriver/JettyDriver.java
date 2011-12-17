@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
-import static com.pyxis.matchers.ExceptionImposter.imposterize;
+import static org.testinfected.hamcrest.ExceptionImposter.imposterize;
 import static test.support.com.pyxis.petstore.web.Environment.contextPath;
 import static test.support.com.pyxis.petstore.web.Environment.serverHost;
 import static test.support.com.pyxis.petstore.web.Environment.serverPort;

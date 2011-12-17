@@ -4,7 +4,7 @@ import com.pyxis.petstore.controller.SessionController;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpSession;
 
-import static com.pyxis.matchers.spring.SpringMatchers.isRedirectedTo;
+import static org.testinfected.hamcrest.spring.SpringMatchers.isRedirectedTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 

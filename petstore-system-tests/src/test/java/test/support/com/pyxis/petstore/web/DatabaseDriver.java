@@ -19,7 +19,7 @@ public class DatabaseDriver {
 		database.disconnect();
 	}
 	
-    public <T> void contain(T... entities) throws Exception {
+    public void contain(Object... entities) throws Exception {
         database.persist(entities);
     }
 

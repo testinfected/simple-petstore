@@ -15,7 +15,7 @@ import test.support.com.pyxis.petstore.views.VelocityRendering;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.pyxis.matchers.dom.DomMatchers.*;
+import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static com.pyxis.petstore.domain.billing.CreditCardType.mastercard;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;

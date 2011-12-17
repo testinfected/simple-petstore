@@ -12,7 +12,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.pyxis.matchers.spring.SpringMatchers.isRedirectedTo;
+import static org.testinfected.hamcrest.spring.SpringMatchers.isRedirectedTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;

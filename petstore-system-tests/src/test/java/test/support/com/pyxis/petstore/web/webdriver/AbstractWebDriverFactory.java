@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.web.webdriver;
 
-import com.pyxis.matchers.ExceptionImposter;
+import org.testinfected.hamcrest.ExceptionImposter;
 import org.openqa.selenium.WebDriver;
 
 public abstract class AbstractWebDriverFactory implements WebDriverFactory {
