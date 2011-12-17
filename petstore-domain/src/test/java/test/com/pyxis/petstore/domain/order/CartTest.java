@@ -82,7 +82,7 @@ public class CartTest {
         cart.add(anItem().build());
     }
 
-    private Matcher<Iterable<CartItem>> containsItems(Matcher<CartItem>... cartItemMatchers) {
+    private Matcher<Iterable<? extends CartItem>> containsItems(Matcher<CartItem>... cartItemMatchers) {
         return contains(cartItemMatchers);
     }
 

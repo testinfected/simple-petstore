@@ -122,7 +122,7 @@ public class PersistentProductCatalogTest {
         return builder;
     }
 
-    private Matcher<Iterable<Product>> containsProducts(Matcher<Product>... productMatchers) {
+    private Matcher<Iterable<? extends Product>> containsProducts(Matcher<Product>... productMatchers) {
         return containsInAnyOrder(productMatchers);
     }
 

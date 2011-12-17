@@ -100,7 +100,7 @@ public class OrderTest {
         return cart;
     }
 
-    private Matcher<Iterable<LineItem>> containsLineItems(List<Matcher<? super LineItem>> lineItemMatchers) {
+    private Matcher<Iterable<? extends LineItem>> containsLineItems(List<Matcher<? super LineItem>> lineItemMatchers) {
         return Matchers.contains(lineItemMatchers);
     }
 
