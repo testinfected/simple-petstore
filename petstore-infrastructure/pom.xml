@@ -71,7 +71,7 @@
             <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.testinfected</groupId>
+            <groupId>org.testinfected.time</groupId>
             <artifactId>time</artifactId>
         </dependency>
     </dependencies>

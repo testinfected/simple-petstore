@@ -163,7 +163,7 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.testinfected</groupId>
+            <groupId>org.testinfected.time</groupId>
             <artifactId>time</artifactId>
             <scope>runtime</scope>
         </dependency>
