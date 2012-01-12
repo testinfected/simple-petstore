@@ -2,7 +2,7 @@ package test.support.com.pyxis.petstore.web.page;
 
 import com.objogate.wl.web.AsyncWebDriver;
 
-import static org.testinfected.hamcrest.core.CoreMatchers.being;
+import static org.testinfected.hamcrest.core.StringMatchers.being;
 import static org.openqa.selenium.By.*;
 
 public class ProductsPage extends Page {

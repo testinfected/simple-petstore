@@ -15,11 +15,16 @@ import test.support.com.pyxis.petstore.views.VelocityRendering;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static com.pyxis.petstore.domain.billing.CreditCardType.mastercard;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasName;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.matchesInAnyOrder;
 import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aMasterCard;
@@ -46,27 +51,23 @@ public class NewPurchaseViewTest {
 
     @Test public void
     displaysOrderSummary() {
-        assertThat("view", newPurchaseView, hasUniqueSelector("#cart-grand-total", withText("100.00")));
+        assertThat("view", newPurchaseView, hasUniqueSelector("#cart-grand-total", hasText("100.00")));
     }
 
-	@Test public void
+    @Test public void
     displaysPurchaseForm() {
-        assertThat("view", newPurchaseView, checkoutForm(
-                    withAttribute("action", purchasesPath()),
-                    withAttribute("method", "post")
-                ));
-        assertThat("view", newPurchaseView, checkoutForm(withEmptyBillingInformation()));
-        assertThat("view", newPurchaseView, checkoutForm(withPaymentDetails()));
-        assertThat("view", newPurchaseView, checkoutForm(withSubmitOrderButton()));
-    }
-
-    private Matcher<? super Element> checkoutForm(Matcher<Element>... elementMatchers) {
-        return hasUniqueSelector("form#order-form", elementMatchers);
+        assertThat("view", newPurchaseView, hasCheckoutForm(
+                hasAttribute("action", purchasesPath()),
+                hasAttribute("method", "post")
+        ));
+        assertThat("view", newPurchaseView, hasCheckoutForm(hasEmptyBillingInformation()));
+        assertThat("view", newPurchaseView, hasCheckoutForm(hasEmptyPaymentDetails()));
+        assertThat("view", newPurchaseView, hasCheckoutForm(hasSubmitOrderButton()));
     }
 
     @Test public void
     fillsCardTypeSelectionList() {
-        assertThat("view", newPurchaseView, hasSelector("#card-type option", withCreditCardOptions()));
+        assertThat("view", newPurchaseView, hasSelector("#card-type option", hasCreditCardOptions()));
     }
 
     @Test public void
@@ -77,92 +78,100 @@ public class NewPurchaseViewTest {
         newPurchaseView = renderNewPurchaseView().using(model).bind(errors).asDom();
 
         assertThat("view", newPurchaseView, hasUniqueSelector("#payment-details-errors", hasChild(
-                withText("invalid.paymentDetails")
+                hasText("invalid.paymentDetails")
         )));
         assertThat("view", newPurchaseView, hasUniqueSelector("#card-number-errors", hasChild(
-                withText("empty.paymentDetails.cardNumber")
+                hasText("empty.paymentDetails.cardNumber")
         )));
     }
 
-	@Test public void
+    @Test public void
     restoresFormValuesWhenAValidationErrorOccurs() {
-    	AddressBuilder billingAddress = anAddress().
+        AddressBuilder billingAddress = anAddress().
                 withName("Jack", "Johnson").withEmail("jack@gmail.com");
-		CreditCardDetails creditCardDetails = aMasterCard().
+        CreditCardDetails creditCardDetails = aMasterCard().
                 withNumber("1111 2222 3333 4444").
                 withExpiryDate("2010-10-10").
                 billedTo(billingAddress).build();
-    	newPurchaseView = renderNewPurchaseView().using(model.with("paymentDetails", creditCardDetails)).bind(validationErrorsOn("paymentDetails", creditCardDetails)).asDom();
-		assertThat("view", newPurchaseView, checkoutForm(
-    			withBillingInformation("Jack", "Johnson", "jack@gmail.com"), 
-    			withCreditCardDetails(mastercard, "1111 2222 3333 4444", "2010-10-10")));
+        newPurchaseView = renderNewPurchaseView().using(model.with("paymentDetails", creditCardDetails)).bind(validationErrorsOn("paymentDetails", creditCardDetails)).asDom();
+        assertThat("view", newPurchaseView, hasCheckoutForm(
+                hasBillingInformation("Jack", "Johnson", "jack@gmail.com"),
+                hasCreditCardDetails(mastercard, "1111 2222 3333 4444", "2010-10-10")));
     }
 
-    private BeanPropertyBindingResult validationErrorsOn(String objectName, CreditCardDetails creditCardDetails) {
-		return new BeanPropertyBindingResult(creditCardDetails, objectName);
-	}
-    
-	private Matcher<Element> withCreditCardDetails(CreditCardType cardType, String cardNumber, String cardExpiryDate) {
-		return allOf( 
-				withCardNumberAndExpiryDate(cardNumber, cardExpiryDate),
-	            withSelectedCardType(cardType));
-	}
-
-	private Matcher<Element> withSelectedCardType(CreditCardType cardType) {
-		return withSelectionLists(
-			allOf(withName("cardType"), hasChild(allOf(withAttribute("value", cardType.toString()), withAttribute("selected", "selected")))));
-	}
-
-	private Matcher<Element> withCardNumberAndExpiryDate(String cardNumber, String cardExpiryDate) {
-		return withInputFields(
-		    allOf(withName("cardNumber"), withAttribute("value", cardNumber)),
-		    allOf(withName("cardExpiryDate"), withAttribute("value", cardExpiryDate)));
-	}
-
-	private Matcher<Element> withBillingInformation(String firstName, String lastName, String email) {
-		return withInputFields(
-                allOf(withName("billingAddress.firstName"), withAttribute("value", firstName)),
-                allOf(withName("billingAddress.lastName"), withAttribute("value", lastName)),
-                allOf(withName("billingAddress.emailAddress"), withAttribute("value", email)));
-	}
-
-	private Matcher<Element> withEmptyBillingInformation() {
-        return withBillingInformation("", "", "");
+    private Matcher<? super Element> hasCheckoutForm(Matcher<Element>... elementMatchers) {
+        return hasUniqueSelector("form#order-form", elementMatchers);
     }
 
-    private Matcher<Element> withPaymentDetails() {
-        return allOf(
-                withSelectionLists(withName("cardType")),
-                withEmptyCardNumberAndExpiryDate()
+    private Matcher<Element> hasEmptyBillingInformation() {
+        return hasBillingInformation("", "", "");
+    }
+
+    private Matcher<Element> hasBillingInformation(String firstName, String lastName, String email) {
+        return hasInputFields(
+                anElement(hasName("billingAddress.firstName"), hasAttribute("value", firstName)),
+                anElement(hasName("billingAddress.lastName"), hasAttribute("value", lastName)),
+                anElement(hasName("billingAddress.emailAddress"), hasAttribute("value", email)));
+    }
+
+    private Matcher<Element> hasInputFields(final Matcher<Element>... fieldMatchers) {
+        return hasSelector("input[type='text']", fieldMatchers);
+    }
+
+    private Matcher<Element> hasEmptyPaymentDetails() {
+        return anElement(
+                hasSelectionOfCreditCardTypes(),
+                hasEmptyCardNumberAndExpiryDate()
         );
     }
 
-	private Matcher<Element> withEmptyCardNumberAndExpiryDate() {
-		return withCardNumberAndExpiryDate("", "");
-	}
-
-    private Matcher<Element> withSelectionLists(final Matcher<Element>... dropDownMatchers) {
-        return hasSelector("select", dropDownMatchers);
+    private Matcher<Element> hasSelectionOfCreditCardTypes() {
+        return hasSelectionList(hasName("cardType"));
     }
 
-    private Matcher<Element> withSubmitOrderButton() {
+    private Matcher<Element> hasSelectionList(final Matcher<Element>... dropDownMatchers) {
+        return hasUniqueSelector("select", dropDownMatchers);
+    }
+
+    private Matcher<Element> hasEmptyCardNumberAndExpiryDate() {
+        return hasCardNumberAndExpiryDate("", "");
+    }
+
+    private Matcher<Element> hasCardNumberAndExpiryDate(String cardNumber, String cardExpiryDate) {
+        return hasInputFields(
+                anElement(hasName("cardNumber"), hasAttribute("value", cardNumber)),
+                anElement(hasName("cardExpiryDate"), hasAttribute("value", cardExpiryDate)));
+    }
+
+    private Matcher<Element> hasSubmitOrderButton() {
         return hasUniqueSelector("#order");
     }
 
-    private Matcher<Iterable<Element>> withCreditCardOptions() {
+    private Matcher<Iterable<Element>> hasCreditCardOptions() {
         List<Matcher<? super Element>> matchers = new ArrayList<Matcher<? super Element>>();
         for (CreditCardType type : CreditCardType.values()) {
-            matchers.add(withOption(type.name(), type.commonName()));
+            matchers.add(hasOption(type.name(), type.commonName()));
         }
-        return containsInAnyOrder(matchers);
+        return matchesInAnyOrder(matchers);
     }
 
-    private Matcher<Element> withOption(String value, String text) {
-        return allOf(withAttribute("value", value), withText(text));
+    private Matcher<Element> hasOption(String value, String text) {
+        return anElement(hasAttribute("value", value), hasText(text));
     }
 
-    private Matcher<Element> withInputFields(final Matcher<Element>... fieldMatchers) {
-        return hasSelector("input[type='text']", fieldMatchers);
+    private Matcher<Element> hasCreditCardDetails(CreditCardType cardType, String cardNumber, String cardExpiryDate) {
+        return anElement(
+                hasSelectedCardType(cardType),
+                hasCardNumberAndExpiryDate(cardNumber, cardExpiryDate));
+    }
+
+    private Matcher<Element> hasSelectedCardType(CreditCardType cardType) {
+        return hasSelectionList(
+                hasName("cardType"), hasChild(anElement(hasAttribute("value", cardType.toString()), hasAttribute("selected", "selected"))));
+    }
+
+    private BeanPropertyBindingResult validationErrorsOn(String objectName, CreditCardDetails creditCardDetails) {
+        return new BeanPropertyBindingResult(creditCardDetails, objectName);
     }
 
     private VelocityRendering renderNewPurchaseView() {

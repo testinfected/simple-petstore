@@ -1,13 +1,11 @@
-o Ditch webdriver lift interface in favor of windowlicker to support browsers with native events without wait code
-and also to have better error reporting
-o Fix layout of header
 o Fork windowlicker to github
-o Mavenize window licker to easily upload to pyxis central 
+o Mavenize windowlicker and upload to maven central
+o Move properties in pom.xml to properties file and use maven-properties plugin
+o Fix layout of header
 o Use wildcard matchers in windowlicker to get rid of being() sugar ?
 o Upgrade to log4j.xml
 o See if we can switch to logback without too much pain
 o Experiment with externalized hibernate config
 o Velocity macros form helpers
 
-o Enhance InternetTimeServer
 

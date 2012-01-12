@@ -4,8 +4,18 @@ import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
-import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasBlankText;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasId;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasNoSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.matches;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.anEmptyModel;
@@ -27,8 +37,8 @@ public class ItemsViewTest {
     @Test public void
     displaysNumberOfItemsAvailable() {
         itemsView = renderItemsView().using(aModel().listing(anItem(), anItem())).asDom();
-        assertThat("view", itemsView, hasUniqueSelector("#inventory-count", withText("2")));
-        assertThat("view", itemsView, hasSelector("#inventory tr[id^='item']", withSize(2)));
+        assertThat("view", itemsView, hasUniqueSelector("#inventory-count", hasText("2")));
+        assertThat("view", itemsView, hasSelector("#inventory tr[id^='item']", hasSize(2)));
     }
 
     @SuppressWarnings("unchecked")
@@ -37,10 +47,10 @@ public class ItemsViewTest {
         itemsView = renderItemsView().using(aModel().listing(anItem())).asDom();
         assertThat("view", itemsView,
                 hasSelector("#items th",
-                        inOrder(withText("Reference number"),
-                                withText("Description"),
-                                withText("Price"),
-                                withBlankText())));
+                        matches(hasText("Reference number"),
+                                hasText("Description"),
+                                hasText("Price"),
+                                hasBlankText())));
     }
 
     @SuppressWarnings("unchecked")
@@ -52,10 +62,10 @@ public class ItemsViewTest {
                 priced("18.50"))).asDom();
         assertThat("view", itemsView,
                 hasSelector("tr#item-12345678 td",
-                        inOrder(withText("12345678"),
-                                withText("Green Adult"),
-                                withText("18.50"),
-                                hasChild(withTag("form")))));
+                        matches(hasText("12345678"),
+                                hasText("Green Adult"),
+                                hasText("18.50"),
+                                hasChild(hasTag("form")))));
     }
 
     @SuppressWarnings("unchecked")
@@ -64,13 +74,13 @@ public class ItemsViewTest {
         itemsView = renderItemsView().using(aModel().listing(anItem().withNumber("12345678"))).asDom();
         assertThat("view", itemsView,
                 hasUniqueSelector("form",
-                        withAttribute("action", cartItemsPath()),
-                        withAttribute("method", "post"),
-                        hasUniqueSelector("button", withId("add-to-cart-12345678"))));
+                        hasAttribute("action", cartItemsPath()),
+                        hasAttribute("method", "post"),
+                        hasUniqueSelector("button", hasId("add-to-cart-12345678"))));
         assertThat("view", itemsView,
                 hasUniqueSelector("form input[type='hidden']",
-                        withAttribute("name", "item_number"),
-                        withAttribute("value", "12345678")));
+                        hasAttribute("name", "item_number"),
+                        hasAttribute("value", "12345678")));
     }
 
     private VelocityRendering renderItemsView() {

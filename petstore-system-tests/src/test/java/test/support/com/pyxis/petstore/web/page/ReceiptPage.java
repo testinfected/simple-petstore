@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 
 import java.math.BigDecimal;
 
-import static org.testinfected.hamcrest.core.CoreMatchers.being;
+import static org.testinfected.hamcrest.core.StringMatchers.being;
 import static org.hamcrest.Matchers.containsString;
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;

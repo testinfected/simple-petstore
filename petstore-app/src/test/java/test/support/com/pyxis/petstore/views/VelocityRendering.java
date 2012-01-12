@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static com.threelevers.css.DocumentBuilder.dom;
 import static org.apache.commons.lang.StringUtils.isEmpty;
+import static test.support.com.pyxis.petstore.views.HTMLDocument.toElement;
 
 public class VelocityRendering {
 
@@ -122,7 +122,7 @@ public class VelocityRendering {
     }
 
     public Element asDom() {
-        return dom(asString());
+        return toElement(asString());
     }
 
     private void setupTools() {

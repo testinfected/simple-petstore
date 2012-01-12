@@ -66,59 +66,59 @@ public class ShowReceiptViewTest {
     setsUpOrderDetailsColumnHeadings() {
         assertThat("view", showReceiptView,
                 hasSelector("#order-details th",
-                        inOrder(withText("Quantity"),
-                                withText("Item"),
-                                withText("Price"),
-                                withText("Total"))));
+                        matches(hasText("Quantity"),
+                                hasText("Item"),
+                                hasText("Price"),
+                                hasText("Total"))));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     displaysOrderLineItemsInColumns() {
         assertThat("view", showReceiptView, hasSelector("#order-details tr#line-item-12345678 td",
-                inOrder(withText("2"),
-                        withText(containsString("Green Adult")),
-                        withText("100.00"),
-                        withText("200.00"))));
+                matches(hasText("2"),
+                        hasText(containsString("Green Adult")),
+                        hasText("100.00"),
+                        hasText("200.00"))));
     }
 
     @Test public void
     displaysOneOrderLineItemPerLine() {
-        assertThat("view", showReceiptView, hasSelector("#order-details tr[id^='line-item']", withSize(2)));
+        assertThat("view", showReceiptView, hasSelector("#order-details tr[id^='line-item']", hasSize(2)));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     displaysPaymentDetails() {
-        assertThat("view", showReceiptView, hasSelector("#payment-details span", inOrder(
-                withText("Visa"),
-                withText("9999 9999 9999"),
-                withText("12/12"))));
+        assertThat("view", showReceiptView, hasSelector("#payment-details span", matchesInAnyOrder(
+                hasText("Visa"),
+                hasText("9999 9999 9999"),
+                hasText("12/12"))));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     displaysBillingInformation() {
-        assertThat("view", showReceiptView, hasSelector("#billing-address span", inOrder(
-                withText("John"),
-                withText("Doe"),
-                withText("jdoe@gmail.com"))));
+        assertThat("view", showReceiptView, hasSelector("#billing-address span", matchesInAnyOrder(
+                hasText("John"),
+                hasText("Doe"),
+                hasText("jdoe@gmail.com"))));
     }
 
     @Test public void
     returnsToHomePageToContinueShopping() {
-        assertThat("view", showReceiptView, hasUniqueSelector("a#continue-shopping", withAttribute("href", homePath())));
+        assertThat("view", showReceiptView, hasUniqueSelector("a#continue-shopping", hasAttribute("href", homePath())));
     }
 
     private VelocityRendering renderShowReceiptView() {
         return render(SHOW_RECEIPT_VIEW_NAME);
     }
 
-    private Matcher<Element> hasOrderTotal(final String orderTotal) {
-        return hasUniqueSelector("#order-total", withText(orderTotal));
+    private Matcher<Element> hasOrderNumber(final String orderNumber) {
+        return hasUniqueSelector("#order-number", hasText(orderNumber));
     }
 
-    private Matcher<Element> hasOrderNumber(final String orderNumber) {
-        return hasUniqueSelector("#order-number", withText(orderNumber));
+    private Matcher<Element> hasOrderTotal(final String orderTotal) {
+        return hasUniqueSelector("#order-total", hasText(orderTotal));
     }
 }

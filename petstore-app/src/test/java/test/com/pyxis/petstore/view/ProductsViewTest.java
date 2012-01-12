@@ -15,9 +15,18 @@ import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.views.ModelBuilder;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
-import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.nullValue;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasBlankText;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasNoSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.views.PathFor.itemsPath;
 import static test.support.com.pyxis.petstore.views.PathFor.pathFor;
@@ -48,10 +57,10 @@ public class ProductsViewTest {
     }
 
     @Test public void
-    displaysNumberOfProductsFound() {
+    displaysAllProductsFound() {
         productsView = renderProductsView().using(model.listing(aProduct(), aProduct())).asDom();
-        assertThat("view", productsView, hasUniqueSelector("#match-count", withText("2")));
-        assertThat("view", productsView, hasSelector("#catalog li[id^='product']", withSize(2)));
+        assertThat("view", productsView, hasUniqueSelector("#match-count", hasText("2")));
+        assertThat("view", productsView, hasSelector("#catalog li[id^='product']", hasSize(2)));
     }
 
     @Test public void
@@ -68,23 +77,22 @@ public class ProductsViewTest {
 
         productsView = renderProductsView().using(model).asDom();
         assertThat("view", productsView,
-                hasSelector(".product-link", contains(anImage(pathFor(photoUrl)))));
+                hasSelector(".product-link", hasImage(pathFor(photoUrl))));
         assertThat("view", productsView,
-                hasSelector(".product-name", contains(withText("Labrador"))));
+                hasSelector(".product-name", hasText("Labrador")));
         assertThat("view", productsView,
-                hasSelector(".product-description", contains(withText("Friendly"))));
+                hasSelector(".product-description", hasText("Friendly")));
     }
 
     @Test public void
-    handlesProductWithNoDescriptionCorrectly() {
+    handlesProductWithNoDescription() {
         productsView = renderProductsView().using(model.listing(aProduct().withNoDescription())).asDom();
         assertThat("view", productsView,
-                hasSelector(".product-description",
-                        contains(anEmptyDescription())));
+                hasSelector(".product-description", hasBlankText()));
     }
 
     @Test public void
-    doesNotDisplayProductsIfNoProductIsFound() {
+    doesNotDisplayProductListWhenNoProductIsFound() {
         productsView = renderProductsView().using(model).asDom();
         assertThat("view", productsView, hasUniqueSelector("#no-match"));
         assertThat("view", productsView, hasNoSelector("#catalog li"));
@@ -95,7 +103,7 @@ public class ProductsViewTest {
         productsView = renderProductsView().using(model.listing(aProduct().withName("Labrador").withNumber("LAB-1234"))).asDom();
     	assertThat("view", productsView,
     			hasSelector("li a", everyItem(
-    					withAttribute("href", equalTo(itemsPath("LAB-1234"))))));
+    					hasAttribute("href", equalTo(itemsPath("LAB-1234"))))));
     }
 
     private Matcher<Product> aProductWithNoPhoto() {
@@ -114,12 +122,8 @@ public class ProductsViewTest {
         };
     }
 
-    private Matcher<Element> anEmptyDescription() {
-        return withBlankText();
-    }
-
-    private Matcher<Element> anImage(String imageUrl) {
-        return hasChild(withAttribute("src", equalTo(imageUrl)));
+    private Matcher<Element> hasImage(String imageUrl) {
+        return hasChild(hasAttribute("src", equalTo(imageUrl)));
     }
 
     private VelocityRendering renderProductsView() {

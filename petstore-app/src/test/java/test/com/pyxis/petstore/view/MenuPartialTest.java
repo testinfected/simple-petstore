@@ -4,9 +4,12 @@ import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
-import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasNoSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
@@ -22,7 +25,7 @@ public class MenuPartialTest {
     linkIsInactiveWhenCartIsEmpty() {
         partial = renderMenuPartial().using(aModel().with(aCart())).asDom();
         assertThat("partial", partial, hasNoSelector("#shopping-cart a"));
-        assertThat("partial", partial, withText(containsString("0")));
+        assertThat("partial", partial, hasText(containsString("0")));
     }
 
     @SuppressWarnings("unchecked")
@@ -33,8 +36,8 @@ public class MenuPartialTest {
         ).asDom();
         assertThat("partial", partial,
                 hasUniqueSelector("#shopping-cart a",
-                        withAttribute("href", cartPath()),
-                        withText(containsString("2"))));
+                        hasAttribute("href", cartPath()),
+                        hasText(containsString("2"))));
     }
 
     private VelocityRendering renderMenuPartial() {

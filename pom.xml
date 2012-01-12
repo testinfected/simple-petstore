@@ -18,13 +18,6 @@
 
     <repositories>
         <repository>
-            <id>sonatype-snapshots</id>
-            <name>Sonatype OSS</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases><enabled>false</enabled></releases>
-            <snapshots><enabled>true</enabled></snapshots>
-        </repository>
-        <repository>
             <id>pyxis</id>
             <name>Pyxis Nexus Maven Repository</name>
             <url>https://www.pyxis-tech.ca/nexus/content/groups/public</url>
@@ -57,9 +50,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testinfected</groupId>
+            <groupId>org.testinfected.hamcrest-matchers</groupId>
             <artifactId>all-matchers</artifactId>
-            <version>1.4-SNAPSHOT</version>
+            <version>1.5</version>
             <scope>test</scope>
         </dependency>
         <!-- Declare junit after hamcrest because junit includes org.hamcrest.Matcher
@@ -155,12 +148,6 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
                 <version>3.0.2.RELEASE</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.3levers.cssselectors</groupId>
-                <artifactId>cssselectors</artifactId>
-                <version>1.1</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -292,6 +279,12 @@
                 <groupId>org.testinfected</groupId>
                 <artifactId>time</artifactId>
                 <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>nekohtml</groupId>
+                <artifactId>nekohtml</artifactId>
+                <version>1.9.6.2</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
