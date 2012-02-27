@@ -32,11 +32,11 @@ public class Database {
     }
 
     public void clean() {
-        new DatabaseCleaner(session).clean();
+        if (session != null) new DatabaseCleaner(session).clean();
     }
 
     public void disconnect() {
-        session.close();
+        if (session != null) session.close();
     }
 
     public void persist(final Builder<?>... builders) throws Exception {
