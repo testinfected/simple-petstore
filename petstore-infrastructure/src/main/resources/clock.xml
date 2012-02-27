@@ -4,8 +4,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="clock" class="com.pyxis.time.nist.InternetTimeClock">
+    <bean id="clock" class="org.testinfected.time.DaytimeClient">
         <constructor-arg index="0" value="${timeServer.host}"/>
         <constructor-arg index="1" value="${timeServer.port}"/>
+        <constructor-arg index="2">
+            <bean class="org.testinfected.time.nist.NISTDialect"/>
+        </constructor-arg>
     </bean>
 </beans>
