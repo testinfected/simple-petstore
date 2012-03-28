@@ -83,6 +83,7 @@
     </dependencies>
 
     <properties>
+        <main.basedir>${project.parent.basedir}</main.basedir>
         <!-- maven-resources-plugin does not seen to interpolate project.baseUri, help it out -->
         <projectBaseUri>${project.baseUri}</projectBaseUri>
     </properties>

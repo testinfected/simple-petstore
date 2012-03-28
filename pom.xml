@@ -304,26 +304,38 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>properties-maven-plugin</artifactId>
+                    <version>1.0-alpha-2</version>
+                </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0-alpha-2</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${main.basedir}/build.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <properties>
+        <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <context.path>/petstore</context.path>
-        <!-- Log files go to parent/logs -->
-        <log.dir>${project.basedir}/../logs</log.dir>
-        <test.server.host>localhost</test.server.host>
-        <test.server.port>8180</test.server.port>
-        <test.log.file>test.log</test.log.file>
-        <test.jdbc.driverClassName>com.mysql.jdbc.Driver</test.jdbc.driverClassName>
-        <test.jdbc.url>jdbc:mysql://localhost:3306/petstore_test</test.jdbc.url>
-        <test.jdbc.username>petstore</test.jdbc.username>
-        <test.jdbc.password>petstore</test.jdbc.password>
-        <test.hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</test.hibernate.dialect>
-        <test.timeServer.host>localhost</test.timeServer.host>
-        <test.timeServer.port>10013</test.timeServer.port>
     </properties>
 
     <profiles>
