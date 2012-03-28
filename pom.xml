@@ -325,6 +325,7 @@
                         <configuration>
                             <files>
                                 <file>${main.basedir}/build.properties</file>
+                                <file>${main.basedir}/${env}.properties</file>
                             </files>
                         </configuration>
                     </execution>
@@ -343,42 +344,16 @@
             <id>development</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>env</name>
-                    <value>dev</value>
-                </property>
             </activation>
             <properties>
-                <server.port>8080</server.port>
-                <log.file>development.log</log.file>
-                <jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-                <jdbc.url>jdbc:mysql://localhost:3306/petstore_dev</jdbc.url>
-                <jdbc.username>petstore</jdbc.username>
-                <jdbc.password>petstore</jdbc.password>
-                <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
-                <timeServer.host>localhost</timeServer.host>
-                <timeServer.port>10000</timeServer.port>
+                <env>development</env>
             </properties>
         </profile>
         <profile>
             <id>production</id>
             <properties>
-                <server.port>8280</server.port>
-                <log.file>production.log</log.file>
-                <jdbc.driverClassName>com.mysql.jdbc.Driver</jdbc.driverClassName>
-                <jdbc.url>jdbc:mysql://psd-server:3306/petstore</jdbc.url>
-                <jdbc.username>petstore</jdbc.username>
-                <jdbc.password>petstore</jdbc.password>
-                <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
-                <timeServer.host>time.nist.gov</timeServer.host>
-                <timeServer.port>13</timeServer.port>
+                <env>production</env>
             </properties>
-            <activation>
-                <property>
-                    <name>env</name>
-                    <value>prod</value>
-                </property>
-            </activation>
         </profile>
     </profiles>
 </project>
