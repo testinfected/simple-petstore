@@ -233,7 +233,7 @@
                             <url>${test.jdbc.url}</url>
                             <username>${test.jdbc.username}</username>
                             <password>${test.jdbc.password}</password>
-                            <migrationsPath>${project.basedir}/../petstore-infrastructure/src/main/scripts/migrations</migrationsPath>
+                            <migrationsPath>${main.basedir}/petstore-infrastructure/src/main/scripts/migrations</migrationsPath>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -289,7 +289,7 @@
                         <configuration>
                             <wait>false</wait>
                             <container>
-                                <log>${project.basedir}/../logs/cargo.log</log>
+                                <log>${main.basedir}/logs/cargo.log</log>
                                 <containerId>jetty6x</containerId>
                                 <timeout>60000</timeout>
                                 <zipUrlInstaller>
@@ -349,6 +349,5 @@
                 </plugins>
             </build>
         </profile>
-
     </profiles>
 </project>
