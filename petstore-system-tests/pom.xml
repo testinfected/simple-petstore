@@ -92,9 +92,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.objenesis.windowlicker</groupId>
+            <groupId>com.googlecode.windowlicker</groupId>
             <artifactId>windowlicker-web</artifactId>
-            <version>DEV</version>
+            <version>r268</version>
             <scope>test</scope>
         </dependency>
         <dependency>

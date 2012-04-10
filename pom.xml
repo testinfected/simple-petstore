@@ -17,11 +17,11 @@
     </modules>
 
     <repositories>
-        <repository>
-            <id>pyxis</id>
-            <name>Pyxis Nexus Maven Repository</name>
-            <url>https://www.pyxis-tech.ca/nexus/content/groups/public</url>
-        </repository>
+        <!--<repository>-->
+            <!--<id>pyxis</id>-->
+            <!--<name>Pyxis Nexus Maven Repository</name>-->
+            <!--<url>https://www.pyxis-tech.ca/nexus/content/groups/public</url>-->
+        <!--</repository>-->
         <repository>
             <id>c5-public-repository</id>
             <name>Carbon 5 repository</name>
@@ -133,19 +133,6 @@
             <artifactId>jcl-over-slf4j</artifactId>
             <version>1.5.10</version>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jasypt</groupId>
-            <artifactId>jasypt</artifactId>
-            <version>1.9.0</version>
-            <classifier>lite</classifier>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jasypt</groupId>
-            <artifactId>jasypt-spring3</artifactId>
-            <version>1.9.0</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
