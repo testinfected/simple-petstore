@@ -17,11 +17,6 @@
     </modules>
 
     <repositories>
-        <!--<repository>-->
-            <!--<id>pyxis</id>-->
-            <!--<name>Pyxis Nexus Maven Repository</name>-->
-            <!--<url>https://www.pyxis-tech.ca/nexus/content/groups/public</url>-->
-        <!--</repository>-->
         <repository>
             <id>c5-public-repository</id>
             <name>Carbon 5 repository</name>
