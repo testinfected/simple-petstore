@@ -19,7 +19,7 @@ public final class SystemProperties {
     public static Properties load(String propertiesFile) {
         Properties properties = new Properties();
         try {
-            properties.load(PersistenceContext.class.getResourceAsStream(propertiesFile));
+            properties.load(SystemProperties.class.getResourceAsStream(propertiesFile));
         } catch (IOException e) {
             throw imposterize(e);
         }
