@@ -22,12 +22,12 @@ public class ShopFeature {
     PetStoreDriver petstore = new PetStoreDriver(browser);
 
     @Before public void
-    startApplication() throws Exception {
+    startApplication() {
         petstore.open(context.routing());
     }
 
     @After public void
-    stopApplication() throws Exception {
+    stopApplication() {
         petstore.close();
         context.stopServer(server);
         context.stopBrowser(browser);
@@ -35,7 +35,7 @@ public class ShopFeature {
     }
 
     @Before public void
-    iguanaAreForSale() throws Exception {
+    iguanaAreForSale() {
         Product iguana = aProduct().withName("Iguana").build();
         context.given(iguana);
         context.given(
@@ -44,7 +44,7 @@ public class ShopFeature {
     }
 
     @Test public void
-    shopsForItemsAndAddsThemToCart() throws Exception {
+    shopsForItemsAndAddsThemToCart() {
         petstore.showsCartIsEmpty();
 
         petstore.buy("Iguana", "12345678");
@@ -59,7 +59,7 @@ public class ShopFeature {
     }
 
     @Test public void
-    shopsForTheSameItemMultipleTimes() throws Exception {
+    shopsForTheSameItemMultipleTimes() {
         petstore.buy("Iguana", "12345678");
         petstore.showsItemQuantity("12345678", 1);
 

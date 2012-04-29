@@ -6,7 +6,6 @@ import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.product.Item;
 import com.pyxis.petstore.domain.product.Product;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class DatabaseCleaner {
 
@@ -21,29 +20,36 @@ public class DatabaseCleaner {
             "order_number_sequence"
     };
 
-    private final Session session;
+    private final Database database;
 
-    public DatabaseCleaner(Session session) {
-        this.session = session;
+    public DatabaseCleaner(Database database) {
+        this.database = database;
     }
 
     public void clean() {
-        Transaction transaction = session.beginTransaction();
-        for (Class<?> entityType : ENTITY_TYPES) {
-            deleteEntities(entityType);
-        }
+        database.perform(new UnitOfWork() {
+            public void work(Session session) {
+                clear(session);
+                deleteEntities(session);
+                resetSequences(session);
+            }
+        });
+    }
+
+    private void clear(Session session) {
+        session.clear();
+    }
+
+    private void resetSequences(Session session) {
         for (String sequenceName : SEQUENCE_NAMES) {
-            resetSequence(sequenceName);
+            session.createSQLQuery("truncate " + sequenceName).executeUpdate();
         }
-        transaction.commit();
     }
 
-    private void resetSequence(String sequenceName) {
-        session.createSQLQuery("truncate " + sequenceName).executeUpdate();
-    }
-
-    private void deleteEntities(Class<?> entityType) {
-        session.createQuery("delete from " + entityNameOf(entityType)).executeUpdate();
+    private void deleteEntities(Session session) {
+        for (Class<?> entityType : ENTITY_TYPES) {
+            session.createQuery("delete from " + entityNameOf(entityType)).executeUpdate();
+        }
     }
 
     private String entityNameOf(Class<?> entityType) {

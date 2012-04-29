@@ -20,12 +20,12 @@ public class SearchFeature {
     PetStoreDriver petstore = new PetStoreDriver(browser);
 
     @Before public void
-    startApplication() throws Exception {
+    startApplication() {
         petstore.open(context.routing());
     }
 
     @After public void
-    stopApplication() throws Exception {
+    stopApplication() {
         petstore.close();
         context.stopServer(server);
         context.stopBrowser(browser);
@@ -33,7 +33,7 @@ public class SearchFeature {
     }
 
     @Test public void
-    searchesForAProductNotAvailableInStore() throws Exception {
+    searchesForAProductNotAvailableInStore() {
         context.given(aProduct().withName("Labrador Retriever"));
 
         petstore.searchFor("Dalmatian");
@@ -41,7 +41,7 @@ public class SearchFeature {
     }
 
     @Test public void
-    searchesAndFindsProductsInCatalog() throws Exception {
+    searchesAndFindsProductsInCatalog() {
         context.given(aProduct().withNumber("LAB-1234").withName("Labrador Retriever"),
                 aProduct().withNumber("CHE-5678").withName("Chesapeake").describedAs("Chesapeake bay retriever"),
                 aProduct().withName("Dalmatian"));

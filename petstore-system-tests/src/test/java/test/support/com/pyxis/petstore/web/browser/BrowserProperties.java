@@ -1,18 +1,18 @@
 package test.support.com.pyxis.petstore.web.browser;
 
-import test.support.com.pyxis.petstore.Configuration;
+import test.support.com.pyxis.petstore.Properties;
 
 public final class BrowserProperties {
     
     public static final String LIFECYCLE = "browser.lifecycle";
 
-    private final Configuration configuration;
+    private final Properties properties;
 
-    public BrowserProperties(Configuration configuration) {
-        this.configuration = configuration;
+    public BrowserProperties(Properties properties) {
+        this.properties = properties;
     }
 
     public String lifeCycle() {
-        return System.getProperty(LIFECYCLE, configuration.getValue(LIFECYCLE));
+        return System.getProperty(LIFECYCLE, properties.getValue(LIFECYCLE));
     }
 }

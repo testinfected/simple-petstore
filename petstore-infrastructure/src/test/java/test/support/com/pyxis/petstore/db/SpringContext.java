@@ -14,13 +14,13 @@ import java.util.Properties;
 
 import static java.util.Arrays.asList;
 
-public class PersistenceContext {
+public class SpringContext {
 
     private static final String PERSISTENCE_CONFIGURATION = "classpath:persistence.xml";
 
     private final ApplicationContext spring;
 
-    public PersistenceContext(Properties properties) {
+    public SpringContext(Properties properties) {
         spring = loadFrom(properties);
     }
 

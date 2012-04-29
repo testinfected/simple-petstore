@@ -11,12 +11,11 @@ import org.hamcrest.Matcher;
 import org.hibernate.Session;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.builders.OrderBuilder;
 import test.support.com.pyxis.petstore.db.Database;
-import test.support.com.pyxis.petstore.db.IntegrationTestContext;
+import test.support.com.pyxis.petstore.db.DatabaseCleaner;
+import test.support.com.pyxis.petstore.db.IntegrationTest;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
 
 import java.util.ArrayList;
@@ -32,36 +31,32 @@ import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.validVi
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 import static test.support.com.pyxis.petstore.db.Database.idOf;
-import static test.support.com.pyxis.petstore.db.IntegrationTestContext.integrationTesting;
+import static test.support.com.pyxis.petstore.db.IntegrationTest.integrationTesting;
 
 public class PersistentOrderBookTest {
 
-    IntegrationTestContext context = integrationTesting();
+    IntegrationTest context = integrationTesting();
 
-    Database database = new Database(context.openSession());
+    Database database = new Database(context.openConnection());
     OrderBook orderBook = context.getComponent(OrderBook.class);
 
-    @Before
-    public void cleanDatabase() {
-        database.clean();
-    }
-
     @After
-    public void closeDatabase() {
+    public void cleanDatabase() {
+        new DatabaseCleaner(database).clean();
         database.close();
     }
 
     @Test public void
-    orderNumberShouldBeUnique() throws Exception {
+    orderNumberShouldBeUnique() {
         OrderBuilder order = anOrder().withNumber("00000100");
-        havingPersisted(order);
+        database.given(order);
 
         assertViolatesUniqueness(order.build());
     }
 
     @Test public void
-    findsOrdersByNumber() throws Exception {
-        havingPersisted(anOrder().withNumber("00000100"));
+    findsOrdersByNumber() {
+        database.given(anOrder().withNumber("00000100"));
 
         Maybe<Order> entry = orderBook.find(new OrderNumber("00000100"));
         assertThat("no match", entry.exists());
@@ -69,13 +64,13 @@ public class PersistentOrderBookTest {
     }
 
     @Test(expected = ConstraintViolationException.class) public void
-    lineItemsCannotBePersistedInIsolation() throws Exception {
+    lineItemsCannotBePersistedInIsolation() {
         LineItem shouldFail = LineItem.from(new CartItem(anItem().build()));
         database.persist(shouldFail);
     }
 
     @Test public void
-    canRoundTripOrders() throws Exception {
+    canRoundTripOrders() {
         OrderBuilder aPendingOrder = anOrder();
         assertCanPersistAndReload("pending order", aPendingOrder.build());
 
@@ -83,14 +78,14 @@ public class PersistentOrderBookTest {
         assertCanPersistAndReload("paid order", aPaidOrder.build());
     }
 
-    private void assertCanPersistAndReload(String orderName, Order order) throws Exception {
+    private void assertCanPersistAndReload(String orderName, Order order) {
         database.persist(order);
         database.assertCanBeReloadedWithSameState(orderName, order);
         if (order.isPaid()) database.assertCanBeReloadedWithSameState(order.getPaymentMethod());
     }
 
     @Test public void
-    lineItemsAreLoggedWithOrderInCorrectOrder() throws Exception {
+    lineItemsAreLoggedWithOrderInCorrectOrder() {
         final Order order = anOrder().from(aCart().containing(
                 anItem().withNumber("00000100").priced("100.00"),
                 anItem().withNumber("00000100").priced("100.00"),
@@ -98,7 +93,7 @@ public class PersistentOrderBookTest {
         database.persist(order);
 
         database.perform(new UnitOfWork() {
-            public void work(Session session) throws Exception {
+            public void work(Session session) {
                 Order reloaded = (Order) session.get(Order.class, idOf(order));
                 assertThat("loaded", reloaded, sameItemCountAs(order));
                 assertThat("loaded line items", reloaded.getLineItems(), contains(linesWithSameStateAs(order)));
@@ -122,10 +117,6 @@ public class PersistentOrderBookTest {
         return all;
     }
 
-    private void havingPersisted(Builder<?>... builders) throws Exception {
-        database.persist(builders);
-    }
-
     private Matcher<? super Order> orderWithNumber(String orderNumber) {
         return new FeatureMatcher<Order, String>(equalTo(orderNumber), "an order with number", "order number") {
             @Override protected String featureValueOf(Order order) {
@@ -134,7 +125,7 @@ public class PersistentOrderBookTest {
         };
     }
 
-    private void assertViolatesUniqueness(Order order) throws Exception {
+    private void assertViolatesUniqueness(Order order) {
         try {
             orderBook.record(order);
             fail("No constraint violation");

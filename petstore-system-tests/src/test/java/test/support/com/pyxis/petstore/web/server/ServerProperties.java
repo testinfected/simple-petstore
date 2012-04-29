@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.web.server;
 
-import test.support.com.pyxis.petstore.Configuration;
+import test.support.com.pyxis.petstore.Properties;
 
 import java.io.File;
 
@@ -13,34 +13,34 @@ public class ServerProperties {
     public static final String CONTEXT_PATH = "server.context.path";
     public static final String WEBAPP_PATH = "server.webapp.path";
 
-    private final Configuration configuration;
+    private final Properties properties;
 
-    public ServerProperties(Configuration configuration) {
-        this.configuration = configuration;
+    public ServerProperties(Properties properties) {
+        this.properties = properties;
     }
 
     public String scheme() {
-        return configuration.getValue(SCHEME);
+        return properties.getValue(SCHEME);
     }
 
     public String host() {
-        return configuration.getValue(HOST);
+        return properties.getValue(HOST);
     }
 
     public int port() {
-        return configuration.getValueAsInt(PORT);
+        return properties.getValueAsInt(PORT);
     }
 
     public String contextPath() {
-        return configuration.getValue(CONTEXT_PATH);
+        return properties.getValue(CONTEXT_PATH);
     }
 
     public String webAppPath() {
-        return new File(configuration.getValue(WEBAPP_PATH)).getAbsolutePath();
+        return properties.getValue(WEBAPP_PATH);
     }
 
     public String lifeCycle() {
-        return System.getProperty(LIFECYCLE, configuration.getValue(LIFECYCLE));
+        return System.getProperty(LIFECYCLE, properties.getValue(LIFECYCLE));
     }
 
     public String urlFor(String path) {

@@ -3,31 +3,33 @@ package test.support.com.pyxis.petstore;
 import org.testinfected.hamcrest.ExceptionImposter;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Properties;
 import java.util.Set;
 
 import static java.lang.Integer.parseInt;
 
-public class Configuration {
+public class Properties {
 
-    public static Configuration load(String name) {
+    public static Properties load(String name) {
         return load(name, Thread.currentThread().getContextClassLoader());
     }
 
-    public static Configuration load(String name, ClassLoader classLoader) {
-        Properties properties = new Properties();
+    public static Properties load(String name, ClassLoader classLoader) {
+        java.util.Properties properties = new java.util.Properties();
         try {
             properties.load(classLoader.getResourceAsStream(name));
         } catch (IOException e) {
             throw ExceptionImposter.imposterize(e);
         }
-        return new Configuration(properties);
+        return new Properties(properties);
     }
 
-    private final Properties properties;
+    private final java.util.Properties properties;
 
-    public Configuration(Properties properties) {
+    public Properties() {
+        this(new java.util.Properties());
+    }
+
+    public Properties(java.util.Properties properties) {
         this.properties = properties;
     }
 
@@ -39,8 +41,8 @@ public class Configuration {
         return parseInt(getValue(name));
     }
 
-    public Properties toProperties() {
-        return new Properties(properties);
+    public java.util.Properties toJavaProperties() {
+        return new java.util.Properties(properties);
     }
 
     public Set<String> names() {

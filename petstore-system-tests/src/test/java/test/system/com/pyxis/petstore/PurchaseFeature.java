@@ -22,7 +22,7 @@ public class PurchaseFeature {
     PetStoreDriver petstore = new PetStoreDriver(browser);
 
     @Before public void
-    labradorsAreForSale() throws Exception {
+    labradorsAreForSale() {
         Product labrador = aProduct().withName("Labrador Retriever").build();
         Product golden = aProduct().withName("Golden Retriever").build();
         context.given(labrador, golden);
@@ -32,12 +32,12 @@ public class PurchaseFeature {
     }
 
     @Before public void
-    startApplication() throws Exception {
+    startApplication() {
         petstore.open(context.routing());
     }
 
     @After public void
-    stopApplication() throws Exception {
+    stopApplication() {
         petstore.close();
         context.stopServer(server);
         context.stopBrowser(browser);
@@ -45,7 +45,7 @@ public class PurchaseFeature {
     }
 
     @Test public void
-    purchasesSeveralItemsUsingACreditCard() throws Exception {
+    purchasesSeveralItemsUsingACreditCard() {
         petstore.buy("Labrador Retriever", "11111111");
         petstore.buy("Golden Retriever", "22222222");
         petstore.checkout();

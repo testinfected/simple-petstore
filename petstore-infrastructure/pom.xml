@@ -81,8 +81,6 @@
     </properties>
 
     <build>
-        <!-- Make sure Maven2 generates an absolute path, since Hudson does not support Maven3 yet -->
-        <scriptSourceDirectory>${project.basedir}/src/main/scripts</scriptSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -97,6 +95,16 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/IntegrationTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>com.carbonfive.db-support</groupId>
                 <artifactId>db-migration-maven-plugin</artifactId>
                 <version>0.9.9-m2</version>
@@ -104,7 +112,7 @@
                     <url>${jdbc.url}</url>
                     <username>${jdbc.username}</username>
                     <password>${jdbc.password}</password>
-                    <migrationsPath>${project.build.scriptSourceDirectory}/migrations</migrationsPath>
+                    <migrationsPath>${project.basedir}/src/main/scripts/migrations</migrationsPath>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -142,7 +150,7 @@
                     <username>${jdbc.username}</username>
                     <password>${jdbc.password}</password>
                     <fileset>
-                        <basedir>${project.build.scriptSourceDirectory}/seeds</basedir>
+                        <basedir>${project.basedir}/src/main/scripts/seeds</basedir>
                         <includes>
                             <include>*.sql</include>
                         </includes>
@@ -178,7 +186,7 @@
                             <url>${test.jdbc.url}</url>
                             <username>${test.jdbc.username}</username>
                             <password>${test.jdbc.password}</password>
-                            <migrationsPath>${project.build.scriptSourceDirectory}/migrations</migrationsPath>
+                            <migrationsPath>${project.basedir}/src/main/scripts/migrations</migrationsPath>
                         </configuration>
                         <dependencies>
                             <dependency>

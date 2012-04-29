@@ -30,7 +30,7 @@ public class PetStoreDriver {
         homePage.navigateTo(routes);
     }
 
-    public void close() throws Exception {
+    public void close() {
         homePage.logout();
     }
 

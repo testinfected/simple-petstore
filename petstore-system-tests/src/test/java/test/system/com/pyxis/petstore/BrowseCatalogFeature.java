@@ -24,12 +24,12 @@ public class BrowseCatalogFeature {
     Product iguana;
 
     @Before public void
-    startApplication() throws Exception {
+    startApplication() {
         petstore.open(context.routing());
     }
 
     @After public void
-    stopApplication() throws Exception {
+    stopApplication() {
         petstore.close();
         context.stopBrowser(browser);
         context.stopServer(server);
@@ -37,19 +37,19 @@ public class BrowseCatalogFeature {
     }
 
     @Before public void
-    iguanaAreForSale() throws Exception {
+    iguanaAreForSale() {
         iguana = aProduct().withName("Iguana").build();
         context.given(iguana);
     }
 
     @Test public void
-    consultsAProductCurrentlyOutOfStock() throws Exception {
+    consultsAProductCurrentlyOutOfStock() {
         petstore.consultInventoryOf("Iguana");
         petstore.showsNoItemAvailable();
     }
 
     @Test public void
-    consultsAProductAvailableItems() throws Exception {
+    consultsAProductAvailableItems() {
         context.given(an(iguana).withNumber("12345678").describedAs("Green Adult").priced("18.50"));
 
         petstore.consultInventoryOf("Iguana");

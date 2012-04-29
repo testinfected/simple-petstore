@@ -6,12 +6,12 @@ import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.db.Database;
-import test.support.com.pyxis.petstore.db.IntegrationTestContext;
+import test.support.com.pyxis.petstore.db.DatabaseCleaner;
+import test.support.com.pyxis.petstore.db.IntegrationTest;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
@@ -26,28 +26,24 @@ import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.db.IntegrationTestContext.integrationTesting;
+import static test.support.com.pyxis.petstore.db.IntegrationTest.integrationTesting;
 
 public class PersistentProductCatalogTest {
 
-    IntegrationTestContext context = integrationTesting();
+    IntegrationTest context = integrationTesting();
 
-    Database database = new Database(context.openSession());
+    Database database = new Database(context.openConnection());
     ProductCatalog productCatalog = context.getComponent(ProductCatalog.class);
 
-    @Before
-    public void cleanDatabase() {
-        database.clean();
-    }
-
     @After
-    public void closeDatabase() {
+    public void cleanDatabase() {
+        new DatabaseCleaner(database).clean();
         database.close();
     }
 
     @Test public void
     wontFindAnythingIfNoProductMatches() throws Exception {
-        havingPersisted(aProduct().withName("Dalmatian").describedAs("A big dog"));
+        database.given(aProduct().withName("Dalmatian").describedAs("A big dog"));
 
         Collection<Product> matchingProducts = productCatalog.findByKeyword("bulldog");
         assertThat("matching products", matchingProducts, is(empty()));
@@ -60,11 +56,7 @@ public class PersistentProductCatalogTest {
     @SuppressWarnings("unchecked")
     @Test public void
     canFindProductsByMatchingName() throws Exception {
-        havingPersisted(
-                aProduct().withName("English Bulldog"),
-                and(aProduct().withName("French Bulldog")),
-                and(aProduct().withName("Labrador Retriever"))
-        );
+        database.given(aProduct().withName("English Bulldog"), and(aProduct().withName("French Bulldog")), and(aProduct().withName("Labrador Retriever")));
 
         Collection<Product> matches = productCatalog.findByKeyword("bull");
         assertThat("matching products", matches, hasSize(equalTo(2)));
@@ -74,11 +66,7 @@ public class PersistentProductCatalogTest {
     @SuppressWarnings("unchecked")
     @Test public void
     canFindProductsByMatchingDescription() throws Exception {
-        havingPersisted(
-                aProduct().withName("Labrador").describedAs("Friendly"),
-                and(aProduct().withName("Golden").describedAs("Kids best friend")),
-                and(aProduct().withName("Poodle").describedAs("Annoying"))
-        );
+        database.given(aProduct().withName("Labrador").describedAs("Friendly"), and(aProduct().withName("Golden").describedAs("Kids best friend")), and(aProduct().withName("Poodle").describedAs("Annoying")));
 
         List<Product> matches = productCatalog.findByKeyword("friend");
         assertThat("matching products", matches, hasSize(equalTo(2)));
@@ -117,10 +105,6 @@ public class PersistentProductCatalogTest {
         } catch (org.hibernate.exception.ConstraintViolationException expected) {
             assertTrue(true);
         }
-    }
-
-    private void havingPersisted(Builder<?>... builders) throws Exception {
-        database.persist(builders);
     }
 
     private Builder<?> and(Builder<?> builder) {

@@ -7,31 +7,27 @@ import org.hamcrest.Matcher;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.db.Database;
-import test.support.com.pyxis.petstore.db.IntegrationTestContext;
+import test.support.com.pyxis.petstore.db.DatabaseCleaner;
+import test.support.com.pyxis.petstore.db.IntegrationTest;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static test.support.com.pyxis.petstore.db.IntegrationTestContext.integrationTesting;
+import static test.support.com.pyxis.petstore.db.IntegrationTest.integrationTesting;
 
 public class PersistentOrderNumberSequenceTest {
 
-    IntegrationTestContext context = integrationTesting();
+    IntegrationTest context = integrationTesting();
 
-    Database database = new Database(context.openSession());
+    Database database = new Database(context.openConnection());
     OrderNumberSequence orderNumberSequence = context.getComponent(OrderNumberSequence.class);
 
-    @Before
-    public void cleanDatabase() {
-        database.clean();
-    }
-
     @After
-    public void closeDatabase() {
+    public void cleanDatabase() {
+        new DatabaseCleaner(database).clean();
         database.close();
     }
 
@@ -45,7 +41,7 @@ public class PersistentOrderNumberSequenceTest {
 
     private void seedSequenceNumberWith(final long seed) throws Exception {
         database.perform(new UnitOfWork() {
-            public void work(Session session) throws Exception {
+            public void work(Session session) {
                 SQLQuery query = session.createSQLQuery("insert into order_number_sequence values (:seed)");
                 query.setLong("seed", seed);
                 assertUpdateExecutes(query);
