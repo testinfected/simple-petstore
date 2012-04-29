@@ -1,6 +1,7 @@
 package test.support.com.pyxis.petstore.web.page;
 
 import com.objogate.wl.web.AsyncWebDriver;
+import test.support.com.pyxis.petstore.web.Routes;
 
 import static java.lang.String.valueOf;
 import static org.hamcrest.Matchers.containsString;

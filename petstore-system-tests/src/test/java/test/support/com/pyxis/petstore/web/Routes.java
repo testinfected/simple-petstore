@@ -1,31 +1,30 @@
 package test.support.com.pyxis.petstore.web;
 
 import test.support.com.pyxis.petstore.web.page.HomePage;
+import test.support.com.pyxis.petstore.web.page.Page;
+import test.support.com.pyxis.petstore.web.server.ServerProperties;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.lang.String.format;
-import static test.support.com.pyxis.petstore.web.Environment.contextPath;
-import static test.support.com.pyxis.petstore.web.Environment.serverHost;
-import static test.support.com.pyxis.petstore.web.Environment.serverPort;
-
 public final class Routes {
 
-    private static Map<Class<?>, String> urlMappings = new HashMap<Class<?>, String>();
+    private final ServerProperties server;
+    private final Map<Class<? extends Page>, String> urlMappings = new HashMap<Class<? extends Page>, String>();
 
-    static {
+    {
         urlMappings.put(HomePage.class, "/");
     }
 
-    private Routes() {
+    public Routes(ServerProperties server) {
+        this.server = server;
     }
 
-    public static String urlFor(Class<?> pageClass) {
-        return format("http://%s:%s%s%s", serverHost(), serverPort(), contextPath(), path(pageClass));
+    public String urlFor(Class<? extends Page> pageClass) {
+        return server.urlFor(pathOf(pageClass));
     }
 
-    private static String path(Class<?> pageClass) {
+    private String pathOf(Class<? extends Page> pageClass) {
         return urlMappings.get(pageClass);
     }
 }

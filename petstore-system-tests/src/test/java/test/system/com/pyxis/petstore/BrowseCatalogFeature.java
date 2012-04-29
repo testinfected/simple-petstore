@@ -4,39 +4,42 @@ import com.pyxis.petstore.domain.product.Product;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.builders.Builder;
-import test.support.com.pyxis.petstore.web.DatabaseDriver;
+import org.openqa.selenium.WebDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
+import test.support.com.pyxis.petstore.web.SystemTest;
+import test.support.com.pyxis.petstore.web.server.ServerDriver;
 
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.an;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.web.SystemTest.systemTesting;
 
 public class BrowseCatalogFeature {
 
-    PetStoreDriver petstore = new PetStoreDriver();
-    DatabaseDriver database = new DatabaseDriver();
+    SystemTest context = systemTesting();
+
+    ServerDriver server = context.startServer();
+    WebDriver browser = context.startBrowser();
+    PetStoreDriver petstore = new PetStoreDriver(browser);
 
     Product iguana;
 
     @Before public void
     startApplication() throws Exception {
-        petstore.start();
-    }
-
-    @Before public void
-    iguanaAreForSale() throws Exception {
-        database.start();
-        iguana = given(aProduct().withName("Iguana"));
+        petstore.open(context.routing());
     }
 
     @After public void
     stopApplication() throws Exception {
-        petstore.stop();
-        database.stop();
+        petstore.close();
+        context.stopBrowser(browser);
+        context.stopServer(server);
+        context.cleanUp();
     }
 
-    private <T> T given(Builder<T> builder) throws Exception {
-        return database.contain(builder);
+    @Before public void
+    iguanaAreForSale() throws Exception {
+        iguana = aProduct().withName("Iguana").build();
+        context.given(iguana);
     }
 
     @Test public void
@@ -47,7 +50,7 @@ public class BrowseCatalogFeature {
 
     @Test public void
     consultsAProductAvailableItems() throws Exception {
-        given(an(iguana).withNumber("12345678").describedAs("Green Adult").priced("18.50"));
+        context.given(an(iguana).withNumber("12345678").describedAs("Green Adult").priced("18.50"));
 
         petstore.consultInventoryOf("Iguana");
         petstore.displaysItem("12345678", "Green Adult", "18.50");

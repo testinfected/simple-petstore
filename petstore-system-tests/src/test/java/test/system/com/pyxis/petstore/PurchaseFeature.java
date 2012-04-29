@@ -1,42 +1,47 @@
 package test.system.com.pyxis.petstore;
 
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-
+import com.pyxis.petstore.domain.product.Product;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import test.support.com.pyxis.petstore.web.DatabaseDriver;
+import org.openqa.selenium.WebDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
+import test.support.com.pyxis.petstore.web.SystemTest;
+import test.support.com.pyxis.petstore.web.server.ServerDriver;
 
-import com.pyxis.petstore.domain.product.Product;
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.web.SystemTest.systemTesting;
 
 public class PurchaseFeature {
 
-    PetStoreDriver petstore = new PetStoreDriver();
-    DatabaseDriver database = new DatabaseDriver();
+    SystemTest context = systemTesting();
+
+    ServerDriver server = context.startServer();
+    WebDriver browser = context.startBrowser();
+    PetStoreDriver petstore = new PetStoreDriver(browser);
 
     @Before public void
     labradorsAreForSale() throws Exception {
-        database.start();
         Product labrador = aProduct().withName("Labrador Retriever").build();
         Product golden = aProduct().withName("Golden Retriever").build();
-        database.contain(labrador, golden);
-        database.contain(
+        context.given(labrador, golden);
+        context.given(
                 a(labrador).withNumber("11111111").describedAs("Male Adult").priced("599.00"),
                 a(golden).withNumber("22222222").describedAs("Female Adult").priced("649.00"));
     }
 
     @Before public void
     startApplication() throws Exception {
-        petstore.start();
+        petstore.open(context.routing());
     }
 
     @After public void
     stopApplication() throws Exception {
-        petstore.stop();
-        database.stop();
+        petstore.close();
+        context.stopServer(server);
+        context.stopBrowser(browser);
+        context.cleanUp();
     }
 
     @Test public void

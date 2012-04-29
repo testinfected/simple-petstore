@@ -4,34 +4,41 @@ import com.pyxis.petstore.domain.product.Product;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.web.DatabaseDriver;
+import org.openqa.selenium.WebDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
+import test.support.com.pyxis.petstore.web.SystemTest;
+import test.support.com.pyxis.petstore.web.server.ServerDriver;
 
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.web.SystemTest.systemTesting;
 
 public class ShopFeature {
 
-	PetStoreDriver petstore = new PetStoreDriver();
-	DatabaseDriver database = new DatabaseDriver();
+    SystemTest context = systemTesting();
+
+    ServerDriver server = context.startServer();
+    WebDriver browser = context.startBrowser();
+    PetStoreDriver petstore = new PetStoreDriver(browser);
 
     @Before public void
     startApplication() throws Exception {
-        petstore.start();
-	}
+        petstore.open(context.routing());
+    }
 
     @After public void
     stopApplication() throws Exception {
-        petstore.stop();
-        database.stop();
+        petstore.close();
+        context.stopServer(server);
+        context.stopBrowser(browser);
+        context.cleanUp();
     }
 
     @Before public void
     iguanaAreForSale() throws Exception {
-        database.start();
         Product iguana = aProduct().withName("Iguana").build();
-        database.contain(iguana);
-        database.contain(
+        context.given(iguana);
+        context.given(
                 anItem().of(iguana).withNumber("12345678").describedAs("Green Adult").priced("18.50"),
                 anItem().of(iguana).withNumber("87654321").describedAs("Blue Female").priced("58.97"));
     }
@@ -56,8 +63,8 @@ public class ShopFeature {
         petstore.buy("Iguana", "12345678");
         petstore.showsItemQuantity("12345678", 1);
 
-        petstore.buy("Iguana","12345678");
+        petstore.buy("Iguana", "12345678");
         petstore.showsItemQuantity("12345678", 2);
         petstore.showsCartTotalQuantity(2);
-	}
+    }
 }

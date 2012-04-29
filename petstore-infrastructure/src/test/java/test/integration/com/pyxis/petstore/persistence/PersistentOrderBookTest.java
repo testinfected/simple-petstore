@@ -1,11 +1,14 @@
 package test.integration.com.pyxis.petstore.persistence;
 
 import com.pyxis.petstore.Maybe;
-import com.pyxis.petstore.domain.order.*;
+import com.pyxis.petstore.domain.order.CartItem;
+import com.pyxis.petstore.domain.order.LineItem;
+import com.pyxis.petstore.domain.order.Order;
+import com.pyxis.petstore.domain.order.OrderBook;
+import com.pyxis.petstore.domain.order.OrderNumber;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.After;
 import org.junit.Before;
@@ -13,27 +16,30 @@ import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.builders.OrderBuilder;
 import test.support.com.pyxis.petstore.db.Database;
+import test.support.com.pyxis.petstore.db.IntegrationTestContext;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testinfected.hamcrest.jpa.PersistenceMatchers.samePersistentFieldsAs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.fail;
+import static org.testinfected.hamcrest.jpa.PersistenceMatchers.samePersistentFieldsAs;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 import static test.support.com.pyxis.petstore.db.Database.idOf;
-import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
+import static test.support.com.pyxis.petstore.db.IntegrationTestContext.integrationTesting;
 
 public class PersistentOrderBookTest {
 
-    Database database = Database.connect(get(SessionFactory.class));
-    OrderBook orderBook = get(OrderBook.class);
+    IntegrationTestContext context = integrationTesting();
+
+    Database database = new Database(context.openSession());
+    OrderBook orderBook = context.getComponent(OrderBook.class);
 
     @Before
     public void cleanDatabase() {
@@ -42,7 +48,7 @@ public class PersistentOrderBookTest {
 
     @After
     public void closeDatabase() {
-        database.disconnect();
+        database.close();
     }
 
     @Test public void

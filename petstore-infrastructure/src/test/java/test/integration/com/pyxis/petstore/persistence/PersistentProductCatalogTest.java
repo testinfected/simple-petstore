@@ -5,13 +5,13 @@ import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.db.Database;
+import test.support.com.pyxis.petstore.db.IntegrationTestContext;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
@@ -19,16 +19,21 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
+import static test.support.com.pyxis.petstore.db.IntegrationTestContext.integrationTesting;
 
 public class PersistentProductCatalogTest {
 
-    ProductCatalog productCatalog = get(ProductCatalog.class);
-    Database database = Database.connect(get(SessionFactory.class));
+    IntegrationTestContext context = integrationTesting();
+
+    Database database = new Database(context.openSession());
+    ProductCatalog productCatalog = context.getComponent(ProductCatalog.class);
 
     @Before
     public void cleanDatabase() {
@@ -37,7 +42,7 @@ public class PersistentProductCatalogTest {
 
     @After
     public void closeDatabase() {
-        database.disconnect();
+        database.close();
     }
 
     @Test public void
@@ -80,12 +85,12 @@ public class PersistentProductCatalogTest {
         assertThat("matches", matches, containsProducts(productNamed("Labrador"), productNamed("Golden")));
     }
 
-    @Test (expected = ConstraintViolationException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutAName() throws Exception {
         productCatalog.add(aProduct().withoutAName().build());
     }
 
-    @Test (expected = ConstraintViolationException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void cannotPersistAProductWithoutANumber() throws Exception {
         productCatalog.add(aProduct().withoutANumber().build());
     }
@@ -107,11 +112,11 @@ public class PersistentProductCatalogTest {
         ProductBuilder someProduct = aProduct().withNumber("LAB-1234");
         database.persist(someProduct);
         try {
-			productCatalog.add(someProduct.build());
-			fail("No constraint violation");
-		} catch (org.hibernate.exception.ConstraintViolationException expected) {
-			assertTrue(true);
-		}
+            productCatalog.add(someProduct.build());
+            fail("No constraint violation");
+        } catch (org.hibernate.exception.ConstraintViolationException expected) {
+            assertTrue(true);
+        }
     }
 
     private void havingPersisted(Builder<?>... builders) throws Exception {

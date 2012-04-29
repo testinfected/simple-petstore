@@ -7,13 +7,13 @@ import com.pyxis.petstore.domain.product.Product;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.builders.ItemBuilder;
 import test.support.com.pyxis.petstore.db.Database;
+import test.support.com.pyxis.petstore.db.IntegrationTestContext;
 
 import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
@@ -29,12 +29,15 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
+import static test.support.com.pyxis.petstore.db.IntegrationTestContext.integrationTesting;
 
 public class PersistentItemInventoryTest {
 
-    Database database = Database.connect(get(SessionFactory.class));
-    ItemInventory itemInventory = get(ItemInventory.class);
+    IntegrationTestContext context = integrationTesting();
+
+    Database database = new Database(context.openSession());
+    ItemInventory itemInventory = context.getComponent(ItemInventory.class);
+
     Product product = aProduct().build();
 
     @Before
@@ -44,7 +47,7 @@ public class PersistentItemInventoryTest {
 
     @After
     public void closeDatabase() {
-        database.disconnect();
+        database.close();
     }
 
     @Test public void

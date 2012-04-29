@@ -202,12 +202,6 @@
                             <includes>
                                 <include>**/*Feature.java</include>
                             </includes>
-                            <systemPropertyVariables>
-                                <timeServer.host>${test.timeServer.host}</timeServer.host>
-                                <timeServer.port>${test.timeServer.port}</timeServer.port>
-                                <server.port>${test.server.port}</server.port>
-                                <context.path>${context.path}</context.path>
-                            </systemPropertyVariables>
                         </configuration>
                     </plugin>
 
@@ -262,14 +256,8 @@
                                 <include>**/*Feature.java</include>
                             </includes>
                             <systemPropertyVariables>
-                                <!-- Uncomment to change webdriver and jetty runtime options -->
-                                <!--<webdriver.factory.class>test.support.com.pyxis.petstore.web.webdriver.ClassicWebDriverFactory</webdriver.factory.class>-->
-                                <!--<webdriver.class>org.openqa.selenium.chrome.ChromeDriver</webdriver.class>-->
-                                <serverdriver.factory.class>test.support.com.pyxis.petstore.web.serverdriver.ExternallyManagedServerDriverFactory</serverdriver.factory.class>
-                                <timeServer.host>${test.timeServer.host}</timeServer.host>
-                                <timeServer.port>${test.timeServer.port}</timeServer.port>
-                                <server.port>${test.server.port}</server.port>
-                                <context.path>${context.path}</context.path>
+                                <server.lifecycle>external</server.lifecycle>
+                                <browser.lifecycle>lasting</browser.lifecycle>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>

@@ -6,22 +6,24 @@ import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.db.Database;
+import test.support.com.pyxis.petstore.db.IntegrationTestContext;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static test.support.com.pyxis.petstore.db.PersistenceContext.get;
+import static test.support.com.pyxis.petstore.db.IntegrationTestContext.integrationTesting;
 
 public class PersistentOrderNumberSequenceTest {
 
-    Database database = Database.connect(get(SessionFactory.class));
-    OrderNumberSequence orderNumberSequence = get(OrderNumberSequence.class);
+    IntegrationTestContext context = integrationTesting();
+
+    Database database = new Database(context.openSession());
+    OrderNumberSequence orderNumberSequence = context.getComponent(OrderNumberSequence.class);
 
     @Before
     public void cleanDatabase() {
@@ -30,7 +32,7 @@ public class PersistentOrderNumberSequenceTest {
 
     @After
     public void closeDatabase() {
-        database.disconnect();
+        database.close();
     }
 
     @Test public void

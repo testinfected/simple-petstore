@@ -4,24 +4,10 @@ import com.objogate.wl.UnsynchronizedProber;
 import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.WebDriver;
 import test.support.com.pyxis.petstore.web.page.*;
-import test.support.com.pyxis.petstore.web.serverdriver.ServerDriver;
-import test.support.com.pyxis.petstore.web.serverdriver.ServerDriverFactory;
-import test.support.com.pyxis.petstore.web.webdriver.WebDriverFactory;
 
 import java.math.BigDecimal;
 
-import static test.support.com.pyxis.petstore.web.Routes.urlFor;
-import static test.support.com.pyxis.petstore.web.serverdriver.AbstractServerDriverFactory.serverDriverFactory;
-import static test.support.com.pyxis.petstore.web.webdriver.AbstractWebDriverFactory.webDriverFactory;
-
 public class PetStoreDriver {
-
-    private final ServerDriverFactory serverDriverFactory = serverDriverFactory();
-    private final WebDriverFactory webDriverFactory = webDriverFactory();
-
-    private ServerDriver serverDriver;
-    private WebDriver webdriver;
-    private AsyncWebDriver browser;
 
     private HomePage homePage;
     private ProductsPage productsPage;
@@ -30,27 +16,8 @@ public class PetStoreDriver {
     private PurchasePage purchasePage;
     private ReceiptPage receiptPage;
 
-    public void start() throws Exception {
-        createDrivers();
-        startBrowser();
-    }
-
-    private void createDrivers() throws Exception {
-        createServerDriver();
-        createWebDriver();
-        createPageDrivers();
-    }
-
-    private void createServerDriver() throws Exception {
-        serverDriver = serverDriverFactory.newServerDriver();
-    }
-
-    private void createWebDriver() {
-        webdriver = webDriverFactory.newWebDriver();
-        browser = new AsyncWebDriver(new UnsynchronizedProber(), webdriver);
-    }
-
-    private void createPageDrivers() {
+    public PetStoreDriver(WebDriver webDriver) {
+        AsyncWebDriver browser = new AsyncWebDriver(new UnsynchronizedProber(), webDriver);
         homePage = new HomePage(browser);
         productsPage = new ProductsPage(browser);
         itemsPage = new ItemsPage(browser);
@@ -59,14 +26,12 @@ public class PetStoreDriver {
         receiptPage = new ReceiptPage(browser);
     }
 
-    private void startBrowser() {
-        browser.navigate().to(urlFor(HomePage.class));
-        homePage.logout();
+    public void open(Routes routes) {
+        homePage.navigateTo(routes);
     }
 
-    public void stop() throws Exception {
-        webDriverFactory.disposeWebDriver(webdriver);
-        serverDriverFactory.disposeServerDriver(serverDriver);
+    public void close() throws Exception {
+        homePage.logout();
     }
 
     public void searchFor(String keyword) {

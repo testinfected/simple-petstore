@@ -14,29 +14,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class Database {
 
-    private final SessionFactory sessionFactory;
     private Session session;
 
-    public static Database connect(SessionFactory sessionFactory) {
-        Database database = new Database(sessionFactory);
-        database.openConnection();
-        return database;
-    }
-
-    public Database(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    public void openConnection() {
-        session = sessionFactory.openSession();
+    public Database(Session session) {
+        this.session = session;
     }
 
     public void clean() {
-        if (session != null) new DatabaseCleaner(session).clean();
+        new DatabaseCleaner(session).clean();
     }
 
-    public void disconnect() {
-        if (session != null) session.close();
+    public void close() {
+        session.close();
     }
 
     public void persist(final Builder<?>... builders) throws Exception {
