@@ -6,7 +6,7 @@ import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.DatabaseCleaner;
 import test.support.com.pyxis.petstore.db.DatabaseMigrator;
-import test.support.com.pyxis.petstore.db.SpringContext;
+import test.support.com.pyxis.petstore.db.PersistenceContext;
 import test.support.com.pyxis.petstore.web.browser.BrowserLifeCycle;
 import test.support.com.pyxis.petstore.web.browser.BrowserLifeCycles;
 import test.support.com.pyxis.petstore.web.browser.BrowserProperties;
@@ -15,25 +15,25 @@ import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycles;
 import test.support.com.pyxis.petstore.web.server.ServerProperties;
 
-public final class SystemTest {
+public final class SystemTestContext {
 
     private static final String SYSTEM_TESTS_PROPERTIES = "system/test.properties";
 
-    private static SystemTest context;
+    private static SystemTestContext context;
 
-    private SpringContext spring;
+    private PersistenceContext spring;
     private ServerLifeCycle serverLifeCycle;
     private BrowserLifeCycle browserLifeCycle;
     private Routes routes;
 
-    public static SystemTest systemTesting() {
+    public static SystemTestContext systemTesting() {
         if (context == null) {
-            context = new SystemTest(Properties.load(SYSTEM_TESTS_PROPERTIES));
+            context = new SystemTestContext(Properties.load(SYSTEM_TESTS_PROPERTIES));
         }
         return context;
     }
 
-    public SystemTest(Properties properties) {
+    public SystemTestContext(Properties properties) {
         loadSpringContext(properties);
         migrateDatabase(properties);
         overrideApplicationProperties(properties);
@@ -47,7 +47,7 @@ public final class SystemTest {
     }
 
     private void loadSpringContext(Properties properties) {
-        this.spring = new SpringContext(properties.toJavaProperties());
+        this.spring = new PersistenceContext(properties.toJavaProperties());
     }
 
     private void migrateDatabase(Properties properties) {

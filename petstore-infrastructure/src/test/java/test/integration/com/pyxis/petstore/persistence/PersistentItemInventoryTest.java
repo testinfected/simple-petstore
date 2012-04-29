@@ -12,7 +12,7 @@ import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.ItemBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.DatabaseCleaner;
-import test.support.com.pyxis.petstore.db.IntegrationTest;
+import test.support.com.pyxis.petstore.db.IntegrationTestContext;
 
 import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
@@ -28,11 +28,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.db.IntegrationTest.integrationTesting;
+import static test.support.com.pyxis.petstore.db.IntegrationTestContext.integrationTesting;
 
 public class PersistentItemInventoryTest {
 
-    IntegrationTest context = integrationTesting();
+    IntegrationTestContext context = integrationTesting();
 
     Database database = new Database(context.openConnection());
     ItemInventory itemInventory = context.getComponent(ItemInventory.class);

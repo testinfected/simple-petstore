@@ -5,15 +5,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import test.support.com.pyxis.petstore.web.PetStoreDriver;
-import test.support.com.pyxis.petstore.web.SystemTest;
+import test.support.com.pyxis.petstore.web.SystemTestContext;
 import test.support.com.pyxis.petstore.web.server.ServerDriver;
 
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.web.SystemTest.systemTesting;
+import static test.support.com.pyxis.petstore.web.SystemTestContext.systemTesting;
 
 public class SearchFeature {
 
-    SystemTest context = systemTesting();
+    SystemTestContext context = systemTesting();
 
     ServerDriver server = context.startServer();
     WebDriver browser = context.startBrowser();

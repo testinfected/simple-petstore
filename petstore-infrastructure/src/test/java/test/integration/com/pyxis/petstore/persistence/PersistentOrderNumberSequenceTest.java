@@ -10,17 +10,17 @@ import org.junit.After;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.DatabaseCleaner;
-import test.support.com.pyxis.petstore.db.IntegrationTest;
+import test.support.com.pyxis.petstore.db.IntegrationTestContext;
 import test.support.com.pyxis.petstore.db.UnitOfWork;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static test.support.com.pyxis.petstore.db.IntegrationTest.integrationTesting;
+import static test.support.com.pyxis.petstore.db.IntegrationTestContext.integrationTesting;
 
 public class PersistentOrderNumberSequenceTest {
 
-    IntegrationTest context = integrationTesting();
+    IntegrationTestContext context = integrationTesting();
 
     Database database = new Database(context.openConnection());
     OrderNumberSequence orderNumberSequence = context.getComponent(OrderNumberSequence.class);

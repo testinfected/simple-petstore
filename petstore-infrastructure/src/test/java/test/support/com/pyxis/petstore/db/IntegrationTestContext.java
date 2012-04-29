@@ -3,27 +3,27 @@ package test.support.com.pyxis.petstore.db;
 import org.hibernate.Session;
 import test.support.com.pyxis.petstore.Properties;
 
-public class IntegrationTest {
+public class IntegrationTestContext {
 
     private static final String INTEGRATION_TEST_PROPERTIES = "integration/test.properties";
-    private static IntegrationTest context;
+    private static IntegrationTestContext context;
 
-    private SpringContext spring;
+    private PersistenceContext spring;
 
-    public static IntegrationTest integrationTesting() {
+    public static IntegrationTestContext integrationTesting() {
         if (context == null) {
-            context = new IntegrationTest(Properties.load(INTEGRATION_TEST_PROPERTIES));
+            context = new IntegrationTestContext(Properties.load(INTEGRATION_TEST_PROPERTIES));
         }
         return context;
     }
 
-    public IntegrationTest(Properties properties) {
+    public IntegrationTestContext(Properties properties) {
         loadSpringContext(properties);
         migrateDatabase(properties);
     }
 
     private void loadSpringContext(Properties properties) {
-        this.spring = new SpringContext(properties.toJavaProperties());
+        this.spring = new PersistenceContext(properties.toJavaProperties());
     }
 
     private void migrateDatabase(Properties properties) {

@@ -11,7 +11,7 @@ import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.DatabaseCleaner;
-import test.support.com.pyxis.petstore.db.IntegrationTest;
+import test.support.com.pyxis.petstore.db.IntegrationTestContext;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
@@ -26,11 +26,11 @@ import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.db.IntegrationTest.integrationTesting;
+import static test.support.com.pyxis.petstore.db.IntegrationTestContext.integrationTesting;
 
 public class PersistentProductCatalogTest {
 
-    IntegrationTest context = integrationTesting();
+    IntegrationTestContext context = integrationTesting();
 
     Database database = new Database(context.openConnection());
     ProductCatalog productCatalog = context.getComponent(ProductCatalog.class);
