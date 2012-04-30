@@ -2,8 +2,6 @@ package test.support.com.pyxis.petstore.web.server;
 
 import test.support.com.pyxis.petstore.Properties;
 
-import java.io.File;
-
 public class ServerProperties {
 
     public static final String LIFECYCLE = "server.lifecycle";
