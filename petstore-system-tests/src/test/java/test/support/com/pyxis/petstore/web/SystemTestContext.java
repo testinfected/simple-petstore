@@ -15,9 +15,12 @@ import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycles;
 import test.support.com.pyxis.petstore.web.server.ServerProperties;
 
+import static test.support.com.pyxis.petstore.Properties.load;
+
 public final class SystemTestContext {
 
-    private static final String SYSTEM_TESTS_PROPERTIES = "system/test.properties";
+    private static final String SYSTEM_TEST_PROPERTIES = "system/test.properties";
+    private static final String APPLICATION_PROPERTIES = "system/application.properties";
 
     private static SystemTestContext context;
 
@@ -28,18 +31,18 @@ public final class SystemTestContext {
 
     public static SystemTestContext systemTesting() {
         if (context == null) {
-            context = new SystemTestContext(Properties.load(SYSTEM_TESTS_PROPERTIES));
+            context = new SystemTestContext(load(SYSTEM_TEST_PROPERTIES), load(APPLICATION_PROPERTIES));
         }
         return context;
     }
 
-    public SystemTestContext(Properties properties) {
-        loadSpringContext(properties);
-        migrateDatabase(properties);
-        overrideApplicationProperties(properties);
-        selectServer(new ServerProperties(properties));
-        selectBrowser(new BrowserProperties(properties));
-        createRoutes(new ServerProperties(properties));
+    public SystemTestContext(Properties testProperties, Properties applicationProperties) {
+        loadSpringContext(testProperties);
+        migrateDatabase(testProperties);
+        overrideApplicationProperties(applicationProperties);
+        selectServer(new ServerProperties(testProperties));
+        selectBrowser(new BrowserProperties(testProperties));
+        createRoutes(new ServerProperties(testProperties));
     }
 
     private void createRoutes(ServerProperties properties) {
@@ -63,7 +66,7 @@ public final class SystemTestContext {
     }
 
     private void selectBrowser(BrowserProperties properties) {
-        browserLifeCycle = new BrowserLifeCycles().select(properties.lifeCycle());
+        browserLifeCycle = new BrowserLifeCycles(properties).select(properties.lifeCycle());
     }
 
     public void cleanUp() {
