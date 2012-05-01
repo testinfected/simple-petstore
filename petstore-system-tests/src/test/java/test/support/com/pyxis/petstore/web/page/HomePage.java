@@ -1,7 +1,6 @@
 package test.support.com.pyxis.petstore.web.page;
 
 import com.objogate.wl.web.AsyncWebDriver;
-import test.support.com.pyxis.petstore.web.Routes;
 
 import static java.lang.String.valueOf;
 import static org.hamcrest.Matchers.containsString;
@@ -25,10 +24,6 @@ public class HomePage extends Page {
 
     public void showsCartTotalQuantity(int quantity) {
         browser.element(cssSelector("#shopping-cart a")).assertText(containsString(valueOf(quantity)));
-    }
-
-    public void lookAtCartContent() {
-        browser.element(cssSelector("#shopping-cart a")).click();
     }
 
     public void logout() {
