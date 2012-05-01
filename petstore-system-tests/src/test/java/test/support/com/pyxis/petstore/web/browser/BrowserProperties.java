@@ -1,19 +1,18 @@
 package test.support.com.pyxis.petstore.web.browser;
 
-import org.openqa.selenium.Platform;
 import org.testinfected.hamcrest.ExceptionImposter;
 import test.support.com.pyxis.petstore.Properties;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class BrowserProperties {
     
     public static final String LIFECYCLE = "browser.lifecycle";
-    public static final String PROXY = "browser.proxy";
-    public static final String NAME = "browser.name";
-    public static final String VERSION = "browser.version";
-    public static final String PLATFORM = "browser.platform";
+    public static final String REMOTE_URL = "browser.remote.url";
+    public static final String CAPABILITY = "browser.remote.capability.";
 
     private final Properties properties;
 
@@ -22,26 +21,36 @@ public final class BrowserProperties {
     }
 
     public String lifeCycle() {
-        return System.getProperty(LIFECYCLE, properties.getValue(LIFECYCLE));
+        return valueOf(LIFECYCLE);
     }
 
-    public URL proxy() {
+    public URL remoteUrl() {
         try {
-            return new URL(System.getProperty(PROXY, properties.getValue(PROXY)));
+            return new URL(valueOf(REMOTE_URL));
         } catch (MalformedURLException e) {
             throw ExceptionImposter.imposterize(e);
         }
     }
 
-    public String name() {
-        return System.getProperty(NAME, properties.getValue(NAME));
+    public Map<String, String> capabilities() {
+        Map<String, String> capabilities = new HashMap<String, String>();
+        for (String property : properties.names()) {
+            if (isCapability(property)) {
+                capabilities.put(capabilityName(property), valueOf(property));
+            }
+        }
+        return capabilities;
     }
 
-    public String version() {
-        return System.getProperty(VERSION, properties.getValue(VERSION));
+    private String valueOf(String propertyName) {
+        return properties.getValue(propertyName);
     }
 
-    public Platform platform() {
-        return Platform.valueOf(System.getProperty(PLATFORM, properties.getValue(PLATFORM)));
+    private String capabilityName(String property) {
+        return property.substring(CAPABILITY.length());
+    }
+
+    private boolean isCapability(String property) {
+        return property.startsWith(CAPABILITY);
     }
 }

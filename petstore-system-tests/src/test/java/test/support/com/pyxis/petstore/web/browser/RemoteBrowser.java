@@ -13,12 +13,8 @@ public class RemoteBrowser implements BrowserLifeCycle {
     }
 
     public WebDriver start() {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setBrowserName(properties.name());
-        capabilities.setVersion(properties.version());
-        capabilities.setPlatform(properties.platform());
-        capabilities.setJavascriptEnabled(true);
-        return new RemoteWebDriver(properties.proxy(), capabilities);
+        DesiredCapabilities capabilities = new DesiredCapabilities(properties.capabilities());
+        return new RemoteWebDriver(properties.remoteUrl(), capabilities);
     }
 
     public void stop(WebDriver browser) {

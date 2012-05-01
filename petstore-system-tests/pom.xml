@@ -218,9 +218,8 @@
                             <systemPropertyVariables>
                                 <server.lifecycle>external</server.lifecycle>
                                 <browser.lifecycle>remote</browser.lifecycle>
-                                <browser.name>firefox</browser.name>
-                                <browser.platform>MAC</browser.platform>
-                                <browser.proxy>http://127.0.0.1:4444/wd/hub</browser.proxy>
+                                <browser.remote.url>http://127.0.0.1:4444/wd/hub</browser.remote.url>
+                                <browser.remote.capability.browserName>firefox</browser.remote.capability.browserName>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
