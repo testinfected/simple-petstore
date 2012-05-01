@@ -38,7 +38,7 @@ public class ServerProperties {
     }
 
     public String lifeCycle() {
-        return System.getProperty(LIFECYCLE, properties.getValue(LIFECYCLE));
+        return properties.getValue(LIFECYCLE);
     }
 
     public String urlFor(String path) {

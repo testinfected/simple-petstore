@@ -15,12 +15,9 @@ import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycles;
 import test.support.com.pyxis.petstore.web.server.ServerProperties;
 
-import static test.support.com.pyxis.petstore.Properties.load;
-
 public final class SystemTestContext {
 
     private static final String SYSTEM_TEST_PROPERTIES = "system/test.properties";
-    private static final String APPLICATION_PROPERTIES = "system/application.properties";
 
     private static SystemTestContext context;
 
@@ -31,18 +28,20 @@ public final class SystemTestContext {
 
     public static SystemTestContext systemTesting() {
         if (context == null) {
-            context = new SystemTestContext(load(SYSTEM_TEST_PROPERTIES), load(APPLICATION_PROPERTIES));
+            Properties properties = Properties.load(SYSTEM_TEST_PROPERTIES);
+            properties.override(Properties.system());
+            Properties.system().merge(properties);
+            context = new SystemTestContext(properties);
         }
         return context;
     }
 
-    public SystemTestContext(Properties testProperties, Properties applicationProperties) {
-        loadSpringContext(testProperties);
-        migrateDatabase(testProperties);
-        overrideApplicationProperties(applicationProperties);
-        selectServer(new ServerProperties(testProperties));
-        selectBrowser(new BrowserProperties(testProperties));
-        createRoutes(new ServerProperties(testProperties));
+    public SystemTestContext(Properties properties) {
+        loadSpringContext(properties);
+        migrateDatabase(properties);
+        selectServer(new ServerProperties(properties));
+        selectBrowser(new BrowserProperties(properties));
+        createRoutes(new ServerProperties(properties));
     }
 
     private void createRoutes(ServerProperties properties) {
@@ -55,10 +54,6 @@ public final class SystemTestContext {
 
     private void migrateDatabase(Properties properties) {
         new DatabaseMigrator(properties).migrate(spring.getDataSource());
-    }
-
-    private void overrideApplicationProperties(Properties properties) {
-        new SystemProperties().set(properties);
     }
 
     private void selectServer(ServerProperties properties) {

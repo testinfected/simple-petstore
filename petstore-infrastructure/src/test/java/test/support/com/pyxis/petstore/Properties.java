@@ -9,6 +9,10 @@ import static java.lang.Integer.parseInt;
 
 public class Properties {
 
+    public static Properties system() {
+        return new Properties(System.getProperties());
+    }
+
     public static Properties load(String name) {
         return load(name, Thread.currentThread().getContextClassLoader());
     }
@@ -41,11 +45,26 @@ public class Properties {
         return parseInt(getValue(name));
     }
 
-    public java.util.Properties toJavaProperties() {
-        return new java.util.Properties(properties);
-    }
-
     public Set<String> names() {
         return properties.stringPropertyNames();
     }
+
+    public java.util.Properties toJavaProperties() {
+        java.util.Properties javaProperties = new java.util.Properties();
+        javaProperties.putAll(properties);
+        return javaProperties;
+    }
+
+    public void merge(Properties defaults) {
+        for (String name : defaults.names()) {
+            if (!properties.containsKey(name)) properties.setProperty(name, defaults.getValue(name));
+        }
+    }
+
+    public void override(Properties other) {
+        for (String name : other.names()) {
+            properties.setProperty(name, other.getValue(name));
+        }
+    }
+
 }
