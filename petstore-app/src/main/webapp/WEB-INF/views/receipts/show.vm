@@ -71,7 +71,7 @@
     </div>
 
     <div id="receipt-actions">
-        <a id="continue-shopping" class="continue" href="$base">&laquo; continue shopping</a>
+        <a id="continue-shopping" class="continue" href="$base/">&laquo; continue shopping</a>
     </div>
 </div>
 </body>

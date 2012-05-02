@@ -20,22 +20,29 @@ public class MenuPartialTest {
 
     Routes routes =Routes.petstore();
     String MENU_PARTIAL_NAME = "decorators/_menu";
-    Element partial;
+    Element menuPartial;
 
     @Test public void
     linkIsInactiveWhenCartIsEmpty() {
-        partial = renderMenuPartial().using(aModel().with(aCart())).asDom();
-        assertThat("partial", partial, hasNoSelector("#shopping-cart a"));
-        assertThat("partial", partial, hasText(containsString("0")));
+        menuPartial = renderMenuPartial().using(aModel().with(aCart())).asDom();
+        assertThat("partial", menuPartial, hasNoSelector("#shopping-cart a"));
+        assertThat("partial", menuPartial, hasText(containsString("0")));
+    }
+
+    @Test public void
+    linksToHomePage() {
+        menuPartial = renderMenuPartial().asDom();
+        assertThat("partial", menuPartial, hasUniqueSelector("#home a",
+                hasAttribute("href", routes.homePath())));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     displaysTotalItemsInCartAndLinksToCart() throws Exception {
-        partial = renderMenuPartial().using(aModel().with(
+        menuPartial = renderMenuPartial().using(aModel().with(
                 aCart().containing(anItem(), anItem()))
         ).asDom();
-        assertThat("partial", partial,
+        assertThat("partial", menuPartial,
                 hasUniqueSelector("#shopping-cart a",
                         hasAttribute("href", routes.cartPath()),
                         hasText(containsString("2"))));

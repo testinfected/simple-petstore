@@ -117,4 +117,24 @@ public class PetStoreDriver {
     public void showsBillingInformation(String firstName, String lastName, String emailAddress) {
         receiptPage.showsBillingInformation(firstName, lastName, emailAddress);
     }
+
+    public void clickOnLogo() {
+        homePage.clickOnLogo();
+    }
+
+    public void isHome() {
+        homePage.displays();
+    }
+
+    public void jumpHome() {
+        homePage.jumpHome();
+    }
+
+    public void continueShopping() {
+        cartPage.continueShopping();
+    }
+
+    public void jumpToCart() {
+        homePage.jumpToCart();
+    }
 }

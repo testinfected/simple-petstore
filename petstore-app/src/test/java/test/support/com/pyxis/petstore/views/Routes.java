@@ -18,12 +18,12 @@ public final class Routes {
         return contextPath;
     }
 
-    public String homePath() {
-        return contextPath();
-    }
-
     public String pathFor(String relativePath) {
         return contextPath + "/" + relativePath;
+    }
+
+    public String homePath() {
+        return pathFor("");
     }
 
     public String itemsPath(String productNumber) {

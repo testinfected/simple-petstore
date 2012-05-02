@@ -13,9 +13,9 @@
 
 <div id="header">
     <div class="content">
-        <a href="$base" id="home-link">
-            <img src="$base/images/logo.png"/>
-        </a>
+        <div id="logo">
+            #parse("_logo.vm")
+        </div>
 
         <div id="search-box">
             #parse("_search.vm")

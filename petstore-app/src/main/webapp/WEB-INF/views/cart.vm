@@ -37,7 +37,7 @@
 		</tr>
 	 </table>
 	 <div id="cart-actions">
-		<a id="continue-shopping" class="continue" href="$base">&laquo; continue shopping</a>
+		<a id="continue-shopping" class="continue" href="$base/">&laquo; continue shopping</a>
 		<div id="checkout"><a href="$base/checkout">Checkout</a></div>
 	 </div>
 
