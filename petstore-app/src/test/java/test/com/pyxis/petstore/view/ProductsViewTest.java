@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.views.ModelBuilder;
+import test.support.com.pyxis.petstore.views.Routes;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,12 +29,11 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.views.PathFor.itemsPath;
-import static test.support.com.pyxis.petstore.views.PathFor.pathFor;
 import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 @RunWith(JMock.class)
 public class ProductsViewTest {
+    Routes routes = new Routes();
     String PRODUCTS_VIEW_NAME = "products";
     Object DEFAULT_PHOTO_URL = "url/of/missing.png";
     String keyword = "Iguana";
@@ -77,7 +77,7 @@ public class ProductsViewTest {
 
         productsView = renderProductsView().using(model).asDom();
         assertThat("view", productsView,
-                hasSelector(".product-link", hasImage(pathFor(photoUrl))));
+                hasSelector(".product-link", hasImage(routes.pathFor(photoUrl))));
         assertThat("view", productsView,
                 hasSelector(".product-name", hasText("Labrador")));
         assertThat("view", productsView,
@@ -97,13 +97,13 @@ public class ProductsViewTest {
         assertThat("view", productsView, hasUniqueSelector("#no-match"));
         assertThat("view", productsView, hasNoSelector("#catalog li"));
     }
-    
+
     @Test public void
     productNameAndPhotoLinkToProductInventory() {
         productsView = renderProductsView().using(model.listing(aProduct().withName("Labrador").withNumber("LAB-1234"))).asDom();
-    	assertThat("view", productsView,
-    			hasSelector("li a", everyItem(
-    					hasAttribute("href", equalTo(itemsPath("LAB-1234"))))));
+        assertThat("view", productsView,
+                hasSelector("li a", everyItem(
+                        hasAttribute("href", equalTo(routes.itemsPath("LAB-1234"))))));
     }
 
     private Matcher<Product> aProductWithNoPhoto() {

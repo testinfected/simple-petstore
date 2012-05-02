@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.AddressBuilder;
 import test.support.com.pyxis.petstore.views.MockErrors;
 import test.support.com.pyxis.petstore.views.ModelBuilder;
+import test.support.com.pyxis.petstore.views.Routes;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import java.util.ArrayList;
@@ -31,12 +32,12 @@ import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aMaster
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.views.MockErrors.errorsOn;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
-import static test.support.com.pyxis.petstore.views.PathFor.purchasesPath;
 import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 @SuppressWarnings("unchecked")
 public class NewPurchaseViewTest {
 
+    Routes routes = new Routes();
     String NEW_PURCHASE_VIEW_NAME = "purchases/new";
     Element newPurchaseView;
     ModelBuilder model;
@@ -57,7 +58,7 @@ public class NewPurchaseViewTest {
     @Test public void
     displaysPurchaseForm() {
         assertThat("view", newPurchaseView, hasCheckoutForm(
-                hasAttribute("action", purchasesPath()),
+                hasAttribute("action", routes.purchasesPath()),
                 hasAttribute("method", "post")
         ));
         assertThat("view", newPurchaseView, hasCheckoutForm(hasEmptyBillingInformation()));

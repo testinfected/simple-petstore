@@ -4,6 +4,7 @@ import com.pyxis.petstore.domain.product.Item;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.ItemBuilder;
+import test.support.com.pyxis.petstore.views.Routes;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,12 +19,11 @@ import static org.testinfected.hamcrest.dom.DomMatchers.matches;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
-import static test.support.com.pyxis.petstore.views.PathFor.checkoutPath;
-import static test.support.com.pyxis.petstore.views.PathFor.homePath;
 import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class CartViewTest {
 
+    Routes routes = new Routes();
     String CART_VIEW_NAME = "cart";
     Element cartView;
 
@@ -76,13 +76,13 @@ public class CartViewTest {
     @Test public void
     returnsToHomePageToContinueShopping() {
         cartView = renderCartView().using(aModel().with(aCart().containing(anItem()))).asDom();
-        assertThat("view", cartView, hasUniqueSelector("a#continue-shopping", hasAttribute("href", homePath())));
+        assertThat("view", cartView, hasUniqueSelector("a#continue-shopping", hasAttribute("href", routes.homePath())));
     }
 
     @Test public void
     checkingOutRendersPaymentForm() {
         cartView = renderCartView().using(aModel().with(aCart().containing(anItem()))).asDom();
-        assertThat("view", cartView, hasUniqueSelector("#checkout a", hasAttribute("href", checkoutPath())));
+        assertThat("view", cartView, hasUniqueSelector("#checkout a", hasAttribute("href", routes.checkoutPath())));
     }
 
     private VelocityRendering renderCartView() {

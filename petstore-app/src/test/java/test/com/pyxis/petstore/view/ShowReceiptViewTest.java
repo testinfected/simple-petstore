@@ -6,22 +6,29 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.views.ModelBuilder;
+import test.support.com.pyxis.petstore.views.Routes;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
-import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.matches;
+import static org.testinfected.hamcrest.dom.DomMatchers.matchesInAnyOrder;
 import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
-import static test.support.com.pyxis.petstore.views.PathFor.homePath;
 import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class ShowReceiptViewTest {
 
+    Routes routes = new Routes();
     String SHOW_RECEIPT_VIEW_NAME = "receipts/show";
     Element showReceiptView;
     ModelBuilder model;
@@ -35,22 +42,22 @@ public class ShowReceiptViewTest {
                 priced("100.00").build();
         Item anItemOrderedOnce = anItem().priced("258.97").build();
         model = aModel().with(
-                    anOrder().
+                anOrder().
                         withNumber("00000100").
                         from(aCart().containing(
                                 anItemOrderedSeveralTimes,
                                 anItemOrderedSeveralTimes,
                                 anItemOrderedOnce)).
                         paidWith(aVisa().
-                            withNumber("9999 9999 9999").
-                            withExpiryDate("12/12").
-                            billedTo(anAddress().
-                                withFirstName("John").
-                                withLastName("Doe").
-                                withEmail("jdoe@gmail.com")
-                            )
+                                withNumber("9999 9999 9999").
+                                withExpiryDate("12/12").
+                                billedTo(anAddress().
+                                        withFirstName("John").
+                                        withLastName("Doe").
+                                        withEmail("jdoe@gmail.com")
+                                )
                         )
-                    );
+        );
 
         showReceiptView = renderShowReceiptView().using(model).asDom();
     }
@@ -107,11 +114,7 @@ public class ShowReceiptViewTest {
 
     @Test public void
     returnsToHomePageToContinueShopping() {
-        assertThat("view", showReceiptView, hasUniqueSelector("a#continue-shopping", hasAttribute("href", homePath())));
-    }
-
-    private VelocityRendering renderShowReceiptView() {
-        return render(SHOW_RECEIPT_VIEW_NAME);
+        assertThat("view", showReceiptView, hasUniqueSelector("a#continue-shopping", hasAttribute("href", routes.homePath())));
     }
 
     private Matcher<Element> hasOrderNumber(final String orderNumber) {
@@ -120,5 +123,9 @@ public class ShowReceiptViewTest {
 
     private Matcher<Element> hasOrderTotal(final String orderTotal) {
         return hasUniqueSelector("#order-total", hasText(orderTotal));
+    }
+
+    private VelocityRendering renderShowReceiptView() {
+        return render(SHOW_RECEIPT_VIEW_NAME);
     }
 }

@@ -2,6 +2,7 @@ package test.com.pyxis.petstore.view;
 
 import org.junit.Test;
 import org.w3c.dom.Element;
+import test.support.com.pyxis.petstore.views.Routes;
 import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,11 +20,11 @@ import static org.testinfected.hamcrest.dom.DomMatchers.matches;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.aModel;
 import static test.support.com.pyxis.petstore.views.ModelBuilder.anEmptyModel;
-import static test.support.com.pyxis.petstore.views.PathFor.cartItemsPath;
 import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class ItemsViewTest {
 
+    Routes routes = new Routes();
     String ITEMS_VIEW_NAME = "items";
     Element itemsView;
 
@@ -74,7 +75,7 @@ public class ItemsViewTest {
         itemsView = renderItemsView().using(aModel().listing(anItem().withNumber("12345678"))).asDom();
         assertThat("view", itemsView,
                 hasUniqueSelector("form",
-                        hasAttribute("action", cartItemsPath()),
+                        hasAttribute("action", routes.cartItemsPath()),
                         hasAttribute("method", "post"),
                         hasUniqueSelector("button", hasId("add-to-cart-12345678"))));
         assertThat("view", itemsView,

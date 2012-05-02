@@ -30,9 +30,10 @@ public class VelocityRendering {
 	private static final String VIEWS_PROPERTIES_FILENAME = "/views.properties";
 	private static final String VELOCITY_EXTENSION = ".vm";
     private static final String PETSTORE_MACRO_LIBRARY = "com/pyxis/petstore/helpers/petstore.vm";
-    
+
     private VelocityEngine velocityEngine;
 
+    private Routes routes = new Routes();
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
     private final String template;
     private String encoding = DEFAULT_ENCODING;
@@ -48,8 +49,13 @@ public class VelocityRendering {
 	}
 
 	public static VelocityRendering render(String template) {
-		return new VelocityRendering(template);
+        return new VelocityRendering(template);
 	}
+    
+    public VelocityRendering using(Routes routes) {
+        this.routes = routes;
+        return this;
+    }
 
 	private void loadVelocityEngine() {
 		try {
@@ -126,7 +132,7 @@ public class VelocityRendering {
     }
 
     private void setupTools() {
-        model.put("base", PathFor.BASE_URL);
+        model.put("base", routes.contextPath());
         model.put("display", new DisplayTool());
         model.put("date", dateTool());
     }
