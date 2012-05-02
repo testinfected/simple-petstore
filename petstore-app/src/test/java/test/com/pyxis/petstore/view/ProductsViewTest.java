@@ -52,7 +52,7 @@ public class ProductsViewTest {
     @Before public void
     setUpDefaultPhoto() {
         context.checking(new Expectations() {{
-            allowing(attachmentStorage).getAttachmentUrl(with(aProductWithNoPhoto())); will(returnValue(DEFAULT_PHOTO_URL));
+            allowing(attachmentStorage).getAttachmentUri(with(aProductWithNoPhoto())); will(returnValue(DEFAULT_PHOTO_URL));
         }});
     }
 
@@ -72,7 +72,7 @@ public class ProductsViewTest {
                 withPhoto("labrador.png"));
         final String photoUrl = "path/to/attachment/labrador.png";
         context.checking(new Expectations() {{
-            allowing(attachmentStorage).getAttachmentUrl(with(aProductWithPhoto("labrador.png"))); will(returnValue(photoUrl));
+            allowing(attachmentStorage).getAttachmentUri(with(aProductWithPhoto("labrador.png"))); will(returnValue(photoUrl));
         }});
 
         productsView = renderProductsView().using(model).asDom();

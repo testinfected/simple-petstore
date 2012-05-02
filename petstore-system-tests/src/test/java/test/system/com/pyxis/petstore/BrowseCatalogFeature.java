@@ -25,7 +25,7 @@ public class BrowseCatalogFeature {
 
     @Before public void
     startApplication() {
-        petstore.open(context.routing());
+        petstore.open(context.routes());
     }
 
     @After public void

@@ -1,7 +1,7 @@
 package test.support.com.pyxis.petstore.web.page;
 
 import com.objogate.wl.web.AsyncWebDriver;
-import test.support.com.pyxis.petstore.web.Routes;
+import test.support.com.pyxis.petstore.web.Routing;
 
 public abstract class Page {
 
@@ -11,7 +11,7 @@ public abstract class Page {
         this.browser = browser;
     }
 
-    public void navigateTo(Routes routes) {
+    public void navigateThrough(Routing routes) {
         browser.navigate().to(routes.urlFor(getClass()));
     }
 }

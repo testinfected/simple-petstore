@@ -13,11 +13,11 @@ public class SimplePhotoFileStore implements AttachmentStorage {
         this.rootPath = rootPath;
     }
 
-    public String getAttachmentUrl(Product product) {
-        return product.hasPhoto() ? urlOf(product.getPhotoFileName()) : urlOf(MISSING_PHOTO);
+    public String getAttachmentUri(Product product) {
+        return product.hasPhoto() ? uriOf(product.getPhotoFileName()) : uriOf(MISSING_PHOTO);
     }
 
-    private String urlOf(String photoName) {
+    private String uriOf(String photoName) {
         return rootPath + "/" + photoName;
     }
 }

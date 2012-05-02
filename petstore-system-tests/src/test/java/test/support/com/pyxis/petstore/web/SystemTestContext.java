@@ -24,7 +24,7 @@ public final class SystemTestContext {
     private PersistenceContext spring;
     private ServerLifeCycle serverLifeCycle;
     private BrowserLifeCycle browserLifeCycle;
-    private Routes routes;
+    private Routing routing;
 
     public static SystemTestContext systemTesting() {
         if (context == null) {
@@ -45,7 +45,7 @@ public final class SystemTestContext {
     }
 
     private void createRoutes(ServerProperties properties) {
-        this.routes = new Routes(properties);
+        this.routing = new Routing(properties);
     }
 
     private void loadSpringContext(Properties properties) {
@@ -98,7 +98,7 @@ public final class SystemTestContext {
         browserLifeCycle.stop(browser);
     }
 
-    public Routes routing() {
-        return routes;
+    public Routing routes() {
+        return routing;
     }
 }

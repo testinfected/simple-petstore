@@ -1,6 +1,10 @@
 package test.support.com.pyxis.petstore.web.server;
 
+import org.testinfected.hamcrest.ExceptionImposter;
 import test.support.com.pyxis.petstore.Properties;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ServerProperties {
 
@@ -41,7 +45,11 @@ public class ServerProperties {
         return properties.getValue(LIFECYCLE);
     }
 
-    public String urlFor(String path) {
-        return String.format("%s://%s:%s%s%s", scheme(), host(), port(), contextPath(), path);
+    public URL urlFor(String relativePath) {
+        try {
+            return new URL(String.format("%s://%s:%s%s/%s", scheme(), host(), port(), contextPath(), relativePath));
+        } catch (MalformedURLException e) {
+            throw ExceptionImposter.imposterize(e);
+        }
     }
 }

@@ -26,8 +26,8 @@ public class PetStoreDriver {
         receiptPage = new ReceiptPage(browser);
     }
 
-    public void open(Routes routes) {
-        homePage.navigateTo(routes);
+    public void open(Routing routing) {
+        homePage.navigateThrough(routing);
     }
 
     public void close() {
