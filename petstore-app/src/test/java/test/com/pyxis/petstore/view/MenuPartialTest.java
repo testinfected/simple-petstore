@@ -18,7 +18,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class MenuPartialTest {
 
-    Routes routes =Routes.petstore();
+    Routes routes =Routes.toPetstore();
     String MENU_PARTIAL_NAME = "decorators/_menu";
     Element menuPartial;
 
@@ -49,6 +49,6 @@ public class MenuPartialTest {
     }
 
     private VelocityRendering renderMenuPartial() {
-        return render(MENU_PARTIAL_NAME);
+        return render(MENU_PARTIAL_NAME).using(routes);
     }
 }

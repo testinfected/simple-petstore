@@ -28,8 +28,8 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class ShowReceiptViewTest {
 
-    Routes routes = Routes.petstore();
-    String SHOW_RECEIPT_VIEW_NAME = "receipts/show";
+    Routes routes = Routes.toPetstore();
+    String SHOW_RECEIPT_VIEW_TEMPLATE = "receipts/show";
     Element showReceiptView;
     ModelBuilder model;
     String orderTotal = "458.97";
@@ -126,6 +126,6 @@ public class ShowReceiptViewTest {
     }
 
     private VelocityRendering renderShowReceiptView() {
-        return render(SHOW_RECEIPT_VIEW_NAME);
+        return render(SHOW_RECEIPT_VIEW_TEMPLATE).using(routes);
     }
 }

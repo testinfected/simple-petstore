@@ -23,8 +23,8 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class CartViewTest {
 
-    Routes routes = Routes.petstore();
-    String CART_VIEW_NAME = "cart";
+    Routes routes = Routes.toPetstore();
+    String CART_VIEW_TEMPLATE = "cart";
     Element cartView;
 
     @SuppressWarnings("unchecked")
@@ -86,6 +86,6 @@ public class CartViewTest {
     }
 
     private VelocityRendering renderCartView() {
-        return render(CART_VIEW_NAME);
+        return render(CART_VIEW_TEMPLATE).using(routes);
     }
 }

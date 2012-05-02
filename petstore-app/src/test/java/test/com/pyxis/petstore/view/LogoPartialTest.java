@@ -12,7 +12,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class LogoPartialTest {
 
-    Routes routes = Routes.petstore();
+    Routes routes = Routes.toPetstore();
     String LOGO_PARTIAL_NAME = "decorators/_logo";
     Element partial;
 
@@ -23,6 +23,6 @@ public class LogoPartialTest {
     }
 
     private VelocityRendering renderLogoPartial() {
-        return render(LOGO_PARTIAL_NAME);
+        return render(LOGO_PARTIAL_NAME).using(routes);
     }
 }

@@ -6,7 +6,7 @@ public final class Routes {
 
     private final String contextPath;
 
-    public static Routes petstore() {
+    public static Routes toPetstore() {
         return new Routes(PETSTORE_CONTEXT_PATH);
     }
 

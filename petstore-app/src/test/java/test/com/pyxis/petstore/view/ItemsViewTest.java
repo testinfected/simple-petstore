@@ -24,8 +24,8 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class ItemsViewTest {
 
-    Routes routes = Routes.petstore();
-    String ITEMS_VIEW_NAME = "items";
+    Routes routes = Routes.toPetstore();
+    String ITEMS_VIEW_TEMPLATE = "items";
     Element itemsView;
 
     @Test public void
@@ -85,6 +85,6 @@ public class ItemsViewTest {
     }
 
     private VelocityRendering renderItemsView() {
-        return render(ITEMS_VIEW_NAME);
+        return render(ITEMS_VIEW_TEMPLATE).using(routes);
     }
 }

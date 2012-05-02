@@ -33,7 +33,7 @@ public class VelocityRendering {
 
     private VelocityEngine velocityEngine;
 
-    private Routes routes = Routes.petstore();
+    private Routes routes = Routes.toPetstore();
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
     private final String template;
     private String encoding = DEFAULT_ENCODING;
@@ -100,13 +100,13 @@ public class VelocityRendering {
 		this.encoding = encoding;
 	}
 
-    public VelocityRendering using(ModelBuilder modelBuilder) {
-        return using(modelBuilder.asMap());
-    }
-
     public VelocityRendering bind(BindingResult result) {
         mockRequestContext.bind(result);
         return this;
+    }
+
+    public VelocityRendering using(ModelBuilder modelBuilder) {
+        return using(modelBuilder.asMap());
     }
 
 	public VelocityRendering using(Map<String, Object> model) {
@@ -119,16 +119,16 @@ public class VelocityRendering {
         return renderedView;
     }
 
+    public Element asDom() {
+        return toElement(asString());
+    }
+
     private void render() {
         renderedView = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, templateFileName(), this.encoding, model);
     }
 
     private void exposeRequestContext() {
         model.put(AbstractTemplateView.SPRING_MACRO_REQUEST_CONTEXT_ATTRIBUTE, mockRequestContext);
-    }
-
-    public Element asDom() {
-        return toElement(asString());
     }
 
     private void setupTools() {
