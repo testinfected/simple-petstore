@@ -51,6 +51,7 @@ public class ShopFeature {
         petstore.showsItemInCart("12345678", "Green Adult", "18.50");
         petstore.showsGrandTotal("18.50");
         petstore.showsCartTotalQuantity(1);
+        petstore.continueShopping();
 
         petstore.buy("Iguana", "87654321");
         petstore.showsItemInCart("87654321", "Blue Female", "58.97");
