@@ -1,10 +1,10 @@
 package test.support.com.pyxis.petstore.views;
 
+import org.springframework.core.io.FileSystemResourceLoader;
 import org.testinfected.hamcrest.ExceptionImposter;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.generic.DateTool;
 import org.apache.velocity.tools.generic.DisplayTool;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.ui.ExtendedModelMap;
@@ -31,11 +31,11 @@ public class VelocityRendering {
 	private static final String VELOCITY_EXTENSION = ".vm";
     private static final String PETSTORE_MACRO_LIBRARY = "com/pyxis/petstore/helpers/petstore.vm";
 
-    private VelocityEngine velocityEngine;
-
-    private Routes routes = Routes.toPetstore();
-    private ResourceLoader resourceLoader = new DefaultResourceLoader();
     private final String template;
+
+    private VelocityEngine velocityEngine;
+    private Routes routes = Routes.toPetstore();
+    private ResourceLoader resourceLoader = new FileSystemResourceLoader();
     private String encoding = DEFAULT_ENCODING;
     private String renderedView;
     private MockRequestContext mockRequestContext = new MockRequestContext();
@@ -66,8 +66,10 @@ public class VelocityRendering {
                             VelocityEngine.VM_LIBRARY, PETSTORE_MACRO_LIBRARY);
                 }
             };
-            velocityConfigurer.setConfigLocation(getResource(velocityPropertyFileUrl()));
-			velocityConfigurer.setResourceLoaderPath(templatesBaseUrl());
+            Properties properties = loadViewProperties();
+            velocityConfigurer.setConfigLocation(getResource(velocityConfigFileUrl(properties)));
+            velocityConfigurer.setResourceLoader(resourceLoader);
+			velocityConfigurer.setResourceLoaderPath(templatesBaseUrl(properties));
             velocityConfigurer.setOverrideLogging(false);
 			velocityConfigurer.afterPropertiesSet();
 			velocityEngine = velocityConfigurer.getVelocityEngine();
@@ -80,18 +82,22 @@ public class VelocityRendering {
         return resourceLoader.getResource(location);
     }
 
-    private String velocityPropertyFileUrl() throws IOException {
-        return getViewProperty(VELOCITY_CONFIG_FILE_URL_KEY);
+    private String velocityConfigFileUrl(Properties properties) throws IOException {
+        return properties.getProperty(VELOCITY_CONFIG_FILE_URL_KEY);
     }
 
-    private String templatesBaseUrl() throws IOException {
-        return getViewProperty(TEMPLATES_BASE_URL_KEY);
+    private String templatesBaseUrl(Properties properties) {
+        return properties.getProperty(TEMPLATES_BASE_URL_KEY);
     }
 
-    private String getViewProperty(final String key) throws IOException {
-        Properties properties = new Properties();
-        properties.load(VelocityRendering.class.getResourceAsStream(VIEWS_PROPERTIES_FILENAME));
-        return properties.getProperty(key);
+    private Properties loadViewProperties() {
+        try {
+            Properties properties = new Properties();
+            properties.load(VelocityRendering.class.getResourceAsStream(VIEWS_PROPERTIES_FILENAME));
+            return properties;
+        } catch (IOException e) {
+            throw ExceptionImposter.imposterize(e);
+        }
     }
 
     public void withEncoding(String encoding) {
@@ -145,7 +151,7 @@ public class VelocityRendering {
         return dateTool;
     }
 
-    private String templateFileName() {
+    private String templateFileName()  {
 		return template + VELOCITY_EXTENSION;
 	}
 }
