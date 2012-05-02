@@ -33,7 +33,7 @@ public class VelocityRendering {
 
     private VelocityEngine velocityEngine;
 
-    private Routes routes = new Routes();
+    private Routes routes = Routes.petstore();
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
     private final String template;
     private String encoding = DEFAULT_ENCODING;

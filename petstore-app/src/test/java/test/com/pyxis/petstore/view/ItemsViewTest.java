@@ -24,7 +24,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class ItemsViewTest {
 
-    Routes routes = new Routes();
+    Routes routes = Routes.petstore();
     String ITEMS_VIEW_NAME = "items";
     Element itemsView;
 

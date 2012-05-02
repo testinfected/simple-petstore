@@ -18,7 +18,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class MenuPartialTest {
 
-    Routes routes = new Routes();
+    Routes routes =Routes.petstore();
     String MENU_PARTIAL_NAME = "decorators/_menu";
     Element partial;
 

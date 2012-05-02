@@ -28,7 +28,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class ShowReceiptViewTest {
 
-    Routes routes = new Routes();
+    Routes routes = Routes.petstore();
     String SHOW_RECEIPT_VIEW_NAME = "receipts/show";
     Element showReceiptView;
     ModelBuilder model;

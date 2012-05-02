@@ -23,7 +23,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 public class CartViewTest {
 
-    Routes routes = new Routes();
+    Routes routes = Routes.petstore();
     String CART_VIEW_NAME = "cart";
     Element cartView;
 

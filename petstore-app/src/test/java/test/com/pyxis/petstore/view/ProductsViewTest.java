@@ -33,7 +33,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 
 @RunWith(JMock.class)
 public class ProductsViewTest {
-    Routes routes = new Routes();
+    Routes routes = Routes.petstore();
     String PRODUCTS_VIEW_NAME = "products";
     Object DEFAULT_PHOTO_URL = "url/of/missing.png";
     String keyword = "Iguana";

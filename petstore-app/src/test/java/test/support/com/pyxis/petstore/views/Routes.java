@@ -2,12 +2,12 @@ package test.support.com.pyxis.petstore.views;
 
 public final class Routes {
 
-    public static final String DEFAULT_CONTEXT_PATH = "/petstore";
+    private static final String PETSTORE_CONTEXT_PATH = "/petstore";
 
     private final String contextPath;
 
-    public Routes() {
-        this(DEFAULT_CONTEXT_PATH);
+    public static Routes petstore() {
+        return new Routes(PETSTORE_CONTEXT_PATH);
     }
 
     public Routes(String contextPath) {

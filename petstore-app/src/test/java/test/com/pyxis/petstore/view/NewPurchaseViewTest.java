@@ -37,7 +37,7 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 @SuppressWarnings("unchecked")
 public class NewPurchaseViewTest {
 
-    Routes routes = new Routes();
+    Routes routes = Routes.petstore();
     String NEW_PURCHASE_VIEW_NAME = "purchases/new";
     Element newPurchaseView;
     ModelBuilder model;
