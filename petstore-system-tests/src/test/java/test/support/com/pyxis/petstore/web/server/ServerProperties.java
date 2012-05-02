@@ -45,9 +45,9 @@ public class ServerProperties {
         return properties.getValue(LIFECYCLE);
     }
 
-    public URL urlFor(String relativePath) {
+    public URL urlFor(String path) {
         try {
-            return new URL(String.format("%s://%s:%s%s/%s", scheme(), host(), port(), contextPath(), relativePath));
+            return new URL(String.format("%s://%s:%s%s%s", scheme(), host(), port(), contextPath(), path));
         } catch (MalformedURLException e) {
             throw ExceptionImposter.imposterize(e);
         }

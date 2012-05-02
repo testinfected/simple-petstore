@@ -14,7 +14,7 @@ public final class Routing {
     private final Map<Class<? extends Page>, String> routes = new HashMap<Class<? extends Page>, String>();
 
     {
-        routes.put(HomePage.class, "");
+        routes.put(HomePage.class, "/");
     }
 
     public Routing(ServerProperties server) {
