@@ -8,7 +8,7 @@
         </layout>
     </appender>
     <appender name="file" class="org.apache.log4j.RollingFileAppender">
-        <param name="file" value="${log.dir}/${test.log.file}"/>
+        <param name="file" value="${test.log.dir}/${test.log.file}"/>
         <param name="maxFileSize" value="512KB"/>
         <param name="maxBackupIndex" value="3"/>
         <layout class="org.apache.log4j.PatternLayout">

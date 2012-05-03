@@ -314,7 +314,7 @@
                         </goals>
                         <configuration>
                             <files>
-                                <file>${main.basedir}/build.properties</file>
+                                <file>${main.basedir}/test.properties</file>
                                 <file>${main.basedir}/${env}.properties</file>
                             </files>
                         </configuration>
