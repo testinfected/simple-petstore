@@ -84,6 +84,12 @@ public class ItemsViewTest {
                         hasAttribute("value", "12345678")));
     }
 
+    @Test public void
+    returnsToHomePageToContinueShopping() {
+        itemsView = renderItemsView().asDom();
+        assertThat("view", itemsView, hasUniqueSelector("a#continue-shopping", hasAttribute("href", routes.homePath())));
+    }
+
     private VelocityRendering renderItemsView() {
         return render(ITEMS_VIEW_TEMPLATE).using(routes);
     }

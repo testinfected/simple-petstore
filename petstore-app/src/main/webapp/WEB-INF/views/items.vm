@@ -31,7 +31,7 @@
 		 </table>
 	 #end
 	 <div id="items-actions">
-		<a class="continue" href="$base">&laquo; continue shopping</a>
+		<a id="continue-shopping" class="continue" href="$base/">&laquo; continue shopping</a>
 	 </div>
 </div>
 </body>
