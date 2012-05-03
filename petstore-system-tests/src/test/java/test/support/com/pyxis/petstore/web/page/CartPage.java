@@ -50,6 +50,10 @@ public class CartPage extends Page {
     public void checkout() {
         browser.element(cssSelector("#checkout a")).click();
     }
+
+    public void displays() {
+        browser.assertTitle(containsString("Cart"));
+    }
 }
 
 

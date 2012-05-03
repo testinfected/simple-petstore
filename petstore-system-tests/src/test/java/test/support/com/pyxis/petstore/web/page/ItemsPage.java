@@ -3,6 +3,7 @@ package test.support.com.pyxis.petstore.web.page;
 import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.By;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.testinfected.hamcrest.core.StringMatchers.being;
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
@@ -45,5 +46,9 @@ public class ItemsPage extends Page {
 
     private By add(String itemNumber) {
         return cssSelector("#add-to-cart-" + itemNumber);
+    }
+
+    public void displays() {
+        browser.assertTitle(containsString("PetStore - Items"));
     }
 }

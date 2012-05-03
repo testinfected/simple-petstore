@@ -7,7 +7,7 @@ import org.junit.Test;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
-public class SiteNavigationFeature extends Feature {
+public class NavigateSiteFeature extends FeatureTemplate {
 
     @Before public void
     inventoryIsNotEmpty() {
@@ -19,21 +19,19 @@ public class SiteNavigationFeature extends Feature {
     }
 
     @Test public void
-    abandonsBrowsingCatalog() {
+    stopsBrowsingCatalog() {
         petstore.consultInventoryOf("Iguana");
-        petstore.clickOnLogo();
-        petstore.isHome();
-        petstore.consultInventoryOf("Salamander");
-        petstore.jumpHome();
-        petstore.isHome();
+        petstore.continueShopping();
+        petstore.returnHome();
     }
 
     @Test public void
-    reviewCartContentWhileShopping() {
-        petstore.buy("Iguana", "12345678");
-        petstore.consultInventoryOf("Salamander");
-        petstore.jumpToCart();
-        petstore.showsGrandTotal("50.00");
-    }
+    reviewsCartContentWhileShopping() {
+        petstore.consultInventoryOf("Iguana");
+        petstore.buy("12345678");
+        petstore.continueShopping();
 
+        petstore.consultInventoryOf("Salamander");
+        petstore.reviewCart();
+    }
 }

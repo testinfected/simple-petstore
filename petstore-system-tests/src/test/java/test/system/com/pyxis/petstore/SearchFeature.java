@@ -1,36 +1,10 @@
 package test.system.com.pyxis.petstore;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import test.support.com.pyxis.petstore.web.PetStoreDriver;
-import test.support.com.pyxis.petstore.web.SystemTestContext;
-import test.support.com.pyxis.petstore.web.server.ServerDriver;
 
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.web.SystemTestContext.systemTesting;
 
-public class SearchFeature {
-
-    SystemTestContext context = systemTesting();
-
-    ServerDriver server = context.startServer();
-    WebDriver browser = context.startBrowser();
-    PetStoreDriver petstore = new PetStoreDriver(browser);
-
-    @Before public void
-    startApplication() {
-        petstore.open(context.routes());
-    }
-
-    @After public void
-    stopApplication() {
-        petstore.close();
-        context.stopServer(server);
-        context.stopBrowser(browser);
-        context.cleanUp();
-    }
+public class SearchFeature extends FeatureTemplate {
 
     @Test public void
     searchesForAProductNotAvailableInStore() {

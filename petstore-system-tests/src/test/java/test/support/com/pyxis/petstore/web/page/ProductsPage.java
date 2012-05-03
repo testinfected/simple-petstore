@@ -2,6 +2,7 @@ package test.support.com.pyxis.petstore.web.page;
 
 import com.objogate.wl.web.AsyncWebDriver;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.testinfected.hamcrest.core.StringMatchers.being;
 import static org.openqa.selenium.By.*;
 
@@ -26,4 +27,8 @@ public class ProductsPage extends Page {
     public void browseItemsOf(String productName) {
         browser.element(linkText(productName)).click();
 	}
+
+    public void displays() {
+        browser.assertTitle(containsString("Products"));
+    }
 }

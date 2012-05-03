@@ -9,15 +9,18 @@ import java.math.BigDecimal;
 
 public class PetStoreDriver {
 
-    private HomePage homePage;
-    private ProductsPage productsPage;
-    private ItemsPage itemsPage;
-    private CartPage cartPage;
-    private PurchasePage purchasePage;
-    private ReceiptPage receiptPage;
+    private final AsyncWebDriver browser;
+    private final HomePage homePage;
+    private final ProductsPage productsPage;
+    private final ItemsPage itemsPage;
+    private final CartPage cartPage;
+    private final PurchasePage purchasePage;
+    private final ReceiptPage receiptPage;
+    private final Menu menu;
 
     public PetStoreDriver(WebDriver webDriver) {
-        AsyncWebDriver browser = new AsyncWebDriver(new UnsynchronizedProber(), webDriver);
+        browser = new AsyncWebDriver(new UnsynchronizedProber(), webDriver);
+        menu = new Menu(browser);
         homePage = new HomePage(browser);
         productsPage = new ProductsPage(browser);
         itemsPage = new ItemsPage(browser);
@@ -26,16 +29,17 @@ public class PetStoreDriver {
         receiptPage = new ReceiptPage(browser);
     }
 
-    public void open(Routing routing) {
-        homePage.navigateThrough(routing);
+    public void open(Routing routes) {
+        homePage.navigateThrough(routes);
     }
 
     public void close() {
-        homePage.logout();
+        menu.logout();
     }
 
     public void searchFor(String keyword) {
-        homePage.searchFor(keyword);
+        menu.search(keyword);
+        productsPage.displays();
     }
 
     public void showsNoResult() {
@@ -52,7 +56,12 @@ public class PetStoreDriver {
 
     public void consultInventoryOf(String product) {
         searchFor(product);
+        browseInventory(product);
+    }
+
+    public void browseInventory(String product) {
         productsPage.browseItemsOf(product);
+        itemsPage.displays();
     }
 
     public void showsNoItemAvailable() {
@@ -65,19 +74,25 @@ public class PetStoreDriver {
 
     public void buy(String product, String itemNumber) {
         consultInventoryOf(product);
+        buy(itemNumber);
+    }
+
+    public void buy(String itemNumber) {
         itemsPage.addToCart(itemNumber);
+        cartPage.displays();
     }
 
     public void checkout() {
         cartPage.checkout();
+        purchasePage.displays();
     }
 
     public void showsCartIsEmpty() {
-        homePage.showsCartIsEmpty();
+        menu.showsCartIsEmpty();
     }
 
     public void showsCartTotalQuantity(int quantity) {
-        homePage.showsCartTotalQuantity(quantity);
+        menu.showsCartTotalQuantity(quantity);
     }
 
     public void showsItemInCart(String itemNumber, String itemDescription, String totalPrice) {
@@ -100,6 +115,7 @@ public class PetStoreDriver {
         purchasePage.willBillTo(firstName, lastName, email);
         purchasePage.willPayUsingCreditCard(cardType, cardNumber, cardExpiryDate);
         purchasePage.confirmOrder();
+        receiptPage.displays();
     }
 
     public void showsTotalPaid(String total) {
@@ -118,23 +134,21 @@ public class PetStoreDriver {
         receiptPage.showsBillingInformation(firstName, lastName, emailAddress);
     }
 
-    public void clickOnLogo() {
-        homePage.clickOnLogo();
-    }
-
-    public void isHome() {
+    public void returnHome() {
+        menu.home();
         homePage.displays();
-    }
-
-    public void jumpHome() {
-        homePage.jumpHome();
+        browser.navigate().back();
+        menu.logo();
+        homePage.displays();
     }
 
     public void continueShopping() {
         cartPage.continueShopping();
+        homePage.displays();
     }
 
-    public void jumpToCart() {
-        homePage.jumpToCart();
+    public void reviewCart() {
+        menu.cart();
+        cartPage.displays();
     }
 }

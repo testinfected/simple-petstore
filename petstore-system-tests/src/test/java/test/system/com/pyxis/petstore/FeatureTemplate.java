@@ -9,7 +9,7 @@ import test.support.com.pyxis.petstore.web.server.ServerDriver;
 
 import static test.support.com.pyxis.petstore.web.SystemTestContext.systemTesting;
 
-public abstract class Feature {
+public abstract class FeatureTemplate {
 
     protected SystemTestContext context = systemTesting();
 

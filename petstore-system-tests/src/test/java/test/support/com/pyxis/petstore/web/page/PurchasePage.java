@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 
 import java.math.BigDecimal;
 
+import static org.hamcrest.core.StringContains.containsString;
 import static org.testinfected.hamcrest.core.StringMatchers.being;
 import static org.openqa.selenium.By.id;
 
@@ -37,5 +38,9 @@ public class PurchasePage extends Page {
 
     public void confirmOrder() {
         browser.element(id("order")).click();
+    }
+
+    public void displays() {
+        browser.assertTitle(containsString("Checkout"));
     }
 }

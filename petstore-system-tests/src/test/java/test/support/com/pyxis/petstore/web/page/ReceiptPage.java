@@ -41,6 +41,10 @@ public class ReceiptPage extends Page {
         browser.element(id("continue-shopping")).click();
     }
 
+    public void displays() {
+        browser.assertTitle(containsString("Receipt"));
+    }
+
     private By cellDisplayingNameOfItem(String itemNumber) {
         return cssSelector(domIdOf(itemNumber) + " td.text");
     }
