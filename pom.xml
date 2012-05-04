@@ -334,13 +334,35 @@
             <id>development</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env</name>
+                    <value>development</value>
+                </property>
             </activation>
             <properties>
                 <env>development</env>
             </properties>
         </profile>
         <profile>
+            <id>integration</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>integration</value>
+                </property>
+            </activation>
+            <properties>
+                <env>integration</env>
+            </properties>
+        </profile>
+        <profile>
             <id>production</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>production</value>
+                </property>
+            </activation>
             <properties>
                 <env>production</env>
             </properties>

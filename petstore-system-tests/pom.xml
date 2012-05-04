@@ -177,7 +177,7 @@
                 <activeByDefault>true</activeByDefault>
                 <property>
                     <name>env</name>
-                    <value>dev</value>
+                    <value>development</value>
                 </property>
             </activation>
             <build>
@@ -201,7 +201,7 @@
             <activation>
                 <property>
                     <name>env</name>
-                    <value>int</value>
+                    <value>integration</value>
                 </property>
             </activation>
             <build>
@@ -218,8 +218,10 @@
                             <systemPropertyVariables>
                                 <server.lifecycle>external</server.lifecycle>
                                 <browser.lifecycle>remote</browser.lifecycle>
-                                <browser.remote.url>http://127.0.0.1:4444/wd/hub</browser.remote.url>
+                                <browser.remote.url>http://${sauce.username}:${sauce.accessKey}@ondemand.saucelabs.com:80/wd/hub</browser.remote.url>
                                 <browser.remote.capability.browserName>firefox</browser.remote.capability.browserName>
+                                <browser.remote.capability.version>7</browser.remote.capability.version>
+                                <browser.remote.capability.name>PetStore System Tests</browser.remote.capability.name>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
@@ -286,7 +288,7 @@
                             </container>
                             <configuration>
                                 <properties>
-                                    <cargo.servlet.port>${test.server.port}</cargo.servlet.port>
+                                    <cargo.servlet.port>${server.port}</cargo.servlet.port>
                                 </properties>
                             </configuration>
                         </configuration>
@@ -305,7 +307,7 @@
                                                 <groupId>${project.groupId}</groupId>
                                                 <artifactId>petstore-app</artifactId>
                                                 <type>war</type>
-                                                <pingURL>http://localhost:${test.server.port}${context.path}</pingURL>
+                                                <pingURL>http://localhost:${server.port}${context.path}</pingURL>
                                                 <properties>
                                                     <context>${context.path}</context>
                                                 </properties>
