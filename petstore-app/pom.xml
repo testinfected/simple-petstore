@@ -108,6 +108,12 @@
                 <artifactId>maven-jetty-plugin</artifactId>
                 <version>6.1.22</version>
                 <configuration>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>jetty.port</name>
+                            <value>${server.port}</value>
+                        </systemProperty>
+                    </systemProperties>
                     <contextPath>${context.path}</contextPath>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <stopKey>foo</stopKey>

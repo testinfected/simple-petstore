@@ -164,6 +164,18 @@
                 <filtering>true</filtering>
             </testResource>
         </testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Feature.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <properties>
@@ -171,31 +183,6 @@
     </properties>
 
     <profiles>
-        <profile>
-            <id>development</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>env</name>
-                    <value>development</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.5</version>
-                        <configuration>
-                            <includes>
-                                <include>**/*Feature.java</include>
-                            </includes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
         <profile>
             <id>integration</id>
             <activation>
@@ -209,6 +196,16 @@
                     <!--*** Run integration tests with failsafe plugin ***-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.5</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>**</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
                         <version>2.5</version>
                         <configuration>
@@ -218,9 +215,11 @@
                             <systemPropertyVariables>
                                 <server.lifecycle>external</server.lifecycle>
                                 <browser.lifecycle>remote</browser.lifecycle>
-                                <browser.remote.url>http://${sauce.username}:${sauce.accessKey}@ondemand.saucelabs.com:80/wd/hub</browser.remote.url>
-                                <browser.remote.capability.browserName>firefox</browser.remote.capability.browserName>
-                                <browser.remote.capability.version>7</browser.remote.capability.version>
+                                <browser.remote.url>${selenium.server.url}</browser.remote.url>
+                                <browser.remote.capability.browserName>${selenium.server.browser}
+                                </browser.remote.capability.browserName>
+                                <browser.remote.capability.version>${selenium.server.browser.version}
+                                </browser.remote.capability.version>
                                 <browser.remote.capability.name>PetStore System Tests</browser.remote.capability.name>
                             </systemPropertyVariables>
                         </configuration>
@@ -242,7 +241,8 @@
                             <url>${test.jdbc.url}</url>
                             <username>${test.jdbc.username}</username>
                             <password>${test.jdbc.password}</password>
-                            <migrationsPath>${main.basedir}/petstore-infrastructure/src/main/scripts/migrations</migrationsPath>
+                            <migrationsPath>${main.basedir}/petstore-infrastructure/src/main/scripts/migrations
+                            </migrationsPath>
                         </configuration>
                         <dependencies>
                             <dependency>
@@ -283,8 +283,10 @@
                                     <hibernate.dialect>${test.hibernate.dialect}</hibernate.dialect>
                                     <timeServer.host>${test.timeServer.host}</timeServer.host>
                                     <timeServer.port>${test.timeServer.port}</timeServer.port>
-                                    <log4j.configuration>${project.basedir}/src/test/resources/log4j.xml</log4j.configuration>
-        \                        </systemProperties>
+                                    <log4j.configuration>${project.basedir}/src/test/resources/log4j.xml
+                                    </log4j.configuration>
+                                    \
+                                </systemProperties>
                             </container>
                             <configuration>
                                 <properties>

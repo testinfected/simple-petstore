@@ -314,8 +314,9 @@
                         </goals>
                         <configuration>
                             <files>
-                                <file>${main.basedir}/test.properties</file>
-                                <file>${main.basedir}/${env}.properties</file>
+                                <file>${main.basedir}/etc/${where}.properties</file>
+                                <file>${main.basedir}/etc/${env}.properties</file>
+                                <file>${main.basedir}/etc/test.properties</file>
                             </files>
                         </configuration>
                     </execution>
@@ -327,20 +328,21 @@
     <properties>
         <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <where>local</where>
+        <env>development</env>
     </properties>
 
     <profiles>
         <profile>
-            <id>development</id>
+            <id>cloudbees</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
                 <property>
-                    <name>env</name>
-                    <value>development</value>
+                    <name>where</name>
+                    <value>cloudbees</value>
                 </property>
             </activation>
             <properties>
-                <env>development</env>
+                <where>cloudbees</where>
             </properties>
         </profile>
         <profile>
