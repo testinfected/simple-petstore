@@ -264,17 +264,19 @@
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.0.1-sr-1</version>
+                        <version>1.2.1</version>
                         <configuration>
                             <wait>false</wait>
                             <container>
                                 <log>${main.basedir}/logs/cargo.log</log>
-                                <containerId>jetty6x</containerId>
+                                <containerId>tomcat5x</containerId>
                                 <timeout>60000</timeout>
-                                <zipUrlInstaller>
-                                    <url>http://dist.codehaus.org/jetty/jetty-6.1.21/jetty-6.1.21.zip</url>
-                                    <installDir>${project.basedir}/appserver</installDir>
-                                </zipUrlInstaller>
+                                <artifactInstaller>
+                                    <groupId>tomcat</groupId>
+                                    <artifactId>apache-tomcat</artifactId>
+                                    <version>5.5.23</version>
+                                    <extractDir>appserver</extractDir>
+                                </artifactInstaller>
                                 <systemProperties>
                                     <jdbc.driverClassName>${test.jdbc.driverClassName}</jdbc.driverClassName>
                                     <jdbc.url>${test.jdbc.url}</jdbc.url>
@@ -285,7 +287,6 @@
                                     <timeServer.port>${test.timeServer.port}</timeServer.port>
                                     <log4j.configuration>${project.basedir}/src/test/resources/log4j.xml
                                     </log4j.configuration>
-                                    \
                                 </systemProperties>
                             </container>
                             <configuration>
