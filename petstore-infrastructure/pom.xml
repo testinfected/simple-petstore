@@ -156,38 +156,4 @@
             </testResource>
         </testResources>
     </build>
-
-    <profiles>
-        <profile>
-            <id>test</id>
-            <activation>
-                <property>
-                    <name>env</name>
-                    <value>test</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.carbonfive.db-support</groupId>
-                        <artifactId>db-migration-maven-plugin</artifactId>
-                        <version>0.9.9-m2</version>
-                        <configuration>
-                            <url>${test.jdbc.url}</url>
-                            <username>${test.jdbc.username}</username>
-                            <password>${test.jdbc.password}</password>
-                            <migrationsPath>${project.basedir}/src/main/scripts/migrations</migrationsPath>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>mysql</groupId>
-                                <artifactId>mysql-connector-java</artifactId>
-                                <version>5.1.11</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>

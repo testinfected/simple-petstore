@@ -309,16 +309,30 @@
                 <version>1.0-alpha-2</version>
                 <executions>
                     <execution>
+                        <id>read-properties</id>
                         <phase>initialize</phase>
                         <goals>
                             <goal>read-project-properties</goal>
                         </goals>
                         <configuration>
                             <files>
-                                <file>${main.basedir}/etc/${where}.properties</file>
-                                <file>${main.basedir}/etc/${env}.properties</file>
-                                <file>${main.basedir}/etc/test.properties</file>
+                                <file>${main.basedir}/etc/default.properties</file>
+                                <file>${main.basedir}/etc/environments/${environment}.properties</file>
+                                <file>${main.basedir}/etc/targets/${target}.properties</file>
+                                <file>${main.basedir}/etc/grids/${grid}.properties</file>
                             </files>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>write-properties</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>write-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>
+                                ${project.build.directory}/effective.properties
+                            </outputFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -329,45 +343,71 @@
     <properties>
         <main.basedir>${project.basedir}</main.basedir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <where>local</where>
-        <env>development</env>
+        <environment>test</environment>
+        <target>local</target>
+        <grid>local</grid>
     </properties>
 
     <profiles>
         <profile>
-            <id>cloudbees</id>
+            <id>env-dev</id>
             <activation>
                 <property>
-                    <name>where</name>
+                    <name>env</name>
+                    <value>dev</value>
+                </property>
+            </activation>
+            <properties>
+                <environment>development</environment>
+            </properties>
+        </profile>
+        <profile>
+            <id>env-int</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>int</value>
+                </property>
+            </activation>
+            <properties>
+                <environment>integration</environment>
+            </properties>
+        </profile>
+        <profile>
+            <id>env-prod</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>prod</value>
+                </property>
+            </activation>
+            <properties>
+                <environment>production</environment>
+            </properties>
+        </profile>
+        <profile>
+            <id>target-cloudbees</id>
+            <activation>
+                <property>
+                    <name>target</name>
                     <value>cloudbees</value>
                 </property>
             </activation>
             <properties>
-                <where>cloudbees</where>
+                <target>cloudbees</target>
+                <grid>sauce</grid>
             </properties>
         </profile>
         <profile>
-            <id>integration</id>
+            <id>grid-sauce</id>
             <activation>
                 <property>
-                    <name>env</name>
-                    <value>integration</value>
+                    <name>grid</name>
+                    <value>sauce</value>
                 </property>
             </activation>
             <properties>
-                <env>integration</env>
-            </properties>
-        </profile>
-        <profile>
-            <id>production</id>
-            <activation>
-                <property>
-                    <name>env</name>
-                    <value>production</value>
-                </property>
-            </activation>
-            <properties>
-                <env>production</env>
+                <grid>sauce</grid>
             </properties>
         </profile>
     </profiles>

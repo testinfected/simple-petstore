@@ -184,13 +184,7 @@
 
     <profiles>
         <profile>
-            <id>integration</id>
-            <activation>
-                <property>
-                    <name>env</name>
-                    <value>integration</value>
-                </property>
-            </activation>
+            <id>int-testing</id>
             <build>
                 <plugins>
                     <!--*** Run integration tests with failsafe plugin ***-->
@@ -216,10 +210,8 @@
                                 <server.lifecycle>external</server.lifecycle>
                                 <browser.lifecycle>remote</browser.lifecycle>
                                 <browser.remote.url>${selenium.server.url}</browser.remote.url>
-                                <browser.remote.capability.browserName>${selenium.server.browser}
-                                </browser.remote.capability.browserName>
-                                <browser.remote.capability.version>${selenium.server.browser.version}
-                                </browser.remote.capability.version>
+                                <browser.remote.capability.browserName>${selenium.server.browser}</browser.remote.capability.browserName>
+                                <browser.remote.capability.version>${selenium.server.browser.version}</browser.remote.capability.version>
                                 <browser.remote.capability.name>PetStore System Tests</browser.remote.capability.name>
                             </systemPropertyVariables>
                         </configuration>
@@ -260,7 +252,13 @@
                             </execution>
                         </executions>
                     </plugin>
-
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>cargo</id>
+            <build>
+                <plugins>
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
@@ -275,7 +273,7 @@
                                     <groupId>tomcat</groupId>
                                     <artifactId>apache-tomcat</artifactId>
                                     <version>5.5.23</version>
-                                    <extractDir>appserver</extractDir>
+                                    <extractDir>${basedir}/appserver</extractDir>
                                 </artifactInstaller>
                                 <systemProperties>
                                     <jdbc.driverClassName>${test.jdbc.driverClassName}</jdbc.driverClassName>
