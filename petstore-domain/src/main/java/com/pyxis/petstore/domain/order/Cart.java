@@ -2,12 +2,13 @@ package com.pyxis.petstore.domain.order;
 
 import com.pyxis.petstore.domain.product.Item;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Cart implements Basket {
+public class Cart implements Basket, Serializable {
 
     private final List<CartItem> cartItems = new ArrayList<CartItem>();
 

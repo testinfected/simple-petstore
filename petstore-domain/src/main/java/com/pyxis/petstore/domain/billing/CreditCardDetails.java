@@ -3,10 +3,11 @@ package com.pyxis.petstore.domain.billing;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity @Access(AccessType.FIELD)
 @DiscriminatorValue("credit_card")
-public class CreditCardDetails extends PaymentMethod {
+public class CreditCardDetails extends PaymentMethod implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private CreditCardType cardType;

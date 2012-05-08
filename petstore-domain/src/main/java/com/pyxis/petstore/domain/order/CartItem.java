@@ -2,9 +2,10 @@ package com.pyxis.petstore.domain.order;
 
 import com.pyxis.petstore.domain.product.Item;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class CartItem {
+public class CartItem implements Serializable {
 
     private final Item item;
     private final BigDecimal unitPrice;

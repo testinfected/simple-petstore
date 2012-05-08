@@ -2,9 +2,10 @@ package com.pyxis.petstore.domain.product;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Embeddable
-public class ItemNumber {
+public class ItemNumber implements Serializable {
 
     @NotNull private String number;
 

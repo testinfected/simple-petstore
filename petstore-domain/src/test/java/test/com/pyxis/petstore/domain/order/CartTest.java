@@ -7,11 +7,13 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.com.pyxis.petstore.matchers.SerializedForm.serializedForm;
 
 public class CartTest {
     Cart cart = new Cart();
@@ -62,9 +64,9 @@ public class CartTest {
         for (String number : itemNumbers) {
             cart.add(anItem().withNumber(number).build());
         }
-        assertThat("items", cart.getItems(), containsItems(
-                with(number("11111111"), quantity(2)),
-                with(number("22222222"), quantity(1))));
+        assertThat("cart", cart, aCartContaining(
+                itemWith(number("11111111"), quantity(2)),
+                itemWith(number("22222222"), quantity(1))));
         assertThat("total quantity", cart.getTotalQuantity(), equalTo(3));
     }
     
@@ -75,23 +77,37 @@ public class CartTest {
         cart.clear();
         assertTrue("contains item(s)", cart.isEmpty());
     }
+    
+    @Test public void
+    isSerializable() {
+        cart.add(anItem().withNumber("11111111").build());
+        assertThat("cart", cart, serializedForm(aCartContaining(itemWith(number("11111111")))));
+    }
 
     private void havingAddedItemsToCart() {
         cart.add(anItem().build());
         cart.add(anItem().build());
         cart.add(anItem().build());
     }
+                                                                            
+    private Matcher<Cart> aCartContaining(Matcher<CartItem>... cartItemMatchers) {
+        return new FeatureMatcher<Cart, Iterable<CartItem>>(containsItems(cartItemMatchers), "a cart containing", "cart content") {
+            @Override protected List<CartItem> featureValueOf(Cart actual) {
+                return cart.getItems();
+            }
+        };
+    }
 
-    private Matcher<Iterable<? extends CartItem>> containsItems(Matcher<CartItem>... cartItemMatchers) {
+    private Matcher<? super Iterable<CartItem>> containsItems(Matcher<CartItem>... cartItemMatchers) {
         return contains(cartItemMatchers);
     }
 
-    private Matcher<CartItem> with(Matcher<CartItem>... cartItemMatchers) {
+    private Matcher<CartItem> itemWith(Matcher<CartItem>... cartItemMatchers) {
         return allOf(cartItemMatchers);
     }
 
     private Matcher<CartItem> quantity(int count) {
-        return new FeatureMatcher<CartItem, Integer>(equalTo(count), "a cart item with quantity", "quantity") {
+        return new FeatureMatcher<CartItem, Integer>(equalTo(count), "an item with quantity", "item quantity") {
             @Override protected Integer featureValueOf(CartItem actual) {
                 return actual.getQuantity();
             }
@@ -99,7 +115,7 @@ public class CartTest {
     }
 
     private Matcher<CartItem> number(String number) {
-        return new FeatureMatcher<CartItem, String>(equalTo(number), "a cart item with number", "item number") {
+        return new FeatureMatcher<CartItem, String>(equalTo(number), "an item with number", "item number") {
             @Override protected String featureValueOf(CartItem actual) {
                 return actual.getItemNumber();
             }

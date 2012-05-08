@@ -1,10 +1,11 @@
 package com.pyxis.petstore.domain.product;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;             
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity @Access(AccessType.FIELD) @Table(name = "products")
-public class Product {
+public class Product implements Serializable {
 
 	@SuppressWarnings("unused")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

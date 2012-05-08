@@ -3,10 +3,11 @@ package com.pyxis.petstore.domain.product;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity @Access(AccessType.FIELD) @Table(name = "items")
-public class Item {
+public class Item implements Serializable {
 
 	@SuppressWarnings("unused")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
