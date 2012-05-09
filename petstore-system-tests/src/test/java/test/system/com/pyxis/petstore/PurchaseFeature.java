@@ -11,8 +11,8 @@ public class PurchaseFeature extends FeatureTemplate {
 
     @Before public void
     labradorsAreForSale() {
-        Product labrador = aProduct().withName("Labrador Retriever").build();
-        Product golden = aProduct().withName("Golden Retriever").build();
+        Product labrador = aProduct().named("Labrador Retriever").build();
+        Product golden = aProduct().named("Golden Retriever").build();
         context.given(labrador, golden);
         context.given(
                 a(labrador).withNumber("11111111").describedAs("Male Adult").priced("599.00"),

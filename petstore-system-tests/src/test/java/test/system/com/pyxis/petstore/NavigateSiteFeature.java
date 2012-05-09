@@ -4,6 +4,8 @@ import com.pyxis.petstore.domain.product.Product;
 import org.junit.Before;
 import org.junit.Test;
 
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.an;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
@@ -11,11 +13,11 @@ public class NavigateSiteFeature extends FeatureTemplate {
 
     @Before public void
     inventoryIsNotEmpty() {
-        Product iguana = aProduct().withName("Iguana").build();
+        Product iguana = aProduct().named("Iguana").build();
         context.given(iguana);
-        Product salamander = aProduct().withName("Salamander").build();
+        Product salamander = aProduct().named("Salamander").build();
         context.given(salamander);
-        context.given(anItem().of(iguana).withNumber("12345678").priced("50.00"), anItem().of(salamander));
+        context.given(an(iguana).withNumber("12345678").priced("50.00"), a(salamander));
     }
 
     @Test public void
