@@ -1,18 +1,17 @@
 # About
 
-A sample Java application to demonstrate applying the principles and practices described in Steve Freeman and Nat Pryce book, [Growing Object Oriented Software, Guided by Tests](http://www.growing-object-oriented-software.com/).
+A fork of my [petstore](https://github.com/testinfected/petstore) repository, but built with simple tools and no IoC container.
 
 ## Disclaimer
 
-This application is built on top of Spring MVC 3.0, Spring Core 3.0, Hibernate 3.5, Velocity 1.6, Sitemesh 2 and Maven 2/3.
+This is a work in progress.
 
-I hear people asking, why such choices? I don't pretend these are the sexiest nor best frameworks for doing web development in Java. In fact I don't think they are. I wanted to choose technologies a lot Java developers have to deal (or struggle) with, with the following objectives in mind:
+The intention is to progressively refactor the petstore to get rid of Spring Core, Spring MVC, Hibernate and Maven.
 
-* Make it relevant and useful to a large number of Java developers using open source technologies
-* Make the point that technologies should not be preventing you from applying the best practices described in the book.
-* Learn Spring MVC myself, after doing essentially rails development recently
-* Don't make it too easy, like in real life ;-)
+I have in mind to use the following tools:
 
-## Getting Started
-
-See the [wiki](https://github.com/testinfected/petstore/wiki/_pages) for information on building and starting the application.
+- [Simpleframework](http://www.simpleframework.org/) to replace Spring MVC
+- Velocity and Sitemesh for the view (like in my original petstore)
+- Plain JDBC to replace Hibernate
+- No IoC container to replace Spring Core
+- [Buildr](http://buildr.apache.org) to replace Maven
