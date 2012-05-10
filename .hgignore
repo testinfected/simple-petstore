@@ -11,3 +11,4 @@ appserver
 *.ipr
 *.iws
 *.ids
+.idea
