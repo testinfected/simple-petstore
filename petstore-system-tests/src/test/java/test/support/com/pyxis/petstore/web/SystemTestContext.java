@@ -28,20 +28,23 @@ public final class SystemTestContext {
 
     public static SystemTestContext systemTesting() {
         if (context == null) {
-            Properties properties = Properties.load(SYSTEM_TEST_PROPERTIES);
-            properties.override(Properties.system());
-            Properties.system().merge(properties);
-            context = new SystemTestContext(properties);
+            context = new SystemTestContext(Properties.load(SYSTEM_TEST_PROPERTIES));
         }
         return context;
     }
 
     public SystemTestContext(Properties properties) {
+        systemPropertiesOverride(properties);
         loadSpringContext(properties);
         migrateDatabase(properties);
         selectServer(new ServerProperties(properties));
         selectBrowser(new BrowserProperties(properties));
         createRoutes(new ServerProperties(properties));
+    }
+
+    private void systemPropertiesOverride(Properties properties) {
+        properties.override(Properties.system());
+        Properties.system().merge(properties);
     }
 
     private void createRoutes(ServerProperties properties) {
