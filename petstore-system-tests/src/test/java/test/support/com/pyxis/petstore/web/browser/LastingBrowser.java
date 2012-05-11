@@ -35,7 +35,7 @@ public class LastingBrowser extends Firefox implements BrowserLifeCycle {
         private ShutdownHook() {
             super(new Runnable() {
                 public void run() {
-                    browser.quit();
+                    browser.close();
                 }
             });
         }

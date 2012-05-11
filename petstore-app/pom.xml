@@ -28,6 +28,11 @@
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.simpleframework</groupId>
+            <artifactId>simple</artifactId>
+            <version>4.1.21</version>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>

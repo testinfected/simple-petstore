@@ -7,12 +7,18 @@ import test.support.com.pyxis.petstore.web.PetStoreDriver;
 import test.support.com.pyxis.petstore.web.SystemTestContext;
 import test.support.com.pyxis.petstore.web.server.ServerDriver;
 
+import static test.support.com.pyxis.petstore.web.SystemTestContext.legacyTesting;
 import static test.support.com.pyxis.petstore.web.SystemTestContext.systemTesting;
 
 public abstract class FeatureTemplate {
 
-    protected SystemTestContext context = systemTesting();
+    protected SystemTestContext legacyContext = legacyTesting();
 
+    protected ServerDriver legacyServer = legacyContext.startServer();
+    protected WebDriver legacyBrowser = legacyContext.startBrowser();
+    protected PetStoreDriver legacyPetstore = new PetStoreDriver(legacyBrowser);
+
+    protected SystemTestContext context =   systemTesting();
     protected ServerDriver server = context.startServer();
     protected WebDriver browser = context.startBrowser();
     protected PetStoreDriver petstore = new PetStoreDriver(browser);
@@ -28,5 +34,18 @@ public abstract class FeatureTemplate {
         context.stopServer(server);
         context.stopBrowser(browser);
         context.cleanUp();
+    }
+
+    @Before public void
+    startLegacyApplication() {
+        legacyPetstore.open(legacyContext.routes());
+    }
+
+    @After public void
+    stopLegacyApplication() {
+        legacyPetstore.close();
+        legacyContext.stopServer(legacyServer);
+        legacyContext.stopBrowser(legacyBrowser);
+        legacyContext.cleanUp();
     }
 }

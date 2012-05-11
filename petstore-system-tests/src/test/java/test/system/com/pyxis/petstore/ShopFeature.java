@@ -12,36 +12,36 @@ public class ShopFeature extends FeatureTemplate {
     @Before public void
     iguanaAreForSale() {
         Product iguana = aProduct().withName("Iguana").build();
-        context.given(iguana);
-        context.given(
+        legacyContext.given(iguana);
+        legacyContext.given(
                 anItem().of(iguana).withNumber("12345678").describedAs("Green Adult").priced("18.50"),
                 anItem().of(iguana).withNumber("87654321").describedAs("Blue Female").priced("58.97"));
     }
 
     @Test public void
     shopsForItemsAndAddsThemToCart() {
-        petstore.showsCartIsEmpty();
+        legacyPetstore.showsCartIsEmpty();
 
-        petstore.buy("Iguana", "12345678");
-        petstore.showsItemInCart("12345678", "Green Adult", "18.50");
-        petstore.showsGrandTotal("18.50");
-        petstore.showsCartTotalQuantity(1);
-        petstore.continueShopping();
+        legacyPetstore.buy("Iguana", "12345678");
+        legacyPetstore.showsItemInCart("12345678", "Green Adult", "18.50");
+        legacyPetstore.showsGrandTotal("18.50");
+        legacyPetstore.showsCartTotalQuantity(1);
+        legacyPetstore.continueShopping();
 
-        petstore.buy("Iguana", "87654321");
-        petstore.showsItemInCart("87654321", "Blue Female", "58.97");
-        petstore.showsGrandTotal("77.47");
-        petstore.showsCartTotalQuantity(2);
+        legacyPetstore.buy("Iguana", "87654321");
+        legacyPetstore.showsItemInCart("87654321", "Blue Female", "58.97");
+        legacyPetstore.showsGrandTotal("77.47");
+        legacyPetstore.showsCartTotalQuantity(2);
     }
 
     @Test public void
     shopsForTheSameItemMultipleTimes() {
-        petstore.buy("Iguana", "12345678");
-        petstore.showsItemQuantity("12345678", 1);
-        petstore.continueShopping();
+        legacyPetstore.buy("Iguana", "12345678");
+        legacyPetstore.showsItemQuantity("12345678", 1);
+        legacyPetstore.continueShopping();
 
-        petstore.buy("Iguana", "12345678");
-        petstore.showsItemQuantity("12345678", 2);
-        petstore.showsCartTotalQuantity(2);
+        legacyPetstore.buy("Iguana", "12345678");
+        legacyPetstore.showsItemQuantity("12345678", 2);
+        legacyPetstore.showsCartTotalQuantity(2);
     }
 }

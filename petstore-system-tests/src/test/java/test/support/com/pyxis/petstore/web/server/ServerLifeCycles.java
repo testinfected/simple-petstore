@@ -8,12 +8,13 @@ import java.util.Map;
 public class ServerLifeCycles {
 
     public static enum Option {
-        passing, lasting, external
+        passing, lasting, simple, external
     }
 
     private final Map<Option, ServerLifeCycle> available = new HashMap<Option, ServerLifeCycle>();
 
     public ServerLifeCycles(ServerProperties properties) {
+        available.put(Option.simple, new SimpleServer(properties));
         available.put(Option.external, new ExternalServer());
         available.put(Option.lasting, new LastingServer(properties));
         available.put(Option.passing, new PassingServer(properties));

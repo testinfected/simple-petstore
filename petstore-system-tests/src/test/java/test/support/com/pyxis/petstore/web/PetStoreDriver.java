@@ -38,6 +38,7 @@ public class PetStoreDriver {
     }
 
     public void searchFor(String keyword) {
+
         menu.search(keyword);
         productsPage.displays();
     }

@@ -12,26 +12,26 @@ public class NavigateSiteFeature extends FeatureTemplate {
     @Before public void
     inventoryIsNotEmpty() {
         Product iguana = aProduct().withName("Iguana").build();
-        context.given(iguana);
+        legacyContext.given(iguana);
         Product salamander = aProduct().withName("Salamander").build();
-        context.given(salamander);
-        context.given(anItem().of(iguana).withNumber("12345678").priced("50.00"), anItem().of(salamander));
+        legacyContext.given(salamander);
+        legacyContext.given(anItem().of(iguana).withNumber("12345678").priced("50.00"), anItem().of(salamander));
     }
 
     @Test public void
     stopsBrowsingCatalog() {
-        petstore.consultInventoryOf("Iguana");
-        petstore.continueShopping();
-        petstore.returnHome();
+        legacyPetstore.consultInventoryOf("Iguana");
+        legacyPetstore.continueShopping();
+        legacyPetstore.returnHome();
     }
 
     @Test public void
     reviewsCartContentWhileShopping() {
-        petstore.consultInventoryOf("Iguana");
-        petstore.buy("12345678");
-        petstore.continueShopping();
+        legacyPetstore.consultInventoryOf("Iguana");
+        legacyPetstore.buy("12345678");
+        legacyPetstore.continueShopping();
 
-        petstore.consultInventoryOf("Salamander");
-        petstore.reviewCart();
+        legacyPetstore.consultInventoryOf("Salamander");
+        legacyPetstore.reviewCart();
     }
 }

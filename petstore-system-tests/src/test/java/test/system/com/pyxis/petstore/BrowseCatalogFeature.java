@@ -1,8 +1,13 @@
 package test.system.com.pyxis.petstore;
 
 import com.pyxis.petstore.domain.product.Product;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.WebDriver;
+import test.support.com.pyxis.petstore.web.PetStoreDriver;
+import test.support.com.pyxis.petstore.web.SystemTestContext;
+import test.support.com.pyxis.petstore.web.server.ServerDriver;
 
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.an;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
@@ -19,16 +24,16 @@ public class BrowseCatalogFeature extends FeatureTemplate {
 
     @Test public void
     consultsAProductCurrentlyOutOfStock() {
-        petstore.consultInventoryOf("Iguana");
-        petstore.showsNoItemAvailable();
+        legacyPetstore.consultInventoryOf("Iguana");
+        legacyPetstore.showsNoItemAvailable();
     }
 
     @Test public void
     consultsAProductAvailableItems() {
-        context.given(an(iguana).withNumber("12345678").describedAs("Green Adult").priced("18.50"));
+        legacyContext.given(an(iguana).withNumber("12345678").describedAs("Green Adult").priced("18.50"));
 
-        petstore.consultInventoryOf("Iguana");
-        petstore.displaysItem("12345678", "Green Adult", "18.50");
-        petstore.continueShopping();
+        legacyPetstore.consultInventoryOf("Iguana");
+        legacyPetstore.displaysItem("12345678", "Green Adult", "18.50");
+        legacyPetstore.continueShopping();
     }
 }

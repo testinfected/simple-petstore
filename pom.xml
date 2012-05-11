@@ -134,6 +134,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.simpleframework</groupId>
+                <artifactId>simple</artifactId>
+                <version>4.1.21</version>
+            </dependency>
+            <dependency>
                 <groupId>com.carbonfive.db-support</groupId>
                 <artifactId>db-migration</artifactId>
                 <version>0.9.9-m2</version>

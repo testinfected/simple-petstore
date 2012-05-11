@@ -18,8 +18,10 @@ import test.support.com.pyxis.petstore.web.server.ServerProperties;
 public final class SystemTestContext {
 
     private static final String SYSTEM_TEST_PROPERTIES = "system/test.properties";
+    private static final String LEGACY_TEST_PROPERTIES = "system/legacy.properties";
 
     private static SystemTestContext context;
+    private static SystemTestContext simple;
 
     private PersistenceContext spring;
     private ServerLifeCycle serverLifeCycle;
@@ -27,8 +29,16 @@ public final class SystemTestContext {
     private Routing routing;
 
     public static SystemTestContext systemTesting() {
-        if (context == null) {
+        if (simple == null) {
             Properties properties = Properties.load(SYSTEM_TEST_PROPERTIES);
+            simple = new SystemTestContext(properties);
+        }
+        return simple;
+    }
+
+    public static SystemTestContext legacyTesting() {
+        if (context == null) {
+            Properties properties = Properties.load(LEGACY_TEST_PROPERTIES);
             properties.override(Properties.system());
             Properties.system().merge(properties);
             context = new SystemTestContext(properties);

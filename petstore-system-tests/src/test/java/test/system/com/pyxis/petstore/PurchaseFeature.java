@@ -13,27 +13,27 @@ public class PurchaseFeature extends FeatureTemplate {
     labradorsAreForSale() {
         Product labrador = aProduct().withName("Labrador Retriever").build();
         Product golden = aProduct().withName("Golden Retriever").build();
-        context.given(labrador, golden);
-        context.given(
+        legacyContext.given(labrador, golden);
+        legacyContext.given(
                 a(labrador).withNumber("11111111").describedAs("Male Adult").priced("599.00"),
                 a(golden).withNumber("22222222").describedAs("Female Adult").priced("649.00"));
     }
 
     @Test public void
     purchasesSeveralItemsUsingACreditCard() {
-        petstore.buy("Labrador Retriever", "11111111");
-        petstore.buy("Golden Retriever", "22222222");
-        petstore.checkout();
-        petstore.showsTotalToPay("1248.00");
+        legacyPetstore.buy("Labrador Retriever", "11111111");
+        legacyPetstore.buy("Golden Retriever", "22222222");
+        legacyPetstore.checkout();
+        legacyPetstore.showsTotalToPay("1248.00");
 
-        petstore.pay("John", "Leclair", "jleclair@gmail.com", "Visa", "9999 9999 9999 9999", "12/12");
-        petstore.showsTotalPaid("1248.00");
-        petstore.showsLineItem("11111111", "Male Adult", "599.00");
-        petstore.showsLineItem("22222222", "Female Adult", "649.00");
-        petstore.showsBillingInformation("John", "Leclair", "jleclair@gmail.com");
-        petstore.showsCreditCardDetails("Visa", "9999 9999 9999 9999", "12/12");
+        legacyPetstore.pay("John", "Leclair", "jleclair@gmail.com", "Visa", "9999 9999 9999 9999", "12/12");
+        legacyPetstore.showsTotalPaid("1248.00");
+        legacyPetstore.showsLineItem("11111111", "Male Adult", "599.00");
+        legacyPetstore.showsLineItem("22222222", "Female Adult", "649.00");
+        legacyPetstore.showsBillingInformation("John", "Leclair", "jleclair@gmail.com");
+        legacyPetstore.showsCreditCardDetails("Visa", "9999 9999 9999 9999", "12/12");
 
-        petstore.continueShopping();
-        petstore.showsCartIsEmpty();
+        legacyPetstore.continueShopping();
+        legacyPetstore.showsCartIsEmpty();
     }
 }

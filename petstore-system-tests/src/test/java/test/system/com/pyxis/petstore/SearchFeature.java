@@ -1,29 +1,32 @@
 package test.system.com.pyxis.petstore;
 
 import org.junit.Test;
+import test.support.com.pyxis.petstore.web.SystemTestContext;
 
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class SearchFeature extends FeatureTemplate {
 
+    SystemTestContext simple = SystemTestContext.systemTesting();
+
     @Test public void
     searchesForAProductNotAvailableInStore() {
-        context.given(aProduct().withName("Labrador Retriever"));
+        legacyContext.given(aProduct().withName("Labrador Retriever"));
 
-        petstore.searchFor("Dalmatian");
-        petstore.showsNoResult();
+        legacyPetstore.searchFor("Dalmatian");
+        legacyPetstore.showsNoResult();
     }
 
     @Test public void
     searchesAndFindsProductsInCatalog() {
-        context.given(aProduct().withNumber("LAB-1234").withName("Labrador Retriever"),
+        legacyContext.given(aProduct().withNumber("LAB-1234").withName("Labrador Retriever"),
                 aProduct().withNumber("CHE-5678").withName("Chesapeake").describedAs("Chesapeake bay retriever"),
                 aProduct().withName("Dalmatian"));
 
-        petstore.searchFor("retriever");
-        petstore.displaysNumberOfResults(2);
-        petstore.displaysProduct("LAB-1234", "Labrador Retriever");
-        petstore.displaysProduct("CHE-5678", "Chesapeake");
+        legacyPetstore.searchFor("retriever");
+        legacyPetstore.displaysNumberOfResults(2);
+        legacyPetstore.displaysProduct("LAB-1234", "Labrador Retriever");
+        legacyPetstore.displaysProduct("CHE-5678", "Chesapeake");
     }
 
 }
