@@ -77,7 +77,8 @@ public class CartTest {
         cart.clear();
         assertTrue("contains item(s)", cart.isEmpty());
     }
-    
+
+    @SuppressWarnings("unchecked")
     @Test public void
     isSerializable() {
         cart.add(anItem().withNumber("11111111").build());
