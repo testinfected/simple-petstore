@@ -1,4 +1,4 @@
-package test.system.com.pyxis.petstore;
+package test.system.com.pyxis.petstore.legacy;
 
 import org.junit.After;
 import org.junit.Before;
@@ -8,10 +8,10 @@ import test.support.com.pyxis.petstore.web.SystemTestContext;
 import test.support.com.pyxis.petstore.web.server.ServerDriver;
 
 import static test.support.com.pyxis.petstore.web.SystemTestContext.legacyTesting;
-import static test.support.com.pyxis.petstore.web.SystemTestContext.systemTesting;
 
-public class FeatureTemplate {
-    protected SystemTestContext context = systemTesting();
+public abstract class FeatureTemplate {
+
+    protected SystemTestContext context = legacyTesting();
 
     protected ServerDriver server = context.startServer();
     protected WebDriver browser = context.startBrowser();
@@ -29,5 +29,4 @@ public class FeatureTemplate {
         context.stopBrowser(browser);
         context.cleanUp();
     }
-
 }

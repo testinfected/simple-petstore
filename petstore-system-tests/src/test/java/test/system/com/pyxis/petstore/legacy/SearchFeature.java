@@ -1,4 +1,4 @@
-package test.system.com.pyxis.petstore;
+package test.system.com.pyxis.petstore.legacy;
 
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.SystemTestContext;
@@ -11,22 +11,22 @@ public class SearchFeature extends FeatureTemplate {
 
     @Test public void
     searchesForAProductNotAvailableInStore() {
-        legacyContext.given(aProduct().withName("Labrador Retriever"));
+        context.given(aProduct().withName("Labrador Retriever"));
 
-        legacyPetstore.searchFor("Dalmatian");
-        legacyPetstore.showsNoResult();
+        petstore.searchFor("Dalmatian");
+        petstore.showsNoResult();
     }
 
     @Test public void
     searchesAndFindsProductsInCatalog() {
-        legacyContext.given(aProduct().withNumber("LAB-1234").withName("Labrador Retriever"),
+        context.given(aProduct().withNumber("LAB-1234").withName("Labrador Retriever"),
                 aProduct().withNumber("CHE-5678").withName("Chesapeake").describedAs("Chesapeake bay retriever"),
                 aProduct().withName("Dalmatian"));
 
-        legacyPetstore.searchFor("retriever");
-        legacyPetstore.displaysNumberOfResults(2);
-        legacyPetstore.displaysProduct("LAB-1234", "Labrador Retriever");
-        legacyPetstore.displaysProduct("CHE-5678", "Chesapeake");
+        petstore.searchFor("retriever");
+        petstore.displaysNumberOfResults(2);
+        petstore.displaysProduct("LAB-1234", "Labrador Retriever");
+        petstore.displaysProduct("CHE-5678", "Chesapeake");
     }
 
 }
