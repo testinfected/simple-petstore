@@ -23,6 +23,10 @@
 			<artifactId>hibernate-annotations</artifactId>
 		</dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
