@@ -10,7 +10,6 @@
     <name>petstore</name>
 
     <modules>
-        <module>petstore-domain</module>
         <module>petstore-infrastructure</module>
         <module>petstore-app</module>
         <module>petstore-system-tests</module>

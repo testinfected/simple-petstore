@@ -1,8 +1,6 @@
 syntax: glob
 
-target
-logs
-appserver
+
 .classpath
 .project
 .springBeans
@@ -12,3 +10,6 @@ appserver
 *.iws
 *.ids
 .idea
+target
+dependency.cache
+reports
