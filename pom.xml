@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.pyxis</groupId>
+    <groupId>com.pyxis.simple-petstore</groupId>
     <artifactId>petstore</artifactId>
     <packaging>pom</packaging>
     <version>0.9-SNAPSHOT</version>
@@ -284,6 +284,12 @@
                 <groupId>nekohtml</groupId>
                 <artifactId>nekohtml</artifactId>
                 <version>1.9.6.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-nop</artifactId>
+                <version>1.5.10</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

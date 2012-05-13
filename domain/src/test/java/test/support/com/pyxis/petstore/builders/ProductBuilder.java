@@ -17,13 +17,17 @@ public class ProductBuilder implements Builder<Product> {
         return new ProductBuilder();
     }
 
-    public ProductBuilder withName(String name) {
+    public static ProductBuilder aProduct(String productNumber) {
+        return aProduct().withNumber(productNumber);
+    }
+
+    public ProductBuilder named(String name) {
         this.name = name;
         return this;
     }
 
     public ProductBuilder withoutAName() {
-        return withName(null);
+        return named(null);
     }
 
     public ProductBuilder describedAs(String description) {
@@ -53,6 +57,7 @@ public class ProductBuilder implements Builder<Product> {
     public ProductBuilder withoutANumber() {
         return withNumber(null);
     }
+
 
     public Product build() {
         Product product = new Product(number, name);

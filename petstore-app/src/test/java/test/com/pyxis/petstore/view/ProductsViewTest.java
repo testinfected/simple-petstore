@@ -67,7 +67,7 @@ public class ProductsViewTest {
     displaysProductDetails() throws Exception {
         model.listing(aProduct().
                 withNumber("LAB-1234").
-                withName("Labrador").
+                named("Labrador").
                 describedAs("Friendly").
                 withPhoto("labrador.png"));
         final String photoUrl = "path/to/attachment/labrador.png";
@@ -100,7 +100,7 @@ public class ProductsViewTest {
 
     @Test public void
     productNameAndPhotoLinkToProductInventory() {
-        productsView = renderProductsView().using(model.listing(aProduct().withName("Labrador").withNumber("LAB-1234"))).asDom();
+        productsView = renderProductsView().using(model.listing(aProduct().named("Labrador").withNumber("LAB-1234"))).asDom();
         assertThat("view", productsView,
                 hasSelector("li a", everyItem(
                         hasAttribute("href", equalTo(routes.itemsPath("LAB-1234"))))));

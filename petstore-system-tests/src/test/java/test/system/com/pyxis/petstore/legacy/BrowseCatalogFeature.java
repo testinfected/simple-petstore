@@ -13,7 +13,7 @@ public class BrowseCatalogFeature extends FeatureTemplate {
 
     @Before public void
     iguanaAreForSale() {
-        iguana = aProduct().withName("Iguana").build();
+        iguana = aProduct().named("Iguana").build();
         context.given(iguana);
     }
 

@@ -4,6 +4,7 @@ import com.pyxis.petstore.domain.product.Product;
 import org.junit.Before;
 import org.junit.Test;
 
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.an;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
@@ -11,11 +12,11 @@ public class ShopFeature extends FeatureTemplate {
 
     @Before public void
     iguanaAreForSale() {
-        Product iguana = aProduct().withName("Iguana").build();
+        Product iguana = aProduct().named("Iguana").build();
         context.given(iguana);
         context.given(
-                anItem().of(iguana).withNumber("12345678").describedAs("Green Adult").priced("18.50"),
-                anItem().of(iguana).withNumber("87654321").describedAs("Blue Female").priced("58.97"));
+                an(iguana).withNumber("12345678").describedAs("Green Adult").priced("18.50"),
+                an(iguana).withNumber("87654321").describedAs("Blue Female").priced("58.97"));
     }
 
     @Test public void

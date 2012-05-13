@@ -43,7 +43,7 @@ public class ProductTest {
     }
 
     private ProductBuilder aProductWithoutAName() {
-        return aProduct().withName(null);
+        return aProduct().named(null);
     }
 
     private ProductBuilder aProductWithoutANumber() {

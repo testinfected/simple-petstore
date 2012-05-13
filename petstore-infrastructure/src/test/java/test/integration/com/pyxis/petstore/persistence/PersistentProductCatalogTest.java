@@ -43,7 +43,7 @@ public class PersistentProductCatalogTest {
 
     @Test public void
     wontFindAnythingIfNoProductMatches() throws Exception {
-        database.given(aProduct().withName("Dalmatian").describedAs("A big dog"));
+        database.given(aProduct().named("Dalmatian").describedAs("A big dog"));
 
         Collection<Product> matchingProducts = productCatalog.findByKeyword("bulldog");
         assertThat("matching products", matchingProducts, is(empty()));
@@ -56,7 +56,7 @@ public class PersistentProductCatalogTest {
     @SuppressWarnings("unchecked")
     @Test public void
     canFindProductsByMatchingName() throws Exception {
-        database.given(aProduct().withName("English Bulldog"), and(aProduct().withName("French Bulldog")), and(aProduct().withName("Labrador Retriever")));
+        database.given(aProduct().named("English Bulldog"), and(aProduct().named("French Bulldog")), and(aProduct().named("Labrador Retriever")));
 
         Collection<Product> matches = productCatalog.findByKeyword("bull");
         assertThat("matching products", matches, hasSize(equalTo(2)));
@@ -66,7 +66,7 @@ public class PersistentProductCatalogTest {
     @SuppressWarnings("unchecked")
     @Test public void
     canFindProductsByMatchingDescription() throws Exception {
-        database.given(aProduct().withName("Labrador").describedAs("Friendly"), and(aProduct().withName("Golden").describedAs("Kids best friend")), and(aProduct().withName("Poodle").describedAs("Annoying")));
+        database.given(aProduct().named("Labrador").describedAs("Friendly"), and(aProduct().named("Golden").describedAs("Kids best friend")), and(aProduct().named("Poodle").describedAs("Annoying")));
 
         List<Product> matches = productCatalog.findByKeyword("friend");
         assertThat("matching products", matches, hasSize(equalTo(2)));
@@ -86,8 +86,8 @@ public class PersistentProductCatalogTest {
     @Test public void
     canRoundTripProducts() throws Exception {
         final Collection<Product> sampleProducts = Arrays.asList(
-                aProduct().withName("Labrador").describedAs("Labrador Retriever").withPhoto("labrador.png").build(),
-                aProduct().withName("Dalmatian").build());
+                aProduct().named("Labrador").describedAs("Labrador Retriever").withPhoto("labrador.png").build(),
+                aProduct().named("Dalmatian").build());
 
         for (Product product : sampleProducts) {
             productCatalog.add(product);
