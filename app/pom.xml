@@ -121,6 +121,7 @@
 
     <properties>
         <main.basedir>${project.parent.basedir}</main.basedir>
+        <webapp.dir>${project.basedir}/src/main/webapp</webapp.dir>
     </properties>
 
     <pluginRepositories>

@@ -1,63 +1,62 @@
 require 'buildr/java/cobertura'
+require 'buildr/jetty'
 
 VERSION_NUMBER = '0.9-SNAPSHOT'
 
-COMMONS = struct(
-  :lang => 'commons-lang:commons-lang:jar:2.4',
-  :dbcp => transitive('commons-dbcp:commons-dbcp:jar:1.2')
-)
+HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]
+LOG = [:slf4j_api, :slf4j_log4j, :slf4j_jcl, :log4j]
+NO_LOG = [:slf4j_api, :slf4j_silent]
+VELOCITY = [:commons_beanutils, :commons_digester, :commons_chain, :velocity_engine, :velocity_tools]
 
-HIBERNATE = struct(
-  :annotations => transitive('org.hibernate:hibernate-annotations:jar:3.5.1-Final'),
-  :validator => transitive('org.hibernate:hibernate-validator:jar:4.0.2.GA')
-)
-
-JAVASSIST = 'javassist:javassist:jar:3.8.0.GA'
-
-SPRING = struct(
-  :core => transitive('org.springframework:spring-core:jar:3.0.2.RELEASE'),
-  :context => transitive('org.springframework:spring-context:jar:3.0.2.RELEASE'),
-  :tx => transitive('org.springframework:spring-tx:jar:3.0.2.RELEASE'),
-  :orm => transitive('org.springframework:spring-orm:jar:3.0.2.RELEASE')
-)
-
-SLF4J = struct(
-  :silent => 'org.slf4j:slf4j-nop:jar:1.5.8'
-)
-
-HAMCREST = group('hamcrest-core', 'hamcrest-library', :under => 'org.hamcrest', :version => '1.3.RC2')
-
-HAMCREST_MATCHERS = struct(
-  :core => 'org.testinfected.hamcrest-matchers:core-matchers:jar:1.5',
-  :validation => 'org.testinfected.hamcrest-matchers:validation-matchers:jar:1.5',
-  :jpa => transitive('org.testinfected.hamcrest-matchers:jpa-matchers:jar:1.5')
-)
-
-CARBON_5 = transitive('com.carbonfive.db-support:db-migration:jar:0.9.9-m2')
-
-MYSQL = 'mysql:mysql-connector-java:jar:5.1.11'
+Project.local_task 'jetty'
 
 define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NUMBER do
-  
   compile.options.target = '1.6'
 
-  desc 'The domain jar'
   define 'domain' do
-    compile.with COMMONS.lang, HIBERNATE.annotations, HIBERNATE.validator, SPRING.context
+    compile.with_transitive :commons_lang, :hibernate_annotations, :hibernate_validator, :spring_context
     
-    test.with HAMCREST, HAMCREST_MATCHERS.core, HAMCREST_MATCHERS.validation, SLF4J.silent
-
+    test.with HAMCREST, :hamcrest_validation, NO_LOG
+    
     package :jar
-    package(:jar, :classifier => 'tests').include(_(:target, :test, :classes, '*'))
   end
   
-  desc 'The infrastructure jar'
   define 'infrastructure' do
-    compile.with project(:domain), project(:domain).compile.dependencies, SPRING.tx
+    resources.no_filtering
+    compile.with project(:domain)
+    compile.with_transitive :hibernate_annotations, :hibernate_validator, :spring_context, :spring_tx
     
     test.resources.filter.using 'migrations.dir' => _(:src, :main, :scripts, :migrations), 'test.log.dir' => _(:target, :logs)
-    test.with HAMCREST, HAMCREST_MATCHERS.core, HAMCREST_MATCHERS.jpa, CARBON_5, COMMONS.dbcp, SPRING.orm, JAVASSIST, MYSQL, SLF4J.silent
+    test.with project(:domain).test.compile.target, HAMCREST, LOG
+    test.with_transitive :hamcrest_jpa, :carbon_5, :commons_dbcp, :spring_orm, :javassist, :mysql
 
     package :jar
+  end
+  
+  define 'app' do
+    resources.filter.using 'log.dir' => _(:target, :logs)
+    
+    compile.with project(:domain), project(:domain).compile.dependencies, project(:infrastructure), project(:infrastructure).compile.dependencies, VELOCITY
+    compile.with_transitive :spring_web, :spring_mvc, :servlet_api
+    
+    test.setup { makedirs _(:target, :logs) }
+    test.resources.filter.using 'webapp.dir' => _(:src, :main, :webapp), 'test.log.dir' => _(:target, :logs)
+    test.with project(:domain).test.compile.target, HAMCREST 
+    test.with_transitive :hamcrest_dom, :hamcrest_spring, :neko_html, :commons_lang, :spring_support, :spring_test
+    
+    package(:war).provided_dependencies :servlet_api
+    package(:war).runtime_dependencies LOG, :commons_pool, :commons_dbcp, :javassist, :asm, :cglib, :spring_orm, :spring_jdbc, :sitemesh, :url_rewrite, :mysql
+  end
+  
+  task('jetty' => [project(:app).package(:war), jetty.use]) do |task|
+    port = Buildr.settings.profile['server.port']
+    context_path = Buildr.settings.profile['filter']['context.path']
+    
+    jetty.deploy("http://localhost:#{port}#{context_path}", task.prerequisites.first)
+    puts 'Press CTRL-C to stop Jetty'
+    trap 'SIGINT' do
+      jetty.stop
+    end
+    Thread.stop
   end
 end
