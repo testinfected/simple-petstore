@@ -7,6 +7,7 @@ HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]
 LOG = [:slf4j_api, :slf4j_log4j, :slf4j_jcl, :log4j]
 NO_LOG = [:slf4j_api, :slf4j_silent]
 VELOCITY = [:commons_beanutils, :commons_digester, :commons_chain, :velocity_engine, :velocity_tools]
+JETTY = [:jetty, :jetty_util]
 
 Project.local_task :jetty
 
@@ -57,6 +58,16 @@ define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NU
       end
       Thread.stop
     end
-    Thread.stop
+  end
+  
+  define 'petstore-system-tests' do
+    test.resources.filter.using 'webapp.dir' => project(:app).path_to(:src, :main, :webapp), 
+                                'migrations.dir' => project(:infrastructure).path_to(:src, :main, :scripts, :migrations),
+                                'test.log.dir' => _(:target, :logs)
+    test.with project(:app).compile.target, project(:app).resources.target, project(:app).package(:war).libs, 
+              project(:domain).test.compile.target, project(:infrastructure).test.compile.target, HAMCREST, LOG
+    test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :simpleframework, :carbon_5
+
+    test.using :integration
   end
 end
