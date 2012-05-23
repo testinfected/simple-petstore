@@ -8,7 +8,7 @@ LOG = [:slf4j_api, :slf4j_log4j, :slf4j_jcl, :log4j]
 NO_LOG = [:slf4j_api, :slf4j_silent]
 VELOCITY = [:commons_beanutils, :commons_digester, :commons_chain, :velocity_engine, :velocity_tools]
 
-Project.local_task 'jetty'
+Project.local_task :jetty
 
 define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NUMBER do
   compile.options.target = '1.6'
@@ -46,16 +46,16 @@ define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NU
     
     package(:war).provided_dependencies :servlet_api
     package(:war).runtime_dependencies LOG, :commons_pool, :commons_dbcp, :javassist, :asm, :cglib, :spring_orm, :spring_jdbc, :sitemesh, :url_rewrite, :mysql
-  end
-  
-  task('jetty' => [project(:app).package(:war), jetty.use]) do |task|
-    port = Buildr.settings.profile['server.port']
-    context_path = Buildr.settings.profile['filter']['context.path']
     
-    jetty.deploy("http://localhost:#{port}#{context_path}", task.prerequisites.first)
-    puts 'Press CTRL-C to stop Jetty'
-    trap 'SIGINT' do
-      jetty.stop
+    task :jetty => package(:war) do |task|
+      jetty.url = "http://localhost:#{Buildr.settings.profile['server.port']}"
+      jetty.use.invoke
+      jetty.deploy("#{jetty.url}#{Buildr.settings.profile['filter']['context.path']}", task.prerequisites.first)
+      puts 'Press CTRL-C to stop Jetty'
+      trap 'SIGINT' do
+        jetty.stop
+      end
+      Thread.stop
     end
     Thread.stop
   end
