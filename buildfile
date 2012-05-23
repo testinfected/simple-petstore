@@ -60,7 +60,7 @@ define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NU
     end
   end
   
-  define 'petstore-system-tests' do
+  define 'system-tests' do
     test.resources.filter.using 'webapp.dir' => project(:app).path_to(:src, :main, :webapp), 
                                 'migrations.dir' => project(:infrastructure).path_to(:src, :main, :scripts, :migrations),
                                 'test.log.dir' => _(:target, :logs)
