@@ -34,7 +34,7 @@ define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NU
     package :jar
   end
   
-  define 'app' do
+  define 'webapp' do
     resources.filter.using 'log.dir' => _(:target, :logs)
     
     compile.with project(:domain), project(:domain).compile.dependencies, project(:infrastructure), project(:infrastructure).compile.dependencies, VELOCITY
@@ -61,10 +61,10 @@ define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NU
   end
   
   define 'system-tests' do
-    test.resources.filter.using 'webapp.dir' => project(:app).path_to(:src, :main, :webapp), 
+    test.resources.filter.using 'webapp.dir' => project(:webapp).path_to(:src, :main, :webapp), 
                                 'migrations.dir' => project(:infrastructure).path_to(:src, :main, :scripts, :migrations),
                                 'test.log.dir' => _(:target, :logs)
-    test.with project(:app).compile.target, project(:app).resources.target, project(:app).package(:war).libs, 
+    test.with project(:webapp).compile.target, project(:webapp).resources.target, project(:webapp).package(:war).libs, 
               project(:domain).test.compile.target, project(:infrastructure).test.compile.target, HAMCREST, LOG
     test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :simpleframework, :carbon_5
 
