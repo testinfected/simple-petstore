@@ -19,7 +19,7 @@ Java.classpath << SELENIUM_SERVER
 
 Project.local_task :jetty
 
-define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NUMBER do
+define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NUMBER do
   compile.options.target = '1.6'
 
   define 'domain' do
@@ -38,8 +38,6 @@ define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NU
     test.resources.filter.using 'migrations.dir' => _(:src, :main, :scripts, :migrations), 'test.log.dir' => _(:target, :logs)
     test.with project(:domain).test.compile.target, HAMCREST, LOG
     test.with_transitive :hamcrest_jpa, :carbon_5, :commons_dbcp, :spring_orm, :javassist, :mysql
-
-    package :jar
   end
   
   define 'webapp' do
@@ -86,7 +84,6 @@ define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NU
     }
     integration project(:webapp).package(:war)
     integration.setup do
-      #Rake::Task['petstore:system-tests:start-selenium'].invoke
       start_selenium
       jetty.url = "http://localhost:#{Buildr.settings.profile['filter']['test.server.port']}"
       jetty.with :properties => {
