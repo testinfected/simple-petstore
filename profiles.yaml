@@ -7,6 +7,7 @@ defaults: &defaults
   test.jdbc.password: petstore
   test.timeServer.port: 10013
   test.server.host: localhost
+  test.server.port: 8081
   test.jdbc.password: petstore
   jdbc.driverClassName: com.mysql.jdbc.Driver
   hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -22,8 +23,7 @@ development:
     jdbc.password: petstore
     context.path: /petstore
     log.file: development.log    
-    test.server.port: 8090
-  server.port: 8090    
+  server.port: 8080    
   
 production:
   filter:
@@ -32,7 +32,6 @@ production:
     jdbc.username: sysadmin
     jdbc.password: petstore
     context.path: /petstore
-    test.server.port: 80
     log.file: production.log
     timeServer.host: time.nist.gov
     timeServer.port: 13  
@@ -45,7 +44,6 @@ integration:
     jdbc.username: integrator
     jdbc.password: petstore
     context.path: /petstore
-    test.server.port: 8000
     log.file: integration.log
     timeServer.host: localhost
     timeServer.port: 10000    

@@ -88,7 +88,7 @@ define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NU
     integration.setup do
       #Rake::Task['petstore:system-tests:start-selenium'].invoke
       start_selenium
-      jetty.url = "http://localhost:#{Buildr.settings.profile['server.port']}"
+      jetty.url = "http://localhost:#{Buildr.settings.profile['filter']['test.server.port']}"
       jetty.with :properties => {
         'jdbc.url' => Buildr.settings.profile['filter']['test.jdbc.url'],
         'jdbc.username' => Buildr.settings.profile['filter']['test.jdbc.username'],
