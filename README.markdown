@@ -20,9 +20,16 @@ To build the application, I use rvm with ruby-1.8.7-p334 with Buildr 1.4.6. I gu
 
 To install Buildr, follow Buildr installation [instructions](http://buildr.apache.org/installing.html).
 
-To build, run:
+To build and run all tests, ue:
 
-`buildr`
+`buildr integration`
+
+## Running
+
+To run the application, from the webapp directory use:
+
+`buildr jetty`
+
 
 ## IntelliJ
 If you use IntelliJ, you can generate your project using:
