@@ -35,3 +35,10 @@ class Buildr::ResourcesTask
     filter.using { |file, contents| contents }
   end
 end
+
+class Buildr::Jetty
+  def with(options = {})
+    props = options[:properties] || {}
+    props.each { |name, value| Java.java.lang.System.setProperty(name.to_s, value.to_s) }
+  end
+end

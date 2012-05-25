@@ -12,8 +12,8 @@
     <modules>
         <module>domain</module>
         <module>infrastructure</module>
-        <module>app</module>
-        <module>petstore-system-tests</module>
+        <module>webapp</module>
+        <module>system-tests</module>
     </modules>
 
     <repositories>

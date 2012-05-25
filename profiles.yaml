@@ -10,6 +10,9 @@ defaults: &defaults
   test.jdbc.password: petstore
   jdbc.driverClassName: com.mysql.jdbc.Driver
   hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  selenium.server.url: http://localhost:4444/wd/hub
+  selenium.server.browser: firefox
+  selenium.server.browser.version: 7
   
 development:
   filter:

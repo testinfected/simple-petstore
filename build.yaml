@@ -41,6 +41,7 @@ artifacts:
   url_rewrite: org.tuckey:urlrewritefilter:jar:3.1.0
   neko_html: nekohtml:nekohtml:jar:1.9.6.2
   log4j: log4j:log4j:jar:1.2.12
+  jcl_over_slf4j: org.slf4j:jcl-over-slf4j:jar:1.5.10
   slf4j_api: org.slf4j:slf4j-api:jar:1.5.6
   slf4j_log4j: org.slf4j:slf4j-log4j12:jar:1.5.6
   slf4j_jcl: org.slf4j:jcl-over-slf4j:jar:1.5.6

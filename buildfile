@@ -1,3 +1,7 @@
+# Disable logging in Jetty and Selenium Server before requiring jetty addon.
+# Find a way to make this configurable
+Java.classpath << [:slf4j_api, :jcl_over_slf4j, :slf4j_silent]
+
 require 'buildr/java/cobertura'
 require 'buildr/jetty'
 
@@ -8,6 +12,10 @@ LOG = [:slf4j_api, :slf4j_log4j, :slf4j_jcl, :log4j]
 NO_LOG = [:slf4j_api, :slf4j_silent]
 VELOCITY = [:commons_beanutils, :commons_digester, :commons_chain, :velocity_engine, :velocity_tools]
 JETTY = [:jetty, :jetty_util]
+
+SELENIUM_SERVER = artifact("org.seleniumhq:selenium-server-standalone:jar:2.21.0")
+download( SELENIUM_SERVER => "http://selenium.googlecode.com/files/selenium-server-standalone-2.21.0.jar" )
+Java.classpath << SELENIUM_SERVER
 
 Project.local_task :jetty
 
@@ -68,6 +76,31 @@ define 'petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NU
               project(:domain).test.compile.target, project(:infrastructure).test.compile.target, HAMCREST, LOG
     test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :simpleframework, :carbon_5
 
-    test.using :integration
+    test.using :integration, :properties => { 
+      'server.lifecycle' => 'external',
+      'browser.lifecycle' => 'remote',
+      'browser.remote.url' => Buildr.settings.profile['filter']['selenium.server.url'],
+      'browser.remote.capability.browserName' => Buildr.settings.profile['filter']['selenium.server.browser'],
+      'browser.remote.capability.version' => Buildr.settings.profile['filter']['selenium.server.version'],
+      'browser.remote.capability.name' => 'PetStore System Tests'
+    }
+    integration project(:webapp).package(:war)
+    integration.setup do
+      #Rake::Task['petstore:system-tests:start-selenium'].invoke
+      start_selenium
+      jetty.url = "http://localhost:#{Buildr.settings.profile['server.port']}"
+      jetty.with :properties => {
+        'jdbc.url' => Buildr.settings.profile['filter']['test.jdbc.url'],
+        'jdbc.username' => Buildr.settings.profile['filter']['test.jdbc.username'],
+        'jdbc.password' => Buildr.settings.profile['filter']['test.jdbc.password']
+      }
+      jetty.use.invoke
+      jetty.deploy("#{jetty.url}#{Buildr.settings.profile['filter']['context.path']}", project(:webapp).package(:war))
+    end
+    
+    integration.teardown do
+      jetty.stop
+      stop_selenium
+    end
   end
 end
