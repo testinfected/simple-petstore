@@ -63,6 +63,7 @@ public class ProductsViewTest {
         assertThat("view", productsView, hasSelector("#catalog li[id^='product']", hasSize(2)));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     displaysProductDetails() throws Exception {
         model.listing(aProduct().
@@ -84,6 +85,7 @@ public class ProductsViewTest {
                 hasSelector(".product-description", hasText("Friendly")));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     handlesProductWithNoDescription() {
         productsView = renderProductsView().using(model.listing(aProduct().withNoDescription())).asDom();
