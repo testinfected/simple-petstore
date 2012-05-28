@@ -38,6 +38,8 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
     test.resources.filter.using 'migrations.dir' => _(:src, :main, :scripts, :migrations), 'test.log.dir' => _(:target, :logs)
     test.with project(:domain).test.compile.target, HAMCREST, LOG
     test.with_transitive :hamcrest_jpa, :carbon_5, :commons_dbcp, :spring_orm, :javassist, :mysql
+    
+    package(:jar)
   end
   
   define 'webapp' do
