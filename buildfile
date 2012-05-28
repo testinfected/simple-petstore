@@ -86,7 +86,7 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
     }
     integration project(:webapp).package(:war)
     integration.setup do
-      start_selenium
+      selenium.start
       jetty.url = "http://localhost:#{Buildr.settings.profile['filter']['test.server.port']}"
       jetty.with :properties => {
         'jdbc.url' => Buildr.settings.profile['filter']['test.jdbc.url'],
@@ -99,7 +99,7 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
     
     integration.teardown do
       jetty.stop
-      stop_selenium
+      selenium.stop
     end
   end
 end
