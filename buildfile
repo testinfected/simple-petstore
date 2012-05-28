@@ -13,10 +13,6 @@ NO_LOG = [:slf4j_api, :slf4j_silent]
 VELOCITY = [:commons_beanutils, :commons_digester, :commons_chain, :velocity_engine, :velocity_tools]
 JETTY = [:jetty, :jetty_util]
 
-SELENIUM_SERVER = artifact("org.seleniumhq:selenium-server-standalone:jar:2.21.0")
-download( SELENIUM_SERVER => "http://selenium.googlecode.com/files/selenium-server-standalone-2.21.0.jar" )
-Java.classpath << SELENIUM_SERVER
-
 Project.local_task :jetty
 
 define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NUMBER do
@@ -86,7 +82,7 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
     }
     integration project(:webapp).package(:war)
     integration.setup do
-      selenium.start
+      selenium.run
       jetty.url = "http://localhost:#{Buildr.settings.profile['filter']['test.server.port']}"
       jetty.with :properties => {
         'jdbc.url' => Buildr.settings.profile['filter']['test.jdbc.url'],
