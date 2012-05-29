@@ -1,89 +1,94 @@
-# Make that configurable, i.e.:
-# - Selenium version
-# - SLF4J version
-# - Server port
-# - Log/silent output
-# - Wait timeout
+require 'uri'
+
 module Buildr
   class SeleniumServer
-  
-    # Which version of Selenium Server we're using by default
+    # Which version of Selenium Server we're using by default (change with :selenium :version in build settings).
     VERSION = "2.21.0"
-    DOWNLOAD_URL = "http://selenium.googlecode.com/files/selenium-server-standalone-#{VERSION}.jar"
-
-    SELENIUM_SERVER = Buildr.artifact("org.seleniumhq.selenium:selenium-server-standalone:jar:#{VERSION}")
-    Buildr.download( SELENIUM_SERVER => DOWNLOAD_URL  )
+    # Which version of SLF4J we use (change with :selenium :slf4j_version in build settings).
+    SLF4J_VERSION = "1.5.6"
+    # Use selenium server default port (change with :selenium :port in build settings).
+    PORT = 4444
+    # By default, enable server output (change with :selenium :silent in build settings)
+    SILENT = false
     
-    SLF4J_VERSION = "1.5.8"
-
-    # Librairies that we need
-    REQUIRES = [ SELENIUM_SERVER, "org.slf4j:slf4j-api:jar:#{SLF4J_VERSION}", "org.slf4j:slf4j-simple:jar:#{SLF4J_VERSION}", "org.slf4j:jcl104-over-slf4j:jar:#{SLF4J_VERSION}" ]
-  
-    Java.classpath << REQUIRES
-
-    # Default URL for Selenium Server (change with options.url).
-    URL = "http://localhost:4444"
-  
     class << self
-
       # :call-seq:
       #   instance() => SeleniumServer
       #
       # Returns an instance of SeleniumServer.
       def instance
-        @instance ||= SeleniumServer.new(URL)
+        @instance ||= SeleniumServer.new(port)
+      end
+      
+      def settings
+        Buildr.settings.build['selenium'] || {}
+      end
+      
+      def port
+        settings['port'] || PORT
+      end
+      
+      def version
+        settings['version'] || VERSION
+      end
+      
+      def slf4j_version
+        settings['slf4j_version'] || SLF4J_VERSION
+      end
+      
+      def silent?
+        settings['silent'] || SILENT
       end
     end
     
-    attr_reader :url
+    DOWNLOAD_URL = "http://selenium.googlecode.com/files/selenium-server-standalone-#{VERSION}.jar"
+    SELENIUM_SERVER = Buildr.artifact("org.seleniumhq.selenium:selenium-server-standalone:jar:#{VERSION}")
+    Buildr.download( SELENIUM_SERVER => DOWNLOAD_URL  )
+    SLF4J_BINDING = silent? ? 'slf4j-nop' : 'slf4j-simple'
+    REQUIRED_LIBRAIRIES = [ SELENIUM_SERVER, 
+                            "org.slf4j:slf4j-api:jar:#{SLF4J_VERSION}", 
+                            "org.slf4j:jul-to-slf4j:jar:#{SLF4J_VERSION}",
+                            "org.slf4j:jcl-over-slf4j:jar:#{SLF4J_VERSION}",
+                            "org.slf4j:#{SLF4J_BINDING}:jar:#{SLF4J_VERSION}" ]
+                            
+    Java.classpath << REQUIRED_LIBRAIRIES
+
+    attr_accessor :port
   
-    def initialize(url)
-      @url = url
+    def initialize(port)
+      @port = port
+      assimilate_logs
     end
   
     def start(sync = nil)
       puts "Starting Selenium Server at #{url}" if verbose
-
       begin
-        Java.load
-        Java.org.openqa.selenium.server.SeleniumServer.main []
-        sync << "Starting" if sync
-        sleep # Forever
-      rescue Interrupt # Stopped from console
+        Java.org.openqa.selenium.server.SeleniumServer.main ["-port", port.to_s]
+        sync << "Started" if sync
+        sleep
+      rescue Interrupt
         puts "Shutting down" if verbose
       rescue Exception => error
-        puts "An error occured" if verbose
+        puts "An error occured starting Selenium Server:" if verbose
         puts "#{error.class}: #{error.message}"
       end
       exit!
     end
     
     def running?
-      false
+      begin
+        response  = Net::HTTP.get_response(URI.parse(url))
+        response.is_a?(Net::HTTPSuccess)
+      rescue Errno::ECONNREFUSED
+        false
+      end
     end
-  
+    
     def run
       unless running?
-        Java.load
-        logger = Java.java.util.logging.Logger.getLogger("org.openqa")
-        logger.setLevel(Java.java.util.logging.Level.WARNING)
-
         sync = Queue.new
         Thread.new { start sync }
-        sync.pop == "Starting" or fail "Selenium Server not started"
-      
-        # Wait for Selenium to fire up before doing anything else.
-        started = false
-        20.times do
-          begin
-            Net::HTTP.get(URI.parse("#{url}/selenium-server"))
-            started = true
-          rescue Errno::ECONNREFUSED
-            sleep 1
-          end
-        end 
-        started or fail "Selenium Server not responding"
-      
+        sync.pop == "Started" or fail "Selenium Server not started"
         puts "Selenium Server started" if verbose
       end
     end
@@ -91,12 +96,23 @@ module Buildr
     def stop
       puts "Stopping Selenium Server" if verbose
       begin
-        Net::HTTP.get(URI.parse("#{url}/selenium-server/driver/?cmd=shutDownSeleniumServer"))
+        Net::HTTP.get(URI.parse("#{url}/driver/?cmd=shutDownSeleniumServer"))
       rescue Errno::ECONNREFUSED
         # Expected if server not running.
       rescue EOFError
         # We get EOFError when Selenium Server is brutally killed.
       end
+    end
+    
+    protected
+    def assimilate_logs
+      Java.load
+      Java.java.util.logging.LogManager.getLogManager.reset
+      Java.org.slf4j.bridge.SLF4JBridgeHandler.install
+    end
+      
+    def url
+      "http://localhost:#{port}/selenium-server"
     end
   end
 

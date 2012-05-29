@@ -1,7 +1,3 @@
-# Disable logging in Jetty and Selenium Server before requiring jetty addon.
-# Find a way to make this configurable
-Java.classpath << [:slf4j_api, :jcl_over_slf4j, :slf4j_silent]
-
 require 'buildr/java/cobertura'
 require 'buildr/jetty'
 
@@ -94,7 +90,6 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
     end
     
     integration.teardown do
-      jetty.stop
       selenium.stop
     end
   end
