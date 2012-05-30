@@ -60,13 +60,19 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
     end
   end
   
+  define 'webapp' do
+    compile.with :simpleframework
+    package(:jar)
+  end
+  
   define 'system-tests' do
     test.resources.filter.using 'webapp.dir' => project(:oldapp).path_to(:src, :main, :webapp),
                                 'migrations.dir' => project(:infrastructure).path_to(:src, :main, :scripts, :migrations),
                                 'test.log.dir' => _(:target, :logs)
     test.with project(:oldapp).compile.target, project(:oldapp).resources.target, project(:oldapp).package(:war).libs, 
-              project(:domain).test.compile.target, project(:infrastructure).test.compile.target, HAMCREST, LOG
-    test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :simpleframework, :carbon_5
+              project(:domain).test.compile.target, project(:infrastructure).test.compile.target, project(:webapp), project(:webapp).compile.dependencies,
+              HAMCREST, LOG
+    test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :carbon_5
 
     test.using :integration, :properties => { 
       'server.lifecycle' => 'external',

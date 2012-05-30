@@ -46,10 +46,10 @@ module Buildr
     Buildr.download( SELENIUM_SERVER => DOWNLOAD_URL  )
     SLF4J_BINDING = silent? ? 'slf4j-nop' : 'slf4j-simple'
     REQUIRED_LIBRAIRIES = [ SELENIUM_SERVER, 
-                            "org.slf4j:slf4j-api:jar:#{SLF4J_VERSION}", 
-                            "org.slf4j:jul-to-slf4j:jar:#{SLF4J_VERSION}",
-                            "org.slf4j:jcl-over-slf4j:jar:#{SLF4J_VERSION}",
-                            "org.slf4j:#{SLF4J_BINDING}:jar:#{SLF4J_VERSION}" ]
+                            "org.slf4j:slf4j-api:jar:#{slf4j_version}", 
+                            "org.slf4j:jul-to-slf4j:jar:#{slf4j_version}",
+                            "org.slf4j:jcl-over-slf4j:jar:#{slf4j_version}",
+                            "org.slf4j:#{SLF4J_BINDING}:jar:#{slf4j_version}" ]
                             
     Java.classpath << REQUIRED_LIBRAIRIES
 
