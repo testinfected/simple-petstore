@@ -1,4 +1,4 @@
-package test.system.com.pyxis.petstore.legacy;
+package test.system.com.pyxis.petstore.old;
 
 import com.pyxis.petstore.domain.product.Product;
 import org.junit.Before;

@@ -1,11 +1,10 @@
-package test.system.com.pyxis.petstore.legacy;
+package test.system.com.pyxis.petstore.old;
 
 import com.pyxis.petstore.domain.product.Product;
 import org.junit.Before;
 import org.junit.Test;
 
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.an;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class ShopFeature extends FeatureTemplate {

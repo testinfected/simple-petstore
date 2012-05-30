@@ -1,4 +1,4 @@
-package test.system.com.pyxis.petstore.legacy;
+package test.system.com.pyxis.petstore.old;
 
 import org.junit.After;
 import org.junit.Before;

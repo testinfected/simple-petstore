@@ -1,7 +1,6 @@
-package test.system.com.pyxis.petstore.legacy;
+package test.system.com.pyxis.petstore.old;
 
 import org.junit.Test;
-import test.support.com.pyxis.petstore.builders.ProductBuilder;
 
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 

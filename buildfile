@@ -34,7 +34,7 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
     package(:jar)
   end
   
-  define 'webapp' do
+  define 'oldapp' do
     resources.filter.using 'log.dir' => _(:target, :logs)
     
     compile.with project(:domain), project(:domain).compile.dependencies, project(:infrastructure), project(:infrastructure).compile.dependencies, VELOCITY
@@ -61,10 +61,10 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
   end
   
   define 'system-tests' do
-    test.resources.filter.using 'webapp.dir' => project(:webapp).path_to(:src, :main, :webapp), 
+    test.resources.filter.using 'webapp.dir' => project(:oldapp).path_to(:src, :main, :webapp),
                                 'migrations.dir' => project(:infrastructure).path_to(:src, :main, :scripts, :migrations),
                                 'test.log.dir' => _(:target, :logs)
-    test.with project(:webapp).compile.target, project(:webapp).resources.target, project(:webapp).package(:war).libs, 
+    test.with project(:oldapp).compile.target, project(:oldapp).resources.target, project(:oldapp).package(:war).libs, 
               project(:domain).test.compile.target, project(:infrastructure).test.compile.target, HAMCREST, LOG
     test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :simpleframework, :carbon_5
 
@@ -76,7 +76,7 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
       'browser.remote.capability.version' => Buildr.settings.profile['filter']['selenium.server.version'],
       'browser.remote.capability.name' => 'PetStore System Tests'
     }
-    integration project(:webapp).package(:war)
+    integration project(:oldapp).package(:war)
     integration.setup do
       selenium.run
       jetty.url = "http://localhost:#{Buildr.settings.profile['filter']['test.server.port']}"
@@ -86,7 +86,7 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
         'jdbc.password' => Buildr.settings.profile['filter']['test.jdbc.password']
       }
       jetty.use.invoke
-      jetty.deploy("#{jetty.url}#{Buildr.settings.profile['filter']['context.path']}", project(:webapp).package(:war))
+      jetty.deploy("#{jetty.url}#{Buildr.settings.profile['filter']['context.path']}", project(:oldapp  ).package(:war))
     end
     
     integration.teardown do
