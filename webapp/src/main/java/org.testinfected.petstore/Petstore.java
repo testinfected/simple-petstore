@@ -40,15 +40,14 @@ public class PetStore {
                 response.setDate("Date", time);
                 response.setDate("Last-Modified", time);
 
-                body.println(
-                        "<html>\n" +
-                                "<body>\n" +
-                                "<form action=\"/logout\" method=\"post\">\n" +
-                                "    <input type=\"hidden\" name=\"_method\" value=\"delete\"/>\n" +
-                                "    <button id=\"logout\"></button>\n" +
-                                "</form>\n" +
-                                "</body>\n" +
-                                "</html");
+                body.println("<html>\n" +
+                        "<body>\n" +
+                        "<form action=\"/logout\" method=\"post\">\n" +
+                        "    <input type=\"hidden\" name=\"_method\" value=\"delete\"/>\n" +
+                        "    <button id=\"logout\"></button>\n" +
+                        "</form>\n" +
+                        "</body>\n" +
+                        "</html>");
                 body.close();
             } catch (IOException e) {
                 response.setText(stackTraceOf(e));

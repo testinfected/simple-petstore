@@ -13,7 +13,7 @@ Project.local_task :jetty
 
 define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NUMBER do
   compile.options.target = '1.6'
-
+  
   define 'domain' do
     compile.with_transitive :commons_lang, :hibernate_annotations, :hibernate_validator, :spring_context
     
@@ -65,12 +65,14 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
     package(:jar)
   end
   
-  define 'system-tests' do
+  define 'main' do
+    compile.with project(:webapp), project(:webapp).compile.dependencies
+    
     test.resources.filter.using 'webapp.dir' => project(:oldapp).path_to(:src, :main, :webapp),
                                 'migrations.dir' => project(:infrastructure).path_to(:src, :main, :scripts, :migrations),
                                 'test.log.dir' => _(:target, :logs)
     test.with project(:oldapp).compile.target, project(:oldapp).resources.target, project(:oldapp).package(:war).libs, 
-              project(:domain).test.compile.target, project(:infrastructure).test.compile.target, project(:webapp), project(:webapp).compile.dependencies,
+              project(:domain).test.compile.target, project(:infrastructure).test.compile.target, 
               HAMCREST, LOG
     test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :carbon_5
 
@@ -98,5 +100,10 @@ define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VER
     integration.teardown do
       selenium.stop
     end
+  end
+  
+  task :run => project(:main) do
+    cp = [project(:main).compile.target] + project(:main).compile.dependencies
+    Java::Commands.java(["org.testinfected.petstore.Main", Buildr.settings.profile['server.port']], :classpath => cp) { exit }
   end
 end
