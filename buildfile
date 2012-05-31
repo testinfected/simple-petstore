@@ -16,14 +16,12 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   
   define 'domain' do
     compile.with_transitive :commons_lang, :hibernate_annotations, :hibernate_validator, :spring_context
-    
     test.with HAMCREST, :hamcrest_validation, NO_LOG
-    
     package :jar
   end
   
   define 'infrastructure' do
-    resources.no_filtering
+    resources.filter.deactivate
     compile.with project(:domain)
     compile.with_transitive :hibernate_annotations, :hibernate_validator, :spring_context, :spring_tx
     
@@ -45,8 +43,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     test.with project(:domain).test.compile.target, HAMCREST 
     test.with_transitive :hamcrest_dom, :hamcrest_spring, :neko_html, :commons_lang, :spring_support, :spring_test
     
-    package(:war).provided_dependencies :servlet_api
-    package(:war).runtime_dependencies LOG, :commons_pool, :commons_dbcp, :javassist, :asm, :cglib, :spring_orm, :spring_jdbc, :sitemesh, :url_rewrite, :mysql
+    package(:war).exclude :servlet_api
+    package(:war).add LOG, :commons_pool, :commons_dbcp, :javassist, :asm, :cglib, :spring_orm, :spring_jdbc, :sitemesh, :url_rewrite, :mysql
     
     task :jetty => package(:war) do |task|
       jetty.url = "http://localhost:#{Buildr.settings.profile['server.port']}"

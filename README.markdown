@@ -16,7 +16,7 @@ This is a work in progress.
 
 ## Building
 
-To build the application, I use rvm with ruby-1.8.7-p334 with Buildr 1.4.6. I guess it should work fine with ruby 1.9.2 as well, though you won't get growl notifications on OSX (RubyCocoa does not support ruby-1.9).
+To build the application, I use rvm with ruby-1.8.7-p334 with Buildr 1.4.7. I guess it should work fine with ruby 1.9.2 as well, though you won't get growl notifications on OSX (RubyCocoa does not support ruby-1.9).
 
 To install Buildr, follow Buildr installation [instructions](http://buildr.apache.org/installing.html).
 
@@ -26,10 +26,13 @@ To build and run all tests, ue:
 
 ## Running
 
-To run the application, from the webapp directory use:
+To run the new (simple) application, from the top-level directory use:
+
+`buildr run`
+
+To run the old (spring) application, from the oldapp directory use:
 
 `buildr jetty`
-
 
 ## IntelliJ
 If you use IntelliJ, you can generate your project using:
