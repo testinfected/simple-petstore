@@ -1,7 +1,7 @@
 require 'buildr/java/cobertura'
 require 'buildr/jetty'
 
-VERSION_NUMBER = '0.9-SNAPSHOT'
+VERSION_NUMBER = '0.1-SNAPSHOT'
 
 HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]
 LOG = [:slf4j_api, :slf4j_log4j, :slf4j_jcl, :log4j]
@@ -11,7 +11,7 @@ JETTY = [:jetty, :jetty_util]
 
 Project.local_task :jetty
 
-define 'simple-petstore', :group => 'com.pyxis.simple-petstore', :version => VERSION_NUMBER do
+define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NUMBER do
   compile.options.target = '1.6'
   
   define 'domain' do
