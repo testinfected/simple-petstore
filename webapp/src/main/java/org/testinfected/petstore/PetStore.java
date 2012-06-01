@@ -13,8 +13,10 @@ import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
 
 import java.io.IOException;
-import java.io.PrintStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -33,39 +35,33 @@ public class PetStore {
 
     public class MainHandler implements Resource {
 
-        public void handle(Request request, Response response) {
-            PrintStream body;
-            try {
-                body = response.getPrintStream();
-                long time = System.currentTimeMillis();
+        public static final String UTF_8 = "utf-8";
 
-                response.set("Content-Type", "text/html; charset=utf-8");
+        public void handle(Request request, Response response) {
+            try {
+                long time = System.currentTimeMillis();
+                response.set("Content-Type", "text/html; charset=" + charset());
                 response.set("Server", "JPetStore/1.0 (Simple 4.1.21)");
                 response.setDate("Date", time);
                 response.setDate("Last-Modified", time);
+                OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), charset());
 
-                String text = "<html>\n" +
-                        "<head>\n" +
-                        "    <meta content=\"text/html;charset=UTF-8\" http-equiv=\"Content-Type\"/>\n" +
-                        "    <title>{{title}}</title>\n" +
-                        "</head>\n" +
-                        "<body>\n" +
-                        "<form action=\"/logout\" method=\"post\">\n" +
-                        "    <input type=\"hidden\" name=\"_method\" value=\"delete\"/>\n" +
-                        "    <button id=\"logout\"></button>\n" +
-                        "</form>\n" +
-                        "</body>\n" +
-                        "</html>";
-                Template template = Mustache.compiler().compile(text);
+                ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                Reader source = new InputStreamReader(classLoader.getResourceAsStream("templates/main.html"), charset());
+                Template template = Mustache.compiler().compile(source);
                 Map<String, String> data = new HashMap<String, String>();
                 data.put("title", "PetStore");
-                body.println(template.execute(data));
-                body.println();
-                body.close();
-            } catch (IOException e) {
+                template.execute(data, out);
+                out.flush();
+                response.close();
+            } catch (Exception e) {
                 response.setText(stackTraceOf(e));
                 response.setCode(Status.INTERNAL_SERVER_ERROR.getCode());
             }
+        }
+
+        private String charset() {
+            return UTF_8;
         }
     }
 
