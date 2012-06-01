@@ -7,7 +7,7 @@ The intention is to progressively refactor the [petstore](https://github.com/tes
 I have in mind to use the following tools:
 
 - [Simpleframework](http://www.simpleframework.org/) to replace Spring MVC
-- Velocity and Sitemesh for the view (like in my original petstore)
+- A simple templating engine (mustache?)
 - Plain JDBC to replace Hibernate
 - No IoC container to replace Spring Core
 - [Buildr](http://buildr.apache.org) to replace Maven
