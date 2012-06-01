@@ -1,5 +1,7 @@
 package org.testinfected.petstore;
 
+import com.samskivert.mustache.Mustache;
+import com.samskivert.mustache.Template;
 import org.simpleframework.http.Address;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
@@ -16,6 +18,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PetStore {
 
@@ -40,14 +44,23 @@ public class PetStore {
                 response.setDate("Date", time);
                 response.setDate("Last-Modified", time);
 
-                body.println("<html>\n" +
+                String text = "<html>\n" +
+                        "<head>\n" +
+                        "    <meta content=\"text/html;charset=UTF-8\" http-equiv=\"Content-Type\"/>\n" +
+                        "    <title>{{title}}</title>\n" +
+                        "</head>\n" +
                         "<body>\n" +
                         "<form action=\"/logout\" method=\"post\">\n" +
                         "    <input type=\"hidden\" name=\"_method\" value=\"delete\"/>\n" +
                         "    <button id=\"logout\"></button>\n" +
                         "</form>\n" +
                         "</body>\n" +
-                        "</html>");
+                        "</html>";
+                Template template = Mustache.compiler().compile(text);
+                Map<String, String> data = new HashMap<String, String>();
+                data.put("title", "PetStore");
+                body.println(template.execute(data));
+                body.println();
                 body.close();
             } catch (IOException e) {
                 response.setText(stackTraceOf(e));

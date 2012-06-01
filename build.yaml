@@ -3,7 +3,6 @@ gems:
   
 repositories:
   remote:
-    - http://repo1.maven.org/maven2
     - http://mvn.carbonfive.com/public
 
 artifacts:
@@ -31,6 +30,7 @@ artifacts:
   spring_support: org.springframework:spring-context-support:jar:3.0.2.RELEASE
   spring_test: org.springframework:spring-test:jar:3.0.2.RELEASE
   simpleframework: org.simpleframework:simple:jar:4.1.21
+  jmustache: com.samskivert:jmustache:jar:1.5
   velocity_engine: org.apache.velocity:velocity:jar:1.6.3
   velocity_tools: org.apache.velocity:velocity-tools:jar:2.0
   sitemesh: opensymphony:sitemesh:jar:2.4.1
