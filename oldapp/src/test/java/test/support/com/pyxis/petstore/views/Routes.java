@@ -10,6 +10,10 @@ public final class Routes {
         return new Routes(PETSTORE_CONTEXT_PATH);
     }
 
+    public Routes() {
+        this("");
+    }
+
     public Routes(String contextPath) {
         this.contextPath = contextPath;
     }

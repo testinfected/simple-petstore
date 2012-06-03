@@ -60,6 +60,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   
   define 'webapp' do
     compile.with :simpleframework, :jmustache
+    test.with project(:oldapp).test.compile.target, project(:oldapp).test.dependencies
     package(:jar)
   end
   

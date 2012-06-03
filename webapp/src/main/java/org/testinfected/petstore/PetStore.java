@@ -12,6 +12,8 @@ import java.net.SocketAddress;
 
 public class PetStore {
 
+    public static final String UTF_8 = "utf-8";
+
     private final int port;
 
     private Connection connection;
@@ -23,7 +25,7 @@ public class PetStore {
     public void start() throws Exception {
         connection = new SocketConnection(new ResourceContainer(new ResourceEngine() {
             public Resource resolve(Address target) {
-                return new Application();
+                return new Application(new MustacheRendering(new ClassPathResourceLoader(), UTF_8));
             }
         }));
         SocketAddress address = new InetSocketAddress(port);
