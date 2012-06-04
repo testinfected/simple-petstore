@@ -20,7 +20,7 @@ public class ClassPathResourceLoader {
 
     public URL load(String resource) {
         URL url = classLoader.getResource(resource);
-        if (url == null) throw new IllegalArgumentException("Resource not found: " + resource);
+        if (url == null) throw new ResourceNotFoundException("classpath:" + resource);
         return url;
     }
 
