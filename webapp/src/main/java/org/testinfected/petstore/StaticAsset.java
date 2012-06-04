@@ -2,6 +2,7 @@ package org.testinfected.petstore;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
+import org.simpleframework.http.Status;
 import org.simpleframework.http.resource.Resource;
 
 import java.io.IOException;
@@ -26,8 +27,10 @@ public class StaticAsset implements Resource {
             file = resourceLoader.stream(assetFile(request));
             body = response.getOutputStream();
             render(file, body);
+        } catch (ResourceNotFoundException e) {
+            handleNotFound(response);
         } catch (Exception e) {
-            handleError(e, response);
+            handleInternalError(e, response);
         } finally {
             Streams.close(file, body);
         }
@@ -41,7 +44,21 @@ public class StaticAsset implements Resource {
         Streams.copy(file, response);
     }
 
-    private void handleError(Exception error, Response response) {
+    private void handleNotFound(Response response) {
+        try {
+            response.reset();
+            response.setCode(Status.NOT_FOUND.getCode());
+            response.setText(Status.NOT_FOUND.getDescription());
+            PrintStream out = response.getPrintStream();
+            out.println("<p>");
+            out.println("Not found");
+            out.println("</p>");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void handleInternalError(Exception error, Response response) {
         try {
             response.reset();
             response.setText(INTERNAL_SERVER_ERROR.getDescription());
