@@ -27,6 +27,8 @@ public class PetStore {
             public Resource resolve(Address target) {
                 if (target.getPath().getPath().startsWith("/images"))
                     return new StaticAsset(new ClassPathResourceLoader());
+                if (target.getPath().getPath().startsWith("/stylesheets"))
+                    return new StaticAsset(new ClassPathResourceLoader());
                 return new Application(new MustacheRendering(new ClassPathResourceLoader(), UTF_8));
             }
         }));

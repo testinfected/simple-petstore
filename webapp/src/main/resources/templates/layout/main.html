@@ -2,9 +2,12 @@
 <html>
 <head>
   <meta content="text/html;charset=UTF-8" http-equiv="Content-Type"/>
+  <link href="/stylesheets/petstore.css" media="screen" rel="stylesheet" type="text/css"/>
+  <link rel="shortcut icon" href="/images/favicon.ico"/>
   <title>{{title}}</title>
 </head>
-<body>
+<body class="petstore">
+<div id="wrapper">
   <div id="header">
     <div class="content">
       <div id="logo">
@@ -13,11 +16,19 @@
     </div>
   </div>
 
-  <div id="footer">
-    <hr/>
-    <div id="logout-box">
-      {{>layout/_logout}}
-    </div>
+  <div class="content">
   </div>
+
+  <div class="push"></div>
+</div>
+
+<div id="footer">
+  <hr/>
+  <div id="logout-box">
+    {{>layout/_logout}}
+  </div>
+  <a href="https://github.com/testinfected/simple-petstore"><img src="/images/github.png"/></a>
+  <span>jPetStore &copy; 2012 - Vincent Tencé @</span>
+</div>
 </body>
 </html>
