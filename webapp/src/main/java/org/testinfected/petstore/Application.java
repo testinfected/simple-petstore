@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,27 +27,27 @@ public class Application implements Resource {
     }
 
     public void handle(Request request, Response response) {
+        OutputStream body = null;
         try {
             long time = System.currentTimeMillis();
             response.set("Server", "JPetStore/0.1 (Simple 4.1.21)");
             response.set("Content-Type", "text/html; charset=" + charset);
             response.setDate("Date", time);
             response.setDate("Last-Modified", time);
-            render(response);
+            body = response.getOutputStream();
+            render(new OutputStreamWriter(body, response.getContentType().getCharset()));
         } catch (Exception e) {
             handleError(e, response);
         } finally {
-            close(response);
+            Streams.close(body);
         }
     }
 
-    private void render(Response response) throws IOException {
+    private void render(Writer writer) throws IOException {
         Map<String, String> data = new HashMap<String, String>();
         data.put("title", "PetStore");
-        OutputStream out = response.getOutputStream();
-        OutputStreamWriter writer = new OutputStreamWriter(out, response.getContentType().getCharset());
         rendering.render("layout/main", data, writer);
-        writer.close();
+        writer.flush();
     }
 
     private void handleError(Exception error, Response response) {
@@ -63,14 +64,6 @@ public class Application implements Resource {
                 out.println("<br/>");
             }
             out.println("</p>");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void close(Response response) {
-        try {
-            response.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
