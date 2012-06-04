@@ -36,6 +36,7 @@ public class MustacheRendering {
                 return resourceLoader.read(templateFile(name), charset);
             }
         }).compile(source);
+        source.close();
 
         template.execute(context, out);
     }
