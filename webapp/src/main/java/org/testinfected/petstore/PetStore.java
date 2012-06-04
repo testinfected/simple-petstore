@@ -25,6 +25,8 @@ public class PetStore {
     public void start() throws Exception {
         connection = new SocketConnection(new ResourceContainer(new ResourceEngine() {
             public Resource resolve(Address target) {
+                if (target.getPath().getPath().startsWith("/images"))
+                    return new StaticAsset(new ClassPathResourceLoader());
                 return new Application(new MustacheRendering(new ClassPathResourceLoader(), UTF_8));
             }
         }));

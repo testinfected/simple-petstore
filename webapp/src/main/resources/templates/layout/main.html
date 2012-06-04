@@ -5,6 +5,19 @@
   <title>{{title}}</title>
 </head>
 <body>
-   {{>layout/_logout}}
+  <div id="header">
+    <div class="content">
+      <div id="logo">
+        {{>layout/_logo}}
+      </div>
+    </div>
+  </div>
+
+  <div id="footer">
+    <hr/>
+    <div id="logout-box">
+      {{>layout/_logout}}
+    </div>
+  </div>
 </body>
 </html>
