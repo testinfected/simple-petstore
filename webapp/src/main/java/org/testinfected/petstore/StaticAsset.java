@@ -54,7 +54,7 @@ public class StaticAsset implements Resource {
             out.println("Not found");
             out.println("</p>");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw ExceptionImposter.imposterize(e);
         }
     }
 
@@ -73,7 +73,7 @@ public class StaticAsset implements Resource {
             }
             out.println("</p>");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw ExceptionImposter.imposterize(e);
         }
     }
 }

@@ -63,9 +63,9 @@ public class Application implements Resource {
                 out.print(each.toString());
                 out.println("<br/>");
             }
-            out.println("</p>");
+            out.println("</p>") ;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw ExceptionImposter.imposterize(e);
         }
     }
 }
