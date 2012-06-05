@@ -24,6 +24,7 @@ public class StaticAsset implements Resource {
         InputStream file = null;
         OutputStream body = null;
         try {
+            response.set("Content-Type", MimeType.guessFrom(request.getPath().getName()));
             file = resourceLoader.stream(assetFile(request));
             body = response.getOutputStream();
             render(file, body);
