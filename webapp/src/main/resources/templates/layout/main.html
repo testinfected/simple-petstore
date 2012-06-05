@@ -8,27 +8,17 @@
 </head>
 <body class="petstore">
 <div id="wrapper">
-  <div id="header">
-    <div class="content">
-      <div id="logo">
-        {{>layout/_logo}}
-      </div>
-    </div>
-  </div>
+<div id="header">
+{{>layout/header}}
+</div>
 
-  <div class="content">
-  </div>
+<div class="content"></div>
 
-  <div class="push"></div>
+<div class="push"></div>
 </div>
 
 <div id="footer">
-  <hr/>
-  <div id="logout-box">
-    {{>layout/_logout}}
-  </div>
-  <a href="https://github.com/testinfected/simple-petstore"><img src="/images/github.png"/></a>
-  <span>jPetStore &copy; 2012 - Vincent Tencé @</span>
+{{>layout/footer}}
 </div>
 </body>
 </html>
