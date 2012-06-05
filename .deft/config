@@ -1,0 +1,3 @@
+datadir: .deft/data
+format: '3.0'
+initial_status: new
