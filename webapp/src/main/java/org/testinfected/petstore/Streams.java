@@ -1,5 +1,7 @@
 package org.testinfected.petstore;
 
+import org.simpleframework.http.Response;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.Closeable;
@@ -9,20 +11,17 @@ import java.io.OutputStream;
 
 public final class Streams {
 
-    private Streams() {
+    public static void close(Response response) {
+        try {
+            response.close();
+        } catch (IOException ignored) {
+        }
     }
 
     public static void close(Closeable stream) {
         try {
             stream.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void close(Closeable... streams) {
-        for (Closeable stream : streams) {
-            close(stream);
+        } catch (IOException ignored) {
         }
     }
 
@@ -36,4 +35,6 @@ public final class Streams {
         }
         out.flush();
     }
+
+    private Streams() {}
 }

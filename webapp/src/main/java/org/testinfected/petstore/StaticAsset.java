@@ -7,33 +7,49 @@ import org.simpleframework.http.resource.Resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
 
 import static org.simpleframework.http.Status.INTERNAL_SERVER_ERROR;
 
 public class StaticAsset implements Resource {
 
     private final ClassPathResourceLoader resourceLoader;
+    private final MustacheRendering renderer;
+    private final String charset;
 
-    public StaticAsset(ClassPathResourceLoader resourceLoader) {
+    public StaticAsset(ClassPathResourceLoader resourceLoader, MustacheRendering renderer, String charset) {
         this.resourceLoader = resourceLoader;
+        this.renderer = renderer;
+        this.charset = charset;
     }
 
     public void handle(Request request, Response response) {
+        renderHeaders(response);
+        try {
+            renderFile(request, response);
+        } catch (ResourceNotFoundException e) {
+            renderNotFound(e, response);
+        } catch (Exception e) {
+            renderInternalError(e, response);
+        } finally {
+            Streams.close(response);
+        }
+    }
+
+    private void renderHeaders(Response response) {
+        long time = System.currentTimeMillis();
+        response.set("Server", "JPetStore/0.1 (Simple 4.1.21)");
+        response.setDate("Date", time);
+        response.setDate("Last-Modified", time);
+    }
+
+    private void renderFile(Request request, Response response) throws IOException {
         InputStream file = null;
-        OutputStream body = null;
         try {
             response.set("Content-Type", MimeType.guessFrom(request.getPath().getName()));
             file = resourceLoader.stream(assetFile(request));
-            body = response.getOutputStream();
-            render(file, body);
-        } catch (ResourceNotFoundException e) {
-            handleNotFound(response);
-        } catch (Exception e) {
-            handleInternalError(e, response);
-        } finally {
-            Streams.close(file, body);
+            Streams.copy(file, response.getOutputStream());
+        } catch (IOException e) {
+            Streams.close(file);
         }
     }
 
@@ -41,40 +57,25 @@ public class StaticAsset implements Resource {
         return "assets" + request.getPath().getPath();
     }
 
-    private void render(InputStream file, OutputStream response) throws IOException {
-        Streams.copy(file, response);
-    }
-
-    private void handleNotFound(Response response) {
+    private void renderNotFound(Exception error, Response response) {
         try {
             response.reset();
             response.setCode(Status.NOT_FOUND.getCode());
             response.setText(Status.NOT_FOUND.getDescription());
-            PrintStream out = response.getPrintStream();
-            out.println("<p>");
-            out.println("Not found");
-            out.println("</p>");
-        } catch (IOException e) {
-            throw ExceptionImposter.imposterize(e);
+            response.set("Content-Type", "text/html; charset=" + charset);
+            renderer.render("404", error, response);
+        } catch (IOException ignored) {
         }
     }
 
-    private void handleInternalError(Exception error, Response response) {
+    private void renderInternalError(Exception error, Response response) {
         try {
             response.reset();
-            response.setText(INTERNAL_SERVER_ERROR.getDescription());
             response.setCode(INTERNAL_SERVER_ERROR.getCode());
-            PrintStream out = response.getPrintStream();
-            out.println("<p>");
-            out.print(error.toString());
-            out.println("<br/>");
-            for (StackTraceElement each : error.getStackTrace()) {
-                out.print(each.toString());
-                out.println("<br/>");
-            }
-            out.println("</p>");
-        } catch (IOException e) {
-            throw ExceptionImposter.imposterize(e);
+            response.setText(INTERNAL_SERVER_ERROR.getDescription());
+            response.set("Content-Type", "text/html; charset=" + charset);
+            renderer.render("500", error, response);
+        } catch (IOException ignored) {
         }
     }
 }

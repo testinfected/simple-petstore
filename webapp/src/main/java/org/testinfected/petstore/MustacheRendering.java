@@ -2,8 +2,10 @@ package org.testinfected.petstore;
 
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
+import org.simpleframework.http.Response;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -27,6 +29,12 @@ public class MustacheRendering {
         StringWriter buffer = new StringWriter();
         render(templateName, context, buffer);
         return buffer.toString();
+    }
+
+    public void render(String name, Object context, Response response) throws IOException {
+        Writer body = new OutputStreamWriter(response.getOutputStream(), response.getContentType().getCharset());
+        render(name, context, body);
+        body.flush();
     }
 
     public void render(String templateName, Object context, Writer out) throws IOException {
