@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 
-public class ClassPathResourceLoader {
+public class ClassPathResourceLoader implements ResourceLoader {
 
     private final ClassLoader classLoader;
 

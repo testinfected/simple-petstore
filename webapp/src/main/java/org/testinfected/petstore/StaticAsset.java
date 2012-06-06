@@ -12,11 +12,11 @@ import static org.simpleframework.http.Status.INTERNAL_SERVER_ERROR;
 
 public class StaticAsset implements Resource {
 
-    private final ClassPathResourceLoader resourceLoader;
-    private final MustacheRendering renderer;
+    private final ResourceLoader resourceLoader;
+    private final Renderer renderer;
     private final String charset;
 
-    public StaticAsset(ClassPathResourceLoader resourceLoader, MustacheRendering renderer, String charset) {
+    public StaticAsset(ResourceLoader resourceLoader, Renderer renderer, String charset) {
         this.resourceLoader = resourceLoader;
         this.renderer = renderer;
         this.charset = charset;

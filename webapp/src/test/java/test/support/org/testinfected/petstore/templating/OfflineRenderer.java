@@ -9,10 +9,10 @@ import java.util.HashMap;
 
 import static test.support.com.pyxis.petstore.views.HTMLDocument.toElement;
 
-public class Renderer {
+public class OfflineRenderer {
 
-    public static Renderer render(String template) {
-        return new Renderer(template);
+    public static OfflineRenderer render(String template) {
+        return new OfflineRenderer(template);
     }
 
     private final String template;
@@ -21,11 +21,11 @@ public class Renderer {
     private Object context;
     private String content;
 
-    private Renderer(String template) {
+    private OfflineRenderer(String template) {
         this(template, "utf-8");
     }
 
-    private Renderer(String template, String charset) {
+    private OfflineRenderer(String template, String charset) {
         this.template = template;
         this.charset = charset;
         this.context = new HashMap<String, String>();
@@ -35,7 +35,7 @@ public class Renderer {
         this.charset = encoding;
     }
 
-    public Renderer using(Object context) {
+    public OfflineRenderer using(Object context) {
         this.context = context;
         return this;
     }

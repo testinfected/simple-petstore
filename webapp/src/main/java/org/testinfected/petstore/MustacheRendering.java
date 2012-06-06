@@ -10,16 +10,16 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 
-public class MustacheRendering {
+public class MustacheRendering implements Renderer {
 
     private static final String TEMPLATE_DIRECTORY = "templates/";
     private static final String TEMPLATE_EXTENSION = ".html";
 
     private final String charset;
-    private final ClassPathResourceLoader resourceLoader;
+    private final ResourceLoader resourceLoader;
     private final Mustache.Compiler mustache;
 
-    public MustacheRendering(ClassPathResourceLoader resourceLoader, String charset) {
+    public MustacheRendering(ResourceLoader resourceLoader, String charset) {
         this.charset = charset;
         this.resourceLoader = resourceLoader;
         this.mustache = Mustache.compiler();

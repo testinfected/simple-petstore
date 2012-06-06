@@ -23,30 +23,32 @@ public final class Routes {
     }
 
     public String pathFor(String relativePath) {
-        return contextPath + "/" + relativePath;
+        return relativePath.startsWith("/") ?
+                contextPath + relativePath :
+                contextPath + "/" + relativePath;
     }
 
     public String homePath() {
-        return pathFor("");
+        return pathFor("/");
     }
 
     public String itemsPath(String productNumber) {
-        return pathFor("products/" + productNumber + "/items");
+        return pathFor("/products/" + productNumber + "/items");
     }
 
     public String cartItemsPath() {
-        return pathFor("cartitems");
+        return pathFor("/cartitems");
     }
 
     public String cartPath() {
-        return pathFor("cart");
+        return pathFor("/cart");
     }
 
     public String checkoutPath() {
-        return pathFor("checkout");
+        return pathFor("/checkout");
     }
 
     public String purchasesPath() {
-        return pathFor("purchases");
+        return pathFor("/purchases");
     }
 }

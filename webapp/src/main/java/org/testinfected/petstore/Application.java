@@ -12,10 +12,10 @@ import static org.simpleframework.http.Status.INTERNAL_SERVER_ERROR;
 
 public class Application implements Resource {
 
-    private final MustacheRendering renderer;
+    private final Renderer renderer;
     private final String charset;
 
-    public Application(MustacheRendering renderer, String charset) {
+    public Application(Renderer renderer, String charset) {
         this.renderer = renderer;
         this.charset = charset;
     }

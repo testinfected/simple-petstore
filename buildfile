@@ -41,7 +41,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     test.setup { makedirs _(:target, :logs) }
     test.resources.filter.using 'webapp.dir' => _(:src, :main, :webapp), 'test.log.dir' => _(:target, :logs)
     test.with project(:domain).test.compile.target, HAMCREST 
-    test.with_transitive :hamcrest_dom, :hamcrest_spring, :neko_html, :commons_lang, :spring_support, :spring_test
+    test.with_transitive :hamcrest_dom, :hamcrest_spring, :nekohtml, :commons_lang, :spring_support, :spring_test
     
     package(:war).exclude :servlet_api
     package(:war).add LOG, :commons_pool, :commons_dbcp, :javassist, :asm, :cglib, :spring_orm, :spring_jdbc, :sitemesh, :url_rewrite, :mysql
@@ -60,6 +60,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   
   define 'webapp' do
     compile.with :simpleframework, :jmustache
+    test.with_transitive :nekohtml, :htmlunit, :juniversalchardet
     test.with project(:oldapp).test.compile.target, project(:oldapp).test.dependencies
     package(:jar)
   end

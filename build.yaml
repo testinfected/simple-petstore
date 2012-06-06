@@ -40,7 +40,7 @@ artifacts:
   jetty_util: org.mortbay.jetty:jetty-util:jar:6.1.26
   servlet_api: javax.servlet:servlet-api:jar:2.5
   url_rewrite: org.tuckey:urlrewritefilter:jar:3.1.0
-  neko_html: nekohtml:nekohtml:jar:1.9.6.2
+  nekohtml: net.sourceforge.nekohtml:nekohtml:jar:1.9.15
   log4j: log4j:log4j:jar:1.2.12
   jcl_over_slf4j: org.slf4j:jcl-over-slf4j:jar:1.5.10
   slf4j_api: org.slf4j:slf4j-api:jar:1.5.6
@@ -56,6 +56,8 @@ artifacts:
   hamcrest_jpa: org.testinfected.hamcrest-matchers:jpa-matchers:jar:1.5
   selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.21.0
   windowlicker_web: com.googlecode.windowlicker:windowlicker-web:jar:r268
+  htmlunit: net.sourceforge.htmlunit:htmlunit:jar:2.9
+  juniversalchardet: com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3
   
 junit: 4.8.1
 jmock: 2.5.1

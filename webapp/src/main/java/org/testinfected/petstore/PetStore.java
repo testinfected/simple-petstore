@@ -12,12 +12,13 @@ import java.net.SocketAddress;
 
 public class PetStore {
 
-    public static final String UTF_8 = "utf-8";
+    public static final String UTF_8 = "UTF-8";
 
     private final int port;
-    private final ClassPathResourceLoader resourceLoader;
-    private final MustacheRendering renderer;
-    private final String charset;
+    private final ResourceLoader resourceLoader;
+    private final Renderer renderer;
+
+    private String charset;
 
     private Connection connection;
 
@@ -26,6 +27,10 @@ public class PetStore {
         this.resourceLoader = new ClassPathResourceLoader();
         this.renderer = new MustacheRendering(new ClassPathResourceLoader(), UTF_8);
         this.charset = UTF_8;
+    }
+
+    public void setEncoding(String charset) {
+        this.charset = charset;
     }
 
     public void start() throws Exception {
