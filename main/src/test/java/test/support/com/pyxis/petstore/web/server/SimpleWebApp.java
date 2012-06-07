@@ -1,19 +1,21 @@
 package test.support.com.pyxis.petstore.web.server;
 
 import org.testinfected.hamcrest.ExceptionImposter;
-import org.testinfected.petstore.PetStore;
+import org.testinfected.petstore.Application;
 
 public class SimpleWebApp implements ServerDriver {
 
-    final PetStore petstore;
+    private final Application application;
+    private final int port;
 
     public SimpleWebApp(int port) {
-        petstore = new PetStore(port);
+        this.port = port;
+        this.application = new Application();
     }
 
     public void start() {
         try {
-            petstore.start();
+            application.start(port);
         } catch (Exception e) {
             throw ExceptionImposter.imposterize(e);
         }
@@ -21,7 +23,7 @@ public class SimpleWebApp implements ServerDriver {
 
     public void stop() {
         try {
-            petstore.stop();
+            application.stop();
         } catch (Exception e) {
             throw ExceptionImposter.imposterize(e);
         }

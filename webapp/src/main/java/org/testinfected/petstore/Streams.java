@@ -4,6 +4,7 @@ import org.simpleframework.http.Response;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +35,12 @@ public final class Streams {
             out.write(data);
         }
         out.flush();
+    }
+
+    public static byte[] toByteArray(InputStream stream) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        copy(stream, buffer);
+        return buffer.toByteArray();
     }
 
     private Streams() {}

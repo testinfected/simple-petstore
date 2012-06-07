@@ -4,18 +4,18 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         int port = parse(args);
-        final PetStore petStore = new PetStore(port);
-        System.out.println("Starting web application at http://localhost:" + port);
+        final Application application = new Application();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override public void run() {
                 try {
-                    petStore.stop();
+                    application.stop();
                     System.out.println("Stopped");
                 } catch (Exception ignored) {
                 }
             }
         });
-        petStore.start();
+        System.out.println("Starting web application at http://localhost:" + port);
+        application.start(port);
     }
 
     private static int parse(String... args) {

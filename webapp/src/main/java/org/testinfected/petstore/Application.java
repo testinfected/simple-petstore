@@ -1,58 +1,45 @@
 package org.testinfected.petstore;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.simpleframework.http.resource.Resource;
+import org.simpleframework.http.resource.ResourceContainer;
+import org.simpleframework.transport.connect.Connection;
+import org.simpleframework.transport.connect.SocketConnection;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.charset.Charset;
 
-import static org.simpleframework.http.Status.INTERNAL_SERVER_ERROR;
+public class Application {
 
-public class Application implements Resource {
+    private final ResourceLoader resourceLoader;
+    private final Charset charset;
 
-    private final Renderer renderer;
-    private final String charset;
+    private Connection connection;
 
-    public Application(Renderer renderer, String charset) {
-        this.renderer = renderer;
+    public Application() {
+        this(new ClassPathResourceLoader());
+    }
+
+    public Application(ResourceLoader resourceLoader) {
+        this(resourceLoader, Charsets.UTF_8);
+    }
+
+    public Application(Charset charset) {
+        this(new ClassPathResourceLoader(), charset);
+    }
+
+    public Application(final ResourceLoader resourceLoader, Charset charset) {
+        this.resourceLoader = resourceLoader;
         this.charset = charset;
     }
 
-    public void handle(Request request, Response response) {
-        renderHeaders(response);
-        try {
-            renderBody(response);
-        } catch (Exception e) {
-            renderInternalError(e, response);
-        } finally {
-            Streams.close(response);
-        }
+    public void start(int port) throws IOException {
+        connection = new SocketConnection(new ResourceContainer(new PetStoreEngine(resourceLoader, charset)));
+        SocketAddress address = new InetSocketAddress(port);
+        connection.connect(address);
     }
 
-    private void renderHeaders(Response response) {
-        long time = System.currentTimeMillis();
-        response.set("Server", "JPetStore/0.1 (Simple 4.1.21)");
-        response.setDate("Date", time);
-        response.setDate("Last-Modified", time);
-    }
-
-    private void renderBody(Response response) throws IOException {
-        response.set("Content-Type", "text/html; charset=" + charset);
-        Map<String, String> context = new HashMap<String, String>();
-        context.put("title", "PetStore");
-        renderer.render("layout/main", context, response);
-    }
-
-    private void renderInternalError(Exception error, Response response) {
-        try {
-            response.reset();
-            response.setText(INTERNAL_SERVER_ERROR.getDescription());
-            response.setCode(INTERNAL_SERVER_ERROR.getCode());
-            response.set("Content-Type", "text/html; charset=" + charset);
-            renderer.render("500", error, response);
-        } catch (IOException ignored) {
-        }
+    public void stop() throws IOException {
+        connection.close();
     }
 }

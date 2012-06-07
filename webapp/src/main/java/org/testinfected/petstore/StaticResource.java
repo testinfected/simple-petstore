@@ -7,16 +7,18 @@ import org.simpleframework.http.resource.Resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 import static org.simpleframework.http.Status.INTERNAL_SERVER_ERROR;
 
-public class StaticAsset implements Resource {
+public class StaticResource implements Resource {
 
     private final ResourceLoader resourceLoader;
     private final Renderer renderer;
     private final String charset;
 
-    public StaticAsset(ResourceLoader resourceLoader, Renderer renderer, String charset) {
+    public StaticResource(ResourceLoader resourceLoader, Renderer renderer, String charset) {
         this.resourceLoader = resourceLoader;
         this.renderer = renderer;
         this.charset = charset;
@@ -37,7 +39,7 @@ public class StaticAsset implements Resource {
 
     private void renderHeaders(Response response) {
         long time = System.currentTimeMillis();
-        response.set("Server", "JPetStore/0.1 (Simple 4.1.21)");
+        response.set("Server", "Simple/4.1.21");
         response.setDate("Date", time);
         response.setDate("Last-Modified", time);
     }
@@ -45,8 +47,11 @@ public class StaticAsset implements Resource {
     private void renderFile(Request request, Response response) throws IOException {
         InputStream file = null;
         try {
-            response.set("Content-Type", MimeType.guessFrom(request.getPath().getName()));
-            file = resourceLoader.stream(assetFile(request));
+            URL resource = resourceLoader.load(assetFile(request));
+            response.set("Content-Type", MimeType.guessFrom(resource.getPath()));
+            URLConnection connection = resource.openConnection();
+            response.set("Content-Length", connection.getContentLength());
+            file = connection.getInputStream();
             Streams.copy(file, response.getOutputStream());
         } catch (IOException e) {
             Streams.close(file);
