@@ -12,7 +12,7 @@ public class MimeType {
         knownTypes.put(".html", "text/html");
         knownTypes.put(".css", "text/css");
         knownTypes.put(".png", "image/png");
-        knownTypes.put(".ico", "image/vnd.microsoft.icon");
+        knownTypes.put(".ico", "image/x-icon");
     }
 
     public static String guessFrom(String filename) {
