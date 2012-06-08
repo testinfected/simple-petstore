@@ -1,7 +1,7 @@
-package test.support.org.testinfected.petstore.templating;
+package test.support.org.testinfected.petstore.web;
 
 import com.gargoylesoftware.htmlunit.WebRequest;
-import org.testinfected.petstore.ExceptionImposter;
+import org.testinfected.petstore.util.ExceptionImposter;
 import test.support.com.pyxis.petstore.views.Routes;
 
 import java.net.MalformedURLException;
@@ -10,8 +10,8 @@ import java.net.URL;
 public class WebRequestBuilder {
 
     private int port;
-    private String path;
-    private Routes routes = new Routes();
+    private String path = "";
+    private Routes routes = Routes.root();
 
     public static WebRequestBuilder aRequest() {
         return new WebRequestBuilder();

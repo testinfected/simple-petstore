@@ -31,6 +31,7 @@ artifacts:
   spring_test: org.springframework:spring-test:jar:3.0.2.RELEASE
   simpleframework: org.simpleframework:simple:jar:4.1.21
   jmustache: com.samskivert:jmustache:jar:1.5
+  time: org.testinfected.time:time:jar:1.0
   velocity_engine: org.apache.velocity:velocity:jar:1.6.3
   velocity_tools: org.apache.velocity:velocity-tools:jar:2.0
   sitemesh: opensymphony:sitemesh:jar:2.4.1

@@ -7,7 +7,7 @@ import test.support.com.pyxis.petstore.web.page.*;
 
 import java.math.BigDecimal;
 
-public class PetStoreDriver {
+public class ApplicationDriver {
 
     private final AsyncWebDriver browser;
     private final HomePage homePage;
@@ -18,7 +18,7 @@ public class PetStoreDriver {
     private final ReceiptPage receiptPage;
     private final Menu menu;
 
-    public PetStoreDriver(WebDriver webDriver) {
+    public ApplicationDriver(WebDriver webDriver) {
         browser = new AsyncWebDriver(new UnsynchronizedProber(), webDriver);
         menu = new Menu(browser);
         homePage = new HomePage(browser);

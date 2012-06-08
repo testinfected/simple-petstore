@@ -1,21 +1,21 @@
 package test.support.com.pyxis.petstore.web.server;
 
 import org.testinfected.hamcrest.ExceptionImposter;
-import org.testinfected.petstore.Application;
+import org.testinfected.petstore.PetStore;
+import org.testinfected.petstore.util.Charsets;
 
-public class SimpleWebApp implements ServerDriver {
+public class PetStoreDriver implements ServerDriver {
 
-    private final Application application;
-    private final int port;
+    private final PetStore server;
 
-    public SimpleWebApp(int port) {
-        this.port = port;
-        this.application = new Application();
+    public PetStoreDriver(int port) {
+        this.server = new PetStore(port);
     }
 
     public void start() {
         try {
-            application.start(port);
+            server.setEncoding(Charsets.UTF_8);
+            server.start();
         } catch (Exception e) {
             throw ExceptionImposter.imposterize(e);
         }
@@ -23,7 +23,7 @@ public class SimpleWebApp implements ServerDriver {
 
     public void stop() {
         try {
-            application.stop();
+            server.stop();
         } catch (Exception e) {
             throw ExceptionImposter.imposterize(e);
         }

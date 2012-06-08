@@ -7,7 +7,7 @@ import org.w3c.dom.Element;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
-import static test.support.org.testinfected.petstore.templating.OfflineRenderer.render;
+import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class HeaderTest {
 

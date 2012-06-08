@@ -1,25 +1,21 @@
-package test.support.org.testinfected.petstore.templating;
+package test.support.org.testinfected.petstore.web;
 
 import org.mozilla.universalchardet.CharsetListener;
 import org.mozilla.universalchardet.UniversalDetector;
-import org.testinfected.petstore.Streams;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 public class CharsetDetector {
 
-    public static String detectCharset(InputStream data) throws IOException {
+    public static String detectCharset(byte[] data) throws IOException {
         UniversalDetector charsetDetector = new UniversalDetector(new CharsetListener() {
             public void report(String charset) {
             }
         });
-        byte[] body = Streams.toByteArray(data);
-        charsetDetector.handleData(body, 0, body.length);
+        charsetDetector.handleData(data, 0, data.length);
         charsetDetector.dataEnd();
         return charsetDetector.getDetectedCharset();
     }
 
-    private CharsetDetector() {
-    }
+    private CharsetDetector() {}
 }

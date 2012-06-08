@@ -2,16 +2,19 @@ package test.support.com.pyxis.petstore.views;
 
 public final class Routes {
 
-    private static final String PETSTORE_CONTEXT_PATH = "/petstore";
-
     private final String contextPath;
 
+    // todo inline
     public static Routes toPetstore() {
-        return new Routes(PETSTORE_CONTEXT_PATH);
+        return Routes.to("/petstore");
     }
 
-    public Routes() {
-        this("");
+    public static Routes to(String contextPath) {
+        return new Routes(contextPath);
+    }
+
+    public static Routes root() {
+        return new Routes("");
     }
 
     public Routes(String contextPath) {
@@ -22,6 +25,7 @@ public final class Routes {
         return contextPath;
     }
 
+    // TODO needed to check for slash ?
     public String pathFor(String relativePath) {
         return relativePath.startsWith("/") ?
                 contextPath + relativePath :

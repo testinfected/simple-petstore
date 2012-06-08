@@ -6,6 +6,10 @@ public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String resource) {
         this.resource = resource;
     }
+    
+    public String getResource() {
+        return resource;
+    }
 
     public String getMessage() {
         return resource;

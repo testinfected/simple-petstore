@@ -1,10 +1,11 @@
-package org.testinfected.petstore;
+package org.testinfected.petstore.util;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MimeType {
-    
+public class MimeTypes {
+
+    private static final String FALLBACK = "application/octet-stream";
     private static final Map<String, String> knownTypes = new HashMap<String, String>();
 
     static {
@@ -19,6 +20,8 @@ public class MimeType {
         for (String ext : knownTypes.keySet()) {
             if (filename.endsWith(ext)) return knownTypes.get(ext);
         }
-        return "text/plain";
+        return FALLBACK;
     }
+
+    private MimeTypes() {}
 }

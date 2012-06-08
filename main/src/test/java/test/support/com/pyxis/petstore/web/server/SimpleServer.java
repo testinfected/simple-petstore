@@ -9,7 +9,7 @@ public class SimpleServer implements ServerLifeCycle {
     }
 
     public ServerDriver start() {
-        ServerDriver server = new SimpleWebApp(properties.port());
+        ServerDriver server = new PetStoreDriver(properties.port());
         server.start();
         return server;
     }

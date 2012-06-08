@@ -1,4 +1,4 @@
-package org.testinfected.petstore;
+package org.testinfected.petstore.util;
 
 public class ExceptionImposter extends RuntimeException {
     private final Exception imposterized;

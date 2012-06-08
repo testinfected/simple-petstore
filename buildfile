@@ -59,7 +59,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
   
   define 'webapp' do
-    compile.with :simpleframework, :jmustache
+    compile.with :simpleframework, :jmustache, :time
     test.with_transitive :nekohtml, :htmlunit, :juniversalchardet
     test.with project(:oldapp).test.compile.target, project(:oldapp).test.dependencies
     package(:jar)
@@ -104,6 +104,6 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   
   task :run => project(:main) do
     cp = [project(:main).compile.target] + project(:main).compile.dependencies
-    Java::Commands.java(["org.testinfected.petstore.Main", Buildr.settings.profile['server.port']], :classpath => cp) { exit }
+    Java::Commands.java(["org.testinfected.petstore.Launcher", Buildr.settings.profile['server.port']], :classpath => cp) { exit }
   end
 end
