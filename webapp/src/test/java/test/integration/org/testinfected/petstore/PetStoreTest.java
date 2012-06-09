@@ -55,6 +55,7 @@ public class PetStoreTest {
     rendersDynamicContentAsHtmlProperlyEncoded() throws IOException {
         response = client.loadWebResponse(request.build());
 
+        assertThat("status code", response.getStatusCode(), equalTo(200));
         assertThat("response", response, hasHeader("Content-Type", equalTo("text/html; charset=utf-8")));
         assertThat("detected charset", detectCharset(toBytes(response.getContentAsStream())), containsString("UTF-8"));
         assertThat("transfer encoding", response.getResponseHeaderValue("Transfer-Encoding"), nullValue());
@@ -65,6 +66,7 @@ public class PetStoreTest {
     rendersStaticAssetsAsFiles() throws IOException {
         response = client.loadWebResponse(request.but().forPath("/images/logo.png").build());
 
+        assertThat("status code", response.getStatusCode(), equalTo(200));
         assertThat("response", response, hasHeader("Content-Type", equalTo("image/png")));
         assertThat("transfer encoding", response.getResponseHeaderValue("Transfer-Encoding"), nullValue());
     }
@@ -74,5 +76,6 @@ public class PetStoreTest {
         response = client.loadWebResponse(request.but().forPath("/images/missing.png").build());
 
         assertThat("status code", response.getStatusCode(), equalTo(404));
+        assertThat("transfer encoding", response.getResponseHeaderValue("Transfer-Encoding"), nullValue());
     }
 }
