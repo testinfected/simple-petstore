@@ -12,9 +12,9 @@ import org.testinfected.petstore.pipeline.StaticAssets;
 
 import java.io.IOException;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static test.support.org.testinfected.petstore.web.Empty.empty;
+import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
 public class StaticAssetsTest {
@@ -45,15 +45,15 @@ public class StaticAssetsTest {
     @Test public void
     routesToFileServerWhenPathIsMatched() throws Exception {
         response = client.loadWebResponse(aRequest().onPort(PORT).forPath("/favicon.ico").build());
-        assertThat("status code", response.getStatusCode(), equalTo(200));
+        assertThat("response", response, hasStatusCode(200));
 
         response = client.loadWebResponse(aRequest().onPort(PORT).forPath("/static/images/logo").build());
-        assertThat("status code", response.getStatusCode(), equalTo(200));
+        assertThat("response", response, hasStatusCode(200));
     }
 
     @Test public void
     forwardsToNextMiddlewareWhenPathIsNotMatched() throws Exception {
         response = client.loadWebResponse(aRequest().onPort(PORT).forPath("/home").build());
-        assertThat("status code", response.getStatusCode(), equalTo(404));
+        assertThat("response", response, hasStatusCode(404));
     }
 }

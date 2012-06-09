@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.petstore.util.Streams.toBytes;
 import static org.testinfected.time.lib.DateBuilder.aDate;
 import static test.support.org.testinfected.petstore.web.CharsetDetector.detectCharset;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
+import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
 public class PetStoreTest {
@@ -47,18 +47,18 @@ public class PetStoreTest {
     @Test public void
     setsResponseHeaders() throws IOException {
         response = client.loadWebResponse(request.build());
-        assertThat("response", response, hasHeader("Server", equalTo("Simple/4.1.21")));
-        assertThat("response", response, hasHeader("Date", equalTo("Fri, 08 Jun 2012 04:00:00 GMT")));
+        assertThat("response", response, hasHeader("Server", "Simple/4.1.21"));
+        assertThat("response", response, hasHeader("Date", "Fri, 08 Jun 2012 04:00:00 GMT"));
     }
 
     @Test public void
     rendersDynamicContentAsHtmlProperlyEncoded() throws IOException {
         response = client.loadWebResponse(request.build());
 
-        assertThat("status code", response.getStatusCode(), equalTo(200));
-        assertThat("response", response, hasHeader("Content-Type", equalTo("text/html; charset=utf-8")));
+        assertThat("response", response, hasStatusCode(200));
+        assertThat("response", response, hasHeader("Content-Type", "text/html; charset=utf-8"));
         assertThat("detected charset", detectCharset(toBytes(response.getContentAsStream())), containsString("UTF-8"));
-        assertThat("transfer encoding", response.getResponseHeaderValue("Transfer-Encoding"), nullValue());
+        assertThat("response", response, hasHeader("Transfer-Encoding", nullValue()));
     }
 
 
@@ -66,16 +66,16 @@ public class PetStoreTest {
     rendersStaticAssetsAsFiles() throws IOException {
         response = client.loadWebResponse(request.but().forPath("/images/logo.png").build());
 
-        assertThat("status code", response.getStatusCode(), equalTo(200));
-        assertThat("response", response, hasHeader("Content-Type", equalTo("image/png")));
-        assertThat("transfer encoding", response.getResponseHeaderValue("Transfer-Encoding"), nullValue());
+        assertThat("response", response, hasStatusCode(200));
+        assertThat("response", response, hasHeader("Content-Type", "image/png"));
+        assertThat("response", response, hasHeader("Transfer-Encoding", nullValue()));
     }
 
     @Test public void
     render404WhenResourceIsNotFound() throws IOException {
         response = client.loadWebResponse(request.but().forPath("/images/missing.png").build());
 
-        assertThat("status code", response.getStatusCode(), equalTo(404));
-        assertThat("transfer encoding", response.getResponseHeaderValue("Transfer-Encoding"), nullValue());
+        assertThat("response", response, hasStatusCode(404));
+        assertThat("response", response, hasHeader("Transfer-Encoding", nullValue()));
     }
 }

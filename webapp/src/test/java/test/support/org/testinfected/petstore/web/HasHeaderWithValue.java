@@ -4,6 +4,8 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+
 public class HasHeaderWithValue extends FeatureMatcher<WebResponse, String> {
 
     private final String name;
@@ -17,6 +19,10 @@ public class HasHeaderWithValue extends FeatureMatcher<WebResponse, String> {
         return actual.getResponseHeaderValue(name);
     }
 
+    public static Matcher<? super WebResponse> hasHeader(final String name, String value) {
+        return new HasHeaderWithValue(name, equalTo(value));
+    }
+    
     public static Matcher<? super WebResponse> hasHeader(final String name, final Matcher<? super String> valueMatcher) {
         return new HasHeaderWithValue(name, valueMatcher);
     }

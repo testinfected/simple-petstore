@@ -7,19 +7,19 @@ import org.junit.Before;
 import org.junit.Test;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
-import org.testinfected.petstore.pipeline.Application;
 import org.testinfected.petstore.ClassPathResourceLoader;
 import org.testinfected.petstore.Handler;
 import org.testinfected.petstore.MustacheRendering;
 import org.testinfected.petstore.Server;
+import org.testinfected.petstore.pipeline.Application;
 import org.testinfected.petstore.pipeline.Failsafe;
 
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
+import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
 public class FailsafeTest {
@@ -59,8 +59,7 @@ public class FailsafeTest {
     @Test public void
     renders500WhenInternalErrorOccurs() throws IOException {
         response = client.loadWebResponse(aRequest().onPort(PORT).build());
-        assertThat("status code", response.getStatusCode(), equalTo(500));
-        assertThat("status message", response.getStatusMessage(), equalTo("Internal Server Error"));
+        assertThat("response", response, hasStatusCode(500));
         assertThat("response", response, hasHeader("Content-Type", containsString("text/html")));
         assertThat("content", response.getContentAsString(), containsString("Crashed!"));
     }

@@ -26,6 +26,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
+import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
 public class FileServerTest {
@@ -59,7 +60,7 @@ public class FileServerTest {
     rendersFile() throws Exception {
         response = client.loadWebResponse(request.build());
 
-        assertThat("status code", response.getStatusCode(), equalTo(200));
+        assertThat("response", response, hasStatusCode(200));
         assertThat("content size", contentOf(response).length, equalTo(6597));
         assertTrue("content differs from original file", Arrays.equals(contentOf(response), contentOf(originalFile())));
     }
@@ -68,24 +69,23 @@ public class FileServerTest {
     guessesMimeTypeFromExtension() throws IOException {
         response = client.loadWebResponse(request.build());
 
-        assertThat("response", response, hasHeader("Content-Type", equalTo("image/png")));
+        assertThat("response", response, hasHeader("Content-Type", "image/png"));
     }
 
     @Test public void
     setsFileResponseHeaders() throws IOException, URISyntaxException {
         response = client.loadWebResponse(request.build());
 
-        assertThat("response", response, hasHeader("Content-Length", equalTo("6597")));
-        assertThat("response", response, hasHeader("Last-Modified", equalTo(modifiedDateOf(originalFile()))));
+        assertThat("response", response, hasHeader("Content-Length", "6597"));
+        assertThat("response", response, hasHeader("Last-Modified", modifiedDateOf(originalFile())));
     }
 
     @Test public void
     renders404WhenFileIsNotFound() throws IOException {
         response = client.loadWebResponse(request.but().forPath("/images/missing").build());
 
-        assertThat("status code", response.getStatusCode(), equalTo(404));
-        assertThat("status message", response.getStatusMessage(), equalTo("Not Found"));
-        assertThat("response", response, hasHeader("Content-Type", equalTo("text/plain")));
+        assertThat("response", response, hasStatusCode(404));
+        assertThat("response", response, hasHeader("Content-Type", "text/plain"));
         assertThat("content", response.getContentAsString(), containsString("/images/missing"));
     }
 
