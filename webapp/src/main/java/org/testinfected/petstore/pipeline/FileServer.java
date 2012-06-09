@@ -17,6 +17,8 @@ import java.net.URLConnection;
 
 public class FileServer implements Handler {
 
+    private static final String ROOT = "assets";
+
     private final ResourceLoader resourceLoader;
 
     public FileServer(ResourceLoader resourceLoader) {
@@ -35,7 +37,7 @@ public class FileServer implements Handler {
         URL resource = resourceLoader.load(assetFile(request));
         response.set("Content-Type", MimeTypes.guessFrom(resource.getPath()));
         URLConnection connection = resource.openConnection();
-        //todo set last-modified header
+        response.setDate("Last-Modified", connection.getLastModified());
         InputStream file = connection.getInputStream();
         try {
             Streams.copy(file, response.getOutputStream(connection.getContentLength()));
@@ -45,7 +47,7 @@ public class FileServer implements Handler {
     }
 
     private String assetFile(Request request) {
-        return "assets" + request.getPath().getPath();
+        return ROOT + request.getPath().getPath();
     }
 
     private void renderNotFound(ResourceNotFoundException notFound, Response response) throws IOException {
