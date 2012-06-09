@@ -1,4 +1,4 @@
-package test.integration.org.testinfected.petstore.pipeline;
+package test.org.testinfected.petstore.pipeline;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
