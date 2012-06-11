@@ -1,0 +1,1 @@
+Loading resources (templates, assets, etc.) from a configurable filesystem root directory, rather than the classpath
