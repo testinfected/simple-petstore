@@ -1,8 +1,7 @@
 package test.support.org.testinfected.petstore.web;
 
 import org.testinfected.hamcrest.ExceptionImposter;
-import org.testinfected.petstore.ClassPathResourceLoader;
-import org.testinfected.petstore.MustacheRendering;
+import org.testinfected.petstore.Renderer;
 import org.w3c.dom.Element;
 
 import java.util.HashMap;
@@ -17,12 +16,18 @@ public class OfflineRenderer {
 
     private final String template;
 
+    private Renderer renderer;
     private Object context;
     private String content;
 
     private OfflineRenderer(String template) {
         this.template = template;
         this.context = new HashMap<String, String>();
+    }
+
+    public OfflineRenderer with(Renderer renderer) {
+        this.renderer = renderer;
+        return this;
     }
 
     public OfflineRenderer using(Object context) {
@@ -41,8 +46,7 @@ public class OfflineRenderer {
 
     private void render() {
         try {
-            MustacheRendering mustache = new MustacheRendering(new ClassPathResourceLoader());
-            content = mustache.render(template, context);
+            content = renderer.render(template, context);
         } catch (Exception e) {
             throw ExceptionImposter.imposterize(e);
         }

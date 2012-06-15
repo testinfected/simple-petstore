@@ -2,11 +2,13 @@ package test.support.com.pyxis.petstore;
 
 import org.testinfected.hamcrest.ExceptionImposter;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
 import static java.lang.Integer.parseInt;
 
+// todo move to domain, along with ExceptionImposter?
 public class Properties {
 
     public static Properties system() {
@@ -37,6 +39,10 @@ public class Properties {
         this.properties = properties;
     }
 
+    public boolean containsKey(String key) {
+        return properties.containsKey(key);
+    }
+
     public String getValue(String key) {
         return properties.getProperty(key);
     }
@@ -45,8 +51,16 @@ public class Properties {
         return parseInt(getValue(name));
     }
 
+    public File getFile(String key) {
+        return new File(getValue(key));
+    }
+
     public Set<String> names() {
         return properties.stringPropertyNames();
+    }
+
+    public void put(String key, String value) {
+        properties.setProperty(key, value);
     }
 
     public java.util.Properties toJavaProperties() {
@@ -57,14 +71,19 @@ public class Properties {
 
     public void merge(Properties defaults) {
         for (String name : defaults.names()) {
-            if (!properties.containsKey(name)) properties.setProperty(name, defaults.getValue(name));
+            if (!containsKey(name)) put(name, defaults.getValue(name));
         }
     }
 
     public void override(Properties other) {
         for (String name : other.names()) {
-            properties.setProperty(name, other.getValue(name));
+            put(name, other.getValue(name));
         }
     }
 
+    public Properties copy() {
+        Properties copy = new Properties();
+        copy.merge(this);
+        return copy;
+    }
 }

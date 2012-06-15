@@ -5,7 +5,7 @@ VERSION_NUMBER = '0.1-SNAPSHOT'
 
 HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]
 LOG = [:slf4j_api, :slf4j_log4j, :slf4j_jcl, :log4j]
-NO_LOG = [:slf4j_api, :slf4j_silent]
+NO_LOG = [:slf4j_api, :slf4j_silent, :jcl_over_slf4j]
 VELOCITY = [:commons_beanutils, :commons_digester, :commons_chain, :velocity_engine, :velocity_tools]
 JETTY = [:jetty, :jetty_util]
 
@@ -60,8 +60,12 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   
   define 'webapp' do
     compile.with :simpleframework, :jmustache, :time
+    test.with NO_LOG, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:infrastructure ).test.compile.target
     test.with_transitive :nekohtml, :htmlunit, :juniversalchardet
-    test.with project(:oldapp).test.compile.target, project(:oldapp).test.dependencies
+    test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
+    puts project.compile.dependencies
+    puts "=========================="
+    puts test.compile.dependencies
     package(:jar)
   end
   
@@ -73,10 +77,12 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
                                 'test.log.dir' => _(:target, :logs)
     test.with project(:oldapp).compile.target, project(:oldapp).resources.target, project(:oldapp).package(:war).libs, 
               project(:domain).test.compile.target, project(:infrastructure).test.compile.target,
+              project(:webapp).test.compile.target,
               HAMCREST, LOG
     test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :carbon_5
 
     test.using :integration, :properties => { 
+      'web.root' => project(:webapp).path_to(:src, :main, :webapp),
       'server.lifecycle' => 'external',
       'browser.lifecycle' => 'remote',
       'browser.remote.url' => Buildr.settings.profile['filter']['selenium.server.url'],
@@ -94,7 +100,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
         'jdbc.password' => Buildr.settings.profile['filter']['test.jdbc.password']
       }
       jetty.use.invoke
-      jetty.deploy("#{jetty.url}#{Buildr.settings.profile['filter']['context.path']}", project(:oldapp  ).package(:war))
+      jetty.deploy("#{jetty.url}#{Buildr.settings.profile['filter']['context.path']}", project(:oldapp).package(:war))
     end
     
     integration.teardown do
@@ -104,6 +110,6 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   
   task :run => project(:main) do
     cp = [project(:main).compile.target] + project(:main).compile.dependencies
-    Java::Commands.java(["org.testinfected.petstore.Launcher", Buildr.settings.profile['server.port']], :classpath => cp) { exit }
+    Java::Commands.java(["org.testinfected.petstore.Launcher", Buildr.settings.profile['server.port']], project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
   end
 end

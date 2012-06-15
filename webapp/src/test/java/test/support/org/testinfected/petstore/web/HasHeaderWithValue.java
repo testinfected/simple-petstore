@@ -22,7 +22,7 @@ public class HasHeaderWithValue extends FeatureMatcher<WebResponse, String> {
     public static Matcher<? super WebResponse> hasHeader(final String name, String value) {
         return new HasHeaderWithValue(name, equalTo(value));
     }
-    
+
     public static Matcher<? super WebResponse> hasHeader(final String name, final Matcher<? super String> valueMatcher) {
         return new HasHeaderWithValue(name, valueMatcher);
     }

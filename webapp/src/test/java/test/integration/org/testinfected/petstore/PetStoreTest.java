@@ -20,12 +20,13 @@ import static org.testinfected.time.lib.DateBuilder.aDate;
 import static test.support.org.testinfected.petstore.web.CharsetDetector.detectCharset;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
 import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
+import static test.support.org.testinfected.petstore.web.OfflineContext.offline;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
 public class PetStoreTest {
 
     int PORT = 9999;
-    PetStore petStore = new PetStore(PORT);
+    PetStore petStore = new PetStore(offline().webRoot());
     Date now = aDate().onCalendar(2012, 6, 8).atMidnight().build();
 
     WebClient client = new WebClient();
@@ -36,7 +37,7 @@ public class PetStoreTest {
     startServer() throws IOException {
         petStore.setEncoding("utf-8");
         petStore.setClock(BrokenClock.stoppedAt(now));
-        petStore.start();
+        petStore.start(PORT);
     }
 
     @After public void

@@ -25,6 +25,8 @@ public class StaticAssetsTest {
     StaticAssets assets = new StaticAssets(empty(Status.OK), "/favicon.ico", "/static");
     Application application = new Application() {{
         use(assets);
+        // todo rename to emptyResponseWith
+        // todo use FORWARDED = 30x for the code to clarify intention
         run(empty(Status.NOT_FOUND));
     }};
 

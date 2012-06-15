@@ -15,16 +15,16 @@ import java.net.SocketAddress;
 public class Server {
 
     private final int port;
-    private Clock clock;
+    private final Clock clock;
 
     private Connection connection;
 
     public Server(int port) {
-        this.port = port;
-        this.clock = new SystemClock();
+        this(port, new SystemClock());
     }
-    
-    public void setClock(Clock clock) {
+
+    public Server(int port, Clock clock) {
+        this.port = port;
         this.clock = clock;
     }
 
@@ -35,7 +35,7 @@ public class Server {
     }
 
     public void stop() throws IOException {
-        connection.close();
+        if (connection != null) connection.close();
     }
 
     private class HandlerContainer implements Container {

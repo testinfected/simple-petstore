@@ -31,24 +31,21 @@ import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequ
 
 public class FileServerTest {
 
-    String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    ClassPathResourceLoader resourceLoader = new ClassPathResourceLoader();
+    FileServer fileServer = new FileServer(resourceLoader);
 
+    String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
     int PORT = 9999;
     Server server = new Server(PORT);
 
-    ClassPathResourceLoader resourceLoader = new ClassPathResourceLoader();
-    FileServer fileServer = new FileServer(resourceLoader);
-    String imageFile = "/images/github.png";
-
+    WebRequestBuilder request = aRequest().onPort(PORT).forPath("/assets/image.png");
     WebClient client = new WebClient();
-    WebRequestBuilder request = aRequest().onPort(PORT).forPath(imageFile);
     WebResponse response;
 
     @Before public void
     startServer() throws IOException {
         client.setTimeout(5000);
         server.run(fileServer);
-        imageFile = "/images/github.png";
     }
 
     @After public void
@@ -62,7 +59,7 @@ public class FileServerTest {
 
         assertThat("response", response, hasStatusCode(200));
         assertThat("content size", contentOf(response).length, equalTo(6597));
-        assertTrue("content differs from original file", Arrays.equals(contentOf(response), contentOf(originalFile())));
+        assertTrue("content differs from original file", Arrays.equals(contentOf(response), contentOf(resourceFile("assets/image.png"))));
     }
 
     @Test public void
@@ -77,7 +74,7 @@ public class FileServerTest {
         response = client.loadWebResponse(request.build());
 
         assertThat("response", response, hasHeader("Content-Length", "6597"));
-        assertThat("response", response, hasHeader("Last-Modified", modifiedDateOf(originalFile())));
+        assertThat("response", response, hasHeader("Last-Modified", modifiedDateOf(resourceFile("assets/image.png"))));
     }
 
     @Test public void
@@ -95,8 +92,8 @@ public class FileServerTest {
         return httpDate.format(new Date(file.lastModified()));
     }
 
-    private File originalFile() throws URISyntaxException {
-        URL resource = resourceLoader.load("assets" + imageFile);
+    private File resourceFile(final String name) throws URISyntaxException {
+        URL resource = getClass().getClassLoader().getResource(name);
         return new File(resource.toURI());
     }
 

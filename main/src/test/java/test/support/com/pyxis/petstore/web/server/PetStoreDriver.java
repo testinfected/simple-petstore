@@ -4,18 +4,21 @@ import org.testinfected.hamcrest.ExceptionImposter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.util.Charsets;
 
+import static test.support.org.testinfected.petstore.web.OfflineContext.offline;
+
 public class PetStoreDriver implements ServerDriver {
 
     private final PetStore server;
+    private final int port;
 
     public PetStoreDriver(int port) {
-        this.server = new PetStore(port);
+        this.port = port;
+        this.server = createServer();
     }
 
     public void start() {
         try {
-            server.setEncoding(Charsets.UTF_8);
-            server.start();
+            server.start(port);
         } catch (Exception e) {
             throw ExceptionImposter.imposterize(e);
         }
@@ -27,5 +30,11 @@ public class PetStoreDriver implements ServerDriver {
         } catch (Exception e) {
             throw ExceptionImposter.imposterize(e);
         }
+    }
+
+    private PetStore createServer() {
+        PetStore server = PetStore.rootedAt(offline().webRoot());
+        server.setEncoding(Charsets.UTF_8);
+        return server;
     }
 }
