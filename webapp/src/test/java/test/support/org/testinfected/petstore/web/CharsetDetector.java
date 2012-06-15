@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class CharsetDetector {
 
-    public static String detectCharset(byte[] data) throws IOException {
+    public static String detectedCharset(byte[] data) throws IOException {
         UniversalDetector charsetDetector = new UniversalDetector(new CharsetListener() {
             public void report(String charset) {
             }

@@ -19,7 +19,7 @@ public class OfflineContext {
 
     private final Properties properties;
 
-    public static OfflineContext offline() {
+    public static OfflineContext offlineContext() {
         return new OfflineContext(Properties.system());
     }
 

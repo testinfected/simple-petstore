@@ -5,6 +5,7 @@ import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 public class HasHeaderWithValue extends FeatureMatcher<WebResponse, String> {
 
@@ -19,11 +20,15 @@ public class HasHeaderWithValue extends FeatureMatcher<WebResponse, String> {
         return actual.getResponseHeaderValue(name);
     }
 
-    public static Matcher<? super WebResponse> hasHeader(final String name, String value) {
-        return new HasHeaderWithValue(name, equalTo(value));
+    public static Matcher<? super WebResponse> hasNoHeader(String name) {
+        return hasHeader(name, nullValue());
     }
 
-    public static Matcher<? super WebResponse> hasHeader(final String name, final Matcher<? super String> valueMatcher) {
+    public static Matcher<? super WebResponse> hasHeader(String name, String value) {
+        return hasHeader(name, equalTo(value));
+    }
+
+    public static Matcher<? super WebResponse> hasHeader(String name, Matcher<? super String> valueMatcher) {
         return new HasHeaderWithValue(name, valueMatcher);
     }
 }

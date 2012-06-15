@@ -11,28 +11,27 @@ import org.testinfected.petstore.Handler;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.Application;
 import org.testinfected.petstore.pipeline.Failsafe;
-import test.support.org.testinfected.petstore.web.OfflineContext;
+import test.support.org.testinfected.petstore.web.WebRequestBuilder;
 
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static test.support.org.testinfected.petstore.web.HasContent.hasContent;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
 import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
-import static test.support.org.testinfected.petstore.web.OfflineContext.offline;
+import static test.support.org.testinfected.petstore.web.OfflineContext.offlineContext;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
 public class FailsafeTest {
 
     Application application = new Application() {{
-        use(new Failsafe(offline().renderer()));
+        use(new Failsafe(offlineContext().renderer()));
         run(crashesWith(new Exception("Crashed!")));
     }};
 
-    int PORT = 9999;
-    Server server = new Server(PORT);
-    WebClient client = new WebClient();
-    WebResponse response;
+    int SERVER_LISTENS_ON = 9999;
+    Server server = new Server(SERVER_LISTENS_ON);
 
     @Before public void
     startServer() throws IOException {
@@ -47,10 +46,15 @@ public class FailsafeTest {
 
     @Test public void
     renders500WhenInternalErrorOccurs() throws IOException {
-        response = client.loadWebResponse(aRequest().onPort(PORT).build());
+        send(aRequest().onPort(SERVER_LISTENS_ON));
+
         assertThat("response", response, hasStatusCode(500));
         assertThat("response", response, hasHeader("Content-Type", containsString("text/html")));
-        assertThat("content", response.getContentAsString(), containsString("Crashed!"));
+        assertThat("response", response, hasContent(containsString("Crashed!")));
+    }
+
+    private void send(WebRequestBuilder request) throws IOException {
+        response = client.loadWebResponse(request.build());
     }
 
     private Handler crashesWith(final Exception error) {
@@ -60,4 +64,7 @@ public class FailsafeTest {
             }
         };
     }
+
+    WebClient client = new WebClient();
+    WebResponse response;
 }

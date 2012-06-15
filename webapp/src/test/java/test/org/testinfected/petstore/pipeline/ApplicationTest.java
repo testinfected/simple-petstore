@@ -16,11 +16,10 @@ import org.testinfected.petstore.pipeline.Middleware;
 
 @RunWith(JMock.class)
 public class ApplicationTest {
-    
-    Mockery context = new JUnit4Mockery();
-    
+
     Application application = new Application();
-    
+
+    Mockery context = new JUnit4Mockery();
     Handler handler = context.mock(Handler.class);
     Middleware onTop = context.mock(Middleware.class, "on top");
     Middleware inTheMiddle = context.mock(Middleware.class, "in the middle");

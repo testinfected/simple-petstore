@@ -25,22 +25,19 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static test.support.org.testinfected.petstore.web.HasContent.hasContent;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
 import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
 public class FileServerTest {
 
-    ClassPathResourceLoader resourceLoader = new ClassPathResourceLoader();
-    FileServer fileServer = new FileServer(resourceLoader);
-
-    String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    FileServer fileServer = new FileServer(new ClassPathResourceLoader());
     int PORT = 9999;
     Server server = new Server(PORT);
 
     WebRequestBuilder request = aRequest().onPort(PORT).forPath("/assets/image.png");
-    WebClient client = new WebClient();
-    WebResponse response;
+    String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
     @Before public void
     startServer() throws IOException {
@@ -55,7 +52,7 @@ public class FileServerTest {
 
     @Test public void
     rendersFile() throws Exception {
-        response = client.loadWebResponse(request.build());
+        send(request);
 
         assertThat("response", response, hasStatusCode(200));
         assertThat("content size", contentOf(response).length, equalTo(6597));
@@ -64,14 +61,14 @@ public class FileServerTest {
 
     @Test public void
     guessesMimeTypeFromExtension() throws IOException {
-        response = client.loadWebResponse(request.build());
+        send(request);
 
         assertThat("response", response, hasHeader("Content-Type", "image/png"));
     }
 
     @Test public void
     setsFileResponseHeaders() throws IOException, URISyntaxException {
-        response = client.loadWebResponse(request.build());
+        send(request);
 
         assertThat("response", response, hasHeader("Content-Length", "6597"));
         assertThat("response", response, hasHeader("Last-Modified", modifiedDateOf(resourceFile("assets/image.png"))));
@@ -79,11 +76,11 @@ public class FileServerTest {
 
     @Test public void
     renders404WhenFileIsNotFound() throws IOException {
-        response = client.loadWebResponse(request.but().forPath("/images/missing").build());
+        send(request.but().forPath("/images/missing"));
 
         assertThat("response", response, hasStatusCode(404));
         assertThat("response", response, hasHeader("Content-Type", "text/plain"));
-        assertThat("content", response.getContentAsString(), containsString("/images/missing"));
+        assertThat("response", response, hasContent(containsString("/images/missing")));
     }
 
     private String modifiedDateOf(File file) {
@@ -104,4 +101,11 @@ public class FileServerTest {
     private byte[] contentOf(final WebResponse response) throws IOException {
         return Streams.toBytes(response.getContentAsStream());
     }
+
+    private void send(WebRequestBuilder request) throws IOException {
+        response = client.loadWebResponse(request.build());
+    }
+
+    WebClient client = new WebClient();
+    WebResponse response;
 }

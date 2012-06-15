@@ -17,27 +17,26 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.petstore.util.Streams.toBytes;
 import static org.testinfected.time.lib.DateBuilder.aDate;
-import static test.support.org.testinfected.petstore.web.CharsetDetector.detectCharset;
+import static test.support.org.testinfected.petstore.web.CharsetDetector.detectedCharset;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
+import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasNoHeader;
 import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
-import static test.support.org.testinfected.petstore.web.OfflineContext.offline;
+import static test.support.org.testinfected.petstore.web.OfflineContext.offlineContext;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
 public class PetStoreTest {
 
-    int PORT = 9999;
-    PetStore petStore = new PetStore(offline().webRoot());
-    Date now = aDate().onCalendar(2012, 6, 8).atMidnight().build();
+    PetStore petStore = new PetStore(offlineContext().webRoot());
 
-    WebClient client = new WebClient();
-    WebRequestBuilder request = aRequest().onPort(PORT).forPath("/");
-    WebResponse response;
+    int SERVER_LISTENS_ON = 9999;
+    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENS_ON).forPath("/");
+    Date now = aDate().onCalendar(2012, 6, 8).atMidnight().build();
 
     @Before public void
     startServer() throws IOException {
         petStore.setEncoding("utf-8");
         petStore.setClock(BrokenClock.stoppedAt(now));
-        petStore.start(PORT);
+        petStore.start(SERVER_LISTENS_ON);
     }
 
     @After public void
@@ -47,36 +46,44 @@ public class PetStoreTest {
 
     @Test public void
     setsResponseHeaders() throws IOException {
-        response = client.loadWebResponse(request.build());
+        send(request);
+
         assertThat("response", response, hasHeader("Server", "Simple/4.1.21"));
         assertThat("response", response, hasHeader("Date", "Fri, 08 Jun 2012 04:00:00 GMT"));
     }
 
     @Test public void
     rendersDynamicContentAsHtmlProperlyEncoded() throws IOException {
-        response = client.loadWebResponse(request.build());
+        send(request);
 
         assertThat("response", response, hasStatusCode(200));
         assertThat("response", response, hasHeader("Content-Type", "text/html; charset=utf-8"));
-        assertThat("detected charset", detectCharset(toBytes(response.getContentAsStream())), containsString("UTF-8"));
-        assertThat("response", response, hasHeader("Transfer-Encoding", nullValue()));
+        assertThat("detected charset", detectedCharset(toBytes(response.getContentAsStream())), containsString("UTF-8"));
+        assertThat("response", response, hasNoHeader("Transfer-Encoding"));
     }
-
 
     @Test public void
     rendersStaticAssetsAsFiles() throws IOException {
-        response = client.loadWebResponse(request.but().forPath("/images/logo.png").build());
+        send(request.but().forPath("/images/logo.png"));
 
         assertThat("response", response, hasStatusCode(200));
         assertThat("response", response, hasHeader("Content-Type", "image/png"));
-        assertThat("response", response, hasHeader("Transfer-Encoding", nullValue()));
+        assertThat("response", response, hasNoHeader("Transfer-Encoding"));
     }
 
     @Test public void
     render404WhenResourceIsNotFound() throws IOException {
-        response = client.loadWebResponse(request.but().forPath("/images/missing.png").build());
+        send(request.but().forPath("/images/missing.png"));
 
         assertThat("response", response, hasStatusCode(404));
-        assertThat("response", response, hasHeader("Transfer-Encoding", nullValue()));
+        assertThat("response", response, hasNoHeader("Transfer-Encoding"));
     }
+
+
+    private void send(final WebRequestBuilder request) throws IOException {
+        response = client.loadWebResponse(request.build());
+    }
+
+    WebClient client = new WebClient();
+    WebResponse response;
 }

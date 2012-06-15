@@ -4,7 +4,7 @@ import org.testinfected.hamcrest.ExceptionImposter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.util.Charsets;
 
-import static test.support.org.testinfected.petstore.web.OfflineContext.offline;
+import static test.support.org.testinfected.petstore.web.OfflineContext.offlineContext;
 
 public class PetStoreDriver implements ServerDriver {
 
@@ -33,7 +33,7 @@ public class PetStoreDriver implements ServerDriver {
     }
 
     private PetStore createServer() {
-        PetStore server = PetStore.rootedAt(offline().webRoot());
+        PetStore server = PetStore.rootedAt(offlineContext().webRoot());
         server.setEncoding(Charsets.UTF_8);
         return server;
     }
