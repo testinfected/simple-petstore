@@ -63,9 +63,6 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     test.with NO_LOG, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:infrastructure ).test.compile.target
     test.with_transitive :nekohtml, :htmlunit, :juniversalchardet
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
-    puts project.compile.dependencies
-    puts "=========================="
-    puts test.compile.dependencies
     package(:jar)
   end
   
