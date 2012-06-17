@@ -12,31 +12,37 @@ public class Application implements Handler {
 
     private final Deque<Middleware> stack = new ArrayDeque<Middleware>();
     private Handler runner;
+    private Handler chain;
 
-    public Application() {
+    public Application() {}
+
+    public void use(Middleware middleware) {
+        stack.add(middleware);
     }
 
     public void run(Handler runner) {
         this.runner = runner;
     }
 
-    public void use(Middleware middleware) {
-        stack.add(middleware);
-    }
-
     public void handle(Request request, Response response) throws Exception {
-        chain().handle(request, response);
+        if (!assembled()) assemble();
+
+        chain.handle(request, response);
     }
 
-    public Handler chain() {
+    public Handler assemble() {
         if (runner == null) throw new IllegalStateException("No runner specified");
 
-        Handler chain = runner;
+        chain = runner;
         for (Iterator<Middleware> middlewares = stack.descendingIterator(); middlewares.hasNext(); ) {
             Middleware previous = middlewares.next();
-            previous.wrap(chain);
+            previous.chain(chain);
             chain = previous;
         }
         return chain;
+    }
+
+    private boolean assembled() {
+        return chain != null;
     }
 }

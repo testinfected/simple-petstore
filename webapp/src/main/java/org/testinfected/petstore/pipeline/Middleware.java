@@ -4,5 +4,5 @@ import org.testinfected.petstore.Handler;
 
 public interface Middleware extends Handler {
 
-    void wrap(Handler handler);
+    void chain(Handler handler);
 }

@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.PetStore;
+import org.testinfected.petstore.Server;
 import org.testinfected.time.lib.BrokenClock;
 import test.support.org.testinfected.petstore.web.WebRequestBuilder;
 
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.petstore.util.Streams.toBytes;
 import static org.testinfected.time.lib.DateBuilder.aDate;
@@ -48,7 +48,7 @@ public class PetStoreTest {
     setsResponseHeaders() throws IOException {
         send(request);
 
-        assertThat("response", response, hasHeader("Server", "Simple/4.1.21"));
+        assertThat("response", response, hasHeader("Server", Server.NAME));
         assertThat("response", response, hasHeader("Date", "Fri, 08 Jun 2012 04:00:00 GMT"));
     }
 
@@ -78,7 +78,6 @@ public class PetStoreTest {
         assertThat("response", response, hasStatusCode(404));
         assertThat("response", response, hasNoHeader("Transfer-Encoding"));
     }
-
 
     private void send(final WebRequestBuilder request) throws IOException {
         response = client.loadWebResponse(request.build());

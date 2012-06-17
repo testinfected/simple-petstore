@@ -33,10 +33,10 @@ import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequ
 public class FileServerTest {
 
     FileServer fileServer = new FileServer(new ClassPathResourceLoader());
-    int PORT = 9999;
-    Server server = new Server(PORT);
+    int SERVER_LISTENS_ON = 9999;
+    Server server = new Server(SERVER_LISTENS_ON);
 
-    WebRequestBuilder request = aRequest().onPort(PORT).forPath("/assets/image.png");
+    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENS_ON).forPath("/assets/image.png");
     String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
     @Before public void

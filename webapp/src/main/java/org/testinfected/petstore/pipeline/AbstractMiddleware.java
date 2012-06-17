@@ -11,7 +11,7 @@ public abstract class AbstractMiddleware implements Middleware {
         }
     };
 
-    public void wrap(Handler handler) {
+    public void chain(Handler handler) {
         this.handler = handler;
     }
 

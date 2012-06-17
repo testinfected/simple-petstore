@@ -14,6 +14,8 @@ import java.net.SocketAddress;
 
 public class Server {
 
+    public static final String NAME = "Simple/4.1.21";
+
     private final int port;
     private final Clock clock;
 
@@ -28,8 +30,8 @@ public class Server {
         this.clock = clock;
     }
 
-    public void run(final Handler handler) throws IOException {
-        connection = new SocketConnection(new HandlerContainer(handler));
+    public void run(final Handler application) throws IOException {
+        connection = new SocketConnection(new ApplicationContainer(application));
         SocketAddress address = new InetSocketAddress(port);
         connection.connect(address);
     }
@@ -38,28 +40,30 @@ public class Server {
         if (connection != null) connection.close();
     }
 
-    private class HandlerContainer implements Container {
+    private class ApplicationContainer implements Container {
 
-        private final Handler handler;
+        private final Handler application;
 
-        public HandlerContainer(Handler handler) {
-            this.handler = handler;
+        public ApplicationContainer(Handler application) {
+            this.application = application;
         }
 
         public void handle(Request request, Response response) {
             try {
-                setHeaders(response);
-                handler.handle(request, response);
-            } catch (Exception e) {
-                //TODO add exception monitoring
-                e.printStackTrace();
+                setRequiredHeaders(response);
+                run(request, response);
+            } catch (Exception ignored) {
             } finally {
                 close(response);
             }
         }
 
-        private void setHeaders(Response response) {
-            response.set("Server", "Simple/4.1.21");
+        private void run(Request request, Response response) throws Exception {
+            application.handle(request, response);
+        }
+
+        private void setRequiredHeaders(Response response) {
+            response.set("Server", NAME);
             response.setDate("Date", clock.now().getTime());
         }
 
@@ -67,7 +71,6 @@ public class Server {
             try {
                 response.close();
             } catch (IOException ignored) {
-                //TODO add exception monitoring
             }
         }
     }

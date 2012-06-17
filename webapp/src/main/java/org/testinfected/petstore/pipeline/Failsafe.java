@@ -20,22 +20,30 @@ public class Failsafe extends AbstractMiddleware {
         try {
             forward(request, response);
         } catch (Exception e) {
-            renderError(e, response);
+            failsafeResponse(e, response);
         }
     }
 
-    private void renderError(Exception error, Response response) {
+    private void failsafeResponse(Exception error, Response response) {
         try {
-            response.reset();
-            response.setText(Status.INTERNAL_SERVER_ERROR.getDescription());
-            response.setCode(Status.INTERNAL_SERVER_ERROR.getCode());
-            response.set("Content-Type", "text/html; charset=" + Charsets.ISO_8859_1.name().toLowerCase());
-            renderTemplate(error, response);
+            reset(response);
+            setErrorStatus(response);
+            renderError(error, response);
         } catch (IOException ignored) {
         }
     }
 
-    private void renderTemplate(Exception error, Response response) throws IOException {
+    private void reset(Response response) throws IOException {
+        response.reset();
+    }
+
+    private void setErrorStatus(Response response) {
+        response.setText(Status.INTERNAL_SERVER_ERROR.getDescription());
+        response.setCode(Status.INTERNAL_SERVER_ERROR.getCode());
+    }
+
+    private void renderError(Exception error, Response response) throws IOException {
+        response.set("Content-Type", "text/html; charset=" + Charsets.ISO_8859_1.name().toLowerCase());
         String body = renderer.render("500", error);
         byte[] bytes = body.getBytes(Charsets.ISO_8859_1);
         response.getOutputStream(bytes.length).write(bytes);
