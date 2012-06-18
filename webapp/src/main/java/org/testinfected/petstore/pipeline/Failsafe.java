@@ -3,6 +3,7 @@ package org.testinfected.petstore.pipeline;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
+import org.testinfected.petstore.FailureReporter;
 import org.testinfected.petstore.Renderer;
 import org.testinfected.petstore.util.Charsets;
 
@@ -12,28 +13,44 @@ public class Failsafe extends AbstractMiddleware {
 
     private final Renderer renderer;
 
+    private FailureReporter failureReporter;
+
     public Failsafe(Renderer renderer) {
+        this(renderer, new FailureReporter() {
+            public void requestFailed(Exception failure) {
+            }
+        });
+    }
+
+    public Failsafe(Renderer renderer, FailureReporter failureReporter) {
         this.renderer = renderer;
+        this.failureReporter = failureReporter;
+    }
+
+    public void reportFailuresTo(FailureReporter failureReporter) {
+        this.failureReporter = failureReporter;
     }
 
     public void handle(Request request, Response response) throws Exception {
         try {
             forward(request, response);
-        } catch (Exception e) {
-            failsafeResponse(e, response);
+        } catch (Exception error) {
+            reportFailure(error);
+            failsafeResponse(error, response);
         }
     }
 
-    private void failsafeResponse(Exception error, Response response) {
-        try {
-            reset(response);
-            setErrorStatus(response);
-            renderError(error, response);
-        } catch (IOException ignored) {
-        }
+    private void reportFailure(Exception error) {
+        failureReporter.requestFailed(error);
     }
 
-    private void reset(Response response) throws IOException {
+    private void failsafeResponse(Exception error, Response response) throws IOException {
+        setErrorStatus(response);
+        resetContent(response);
+        renderError(error, response);
+    }
+
+    private void resetContent(Response response) throws IOException {
         response.reset();
     }
 
