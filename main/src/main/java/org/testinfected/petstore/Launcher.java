@@ -10,7 +10,7 @@ public class Launcher {
 
         final PetStore petStore = PetStore.rootedAt(webRoot);
         // todo optional command line parameter
-        petStore.setEncoding("utf-8");
+        petStore.encodeOutputAs("utf-8");
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 try {

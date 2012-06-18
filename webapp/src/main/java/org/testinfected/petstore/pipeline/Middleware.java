@@ -1,8 +1,8 @@
 package org.testinfected.petstore.pipeline;
 
-import org.testinfected.petstore.Handler;
+import org.testinfected.petstore.Application;
 
-public interface Middleware extends Handler {
+public interface Middleware extends Application {
 
-    void chain(Handler handler);
+    void chain(Application app);
 }

@@ -2,7 +2,7 @@ package org.testinfected.petstore.pipeline;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
-import org.testinfected.petstore.Handler;
+import org.testinfected.petstore.Application;
 import org.testinfected.petstore.Renderer;
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Dispatcher implements Handler {
+public class Dispatcher implements Application {
 
     private final Renderer renderer;
     private final Charset charset;

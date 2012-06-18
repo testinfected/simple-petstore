@@ -1,22 +1,18 @@
 package test.integration.org.testinfected.petstore;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Server;
-import org.testinfected.time.lib.BrokenClock;
 import test.support.org.testinfected.petstore.web.WebRequestBuilder;
 
 import java.io.IOException;
-import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.petstore.util.Streams.toBytes;
-import static org.testinfected.time.lib.DateBuilder.aDate;
 import static test.support.org.testinfected.petstore.web.CharsetDetector.detectedCharset;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasNoHeader;
@@ -28,33 +24,30 @@ public class PetStoreTest {
 
     PetStore petStore = new PetStore(offlineContext().webRoot());
 
-    int SERVER_LISTENS_ON = 9999;
-    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENS_ON).forPath("/");
-    Date now = aDate().onCalendar(2012, 6, 8).atMidnight().build();
+    int SERVER_LISTENING_PORT = 9999;
+    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENING_PORT);
 
     @Before public void
     startServer() throws IOException {
-        petStore.setEncoding("utf-8");
-        petStore.setClock(BrokenClock.stoppedAt(now));
-        petStore.start(SERVER_LISTENS_ON);
+        petStore.encodeOutputAs("utf-8");
+        petStore.start(SERVER_LISTENING_PORT);
     }
 
     @After public void
     stopServer() throws Exception {
         petStore.stop();
     }
+    
+    @Test public void 
+    setsServerHeaders() throws IOException {
+        WebResponse response = request.send();
 
-    @Test public void
-    setsResponseHeaders() throws IOException {
-        send(request);
-
-        assertThat("response", response, hasHeader("Server", Server.NAME));
-        assertThat("response", response, hasHeader("Date", "Fri, 08 Jun 2012 04:00:00 GMT"));
+        assertThat("response", response, hasHeader("Server", containsString(Server.NAME)));
     }
 
     @Test public void
     rendersDynamicContentAsHtmlProperlyEncoded() throws IOException {
-        send(request);
+        WebResponse response = request.send();
 
         assertThat("response", response, hasStatusCode(200));
         assertThat("response", response, hasHeader("Content-Type", "text/html; charset=utf-8"));
@@ -64,7 +57,7 @@ public class PetStoreTest {
 
     @Test public void
     rendersStaticAssetsAsFiles() throws IOException {
-        send(request.but().forPath("/images/logo.png"));
+        WebResponse response = request.but().forPath("/images/logo.png").send();
 
         assertThat("response", response, hasStatusCode(200));
         assertThat("response", response, hasHeader("Content-Type", "image/png"));
@@ -73,16 +66,9 @@ public class PetStoreTest {
 
     @Test public void
     render404WhenResourceIsNotFound() throws IOException {
-        send(request.but().forPath("/images/missing.png"));
+        WebResponse response = request.but().forPath("/images/missing.png").send();
 
         assertThat("response", response, hasStatusCode(404));
         assertThat("response", response, hasNoHeader("Transfer-Encoding"));
     }
-
-    private void send(final WebRequestBuilder request) throws IOException {
-        response = client.loadWebResponse(request.build());
-    }
-
-    WebClient client = new WebClient();
-    WebResponse response;
 }

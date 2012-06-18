@@ -8,25 +8,24 @@ import org.simpleframework.http.Status;
 import org.testinfected.petstore.Application;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
-import org.testinfected.petstore.pipeline.StaticAssets;
+import org.testinfected.petstore.pipeline.ServerHeaders;
+import org.testinfected.time.lib.BrokenClock;
 import test.support.org.testinfected.petstore.web.WebRequestBuilder;
 
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static test.support.org.testinfected.petstore.web.EmptyResponse.respondWithCode;
+import static org.testinfected.time.lib.DateBuilder.aDate;
+import static test.support.org.testinfected.petstore.web.EmptyResponse.respondWith;
+import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
 import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
-public class StaticAssetsTest {
+public class ServerHeadersTest {
 
-    int ASSET_SERVED = Status.FOUND.getCode();
-    int NO_ASSET_SERVED = Status.NOT_FOUND.getCode();
-
-    StaticAssets assets = new StaticAssets(respondWithCode(ASSET_SERVED), "/favicon.ico", "/static");
     Application application = new MiddlewareStack() {{
-        use(assets);
-        run(respondWithCode(NO_ASSET_SERVED));
+        use(new ServerHeaders(BrokenClock.stoppedAt(aDate().onCalendar(2012, 6, 8).atMidnight().build())));
+        run(respondWith(Status.OK));
     }};
 
     int SERVER_LISTENING_PORT = 9999;
@@ -44,17 +43,17 @@ public class StaticAssetsTest {
     }
 
     @Test public void
-    routesToFileServerWhenPathIsMatched() throws Exception {
-        WebResponse response = request.but().forPath("/favicon.ico").send();
-        assertThat("response", response, hasStatusCode(ASSET_SERVED));
+    setsResponseHeaders() throws IOException {
+        WebResponse response = request.send();
 
-        response = request.but().forPath("/static/images/logo").send();
-        assertThat("response", response, hasStatusCode(ASSET_SERVED));
+        assertThat("response", response, hasHeader("Server", Server.NAME));
+        assertThat("response", response, hasHeader("Date", "Fri, 08 Jun 2012 04:00:00 GMT"));
     }
 
     @Test public void
-    forwardsToNextApplicationWhenPathIsNotMatched() throws Exception {
-        WebResponse response = request.but().forPath("/home").send();
-        assertThat("response", response, hasStatusCode(NO_ASSET_SERVED));
+    forwardsToNextApplication() throws IOException {
+        WebResponse response = request.send();
+
+        assertThat("response", response, hasStatusCode(Status.OK.getCode()));
     }
 }

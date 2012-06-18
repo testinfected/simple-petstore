@@ -3,7 +3,7 @@ package org.testinfected.petstore.pipeline;
 import org.simpleframework.http.Path;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
-import org.testinfected.petstore.Handler;
+import org.testinfected.petstore.Application;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,10 +11,10 @@ import java.util.List;
 
 public class StaticAssets extends AbstractMiddleware {
 
-    private final Handler fileServer;
+    private final Application fileServer;
     private final List<String> urls = new ArrayList<String>();
 
-    public StaticAssets(Handler fileServer, String... urls) {
+    public StaticAssets(Application fileServer, String... urls) {
         this.fileServer = fileServer;
         this.urls.addAll(Arrays.asList(urls));
     }

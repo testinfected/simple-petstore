@@ -2,26 +2,26 @@ package org.testinfected.petstore.pipeline;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
-import org.testinfected.petstore.Handler;
+import org.testinfected.petstore.Application;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
-public class Application implements Handler {
+public class MiddlewareStack implements Application {
 
     private final Deque<Middleware> stack = new ArrayDeque<Middleware>();
-    private Handler runner;
-    private Handler chain;
+    private Application runner;
+    private Application chain;
 
-    public Application() {}
+    public MiddlewareStack() {}
 
     public void use(Middleware middleware) {
         stack.add(middleware);
     }
 
-    public void run(Handler runner) {
-        this.runner = runner;
+    public void run(Application app) {
+        this.runner = app;
     }
 
     public void handle(Request request, Response response) throws Exception {
@@ -30,7 +30,7 @@ public class Application implements Handler {
         chain.handle(request, response);
     }
 
-    public Handler assemble() {
+    public Application assemble() {
         if (runner == null) throw new IllegalStateException("No runner specified");
 
         chain = runner;

@@ -34,7 +34,8 @@ public class PetStoreDriver implements ServerDriver {
 
     private PetStore createServer() {
         PetStore server = PetStore.rootedAt(offlineContext().webRoot());
-        server.setEncoding(Charsets.UTF_8);
+        server.encodeOutputAs(Charsets.UTF_8);
+        server.quiet();
         return server;
     }
 }

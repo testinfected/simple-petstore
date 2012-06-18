@@ -1,6 +1,5 @@
 package test.integration.org.testinfected.petstore.pipeline;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import org.junit.After;
 import org.junit.Before;
@@ -33,26 +32,24 @@ import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequ
 public class FileServerTest {
 
     FileServer fileServer = new FileServer(new ClassPathResourceLoader());
-    int SERVER_LISTENS_ON = 9999;
-    Server server = new Server(SERVER_LISTENS_ON);
 
-    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENS_ON).forPath("/assets/image.png");
-    String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    int SERVER_LISTENING_PORT = 9999;
+    Server server = new Server(SERVER_LISTENING_PORT);
+    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENING_PORT).forPath("/assets/image.png");
 
     @Before public void
     startServer() throws IOException {
-        client.setTimeout(5000);
         server.run(fileServer);
     }
 
     @After public void
     stopServer() throws Exception {
-        server.stop();
+        server.shutdown();
     }
 
     @Test public void
     rendersFile() throws Exception {
-        send(request);
+        WebResponse response = request.send();
 
         assertThat("response", response, hasStatusCode(200));
         assertThat("content size", contentOf(response).length, equalTo(6597));
@@ -61,14 +58,14 @@ public class FileServerTest {
 
     @Test public void
     guessesMimeTypeFromExtension() throws IOException {
-        send(request);
+        WebResponse response = request.send();
 
         assertThat("response", response, hasHeader("Content-Type", "image/png"));
     }
 
     @Test public void
     setsFileResponseHeaders() throws IOException, URISyntaxException {
-        send(request);
+        WebResponse response = request.send();
 
         assertThat("response", response, hasHeader("Content-Length", "6597"));
         assertThat("response", response, hasHeader("Last-Modified", modifiedDateOf(resourceFile("assets/image.png"))));
@@ -76,12 +73,14 @@ public class FileServerTest {
 
     @Test public void
     renders404WhenFileIsNotFound() throws IOException {
-        send(request.but().forPath("/images/missing"));
+        WebResponse response = request.but().forPath("/images/missing").send();
 
         assertThat("response", response, hasStatusCode(404));
         assertThat("response", response, hasHeader("Content-Type", "text/plain"));
         assertThat("response", response, hasContent(containsString("/images/missing")));
     }
+
+    String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 
     private String modifiedDateOf(File file) {
         SimpleDateFormat httpDate = new SimpleDateFormat(RFC_1123_DATE_FORMAT);
@@ -101,11 +100,4 @@ public class FileServerTest {
     private byte[] contentOf(final WebResponse response) throws IOException {
         return Streams.toBytes(response.getContentAsStream());
     }
-
-    private void send(WebRequestBuilder request) throws IOException {
-        response = client.loadWebResponse(request.build());
-    }
-
-    WebClient client = new WebClient();
-    WebResponse response;
 }

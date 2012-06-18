@@ -46,10 +46,10 @@ public class ExceptionImposterTest {
     public void mimicsImposterizedExceptionStackTraceOutput() {
         original = new Exception("Detail message");
         original.fillInStackTrace();
-        assertThat("stack trace output", captureStackTrace(imposterize(original)), equalTo(captureStackTrace(original)));
+        assertThat("stack trace output", stackTraceOf(imposterize(original)), equalTo(stackTraceOf(original)));
     }
 
-    private String captureStackTrace(Exception exception) {
+    private String stackTraceOf(Exception exception) {
         StringWriter capture = new StringWriter();
         exception.printStackTrace(new PrintWriter(capture));
         capture.flush();

@@ -3,7 +3,7 @@ package org.testinfected.petstore.pipeline;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
-import org.testinfected.petstore.Handler;
+import org.testinfected.petstore.Application;
 import org.testinfected.petstore.Resource;
 import org.testinfected.petstore.ResourceLoader;
 import org.testinfected.petstore.ResourceNotFoundException;
@@ -13,7 +13,7 @@ import org.testinfected.petstore.util.Streams;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class FileServer implements Handler {
+public class FileServer implements Application {
 
     private final ResourceLoader resourceLoader;
 

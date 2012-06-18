@@ -2,20 +2,20 @@ package org.testinfected.petstore.pipeline;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
-import org.testinfected.petstore.Handler;
+import org.testinfected.petstore.Application;
 
 public abstract class AbstractMiddleware implements Middleware {
 
-    private Handler handler = new Handler() {
+    private Application app = new Application() {
         public void handle(Request request, Response response) throws Exception {
         }
     };
 
-    public void chain(Handler handler) {
-        this.handler = handler;
+    public void chain(Application app) {
+        this.app = app;
     }
 
     protected void forward(Request request, Response response) throws Exception {
-        handler.handle(request, response);
+        app.handle(request, response);
     }
 }

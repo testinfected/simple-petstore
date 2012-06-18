@@ -16,10 +16,7 @@ public class Failsafe extends AbstractMiddleware {
     private FailureReporter failureReporter;
 
     public Failsafe(Renderer renderer) {
-        this(renderer, new FailureReporter() {
-            public void requestFailed(Exception failure) {
-            }
-        });
+        this(renderer, FailureReporter.IGNORE);
     }
 
     public Failsafe(Renderer renderer, FailureReporter failureReporter) {
@@ -27,21 +24,21 @@ public class Failsafe extends AbstractMiddleware {
         this.failureReporter = failureReporter;
     }
 
-    public void reportFailuresTo(FailureReporter failureReporter) {
+    public void reportErrorsTo(FailureReporter failureReporter) {
         this.failureReporter = failureReporter;
     }
 
     public void handle(Request request, Response response) throws Exception {
         try {
             forward(request, response);
-        } catch (Exception error) {
-            reportFailure(error);
-            failsafeResponse(error, response);
+        } catch (Exception internalError) {
+            reportInternalError(internalError);
+            failsafeResponse(internalError, response);
         }
     }
 
-    private void reportFailure(Exception error) {
-        failureReporter.requestFailed(error);
+    private void reportInternalError(Exception error) {
+        failureReporter.internalErrorOccurred(error);
     }
 
     private void failsafeResponse(Exception error, Response response) throws IOException {

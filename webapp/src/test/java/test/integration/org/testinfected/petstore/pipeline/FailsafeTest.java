@@ -1,6 +1,5 @@
 package test.integration.org.testinfected.petstore.pipeline;
 
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -12,11 +11,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
+import org.testinfected.petstore.Application;
 import org.testinfected.petstore.FailureReporter;
-import org.testinfected.petstore.Handler;
 import org.testinfected.petstore.Server;
-import org.testinfected.petstore.pipeline.Application;
 import org.testinfected.petstore.pipeline.Failsafe;
+import org.testinfected.petstore.pipeline.MiddlewareStack;
 import test.support.org.testinfected.petstore.web.WebRequestBuilder;
 
 import java.io.IOException;
@@ -38,29 +37,28 @@ public class FailsafeTest {
     Failsafe failsafe = new Failsafe(offlineContext().renderer());
     Exception error = new Exception("Crashed!");
 
-    Application application = new Application() {{
+    Application app = new MiddlewareStack() {{
         use(failsafe);
         run(crashesWith(error));
     }};
 
-    int SERVER_LISTENS_ON = 9999;
-    Server server = new Server(SERVER_LISTENS_ON);
-    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENS_ON);
+    int SERVER_LISTENING_PORT = 9999;
+    Server server = new Server(SERVER_LISTENING_PORT);
+    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENING_PORT);
 
     @Before public void
     startServer() throws IOException {
-        client.setTimeout(5000);
-        server.run(application);
+        server.run(app);
     }
 
     @After public void
     stopServer() throws Exception {
-        server.stop();
+        server.shutdown();
     }
 
     @Test public void
     renders500WhenInternalErrorOccurs() throws IOException {
-        send(request);
+        WebResponse response = request.send();
 
         assertThat("response", response, hasStatusCode(500));
         assertThat("response", response, hasHeader("Content-Type", containsString("text/html")));
@@ -68,30 +66,25 @@ public class FailsafeTest {
     }
 
     @Test public void
-    notifiesFailureReporterWhenErrorOccurs() throws IOException {
-        failsafe.reportFailuresTo(failureReporter);
+    notifiesFailureReporterWhenInternalErrorOccurs() throws IOException {
+        failsafe.reportErrorsTo(failureReporter);
         expectFailureReport();
-        send(request);
+
+        request.send();
+        context.assertIsSatisfied();
     }
 
     private void expectFailureReport() {
         context.checking(new Expectations() {{
-            oneOf(failureReporter).requestFailed(with(same(error)));
+            oneOf(failureReporter).internalErrorOccurred(with(same(error)));
         }});
     }
 
-    private void send(WebRequestBuilder request) throws IOException {
-        response = client.loadWebResponse(request.build());
-    }
-
-    private Handler crashesWith(final Exception error) {
-        return new Handler() {
+    private Application crashesWith(final Exception error) {
+        return new Application() {
             public void handle(Request request, Response response) throws Exception {
                 throw error;
             }
         };
     }
-
-    WebClient client = new WebClient();
-    WebResponse response;
 }

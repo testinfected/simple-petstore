@@ -11,17 +11,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
-import org.testinfected.petstore.Handler;
-import org.testinfected.petstore.pipeline.Application;
+import org.testinfected.petstore.Application;
 import org.testinfected.petstore.pipeline.Middleware;
+import org.testinfected.petstore.pipeline.MiddlewareStack;
 
 @RunWith(JMock.class)
-public class ApplicationTest {
+public class MiddlewareStackTest {
 
-    Application application = new Application();
+    MiddlewareStack stack = new MiddlewareStack();
 
     Mockery context = new JUnit4Mockery();
-    Handler handler = context.mock(Handler.class);
+    Application application = context.mock(Application.class);
     Middleware onTop = context.mock(Middleware.class, "on top");
     Middleware inTheMiddle = context.mock(Middleware.class, "in the middle");
     Middleware atBottom = context.mock(Middleware.class, "at bottom");
@@ -35,19 +35,19 @@ public class ApplicationTest {
         expectMiddlewaresToBeChainedFromTopToBottomThen(chain.is("assembled"));
         expectChainToHandleRequestWhen(chain.is("assembled"));
 
-        application.use(onTop);
-        application.use(inTheMiddle);
-        application.use(atBottom);
-        application.run(handler);
+        stack.use(onTop);
+        stack.use(inTheMiddle);
+        stack.use(atBottom);
+        stack.run(application);
 
-        application.handle(request, response);
+        stack.handle(request, response);
     }
 
     private void expectMiddlewaresToBeChainedFromTopToBottomThen(final State state) {
         context.checking(new Expectations() {{
             oneOf(onTop).chain(inTheMiddle);
             oneOf(inTheMiddle).chain(atBottom);
-            oneOf(atBottom).chain(handler); then(state);
+            oneOf(atBottom).chain(application); then(state);
         }});
     }
 

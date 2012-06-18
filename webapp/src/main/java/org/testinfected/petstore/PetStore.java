@@ -1,12 +1,13 @@
 package org.testinfected.petstore;
 
-import org.testinfected.petstore.pipeline.Application;
 import org.testinfected.petstore.pipeline.Dispatcher;
 import org.testinfected.petstore.pipeline.Failsafe;
 import org.testinfected.petstore.pipeline.FileServer;
+import org.testinfected.petstore.pipeline.MiddlewareStack;
+import org.testinfected.petstore.pipeline.ServerHeaders;
 import org.testinfected.petstore.pipeline.StaticAssets;
 import org.testinfected.petstore.util.Charsets;
-import org.testinfected.time.Clock;
+import org.testinfected.petstore.util.ConsoleErrorReporter;
 import org.testinfected.time.lib.SystemClock;
 
 import java.io.File;
@@ -20,9 +21,9 @@ public class PetStore {
 
     private final File root;
 
-    private Clock clock;
-    private Charset charset;
     private Server server;
+    private Charset charset = Charset.defaultCharset();
+    private FailureReporter failureReporter = new ConsoleErrorReporter(System.err);
 
     public static PetStore rootedAt(File root) {
         return new PetStore(root);
@@ -30,37 +31,36 @@ public class PetStore {
 
     public PetStore(File root) {
         this.root = root;
-        this.charset = Charset.defaultCharset();
-        this.clock = new SystemClock();
     }
 
-    public void setEncoding(String charsetName) {
-        setEncoding(Charset.forName(charsetName));
+    public void encodeOutputAs(String charsetName) {
+        encodeOutputAs(Charset.forName(charsetName));
     }
 
-    public void setEncoding(Charset charset) {
+    public void encodeOutputAs(Charset charset) {
         this.charset = charset;
     }
-
-    public void setClock(Clock clock) {
-        this.clock = clock;
+    
+    public void quiet() {
+        failureReporter = FailureReporter.IGNORE;
     }
 
     public void start(int port) throws IOException {
-        server = new Server(port, clock);
+        server = new Server(port, failureReporter);
         final Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(templateDirectory(), Charsets.UTF_8));
-        server.run(new Application() {{
-            use(new Failsafe(renderer));
-            use(assets());
+        server.run(new MiddlewareStack() {{
+            use(new Failsafe(renderer, failureReporter));
+            use(new ServerHeaders(new SystemClock()));
+            use(staticAssets());
             run(new Dispatcher(renderer, charset));
         }});
     }
 
     public void stop() throws IOException {
-        if (server != null) server.stop();
+        if (server != null) server.shutdown();
     }
 
-    private StaticAssets assets() {
+    private StaticAssets staticAssets() {
         final StaticAssets assets = new StaticAssets(new FileServer(new FileSystemResourceLoader(assetDirectory())));
         assets.serve("/favicon.ico", "/images", "/stylesheets");
         return assets;
