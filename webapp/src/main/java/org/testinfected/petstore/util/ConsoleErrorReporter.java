@@ -9,8 +9,8 @@ public class ConsoleErrorReporter implements FailureReporter {
 
     private final PrintStream console;
 
-    public ConsoleErrorReporter() {
-        this(System.err);
+    public static FailureReporter toStandardError() {
+        return new ConsoleErrorReporter(System.err);
     }
 
     public ConsoleErrorReporter(PrintStream console) {
@@ -18,17 +18,16 @@ public class ConsoleErrorReporter implements FailureReporter {
     }
 
     public void internalErrorOccurred(Exception failure) {
-        error("Internal error");
-        failure.printStackTrace(console);
+        error("Internal error", failure);
     }
 
     public void communicationFailed(IOException failure) {
-        error("Communication failure");
-        failure.printStackTrace(console);
+        error("Communication failure", failure);
     }
 
-    private void error(final String msg) {
+    private void error(final String msg, Exception failure) {
         console.println("[ERROR] " + msg);
+        failure.printStackTrace(console);
     }
 }
 

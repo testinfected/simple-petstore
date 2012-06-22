@@ -23,7 +23,7 @@ public class PetStore {
 
     private Server server;
     private Charset charset = Charset.defaultCharset();
-    private FailureReporter failureReporter = new ConsoleErrorReporter(System.err);
+    private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
 
     public static PetStore rootedAt(File root) {
         return new PetStore(root);
