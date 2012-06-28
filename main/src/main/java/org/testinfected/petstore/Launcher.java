@@ -9,8 +9,9 @@ public class Launcher {
         File webRoot = new File(args[1]);
 
         final PetStore petStore = PetStore.rootedAt(webRoot);
-        // todo optional command line parameter
+        // todo optional command line parameters
         petStore.encodeOutputAs("utf-8");
+        petStore.logToConsole();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 try {
@@ -21,7 +22,7 @@ public class Launcher {
             }
         });
         System.out.println("Starting web application at http://localhost:" + port);
-        System.out.println("Serving files from " + webRoot.getAbsolutePath());
+        System.out.println("Serving from " + webRoot.getAbsolutePath());
         petStore.start(port);
     }
 

@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.time.lib.DateBuilder.aDate;
-import static test.support.org.testinfected.petstore.web.EmptyResponse.respondWith;
+import static test.support.org.testinfected.petstore.web.TextResponse.respondWith;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
 import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;

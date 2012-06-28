@@ -33,6 +33,7 @@ public class FileServer implements Application {
         Resource resource = resourceLoader.load(fileName(request));
         response.set("Content-Type", resource.mimeType());
         response.setDate("Last-Modified", resource.lastModified());
+        response.setContentLength(resource.contentLength());
         InputStream file = resource.open();
         try {
             Streams.copy(file, response.getOutputStream(resource.contentLength()));
@@ -52,6 +53,7 @@ public class FileServer implements Application {
         String body = "Not found: " + notFound.getResource();
         byte[] bytes = body.getBytes(Charsets.ISO_8859_1);
         response.set("Content-Type", "text/plain");
+        response.setContentLength(bytes.length);
         response.getOutputStream(bytes.length).write(bytes);
     }
 }

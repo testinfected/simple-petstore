@@ -5,6 +5,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 public final class Streams {
 
@@ -25,11 +26,20 @@ public final class Streams {
         }
     }
 
-    public static byte[] toBytes(InputStream stream) throws IOException {
+    public static String toString(InputStream in) throws IOException {
+        return toString(in, Charset.defaultCharset().name());
+    }
+
+    public static String toString(InputStream in, String encoding) throws IOException {
+        return new String(toBytes(in), encoding);
+    }
+
+    public static byte[] toBytes(InputStream in) throws IOException {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        copy(stream, buffer);
+        copy(in, buffer);
         return buffer.toByteArray();
     }
 
-    private Streams() {}
+    private Streams() {
+    }
 }

@@ -60,6 +60,7 @@ public class Failsafe extends AbstractMiddleware {
         response.set("Content-Type", "text/html; charset=" + Charsets.ISO_8859_1.name().toLowerCase());
         String body = renderer.render("500", error);
         byte[] bytes = body.getBytes(Charsets.ISO_8859_1);
+        response.setContentLength(bytes.length);
         response.getOutputStream(bytes.length).write(bytes);
     }
 }

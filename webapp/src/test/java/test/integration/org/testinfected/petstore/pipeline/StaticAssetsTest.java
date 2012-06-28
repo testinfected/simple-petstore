@@ -14,7 +14,7 @@ import test.support.org.testinfected.petstore.web.WebRequestBuilder;
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static test.support.org.testinfected.petstore.web.EmptyResponse.respondWithCode;
+import static test.support.org.testinfected.petstore.web.TextResponse.respondWithCode;
 import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
 import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 

@@ -30,6 +30,7 @@ public class Dispatcher implements Application {
         response.set("Content-Type", "text/html; charset=" + charset.name().toLowerCase());
         String body = renderer.render(name, context);
         byte[] bytes = body.getBytes(charset);
+        response.setContentLength(bytes.length);
         response.getOutputStream(bytes.length).write(bytes);
     }
 }

@@ -4,6 +4,7 @@ import org.testinfected.petstore.FileSystemResourceLoader;
 import org.testinfected.petstore.MustacheRendering;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Renderer;
+import org.testinfected.petstore.Server;
 import org.testinfected.petstore.util.Charsets;
 import test.support.com.pyxis.petstore.Properties;
 
@@ -11,6 +12,8 @@ import java.io.File;
 
 public class OfflineContext {
     
+    public static int TEST_PORT = 9999;
+
     private static final Properties defaults = new Properties();
 
     static {

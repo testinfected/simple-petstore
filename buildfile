@@ -61,7 +61,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   define 'webapp' do
     compile.with :simpleframework, :jmustache, :time
     test.with NO_LOG, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:infrastructure ).test.compile.target
-    test.with_transitive :nekohtml, :htmlunit, :juniversalchardet
+    test.with_transitive :nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
     package(:jar)
   end

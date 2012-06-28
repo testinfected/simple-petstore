@@ -59,6 +59,7 @@ artifacts:
   windowlicker_web: com.googlecode.windowlicker:windowlicker-web:jar:r268
   htmlunit: net.sourceforge.htmlunit:htmlunit:jar:2.9
   juniversalchardet: com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3
+  jmock_legacy: org.jmock:jmock-legacy:jar:2.5.1
   
 junit: 4.8.1
 jmock: 2.5.1

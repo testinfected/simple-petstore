@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Server;
+import test.support.org.testinfected.petstore.web.LogFile;
 import test.support.org.testinfected.petstore.web.WebRequestBuilder;
 
 import java.io.IOException;
@@ -26,30 +27,43 @@ public class PetStoreTest {
 
     int SERVER_LISTENING_PORT = 9999;
     WebRequestBuilder request = aRequest().onPort(SERVER_LISTENING_PORT);
+    LogFile logFile;
 
     @Before public void
     startServer() throws IOException {
         petStore.encodeOutputAs("utf-8");
+        logFile = LogFile.create();
+        petStore.logToFile(logFile.path());
         petStore.start(SERVER_LISTENING_PORT);
     }
 
     @After public void
     stopServer() throws Exception {
         petStore.stop();
+        logFile.clear();
     }
     
     @Test public void 
     setsServerHeaders() throws IOException {
         WebResponse response = request.send();
 
+        assertOK(response);
         assertThat("response", response, hasHeader("Server", containsString(Server.NAME)));
+    }
+
+    @Test public void
+    producesAccessLog() throws IOException {
+        WebResponse response = request.but().forPath("/home").send();
+
+        assertOK(response);
+        logFile.assertHasEntry(containsString("\"GET /home HTTP/1.1\" 200"));
     }
 
     @Test public void
     rendersDynamicContentAsHtmlProperlyEncoded() throws IOException {
         WebResponse response = request.send();
 
-        assertThat("response", response, hasStatusCode(200));
+        assertOK(response);
         assertThat("response", response, hasHeader("Content-Type", "text/html; charset=utf-8"));
         assertThat("detected charset", detectedCharset(toBytes(response.getContentAsStream())), containsString("UTF-8"));
         assertThat("response", response, hasNoHeader("Transfer-Encoding"));
@@ -59,7 +73,7 @@ public class PetStoreTest {
     rendersStaticAssetsAsFiles() throws IOException {
         WebResponse response = request.but().forPath("/images/logo.png").send();
 
-        assertThat("response", response, hasStatusCode(200));
+        assertOK(response);
         assertThat("response", response, hasHeader("Content-Type", "image/png"));
         assertThat("response", response, hasNoHeader("Transfer-Encoding"));
     }
@@ -70,5 +84,9 @@ public class PetStoreTest {
 
         assertThat("response", response, hasStatusCode(404));
         assertThat("response", response, hasNoHeader("Transfer-Encoding"));
+    }
+
+    private void assertOK(WebResponse response) {
+        assertThat("response", response, hasStatusCode(200));
     }
 }
