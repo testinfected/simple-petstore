@@ -2,10 +2,10 @@ package test.support.com.pyxis.petstore.web.server;
 
 public class LastingServer implements ServerLifeCycle {
 
-    private final OldServerDriver shared;
+    private final OldWebServer shared;
 
     public LastingServer(ServerProperties properties) {
-        this.shared = new OldServerDriver(properties);
+        this.shared = new OldWebServer(properties);
     }
 
     public ServerDriver start() {

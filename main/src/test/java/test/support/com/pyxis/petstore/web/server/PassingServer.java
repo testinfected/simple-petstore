@@ -9,7 +9,7 @@ public class PassingServer implements ServerLifeCycle {
     }
 
     public ServerDriver start() {
-        ServerDriver server = new OldServerDriver(properties);
+        ServerDriver server = new OldWebServer(properties);
         server.start();
         return server;
     }
