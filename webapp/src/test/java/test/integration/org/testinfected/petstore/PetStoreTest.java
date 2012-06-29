@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Server;
+import test.support.org.testinfected.petstore.web.Console;
 import test.support.org.testinfected.petstore.web.LogFile;
 import test.support.org.testinfected.petstore.web.WebRequestBuilder;
 
@@ -23,24 +24,25 @@ import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequ
 
 public class PetStoreTest {
 
-    PetStore petStore = new PetStore(offlineContext().webRoot());
+    PetStore petstore = new PetStore(offlineContext().webRoot());
 
     int SERVER_LISTENING_PORT = 9999;
     WebRequestBuilder request = aRequest().onPort(SERVER_LISTENING_PORT);
     LogFile logFile;
+    Console console = Console.captureStandardOutput();
 
     @Before public void
     startServer() throws IOException {
-        petStore.encodeOutputAs("utf-8");
         logFile = LogFile.create();
-        petStore.logToFile(logFile.path());
-        petStore.start(SERVER_LISTENING_PORT);
+        petstore.encodeOutputAs("utf-8");
+        petstore.start(SERVER_LISTENING_PORT);
     }
 
     @After public void
     stopServer() throws Exception {
-        petStore.stop();
+        petstore.stop();
         logFile.clear();
+        console.terminate();
     }
     
     @Test public void 
@@ -52,11 +54,21 @@ public class PetStoreTest {
     }
 
     @Test public void
-    producesAccessLog() throws IOException {
+    canProduceAccessLogFile() throws IOException {
+        petstore.logToFile(logFile.path());
         WebResponse response = request.but().forPath("/home").send();
 
         assertOK(response);
         logFile.assertHasEntry(containsString("\"GET /home HTTP/1.1\" 200"));
+    }
+
+    @Test public void
+    canOutputAccessLogToConsole() throws IOException {
+        petstore.logToConsole();
+        WebResponse response = request.but().forPath("/cart").send();
+
+        assertOK(response);
+        console.assertHasEntry(containsString("\"GET /cart HTTP/1.1\" 200"));
     }
 
     @Test public void
