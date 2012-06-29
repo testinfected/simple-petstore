@@ -1,6 +1,5 @@
 package test.integration.org.testinfected.petstore.pipeline;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,7 +7,8 @@ import org.testinfected.petstore.ClassPathResourceLoader;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.FileServer;
 import org.testinfected.petstore.util.Streams;
-import test.support.org.testinfected.petstore.web.WebRequestBuilder;
+import test.support.org.testinfected.petstore.web.HttpResponse;
+import test.support.org.testinfected.petstore.web.OfflineContext;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,26 +16,17 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static test.support.org.testinfected.petstore.web.HasContent.hasContent;
-import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
-import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
-import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
+import static test.support.org.testinfected.petstore.web.HttpRequest.get;
 
 public class FileServerTest {
 
     FileServer fileServer = new FileServer(new ClassPathResourceLoader());
 
-    int SERVER_LISTENING_PORT = 9999;
-    Server server = new Server(SERVER_LISTENING_PORT);
-    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENING_PORT).forPath("/assets/image.png");
+    Server server = new Server(OfflineContext.TEST_PORT);
 
     @Before public void
     startServer() throws IOException {
@@ -49,35 +40,34 @@ public class FileServerTest {
 
     @Test public void
     rendersFile() throws Exception {
-        WebResponse response = request.send();
+        HttpResponse response = get("/assets/image.png");
 
-        assertThat("response", response, hasStatusCode(200));
-        assertThat("content size", contentOf(response).length, equalTo(6597));
-        assertTrue("content differs from original file", Arrays.equals(contentOf(response), contentOf(resourceFile("assets/image.png"))));
+        response.assertOK();
+        response.assertHasContentSize(6597);
+        response.assertHasContent(contentOf(resourceFile("assets/image.png")));
     }
 
     @Test public void
     guessesMimeTypeFromExtension() throws IOException {
-        WebResponse response = request.send();
-
-        assertThat("response", response, hasHeader("Content-Type", "image/png"));
+        HttpResponse response = get("/assets/image.png");
+        response.assertHasHeader("Content-Type", "image/png");
     }
 
     @Test public void
     setsFileResponseHeaders() throws IOException, URISyntaxException {
-        WebResponse response = request.send();
+        HttpResponse response = get("/assets/image.png");
 
-        assertThat("response", response, hasHeader("Content-Length", "6597"));
-        assertThat("response", response, hasHeader("Last-Modified", modifiedDateOf(resourceFile("assets/image.png"))));
+        response.assertHasHeader("Content-Length", "6597");
+        response.assertHasHeader("Last-Modified", modifiedDateOf(resourceFile("assets/image.png")));
     }
 
     @Test public void
     renders404WhenFileIsNotFound() throws IOException {
-        WebResponse response = request.but().forPath("/images/missing").send();
+        HttpResponse response = get("/images/missing");
 
-        assertThat("response", response, hasStatusCode(404));
-        assertThat("response", response, hasHeader("Content-Type", "text/plain"));
-        assertThat("response", response, hasContent(containsString("/images/missing")));
+        response.assertHasStatusCode(404);
+        response.assertHasHeader("Content-Type", "text/plain");
+        response.assertHasContent(containsString("/images/missing"));
     }
 
     String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
@@ -97,7 +87,4 @@ public class FileServerTest {
         return Streams.toBytes(new FileInputStream(file));
     }
 
-    private byte[] contentOf(final WebResponse response) throws IOException {
-        return Streams.toBytes(response.getContentAsStream());
-    }
 }

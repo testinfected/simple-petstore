@@ -4,7 +4,6 @@ import org.testinfected.petstore.FileSystemResourceLoader;
 import org.testinfected.petstore.MustacheRendering;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Renderer;
-import org.testinfected.petstore.Server;
 import org.testinfected.petstore.util.Charsets;
 import test.support.com.pyxis.petstore.Properties;
 
@@ -14,20 +13,18 @@ public class OfflineContext {
     
     public static int TEST_PORT = 9999;
 
-    private static final Properties defaults = new Properties();
-
-    static {
+    private final Properties defaults = new Properties();
+    {
         defaults.put("web.root", "webapp/src/main/webapp");
     }
 
-    private final Properties properties;
+    private final Properties properties = defaults.copy();
 
-    public static OfflineContext offlineContext() {
+    public static OfflineContext fromSystemProperties() {
         return new OfflineContext(Properties.system());
     }
 
     public OfflineContext(Properties properties) {
-        this.properties = defaults.copy();
         this.properties.override(properties);
     }
 
@@ -38,6 +35,4 @@ public class OfflineContext {
     public Renderer renderer() {
         return new MustacheRendering(new FileSystemResourceLoader(new File(webRoot(), PetStore.TEMPLATE_DIRECTORY), Charsets.UTF_8));
     }
-
-
 }

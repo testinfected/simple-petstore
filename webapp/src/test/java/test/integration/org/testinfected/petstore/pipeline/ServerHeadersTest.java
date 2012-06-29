@@ -1,36 +1,31 @@
 package test.integration.org.testinfected.petstore.pipeline;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.simpleframework.http.Status;
 import org.testinfected.petstore.Application;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.petstore.pipeline.ServerHeaders;
 import org.testinfected.time.lib.BrokenClock;
-import test.support.org.testinfected.petstore.web.WebRequestBuilder;
+import test.support.org.testinfected.petstore.web.HttpResponse;
+import test.support.org.testinfected.petstore.web.OfflineContext;
 
 import java.io.IOException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.simpleframework.http.Status.SEE_OTHER;
 import static org.testinfected.time.lib.DateBuilder.aDate;
+import static test.support.org.testinfected.petstore.web.HttpRequest.get;
 import static test.support.org.testinfected.petstore.web.TextResponse.respondWith;
-import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
-import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
-import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
 public class ServerHeadersTest {
 
     Application application = new MiddlewareStack() {{
         use(new ServerHeaders(BrokenClock.stoppedAt(aDate().onCalendar(2012, 6, 8).atMidnight().build())));
-        run(respondWith(Status.OK));
+        run(respondWith(SEE_OTHER));
     }};
 
-    int SERVER_LISTENING_PORT = 9999;
-    Server server = new Server(SERVER_LISTENING_PORT);
-    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENING_PORT);
+    Server server = new Server(OfflineContext.TEST_PORT);
 
     @Before public void
     startServer() throws IOException {
@@ -44,16 +39,14 @@ public class ServerHeadersTest {
 
     @Test public void
     setsResponseHeaders() throws IOException {
-        WebResponse response = request.send();
+        HttpResponse response = get("/");
 
-        assertThat("response", response, hasHeader("Server", Server.NAME));
-        assertThat("response", response, hasHeader("Date", "Fri, 08 Jun 2012 04:00:00 GMT"));
+        response.assertHasHeader("Server", Server.NAME);
+        response.assertHasHeader("Date", "Fri, 08 Jun 2012 04:00:00 GMT");
     }
 
     @Test public void
     forwardsToNextApplication() throws IOException {
-        WebResponse response = request.send();
-
-        assertThat("response", response, hasStatusCode(Status.OK.getCode()));
+        get("/").assertHasStatusCode(SEE_OTHER.getCode());
     }
 }

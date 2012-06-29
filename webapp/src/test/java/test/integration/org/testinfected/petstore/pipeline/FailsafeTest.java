@@ -1,6 +1,5 @@
 package test.integration.org.testinfected.petstore.pipeline;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -16,17 +15,14 @@ import org.testinfected.petstore.FailureReporter;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.Failsafe;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
-import test.support.org.testinfected.petstore.web.WebRequestBuilder;
+import test.support.org.testinfected.petstore.web.HttpResponse;
+import test.support.org.testinfected.petstore.web.OfflineContext;
 
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static test.support.org.testinfected.petstore.web.HasContent.hasContent;
-import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
-import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
-import static test.support.org.testinfected.petstore.web.OfflineContext.offlineContext;
-import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
+import static test.support.org.testinfected.petstore.web.HttpRequest.get;
+import static test.support.org.testinfected.petstore.web.OfflineContext.fromSystemProperties;
 
 @RunWith(JMock.class)
 public class FailsafeTest {
@@ -34,7 +30,7 @@ public class FailsafeTest {
     Mockery context = new JUnit4Mockery();
     FailureReporter failureReporter = context.mock(FailureReporter.class);
 
-    Failsafe failsafe = new Failsafe(offlineContext().renderer());
+    Failsafe failsafe = new Failsafe(fromSystemProperties().renderer());
     Exception error = new Exception("Crashed!");
 
     Application app = new MiddlewareStack() {{
@@ -42,9 +38,7 @@ public class FailsafeTest {
         run(crashesWith(error));
     }};
 
-    int SERVER_LISTENING_PORT = 9999;
-    Server server = new Server(SERVER_LISTENING_PORT);
-    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENING_PORT);
+    Server server = new Server(OfflineContext.TEST_PORT);
 
     @Before public void
     startServer() throws IOException {
@@ -58,11 +52,11 @@ public class FailsafeTest {
 
     @Test public void
     renders500WhenInternalErrorOccurs() throws IOException {
-        WebResponse response = request.send();
+        HttpResponse response = get("/crash");
 
-        assertThat("response", response, hasStatusCode(500));
-        assertThat("response", response, hasHeader("Content-Type", containsString("text/html")));
-        assertThat("response", response, hasContent(containsString("Crashed!")));
+        response.assertHasStatusCode(500);
+        response.assertHasHeader("Content-Type", containsString("text/html"));
+        response.assertHasContent(containsString("Crashed!"));
     }
 
     @Test public void
@@ -70,7 +64,7 @@ public class FailsafeTest {
         failsafe.reportErrorsTo(failureReporter);
         expectFailureReport();
 
-        request.send();
+        get("/crash");
         context.assertIsSatisfied();
     }
 

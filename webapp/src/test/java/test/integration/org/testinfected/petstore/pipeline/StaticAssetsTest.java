@@ -1,6 +1,5 @@
 package test.integration.org.testinfected.petstore.pipeline;
 
-import com.gargoylesoftware.htmlunit.WebResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,14 +8,12 @@ import org.testinfected.petstore.Application;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.petstore.pipeline.StaticAssets;
-import test.support.org.testinfected.petstore.web.WebRequestBuilder;
+import test.support.org.testinfected.petstore.web.OfflineContext;
 
 import java.io.IOException;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static test.support.org.testinfected.petstore.web.HttpRequest.get;
 import static test.support.org.testinfected.petstore.web.TextResponse.respondWithCode;
-import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
-import static test.support.org.testinfected.petstore.web.WebRequestBuilder.aRequest;
 
 public class StaticAssetsTest {
 
@@ -29,9 +26,7 @@ public class StaticAssetsTest {
         run(respondWithCode(NO_ASSET_SERVED));
     }};
 
-    int SERVER_LISTENING_PORT = 9999;
-    Server server = new Server(SERVER_LISTENING_PORT);
-    WebRequestBuilder request = aRequest().onPort(SERVER_LISTENING_PORT);
+    Server server = new Server(OfflineContext.TEST_PORT);
 
     @Before public void
     startServer() throws IOException {
@@ -45,16 +40,12 @@ public class StaticAssetsTest {
 
     @Test public void
     routesToFileServerWhenPathIsMatched() throws Exception {
-        WebResponse response = request.but().forPath("/favicon.ico").send();
-        assertThat("response", response, hasStatusCode(ASSET_SERVED));
-
-        response = request.but().forPath("/static/images/logo").send();
-        assertThat("response", response, hasStatusCode(ASSET_SERVED));
+        get("/favicon.ico").assertHasStatusCode(ASSET_SERVED);
+        get("/static/images/logo").assertHasStatusCode(ASSET_SERVED);
     }
 
     @Test public void
     forwardsToNextApplicationWhenPathIsNotMatched() throws Exception {
-        WebResponse response = request.but().forPath("/home").send();
-        assertThat("response", response, hasStatusCode(NO_ASSET_SERVED));
+        get("/home").assertHasStatusCode(NO_ASSET_SERVED);
     }
 }

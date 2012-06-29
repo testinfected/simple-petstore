@@ -4,8 +4,6 @@ import com.gargoylesoftware.htmlunit.WebResponse;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-
 public class HasContent extends FeatureMatcher<WebResponse, String> {
 
     public HasContent(Matcher<? super String> subMatcher) {

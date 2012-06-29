@@ -11,7 +11,7 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChildren;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
-import static test.support.org.testinfected.petstore.web.OfflineContext.offlineContext;
+import static test.support.org.testinfected.petstore.web.OfflineContext.fromSystemProperties;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class FooterTest {
@@ -20,7 +20,7 @@ public class FooterTest {
 
     @Before public void
     renderContent() {
-        content = render("layout/footer").with(offlineContext().renderer()).asDom();
+        content = render("layout/footer").with(fromSystemProperties().renderer()).asDom();
     }
 
     @SuppressWarnings("unchecked") @Test public void
