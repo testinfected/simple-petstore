@@ -1,9 +1,27 @@
 package test.system.com.pyxis.petstore.features;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import test.system.com.pyxis.petstore.FeatureTemplate;
+import test.support.com.pyxis.petstore.web.ApplicationDriver;
+import test.support.com.pyxis.petstore.web.SystemTestContext;
 
-public class BrowseCatalogFeature extends FeatureTemplate {
+import static test.support.com.pyxis.petstore.web.SystemTestContext.systemTesting;
+
+public class BrowseCatalogFeature {
+
+    SystemTestContext context = systemTesting();
+    ApplicationDriver application;
+
+    @Before public void
+    startApplication() {
+        application = context.startApplication();
+    }
+
+    @After public void
+    stopApplication() {
+        context.stopApplication(application);
+    }
 
     @Test public void
     skeleton() {

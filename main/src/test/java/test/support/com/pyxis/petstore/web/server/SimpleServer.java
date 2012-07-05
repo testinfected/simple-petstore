@@ -4,17 +4,18 @@ public class SimpleServer implements ServerLifeCycle {
 
     private final ServerProperties properties;
 
+    private WebServer server;
+
     public SimpleServer(ServerProperties properties) {
         this.properties = properties;
     }
 
-    public ServerDriver start() {
-        ServerDriver server = new PetStoreDriver(properties.port());
+    public void start() {
+        server = new WebServer(properties.port());
         server.start();
-        return server;
     }
 
-    public void stop(ServerDriver server) {
+    public void stop() {
         server.stop();
     }
 }

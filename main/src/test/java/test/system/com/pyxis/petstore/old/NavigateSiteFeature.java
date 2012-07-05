@@ -1,14 +1,21 @@
 package test.system.com.pyxis.petstore.old;
 
 import com.pyxis.petstore.domain.product.Product;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import test.support.com.pyxis.petstore.web.ApplicationDriver;
+import test.support.com.pyxis.petstore.web.SystemTestContext;
 
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.an;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.com.pyxis.petstore.web.SystemTestContext.legacyTesting;
 
-public class NavigateSiteFeature extends FeatureTemplate {
+public class NavigateSiteFeature {
+
+    SystemTestContext context = legacyTesting();
+    ApplicationDriver petstore;
 
     @Before public void
     inventoryIsNotEmpty() {
@@ -34,5 +41,15 @@ public class NavigateSiteFeature extends FeatureTemplate {
 
         petstore.consultInventoryOf("Salamander");
         petstore.reviewCart();
+    }
+
+    @Before public void
+    startApplication() {
+        petstore = context.startApplication();
+    }
+
+    @After public void
+    stopApplication() {
+        context.stopApplication(petstore);
     }
 }

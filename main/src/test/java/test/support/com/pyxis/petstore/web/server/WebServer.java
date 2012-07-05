@@ -6,12 +6,12 @@ import org.testinfected.petstore.util.Charsets;
 
 import static test.support.org.testinfected.petstore.web.OfflineContext.fromSystemProperties;
 
-public class PetStoreDriver implements ServerDriver {
+public class WebServer {
 
     private final PetStore server;
     private final int port;
 
-    public PetStoreDriver(int port) {
+    public WebServer(int port) {
         this.port = port;
         this.server = createServer();
     }

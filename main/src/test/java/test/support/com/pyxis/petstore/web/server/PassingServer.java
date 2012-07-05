@@ -4,17 +4,18 @@ public class PassingServer implements ServerLifeCycle {
 
     private final ServerProperties properties;
 
+    private OldWebServer server;
+
     public PassingServer(ServerProperties properties) {
         this.properties = properties;
     }
 
-    public ServerDriver start() {
-        ServerDriver server = new OldWebServer(properties);
+    public void start() {
+        server = new OldWebServer(properties);
         server.start();
-        return server;
     }
 
-    public void stop(ServerDriver server) {
+    public void stop() {
         server.stop();
     }
 }

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 public class ApplicationDriver {
 
-    private final AsyncWebDriver browser;
+    private final WebDriver browser;
     private final HomePage homePage;
     private final ProductsPage productsPage;
     private final ItemsPage itemsPage;
@@ -19,26 +19,27 @@ public class ApplicationDriver {
     private final Menu menu;
 
     public ApplicationDriver(WebDriver webDriver) {
-        browser = new AsyncWebDriver(new UnsynchronizedProber(), webDriver);
-        menu = new Menu(browser);
-        homePage = new HomePage(browser);
-        productsPage = new ProductsPage(browser);
-        itemsPage = new ItemsPage(browser);
-        cartPage = new CartPage(browser);
-        purchasePage = new PurchasePage(browser);
-        receiptPage = new ReceiptPage(browser);
+        this.browser = webDriver;
+        AsyncWebDriver asyncDriver = new AsyncWebDriver(new UnsynchronizedProber(), webDriver);
+        menu = new Menu(asyncDriver);
+        homePage = new HomePage(asyncDriver);
+        productsPage = new ProductsPage(asyncDriver);
+        itemsPage = new ItemsPage(asyncDriver);
+        cartPage = new CartPage(asyncDriver);
+        purchasePage = new PurchasePage(asyncDriver);
+        receiptPage = new ReceiptPage(asyncDriver);
     }
 
     public void open(Routing routes) {
-        homePage.navigateThrough(routes);
+        browser.navigate().to(routes.urlFor(HomePage.class));
     }
 
     public void close() {
         menu.logout();
+        browser.close();
     }
 
     public void searchFor(String keyword) {
-
         menu.search(keyword);
         productsPage.displays();
     }
@@ -137,9 +138,6 @@ public class ApplicationDriver {
 
     public void returnHome() {
         menu.home();
-        homePage.displays();
-        browser.navigate().back();
-        menu.logo();
         homePage.displays();
     }
 
