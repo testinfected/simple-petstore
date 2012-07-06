@@ -20,6 +20,7 @@ import test.support.org.testinfected.petstore.web.HttpRequest;
 
 import java.io.IOException;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
@@ -50,7 +51,7 @@ public class HttpMethodOverrideTest {
     @Test public void
     doesNotAffectGetMethods() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(runner).handle(with(aRequestWithMethod(equalToIgnoringCase("GET"))), with(any(Response.class)));
+            oneOf(runner).handle(with(aRequestWithMethod(equalTo("GET"))), with(any(Response.class)));
         }});
         request.get("/");
         context.assertIsSatisfied();
@@ -59,7 +60,7 @@ public class HttpMethodOverrideTest {
     @Test public void
     doesNotAffectPostMethodsWhenOverrideParameterIsNotSet() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(runner).handle(with(aRequestWithMethod(equalToIgnoringCase("POST"))), with(any(Response.class)));
+            oneOf(runner).handle(with(aRequestWithMethod(equalTo("POST"))), with(any(Response.class)));
         }});
         request.post("/item");
         context.assertIsSatisfied();
@@ -72,7 +73,7 @@ public class HttpMethodOverrideTest {
         }});
 
         HttpMethodOverride.METHOD_OVERRIDE_PARAMETER = "override";
-        request.withParameter("override", "DELETE").post("/item");
+        request.withParameter("override", "delete").post("/item");
         context.assertIsSatisfied();
     }
 
@@ -81,7 +82,7 @@ public class HttpMethodOverrideTest {
         context.checking(new Expectations() {{
             oneOf(runner).handle(with(aRequestWithMethod(equalToIgnoringCase("POST"))), with(any(Response.class)));
         }});
-        request.withParameter("_method", "FOO").post("/item");
+        request.withParameter("_method", "foo").post("/item");
         context.assertIsSatisfied();
     }
 

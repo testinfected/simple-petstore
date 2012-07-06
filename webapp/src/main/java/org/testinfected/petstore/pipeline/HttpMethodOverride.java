@@ -26,7 +26,7 @@ public class HttpMethodOverride extends AbstractMiddleware {
         if (supported(methodOverride)) {
             return new RequestWrapper(request) {
                 public String getMethod() {
-                    return methodOverride;
+                    return methodOverride.toUpperCase();
                 }
             };
         }
@@ -34,7 +34,7 @@ public class HttpMethodOverride extends AbstractMiddleware {
     }
 
     private boolean supported(String methodOverride) {
-        return OVERRIDE_METHODS.contains(methodOverride);
+        return OVERRIDE_METHODS.contains(methodOverride.toUpperCase());
     }
 
     private boolean methodOverriden(Request request) throws IOException {
