@@ -47,7 +47,7 @@ public class Properties {
         return properties.getProperty(key);
     }
 
-    public int getValueAsInt(final String name) {
+    public int getInt(final String name) {
         return parseInt(getValue(name));
     }
 

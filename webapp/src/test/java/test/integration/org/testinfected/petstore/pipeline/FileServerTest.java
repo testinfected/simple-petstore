@@ -7,8 +7,8 @@ import org.testinfected.petstore.ClassPathResourceLoader;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.FileServer;
 import org.testinfected.petstore.util.Streams;
+import test.support.org.testinfected.petstore.web.HttpRequest;
 import test.support.org.testinfected.petstore.web.HttpResponse;
-import test.support.org.testinfected.petstore.web.OfflineContext;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,13 +20,14 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static test.support.org.testinfected.petstore.web.HttpRequest.get;
+import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 public class FileServerTest {
 
     FileServer fileServer = new FileServer(new ClassPathResourceLoader());
 
-    Server server = new Server(OfflineContext.TEST_PORT);
+    Server server = new Server(9999);
+    HttpRequest request = aRequest().to(server);
 
     @Before public void
     startServer() throws IOException {
@@ -40,7 +41,7 @@ public class FileServerTest {
 
     @Test public void
     rendersFile() throws Exception {
-        HttpResponse response = get("/assets/image.png");
+        HttpResponse response = request.get("/assets/image.png");
 
         response.assertOK();
         response.assertHasContentSize(6597);
@@ -49,13 +50,13 @@ public class FileServerTest {
 
     @Test public void
     guessesMimeTypeFromExtension() throws IOException {
-        HttpResponse response = get("/assets/image.png");
+        HttpResponse response = request.get("/assets/image.png");
         response.assertHasHeader("Content-Type", "image/png");
     }
 
     @Test public void
     setsFileResponseHeaders() throws IOException, URISyntaxException {
-        HttpResponse response = get("/assets/image.png");
+        HttpResponse response = request.get("/assets/image.png");
 
         response.assertHasHeader("Content-Length", "6597");
         response.assertHasHeader("Last-Modified", modifiedDateOf(resourceFile("assets/image.png")));
@@ -63,7 +64,7 @@ public class FileServerTest {
 
     @Test public void
     renders404WhenFileIsNotFound() throws IOException {
-        HttpResponse response = get("/images/missing");
+        HttpResponse response = request.get("/images/missing");
 
         response.assertHasStatusCode(404);
         response.assertHasHeader("Content-Type", "text/plain");

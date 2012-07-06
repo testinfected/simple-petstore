@@ -1,14 +1,14 @@
 package org.testinfected.petstore;
 
-import java.io.File;
-
 public class Launcher {
 
-    public static void main(String[] args) throws Exception {
-        int port = Integer.parseInt(args[0]);
-        File webRoot = new File(args[1]);
+    private static final int WEB_ROOT = 1;
+    private static final int PORT = 0;
 
-        final PetStore petStore = PetStore.rootedAt(webRoot);
+    public static void main(String[] args) throws Exception {
+        String webRoot = args[WEB_ROOT];
+
+        final PetStore petStore = PetStore.at(webRoot);
         // todo optional command line parameters
         petStore.encodeOutputAs("utf-8");
         petStore.logToConsole();
@@ -21,8 +21,10 @@ public class Launcher {
                 }
             }
         });
+
+        int port = Integer.parseInt(args[PORT]);
         System.out.println("Starting web application at http://localhost:" + port);
-        System.out.println("Serving from " + webRoot.getAbsolutePath());
+        System.out.println("Serving from " + webRoot);
         petStore.start(port);
     }
 

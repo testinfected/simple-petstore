@@ -25,6 +25,10 @@ public class Server {
         this.failureReporter = failureReporter;
     }
 
+    public int getPort() {
+        return port;
+    }
+
     public void run(final Application app) throws IOException {
         connection = new SocketConnection(new ApplicationContainer(app, failureReporter));
         SocketAddress address = new InetSocketAddress(port);

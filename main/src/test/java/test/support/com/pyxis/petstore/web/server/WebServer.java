@@ -3,8 +3,9 @@ package test.support.com.pyxis.petstore.web.server;
 import org.testinfected.hamcrest.ExceptionImposter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.util.Charsets;
+import test.support.org.testinfected.petstore.web.WebRoot;
 
-import static test.support.org.testinfected.petstore.web.OfflineContext.fromSystemProperties;
+import static test.support.org.testinfected.petstore.web.WebRoot.locate;
 
 public class WebServer {
 
@@ -33,7 +34,7 @@ public class WebServer {
     }
 
     private PetStore createServer() {
-        PetStore server = PetStore.rootedAt(fromSystemProperties().webRoot());
+        PetStore server = PetStore.at(WebRoot.locate());
         server.encodeOutputAs(Charsets.UTF_8);
         server.quiet();
         return server;

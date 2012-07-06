@@ -8,11 +8,11 @@ import org.testinfected.petstore.Application;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.petstore.pipeline.StaticAssets;
-import test.support.org.testinfected.petstore.web.OfflineContext;
+import test.support.org.testinfected.petstore.web.HttpRequest;
 
 import java.io.IOException;
 
-import static test.support.org.testinfected.petstore.web.HttpRequest.get;
+import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 import static test.support.org.testinfected.petstore.web.TextResponse.respondWithCode;
 
 public class StaticAssetsTest {
@@ -26,7 +26,8 @@ public class StaticAssetsTest {
         run(respondWithCode(NO_ASSET_SERVED));
     }};
 
-    Server server = new Server(OfflineContext.TEST_PORT);
+    Server server = new Server(9999);
+    HttpRequest request = aRequest().to(server);
 
     @Before public void
     startServer() throws IOException {
@@ -40,12 +41,12 @@ public class StaticAssetsTest {
 
     @Test public void
     routesToFileServerWhenPathIsMatched() throws Exception {
-        get("/favicon.ico").assertHasStatusCode(ASSET_SERVED);
-        get("/static/images/logo").assertHasStatusCode(ASSET_SERVED);
+        request.get("/favicon.ico").assertHasStatusCode(ASSET_SERVED);
+        request.get("/static/images/logo").assertHasStatusCode(ASSET_SERVED);
     }
 
     @Test public void
     forwardsToNextApplicationWhenPathIsNotMatched() throws Exception {
-        get("/home").assertHasStatusCode(NO_ASSET_SERVED);
+        request.get("/home").assertHasStatusCode(NO_ASSET_SERVED);
     }
 }

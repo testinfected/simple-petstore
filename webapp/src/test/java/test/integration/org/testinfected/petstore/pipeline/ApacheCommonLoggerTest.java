@@ -14,14 +14,14 @@ import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.time.Clock;
+import test.support.org.testinfected.petstore.web.HttpRequest;
 
 import java.util.Date;
 import java.util.logging.Logger;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.testinfected.time.lib.DateBuilder.aDate;
-import static test.support.org.testinfected.petstore.web.HttpRequest.get;
-import static test.support.org.testinfected.petstore.web.OfflineContext.TEST_PORT;
+import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 import static test.support.org.testinfected.petstore.web.TextResponse.respondWith;
 import static test.support.org.testinfected.petstore.web.TextResponse.respondWithCode;
 
@@ -36,7 +36,9 @@ public class ApacheCommonLoggerTest {
 
     ApacheCommonLogger apacheCommonLogger = new ApacheCommonLogger(logger, clock);
 
-    Server server = new Server(TEST_PORT);
+    Server server = new Server(9999);
+    HttpRequest request = aRequest().to(server);
+
     Date currentTime = aDate().onCalendar(2012, 6, 27).atTime(18, 4, 0).inZone("EDT").build();
 
     @Before public void
@@ -64,7 +66,7 @@ public class ApacheCommonLoggerTest {
         context.checking(new Expectations() {{
             oneOf(logger).info(with("127.0.0.1 - - [27/Jun/2012:14:04:00 -0400] \"GET /products?keyword=dogs HTTP/1.1\" 304 28"));
         }});
-        get("/products?keyword=dogs");
+        request.get("/products?keyword=dogs");
         context.assertIsSatisfied();
     }
 
@@ -81,7 +83,7 @@ public class ApacheCommonLoggerTest {
             oneOf(logger).info(with(containsString("\"GET /logout HTTP/1.1\" 303 -")));
         }});
 
-        get("/logout");
+        request.get("/logout");
         context.assertIsSatisfied();
     }
 

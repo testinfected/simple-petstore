@@ -4,6 +4,7 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Element;
+import test.support.org.testinfected.petstore.web.WebRoot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
@@ -11,7 +12,6 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChildren;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
-import static test.support.org.testinfected.petstore.web.OfflineContext.fromSystemProperties;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class FooterTest {
@@ -20,7 +20,7 @@ public class FooterTest {
 
     @Before public void
     renderContent() {
-        content = render("layout/footer").with(fromSystemProperties().renderer()).asDom();
+        content = render("layout/footer").from(WebRoot.locate()).asDom();
     }
 
     @SuppressWarnings("unchecked") @Test public void

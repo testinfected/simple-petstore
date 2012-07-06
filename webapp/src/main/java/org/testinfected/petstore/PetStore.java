@@ -26,21 +26,21 @@ public class PetStore {
     public static final String ASSET_DIRECTORY = "assets";
     private static final String LOGGER_NAME = "access";
 
-    private final File root;
+    private final File location;
     private final Logger logger = makeLogger();
 
     private Server server;
 
     private Charset charset = Charset.defaultCharset();
     private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
-    final SystemClock clock = new SystemClock();;
+    final SystemClock clock = new SystemClock();
 
-    public static PetStore rootedAt(File root) {
-        return new PetStore(root);
+    public static PetStore at(String webRoot) {
+        return new PetStore(new File(webRoot));
     }
 
-    public PetStore(File root) {
-        this.root = root;
+    public PetStore(File webRoot) {
+        this.location = webRoot;
     }
 
     public void encodeOutputAs(String charsetName) {
@@ -84,11 +84,11 @@ public class PetStore {
     }
 
     private File templateDirectory() {
-        return new File(root, TEMPLATE_DIRECTORY);
+        return new File(location, TEMPLATE_DIRECTORY);
     }
 
     private File assetDirectory() {
-        return new File(root, ASSET_DIRECTORY);
+        return new File(location, ASSET_DIRECTORY);
     }
 
     public void logToFile(String logFile) throws IOException {

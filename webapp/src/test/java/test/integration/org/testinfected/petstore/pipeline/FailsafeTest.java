@@ -12,25 +12,26 @@ import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
 import org.testinfected.petstore.FailureReporter;
+import org.testinfected.petstore.Renderer;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.Failsafe;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
+import test.support.org.testinfected.petstore.web.HttpRequest;
 import test.support.org.testinfected.petstore.web.HttpResponse;
-import test.support.org.testinfected.petstore.web.OfflineContext;
 
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static test.support.org.testinfected.petstore.web.HttpRequest.get;
-import static test.support.org.testinfected.petstore.web.OfflineContext.fromSystemProperties;
+import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 @RunWith(JMock.class)
 public class FailsafeTest {
 
     Mockery context = new JUnit4Mockery();
+    Renderer renderer = context.mock(Renderer.class);
     FailureReporter failureReporter = context.mock(FailureReporter.class);
 
-    Failsafe failsafe = new Failsafe(fromSystemProperties().renderer());
+    Failsafe failsafe = new Failsafe(renderer);
     Exception error = new Exception("Crashed!");
 
     Application app = new MiddlewareStack() {{
@@ -38,7 +39,8 @@ public class FailsafeTest {
         run(crashesWith(error));
     }};
 
-    Server server = new Server(OfflineContext.TEST_PORT);
+    Server server = new Server(9999);
+    HttpRequest request = aRequest().to(server);
 
     @Before public void
     startServer() throws IOException {
@@ -51,9 +53,13 @@ public class FailsafeTest {
     }
 
     @Test public void
-    renders500WhenInternalErrorOccurs() throws IOException {
-        HttpResponse response = get("/crash");
+    rendersErrorTemplateWhenInternalErrorOccurs() throws IOException {
+        failsafe.setErrorTemplate("error");
+        context.checking(new Expectations() {{
+            oneOf(renderer).render(with("error"), with(same(error))); will(returnValue("Crashed!"));
+        }});
 
+        HttpResponse response = request.get("/crash");
         response.assertHasStatusCode(500);
         response.assertHasHeader("Content-Type", containsString("text/html"));
         response.assertHasContent(containsString("Crashed!"));
@@ -62,16 +68,12 @@ public class FailsafeTest {
     @Test public void
     notifiesFailureReporterWhenInternalErrorOccurs() throws IOException {
         failsafe.reportErrorsTo(failureReporter);
-        expectFailureReport();
-
-        get("/crash");
-        context.assertIsSatisfied();
-    }
-
-    private void expectFailureReport() {
         context.checking(new Expectations() {{
+            allowing(renderer).render(with(any(String.class)), with(any(Object.class)));
             oneOf(failureReporter).internalErrorOccurred(with(same(error)));
         }});
+        request.get("/crash");
+        context.assertIsSatisfied();
     }
 
     private Application crashesWith(final Exception error) {

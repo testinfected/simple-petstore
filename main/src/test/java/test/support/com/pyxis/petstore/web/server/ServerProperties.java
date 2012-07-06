@@ -30,7 +30,7 @@ public class ServerProperties {
     }
 
     public int port() {
-        return properties.getValueAsInt(PORT);
+        return properties.getInt(PORT);
     }
 
     public String contextPath() {
