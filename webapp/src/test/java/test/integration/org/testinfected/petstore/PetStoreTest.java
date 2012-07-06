@@ -64,6 +64,14 @@ public class PetStoreTest {
     }
 
     @Test public void
+    supportsHttpMethodOverride() throws IOException {
+        petstore.logToConsole();
+
+        request.withParameter("_method", "PUT").post("/item").assertOK();
+        console.assertHasEntry(containsString("\"PUT /item HTTP/1.1\" 200"));
+    }
+
+    @Test public void
     rendersDynamicContentAsHtmlProperlyEncoded() throws IOException {
         HttpResponse response = request.get("/");
 

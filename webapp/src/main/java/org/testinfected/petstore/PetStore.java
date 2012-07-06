@@ -4,6 +4,7 @@ import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.Dispatcher;
 import org.testinfected.petstore.pipeline.Failsafe;
 import org.testinfected.petstore.pipeline.FileServer;
+import org.testinfected.petstore.pipeline.HttpMethodOverride;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.petstore.pipeline.ServerHeaders;
 import org.testinfected.petstore.pipeline.StaticAssets;
@@ -61,6 +62,7 @@ public class PetStore {
         server.run(new MiddlewareStack() {{
             use(new Failsafe(renderer, failureReporter));
             use(new ServerHeaders(clock));
+            use(new HttpMethodOverride());
             use(new ApacheCommonLogger(logger, clock));
             use(staticAssets());
             run(new Dispatcher(renderer, charset));
