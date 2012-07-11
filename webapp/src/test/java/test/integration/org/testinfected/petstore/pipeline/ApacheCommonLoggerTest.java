@@ -44,8 +44,7 @@ public class ApacheCommonLoggerTest {
     @Before public void
     stopClock() {
         context.checking(new Expectations() {{
-            allowing(clock).now();
-            will(returnValue(currentTime));
+            allowing(clock).now(); will(returnValue(currentTime));
         }});
     }
 
@@ -86,5 +85,7 @@ public class ApacheCommonLoggerTest {
         request.get("/logout");
         context.assertIsSatisfied();
     }
+
+    //todo log also in case of exception
 
 }
