@@ -57,6 +57,32 @@ body.petstore {
 	padding-right: 60px;
 }
 
+#search-box input {
+	height: 24px;
+	position: absolute;
+	top: 29px;
+	left: 731px;
+	border: solid gray 2px;
+	-moz-border-radius: 4px 0 0 4px;
+}
+
+#search {
+	position: absolute;
+	width: 34px;
+	height: 30px;
+	padding: 0;
+	background-color: #c6ee22;
+	top: 29px;
+	left: 882px;
+	border: solid gray 2px;
+	-moz-border-radius: 0 4px 4px 0;
+	cursor: pointer;
+}
+
+#search img {
+	padding-top: 2px;
+}
+
 #footer {
 	width: 960px;
 	margin: 0 auto;
@@ -79,7 +105,6 @@ body.petstore {
 #footer a {
 	float: right;
 }
-
 
 #footer span {
 	float: right;

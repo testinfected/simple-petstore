@@ -36,6 +36,7 @@ public class ApplicationDriver {
 
     public void close() {
         menu.logout();
+        homePage.displays();
         browser.close();
     }
 

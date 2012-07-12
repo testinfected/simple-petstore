@@ -55,4 +55,8 @@ public final class Routes {
     public String purchasesPath() {
         return pathFor("/purchases");
     }
+
+    public String productsPath() {
+        return pathFor("/products");
+    }
 }

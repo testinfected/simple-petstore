@@ -98,8 +98,12 @@ public final class SystemTestContext {
 
     public void stopApplication(ApplicationDriver application) {
         stopServer();
-        application.close();
+        closeApplication(application);
         cleanUp();
+    }
+
+    private void closeApplication(ApplicationDriver application) {
+        application.close();
     }
 
     private void cleanUp() {

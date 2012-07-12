@@ -2,13 +2,15 @@ package test.system.com.pyxis.petstore.features;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.ApplicationDriver;
 import test.support.com.pyxis.petstore.web.SystemTestContext;
 
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.com.pyxis.petstore.web.SystemTestContext.systemTesting;
 
-public class BrowseCatalogFeature {
+public class SearchFeature {
 
     SystemTestContext context = systemTesting();
     ApplicationDriver application;
@@ -23,7 +25,12 @@ public class BrowseCatalogFeature {
         context.stopApplication(application);
     }
 
+    @Ignore("wip")
     @Test public void
-    skeleton() {
+    searchesForAProductNotAvailableInStore() {
+        context.given(aProduct().named("Labrador Retriever"));
+
+        application.searchFor("Dalmatian");
+        application.showsNoResult();
     }
 }
