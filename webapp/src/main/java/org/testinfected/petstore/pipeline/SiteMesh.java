@@ -3,6 +3,8 @@ package org.testinfected.petstore.pipeline;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.decoration.Decorator;
+import org.testinfected.petstore.decoration.PathMapper;
+import org.testinfected.petstore.decoration.RequestMatcher;
 import org.testinfected.petstore.decoration.Selector;
 import org.testinfected.petstore.util.BufferedResponse;
 
@@ -20,8 +22,12 @@ public class SiteMesh extends AbstractMiddleware {
         this.selector = selector;
     }
 
-    public void decorate(String path, Decorator decorator) {
-        decorations.add(new Decoration(path, decorator));
+    public void map(String path, Decorator decorator) {
+        map(PathMapper.startingWith(path), decorator);
+    }
+
+    public void map(RequestMatcher matcher, Decorator decorator) {
+        decorations.add(new Decoration(matcher, decorator));
     }
 
     public void handle(Request request, Response response) throws Exception {
@@ -60,20 +66,16 @@ public class SiteMesh extends AbstractMiddleware {
 
     private static class Decoration {
 
-        private final String path;
+        private final RequestMatcher matcher;
         private final Decorator decorator;
 
-        private Decoration(String path, Decorator decorator) {
-            this.path = path;
+        public Decoration(RequestMatcher matcher, Decorator decorator) {
+            this.matcher = matcher;
             this.decorator = decorator;
         }
 
         private boolean appliesTo(Request request) {
-            return pathOf(request).startsWith(path);
-        }
-
-        private String pathOf(Request request) {
-            return request.getPath().getPath();
+            return matcher.matches(request);
         }
     }
 

@@ -1,22 +1,9 @@
 package org.testinfected.petstore.decoration;
 
-import org.testinfected.petstore.Renderer;
-
 import java.io.IOException;
+import java.util.Map;
 
-public class Layout implements Decorator {
+public interface Layout {
 
-    private final String template;
-    private final ContentProcessor processor;
-    private final Renderer renderer;
-
-    public Layout(String template, ContentProcessor processor, Renderer renderer) {
-        this.template = template;
-        this.processor = processor;
-        this.renderer = renderer;
-    }
-
-    public String decorate(String content) throws IOException {
-        return renderer.render(template, processor.process(content));
-    }
+    String render(Map<String, String> content) throws IOException;
 }

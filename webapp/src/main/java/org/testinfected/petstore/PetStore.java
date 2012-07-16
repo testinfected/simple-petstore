@@ -2,7 +2,8 @@ package org.testinfected.petstore;
 
 import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
 import org.testinfected.petstore.decoration.HtmlPageSelector;
-import org.testinfected.petstore.decoration.Layout;
+import org.testinfected.petstore.decoration.LayoutTemplate;
+import org.testinfected.petstore.decoration.PageCompositor;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.Dispatcher;
 import org.testinfected.petstore.pipeline.Failsafe;
@@ -84,7 +85,7 @@ public class PetStore {
 
     private SiteMesh siteMesh(Renderer renderer) {
         SiteMesh siteMesh = new SiteMesh(new HtmlPageSelector());
-        siteMesh.decorate("/", new Layout("layout/main", new HtmlDocumentProcessor(), renderer));
+        siteMesh.map("/", new PageCompositor(new HtmlDocumentProcessor(), new LayoutTemplate("layout/main", renderer)));
         return siteMesh;
     }
 

@@ -15,9 +15,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HtmlPageSelectorTest {
-    Selector selector = new HtmlPageSelector();
-
     Mockery context = new JUnit4Mockery();
+
+    Selector selector = new HtmlPageSelector();
     ResponseStub response = new ResponseStub();
 
     @Test public void
