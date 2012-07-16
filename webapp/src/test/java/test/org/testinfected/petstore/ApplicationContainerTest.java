@@ -48,8 +48,7 @@ public class ApplicationContainerTest {
 
     private void applicationFailsWith(final Exception failure) throws Exception {
         context.checking(new Expectations() {{
-            allowing(app).handle(with(same(request)), with(same(response)));
-            will(throwException(failure));
+            allowing(app).handle(with(same(request)), with(same(response))); will(throwException(failure));
         }});
     }
 

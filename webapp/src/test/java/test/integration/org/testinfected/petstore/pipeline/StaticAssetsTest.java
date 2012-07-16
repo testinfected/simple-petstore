@@ -13,7 +13,7 @@ import test.support.org.testinfected.petstore.web.HttpRequest;
 import java.io.IOException;
 
 import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
-import static test.support.org.testinfected.petstore.web.TextResponse.respondWithCode;
+import static test.support.org.testinfected.petstore.web.StaticResponse.respondWithCode;
 
 public class StaticAssetsTest {
 

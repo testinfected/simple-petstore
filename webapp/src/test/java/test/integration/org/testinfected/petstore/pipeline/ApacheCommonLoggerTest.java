@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.testinfected.time.lib.DateBuilder.aDate;
 import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
-import static test.support.org.testinfected.petstore.web.TextResponse.respondWith;
-import static test.support.org.testinfected.petstore.web.TextResponse.respondWithCode;
+import static test.support.org.testinfected.petstore.web.StaticResponse.respondWith;
+import static test.support.org.testinfected.petstore.web.StaticResponse.respondWithCode;
 
 @RunWith(JMock.class)
 public class ApacheCommonLoggerTest {

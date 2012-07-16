@@ -1,5 +1,8 @@
 package org.testinfected.petstore;
 
+import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
+import org.testinfected.petstore.decoration.HtmlPageSelector;
+import org.testinfected.petstore.decoration.Layout;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.Dispatcher;
 import org.testinfected.petstore.pipeline.Failsafe;
@@ -7,6 +10,7 @@ import org.testinfected.petstore.pipeline.FileServer;
 import org.testinfected.petstore.pipeline.HttpMethodOverride;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.petstore.pipeline.ServerHeaders;
+import org.testinfected.petstore.pipeline.SiteMesh;
 import org.testinfected.petstore.pipeline.StaticAssets;
 import org.testinfected.petstore.util.Charsets;
 import org.testinfected.petstore.util.ConsoleErrorReporter;
@@ -56,6 +60,14 @@ public class PetStore {
         failureReporter = FailureReporter.IGNORE;
     }
 
+    public void logToConsole() {
+        logger.addHandler(ConsoleHandler.toStandardOutput());
+    }
+
+    public void logToFile(String logFile) throws IOException {
+        logger.addHandler(fileHandler(logFile));
+    }
+
     public void start(int port) throws IOException {
         server = new Server(port, failureReporter);
         final Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(templateDirectory(), Charsets.UTF_8));
@@ -65,8 +77,15 @@ public class PetStore {
             use(new HttpMethodOverride());
             use(new ApacheCommonLogger(logger, clock));
             use(staticAssets());
+            use(siteMesh(renderer));
             run(new Dispatcher(renderer, charset));
         }});
+    }
+
+    private SiteMesh siteMesh(Renderer renderer) {
+        SiteMesh siteMesh = new SiteMesh(new HtmlPageSelector());
+        siteMesh.decorate("/", new Layout("layout/main", new HtmlDocumentProcessor(), renderer));
+        return siteMesh;
     }
 
     public void stop() throws IOException {
@@ -93,17 +112,9 @@ public class PetStore {
         return new File(location, ASSET_DIRECTORY);
     }
 
-    public void logToFile(String logFile) throws IOException {
-        logger.addHandler(fileHandler(logFile));
-    }
-
     private Handler fileHandler(String logFile) throws IOException {
         FileHandler handler = new FileHandler(logFile);
         handler.setFormatter(new PlainFormatter());
         return handler;
-    }
-
-    public void logToConsole() {
-        logger.addHandler(ConsoleHandler.toStandardOutput());
     }
 }

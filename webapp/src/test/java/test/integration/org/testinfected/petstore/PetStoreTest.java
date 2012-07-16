@@ -1,5 +1,6 @@
 package test.integration.org.testinfected.petstore;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,6 +83,14 @@ public class PetStoreTest {
     }
 
     @Test public void
+    appliesLayoutToHtmlPages() throws IOException {
+        HttpResponse response = request.get("/products");
+
+        response.assertOK();
+        response.assertHasContent(containsLayoutHeader());
+    }
+
+    @Test public void
     rendersStaticAssetsAsFiles() throws IOException {
         HttpResponse response = request.get("/images/logo.png");
 
@@ -98,4 +107,7 @@ public class PetStoreTest {
         response.assertHasNoHeader("Transfer-Encoding");
     }
 
+    private Matcher<String> containsLayoutHeader() {
+        return containsString("<div id=\"header\">");
+    }
 }

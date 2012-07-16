@@ -22,8 +22,7 @@ public class Dispatcher implements Application {
 
     public void handle(Request request, Response response) throws Exception {
         Map<String, String> context = new HashMap<String, String>();
-        context.put("title", "PetStore");
-        renderTemplate("layout/main", context, response);
+        renderTemplate("pages/home", context, response);
     }
 
     private void renderTemplate(String name, Object context, Response response) throws IOException {

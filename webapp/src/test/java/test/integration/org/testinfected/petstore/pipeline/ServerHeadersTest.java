@@ -16,7 +16,7 @@ import java.io.IOException;
 import static org.simpleframework.http.Status.SEE_OTHER;
 import static org.testinfected.time.lib.DateBuilder.aDate;
 import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
-import static test.support.org.testinfected.petstore.web.TextResponse.respondWith;
+import static test.support.org.testinfected.petstore.web.StaticResponse.respondWith;
 
 public class ServerHeadersTest {
 
