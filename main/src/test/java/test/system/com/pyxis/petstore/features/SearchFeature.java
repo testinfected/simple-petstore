@@ -25,7 +25,6 @@ public class SearchFeature {
         context.stopApplication(application);
     }
 
-    @Ignore("wip")
     @Test public void
     searchesForAProductNotAvailableInStore() {
         context.given(aProduct().named("Labrador Retriever"));

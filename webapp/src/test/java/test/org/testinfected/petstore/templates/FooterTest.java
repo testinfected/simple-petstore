@@ -16,22 +16,23 @@ import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class FooterTest {
 
-    Element content;
+    String FOOTER_TEMPLATE = "layout/footer";
+    Element footer;
 
     @Before public void
-    renderContent() {
-        content = render("layout/footer").from(WebRoot.locate()).asDom();
+    renderFooter() {
+        footer = render(FOOTER_TEMPLATE).from(WebRoot.locate()).asDom();
     }
 
     @SuppressWarnings("unchecked") @Test public void
     logoutButtonSubmitsADeleteToLogoutPath() {
-        assertThat("content", content, hasLogoutForm(hasAttribute("action", "/logout"), hasAttribute("method", "post")));
-        assertThat("content", content, hasLogoutForm(hasChildren(
+        assertThat("footer", footer, hasLogoutForm(hasAttribute("action", "/logout"), hasAttribute("method", "post")));
+        assertThat("footer", footer, hasLogoutForm(hasChildren(
                 anElement(hasTag("input"), hasAttribute("type", "hidden"), hasAttribute("name", "_method"), hasAttribute("value", "delete")),
                 anElement(hasTag("button")))));
     }
 
     private Matcher<Element> hasLogoutForm(Matcher<Element>... formMatchers) {
-        return hasSelector("form#logout", formMatchers);
+        return hasSelector("#logout-box form", formMatchers);
     }
 }

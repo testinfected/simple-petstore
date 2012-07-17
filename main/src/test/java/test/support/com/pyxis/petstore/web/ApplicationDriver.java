@@ -34,9 +34,12 @@ public class ApplicationDriver {
         browser.navigate().to(routes.urlFor(HomePage.class));
     }
 
-    public void close() {
+    public void logout() {
         menu.logout();
         homePage.displays();
+    }
+
+    public void close() {
         browser.close();
     }
 

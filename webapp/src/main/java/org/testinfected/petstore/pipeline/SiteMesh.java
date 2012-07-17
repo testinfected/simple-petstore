@@ -4,7 +4,7 @@ import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.decoration.Decorator;
 import org.testinfected.petstore.decoration.PathMapper;
-import org.testinfected.petstore.decoration.RequestMatcher;
+import org.testinfected.petstore.util.RequestMatcher;
 import org.testinfected.petstore.decoration.Selector;
 import org.testinfected.petstore.util.BufferedResponse;
 

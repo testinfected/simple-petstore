@@ -1,4 +1,4 @@
-package org.testinfected.petstore.decoration;
+package org.testinfected.petstore.util;
 
 import org.simpleframework.http.Request;
 

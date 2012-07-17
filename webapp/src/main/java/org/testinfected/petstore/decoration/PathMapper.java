@@ -1,6 +1,7 @@
 package org.testinfected.petstore.decoration;
 
 import org.simpleframework.http.Request;
+import org.testinfected.petstore.util.RequestMatcher;
 
 public class PathMapper {
 

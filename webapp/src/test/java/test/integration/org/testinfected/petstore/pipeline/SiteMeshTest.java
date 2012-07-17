@@ -14,8 +14,7 @@ import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.decoration.Decorator;
-import org.testinfected.petstore.decoration.PathMapper;
-import org.testinfected.petstore.decoration.RequestMatcher;
+import org.testinfected.petstore.util.RequestMatcher;
 import org.testinfected.petstore.decoration.Selector;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.petstore.pipeline.SiteMesh;
@@ -26,7 +25,6 @@ import test.support.org.testinfected.petstore.web.StaticResponse;
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.testinfected.petstore.decoration.PathMapper.startingWith;
 import static test.support.org.testinfected.petstore.web.StaticResponse.respondWith;
 
 @RunWith(JMock.class)

@@ -19,27 +19,28 @@ import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class HeaderTest {
 
-    Element content;
+    String HEADER_TEMPLATE = "layout/header";
+    Element header;
     Routes routes = Routes.root();
 
     @Before public void
-    renderContent() {
-        content = render("layout/header").from(WebRoot.locate()).asDom();
+    renderHeader() {
+        header = render(HEADER_TEMPLATE).from(WebRoot.locate()).asDom();
     }
 
     @Test public void
     hasAClickableLogoThatReturnsToTheHomePage() {
-        assertThat("content", content, hasUniqueSelector("#logo a", hasAttribute("href", "/")));
+        assertThat("content", header, hasUniqueSelector("#logo a", hasAttribute("href", "/")));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     containsASearchBoxToQueryTheProductCatalog() {
-        assertThat("content", content,
+        assertThat("header", header,
                 hasUniqueSelector("#search-box form",
                         hasAttribute("action", routes.productsPath()),
                         hasAttribute("method", equalToIgnoringCase("GET"))));
-        assertThat("content", content,
+        assertThat("header", header,
                 hasUniqueSelector("#search-box form", hasChildren(keywordInputField(), searchButton())));
     }
 
