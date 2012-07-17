@@ -1,9 +1,12 @@
 package org.testinfected.petstore;
 
+import org.testinfected.petstore.actions.Logout;
+import org.testinfected.petstore.actions.ShowProducts;
 import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
 import org.testinfected.petstore.decoration.HtmlPageSelector;
 import org.testinfected.petstore.decoration.LayoutTemplate;
 import org.testinfected.petstore.decoration.PageCompositor;
+import org.testinfected.petstore.dispatch.Routes;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.Dispatcher;
 import org.testinfected.petstore.pipeline.Failsafe;
@@ -25,6 +28,9 @@ import java.nio.charset.Charset;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
+
+import static org.testinfected.petstore.dispatch.Routing.delete;
+import static org.testinfected.petstore.dispatch.Routing.match;
 
 public class PetStore {
 
@@ -70,8 +76,9 @@ public class PetStore {
     }
 
     public void start(int port) throws IOException {
-        server = new Server(port, failureReporter);
         final Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(templateDirectory(), Charsets.UTF_8));
+
+        server = new Server(port, failureReporter);
         server.run(new MiddlewareStack() {{
             use(new Failsafe(renderer, failureReporter));
             use(new ServerHeaders(clock));
@@ -79,8 +86,21 @@ public class PetStore {
             use(new ApacheCommonLogger(logger, clock));
             use(staticAssets());
             use(siteMesh(renderer));
-            run(new Dispatcher(renderer, charset));
+            run(dispatcher(renderer));
         }});
+    }
+
+    private Dispatcher dispatcher(Renderer renderer) {
+        final Dispatcher dispatcher = new Dispatcher(routes(), renderer);
+        dispatcher.setEncoding(charset);
+        return dispatcher;
+    }
+
+    private Routes routes() {
+        Routes routes = new Routes();
+        routes.draw(match("/products"), new ShowProducts());
+        routes.draw(delete("/logout"), new Logout());
+        return routes;
     }
 
     private SiteMesh siteMesh(Renderer renderer) {

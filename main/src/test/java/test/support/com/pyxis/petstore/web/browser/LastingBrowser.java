@@ -34,7 +34,7 @@ public class LastingBrowser implements BrowserControl {
         private ShutdownHook(final WebDriver browser) {
             super(new Runnable() {
                 public void run() {
-                    browser.close();
+                    browser.quit();
                 }
             });
         }
