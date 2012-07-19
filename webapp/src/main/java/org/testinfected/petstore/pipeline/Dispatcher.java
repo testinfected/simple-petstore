@@ -3,10 +3,9 @@ package org.testinfected.petstore.pipeline;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
-import org.testinfected.petstore.dispatch.Action;
 import org.testinfected.petstore.Renderer;
-import org.testinfected.petstore.dispatch.Routes;
-import org.testinfected.petstore.actions.Home;
+import org.testinfected.petstore.dispatch.Router;
+import org.testinfected.petstore.dispatch.Routing;
 import org.testinfected.petstore.util.Charsets;
 
 import java.io.IOException;
@@ -14,20 +13,21 @@ import java.nio.charset.Charset;
 
 public class Dispatcher implements Application {
 
-    private final Routes routes;
     private final Renderer renderer;
-    
+    private final Router router;
     private Charset charset = Charsets.ISO_8859_1;
 
-    public Dispatcher(Routes routes, Renderer renderer) {
-        this.routes = routes;
+    public Dispatcher(Router router, Renderer renderer) {
         this.renderer = renderer;
+        this.router = router;
+    }
+
+    public void draw(Routing routing) {
+        routing.defineRoutes(router);
     }
 
     public void handle(Request request, Response response) throws Exception {
-        Action action = routes.select(request);
-        if (action == null) action = new Home();
-        action.execute(request, response, this);
+        router.dispatch(request, response, this);
     }
 
     public void renderTemplate(String name, Object context, Response response) throws IOException {

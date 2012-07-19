@@ -1,28 +1,45 @@
 package org.testinfected.petstore.dispatch;
 
-import org.simpleframework.http.Request;
+import org.testinfected.petstore.util.HttpMethod;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Routes {
+public class Routes implements Routing {
 
-    private final Map<Route, Action> routes = new HashMap<Route, Action>();
-    
-    public Routes() {}
+    private final List<RouteDefinition> definitions = new ArrayList<RouteDefinition>();
+    private RouteDefinition currentDefinition;
 
-    public void draw(Routing routing, Action action) {
-        connect(routing.draw(), action);
-    }
-
-    public void connect(Route route, Action action) {
-        routes.put(route, action);
-    }
-
-    public Action select(Request request) {
-        for (Route route : routes.keySet()) {
-            if (route.handles(request)) return routes.get(route);
+    public void defineRoutes(RouteSet routes) {
+        for (RouteDefinition definition : this.definitions) {
+            routes.add(definition.toRoute());
         }
-        return null;
+    }
+
+    public Routes match(String path) {
+        RouteDefinition routeDefinition = openRoute();
+        routeDefinition.setPath(path);
+        return this;
+    }
+
+    public Routes delete(String path) {
+        return match(path).via(HttpMethod.delete);
+    }
+
+    public Routes via(HttpMethod method) {
+        currentDefinition.setMethod(method);
+        return this;
+    }
+
+    public Routes to(Destination destination) {
+        currentDefinition.setDestination(destination);
+        return this;
+    }
+
+    private RouteDefinition openRoute() {
+        RouteDefinition definition = new StaticRouteDefinition();
+        definitions.add(definition);
+        currentDefinition = definition;
+        return definition;
     }
 }

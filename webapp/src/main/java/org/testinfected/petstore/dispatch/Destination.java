@@ -6,7 +6,7 @@ import org.testinfected.petstore.pipeline.Dispatcher;
 
 import java.io.IOException;
 
-public interface Action {
+public interface Destination {
 
-    void execute(Request request, Response response, Dispatcher dispatcher) throws IOException;
+    void handle(Request request, Response response, Dispatcher dispatcher) throws IOException;
 }

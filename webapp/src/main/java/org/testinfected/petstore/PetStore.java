@@ -1,11 +1,13 @@
 package org.testinfected.petstore;
 
+import org.testinfected.petstore.actions.Home;
 import org.testinfected.petstore.actions.Logout;
 import org.testinfected.petstore.actions.ShowProducts;
 import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
 import org.testinfected.petstore.decoration.HtmlPageSelector;
 import org.testinfected.petstore.decoration.LayoutTemplate;
 import org.testinfected.petstore.decoration.PageCompositor;
+import org.testinfected.petstore.dispatch.Router;
 import org.testinfected.petstore.dispatch.Routes;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.Dispatcher;
@@ -28,9 +30,6 @@ import java.nio.charset.Charset;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
-
-import static org.testinfected.petstore.dispatch.Routing.delete;
-import static org.testinfected.petstore.dispatch.Routing.match;
 
 public class PetStore {
 
@@ -91,16 +90,13 @@ public class PetStore {
     }
 
     private Dispatcher dispatcher(Renderer renderer) {
-        final Dispatcher dispatcher = new Dispatcher(routes(), renderer);
+        final Dispatcher dispatcher = new Dispatcher(new Router(new Home()), renderer);
         dispatcher.setEncoding(charset);
+        dispatcher.draw(new Routes() {{
+            match("/products").to(new ShowProducts());
+            delete("/logout").to(new Logout());
+        }});
         return dispatcher;
-    }
-
-    private Routes routes() {
-        Routes routes = new Routes();
-        routes.draw(match("/products"), new ShowProducts());
-        routes.draw(delete("/logout"), new Logout());
-        return routes;
     }
 
     private SiteMesh siteMesh(Renderer renderer) {
