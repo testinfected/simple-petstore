@@ -37,7 +37,7 @@ public class RoutingTableTest {
     }
 
     @Test public void
-    dispatchesToFirstRouteAppropriateRoute() throws Exception {
+    dispatchesToFirstAppropriateRoute() throws Exception {
         context.checking(new Expectations() {{
             allowing(preferredRoute).matches(with(same(request))); will(returnValue(true));
             allowing(alternateRoute).matches(with(same(request))); will(returnValue(true));
