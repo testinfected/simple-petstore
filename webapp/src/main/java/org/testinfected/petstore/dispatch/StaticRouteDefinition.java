@@ -4,6 +4,10 @@ import org.testinfected.petstore.util.HttpMethod;
 
 public class StaticRouteDefinition implements RouteDefinition {
 
+    public static StaticRouteDefinition staticRoute() {
+        return new StaticRouteDefinition();
+    }
+
     private HttpMethod method = HttpMethod.any;
     private String path = "";
     private Destination destination;
@@ -23,7 +27,7 @@ public class StaticRouteDefinition implements RouteDefinition {
         return this;
     }
 
-    public Route toRoute() {
+    public StaticRoute toRoute() {
         return new StaticRoute(path, method, destination);
     }
 }
