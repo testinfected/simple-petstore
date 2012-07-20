@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public interface Route {
 
-    boolean connects(Request request);
+    boolean matches(Request request);
 
     void dispatch(Request request, Response response, Dispatcher dispatcher) throws IOException;
 }

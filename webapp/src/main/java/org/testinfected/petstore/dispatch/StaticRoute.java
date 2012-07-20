@@ -18,7 +18,7 @@ public class StaticRoute implements Route {
         this.destination = destination;
     }
 
-    public boolean connects(Request request) {
+    public boolean matches(Request request) {
         return request.getPath().getPath().startsWith(path) &&
                 (method == HttpMethod.any || request.getMethod().equalsIgnoreCase(method.name()));
     }

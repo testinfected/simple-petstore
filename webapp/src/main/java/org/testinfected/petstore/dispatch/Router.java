@@ -8,32 +8,36 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Router implements RouteSet {
+public class Router implements Routing {
 
-    private final List<Route> routingTable = new ArrayList<Route>();
-    private final Destination defaultDestination;
+    private final RoutingTable routingTable = new RoutingTable();
 
-    public Router(Destination defaultDestination) {
-        this.defaultDestination = defaultDestination;
-    }
-
-    public void add(Route route) {
-        routingTable.add(route);
+    public void draw(RouteBuilder routeBuilder) {
+        routeBuilder.defineRoutes(routingTable);
     }
 
     public void dispatch(Request request, Response response, Dispatcher dispatcher) throws IOException {
-        Route route = findRouteFor(request);
-        if (route != null) {
-            route.dispatch(request, response, dispatcher);
-        } else {
-            defaultDestination.handle(request, response, dispatcher);
-        }
+        routingTable.locateRoute(request).dispatch(request, response, dispatcher);
     }
 
-    private Route findRouteFor(Request request) {
-        for (Route route : routingTable) {
-            if (route.connects(request)) return route;
+    public static class RoutingTable implements RouteSet {
+
+        private final List<Route> routingTable = new ArrayList<Route>();
+        private Route defaultRoute;
+
+        public void add(Route route) {
+            routingTable.add(route);
         }
-        return null;
+
+        public void setDefaultRoute(Route route) {
+            this.defaultRoute = route;
+        }
+
+        public Route locateRoute(Request request) {
+            for (Route route : routingTable) {
+                if (route.matches(request)) return route;
+            }
+            return defaultRoute;
+        }
     }
 }

@@ -5,19 +5,22 @@ import org.testinfected.petstore.util.HttpMethod;
 public class StaticRouteDefinition implements RouteDefinition {
 
     private HttpMethod method = HttpMethod.any;
-    private String path;
+    private String path = "";
     private Destination destination;
 
-    public void setPath(String path) {
+    public StaticRouteDefinition map(String path) {
         this.path = path;
+        return this;
     }
 
-    public void setMethod(HttpMethod method) {
+    public StaticRouteDefinition via(HttpMethod method) {
         this.method = method;
+        return this;
     }
 
-    public void setDestination(Destination destination) {
+    public StaticRouteDefinition to(Destination destination) {
         this.destination = destination;
+        return this;
     }
 
     public Route toRoute() {

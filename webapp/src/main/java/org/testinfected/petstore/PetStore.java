@@ -90,12 +90,14 @@ public class PetStore {
     }
 
     private Dispatcher dispatcher(Renderer renderer) {
-        final Dispatcher dispatcher = new Dispatcher(new Router(new Home()), renderer);
-        dispatcher.setEncoding(charset);
-        dispatcher.draw(new Routes() {{
-            match("/products").to(new ShowProducts());
+        Router router = new Router();
+        router.draw(new Routes() {{
+            map("/products").to(new ShowProducts());
             delete("/logout").to(new Logout());
+            otherwise().to(new Home());
         }});
+        final Dispatcher dispatcher = new Dispatcher(router, renderer);
+        dispatcher.setEncoding(charset);
         return dispatcher;
     }
 

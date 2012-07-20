@@ -3,12 +3,10 @@ package org.testinfected.petstore.dispatch;
 import org.testinfected.petstore.util.HttpMethod;
 
 public interface RouteDefinition {
-    
-    void setPath(String path);
 
-    void setMethod(HttpMethod method);
+    RouteDefinition map(String path);
 
-    void setDestination(Destination destination);
-    
-    Route toRoute();
+    RouteDefinition via(HttpMethod method);
+
+    RouteDefinition to(Destination destination);
 }
