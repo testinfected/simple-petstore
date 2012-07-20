@@ -1,4 +1,4 @@
-package org.testinfected.petstore.actions;
+package org.testinfected.petstore.destinations;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;

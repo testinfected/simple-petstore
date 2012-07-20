@@ -1,4 +1,4 @@
-package org.testinfected.petstore.actions;
+package org.testinfected.petstore.destinations;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Home implements Destination {
+public class ShowProducts implements Destination {
 
     public void handle(Request request, Response response, Dispatcher dispatcher) throws IOException {
         Map<String, String> context = new HashMap<String, String>();
-        dispatcher.renderTemplate("pages/home", context, response);
+        dispatcher.renderTemplate("pages/products", context, response);
     }
 }
