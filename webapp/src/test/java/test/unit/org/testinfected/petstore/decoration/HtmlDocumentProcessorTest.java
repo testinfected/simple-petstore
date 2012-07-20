@@ -1,4 +1,4 @@
-package test.org.testinfected.petstore.decoration;
+package test.unit.org.testinfected.petstore.decoration;
 
 import org.junit.Test;
 import org.testinfected.petstore.decoration.ContentProcessor;

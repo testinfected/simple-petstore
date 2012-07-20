@@ -1,4 +1,4 @@
-package test.org.testinfected.petstore.decoration;
+package test.unit.org.testinfected.petstore.decoration;
 
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;

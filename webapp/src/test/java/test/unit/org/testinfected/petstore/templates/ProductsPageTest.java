@@ -1,4 +1,4 @@
-package test.org.testinfected.petstore.templates;
+package test.unit.org.testinfected.petstore.templates;
 
 import org.junit.Test;
 import org.w3c.dom.Element;
