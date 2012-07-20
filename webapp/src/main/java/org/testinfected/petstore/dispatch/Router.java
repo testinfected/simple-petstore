@@ -21,13 +21,6 @@ public class Router implements RouteSet {
         routingTable.add(route);
     }
 
-    private Route findRouteFor(Request request) {
-        for (Route route : routingTable) {
-            if (route.connects(request)) return route;
-        }
-        return null;
-    }
-
     public void dispatch(Request request, Response response, Dispatcher dispatcher) throws IOException {
         Route route = findRouteFor(request);
         if (route != null) {
@@ -35,5 +28,12 @@ public class Router implements RouteSet {
         } else {
             defaultDestination.handle(request, response, dispatcher);
         }
+    }
+
+    private Route findRouteFor(Request request) {
+        for (Route route : routingTable) {
+            if (route.connects(request)) return route;
+        }
+        return null;
     }
 }
