@@ -1,4 +1,4 @@
-package test.integration.org.testinfected.petstore.endpoints;
+package test.unit.org.testinfected.petstore.endpoints;
 
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.jmock.Expectations;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.petstore.dispatch.Dispatch;
 import org.testinfected.petstore.endpoints.ShowProducts;
+import test.support.org.testinfected.petstore.web.MockRequest;
 
 import java.util.Arrays;
 
@@ -21,20 +22,20 @@ public class ShowProductsTest {
 
     Mockery context = new JUnit4Mockery();
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
+    MockRequest request = new MockRequest();
     Dispatch.Response response = context.mock(Dispatch.Response.class);
-    Dispatch.Request request = context.mock(Dispatch.Request.class);
 
     ShowProducts showProducts = new ShowProducts(productCatalog);
 
     @Test public void
     searchesForProductsInCatalogUsingSpecifiedKeywordThenRendersProductsPageWithSearchKeywordAndProductList() throws Exception {
         final String keyword = "dogs;";
+        request.addParameter("keyword", keyword);
         final Object matchingProducts = Arrays.asList(aProduct().describedAs("Friendly dog").build());
 
         context.checking(new Expectations() {{
-            allowing(request).getParameter(with("keyword")); will(returnValue(keyword));
             oneOf(productCatalog).findByKeyword(keyword); will(returnValue(matchingProducts));
-            oneOf(response).render(with("pages/products"), with(allOf(
+            oneOf(response).render(with("products"), with(allOf(
                     hasEntry("products", matchingProducts),
                     hasEntry("keyword", keyword))));
         }});

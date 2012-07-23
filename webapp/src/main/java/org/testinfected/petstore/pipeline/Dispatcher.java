@@ -9,7 +9,6 @@ import org.testinfected.petstore.dispatch.SimpleRequest;
 import org.testinfected.petstore.dispatch.SimpleResponse;
 import org.testinfected.petstore.util.Charsets;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class Dispatcher implements Application {
@@ -23,20 +22,11 @@ public class Dispatcher implements Application {
         this.routing = routing;
     }
 
-    public void handle(Request request, Response response) throws Exception {
-        routing.dispatch(new SimpleRequest(request), new SimpleResponse(response, renderer, charset));
-//        routing.dispatch(request, response, this);
-    }
-
-    public void renderTemplate(String name, Object context, Response response) throws IOException {
-        response.set("Content-Type", "text/html; charset=" + charset.name().toLowerCase());
-        String body = renderer.render(name, context);
-        byte[] bytes = body.getBytes(charset);
-        response.setContentLength(bytes.length);
-        response.getOutputStream(bytes.length).write(bytes);
-    }
-
     public void setEncoding(Charset charset) {
         this.charset = charset;
+    }
+
+    public void handle(Request request, Response response) throws Exception {
+        routing.dispatch(new SimpleRequest(request), new SimpleResponse(response, renderer, charset));
     }
 }

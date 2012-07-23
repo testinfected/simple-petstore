@@ -7,7 +7,6 @@ import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Renderer;
 import org.testinfected.petstore.util.Charsets;
 import org.w3c.dom.Element;
-import test.support.com.pyxis.petstore.views.VelocityRendering;
 
 import java.io.File;
 import java.util.HashMap;

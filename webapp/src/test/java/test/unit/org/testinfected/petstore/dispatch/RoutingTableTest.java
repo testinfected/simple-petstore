@@ -6,9 +6,10 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.simpleframework.http.Request;
+import org.testinfected.petstore.dispatch.Dispatch;
 import org.testinfected.petstore.dispatch.Route;
 import org.testinfected.petstore.dispatch.Router;
+import test.support.org.testinfected.petstore.web.MockRequest;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,7 +20,7 @@ public class RoutingTableTest {
     Mockery context = new JUnit4Mockery();
     Router.RoutingTable routingTable = new Router.RoutingTable();
 
-    Request request = context.mock(Request.class);
+    Dispatch.Request request = new MockRequest();
 
     Route inappropriateRoute = context.mock(Route.class, "inappropriate route");
     Route preferredRoute = context.mock(Route.class, "preferred route");

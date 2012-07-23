@@ -29,6 +29,6 @@ public class SimpleResponse implements Dispatch.Response {
     public void redirectTo(String location) {
         response.setCode(Status.SEE_OTHER.getCode());
         response.setText(Status.SEE_OTHER.getDescription());
-        response.set("Location", "/");
+        response.set("Location", location);
     }
 }

@@ -36,6 +36,9 @@ public class PetStore {
 
     public static final String TEMPLATE_DIRECTORY = "templates";
     public static final String ASSET_DIRECTORY = "assets";
+    public static final String PAGES_DIRECTORY = "pages";
+    public static final String LAYOUT_DIRECTORY = "layout";
+
     private static final String LOGGER_NAME = "access";
 
     private final File location;
@@ -76,35 +79,39 @@ public class PetStore {
     }
 
     public void start(int port) throws IOException {
-        final Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(templateDirectory(), Charsets.UTF_8));
-
         server = new Server(port, failureReporter);
         server.run(new MiddlewareStack() {{
-            use(new Failsafe(renderer, failureReporter));
+            use(new Failsafe(new MustacheRendering(new FileSystemResourceLoader(templateDirectory(), Charsets.UTF_8)), failureReporter));
             use(new ServerHeaders(clock));
             use(new HttpMethodOverride());
             use(new ApacheCommonLogger(logger, clock));
             use(staticAssets());
-            use(siteMesh(renderer));
-            run(dispatcher(renderer));
+            use(siteMesh());
+            run(dispatcher());
         }});
     }
 
-    private Dispatcher dispatcher(Renderer renderer) {
+    private Dispatcher dispatcher() {
+        Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(pagesDirectory(), Charsets.UTF_8));
+        final Dispatcher dispatcher = new Dispatcher(drawRoutes(), renderer);
+        dispatcher.setEncoding(charset);
+        return dispatcher;
+    }
+
+    private Router drawRoutes() {
         Router router = new Router();
         router.draw(new Routes() {{
             map("/products").to(new ShowProducts(new ProductsDatabase()));
             delete("/logout").to(new Logout());
             otherwise().to(new Home());
         }});
-        final Dispatcher dispatcher = new Dispatcher(router, renderer);
-        dispatcher.setEncoding(charset);
-        return dispatcher;
+        return router;
     }
 
-    private SiteMesh siteMesh(Renderer renderer) {
+    private SiteMesh siteMesh() {
+        Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(layoutDirectory(), Charsets.UTF_8));
         SiteMesh siteMesh = new SiteMesh(new HtmlPageSelector());
-        siteMesh.map("/", new PageCompositor(new HtmlDocumentProcessor(), new LayoutTemplate("layout/main", renderer)));
+        siteMesh.map("/", new PageCompositor(new HtmlDocumentProcessor(), new LayoutTemplate("main", renderer)));
         return siteMesh;
     }
 
@@ -122,6 +129,14 @@ public class PetStore {
         final StaticAssets assets = new StaticAssets(new FileServer(new FileSystemResourceLoader(assetDirectory())));
         assets.serve("/favicon.ico", "/images", "/stylesheets");
         return assets;
+    }
+
+    private File pagesDirectory() {
+        return new File(templateDirectory(), PAGES_DIRECTORY);
+    }
+
+    private File layoutDirectory() {
+        return new File(templateDirectory(), LAYOUT_DIRECTORY);
     }
 
     private File templateDirectory() {

@@ -1,10 +1,5 @@
 package org.testinfected.petstore.dispatch;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.petstore.pipeline.Dispatcher;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +9,6 @@ public class Router implements Routing {
 
     public void draw(RouteBuilder routeBuilder) {
         routeBuilder.defineRoutes(routingTable);
-    }
-
-    public void dispatch(Request request, Response response, Dispatcher dispatcher) throws IOException {
-        routingTable.locateRoute(request).dispatch(request, response, dispatcher);
     }
 
     public void dispatch(Dispatch.Request request, Dispatch.Response response) throws Exception {
@@ -35,13 +26,6 @@ public class Router implements Routing {
 
         public void setDefaultRoute(Route route) {
             this.defaultRoute = route;
-        }
-
-        public Route locateRoute(Request request) {
-            for (Route route : routingTable) {
-                if (route.matches(request)) return route;
-            }
-            return defaultRoute;
         }
 
         public Route locateRoute(Dispatch.Request request) {
