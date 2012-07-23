@@ -5,6 +5,8 @@ import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
 import org.testinfected.petstore.Renderer;
 import org.testinfected.petstore.dispatch.Routing;
+import org.testinfected.petstore.dispatch.SimpleRequest;
+import org.testinfected.petstore.dispatch.SimpleResponse;
 import org.testinfected.petstore.util.Charsets;
 
 import java.io.IOException;
@@ -22,7 +24,8 @@ public class Dispatcher implements Application {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        routing.dispatch(request, response, this);
+        routing.dispatch(new SimpleRequest(request), new SimpleResponse(response, renderer, charset));
+//        routing.dispatch(request, response, this);
     }
 
     public void renderTemplate(String name, Object context, Response response) throws IOException {

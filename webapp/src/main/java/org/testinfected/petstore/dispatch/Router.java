@@ -20,6 +20,10 @@ public class Router implements Routing {
         routingTable.locateRoute(request).dispatch(request, response, dispatcher);
     }
 
+    public void dispatch(Dispatch.Request request, Dispatch.Response response) throws Exception {
+        routingTable.locateRoute(request).dispatch(request, response);
+    }
+
     public static class RoutingTable implements RouteSet {
 
         private final List<Route> routingTable = new ArrayList<Route>();
@@ -34,6 +38,13 @@ public class Router implements Routing {
         }
 
         public Route locateRoute(Request request) {
+            for (Route route : routingTable) {
+                if (route.matches(request)) return route;
+            }
+            return defaultRoute;
+        }
+
+        public Route locateRoute(Dispatch.Request request) {
             for (Route route : routingTable) {
                 if (route.matches(request)) return route;
             }

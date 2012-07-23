@@ -18,6 +18,15 @@ public class StaticRoute implements Route {
         this.endPoint = endPoint;
     }
 
+    public boolean matches(Dispatch.Request request) {
+        return request.getPath().startsWith(path) &&
+                (method == HttpMethod.any || request.getMethod().equalsIgnoreCase(method.name()));
+    }
+
+    public void dispatch(Dispatch.Request request, Dispatch.Response response) throws Exception {
+        endPoint.process(request, response);
+    }
+
     public boolean matches(Request request) {
         return request.getPath().getPath().startsWith(path) &&
                 (method == HttpMethod.any || request.getMethod().equalsIgnoreCase(method.name()));

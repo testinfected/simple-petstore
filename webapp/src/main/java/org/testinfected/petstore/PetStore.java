@@ -9,6 +9,7 @@ import org.testinfected.petstore.decoration.LayoutTemplate;
 import org.testinfected.petstore.decoration.PageCompositor;
 import org.testinfected.petstore.dispatch.Router;
 import org.testinfected.petstore.dispatch.Routes;
+import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.Dispatcher;
 import org.testinfected.petstore.pipeline.Failsafe;
@@ -92,7 +93,7 @@ public class PetStore {
     private Dispatcher dispatcher(Renderer renderer) {
         Router router = new Router();
         router.draw(new Routes() {{
-            map("/products").to(new ShowProducts());
+            map("/products").to(new ShowProducts(new ProductsDatabase()));
             delete("/logout").to(new Logout());
             otherwise().to(new Home());
         }});

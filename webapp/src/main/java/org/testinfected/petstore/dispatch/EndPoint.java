@@ -9,4 +9,6 @@ import java.io.IOException;
 public interface EndPoint {
 
     void process(Request request, Response response, Dispatcher dispatcher) throws IOException;
+
+    void process(Dispatch.Request request, Dispatch.Response response) throws Exception;
 }
