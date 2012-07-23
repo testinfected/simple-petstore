@@ -20,7 +20,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     package :jar
   end
   
-  define 'infrastructure' do
+  define 'oldinfra' do
     resources.filter.deactivate
     compile.with project(:domain)
     compile.with_transitive :hibernate_annotations, :hibernate_validator, :spring_context, :spring_tx
@@ -35,7 +35,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   define 'oldapp' do
     resources.filter.using 'log.dir' => _(:target, :logs)
     
-    compile.with project(:domain), project(:domain).compile.dependencies, project(:infrastructure), project(:infrastructure).compile.dependencies, VELOCITY
+    compile.with project(:domain), project(:domain).compile.dependencies, project(:oldinfra), project(:oldinfra).compile.dependencies, VELOCITY
     compile.with_transitive :spring_web, :spring_mvc, :servlet_api
     
     test.setup { makedirs _(:target, :logs) }
@@ -60,7 +60,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   
   define 'webapp' do
     compile.with :simpleframework, :jmustache, :time
-    test.with NO_LOG, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:infrastructure ).test.compile.target
+    test.with NO_LOG, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:oldinfra).test.compile.target
     test.with_transitive :nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
     package(:jar)
@@ -70,10 +70,10 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     compile.with project(:webapp).package, project(:webapp).compile.dependencies
     
     test.resources.filter.using 'webapp.dir' => project(:oldapp).path_to(:src, :main, :webapp),
-                                'migrations.dir' => project(:infrastructure).path_to(:src, :main, :scripts, :migrations),
+                                'migrations.dir' => project(:oldinfra).path_to(:src, :main, :scripts, :migrations),
                                 'test.log.dir' => _(:target, :logs)
     test.with project(:oldapp).compile.target, project(:oldapp).resources.target, project(:oldapp).package(:war).libs, 
-              project(:domain).test.compile.target, project(:infrastructure).test.compile.target,
+              project(:domain).test.compile.target, project(:oldinfra).test.compile.target,
               project(:webapp).test.compile.target,
               HAMCREST, LOG
     test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :carbon_5
