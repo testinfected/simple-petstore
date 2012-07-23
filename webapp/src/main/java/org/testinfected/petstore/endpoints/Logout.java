@@ -1,12 +1,12 @@
-package org.testinfected.petstore.destinations;
+package org.testinfected.petstore.endpoints;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
-import org.testinfected.petstore.dispatch.Destination;
+import org.testinfected.petstore.dispatch.EndPoint;
 import org.testinfected.petstore.pipeline.Dispatcher;
 
-public class Logout implements Destination {
+public class Logout implements EndPoint {
 
     public void handle(Request request, Response response, Dispatcher dispatcher) {
         response.setCode(Status.SEE_OTHER.getCode());

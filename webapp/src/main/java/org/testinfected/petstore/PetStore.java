@@ -1,8 +1,8 @@
 package org.testinfected.petstore;
 
-import org.testinfected.petstore.destinations.Home;
-import org.testinfected.petstore.destinations.Logout;
-import org.testinfected.petstore.destinations.ShowProducts;
+import org.testinfected.petstore.endpoints.Home;
+import org.testinfected.petstore.endpoints.Logout;
+import org.testinfected.petstore.endpoints.ShowProducts;
 import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
 import org.testinfected.petstore.decoration.HtmlPageSelector;
 import org.testinfected.petstore.decoration.LayoutTemplate;

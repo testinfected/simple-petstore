@@ -10,12 +10,12 @@ import java.io.IOException;
 public class StaticRoute implements Route {
     private final String path;
     private final HttpMethod method;
-    private final Destination destination;
+    private final EndPoint endPoint;
 
-    public StaticRoute(String path, HttpMethod method, Destination destination) {
+    public StaticRoute(String path, HttpMethod method, EndPoint endPoint) {
         this.path = path;
         this.method = method;
-        this.destination = destination;
+        this.endPoint = endPoint;
     }
 
     public boolean matches(Request request) {
@@ -24,6 +24,6 @@ public class StaticRoute implements Route {
     }
 
     public void dispatch(Request request, Response response, Dispatcher dispatcher) throws IOException {
-        destination.handle(request, response, dispatcher);
+        endPoint.handle(request, response, dispatcher);
     }
 }

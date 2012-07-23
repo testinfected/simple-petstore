@@ -8,5 +8,5 @@ public interface RouteDefinition {
 
     RouteDefinition via(HttpMethod method);
 
-    RouteDefinition to(Destination destination);
+    RouteDefinition to(EndPoint endPoint);
 }

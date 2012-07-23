@@ -10,7 +10,7 @@ public class StaticRouteDefinition implements RouteDefinition {
 
     private HttpMethod method = HttpMethod.any;
     private String path = "";
-    private Destination destination;
+    private EndPoint endPoint;
 
     public StaticRouteDefinition map(String path) {
         this.path = path;
@@ -22,12 +22,12 @@ public class StaticRouteDefinition implements RouteDefinition {
         return this;
     }
 
-    public StaticRouteDefinition to(Destination destination) {
-        this.destination = destination;
+    public StaticRouteDefinition to(EndPoint endPoint) {
+        this.endPoint = endPoint;
         return this;
     }
 
     public StaticRoute toRoute() {
-        return new StaticRoute(path, method, destination);
+        return new StaticRoute(path, method, endPoint);
     }
 }

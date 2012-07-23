@@ -6,7 +6,7 @@ import org.testinfected.petstore.pipeline.Dispatcher;
 
 import java.io.IOException;
 
-public interface Destination {
+public interface EndPoint {
 
     void handle(Request request, Response response, Dispatcher dispatcher) throws IOException;
 }
