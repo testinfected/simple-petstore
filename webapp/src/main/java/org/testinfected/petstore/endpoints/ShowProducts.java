@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class ShowProducts implements EndPoint {
 
-    public void handle(Request request, Response response, Dispatcher dispatcher) throws IOException {
+    public void process(Request request, Response response, Dispatcher dispatcher) throws IOException {
         Map<String, String> context = new HashMap<String, String>();
         dispatcher.renderTemplate("pages/products", context, response);
     }

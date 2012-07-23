@@ -8,7 +8,7 @@ import org.testinfected.petstore.pipeline.Dispatcher;
 
 public class Logout implements EndPoint {
 
-    public void handle(Request request, Response response, Dispatcher dispatcher) {
+    public void process(Request request, Response response, Dispatcher dispatcher) {
         response.setCode(Status.SEE_OTHER.getCode());
         response.setText(Status.SEE_OTHER.getDescription());
         response.set("Location", "/");

@@ -24,6 +24,6 @@ public class StaticRoute implements Route {
     }
 
     public void dispatch(Request request, Response response, Dispatcher dispatcher) throws IOException {
-        endPoint.handle(request, response, dispatcher);
+        endPoint.process(request, response, dispatcher);
     }
 }
