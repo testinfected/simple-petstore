@@ -17,7 +17,17 @@ public class ShopFeature {
     ApplicationDriver petstore;
 
     @Before public void
-    iguanaAreForSale() {
+    startApplication() {
+        petstore = context.startApplication();
+        iguanaAreForSale();
+    }
+
+    @After public void
+    stopApplication() {
+        context.stopApplication(petstore);
+    }
+
+    private void iguanaAreForSale() {
         Product iguana = aProduct().named("Iguana").build();
         context.given(iguana);
         context.given(
@@ -50,15 +60,5 @@ public class ShopFeature {
         petstore.buy("Iguana", "12345678");
         petstore.showsItemQuantity("12345678", 2);
         petstore.showsCartTotalQuantity(2);
-    }
-
-    @Before public void
-    startApplication() {
-        petstore = context.startApplication();
-    }
-
-    @After public void
-    stopApplication() {
-        context.stopApplication(petstore);
     }
 }

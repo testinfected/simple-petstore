@@ -18,7 +18,17 @@ public class NavigateSiteFeature {
     ApplicationDriver petstore;
 
     @Before public void
-    inventoryIsNotEmpty() {
+    startApplication() {
+        petstore = context.startApplication();
+        inventoryIsNotEmpty();
+    }
+
+    @After public void
+    stopApplication() {
+        context.stopApplication(petstore);
+    }
+
+    private void inventoryIsNotEmpty() {
         Product iguana = aProduct().named("Iguana").build();
         context.given(iguana);
         Product salamander = aProduct().named("Salamander").build();
@@ -41,15 +51,5 @@ public class NavigateSiteFeature {
 
         petstore.consultInventoryOf("Salamander");
         petstore.reviewCart();
-    }
-
-    @Before public void
-    startApplication() {
-        petstore = context.startApplication();
-    }
-
-    @After public void
-    stopApplication() {
-        context.stopApplication(petstore);
     }
 }

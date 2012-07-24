@@ -6,6 +6,7 @@ import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
@@ -35,9 +36,12 @@ public class PersistentProductCatalogTest {
     Database database = new Database(context.openConnection());
     ProductCatalog productCatalog = context.getComponent(ProductCatalog.class);
 
-    @After
-    public void cleanDatabase() {
+    @Before public void
+    cleanDatabase() {
         new DatabaseCleaner(database).clean();
+    }
+
+    @After public void closeDatabase() {
         database.close();
     }
 

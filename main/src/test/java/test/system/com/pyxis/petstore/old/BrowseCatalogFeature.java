@@ -19,7 +19,17 @@ public class BrowseCatalogFeature {
     Product iguana;
 
     @Before public void
-    iguanaAreForSale() {
+    startApplication() {
+        petstore = context.startApplication();
+        iguanaAreForSale();
+    }
+
+    @After public void
+    stopApplication() {
+        context.stopApplication(petstore);
+    }
+
+    private void iguanaAreForSale() {
         iguana = aProduct().named("Iguana").build();
         context.given(iguana);
     }
@@ -37,15 +47,5 @@ public class BrowseCatalogFeature {
         petstore.consultInventoryOf("Iguana");
         petstore.displaysItem("12345678", "Green Adult", "18.50");
         petstore.continueShopping();
-    }
-
-    @Before public void
-    startApplication() {
-        petstore = context.startApplication();
-    }
-
-    @After public void
-    stopApplication() {
-        context.stopApplication(petstore);
     }
 }

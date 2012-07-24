@@ -86,6 +86,7 @@ public final class SystemTestContext {
     }
 
     public ApplicationDriver startApplication() {
+        cleanUp();
         startServer();
         return launchApplication();
     }
@@ -98,7 +99,6 @@ public final class SystemTestContext {
 
     public void stopApplication(ApplicationDriver application) {
         closeApplication(application);
-        cleanUp();
         stopServer();
     }
 

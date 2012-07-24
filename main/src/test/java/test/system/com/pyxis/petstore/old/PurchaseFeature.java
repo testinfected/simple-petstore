@@ -17,7 +17,17 @@ public class PurchaseFeature {
     ApplicationDriver petstore;
 
     @Before public void
-    labradorsAreForSale() {
+    startApplication() {
+        petstore = context.startApplication();
+        labradorsAreForSale();
+    }
+
+    @After public void
+    stopApplication() {
+        context.stopApplication(petstore);
+    }
+
+    private void labradorsAreForSale() {
         Product labrador = aProduct().named("Labrador Retriever").build();
         Product golden = aProduct().named("Golden Retriever").build();
         context.given(labrador, golden);
@@ -42,15 +52,5 @@ public class PurchaseFeature {
 
         petstore.continueShopping();
         petstore.showsCartIsEmpty();
-    }
-
-    @Before public void
-    startApplication() {
-        petstore = context.startApplication();
-    }
-
-    @After public void
-    stopApplication() {
-        context.stopApplication(petstore);
     }
 }
