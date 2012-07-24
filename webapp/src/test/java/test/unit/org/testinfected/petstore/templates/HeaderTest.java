@@ -19,13 +19,13 @@ import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class HeaderTest {
 
-    String HEADER_TEMPLATE = "layout/header";
+    String HEADER_TEMPLATE = "header";
     Element header;
     Routes routes = Routes.root();
 
     @Before public void
     renderHeader() {
-        header = render(HEADER_TEMPLATE).from(WebRoot.locate()).asDom();
+        header = render(HEADER_TEMPLATE).from(WebRoot.locateLayout()).asDom();
     }
 
     @Test public void

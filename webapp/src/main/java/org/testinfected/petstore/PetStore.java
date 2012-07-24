@@ -9,6 +9,8 @@ import org.testinfected.petstore.decoration.LayoutTemplate;
 import org.testinfected.petstore.decoration.PageCompositor;
 import org.testinfected.petstore.dispatch.Router;
 import org.testinfected.petstore.dispatch.Routes;
+import org.testinfected.petstore.jdbc.ConnectionSource;
+import org.testinfected.petstore.jdbc.DriverManagerConnectionSource;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.Dispatcher;
@@ -28,6 +30,7 @@ import org.testinfected.time.lib.SystemClock;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.sql.Connection;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -43,15 +46,19 @@ public class PetStore {
 
     private final File location;
     private final Logger logger = makeLogger();
+    private final SystemClock clock = new SystemClock();
 
     private Server server;
-
+    private Connection connection;
     private Charset charset = Charset.defaultCharset();
     private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
-    final SystemClock clock = new SystemClock();
 
     public static PetStore at(String webRoot) {
         return new PetStore(new File(webRoot));
+    }
+
+    public static PetStore at(File webRoot) {
+        return new PetStore(webRoot);
     }
 
     public PetStore(File webRoot) {
@@ -78,7 +85,10 @@ public class PetStore {
         logger.addHandler(fileHandler(logFile));
     }
 
-    public void start(int port) throws IOException {
+    public void start(int port) throws Exception {
+        // mouahahaha wtf a single connection !?!
+        // todo scope this by http request
+        connection = connectToDatabase();
         server = new Server(port, failureReporter);
         server.run(new MiddlewareStack() {{
             use(new Failsafe(new MustacheRendering(new FileSystemResourceLoader(templateDirectory(), Charsets.UTF_8)), failureReporter));
@@ -101,11 +111,20 @@ public class PetStore {
     private Router drawRoutes() {
         Router router = new Router();
         router.draw(new Routes() {{
-            map("/products").to(new ShowProducts(new ProductsDatabase()));
+            map("/products").to(new ShowProducts(new ProductsDatabase(connection)));
             delete("/logout").to(new Logout());
             otherwise().to(new Home());
         }});
         return router;
+    }
+
+    private Connection connectToDatabase() {
+        Properties properties = new Properties();
+        properties.put("jdbc.url", "jdbc:mysql://localhost:3306/petstore-test");
+        properties.put("jdbc.username", "testbot");
+        properties.put("jdbc.password", "petstore");
+        ConnectionSource connectionSource = DriverManagerConnectionSource.configure(properties);
+        return connectionSource.connect();
     }
 
     private SiteMesh siteMesh() {
@@ -115,8 +134,9 @@ public class PetStore {
         return siteMesh;
     }
 
-    public void stop() throws IOException {
+    public void stop() throws Exception {
         if (server != null) server.shutdown();
+        if (connection != null) connection.close();
     }
 
     private static Logger makeLogger() {

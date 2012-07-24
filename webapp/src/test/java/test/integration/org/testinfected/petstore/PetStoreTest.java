@@ -27,7 +27,7 @@ public class PetStoreTest {
     HttpRequest request = aRequest().onPort(serverPort);
 
     @Before public void
-    startServer() throws IOException {
+    startServer() throws Exception {
         logFile = LogFile.create();
         petstore.encodeOutputAs("utf-8");
         petstore.start(serverPort);

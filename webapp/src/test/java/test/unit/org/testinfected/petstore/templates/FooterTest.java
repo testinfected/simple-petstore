@@ -16,12 +16,12 @@ import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class FooterTest {
 
-    String FOOTER_TEMPLATE = "layout/footer";
+    String FOOTER_TEMPLATE = "footer";
     Element footer;
 
     @Before public void
     renderFooter() {
-        footer = render(FOOTER_TEMPLATE).from(WebRoot.locate()).asDom();
+        footer = render(FOOTER_TEMPLATE).from(WebRoot.locateLayout()).asDom();
     }
 
     @SuppressWarnings("unchecked") @Test public void

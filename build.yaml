@@ -36,6 +36,7 @@ artifacts:
   velocity_tools: org.apache.velocity:velocity-tools:jar:2.0
   sitemesh: opensymphony:sitemesh:jar:2.4.1
   carbon_5: com.carbonfive.db-support:db-migration:jar:0.9.9-m2
+  #todo update to latest
   mysql: mysql:mysql-connector-java:jar:5.1.11
   jetty: org.mortbay.jetty:jetty:jar:6.1.26
   jetty_util: org.mortbay.jetty:jetty-util:jar:6.1.26
@@ -48,6 +49,7 @@ artifacts:
   slf4j_log4j: org.slf4j:slf4j-log4j12:jar:1.5.6
   slf4j_jcl: org.slf4j:jcl-over-slf4j:jar:1.5.6
   slf4j_silent: org.slf4j:slf4j-nop:jar:1.5.6
+  #todo update to 1.3 final
   hamcrest_core: org.hamcrest:hamcrest-core:jar:1.3.RC2
   hamcrest_library: org.hamcrest:hamcrest-library:jar:1.3.RC2
   hamcrest_extra: org.testinfected.hamcrest-matchers:core-matchers:jar:1.5
@@ -60,7 +62,8 @@ artifacts:
   htmlunit: net.sourceforge.htmlunit:htmlunit:jar:2.9
   juniversalchardet: com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3
   jmock_legacy: org.jmock:jmock-legacy:jar:2.5.1
-  
+
+#todo update to 4.10
 junit: 4.8.1
 jmock: 2.5.1
 

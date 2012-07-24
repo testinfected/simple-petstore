@@ -3,7 +3,6 @@ package test.support.org.testinfected.petstore.web;
 import org.testinfected.hamcrest.ExceptionImposter;
 import org.testinfected.petstore.FileSystemResourceLoader;
 import org.testinfected.petstore.MustacheRendering;
-import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Renderer;
 import org.testinfected.petstore.util.Charsets;
 import org.w3c.dom.Element;
@@ -30,13 +29,8 @@ public class OfflineRenderer {
         this.context = new HashMap<String, String>();
     }
 
-    public OfflineRenderer from(String location) {
-        return from(new File(location));
-    }
-
     public OfflineRenderer from(File location) {
-        return with(new MustacheRendering(new FileSystemResourceLoader(
-                new File(location, PetStore.TEMPLATE_DIRECTORY), Charsets.UTF_8)));
+        return with(new MustacheRendering(new FileSystemResourceLoader(location, Charsets.UTF_8)));
     }
 
     public OfflineRenderer with(Renderer renderer) {

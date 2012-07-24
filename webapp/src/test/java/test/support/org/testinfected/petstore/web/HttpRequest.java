@@ -5,7 +5,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import org.testinfected.petstore.Server;
-import org.testinfected.petstore.util.ExceptionImposter;
 import test.support.com.pyxis.petstore.views.Routes;
 
 import java.io.IOException;
@@ -88,7 +87,7 @@ public class HttpRequest {
         try {
             return new URL("http://localhost:" + port + routes.pathFor(path));
         } catch (MalformedURLException e) {
-            throw ExceptionImposter.imposterize(e);
+            throw new RuntimeException(e);
         }
     }
 }

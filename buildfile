@@ -71,7 +71,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     compile.with :simpleframework, :jmustache, :time
     compile.with_transitive project(:domain), project(:persistence), project(:persistence).compile.dependencies
     test.with NO_LOG, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:oldinfra).test.compile.target
-    test.with_transitive :nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy
+    test.with_transitive :nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy, :mysql
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
     package(:jar)
   end

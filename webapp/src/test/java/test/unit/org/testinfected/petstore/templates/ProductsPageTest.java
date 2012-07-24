@@ -9,7 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 
 public class ProductsPageTest {
-    String PRODUCTS_PAGE_TEMPLATE = "pages/products";
+    String PRODUCTS_PAGE_TEMPLATE = "products";
 
     Element productPage;
 
@@ -20,6 +20,6 @@ public class ProductsPageTest {
     }
 
     private OfflineRenderer renderProductsPage() {
-        return OfflineRenderer.render(PRODUCTS_PAGE_TEMPLATE).from(WebRoot.locate());
+        return OfflineRenderer.render(PRODUCTS_PAGE_TEMPLATE).from(WebRoot.locatePages());
     }
 }

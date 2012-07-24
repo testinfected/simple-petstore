@@ -1,8 +1,8 @@
-package test.unit.org.testinfected.petstore.util;
+package test.unit.org.testinfected.petstore;
 
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.testinfected.petstore.util.ExceptionImposter;
+import org.testinfected.petstore.ExceptionImposter;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -11,7 +11,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testinfected.petstore.util.ExceptionImposter.imposterize;
+import static org.testinfected.petstore.ExceptionImposter.imposterize;
 
 public class ExceptionImposterTest {
     Exception original;
