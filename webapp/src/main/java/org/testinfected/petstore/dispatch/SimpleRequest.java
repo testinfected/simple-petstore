@@ -1,6 +1,9 @@
 package org.testinfected.petstore.dispatch;
 
 import org.simpleframework.http.Request;
+import org.testinfected.petstore.ExceptionImposter;
+
+import java.io.IOException;
 
 public class SimpleRequest implements Dispatch.Request {
 
@@ -11,7 +14,11 @@ public class SimpleRequest implements Dispatch.Request {
     }
 
     public String getParameter(String name) {
-        return null;
+        try {
+            return request.getParameter(name);
+        } catch (IOException e) {
+            throw ExceptionImposter.imposterize(e);
+        }
     }
 
     public String getPath() {

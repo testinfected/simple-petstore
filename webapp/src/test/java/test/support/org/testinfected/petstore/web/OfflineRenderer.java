@@ -5,6 +5,7 @@ import org.testinfected.petstore.FileSystemResourceLoader;
 import org.testinfected.petstore.MustacheRendering;
 import org.testinfected.petstore.Renderer;
 import org.testinfected.petstore.util.Charsets;
+import org.testinfected.petstore.util.ContextBuilder;
 import org.w3c.dom.Element;
 
 import java.io.File;
@@ -36,6 +37,10 @@ public class OfflineRenderer {
     public OfflineRenderer with(Renderer renderer) {
         this.renderer = renderer;
         return this;
+    }
+
+    public OfflineRenderer using(ContextBuilder context) {
+        return using(context.asMap());
     }
 
     public OfflineRenderer using(Object context) {

@@ -3,7 +3,6 @@ package test.system.com.pyxis.petstore.features;
 import com.pyxis.petstore.domain.product.Product;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.web.ApplicationDriver;
@@ -42,7 +41,6 @@ public class SearchFeature {
         application.showsNoResult();
     }
 
-    @Ignore("wip")
     @Test public void
     searchesAndFindsProductsInCatalog() throws SQLException {
         givenProducts(aProduct("LAB-1234").named("Labrador Retriever"),

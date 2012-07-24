@@ -4,7 +4,26 @@
 </head>
 <body>
 <div id="products">
+  {{^products}}
   <div id="no-match">No product was found</div>
+  {{/products}}
+  <ul id="catalog">
+  {{#products}}
+  {{#-first}}
+  <div id="match-found">Found <span id="match-count">{{productCount}}</span> result(s) for {{keyword}}</div>
+  {{/-first}}
+  <li id="product-{{number}}">
+    <div class='product-details'>
+      <span class="product-name">{{name}}</span>
+      <br/>
+      <span class="product-description">{{#description}}{{.}}{{/description}}</span>
+    </div>
+  </li>
+  {{/products}}
+  </ul>
 </div>
+
+</div>
+
 </body>
 </html>

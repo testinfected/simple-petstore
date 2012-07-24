@@ -23,6 +23,7 @@ public class ShowProducts implements EndPoint {
 
         response.render("products", context().
                 with("products", matchingProducts).
+                with("productCount", matchingProducts.size()).
                 and("keyword", keyword).asMap());
     }
 }
