@@ -9,6 +9,8 @@ NO_LOG = [:slf4j_api, :slf4j_silent, :jcl_over_slf4j]
 VELOCITY = [:commons_beanutils, :commons_digester, :commons_chain, :velocity_engine, :velocity_tools]
 JETTY = [:jetty, :jetty_util]
 
+MUSTACHE = [:jsr305, :guava, :mustache]
+
 Project.local_task :jetty
 
 define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NUMBER do
@@ -68,11 +70,12 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
 
   define 'webapp' do
-    compile.with :simpleframework, :jmustache, :time
+    compile.with :simpleframework, MUSTACHE, :time
     compile.with_transitive project(:domain), project(:persistence), project(:persistence).compile.dependencies
-    test.with NO_LOG, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:oldinfra).test.compile.target
+    test.with NO_LOG, :guava, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:oldinfra).test.compile.target
     test.with_transitive :nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy, :mysql
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
+    puts test.dependencies
     package(:jar)
   end
   

@@ -30,7 +30,9 @@ artifacts:
   spring_support: org.springframework:spring-context-support:jar:3.0.2.RELEASE
   spring_test: org.springframework:spring-test:jar:3.0.2.RELEASE
   simpleframework: org.simpleframework:simple:jar:4.1.21
-  jmustache: com.samskivert:jmustache:jar:1.5
+  jsr305: com.google.code.findbugs:jsr305:jar:1.3.7
+  guava: com.google.guava:guava:jar:12.0
+  mustache: com.github.spullara.mustache.java:compiler:jar:0.8.3
   time: org.testinfected.time:time:jar:1.0
   velocity_engine: org.apache.velocity:velocity:jar:1.6.3
   velocity_tools: org.apache.velocity:velocity-tools:jar:2.0
