@@ -20,15 +20,9 @@ import static org.testinfected.petstore.util.ContextBuilder.context;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class ProductsPageTest {
-    String PRODUCTS_PAGE_TEMPLATE = "products";
+    String PRODUCTS_TEMPLATE = "products";
 
     Element productsPage;
-
-    @Test public void
-    doesNotDisplayProductListWhenNoProductIsFound() {
-        productsPage = renderProductsPage().asDom();
-        assertThat("products page", productsPage, hasUniqueSelector("#no-match"));
-    }
 
     @Test public void
     displaysAllProductsFound() {
@@ -38,7 +32,7 @@ public class ProductsPageTest {
 
         productsPage = renderProductsPage().using(context().
                 with("products", productList).
-                with("productCount", 2).
+                with("matchCount", 2).
                 with("keyword", "dog")).asDom();
 
         assertThat("products page", productsPage, hasUniqueSelector("#match-count", hasText("2")));
@@ -74,6 +68,6 @@ public class ProductsPageTest {
     }
 
     private OfflineRenderer renderProductsPage() {
-        return OfflineRenderer.render(PRODUCTS_PAGE_TEMPLATE).from(WebRoot.locatePages());
+        return OfflineRenderer.render(PRODUCTS_TEMPLATE).from(WebRoot.locatePages());
     }
 }

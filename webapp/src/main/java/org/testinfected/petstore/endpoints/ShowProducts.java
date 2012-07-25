@@ -4,6 +4,7 @@ import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.testinfected.petstore.dispatch.Dispatch;
 import org.testinfected.petstore.dispatch.EndPoint;
+import org.testinfected.petstore.util.ContextBuilder;
 
 import java.util.List;
 
@@ -21,9 +22,14 @@ public class ShowProducts implements EndPoint {
         String keyword = request.getParameter("keyword");
         List<Product> matchingProducts = productCatalog.findByKeyword(keyword);
 
-        response.render("products", context().
-                with("products", matchingProducts).
-                with("productCount", matchingProducts.size()).
-                and("keyword", keyword).asMap());
+        ContextBuilder context = context().with("keyword", keyword);
+        if (matchingProducts.isEmpty()) {
+            response.render("no-product", context.asMap());
+        } else {
+            response.render("products", context.
+                    with("products", matchingProducts).
+                    and("matchCount", matchingProducts.size()).
+                    asMap());
+        }
     }
 }
