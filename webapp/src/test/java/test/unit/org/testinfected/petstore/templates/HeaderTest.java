@@ -21,6 +21,7 @@ public class HeaderTest {
 
     String HEADER_TEMPLATE = "header";
     Element header;
+    // todo Use Paths instead
     Routes routes = Routes.root();
 
     @Before public void

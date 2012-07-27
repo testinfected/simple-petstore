@@ -10,6 +10,9 @@
   {{#products}}
     <li id="product-{{number}}">
       <div class='product-details'>
+        <a class="product-link" href="/products/{{number}}/items">
+          <img src="{{photo}}"/>
+        </a>
         <span class="product-name">{{name}}</span>
         <br/>
         <span class="product-description">{{description}}</span>

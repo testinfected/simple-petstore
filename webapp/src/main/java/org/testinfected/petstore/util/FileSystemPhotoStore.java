@@ -1,14 +1,12 @@
-package com.pyxis.petstore.service;
+package org.testinfected.petstore.util;
 
 import com.pyxis.petstore.domain.product.AttachmentStorage;
-import org.springframework.stereotype.Service;
 
-@Service
-public class SimplePhotoFileStore implements AttachmentStorage {
+public class FileSystemPhotoStore implements AttachmentStorage {
 
     private final String rootPath;
 
-    public SimplePhotoFileStore(String rootPath) {
+    public FileSystemPhotoStore(String rootPath) {
         this.rootPath = rootPath;
     }
 
@@ -20,3 +18,4 @@ public class SimplePhotoFileStore implements AttachmentStorage {
         return rootPath + "/" + photoName;
     }
 }
+

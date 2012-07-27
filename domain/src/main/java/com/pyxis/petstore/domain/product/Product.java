@@ -7,7 +7,9 @@ import java.io.Serializable;
 @Entity @Access(AccessType.FIELD) @Table(name = "products")
 public class Product implements Serializable {
 
-	@SuppressWarnings("unused")
+    public static final String MISSING_PHOTO = "missing.png";
+
+    @SuppressWarnings("unused")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private @Id Long id;
 
@@ -45,7 +47,11 @@ public class Product implements Serializable {
 	}
 
     public String getPhotoFileName() {
-        return photo != null ? photo.getFileName() : null;
+        return hasPhoto() ? photo.getFileName() : MISSING_PHOTO;
+    }
+
+    public String getPhotoLocation(AttachmentStorage attachmentStorage) {
+        return attachmentStorage.getLocation(getPhotoFileName());
     }
 
     public void attachPhoto(Attachment photo) {

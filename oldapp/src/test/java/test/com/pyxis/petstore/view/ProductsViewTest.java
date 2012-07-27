@@ -1,8 +1,6 @@
 package test.com.pyxis.petstore.view;
 
 import com.pyxis.petstore.domain.product.AttachmentStorage;
-import com.pyxis.petstore.domain.product.Product;
-import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -19,7 +17,6 @@ import test.support.com.pyxis.petstore.views.VelocityRendering;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.nullValue;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasBlankText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
@@ -35,7 +32,6 @@ import static test.support.com.pyxis.petstore.views.VelocityRendering.render;
 public class ProductsViewTest {
     Routes routes = Routes.toPetstore();
     String PRODUCTS_VIEW_TEMPLATE = "products";
-    Object DEFAULT_PHOTO_URL = "url/of/missing.png";
     String keyword = "Iguana";
 
     Mockery context = new JUnit4Mockery();
@@ -52,7 +48,7 @@ public class ProductsViewTest {
     @Before public void
     setUpDefaultPhoto() {
         context.checking(new Expectations() {{
-            allowing(attachmentStorage).getAttachmentUri(with(aProductWithNoPhoto())); will(returnValue(DEFAULT_PHOTO_URL));
+            allowing(attachmentStorage).getLocation(with("missing.png")); will(returnValue("/url/of/missing.png"));
         }});
     }
 
@@ -71,9 +67,9 @@ public class ProductsViewTest {
                 named("Labrador").
                 describedAs("Friendly").
                 withPhoto("labrador.png"));
-        final String photoUrl = "path/to/attachment/labrador.png";
+        final String photoUrl = "/photos/labrador.png";
         context.checking(new Expectations() {{
-            allowing(attachmentStorage).getAttachmentUri(with(aProductWithPhoto("labrador.png"))); will(returnValue(photoUrl));
+            allowing(attachmentStorage).getLocation(with("labrador.png")); will(returnValue(photoUrl));
         }});
 
         productsView = renderProductsView().using(model).asDom();
@@ -106,22 +102,6 @@ public class ProductsViewTest {
         assertThat("view", productsView,
                 hasSelector("li a", everyItem(
                         hasAttribute("href", equalTo(routes.itemsPath("LAB-1234"))))));
-    }
-
-    private Matcher<Product> aProductWithNoPhoto() {
-        return aProductWithPhoto(nullValue());
-    }
-
-    private Matcher<Product> aProductWithPhoto(String photoName) {
-        return aProductWithPhoto(equalTo(photoName));
-    }
-
-    private Matcher<Product> aProductWithPhoto(Matcher<? super String> photoMatcher) {
-        return new FeatureMatcher<Product, String>(photoMatcher, "a product with photo filename", "photo filename") {
-            @Override protected String featureValueOf(Product actual) {
-                return actual.getPhotoFileName();
-            }
-        };
     }
 
     private Matcher<Element> hasImage(String imageUrl) {

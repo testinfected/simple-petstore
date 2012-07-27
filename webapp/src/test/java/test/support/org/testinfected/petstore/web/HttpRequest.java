@@ -22,6 +22,7 @@ public class HttpRequest {
     private int timeout = 5000;
     private HttpMethod method = HttpMethod.GET;
     private String path = "/";
+    // todo use Paths instead
     private Routes routes = Routes.root();
     private int port;
 

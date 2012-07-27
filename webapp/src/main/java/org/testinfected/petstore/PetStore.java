@@ -24,6 +24,7 @@ import org.testinfected.petstore.pipeline.StaticAssets;
 import org.testinfected.petstore.util.Charsets;
 import org.testinfected.petstore.util.ConsoleErrorReporter;
 import org.testinfected.petstore.util.ConsoleHandler;
+import org.testinfected.petstore.util.FileSystemPhotoStore;
 import org.testinfected.petstore.util.PlainFormatter;
 import org.testinfected.time.lib.SystemClock;
 
@@ -111,7 +112,7 @@ public class PetStore {
     private Router drawRoutes() {
         Router router = new Router();
         router.draw(new Routes() {{
-            map("/products").to(new ShowProducts(new ProductsDatabase(connection)));
+            map("/products").to(new ShowProducts(new ProductsDatabase(connection), new FileSystemPhotoStore("/photos")));
             delete("/logout").to(new Logout());
             otherwise().to(new Home());
         }});
@@ -147,7 +148,7 @@ public class PetStore {
 
     private StaticAssets staticAssets() {
         final StaticAssets assets = new StaticAssets(new FileServer(new FileSystemResourceLoader(assetDirectory())));
-        assets.serve("/favicon.ico", "/images", "/stylesheets");
+        assets.serve("/favicon.ico", "/images", "/stylesheets", "/photos");
         return assets;
     }
 

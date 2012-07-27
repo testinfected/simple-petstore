@@ -70,12 +70,13 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
 
   define 'webapp' do
+    # todo go back to jmustache, since we don't really need lambdas
     compile.with :simpleframework, MUSTACHE, :time
     compile.with_transitive project(:domain), project(:persistence), project(:persistence).compile.dependencies
+    # todo remove dependency on oldapp
     test.with NO_LOG, :guava, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:oldinfra).test.compile.target
     test.with_transitive :nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy, :mysql
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
-    puts test.dependencies
     package(:jar)
   end
   
