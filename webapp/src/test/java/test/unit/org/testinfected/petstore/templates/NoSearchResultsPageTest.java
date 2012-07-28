@@ -11,8 +11,8 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.testinfected.petstore.util.ContextBuilder.context;
 
-public class NoProductPageTest {
-    String NO_PRODUCT_TEMPLATE = "no-product";
+public class NoSearchResultsPageTest {
+    String NO_SEARCH_RESULTS_PAGE_TEMPLATE = "no-results";
 
     Element noProductPage;
 
@@ -23,6 +23,6 @@ public class NoProductPageTest {
     }
 
     private OfflineRenderer renderNoProductPage() {
-        return OfflineRenderer.render(NO_PRODUCT_TEMPLATE).from(WebRoot.locatePages());
+        return OfflineRenderer.render(NO_SEARCH_RESULTS_PAGE_TEMPLATE).from(WebRoot.locatePages());
     }
 }

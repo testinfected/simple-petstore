@@ -28,7 +28,7 @@ public class ShowProducts implements EndPoint {
 
         ContextBuilder context = context().with("keyword", keyword);
         if (matchingProducts.isEmpty()) {
-            response.render("no-product", context.asMap());
+            response.render("no-results", context.asMap());
         } else {
             response.render("products", context.
                     with("products", withPhotos(matchingProducts)).

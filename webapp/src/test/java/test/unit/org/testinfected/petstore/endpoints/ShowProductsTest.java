@@ -18,6 +18,9 @@ import org.testinfected.petstore.endpoints.ShowProducts;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.MockRequest;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -39,6 +42,7 @@ public class ShowProductsTest {
     MockRequest request = new MockRequest();
     Dispatch.Response response = context.mock(Dispatch.Response.class);
     String keyword = "dogs";
+    List<Product> searchResults = new ArrayList<Product>();
 
 
     @Before public void
@@ -56,10 +60,10 @@ public class ShowProductsTest {
     @SuppressWarnings("unchecked")
     @Test public void
     rendersNoMatchPageWhenSearchYieldsNoResult() throws Exception {
-        searchYields();
+        searchYieldsNothing();
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with("no-product"), with(hasEntry("keyword", keyword)));
+            oneOf(response).render(with("no-results"), with(hasEntry("keyword", keyword)));
         }});
 
         showProducts.process(request, response);
@@ -67,7 +71,7 @@ public class ShowProductsTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    rendersProductsPageWithDetailsOfProductsInCatalogThatMatchKeyword() throws Exception {
+    rendersProductsPageWithProductsInCatalogThatMatchKeyword() throws Exception {
         searchYields(
                 aProduct().withNumber("LAB-1234").named("Labrador").describedAs("Friendly dog").withPhoto("labrador.png"),
                 aProduct().describedAs("Guard dog"));
@@ -127,9 +131,15 @@ public class ShowProductsTest {
         return any(String.class);
     }
 
+    @SuppressWarnings("unchecked")
+    private void searchYieldsNothing() {
+        searchYields();
+    }
+
     private void searchYields(final Builder<Product>... products) {
+        searchResults.addAll(build(products));
         context.checking(new Expectations() {{
-            allowing(productCatalog).findByKeyword(keyword); will(returnValue(build(products)));
+            allowing(productCatalog).findByKeyword(keyword); will(returnValue(searchResults));
         }});
     }
 }

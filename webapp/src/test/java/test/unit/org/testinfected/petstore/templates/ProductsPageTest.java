@@ -36,8 +36,8 @@ public class ProductsPageTest {
 
     @Test public void
     displaysAllProductsFound() {
-        productList.add(productWithPhoto(aProduct()));
-        productList.add(productWithPhoto(aProduct()));
+        addToProducts(productWithPhoto(aProduct()));
+        addToProducts(productWithPhoto(aProduct()));
 
         productsPage = renderProductsPage().using(context.with("matchCount", 2)).asDom();
 
@@ -47,7 +47,7 @@ public class ProductsPageTest {
 
     @SuppressWarnings("unchecked") @Test public void
     displaysProductDetails() throws Exception {
-        productList.add(productWithPhoto(
+        addToProducts(productWithPhoto(
                 aProduct().withNumber("LAB-1234").named("Labrador").describedAs("Friendly"), "/photos/labrador.png"));
 
         productsPage = renderProductsPage().using(context).asDom();
@@ -56,6 +56,10 @@ public class ProductsPageTest {
                 hasUniqueSelector(".product-link", hasImage(paths.pathFor("/photos/labrador.png"))),
                 hasUniqueSelector(".product-name", hasText("Labrador")),
                 hasUniqueSelector(".product-description", hasText("Friendly")))));
+    }
+
+    private void addToProducts(final ShowProducts.ProductAndPhoto productAndPhoto) {
+        productList.add(productAndPhoto);
     }
 
     private ShowProducts.ProductAndPhoto productWithPhoto(Builder<Product> product) {

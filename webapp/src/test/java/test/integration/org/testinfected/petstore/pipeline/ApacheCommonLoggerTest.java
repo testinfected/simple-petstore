@@ -66,7 +66,6 @@ public class ApacheCommonLoggerTest {
             oneOf(logger).info(with("127.0.0.1 - - [27/Jun/2012:14:04:00 -0400] \"GET /products?keyword=dogs HTTP/1.1\" 304 28"));
         }});
         request.get("/products?keyword=dogs");
-        context.assertIsSatisfied();
     }
 
     @Test public void
@@ -77,13 +76,11 @@ public class ApacheCommonLoggerTest {
         }};
         server.run(app);
 
-
         context.checking(new Expectations() {{
             oneOf(logger).info(with(containsString("\"GET /logout HTTP/1.1\" 303 -")));
         }});
 
         request.get("/logout");
-        context.assertIsSatisfied();
     }
 
     //todo log also in case of exception

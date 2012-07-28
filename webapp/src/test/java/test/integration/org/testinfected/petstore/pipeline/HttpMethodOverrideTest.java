@@ -51,19 +51,17 @@ public class HttpMethodOverrideTest {
     @Test public void
     doesNotAffectGetMethods() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(runner).handle(with(aRequestWithMethod(equalTo("GET"))), with(any(Response.class)));
+            oneOf(runner).handle(with(aRequestWithMethod("GET")), with(any(Response.class)));
         }});
         request.get("/");
-        context.assertIsSatisfied();
     }
 
     @Test public void
     doesNotAffectPostMethodsWhenOverrideParameterIsNotSet() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(runner).handle(with(aRequestWithMethod(equalTo("POST"))), with(any(Response.class)));
+            oneOf(runner).handle(with(aRequestWithMethod("POST")), with(any(Response.class)));
         }});
         request.post("/item");
-        context.assertIsSatisfied();
     }
 
     @Test public void
@@ -74,16 +72,18 @@ public class HttpMethodOverrideTest {
 
         HttpMethodOverride.METHOD_OVERRIDE_PARAMETER = "override";
         request.withParameter("override", "delete").post("/item");
-        context.assertIsSatisfied();
     }
 
     @Test public void
-    doesNotChangeMethodIfOverridenMethodIsUnknown() throws Exception {
+    doesNotChangeMethodIfOverriddenMethodIsUnknown() throws Exception {
         context.checking(new Expectations() {{
             oneOf(runner).handle(with(aRequestWithMethod(equalToIgnoringCase("POST"))), with(any(Response.class)));
         }});
         request.withParameter("_method", "foo").post("/item");
-        context.assertIsSatisfied();
+    }
+
+    private Matcher<Request> aRequestWithMethod(String method) {
+        return aRequestWithMethod(equalTo(method));
     }
 
     private Matcher<Request> aRequestWithMethod(Matcher<? super String> methodMatcher) {

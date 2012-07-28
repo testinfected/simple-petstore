@@ -2,8 +2,10 @@ package test.unit.org.testinfected.petstore;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
@@ -12,6 +14,7 @@ import org.testinfected.petstore.FailureReporter;
 
 import java.io.IOException;
 
+@RunWith(JMock.class)
 public class ApplicationContainerTest {
 
     Mockery context = new JUnit4Mockery();
@@ -21,7 +24,7 @@ public class ApplicationContainerTest {
     ApplicationContainer applicationContainer = new ApplicationContainer(app, monitor);
 
     @Test public void
-    reportInternalErrors() throws Exception {
+    reportsInternalErrors() throws Exception {
         Exception error = new Exception("Application error");
 
         applicationFailsWith(error);
@@ -29,12 +32,10 @@ public class ApplicationContainerTest {
         expectInternalErrorReport(error);
 
         handleRequest();
-
-        context.assertIsSatisfied();
     }
 
     @Test public void
-    reportCommunicationErrors() throws Exception {
+    reportsCommunicationErrors() throws Exception {
         IOException error = new IOException("Communication error");
 
         applicationSucceeds();
@@ -42,8 +43,6 @@ public class ApplicationContainerTest {
         expectCommunicationFailureReport(error);
 
         handleRequest();
-
-        context.assertIsSatisfied();
     }
 
     private void applicationFailsWith(final Exception failure) throws Exception {
