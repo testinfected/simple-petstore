@@ -97,7 +97,7 @@ body.petstore {
 	float: left;
 }
 
-#logout button {
+#logout {
 	background: none;
 	border: none;
 }
