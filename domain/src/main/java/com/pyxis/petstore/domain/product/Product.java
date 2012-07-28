@@ -50,10 +50,6 @@ public class Product implements Serializable {
         return hasPhoto() ? photo.getFileName() : MISSING_PHOTO;
     }
 
-    public String getPhotoLocation(AttachmentStorage attachmentStorage) {
-        return attachmentStorage.getLocation(getPhotoFileName());
-    }
-
     public void attachPhoto(Attachment photo) {
         this.photo = photo;
 	}

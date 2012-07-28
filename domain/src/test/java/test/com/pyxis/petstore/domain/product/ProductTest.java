@@ -1,9 +1,12 @@
 package test.com.pyxis.petstore.domain.product;
 
 import com.pyxis.petstore.domain.product.Product;
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 
+import static org.hamcrest.Matchers.hasProperty;
 import static org.testinfected.hamcrest.validation.ViolationMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -30,6 +33,19 @@ public class ProductTest {
     @Test public void
     isValidWithANameAndANumber() {
         assertThat("constraint violations", validationOf(aValidProduct()), succeeds());
+    }
+
+    @Test public void
+    hasADefaultPhoto() {
+        assertThat("default photo", aProduct().withoutAPhoto().build(), productWithPhoto("missing.png"));
+    }
+
+    private Matcher<? super Product> productWithPhoto(String fileName) {
+        return new FeatureMatcher<Product, String>(equalTo(fileName), "a product with photo", "photo") {
+            protected String featureValueOf(Product actual) {
+                return actual.getPhotoFileName();
+            }
+        };
     }
 
     @Test public void

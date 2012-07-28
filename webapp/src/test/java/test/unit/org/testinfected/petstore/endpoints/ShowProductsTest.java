@@ -1,13 +1,17 @@
 package test.unit.org.testinfected.petstore.endpoints;
 
+import com.google.common.base.Function;
 import com.pyxis.petstore.domain.product.AttachmentStorage;
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsMapContaining;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.api.Action;
+import org.jmock.api.Invocation;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
@@ -19,15 +23,11 @@ import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.MockRequest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.any;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasProperty;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
@@ -78,17 +78,7 @@ public class ShowProductsTest {
 
         context.checking(new Expectations() {{
             allowing(attachmentStorage).getLocation(with("labrador.png")); will(returnValue("/photos/labrador.png"));
-
-            oneOf(response).render(with("products"), with(
-                    hasEntryMatching("products", hasItems(
-                            allOf(
-                                    hasProperty("number", equalTo("LAB-1234")),
-                                    hasProperty("name", equalTo("Labrador")),
-                                    hasProperty("description", equalTo("Friendly dog")),
-                                    hasProperty("photo", equalTo("/photos/labrador.png"))),
-                            hasProperty("description", equalTo("Guard dog"))
-                    ))
-                ));
+            oneOf(response).render(with("products"), with(hasEntry("products", searchResults)));
         }});
 
         showProducts.process(request, response);
@@ -117,10 +107,16 @@ public class ShowProductsTest {
         showProducts.process(request, response);
     }
 
-    // Can't sort out generics on this one
-    @SuppressWarnings("unchecked")
-    private Matcher<Map<? extends String, ?>> hasEntryMatching(String name, Matcher value) {
-        return new IsMapContaining<String, Object>(equalTo(name), value);
+    @Test public void
+    makesImageResolverAvailableToView() throws Exception {
+        searchYields(aProduct().withPhoto("photo.png"));
+
+        context.checking(new Expectations() {{
+            oneOf(response).render(with(view()), with(hasLambda("photo"))); will(call("photo", "photo.png"));
+            oneOf(attachmentStorage).getLocation(with("photo.png"));
+        }});
+
+        showProducts.process(request, response);
     }
 
     private Matcher<Map<? extends String, ?>> hasEntry(String name, Object value) {
@@ -141,5 +137,34 @@ public class ShowProductsTest {
         context.checking(new Expectations() {{
             allowing(productCatalog).findByKeyword(keyword); will(returnValue(searchResults));
         }});
+    }
+
+    private Matcher<Map<? extends String, ? extends Function>> hasLambda(String name) {
+        return new IsMapContaining<String, Function>(equalTo(name), any(Function.class));
+    }
+
+    private Action call(String key, String input) {
+        return new CallLambda(key, input);
+    }
+
+    public class CallLambda implements Action {
+        private final String lambda;
+        private String input;
+
+        public CallLambda(String lambda, String input) {
+            this.lambda = lambda;
+            this.input = input;
+        }
+
+        public void describeTo(Description description) {
+            description.appendText("calls " + lambda + " with ").appendText(input);
+        }
+
+        @SuppressWarnings("unchecked")
+        public Object invoke(Invocation invocation) throws Throwable {
+            Map<String, ?> context = ((Map<String, ?>) invocation.getParameter(1));
+            ((Function) context.get(lambda)).apply(input);
+            return null;
+        }
     }
 }

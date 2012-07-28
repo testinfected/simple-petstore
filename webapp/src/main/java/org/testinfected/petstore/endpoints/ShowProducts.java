@@ -1,5 +1,6 @@
 package org.testinfected.petstore.endpoints;
 
+import com.github.mustachejava.TemplateFunction;
 import com.pyxis.petstore.domain.product.AttachmentStorage;
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
@@ -7,7 +8,7 @@ import org.testinfected.petstore.dispatch.Dispatch;
 import org.testinfected.petstore.dispatch.EndPoint;
 import org.testinfected.petstore.util.ContextBuilder;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.List;
 
 import static org.testinfected.petstore.util.ContextBuilder.context;
@@ -15,11 +16,11 @@ import static org.testinfected.petstore.util.ContextBuilder.context;
 public class ShowProducts implements EndPoint {
 
     private final ProductCatalog productCatalog;
-    private final AttachmentStorage attachments;
+    private final AttachmentStorage storage;
 
-    public ShowProducts(ProductCatalog productCatalog, AttachmentStorage attachments) {
+    public ShowProducts(ProductCatalog productCatalog, AttachmentStorage storage) {
         this.productCatalog = productCatalog;
-        this.attachments = attachments;
+        this.storage = storage;
     }
 
     public void process(Dispatch.Request request, Dispatch.Response response) throws Exception {
@@ -31,43 +32,25 @@ public class ShowProducts implements EndPoint {
             response.render("no-results", context.asMap());
         } else {
             response.render("products", context.
-                    with("products", withPhotos(matchingProducts)).
+                    with("products", matchingProducts).
                     and("matchCount", matchingProducts.size()).
-                    asMap());
+                    and("photo", LocateAttachment.in(storage)).asMap());
         }
     }
 
-    private List<ProductAndPhoto> withPhotos(List<Product> products) {
-        List<ProductAndPhoto> productAndPhotos = new ArrayList<ProductAndPhoto>();
-        for (Product product : products) {
-            productAndPhotos.add(new ProductAndPhoto(product, product.getPhotoLocation(attachments)));
-        }
-        return productAndPhotos;
-    }
-
-    public static class ProductAndPhoto {
-        private final Product product;
-        private final String photo;
-
-        public ProductAndPhoto(Product product, String photo) {
-            this.product = product;
-            this.photo = photo;
+    private static class LocateAttachment implements TemplateFunction {
+        public static LocateAttachment in(AttachmentStorage storage) {
+            return new LocateAttachment(storage);
         }
 
-        public String getNumber() {
-            return product.getNumber();
+        private final AttachmentStorage attachments;
+
+        public LocateAttachment(AttachmentStorage attachments) {
+            this.attachments = attachments;
         }
 
-        public String getDescription() {
-            return product.getDescription();
-        }
-
-        public String getName() {
-            return product.getName();
-        }
-
-        public String getPhoto() {
-            return photo;
+        public String apply(@Nullable String fileName) {
+            return attachments.getLocation(fileName);
         }
     }
 }

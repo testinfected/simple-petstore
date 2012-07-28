@@ -1,5 +1,6 @@
 package test.unit.org.testinfected.petstore.templates;
 
+import com.github.mustachejava.TemplateFunction;
 import com.pyxis.petstore.domain.product.Product;
 import org.hamcrest.Matcher;
 import org.junit.Test;
@@ -7,10 +8,13 @@ import org.testinfected.petstore.endpoints.ShowProducts;
 import org.testinfected.petstore.util.ContextBuilder;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.Builder;
+import test.support.com.pyxis.petstore.builders.Builders;
+import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.Paths;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +35,12 @@ public class ProductsPageTest {
 
     Element productsPage;
     Paths paths = Paths.root();
-    List<ShowProducts.ProductAndPhoto> productList = new ArrayList<ShowProducts.ProductAndPhoto>();
+    List<Product> productList = new ArrayList<Product>();
     ContextBuilder context = context().with("products", productList).with("keyword", "dog");
 
     @Test public void
     displaysAllProductsFound() {
-        addToProducts(productWithPhoto(aProduct()));
-        addToProducts(productWithPhoto(aProduct()));
+        addToProducts(aProduct(), aProduct());
 
         productsPage = renderProductsPage().using(context.with("matchCount", 2)).asDom();
 
@@ -47,10 +50,13 @@ public class ProductsPageTest {
 
     @SuppressWarnings("unchecked") @Test public void
     displaysProductDetails() throws Exception {
-        addToProducts(productWithPhoto(
-                aProduct().withNumber("LAB-1234").named("Labrador").describedAs("Friendly"), "/photos/labrador.png"));
+        addToProducts(aProduct().withNumber("LAB-1234").named("Labrador").describedAs("Friendly").withPhoto("labrador.png"));
 
-        productsPage = renderProductsPage().using(context).asDom();
+        productsPage = renderProductsPage().using(context.with("photo", new TemplateFunction() {
+            public String apply(@Nullable String fileName) {
+                return "/photos/" + fileName;
+            }
+        })).asDom();
 
         assertThat("products page", productsPage, hasUniqueSelector("li[id='product-LAB-1234']", anElement(
                 hasUniqueSelector(".product-link", hasImage(paths.pathFor("/photos/labrador.png"))),
@@ -58,16 +64,8 @@ public class ProductsPageTest {
                 hasUniqueSelector(".product-description", hasText("Friendly")))));
     }
 
-    private void addToProducts(final ShowProducts.ProductAndPhoto productAndPhoto) {
-        productList.add(productAndPhoto);
-    }
-
-    private ShowProducts.ProductAndPhoto productWithPhoto(Builder<Product> product) {
-        return productWithPhoto(product, "photo.png");
-    }
-
-    private ShowProducts.ProductAndPhoto productWithPhoto(Builder<Product> product, String photo) {
-        return new ShowProducts.ProductAndPhoto(product.build(), photo);
+    private void addToProducts(Builder<Product>... products) {
+        productList.addAll(Builders.build(products));
     }
 
     private Matcher<Element> hasImage(String imageUrl) {
