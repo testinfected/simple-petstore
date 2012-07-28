@@ -13,7 +13,7 @@ import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.DriverManagerConnectionSource;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.jdbc.UnitOfWork;
-import test.support.com.pyxis.petstore.builders.ProductBuilder;
+import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.jdbc.DatabaseCleaner;
 import test.support.org.testinfected.petstore.jdbc.DatabaseIntegrationTesting;
 
@@ -22,11 +22,15 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.iterableWithSize;
+import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class ProductsDatabaseTest {
@@ -78,12 +82,49 @@ public class ProductsDatabaseTest {
         assertThat("matches", matches, containsInAnyOrder(productNamed("Labrador"), productNamed("Golden")));
     }
 
+    @Test public void
+    retrievesCompleteProductDetails() throws Exception {
+        final Collection<Product> sampleProducts = build(
+                aProduct().named("Labrador").describedAs("Labrador Retriever").withPhoto("labrador.png"),
+                aProduct().named("Dalmatian"));
 
-    private void given(final ProductBuilder... products) throws Exception {
+        for (Product product : sampleProducts) {
+            given(product);
+            assertCanBeRetrievedWithSameState(product);
+        }
+    }
+
+    private void assertCanBeRetrievedWithSameState(final Product original) throws Exception {
+        transactor.perform(new UnitOfWork() {
+            public void execute() {
+                List<Product> loaded = productCatalog.findByKeyword(original.getName());
+                if (loaded.isEmpty()) throw new AssertionError("No product match");
+                if (loaded.size() > 1) throw new AssertionError("Several products match");
+                assertThat("product", loaded.get(0), sameProductAs(original));
+            }
+        });
+    }
+
+    private Matcher<Product> sameProductAs(Product original) {
+        return allOf(hasProperty("number", equalTo(original.getNumber())),
+                     hasProperty("name", equalTo(original.getName())),
+                     hasProperty("description", equalTo(original.getDescription())),
+                     hasProperty("photoFileName", equalTo(original.getPhotoFileName())));
+    }
+
+    private void given(final Builder<Product>... products) throws Exception {
+        given(build(products));
+    }
+
+    private void given(final Product... products) throws Exception {
+        given(asList(products));
+    }
+
+    private void given(final List<Product> products) throws Exception {
         transactor.perform(new UnitOfWork() {
             public void execute() throws Exception {
-                for (ProductBuilder product: products) {
-                    productCatalog.add(product.build());
+                for (Product product: products) {
+                    productCatalog.add(product);
                 }
             }
         });

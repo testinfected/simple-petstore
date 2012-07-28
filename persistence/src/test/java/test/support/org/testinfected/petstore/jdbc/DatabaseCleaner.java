@@ -10,6 +10,7 @@ import java.sql.SQLException;
 public class DatabaseCleaner {
 
     private static final String[] TABLES = {
+            "items",
             "products"
     };
     private final Connection connection;
