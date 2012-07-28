@@ -83,6 +83,64 @@ body.petstore {
 	padding-top: 2px;
 }
 
+#products {
+	min-height: 440px;
+	color: #84a208;
+}
+
+#match-found {
+	margin-left: 40px;
+	padding-top: 35px;
+	color: black;
+}
+
+#match-count {
+	color: #84a208;
+}
+
+#no-match {
+	margin-left: 40px;
+	padding-top: 35px;
+	color: black;
+}
+
+#products ul {
+	padding-top: 15px;
+}
+
+#products ul li {
+	float: left;
+	width: 460px;
+	height: 152px;
+	list-style-type: none;
+	font-size: 26px;
+}
+
+#products a {
+	color: black;
+}
+
+#products a:hover {
+	color: #84a208;
+}
+
+#products img {
+	float: left;
+	border: solid #c5c5c5 1px;
+}
+
+.product-details {
+	float: left;
+	padding-top: 30px;
+	margin-left: 30px;
+}
+
+.product-description {
+	color: #414141;
+	vertical-align: 200%;
+	font-size: 16px;
+}
+
 #footer {
 	width: 960px;
 	margin: 0 auto;
@@ -112,5 +170,3 @@ body.petstore {
 	margin-right: 5px;
 	line-height: 40px;
 }
-
-

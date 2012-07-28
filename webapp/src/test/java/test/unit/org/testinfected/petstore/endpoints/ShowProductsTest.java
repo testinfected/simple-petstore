@@ -134,6 +134,7 @@ public class ShowProductsTest {
 
     private void searchYields(final Builder<Product>... products) {
         searchResults.addAll(build(products));
+
         context.checking(new Expectations() {{
             allowing(productCatalog).findByKeyword(keyword); will(returnValue(searchResults));
         }});

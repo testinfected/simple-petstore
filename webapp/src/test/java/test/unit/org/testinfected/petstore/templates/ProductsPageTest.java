@@ -4,12 +4,10 @@ import com.github.mustachejava.TemplateFunction;
 import com.pyxis.petstore.domain.product.Product;
 import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.testinfected.petstore.endpoints.ShowProducts;
+import org.testinfected.hamcrest.dom.DomMatchers;
 import org.testinfected.petstore.util.ContextBuilder;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.Builder;
-import test.support.com.pyxis.petstore.builders.Builders;
-import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.Paths;
 import test.support.org.testinfected.petstore.web.WebRoot;
@@ -20,6 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
 import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
@@ -28,6 +27,7 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.testinfected.petstore.util.ContextBuilder.context;
+import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class ProductsPageTest {
@@ -59,13 +59,22 @@ public class ProductsPageTest {
         })).asDom();
 
         assertThat("products page", productsPage, hasUniqueSelector("li[id='product-LAB-1234']", anElement(
-                hasUniqueSelector(".product-link", hasImage(paths.pathFor("/photos/labrador.png"))),
+                hasUniqueSelector(".product-image", hasImage(paths.pathFor("/photos/labrador.png"))),
                 hasUniqueSelector(".product-name", hasText("Labrador")),
                 hasUniqueSelector(".product-description", hasText("Friendly")))));
     }
 
+    @Test public void
+    productNameAndPhotoLinkToProductInventory() {
+        addToProducts(aProduct().named("Labrador").withNumber("LAB-1234"));
+
+        productsPage = renderProductsPage().asDom();
+        assertThat("products page", productsPage, hasSelector("li a", hasSize(2)));
+        assertThat("products page", productsPage, hasSelector("li a", everyItem(hasAttribute("href", equalTo(paths.itemsPath("LAB-1234"))))));
+    }
+
     private void addToProducts(Builder<Product>... products) {
-        productList.addAll(Builders.build(products));
+        productList.addAll(build(products));
     }
 
     private Matcher<Element> hasImage(String imageUrl) {
@@ -73,6 +82,6 @@ public class ProductsPageTest {
     }
 
     private OfflineRenderer renderProductsPage() {
-        return OfflineRenderer.render(PRODUCTS_TEMPLATE).from(WebRoot.locatePages());
+        return OfflineRenderer.render(PRODUCTS_TEMPLATE).using(context).from(WebRoot.locatePages());
     }
 }

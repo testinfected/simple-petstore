@@ -7,18 +7,19 @@
   <div id="match-found"><span id="match-count">{{matchCount}}</span> result(s)</div>
 
   <ul id="catalog">
-  {{#products}}
+    {{#products}}
     <li id="product-{{number}}">
-      <div class='product-details'>
-        <a class="product-link" href="/products/{{number}}/items">
-          <img src="{{#photo}}{{photoFileName}}{{/photo}}"/>
-        </a>
-        <span class="product-name">{{name}}</span>
+      <a class="product-image" href="/products/{{number}}/items">
+        <img src="{{#photo}}{{photoFileName}}{{/photo}}"/>
+      </a>
+
+      <div class="product-details">
+        <a href="/products/{{number}}/items"><span class="product-name">{{name}}</span></a>
         <br/>
         <span class="product-description">{{description}}</span>
       </div>
     </li>
-  {{/products}}
+    {{/products}}
   </ul>
 </div>
 </body>

@@ -6,7 +6,6 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 
-import static org.hamcrest.Matchers.hasProperty;
 import static org.testinfected.hamcrest.validation.ViolationMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -37,15 +36,7 @@ public class ProductTest {
 
     @Test public void
     hasADefaultPhoto() {
-        assertThat("default photo", aProduct().withoutAPhoto().build(), productWithPhoto("missing.png"));
-    }
-
-    private Matcher<? super Product> productWithPhoto(String fileName) {
-        return new FeatureMatcher<Product, String>(equalTo(fileName), "a product with photo", "photo") {
-            protected String featureValueOf(Product actual) {
-                return actual.getPhotoFileName();
-            }
-        };
+        assertThat("default photo", aProductWithoutAPhoto(), productWithPhoto("missing.png"));
     }
 
     @Test public void
@@ -68,5 +59,17 @@ public class ProductTest {
 
     private ProductBuilder aValidProduct() {
         return aProduct();
+    }
+
+    private Product aProductWithoutAPhoto() {
+        return aProduct().withoutAPhoto().build();
+    }
+
+    private Matcher<? super Product> productWithPhoto(String fileName) {
+        return new FeatureMatcher<Product, String>(equalTo(fileName), "a product with photo", "photo") {
+            protected String featureValueOf(Product actual) {
+                return actual.getPhotoFileName();
+            }
+        };
     }
 }

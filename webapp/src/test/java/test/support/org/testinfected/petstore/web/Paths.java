@@ -16,6 +16,10 @@ public final class Paths {
         this.contextPath = contextPath;
     }
 
+    public String itemsPath(String productNumber) {
+        return pathFor("/products/" + productNumber + "/items");
+    }
+
     public String pathFor(String relativePath) {
         return contextPath + relativePath;
     }
