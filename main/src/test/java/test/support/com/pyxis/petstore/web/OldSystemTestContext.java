@@ -7,11 +7,7 @@ import test.support.com.pyxis.petstore.db.DatabaseCleaner;
 import test.support.com.pyxis.petstore.db.DatabaseMigrator;
 import test.support.com.pyxis.petstore.db.PersistenceContext;
 import test.support.com.pyxis.petstore.web.browser.BrowserControl;
-import test.support.com.pyxis.petstore.web.browser.BrowserControls;
-import test.support.com.pyxis.petstore.web.browser.BrowserProperties;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
-import test.support.com.pyxis.petstore.web.server.ServerLifeCycles;
-import test.support.com.pyxis.petstore.web.server.ServerProperties;
 
 import java.util.Properties;
 
@@ -35,20 +31,17 @@ public final class OldSystemTestContext {
     }
 
     public OldSystemTestContext(TestEnvironment environment) {
-        overrideSystemProperties(environment.properties);
-        loadSpringContext(environment.properties);
-        migrateDatabase(environment.properties);
-        selectServer(new ServerProperties(environment.properties));
-        selectBrowser(new BrowserProperties(environment.properties));
-        createRoutes(new ServerProperties(environment.properties));
+        serverLifeCycle = environment.getServerLifeCycle();
+        browserControl = environment.getBrowserControl();
+        routing = environment.getRoutes();
+
+        overrideSystemProperties(environment.getProperties());
+        loadSpringContext(environment.getProperties());
+        migrateDatabase(environment.getProperties());
     }
 
     private void overrideSystemProperties(final Properties properties) {
         System.getProperties().putAll(properties);
-    }
-
-    private void createRoutes(ServerProperties properties) {
-        this.routing = new Routing(properties);
     }
 
     private void loadSpringContext(Properties properties) {
@@ -57,14 +50,6 @@ public final class OldSystemTestContext {
 
     private void migrateDatabase(Properties properties) {
         new DatabaseMigrator(properties).migrate(spring.getDataSource());
-    }
-
-    private void selectServer(ServerProperties properties) {
-        serverLifeCycle = new ServerLifeCycles(properties).select(properties.lifeCycle());
-    }
-
-    private void selectBrowser(BrowserProperties properties) {
-        browserControl = new BrowserControls(properties).select(properties.lifeCycle());
     }
 
     public void given(Builder<?>... builders) {

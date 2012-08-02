@@ -21,8 +21,8 @@ public class OldWebServer {
     private String contextPath;
     private String webAppPath;
 
-    public OldWebServer(ServerProperties properties) {
-        this(properties.host(), properties.port(), properties.contextPath(), properties.webAppPath());
+    public OldWebServer(ServerSettings settings) {
+        this(settings.host, settings.port, settings.contextPath, settings.webAppPath);
     }
 
     public OldWebServer(String host, int port, String contextPath, String webAppPath) {

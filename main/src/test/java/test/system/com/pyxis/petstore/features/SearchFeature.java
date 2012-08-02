@@ -7,6 +7,7 @@ import org.junit.Test;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.web.ApplicationDriver;
 import test.support.com.pyxis.petstore.web.SystemTests;
+import test.support.com.pyxis.petstore.web.TestEnvironment;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,11 +17,10 @@ import java.sql.SQLException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.web.SystemTests.configure;
 
 public class SearchFeature {
 
-    SystemTests context = configure();
+    SystemTests context = SystemTests.in(TestEnvironment.load());
     ApplicationDriver application;
 
     @Before public void

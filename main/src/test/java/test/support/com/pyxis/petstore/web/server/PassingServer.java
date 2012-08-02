@@ -2,16 +2,16 @@ package test.support.com.pyxis.petstore.web.server;
 
 public class PassingServer implements ServerLifeCycle {
 
-    private final ServerProperties properties;
+    private final ServerSettings settings;
 
     private OldWebServer server;
 
-    public PassingServer(ServerProperties properties) {
-        this.properties = properties;
+    public PassingServer(ServerSettings settings) {
+        this.settings = settings;
     }
 
     public void start() {
-        server = new OldWebServer(properties);
+        server = new OldWebServer(settings);
         server.start();
     }
 
