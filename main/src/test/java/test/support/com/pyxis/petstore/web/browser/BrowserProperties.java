@@ -1,12 +1,12 @@
 package test.support.com.pyxis.petstore.web.browser;
 
 import org.testinfected.hamcrest.ExceptionImposter;
-import test.support.com.pyxis.petstore.Properties;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public final class BrowserProperties {
     
@@ -14,7 +14,7 @@ public final class BrowserProperties {
     public static final String REMOTE_URL = "browser.remote.url";
     public static final String CAPABILITY = "browser.remote.capability.";
 
-    private final Properties properties;
+    private final java.util.Properties properties;
 
     public BrowserProperties(Properties properties) {
         this.properties = properties;
@@ -34,7 +34,7 @@ public final class BrowserProperties {
 
     public Map<String, String> capabilities() {
         Map<String, String> capabilities = new HashMap<String, String>();
-        for (String property : properties.names()) {
+        for (String property : properties.stringPropertyNames()) {
             if (isCapability(property)) {
                 capabilities.put(capabilityName(property), valueOf(property));
             }
@@ -43,7 +43,7 @@ public final class BrowserProperties {
     }
 
     private String valueOf(String propertyName) {
-        return properties.getValue(propertyName);
+        return properties.getProperty(propertyName);
     }
 
     private String capabilityName(String property) {

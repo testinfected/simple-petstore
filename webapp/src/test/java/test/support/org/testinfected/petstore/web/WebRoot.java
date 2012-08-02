@@ -6,6 +6,9 @@ import java.io.File;
 
 public class WebRoot {
 
+    public static final String WEB_ROOT = "web.root";
+    public static final String RELATIVE_WEB_APP_PATH = "webapp/src/main/webapp";
+
     public static File locatePages() {
         return locate(PetStore.TEMPLATE_DIRECTORY + "/" + PetStore.PAGES_DIRECTORY);
     }
@@ -19,6 +22,6 @@ public class WebRoot {
     }
 
     public static File locate() {
-        return new File(System.getProperty("web.root", "webapp/src/main/webapp"));
+        return new File(System.getProperty(WEB_ROOT, RELATIVE_WEB_APP_PATH));
     }
 }

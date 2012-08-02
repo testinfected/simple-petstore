@@ -1,7 +1,9 @@
 package test.support.com.pyxis.petstore.db;
 
 import org.hibernate.Session;
-import test.support.com.pyxis.petstore.Properties;
+
+import java.io.IOException;
+import java.util.Properties;
 
 public class IntegrationTestContext {
 
@@ -12,9 +14,21 @@ public class IntegrationTestContext {
 
     public static IntegrationTestContext integrationTesting() {
         if (context == null) {
-            context = new IntegrationTestContext(Properties.load(INTEGRATION_TEST_PROPERTIES));
+            context = new IntegrationTestContext(loadConfiguration(INTEGRATION_TEST_PROPERTIES));
         }
         return context;
+    }
+
+    private static Properties loadConfiguration(String resource) {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        Properties props = new Properties();
+        try {
+            props.load(classLoader.getResourceAsStream(resource));
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to load database configuration file: " + resource, e);
+        }
+        return props;
     }
 
     public IntegrationTestContext(Properties properties) {
@@ -23,7 +37,7 @@ public class IntegrationTestContext {
     }
 
     private void loadSpringContext(Properties properties) {
-        this.spring = new PersistenceContext(properties.toJavaProperties());
+        this.spring = new PersistenceContext(properties);
     }
 
     private void migrateDatabase(Properties properties) {

@@ -19,7 +19,7 @@ import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 public class PetStoreTest {
 
-    PetStore petstore = PetStore.at(WebRoot.locate());
+    PetStore petstore = new PetStore(WebRoot.locate());
 
     LogFile logFile;
     Console console = Console.captureStandardOutput();

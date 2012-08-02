@@ -4,14 +4,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.ApplicationDriver;
-import test.support.com.pyxis.petstore.web.SystemTestContext;
+import test.support.com.pyxis.petstore.web.OldSystemTestContext;
 
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-import static test.support.com.pyxis.petstore.web.SystemTestContext.legacyTesting;
+import static test.support.com.pyxis.petstore.web.OldSystemTestContext.systemTesting;
 
 public class SearchFeature {
 
-    SystemTestContext context = legacyTesting();
+    OldSystemTestContext context = systemTesting();
     ApplicationDriver petstore;
 
     @Test public void

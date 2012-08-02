@@ -1,7 +1,6 @@
 package test.support.com.pyxis.petstore.web;
 
 import org.openqa.selenium.WebDriver;
-import test.support.com.pyxis.petstore.Properties;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.DatabaseCleaner;
@@ -14,43 +13,38 @@ import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycles;
 import test.support.com.pyxis.petstore.web.server.ServerProperties;
 
-public final class SystemTestContext {
+import java.util.Properties;
 
-    private static final String SYSTEM_TEST_PROPERTIES = "system/test.properties";
+public final class OldSystemTestContext {
+
     private static final String LEGACY_TEST_PROPERTIES = "system/legacy.properties";
 
-    private static SystemTestContext context;
-    private static SystemTestContext simple;
+    private static OldSystemTestContext context;
 
     private PersistenceContext spring;
     private ServerLifeCycle serverLifeCycle;
     private BrowserControl browserControl;
     private Routing routing;
 
-    public static SystemTestContext systemTesting() {
-        if (simple == null) {
-            Properties properties = Properties.load(SYSTEM_TEST_PROPERTIES);
-            simple = new SystemTestContext(properties);
-        }
-        return simple;
-    }
-
-    public static SystemTestContext legacyTesting() {
+    public static OldSystemTestContext systemTesting() {
         if (context == null) {
-            Properties properties = Properties.load(LEGACY_TEST_PROPERTIES);
-            properties.override(Properties.system());
-            Properties.system().merge(properties);
-            context = new SystemTestContext(properties);
+            TestEnvironment environment = TestEnvironment.load(LEGACY_TEST_PROPERTIES);
+            context = new OldSystemTestContext(environment);
         }
         return context;
     }
 
-    public SystemTestContext(Properties properties) {
-        loadSpringContext(properties);
-        migrateDatabase(properties);
-        selectServer(new ServerProperties(properties));
-        selectBrowser(new BrowserProperties(properties));
-        createRoutes(new ServerProperties(properties));
+    public OldSystemTestContext(TestEnvironment environment) {
+        overrideSystemProperties(environment.properties);
+        loadSpringContext(environment.properties);
+        migrateDatabase(environment.properties);
+        selectServer(new ServerProperties(environment.properties));
+        selectBrowser(new BrowserProperties(environment.properties));
+        createRoutes(new ServerProperties(environment.properties));
+    }
+
+    private void overrideSystemProperties(final Properties properties) {
+        System.getProperties().putAll(properties);
     }
 
     private void createRoutes(ServerProperties properties) {
@@ -58,7 +52,7 @@ public final class SystemTestContext {
     }
 
     private void loadSpringContext(Properties properties) {
-        this.spring = new PersistenceContext(properties.toJavaProperties());
+        this.spring = new PersistenceContext(properties);
     }
 
     private void migrateDatabase(Properties properties) {
