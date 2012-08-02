@@ -3,9 +3,8 @@ package test.integration.org.testinfected.petstore.jdbc;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.testinfected.petstore.Properties;
 import org.testinfected.petstore.jdbc.DriverManagerConnectionSource;
-import test.support.org.testinfected.petstore.jdbc.DatabaseIntegrationTesting;
+import test.support.org.testinfected.petstore.jdbc.DatabaseConfiguration;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -19,11 +18,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class DriverManagerConnectionSourceTest {
 
-    Properties properties = DatabaseIntegrationTesting.properties();
-    String jdbcUrl = properties.getString("jdbc.url");
-    String jdbcUsername = properties.getString("jdbc.username");
+    DatabaseConfiguration config = DatabaseConfiguration.load();
+    String jdbcUrl = config.getUrl();
+    String jdbcUsername = config.getUsername();
+    String jdbcPassword = config.getPassword();
 
-    DriverManagerConnectionSource connectionSource = DriverManagerConnectionSource.configure(properties);
+    DriverManagerConnectionSource connectionSource = new DriverManagerConnectionSource(jdbcUrl, jdbcUsername, jdbcPassword);
     Connection connection;
 
     @Before public void

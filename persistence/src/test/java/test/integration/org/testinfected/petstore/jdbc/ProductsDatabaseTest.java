@@ -15,7 +15,7 @@ import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.jdbc.UnitOfWork;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.jdbc.DatabaseCleaner;
-import test.support.org.testinfected.petstore.jdbc.DatabaseIntegrationTesting;
+import test.support.org.testinfected.petstore.jdbc.DatabaseConfiguration;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -35,7 +35,8 @@ import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class ProductsDatabaseTest {
 
-    ConnectionSource connectionSource = DriverManagerConnectionSource.configure(DatabaseIntegrationTesting.properties());
+    DatabaseConfiguration config = DatabaseConfiguration.load();
+    ConnectionSource connectionSource = new DriverManagerConnectionSource(config.getUrl(), config.getUsername(), config.getPassword());
     Connection connection = connectionSource.connect();
     ProductCatalog productCatalog = new ProductsDatabase(connection);
     JDBCTransactor transactor = new JDBCTransactor(connection);

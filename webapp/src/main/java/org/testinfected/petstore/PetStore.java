@@ -120,11 +120,10 @@ public class PetStore {
     }
 
     private Connection connectToDatabase() {
-        Properties properties = new Properties();
-        properties.put("jdbc.url", "jdbc:mysql://localhost:3306/petstore-test");
-        properties.put("jdbc.username", "testbot");
-        properties.put("jdbc.password", "petstore");
-        ConnectionSource connectionSource = DriverManagerConnectionSource.configure(properties);
+        String jdbcUrl= "jdbc:mysql://localhost:3306/petstore-test";
+        String jdbcUsername = "testbot";
+        String jdbcPassword = "petstore";
+        ConnectionSource connectionSource = new DriverManagerConnectionSource(jdbcUrl, jdbcUsername, jdbcPassword);
         return connectionSource.connect();
     }
 
