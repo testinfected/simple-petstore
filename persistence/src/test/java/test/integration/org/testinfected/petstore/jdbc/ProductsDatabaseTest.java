@@ -8,16 +8,11 @@ import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.testinfected.petstore.jdbc.ConnectionSource;
-import org.testinfected.petstore.jdbc.JDBCTransactor;
-import org.testinfected.petstore.jdbc.DriverManagerConnectionSource;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.jdbc.UnitOfWork;
 import test.support.com.pyxis.petstore.builders.Builder;
-import test.support.org.testinfected.petstore.jdbc.DatabaseCleaner;
-import test.support.org.testinfected.petstore.jdbc.DatabaseConfiguration;
+import test.support.org.testinfected.petstore.jdbc.Database;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
@@ -35,20 +30,17 @@ import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class ProductsDatabaseTest {
 
-    DatabaseConfiguration config = DatabaseConfiguration.load();
-    ConnectionSource connectionSource = new DriverManagerConnectionSource(config.getUrl(), config.getUsername(), config.getPassword());
-    Connection connection = connectionSource.connect();
-    ProductCatalog productCatalog = new ProductsDatabase(connection);
-    JDBCTransactor transactor = new JDBCTransactor(connection);
+    Database database = Database.configure();
+    ProductCatalog productCatalog = new ProductsDatabase(database.connect());
 
     @Before public void
     cleanDatabase() throws Exception {
-        new DatabaseCleaner(connection).clean();
+        database.clean();
     }
 
     @After public void
     closeDatabase() throws SQLException {
-        connection.close();
+        database.close();
     }
 
     @Test public void
@@ -96,7 +88,7 @@ public class ProductsDatabaseTest {
     }
 
     private void assertCanBeRetrievedWithSameState(final Product original) throws Exception {
-        transactor.perform(new UnitOfWork() {
+        database.transaction(new UnitOfWork() {
             public void execute() {
                 List<Product> loaded = productCatalog.findByKeyword(original.getName());
                 if (loaded.isEmpty()) throw new AssertionError("No product match");
@@ -122,9 +114,9 @@ public class ProductsDatabaseTest {
     }
 
     private void given(final List<Product> products) throws Exception {
-        transactor.perform(new UnitOfWork() {
+        database.transaction(new UnitOfWork() {
             public void execute() throws Exception {
-                for (Product product: products) {
+                for (Product product : products) {
                     productCatalog.add(product);
                 }
             }
