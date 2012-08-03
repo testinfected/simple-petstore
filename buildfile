@@ -119,7 +119,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
   
   task :run => project(:main) do
-    cp = [project(:main).compile.target] + project(:main).compile.dependencies
-    Java::Commands.java(["org.testinfected.petstore.Launcher", Buildr.settings.profile['server.port']], project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
+    cp = [project(:main).compile.target] + project(:main).compile.dependencies + [:mysql]
+    Java::Commands.java("org.testinfected.petstore.Launcher", Buildr.settings.profile['server.port'], project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
   end
 end
