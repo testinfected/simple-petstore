@@ -152,6 +152,7 @@ public class TestEnvironment {
         return properties;
     }
 
+    @Deprecated
     public ServerLifeCycle getServerLifeCycle() {
         return serverLifeCycle;
     }
@@ -172,6 +173,7 @@ public class TestEnvironment {
         return new DatabaseConfiguration(properties);
     }
 
+    @Deprecated
     public Routing getRoutes() {
         return new Routing(serverBaseUrl());
     }

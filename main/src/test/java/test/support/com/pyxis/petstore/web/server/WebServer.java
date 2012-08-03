@@ -16,6 +16,11 @@ public class WebServer {
         this.server = createServer(webRoot);
     }
 
+    // todo should this go in Petstore?
+    public String getUrl() {
+        return "http://localhost:" + port;
+    }
+
     public void start() throws Exception {
         server.start(port);
     }

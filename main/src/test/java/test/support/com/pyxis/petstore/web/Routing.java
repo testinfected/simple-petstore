@@ -6,6 +6,7 @@ import test.support.com.pyxis.petstore.web.page.Page;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public final class Routing {
 
     private final String baseUrl;

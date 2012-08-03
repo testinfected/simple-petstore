@@ -12,7 +12,6 @@ import test.support.com.pyxis.petstore.web.server.WebServer;
 public class ApplicationDriver {
 
     private final WebServer server;
-    private final Routing routing;
     private final BrowserControl browserControl;
     private final DatabaseDriver database;
 
@@ -23,7 +22,6 @@ public class ApplicationDriver {
 
     public ApplicationDriver(TestEnvironment environment) {
         this.server = new WebServer(environment.getServerPort(), environment.getWebRoot());
-        this.routing = environment.getRoutes();
         this.database = DatabaseDriver.configure(environment.getDatabaseConfiguration());
         this.browserControl = environment.getBrowserControl();
     }
@@ -51,7 +49,7 @@ public class ApplicationDriver {
     }
 
     public void openHomePage() {
-        browser.navigate().to(routing.urlFor(HomePage.class));
+        browser.navigate().to(server.getUrl());
     }
 
     public void logout() {
