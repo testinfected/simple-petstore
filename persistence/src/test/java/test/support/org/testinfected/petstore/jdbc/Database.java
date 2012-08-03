@@ -1,45 +1,42 @@
 package test.support.org.testinfected.petstore.jdbc;
 
-import org.testinfected.petstore.jdbc.ConnectionSource;
-import org.testinfected.petstore.jdbc.DriverManagerConnectionSource;
-import org.testinfected.petstore.jdbc.JDBCTransactor;
-import org.testinfected.petstore.jdbc.UnitOfWork;
+import org.testinfected.petstore.jdbc.DriverManagerDataSource;
+import org.testinfected.petstore.jdbc.JDBCException;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class Database {
 
-    public static Database configure() {
-        return configure(DatabaseConfiguration.load());
-    }
+    private final DataSource dataSource;
+    private final DatabaseMigrator migrator;
+    private final DatabaseCleaner cleaner;
 
-    public static Database configure(DatabaseConfiguration config) {
-        return new Database(new DriverManagerConnectionSource(config.getUrl(), config.getUsername(), config.getPassword()));
-    }
-
-    private final ConnectionSource connectionSource;
-
-    private Connection connection;
-
-    public Database(ConnectionSource connectionSource) {
-        this.connectionSource = connectionSource;
+    public Database(DatabaseConfiguration config) {
+        this.dataSource = new DriverManagerDataSource(config.getUrl(), config.getUsername(), config.getPassword());
+        this.migrator = new DatabaseMigrator(dataSource);
+        this.cleaner = new DatabaseCleaner(dataSource);
     }
 
     public Connection connect() {
-        connection = connectionSource.connect();
-        return connection;
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            throw new JDBCException("Failed to connect to database", e);
+        }
     }
 
-    public void transaction(UnitOfWork work) throws Exception {
-        new JDBCTransactor(connection).perform(work);
+    public void migrate() {
+        migrator.migrate();
     }
 
     public void clean() throws Exception {
-        new DatabaseCleaner(connection).clean();
+        cleaner.clean();
     }
 
-    public void close() throws SQLException {
-        connection.close();
+    public void prepare() throws Exception {
+        migrate();
+        clean();
     }
 }

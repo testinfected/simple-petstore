@@ -4,10 +4,10 @@ import org.openqa.selenium.WebDriver;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.com.pyxis.petstore.db.Database;
 import test.support.com.pyxis.petstore.db.DatabaseCleaner;
-import test.support.com.pyxis.petstore.db.DatabaseMigrator;
 import test.support.com.pyxis.petstore.db.PersistenceContext;
 import test.support.com.pyxis.petstore.web.browser.BrowserControl;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
+import test.support.org.testinfected.petstore.jdbc.DatabaseMigrator;
 
 import java.util.Properties;
 
@@ -37,7 +37,7 @@ public final class OldSystemTestContext {
 
         overrideSystemProperties(environment.getProperties());
         loadSpringContext(environment.getProperties());
-        migrateDatabase(environment.getProperties());
+        migrateDatabase();
     }
 
     private void overrideSystemProperties(final Properties properties) {
@@ -48,8 +48,8 @@ public final class OldSystemTestContext {
         this.spring = new PersistenceContext(properties);
     }
 
-    private void migrateDatabase(Properties properties) {
-        new DatabaseMigrator(properties).migrate(spring.getDataSource());
+    private void migrateDatabase() {
+        new DatabaseMigrator(spring.getDataSource()).migrate();
     }
 
     public void given(Builder<?>... builders) {

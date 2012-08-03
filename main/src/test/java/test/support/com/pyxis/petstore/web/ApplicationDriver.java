@@ -27,18 +27,20 @@ public class ApplicationDriver {
     }
 
     public void start() throws Exception {
-        cleanDatabase();
+        startDatabase();
         startWebServer();
         startBrowser();
         openHomePage();
     }
 
-    private void startWebServer() throws Exception {
-        server.start();
+    private void startDatabase() throws Exception {
+        database.migrate();
+        database.clean();
+        database.connect();
     }
 
-    private void cleanDatabase() throws Exception {
-        database.clean();
+    private void startWebServer() throws Exception {
+        server.start();
     }
 
     private void startBrowser() {
@@ -52,16 +54,16 @@ public class ApplicationDriver {
         browser.navigate().to(server.getUrl());
     }
 
-    public void logout() {
-        menu.logout();
-        homePage.displays();
-    }
-
     public void stop() throws Exception {
         logout();
         server.stop();
         browser.quit();
         database.stop();
+    }
+
+    public void logout() {
+        menu.logout();
+        homePage.displays();
     }
 
     public void searchFor(String keyword) {

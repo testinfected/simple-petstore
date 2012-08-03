@@ -1,6 +1,7 @@
 package test.support.com.pyxis.petstore.db;
 
 import org.hibernate.Session;
+import test.support.org.testinfected.petstore.jdbc.DatabaseMigrator;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -33,15 +34,15 @@ public class IntegrationTestContext {
 
     public IntegrationTestContext(Properties properties) {
         loadSpringContext(properties);
-        migrateDatabase(properties);
+        migrateDatabase();
     }
 
     private void loadSpringContext(Properties properties) {
         this.spring = new PersistenceContext(properties);
     }
 
-    private void migrateDatabase(Properties properties) {
-        new DatabaseMigrator(properties).migrate(spring.getDataSource());
+    private void migrateDatabase() {
+        new DatabaseMigrator(spring.getDataSource()).migrate();
     }
 
     public <T> T getComponent(Class<T> type) {

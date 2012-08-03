@@ -3,7 +3,7 @@ package test.integration.org.testinfected.petstore.jdbc;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.testinfected.petstore.jdbc.DriverManagerConnectionSource;
+import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import test.support.org.testinfected.petstore.jdbc.DatabaseConfiguration;
 
 import java.sql.Connection;
@@ -16,19 +16,19 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class DriverManagerConnectionSourceTest {
+public class DriverManagerDataSourceTest {
 
     DatabaseConfiguration config = DatabaseConfiguration.load();
     String jdbcUrl = config.getUrl();
     String jdbcUsername = config.getUsername();
     String jdbcPassword = config.getPassword();
 
-    DriverManagerConnectionSource connectionSource = new DriverManagerConnectionSource(jdbcUrl, jdbcUsername, jdbcPassword);
+    DriverManagerDataSource connectionSource = new DriverManagerDataSource(jdbcUrl, jdbcUsername, jdbcPassword);
     Connection connection;
 
     @Before public void
-    openConnection() {
-        connection = connectionSource.connect();
+    openConnection() throws SQLException {
+        connection = connectionSource.getConnection();
     }
 
     @After public void
@@ -45,7 +45,7 @@ public class DriverManagerConnectionSourceTest {
 
     @Test public void
     opensSeparateConnections() throws Exception {
-        Connection other = connectionSource.connect();
+        Connection other = connectionSource.getConnection();
         try {
             assertThat("other connection", other, not(sameInstance(connection)));
         } finally {

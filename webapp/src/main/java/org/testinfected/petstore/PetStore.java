@@ -9,8 +9,7 @@ import org.testinfected.petstore.decoration.LayoutTemplate;
 import org.testinfected.petstore.decoration.PageCompositor;
 import org.testinfected.petstore.dispatch.Router;
 import org.testinfected.petstore.dispatch.Routes;
-import org.testinfected.petstore.jdbc.ConnectionSource;
-import org.testinfected.petstore.jdbc.DriverManagerConnectionSource;
+import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.Dispatcher;
@@ -28,10 +27,12 @@ import org.testinfected.petstore.util.FileSystemPhotoStore;
 import org.testinfected.petstore.util.PlainFormatter;
 import org.testinfected.time.lib.SystemClock;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -55,7 +56,7 @@ public class PetStore {
     private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
 
     public static PetStore at(String webRoot) {
-        return new PetStore(new File(webRoot));
+        return at(new File(webRoot));
     }
 
     public static PetStore at(File webRoot) {
@@ -119,12 +120,12 @@ public class PetStore {
         return router;
     }
 
-    private Connection connectToDatabase() {
-        String jdbcUrl= "jdbc:mysql://localhost:3306/petstore-test";
+    private Connection connectToDatabase() throws SQLException {
+        String jdbcUrl= "jdbc:mysql://localhost:3306/petstore_test";
         String jdbcUsername = "testbot";
         String jdbcPassword = "petstore";
-        ConnectionSource connectionSource = new DriverManagerConnectionSource(jdbcUrl, jdbcUsername, jdbcPassword);
-        return connectionSource.connect();
+        DataSource dataSource = new DriverManagerDataSource(jdbcUrl, jdbcUsername, jdbcPassword);
+        return dataSource.getConnection();
     }
 
     private SiteMesh siteMesh() {
@@ -172,4 +173,6 @@ public class PetStore {
         handler.setFormatter(new PlainFormatter());
         return handler;
     }
+
+
 }

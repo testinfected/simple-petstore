@@ -4,8 +4,8 @@ require 'buildr/jetty'
 VERSION_NUMBER = '0.1-SNAPSHOT'
 
 HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]
-LOG = [:slf4j_api, :slf4j_log4j, :slf4j_jcl, :log4j]
-NO_LOG = [:slf4j_api, :slf4j_silent, :jcl_over_slf4j]
+LOG = [:jcl_over_slf4j, :slf4j_api, :slf4j_log4j, :log4j]
+NO_LOG = [:jcl_over_slf4j, :slf4j_api, :slf4j_silent]
 VELOCITY = [:commons_beanutils, :commons_digester, :commons_chain, :velocity_engine, :velocity_tools]
 JETTY = [:jetty, :jetty_util]
 
@@ -21,16 +21,26 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     test.with HAMCREST, :hamcrest_validation, NO_LOG
     package :jar
   end
-  
+
+  define 'persistence' do
+    compile.with_transitive project(:domain), project(:domain).compile.dependencies
+
+    test.with project(:domain).test.compile.target, HAMCREST, :flyway, NO_LOG
+    test.with_transitive :mysql
+
+    package(:jar)
+  end
+
+
   define 'oldinfra' do
     resources.filter.deactivate
     compile.with project(:domain)
     compile.with_transitive :hibernate_annotations, :hibernate_validator, :spring_context, :spring_tx
     
-    test.resources.filter.using 'migrations.dir' => _(:src, :main, :scripts, :migrations), 'test.log.dir' => _(:target, :logs)
-    test.with project(:domain).test.compile.target, HAMCREST, LOG
-    test.with_transitive :hamcrest_jpa, :carbon_5, :commons_dbcp, :spring_orm, :javassist, :mysql
-    
+    test.resources.filter.using 'test.log.dir' => _(:target, :logs)
+    test.with project(:domain).test.compile.target, project(:persistence).test.compile.target, :flyway, HAMCREST, LOG
+    test.with_transitive :hamcrest_jpa, :commons_dbcp, :spring_orm, :javassist, :mysql
+
     package(:jar)
   end
   
@@ -60,15 +70,6 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     end
   end
 
-  define 'persistence' do
-    compile.with_transitive project(:domain), project(:domain).compile.dependencies
-
-    test.with project(:domain).test.compile.target, HAMCREST
-    test.with_transitive :mysql
-
-    package(:jar)
-  end
-
   define 'webapp' do
     compile.with :simpleframework, MUSTACHE, :time
     compile.with_transitive project(:domain), project(:persistence), project(:persistence).compile.dependencies
@@ -83,13 +84,12 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     compile.with project(:webapp).package, project(:webapp).compile.dependencies
     
     test.resources.filter.using 'webapp.dir' => project(:oldapp).path_to(:src, :main, :webapp),
-                                'migrations.dir' => project(:oldinfra).path_to(:src, :main, :scripts, :migrations),
                                 'test.log.dir' => _(:target, :logs)
     test.with project(:oldapp).compile.target, project(:oldapp).resources.target, project(:oldapp).package(:war).libs, 
               project(:domain).test.compile.target, project(:oldinfra).test.compile.target,
               project(:webapp).test.compile.target, project(:persistence).test.compile.target,
-              HAMCREST, LOG
-    test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :carbon_5
+              :flyway, HAMCREST, LOG
+    test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty
 
     test.using :integration, :properties => { 
       'web.root' => project(:webapp).path_to(:src, :main, :webapp),

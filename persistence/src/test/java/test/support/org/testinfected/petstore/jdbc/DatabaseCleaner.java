@@ -3,6 +3,7 @@ package test.support.org.testinfected.petstore.jdbc;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.UnitOfWork;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -13,23 +14,25 @@ public class DatabaseCleaner {
             "items",
             "products"
     };
-    private final Connection connection;
+    private final DataSource dataSource;
 
-    public DatabaseCleaner(Connection connection) {
-        this.connection = connection;
+    public DatabaseCleaner(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public void clean() throws Exception {
+        final Connection connection = dataSource.getConnection();
         new JDBCTransactor(connection).perform(new UnitOfWork() {
             public void execute() throws Exception {
                 for (String table : TABLES) {
-                    truncate(table);
+                    truncate(connection, table);
                 }
             }
         });
+        connection.close();
     }
 
-    private void truncate(String table) throws SQLException {
+    private void truncate(Connection connection, String table) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("truncate table " + table);
         statement.executeUpdate();
         statement.close();

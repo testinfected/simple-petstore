@@ -8,11 +8,15 @@ import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
+import org.testinfected.petstore.jdbc.Transactor;
 import org.testinfected.petstore.jdbc.UnitOfWork;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.jdbc.Database;
+import test.support.org.testinfected.petstore.jdbc.DatabaseConfiguration;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
@@ -30,17 +34,19 @@ import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class ProductsDatabaseTest {
 
-    Database database = Database.configure();
-    ProductCatalog productCatalog = new ProductsDatabase(database.connect());
+    Database database = new Database(DatabaseConfiguration.load());
+    Connection connection = database.connect();
+    Transactor transactor = new JDBCTransactor(connection);
+    ProductCatalog productCatalog = new ProductsDatabase(connection);
 
     @Before public void
-    cleanDatabase() throws Exception {
-        database.clean();
+    prepareDatabase() throws Exception {
+        database.prepare();
     }
 
     @After public void
-    closeDatabase() throws SQLException {
-        database.close();
+    closeConnection() throws SQLException {
+        connection.close();
     }
 
     @Test public void
@@ -88,7 +94,7 @@ public class ProductsDatabaseTest {
     }
 
     private void assertCanBeRetrievedWithSameState(final Product original) throws Exception {
-        database.transaction(new UnitOfWork() {
+        transactor.perform(new UnitOfWork() {
             public void execute() {
                 List<Product> loaded = productCatalog.findByKeyword(original.getName());
                 if (loaded.isEmpty()) throw new AssertionError("No product match");
@@ -114,7 +120,7 @@ public class ProductsDatabaseTest {
     }
 
     private void given(final List<Product> products) throws Exception {
-        database.transaction(new UnitOfWork() {
+        transactor.perform(new UnitOfWork() {
             public void execute() throws Exception {
                 for (Product product : products) {
                     productCatalog.add(product);
