@@ -87,7 +87,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
                                 'test.log.dir' => _(:target, :logs)
     test.with project(:oldapp).compile.target, project(:oldapp).resources.target, project(:oldapp).package(:war).libs, 
               project(:domain).test.compile.target, project(:oldinfra).test.compile.target,
-              project(:webapp).test.compile.target,
+              project(:webapp).test.compile.target, project(:persistence).test.compile.target,
               HAMCREST, LOG
     test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :carbon_5
 

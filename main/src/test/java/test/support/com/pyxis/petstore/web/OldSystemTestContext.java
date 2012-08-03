@@ -64,24 +64,24 @@ public final class OldSystemTestContext {
         database.close();
     }
 
-    public ApplicationDriver startApplication() {
+    public OldApplicationDriver startApplication() {
         cleanUp();
         startServer();
         return launchApplication();
     }
 
-    private ApplicationDriver launchApplication() {
-        ApplicationDriver application = new ApplicationDriver(launchBrowser());
+    private OldApplicationDriver launchApplication() {
+        OldApplicationDriver application = new OldApplicationDriver(launchBrowser());
         application.open(routing);
         return application;
     }
 
-    public void stopApplication(ApplicationDriver application) {
+    public void stopApplication(OldApplicationDriver application) {
         closeApplication(application);
         stopServer();
     }
 
-    private void closeApplication(ApplicationDriver application) {
+    private void closeApplication(OldApplicationDriver application) {
         application.logout();
         application.close();
     }
@@ -101,6 +101,6 @@ public final class OldSystemTestContext {
     }
 
     private WebDriver launchBrowser() {
-        return browserControl.launch();
+        return browserControl.webDriver();
     }
 }

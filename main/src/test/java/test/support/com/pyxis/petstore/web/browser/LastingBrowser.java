@@ -1,5 +1,7 @@
 package test.support.com.pyxis.petstore.web.browser;
 
+import com.objogate.wl.UnsynchronizedProber;
+import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -10,11 +12,18 @@ public class LastingBrowser implements BrowserControl {
     public LastingBrowser() {
     }
 
-    public WebDriver launch() {
+    public WebDriver webDriver() {
         if (!launched()) {
             browser = launchBrowser();
         }
         return browser;
+    }
+
+    public AsyncWebDriver launch() {
+        return new AsyncWebDriver(new UnsynchronizedProber(), webDriver()) {
+            public void quit() {
+            }
+        };
     }
 
     private WebDriver launchBrowser() {

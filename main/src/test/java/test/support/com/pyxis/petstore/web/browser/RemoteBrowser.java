@@ -1,11 +1,12 @@
 package test.support.com.pyxis.petstore.web.browser;
 
+import com.objogate.wl.UnsynchronizedProber;
+import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 
 public class RemoteBrowser implements BrowserControl {
@@ -17,8 +18,12 @@ public class RemoteBrowser implements BrowserControl {
         this.url = url;
     }
 
-    public WebDriver launch() {
+    public WebDriver webDriver() {
         return new RemoteWebDriver(url, capabilities);
+    }
+
+    public AsyncWebDriver launch() {
+        return new AsyncWebDriver(new UnsynchronizedProber(), webDriver());
     }
 
     public void addCapabilities(Map<String, String> capabilities) {

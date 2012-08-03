@@ -3,7 +3,7 @@ package test.system.com.pyxis.petstore.old;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.web.ApplicationDriver;
+import test.support.com.pyxis.petstore.web.OldApplicationDriver;
 import test.support.com.pyxis.petstore.web.OldSystemTestContext;
 
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
@@ -12,7 +12,7 @@ import static test.support.com.pyxis.petstore.web.OldSystemTestContext.systemTes
 public class SearchFeature {
 
     OldSystemTestContext context = systemTesting();
-    ApplicationDriver petstore;
+    OldApplicationDriver petstore;
 
     @Test public void
     searchesForAProductNotAvailableInStore() {

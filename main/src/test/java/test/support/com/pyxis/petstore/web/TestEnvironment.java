@@ -9,8 +9,12 @@ import test.support.com.pyxis.petstore.web.server.LastingServer;
 import test.support.com.pyxis.petstore.web.server.PassingServer;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
 import test.support.com.pyxis.petstore.web.server.ServerSettings;
+import test.support.org.testinfected.petstore.jdbc.DatabaseConfiguration;
+import test.support.org.testinfected.petstore.web.WebRoot;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -34,8 +38,13 @@ public class TestEnvironment {
 
     private static final String TEST_PROPERTIES = "test.properties";
 
+    private static TestEnvironment environment;
+
     public static TestEnvironment load() {
-        return load(TEST_PROPERTIES);
+        if (environment == null) {
+            environment = load(TEST_PROPERTIES);
+        }
+        return environment;
     }
 
     public static TestEnvironment load(String resource) {
@@ -46,10 +55,12 @@ public class TestEnvironment {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         Properties props = new Properties();
+        InputStream config = classLoader.getResourceAsStream(resource);
+        if (config == null) throw new IllegalArgumentException("Test configuration file not found: " + resource);
         try {
-            props.load(classLoader.getResourceAsStream(resource));
+            props.load(config);
         } catch (IOException e) {
-            throw new RuntimeException("Unable to load test configuration file: " + resource, e);
+            throw new RuntimeException("Failed to load test configuration file", e);
         }
         return props;
     }
@@ -93,7 +104,7 @@ public class TestEnvironment {
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
-            throw new IllegalArgumentException(key + " is ot a valid url: " + url);
+            throw new IllegalArgumentException(key + " is not a valid url: " + url);
         }
     }
 
@@ -117,6 +128,8 @@ public class TestEnvironment {
 
     private ServerLifeCycle selectServer() {
         String lifeCycle = getString(SERVER_LIFECYCLE);
+        // new tests don't use a server lifecycle
+        if (lifeCycle == null) return null;
         if (lifeCycle.equals("lasting")) return new LastingServer(serverSettings);
         if (lifeCycle.equals("passing")) return new PassingServer(serverSettings);
         if (lifeCycle.equals("external")) return new ExternalServer();
@@ -139,14 +152,6 @@ public class TestEnvironment {
         return properties;
     }
 
-    public Routing getRoutes() {
-        return new Routing(serverBaseUrl());
-    }
-
-    private String serverBaseUrl() {
-        return String.format("%s://%s:%s%s", serverSettings.scheme, serverSettings.host, serverSettings.port, serverSettings.contextPath);
-    }
-
     public ServerLifeCycle getServerLifeCycle() {
         return serverLifeCycle;
     }
@@ -157,5 +162,21 @@ public class TestEnvironment {
 
     public int getServerPort() {
         return serverSettings.port;
+    }
+
+    public File getWebRoot() {
+        return WebRoot.locate();
+    }
+
+    public DatabaseConfiguration getDatabaseConfiguration() {
+        return new DatabaseConfiguration(properties);
+    }
+
+    public Routing getRoutes() {
+        return new Routing(serverBaseUrl());
+    }
+
+    private String serverBaseUrl() {
+        return String.format("%s://%s:%s%s", serverSettings.scheme, serverSettings.host, serverSettings.port, serverSettings.contextPath);
     }
 }

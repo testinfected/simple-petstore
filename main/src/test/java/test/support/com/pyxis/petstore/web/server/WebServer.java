@@ -1,33 +1,27 @@
 package test.support.com.pyxis.petstore.web.server;
 
-import org.testinfected.hamcrest.ExceptionImposter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.util.Charsets;
 
 import java.io.File;
 
+// todo Use Launcher when configurable through command line switches
 public class WebServer {
 
-    private PetStore server;
+    private final int port;
+    private final PetStore server;
 
-    public WebServer(File webRoot) {
+    public WebServer(int port, File webRoot) {
+        this.port = port;
         this.server = createServer(webRoot);
     }
 
-    public void start(int port) {
-        try {
-            server.start(port);
-        } catch (Exception e) {
-            throw ExceptionImposter.imposterize(e);
-        }
+    public void start() throws Exception {
+        server.start(port);
     }
 
-    public void stop() {
-        try {
-            server.stop();
-        } catch (Exception e) {
-            throw ExceptionImposter.imposterize(e);
-        }
+    public void stop() throws Exception {
+        server.stop();
     }
 
     private PetStore createServer(File webRoot) {

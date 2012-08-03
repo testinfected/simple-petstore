@@ -4,7 +4,7 @@ import com.pyxis.petstore.domain.product.Product;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.com.pyxis.petstore.web.ApplicationDriver;
+import test.support.com.pyxis.petstore.web.OldApplicationDriver;
 import test.support.com.pyxis.petstore.web.OldSystemTestContext;
 
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
@@ -14,7 +14,7 @@ import static test.support.com.pyxis.petstore.web.OldSystemTestContext.systemTes
 public class PurchaseFeature {
 
     OldSystemTestContext context = systemTesting();
-    ApplicationDriver petstore;
+    OldApplicationDriver petstore;
 
     @Before public void
     startApplication() {
