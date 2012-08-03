@@ -15,13 +15,23 @@ defaults: &defaults
 development:
   filter:
     <<: *defaults
-    jdbc.url: jdbc:mysql://localhost:3306/petstore-dev
+    jdbc.url: jdbc:mysql://localhost:3306/petstore_dev
     jdbc.username: petstore
     jdbc.password: petstore
     context.path: /petstore
     log.file: development.log    
   server.port: 8080    
   
+test:
+  filter:
+    <<: *defaults
+    jdbc.url: jdbc:mysql://localhost:3306/petstore_test
+    jdbc.username: testbot
+    jdbc.password: petstore
+    context.path: /petstore
+    log.file: test.log
+  server.port: 8081
+
 production:
   filter:
     <<: *defaults

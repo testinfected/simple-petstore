@@ -12,6 +12,7 @@ JETTY = [:jetty, :jetty_util]
 MUSTACHE = [:jsr305, :guava, :mustache]
 
 Project.local_task :jetty
+['db-migrate', 'db-clean', 'db-reset', 'db-init'].each { |t| Project.local_task t }
 
 define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NUMBER do
   compile.options.target = '1.6'
@@ -81,7 +82,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
   
   define 'main' do
-    compile.with project(:webapp).package, project(:webapp).compile.dependencies
+    compile.with project(:webapp).package, project(:webapp).compile.dependencies, :flyway, :jcl_over_slf4j
     
     test.resources.filter.using 'webapp.dir' => project(:oldapp).path_to(:src, :main, :webapp),
                                 'test.log.dir' => _(:target, :logs)
@@ -116,10 +117,30 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     integration.teardown do
       selenium.stop
     end
+
+    def run_migrations(action)
+      Java::Commands.java("org.testinfected.petstore.Migrations", action.to_s,
+        Buildr.settings.profile['filter']['jdbc.url'],
+        Buildr.settings.profile['filter']['jdbc.username'],
+        Buildr.settings.profile['filter']['jdbc.password'],
+        :classpath => [project.compile.target] + [:slf4j_simple, :mysql] + project.compile.dependencies) do
+          exit
+        end
+    end
+
+    task 'db-migrate' => :compile do run_migrations :migrate; end
+    task 'db-clean' => :compile do run_migrations :clean; end
+    task 'db-reset' => :compile do run_migrations :reset; end
+    task 'db-init' => :compile do run_migrations :init; end
   end
   
   task :run => project(:main) do
     cp = [project(:main).compile.target] + project(:main).compile.dependencies + [:mysql]
     Java::Commands.java("org.testinfected.petstore.Launcher", Buildr.settings.profile['server.port'], project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
   end
+
+  task 'db-migrate' => project(:main).task('db-migrate')
+  task 'db-clean' => project(:main).task('db-clean')
+  task 'db-reset' => project(:main).task('db-reset')
+  task 'db-init' => project(:main).task('db-init')
 end

@@ -11,6 +11,8 @@ artifacts:
   guava: com.google.guava:guava:jar:12.0
   mustache: com.github.spullara.mustache.java:compiler:jar:0.8.3
 
+  # Soon flyway will no longer have a dependency on commons_logging
+  slf4j_simple: org.slf4j:slf4j-simple:jar:1.5.6
   flyway: com.googlecode.flyway:flyway-core:jar:1.7
   #todo update to latest
   mysql: mysql:mysql-connector-java:jar:5.1.11
