@@ -42,7 +42,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     test.with project(:domain).test.compile.target, project(:persistence).test.compile.target, :flyway, HAMCREST, LOG
     test.with_transitive :hamcrest_jpa, :commons_dbcp, :spring_orm, :javassist, :mysql
 
-    package(:jar)
+    package :jar
   end
   
   define 'oldapp' do
@@ -55,7 +55,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     test.resources.filter.using 'webapp.dir' => _(:src, :main, :webapp), 'test.log.dir' => _(:target, :logs)
     test.with project(:domain).test.compile.target, HAMCREST 
     test.with_transitive :hamcrest_dom, :hamcrest_spring, :nekohtml, :commons_lang, :spring_support, :spring_test
-    
+
+    package :war
     package(:war).exclude :servlet_api
     package(:war).add LOG, :commons_pool, :commons_dbcp, :javassist, :asm, :cglib, :spring_orm, :spring_jdbc, :sitemesh, :url_rewrite, :mysql
     
@@ -78,12 +79,13 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     test.with NO_LOG, :guava, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:oldinfra).test.compile.target
     test.with_transitive :nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy, :mysql
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
-    package(:jar)
+
+    package :jar
   end
   
   define 'main' do
     compile.with project(:webapp).package, project(:webapp).compile.dependencies, :flyway, :jcl_over_slf4j
-    
+
     test.resources.filter.using 'webapp.dir' => project(:oldapp).path_to(:src, :main, :webapp),
                                 'test.log.dir' => _(:target, :logs)
     test.with project(:oldapp).compile.target, project(:oldapp).resources.target, project(:oldapp).package(:war).libs, 
@@ -101,8 +103,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
       'browser.remote.capability.version' => Buildr.settings.profile['filter']['selenium.server.version'],
       'browser.remote.capability.name' => 'PetStore System Tests'
     }
-    integration project(:oldapp).package(:war)
-    integration.setup do
+
+    integration(project(:oldapp).package(:war)).setup do
       selenium.run
       jetty.url = "http://localhost:#{Buildr.settings.profile['filter']['test.server.port']}"
       jetty.with :properties => {
@@ -133,7 +135,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     task 'db-reset' => :compile do run_migrations :reset; end
     task 'db-init' => :compile do run_migrations :init; end
   end
-  
+
   task :run => project(:main) do
     cp = [project(:main).compile.target] + project(:main).compile.dependencies + [:mysql]
     Java::Commands.java("org.testinfected.petstore.Launcher", Buildr.settings.profile['server.port'], project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
