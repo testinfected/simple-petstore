@@ -22,6 +22,8 @@ artifacts:
   hamcrest_core: org.hamcrest:hamcrest-core:jar:1.3.RC2
   hamcrest_library: org.hamcrest:hamcrest-library:jar:1.3.RC2
   hamcrest_extra: org.testinfected.hamcrest-matchers:core-matchers:jar:1.5
+  antlr_runtime: org.antlr:antlr-runtime:jar:3.0.1
+  cssselectors: com.3levers.cssselectors:cssselectors:jar:1.0
   hamcrest_dom: org.testinfected.hamcrest-matchers:dom-matchers:jar:1.5
   selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.21.0
   windowlicker_web: com.googlecode.windowlicker:windowlicker-web:jar:r268

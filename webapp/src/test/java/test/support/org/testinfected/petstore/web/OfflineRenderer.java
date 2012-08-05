@@ -11,7 +11,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.util.HashMap;
 
-import static test.support.com.pyxis.petstore.views.HTMLDocument.toElement;
+import static test.support.org.testinfected.petstore.web.HTMLDocument.toElement;
 
 public class OfflineRenderer {
 

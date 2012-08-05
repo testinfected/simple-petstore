@@ -20,6 +20,10 @@ public final class Paths {
         return pathFor("/products/" + productNumber + "/items");
     }
 
+    public String productsPath() {
+        return pathFor("/products");
+    }
+
     public String pathFor(String relativePath) {
         return contextPath + relativePath;
     }

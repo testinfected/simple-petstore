@@ -4,17 +4,12 @@ public final class Routes {
 
     private final String contextPath;
 
-    // todo inline
     public static Routes toPetstore() {
         return Routes.to("/petstore");
     }
 
     public static Routes to(String contextPath) {
         return new Routes(contextPath);
-    }
-
-    public static Routes root() {
-        return new Routes("");
     }
 
     public Routes(String contextPath) {
@@ -25,7 +20,6 @@ public final class Routes {
         return contextPath;
     }
 
-    // TODO needed to check for slash ?
     public String pathFor(String relativePath) {
         return relativePath.startsWith("/") ?
                 contextPath + relativePath :
@@ -54,9 +48,5 @@ public final class Routes {
 
     public String purchasesPath() {
         return pathFor("/purchases");
-    }
-
-    public String productsPath() {
-        return pathFor("/products");
     }
 }

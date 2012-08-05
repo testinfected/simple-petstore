@@ -5,7 +5,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.util.NameValuePair;
 import org.testinfected.petstore.Server;
-import test.support.com.pyxis.petstore.views.Routes;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -22,8 +21,7 @@ public class HttpRequest {
     private int timeout = 5000;
     private HttpMethod method = HttpMethod.GET;
     private String path = "/";
-    // todo use Paths instead
-    private Routes routes = Routes.root();
+    private Paths paths  = Paths.root();
     private int port;
 
     public static HttpRequest aRequest() {
@@ -67,10 +65,6 @@ public class HttpRequest {
         return withMethod(HttpMethod.POST).forPath(path).send();
     }
 
-    private HttpRequest withMethod(String name) {
-        return withMethod(HttpMethod.valueOf(name));
-    }
-
     private HttpRequest withMethod(HttpMethod method) {
         this.method = method;
         return this;
@@ -86,7 +80,7 @@ public class HttpRequest {
 
     private URL requestUrl() throws MalformedURLException {
         try {
-            return new URL("http://localhost:" + port + routes.pathFor(path));
+            return new URL("http://localhost:" + port + paths.pathFor(path));
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

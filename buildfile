@@ -75,8 +75,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   define 'webapp' do
     compile.with :simpleframework, MUSTACHE, :time
     compile.with_transitive project(:domain), project(:persistence), project(:persistence).compile.dependencies
-    # todo remove dependency on oldapp
-    test.with NO_LOG, :guava, project(:oldapp).test.compile.target, project(:oldapp).test.dependencies, project(:oldinfra).test.compile.target
+
+    test.with project(:domain).test.compile.target, HAMCREST, :antlr_runtime, :cssselectors, :hamcrest_dom
     test.with_transitive :nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy, :mysql
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
 
