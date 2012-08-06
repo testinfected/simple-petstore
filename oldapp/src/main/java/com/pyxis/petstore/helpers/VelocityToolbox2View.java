@@ -16,7 +16,6 @@ import java.util.Map;
 
 public class VelocityToolbox2View extends VelocityToolboxView {
 
-    // TODO find out how to inject this or inject the resource
     private final DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
 
     @Override

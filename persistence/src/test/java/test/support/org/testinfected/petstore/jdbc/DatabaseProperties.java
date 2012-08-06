@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class DatabaseConfiguration {
+public class DatabaseProperties {
 
     public static final String JDBC_URL = "jdbc.url";
     public static final String JDBC_USERNAME = "jdbc.username";
@@ -12,19 +12,20 @@ public class DatabaseConfiguration {
 
     private static final String DATABASE_PROPERTIES = "database.properties";
 
-    public static DatabaseConfiguration load() {
+    public static DatabaseProperties load() {
         return load(DATABASE_PROPERTIES);
     }
 
-    private static DatabaseConfiguration load(final String name) {
-        return new DatabaseConfiguration(loadConfiguration(name));
+    private static DatabaseProperties load(final String name) {
+        return new DatabaseProperties(loadProperties(name));
     }
 
-    private static Properties loadConfiguration(String resource) {
-        Properties props = new Properties();
+    private static Properties loadProperties(String resource) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream config = classLoader.getResourceAsStream(resource);
         if (config == null) throw new IllegalArgumentException("Database configuration file not found: " + resource);
+
+        Properties props = new Properties();
         try {
             props.load(config);
         } catch (IOException e) {
@@ -35,7 +36,7 @@ public class DatabaseConfiguration {
 
     private Properties properties;
 
-    public DatabaseConfiguration(Properties properties) {
+    public DatabaseProperties(Properties properties) {
         this.properties = properties;
     }
 

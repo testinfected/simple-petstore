@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
-import test.support.org.testinfected.petstore.jdbc.DatabaseConfiguration;
+import test.support.org.testinfected.petstore.jdbc.DatabaseProperties;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -18,7 +18,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class DriverManagerDataSourceTest {
 
-    DatabaseConfiguration config = DatabaseConfiguration.load();
+    DatabaseProperties config = DatabaseProperties.load();
     String jdbcUrl = config.getUrl();
     String jdbcUsername = config.getUsername();
     String jdbcPassword = config.getPassword();

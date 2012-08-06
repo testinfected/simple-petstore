@@ -21,7 +21,7 @@ public class FooterTest {
 
     @Before public void
     renderFooter() {
-        footer = render(FOOTER_TEMPLATE).from(WebRoot.locateLayout()).asDom();
+        footer = render(FOOTER_TEMPLATE).from(WebRoot.locate().layouts).asDom();
     }
 
     @SuppressWarnings("unchecked") @Test public void

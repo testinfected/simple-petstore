@@ -8,7 +8,9 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
         String webRoot = args[WEB_ROOT];
 
-        final PetStore petStore = PetStore.at(webRoot);
+        // todo read this from environment property file
+        final PetStore petStore = new PetStore(WebLayout.standard(webRoot), new DatabaseConfiguration(
+        "jdbc:mysql://localhost:3306/petstore_dev", "petstore", "petstore"));
         // todo optional command line parameters
         petStore.encodeOutputAs("utf-8");
         petStore.logToConsole();

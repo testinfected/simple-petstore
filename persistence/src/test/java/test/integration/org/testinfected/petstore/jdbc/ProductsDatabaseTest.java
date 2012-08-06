@@ -13,8 +13,8 @@ import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.jdbc.Transactor;
 import org.testinfected.petstore.jdbc.UnitOfWork;
 import test.support.com.pyxis.petstore.builders.Builder;
+import test.support.org.testinfected.petstore.jdbc.DatabaseProperties;
 import test.support.org.testinfected.petstore.jdbc.Database;
-import test.support.org.testinfected.petstore.jdbc.DatabaseConfiguration;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,7 +34,7 @@ import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class ProductsDatabaseTest {
 
-    Database database = new Database(DatabaseConfiguration.load());
+    Database database = new Database(DatabaseProperties.load());
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
     ProductCatalog productCatalog = new ProductsDatabase(connection);
@@ -49,6 +49,7 @@ public class ProductsDatabaseTest {
         connection.close();
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     findsNothingIfNoProductMatchesKeyword() throws Exception {
         given(aProduct().named("Dalmatian").describedAs("A big dog"));
@@ -81,6 +82,7 @@ public class ProductsDatabaseTest {
         assertThat("matches", matches, containsInAnyOrder(productNamed("Labrador"), productNamed("Golden")));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     retrievesCompleteProductDetails() throws Exception {
         final Collection<Product> sampleProducts = build(

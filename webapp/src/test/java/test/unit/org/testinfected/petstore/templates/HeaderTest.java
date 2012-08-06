@@ -25,7 +25,7 @@ public class HeaderTest {
 
     @Before public void
     renderHeader() {
-        header = render(HEADER_TEMPLATE).from(WebRoot.locateLayout()).asDom();
+        header = render(HEADER_TEMPLATE).from(WebRoot.locate().layouts).asDom();
     }
 
     @Test public void

@@ -47,6 +47,7 @@ public class DriverManagerDataSource implements DataSource {
         return 0;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T unwrap(Class<T> iface) throws SQLException {
         if (!isDataSource(iface)) throw new IllegalArgumentException("Not a wrapper for: " + iface.getName());
         return (T) this;

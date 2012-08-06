@@ -1,5 +1,7 @@
 package test.support.com.pyxis.petstore.web;
 
+import org.testinfected.petstore.DatabaseConfiguration;
+import org.testinfected.petstore.WebLayout;
 import test.support.com.pyxis.petstore.web.browser.BrowserControl;
 import test.support.com.pyxis.petstore.web.browser.LastingBrowser;
 import test.support.com.pyxis.petstore.web.browser.PassingBrowser;
@@ -9,10 +11,8 @@ import test.support.com.pyxis.petstore.web.server.LastingServer;
 import test.support.com.pyxis.petstore.web.server.PassingServer;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
 import test.support.com.pyxis.petstore.web.server.ServerSettings;
-import test.support.org.testinfected.petstore.jdbc.DatabaseConfiguration;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -35,6 +35,10 @@ public class TestEnvironment {
     public static final String BROWSER_LIFECYCLE = "browser.lifecycle";
     public static final String BROWSER_REMOTE_URL = "browser.remote.url";
     public static final String BROWSER_REMOTE_CAPABILITY = "browser.remote.capability.";
+
+    public static final String JDBC_URL = "jdbc.url";
+    public static final String JDBC_USERNAME = "jdbc.username";
+    public static final String JDBC_PASSWORD = "jdbc.password";
 
     private static final String TEST_PROPERTIES = "test.properties";
 
@@ -165,12 +169,12 @@ public class TestEnvironment {
         return serverSettings.port;
     }
 
-    public File getWebRoot() {
+    public WebLayout getWebLayout() {
         return WebRoot.locate();
     }
 
     public DatabaseConfiguration getDatabaseConfiguration() {
-        return new DatabaseConfiguration(properties);
+        return new DatabaseConfiguration(getString(JDBC_URL), getString(JDBC_USERNAME), getString(JDBC_PASSWORD));
     }
 
     @Deprecated

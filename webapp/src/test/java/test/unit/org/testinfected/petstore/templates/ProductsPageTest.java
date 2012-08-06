@@ -4,7 +4,6 @@ import com.github.mustachejava.TemplateFunction;
 import com.pyxis.petstore.domain.product.Product;
 import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.testinfected.hamcrest.dom.DomMatchers;
 import org.testinfected.petstore.util.ContextBuilder;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.Builder;
@@ -82,6 +81,6 @@ public class ProductsPageTest {
     }
 
     private OfflineRenderer renderProductsPage() {
-        return OfflineRenderer.render(PRODUCTS_TEMPLATE).using(context).from(WebRoot.locatePages());
+        return OfflineRenderer.render(PRODUCTS_TEMPLATE).using(context).from(WebRoot.locate().pages);
     }
 }

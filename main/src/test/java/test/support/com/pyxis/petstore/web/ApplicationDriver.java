@@ -21,7 +21,7 @@ public class ApplicationDriver {
     private Menu menu;
 
     public ApplicationDriver(TestEnvironment environment) {
-        this.server = new WebServer(environment.getServerPort(), environment.getWebRoot());
+        this.server = new WebServer(environment.getServerPort(), environment.getWebLayout(), environment.getDatabaseConfiguration());
         this.database = DatabaseDriver.configure(environment.getDatabaseConfiguration());
         this.browserControl = environment.getBrowserControl();
     }

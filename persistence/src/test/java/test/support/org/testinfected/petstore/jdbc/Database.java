@@ -13,7 +13,7 @@ public class Database {
     private final DatabaseMigrator migrator;
     private final DatabaseCleaner cleaner;
 
-    public Database(DatabaseConfiguration config) {
+    public Database(DatabaseProperties config) {
         this.dataSource = new DriverManagerDataSource(config.getUrl(), config.getUsername(), config.getPassword());
         this.migrator = new DatabaseMigrator(dataSource);
         this.cleaner = new DatabaseCleaner(dataSource);

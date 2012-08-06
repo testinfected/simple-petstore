@@ -2,12 +2,12 @@ package test.support.com.pyxis.petstore.web;
 
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.testinfected.petstore.DatabaseConfiguration;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.jdbc.UnitOfWork;
 import test.support.org.testinfected.petstore.jdbc.DatabaseCleaner;
-import test.support.org.testinfected.petstore.jdbc.DatabaseConfiguration;
 import test.support.org.testinfected.petstore.jdbc.DatabaseMigrator;
 
 import javax.sql.DataSource;
@@ -29,8 +29,8 @@ public class DatabaseDriver {
         this.cleaner = new DatabaseCleaner(dataSource);
     }
 
-    public static DatabaseDriver configure(DatabaseConfiguration configuration) {
-        return new DatabaseDriver(new DriverManagerDataSource(configuration.getUrl(), configuration.getUsername(), configuration.getPassword()));
+    public static DatabaseDriver configure(DatabaseConfiguration database) {
+        return new DatabaseDriver(new DriverManagerDataSource(database.url, database.username, database.password));
     }
 
     public void connect() throws SQLException {

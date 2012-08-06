@@ -20,7 +20,6 @@ import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.petstore.pipeline.ServerHeaders;
 import org.testinfected.petstore.pipeline.SiteMesh;
 import org.testinfected.petstore.pipeline.StaticAssets;
-import org.testinfected.petstore.util.Charsets;
 import org.testinfected.petstore.util.ConsoleErrorReporter;
 import org.testinfected.petstore.util.ConsoleHandler;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
@@ -28,7 +27,6 @@ import org.testinfected.petstore.util.PlainFormatter;
 import org.testinfected.time.lib.SystemClock;
 
 import javax.sql.DataSource;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.Connection;
@@ -39,40 +37,29 @@ import java.util.logging.Logger;
 
 public class PetStore {
 
-    public static final String TEMPLATE_DIRECTORY = "templates";
-    public static final String ASSET_DIRECTORY = "assets";
-    public static final String PAGES_DIRECTORY = "pages";
-    public static final String LAYOUT_DIRECTORY = "layout";
-
     private static final String LOGGER_NAME = "access";
 
-    private final File location;
+    private final WebLayout web;
+    private final DatabaseConfiguration database;
     private final Logger logger = makeLogger();
     private final SystemClock clock = new SystemClock();
 
     private Server server;
     private Connection connection;
-    private Charset charset = Charset.defaultCharset();
+    private Charset outputEncoding = Charset.defaultCharset();
     private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
 
-    public static PetStore at(String webRoot) {
-        return at(new File(webRoot));
-    }
-
-    public static PetStore at(File webRoot) {
-        return new PetStore(webRoot);
-    }
-
-    public PetStore(File webRoot) {
-        this.location = webRoot;
+    public PetStore(WebLayout layout, DatabaseConfiguration configuration) {
+        this.web = layout;
+        this.database = configuration;
     }
 
     public void encodeOutputAs(String charsetName) {
         encodeOutputAs(Charset.forName(charsetName));
     }
 
-    public void encodeOutputAs(Charset charset) {
-        this.charset = charset;
+    public void encodeOutputAs(Charset encoding) {
+        this.outputEncoding = encoding;
     }
 
     public void quiet() {
@@ -93,7 +80,7 @@ public class PetStore {
         connection = connectToDatabase();
         server = new Server(port, failureReporter);
         server.run(new MiddlewareStack() {{
-            use(new Failsafe(new MustacheRendering(new FileSystemResourceLoader(templateDirectory(), Charsets.UTF_8)), failureReporter));
+            use(new Failsafe(new MustacheRendering(new FileSystemResourceLoader(web.templates, web.encoding)), failureReporter));
             use(new ServerHeaders(clock));
             use(new HttpMethodOverride());
             use(new ApacheCommonLogger(logger, clock));
@@ -104,9 +91,9 @@ public class PetStore {
     }
 
     private Dispatcher dispatcher() {
-        Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(pagesDirectory(), Charsets.UTF_8));
+        Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(web.pages, web.encoding));
         final Dispatcher dispatcher = new Dispatcher(drawRoutes(), renderer);
-        dispatcher.setEncoding(charset);
+        dispatcher.setEncoding(outputEncoding);
         return dispatcher;
     }
 
@@ -121,15 +108,12 @@ public class PetStore {
     }
 
     private Connection connectToDatabase() throws SQLException {
-        String jdbcUrl= "jdbc:mysql://localhost:3306/petstore_test";
-        String jdbcUsername = "testbot";
-        String jdbcPassword = "petstore";
-        DataSource dataSource = new DriverManagerDataSource(jdbcUrl, jdbcUsername, jdbcPassword);
+        DataSource dataSource = new DriverManagerDataSource(database.url, database.username, database.password);
         return dataSource.getConnection();
     }
 
     private SiteMesh siteMesh() {
-        Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(layoutDirectory(), Charsets.UTF_8));
+        Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(web.layouts, web.encoding));
         SiteMesh siteMesh = new SiteMesh(new HtmlPageSelector());
         siteMesh.map("/", new PageCompositor(new HtmlDocumentProcessor(), new LayoutTemplate("main", renderer)));
         return siteMesh;
@@ -147,25 +131,9 @@ public class PetStore {
     }
 
     private StaticAssets staticAssets() {
-        final StaticAssets assets = new StaticAssets(new FileServer(new FileSystemResourceLoader(assetDirectory())));
+        final StaticAssets assets = new StaticAssets(new FileServer(new FileSystemResourceLoader(web.assets)));
         assets.serve("/favicon.ico", "/images", "/stylesheets", "/photos");
         return assets;
-    }
-
-    private File pagesDirectory() {
-        return new File(templateDirectory(), PAGES_DIRECTORY);
-    }
-
-    private File layoutDirectory() {
-        return new File(templateDirectory(), LAYOUT_DIRECTORY);
-    }
-
-    private File templateDirectory() {
-        return new File(location, TEMPLATE_DIRECTORY);
-    }
-
-    private File assetDirectory() {
-        return new File(location, ASSET_DIRECTORY);
     }
 
     private Handler fileHandler(String logFile) throws IOException {
@@ -173,6 +141,4 @@ public class PetStore {
         handler.setFormatter(new PlainFormatter());
         return handler;
     }
-
-
 }
