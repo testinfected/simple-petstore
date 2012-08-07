@@ -2,7 +2,7 @@ package test.support.com.pyxis.petstore.web;
 
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
-import org.testinfected.petstore.DatabaseConfiguration;
+import org.testinfected.petstore.jdbc.DataSourceProperties;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
@@ -21,16 +21,17 @@ public class DatabaseDriver {
 
     private Connection connection;
     private ProductCatalog productCatalog;
+
     private DatabaseCleaner cleaner;
+
+    public static DatabaseDriver create(DataSourceProperties properties) {
+        return new DatabaseDriver(DriverManagerDataSource.from(properties));
+    }
 
     public DatabaseDriver(DataSource dataSource) {
         this.dataSource = dataSource;
         this.migrator = new DatabaseMigrator(dataSource);
         this.cleaner = new DatabaseCleaner(dataSource);
-    }
-
-    public static DatabaseDriver configure(DatabaseConfiguration database) {
-        return new DatabaseDriver(new DriverManagerDataSource(database.url, database.username, database.password));
     }
 
     public void connect() throws SQLException {

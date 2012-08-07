@@ -9,6 +9,7 @@ import org.testinfected.petstore.decoration.LayoutTemplate;
 import org.testinfected.petstore.decoration.PageCompositor;
 import org.testinfected.petstore.dispatch.Router;
 import org.testinfected.petstore.dispatch.Routes;
+import org.testinfected.petstore.jdbc.DataSourceProperties;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
@@ -40,7 +41,7 @@ public class PetStore {
     private static final String LOGGER_NAME = "access";
 
     private final WebLayout web;
-    private final DatabaseConfiguration database;
+    private final DataSourceProperties databaseProperties;
     private final Logger logger = makeLogger();
     private final SystemClock clock = new SystemClock();
 
@@ -49,9 +50,9 @@ public class PetStore {
     private Charset outputEncoding = Charset.defaultCharset();
     private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
 
-    public PetStore(WebLayout layout, DatabaseConfiguration configuration) {
+    public PetStore(WebLayout layout, DataSourceProperties properties) {
         this.web = layout;
-        this.database = configuration;
+        this.databaseProperties = properties;
     }
 
     public void encodeOutputAs(String charsetName) {
@@ -108,7 +109,7 @@ public class PetStore {
     }
 
     private Connection connectToDatabase() throws SQLException {
-        DataSource dataSource = new DriverManagerDataSource(database.url, database.username, database.password);
+        DataSource dataSource = DriverManagerDataSource.from(databaseProperties);
         return dataSource.getConnection();
     }
 

@@ -4,10 +4,9 @@ import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.testinfected.petstore.DatabaseConfiguration;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Server;
-import test.support.org.testinfected.petstore.jdbc.DatabaseProperties;
+import test.support.org.testinfected.petstore.jdbc.TestEnvironment;
 import test.support.org.testinfected.petstore.web.Console;
 import test.support.org.testinfected.petstore.web.HttpRequest;
 import test.support.org.testinfected.petstore.web.HttpResponse;
@@ -21,12 +20,10 @@ import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 public class PetStoreTest {
 
-    // todo use test properties local to module
-    DatabaseProperties db = DatabaseProperties.load();
-    PetStore petstore = new PetStore(WebRoot.locate(), new DatabaseConfiguration(db.getUrl(), db.getUsername(), db.getPassword()));
-
-    LogFile logFile;
+    PetStore petstore = new PetStore(WebRoot.locate(), TestEnvironment.properties());
     Console console = Console.captureStandardOutput();
+    LogFile logFile;
+
     int serverPort = 9999;
     HttpRequest request = aRequest().onPort(serverPort);
 

@@ -3,8 +3,9 @@ package test.integration.org.testinfected.petstore.jdbc;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.testinfected.petstore.jdbc.DataSourceProperties;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
-import test.support.org.testinfected.petstore.jdbc.DatabaseProperties;
+import test.support.org.testinfected.petstore.jdbc.TestEnvironment;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -18,12 +19,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class DriverManagerDataSourceTest {
 
-    DatabaseProperties config = DatabaseProperties.load();
-    String jdbcUrl = config.getUrl();
-    String jdbcUsername = config.getUsername();
-    String jdbcPassword = config.getPassword();
-
-    DriverManagerDataSource connectionSource = new DriverManagerDataSource(jdbcUrl, jdbcUsername, jdbcPassword);
+    DataSourceProperties db = TestEnvironment.properties();
+    DriverManagerDataSource connectionSource = DriverManagerDataSource.from(db);
     Connection connection;
 
     @Before public void
@@ -39,8 +36,8 @@ public class DriverManagerDataSourceTest {
     @Test public void
     configuresConnectionFromProperties() throws Exception {
         DatabaseMetaData metaData = connection.getMetaData();
-        assertThat("url", metaData.getURL(), equalTo(jdbcUrl));
-        assertThat("username", metaData.getUserName(), startsWith(jdbcUsername));
+        assertThat("url", metaData.getURL(), equalTo(db.url));
+        assertThat("username", metaData.getUserName(), startsWith(db.username));
     }
 
     @Test public void

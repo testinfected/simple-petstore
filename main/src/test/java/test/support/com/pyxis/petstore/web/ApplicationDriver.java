@@ -21,9 +21,9 @@ public class ApplicationDriver {
     private Menu menu;
 
     public ApplicationDriver(TestEnvironment environment) {
-        this.server = new WebServer(environment.getServerPort(), environment.getWebLayout(), environment.getDatabaseConfiguration());
-        this.database = DatabaseDriver.configure(environment.getDatabaseConfiguration());
-        this.browserControl = environment.getBrowserControl();
+        this.server = new WebServer(environment.serverPort(), environment.webLayout(), environment.databaseProperties());
+        this.database = DatabaseDriver.create(environment.databaseProperties());
+        this.browserControl = environment.browserControl();
     }
 
     public void start() throws Exception {

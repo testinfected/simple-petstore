@@ -1,5 +1,7 @@
 package org.testinfected.petstore;
 
+import org.testinfected.petstore.jdbc.DataSourceProperties;
+
 public class Launcher {
 
     private static final int WEB_ROOT = 1;
@@ -9,7 +11,7 @@ public class Launcher {
         String webRoot = args[WEB_ROOT];
 
         // todo read this from environment property file
-        final PetStore petStore = new PetStore(WebLayout.standard(webRoot), new DatabaseConfiguration(
+        final PetStore petStore = new PetStore(WebLayout.standard(webRoot), new DataSourceProperties(
         "jdbc:mysql://localhost:3306/petstore_dev", "petstore", "petstore"));
         // todo optional command line parameters
         petStore.encodeOutputAs("utf-8");

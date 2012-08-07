@@ -13,7 +13,7 @@ import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.jdbc.Transactor;
 import org.testinfected.petstore.jdbc.UnitOfWork;
 import test.support.com.pyxis.petstore.builders.Builder;
-import test.support.org.testinfected.petstore.jdbc.DatabaseProperties;
+import test.support.org.testinfected.petstore.jdbc.TestEnvironment;
 import test.support.org.testinfected.petstore.jdbc.Database;
 
 import java.sql.Connection;
@@ -34,7 +34,7 @@ import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 public class ProductsDatabaseTest {
 
-    Database database = new Database(DatabaseProperties.load());
+    Database database = Database.from(TestEnvironment.properties());
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
     ProductCatalog productCatalog = new ProductsDatabase(connection);

@@ -32,7 +32,7 @@ public final class OldSystemTestContext {
 
     public OldSystemTestContext(TestEnvironment environment) {
         serverLifeCycle = environment.getServerLifeCycle();
-        browserControl = environment.getBrowserControl();
+        browserControl = environment.browserControl();
         routing = environment.getRoutes();
 
         overrideSystemProperties(environment.getProperties());

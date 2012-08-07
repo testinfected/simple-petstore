@@ -84,7 +84,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
   
   define 'main' do
-    compile.with project(:webapp).package, project(:webapp).compile.dependencies, :flyway, :jcl_over_slf4j
+    compile.with project(:webapp).compile.target, project(:webapp).compile.dependencies, :flyway, :jcl_over_slf4j
 
     test.resources.filter.using 'webapp.dir' => project(:oldapp).path_to(:src, :main, :webapp),
                                 'test.log.dir' => _(:target, :logs)

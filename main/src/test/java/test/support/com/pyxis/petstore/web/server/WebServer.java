@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.web.server;
 
-import org.testinfected.petstore.DatabaseConfiguration;
+import org.testinfected.petstore.jdbc.DataSourceProperties;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.WebLayout;
 import org.testinfected.petstore.util.Charsets;
@@ -10,7 +10,7 @@ public class WebServer {
     private final int port;
     private final PetStore server;
 
-    public WebServer(int port, WebLayout web, DatabaseConfiguration database) {
+    public WebServer(int port, WebLayout web, DataSourceProperties database) {
         this.port = port;
         this.server = createServer(web, database);
     }
@@ -28,7 +28,7 @@ public class WebServer {
         server.stop();
     }
 
-    private PetStore createServer(WebLayout web, DatabaseConfiguration database) {
+    private PetStore createServer(WebLayout web, DataSourceProperties database) {
         // todo Use Launcher when configurable through command line switches
         PetStore server = new PetStore(web, database);
         server.encodeOutputAs(Charsets.UTF_8);

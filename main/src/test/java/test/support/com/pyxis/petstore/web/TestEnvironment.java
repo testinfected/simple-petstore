@@ -1,6 +1,6 @@
 package test.support.com.pyxis.petstore.web;
 
-import org.testinfected.petstore.DatabaseConfiguration;
+import org.testinfected.petstore.jdbc.DataSourceProperties;
 import org.testinfected.petstore.WebLayout;
 import test.support.com.pyxis.petstore.web.browser.BrowserControl;
 import test.support.com.pyxis.petstore.web.browser.LastingBrowser;
@@ -11,10 +11,9 @@ import test.support.com.pyxis.petstore.web.server.LastingServer;
 import test.support.com.pyxis.petstore.web.server.PassingServer;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
 import test.support.com.pyxis.petstore.web.server.ServerSettings;
+import test.support.org.testinfected.petstore.jdbc.PropertyFile;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -52,21 +51,7 @@ public class TestEnvironment {
     }
 
     public static TestEnvironment load(String resource) {
-        return new TestEnvironment(loadConfiguration(resource));
-    }
-
-    private static Properties loadConfiguration(String resource) {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-        Properties props = new Properties();
-        InputStream config = classLoader.getResourceAsStream(resource);
-        if (config == null) throw new IllegalArgumentException("Test configuration file not found: " + resource);
-        try {
-            props.load(config);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load test configuration file", e);
-        }
-        return props;
+        return new TestEnvironment(PropertyFile.load(resource));
     }
 
     private final Properties properties;
@@ -108,7 +93,7 @@ public class TestEnvironment {
         try {
             return new URL(url);
         } catch (MalformedURLException e) {
-            throw new IllegalArgumentException(key + " is not a valid url: " + url);
+            throw new IllegalArgumentException(key + " is not a valid url: " + url, e);
         }
     }
 
@@ -161,20 +146,20 @@ public class TestEnvironment {
         return serverLifeCycle;
     }
 
-    public BrowserControl getBrowserControl() {
+    public BrowserControl browserControl() {
         return browserControl;
     }
 
-    public int getServerPort() {
+    public int serverPort() {
         return serverSettings.port;
     }
 
-    public WebLayout getWebLayout() {
+    public WebLayout webLayout() {
         return WebRoot.locate();
     }
 
-    public DatabaseConfiguration getDatabaseConfiguration() {
-        return new DatabaseConfiguration(getString(JDBC_URL), getString(JDBC_USERNAME), getString(JDBC_PASSWORD));
+    public DataSourceProperties databaseProperties() {
+        return new DataSourceProperties(getString(JDBC_URL), getString(JDBC_USERNAME), getString(JDBC_PASSWORD));
     }
 
     @Deprecated
