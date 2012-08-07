@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Server;
+import org.testinfected.petstore.WebLayout;
 import test.support.org.testinfected.petstore.jdbc.TestEnvironment;
 import test.support.org.testinfected.petstore.web.Console;
 import test.support.org.testinfected.petstore.web.HttpRequest;
@@ -20,7 +21,7 @@ import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 public class PetStoreTest {
 
-    PetStore petstore = new PetStore(WebRoot.locate(), TestEnvironment.properties());
+    PetStore petstore = new PetStore(WebLayout.standard(WebRoot.locate()), TestEnvironment.properties());
     Console console = Console.captureStandardOutput();
     LogFile logFile;
 

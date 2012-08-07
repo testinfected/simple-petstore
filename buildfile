@@ -84,8 +84,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
   
   define 'main' do
-    compile.with project(:webapp).compile.target, project(:webapp).compile.dependencies, :flyway, :jcl_over_slf4j
-
+    compile.with project(:webapp).compile.target, project(:webapp).compile.dependencies, :cli, :flyway, :jcl_over_slf4j
     test.resources.filter.using 'webapp.dir' => project(:oldapp).path_to(:src, :main, :webapp),
                                 'test.log.dir' => _(:target, :logs)
     test.with project(:oldapp).compile.target, project(:oldapp).resources.target, project(:oldapp).package(:war).libs, 
@@ -137,8 +136,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
 
   task :run => project(:main) do
-    cp = [project(:main).compile.target] + project(:main).compile.dependencies + [:mysql]
-    Java::Commands.java("org.testinfected.petstore.Launcher", Buildr.settings.profile['server.port'], project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
+    cp = [project(:main).compile.target, project(:main).resources.target] + project(:main).compile.dependencies + [:mysql]
+    Java::Commands.java("org.testinfected.petstore.Launcher", "-p", Buildr.settings.profile['server.port'], "-e", Buildr.environment, project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
   end
 
   task 'db-migrate' => project(:main).task('db-migrate')

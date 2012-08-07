@@ -1,4 +1,4 @@
-package test.support.org.testinfected.petstore.jdbc;
+package org.testinfected.petstore.util;
 
 import org.testinfected.petstore.ExceptionImposter;
 
@@ -28,4 +28,6 @@ public class PropertyFile {
         }
         return props;
     }
+
+    private PropertyFile() {}
 }

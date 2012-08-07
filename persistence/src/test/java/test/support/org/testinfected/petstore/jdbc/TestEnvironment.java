@@ -1,6 +1,7 @@
 package test.support.org.testinfected.petstore.jdbc;
 
 import org.testinfected.petstore.jdbc.DataSourceProperties;
+import org.testinfected.petstore.util.PropertyFile;
 
 import java.util.Properties;
 

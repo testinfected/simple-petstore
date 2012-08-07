@@ -23,6 +23,6 @@ public class NoSearchResultsPageTest {
     }
 
     private OfflineRenderer renderNoProductPage() {
-        return OfflineRenderer.render(NO_SEARCH_RESULTS_PAGE_TEMPLATE).from(WebRoot.locate().pages);
+        return OfflineRenderer.render(NO_SEARCH_RESULTS_PAGE_TEMPLATE).from(WebRoot.locatePages());
     }
 }

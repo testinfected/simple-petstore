@@ -21,7 +21,8 @@ public class ApplicationDriver {
     private Menu menu;
 
     public ApplicationDriver(TestEnvironment environment) {
-        this.server = new WebServer(environment.serverPort(), environment.webLayout(), environment.databaseProperties());
+        this.server = new WebServer(environment.serverPort(), environment.webRoot());
+        // todo don't go backdoor to the database, use a REST service
         this.database = DatabaseDriver.create(environment.databaseProperties());
         this.browserControl = environment.browserControl();
     }

@@ -1,7 +1,6 @@
 package test.support.com.pyxis.petstore.web;
 
 import org.testinfected.petstore.jdbc.DataSourceProperties;
-import org.testinfected.petstore.WebLayout;
 import test.support.com.pyxis.petstore.web.browser.BrowserControl;
 import test.support.com.pyxis.petstore.web.browser.LastingBrowser;
 import test.support.com.pyxis.petstore.web.browser.PassingBrowser;
@@ -11,9 +10,10 @@ import test.support.com.pyxis.petstore.web.server.LastingServer;
 import test.support.com.pyxis.petstore.web.server.PassingServer;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
 import test.support.com.pyxis.petstore.web.server.ServerSettings;
-import test.support.org.testinfected.petstore.jdbc.PropertyFile;
+import org.testinfected.petstore.util.PropertyFile;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -154,10 +154,8 @@ public class TestEnvironment {
         return serverSettings.port;
     }
 
-    public WebLayout webLayout() {
-        return WebRoot.locate();
-    }
-
+    @Deprecated
+    // todo remove database connection properties from the test environment
     public DataSourceProperties databaseProperties() {
         return new DataSourceProperties(getString(JDBC_URL), getString(JDBC_USERNAME), getString(JDBC_PASSWORD));
     }
@@ -169,5 +167,9 @@ public class TestEnvironment {
 
     private String serverBaseUrl() {
         return String.format("%s://%s:%s%s", serverSettings.scheme, serverSettings.host, serverSettings.port, serverSettings.contextPath);
+    }
+
+    public File webRoot() {
+        return WebRoot.locate();
     }
 }

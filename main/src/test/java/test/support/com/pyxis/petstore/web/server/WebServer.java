@@ -1,18 +1,27 @@
 package test.support.com.pyxis.petstore.web.server;
 
-import org.testinfected.petstore.jdbc.DataSourceProperties;
-import org.testinfected.petstore.PetStore;
-import org.testinfected.petstore.WebLayout;
-import org.testinfected.petstore.util.Charsets;
+import org.testinfected.petstore.Launcher;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 public class WebServer {
 
-    private final int port;
-    private final PetStore server;
+    private static final PrintStream SILENT = new PrintStream(new OutputStream() {
+        public void write(int b) throws IOException {
+        }
+    });
 
-    public WebServer(int port, WebLayout web, DataSourceProperties database) {
+    private final int port;
+    private final File root;
+    private final Launcher launcher;
+
+    public WebServer(int port, File root) {
         this.port = port;
-        this.server = createServer(web, database);
+        this.root = root;
+        this.launcher = new Launcher(SILENT);
     }
 
     // todo should this go in Petstore?
@@ -21,18 +30,10 @@ public class WebServer {
     }
 
     public void start() throws Exception {
-        server.start(port);
+        launcher.launch("--environment", "test", "--quiet", "--encoding", "utf-8", "--port", String.valueOf(port), root.getAbsolutePath());
     }
 
     public void stop() throws Exception {
-        server.stop();
-    }
-
-    private PetStore createServer(WebLayout web, DataSourceProperties database) {
-        // todo Use Launcher when configurable through command line switches
-        PetStore server = new PetStore(web, database);
-        server.encodeOutputAs(Charsets.UTF_8);
-        server.quiet();
-        return server;
+        launcher.stop();
     }
 }
