@@ -9,7 +9,7 @@ NO_LOG = [:jcl_over_slf4j, :slf4j_api, :slf4j_silent]
 VELOCITY = [:commons_beanutils, :commons_digester, :commons_chain, :velocity_engine, :velocity_tools]
 JETTY = [:jetty, :jetty_util]
 
-MUSTACHE = [:jsr305, :guava, :mustache]
+MUSTACHE = [:guava, :mustache]
 
 Project.local_task :jetty
 ['db-migrate', 'db-clean', 'db-reset', 'db-init'].each { |t| Project.local_task t }

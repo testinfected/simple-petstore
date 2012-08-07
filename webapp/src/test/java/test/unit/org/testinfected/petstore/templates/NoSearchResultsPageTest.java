@@ -9,7 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
-import static org.testinfected.petstore.util.ContextBuilder.context;
+import static org.testinfected.petstore.util.Context.context;
 
 public class NoSearchResultsPageTest {
     String NO_SEARCH_RESULTS_PAGE_TEMPLATE = "no-results";

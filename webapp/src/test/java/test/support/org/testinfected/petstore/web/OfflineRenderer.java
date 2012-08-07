@@ -5,7 +5,7 @@ import org.testinfected.petstore.FileSystemResourceLoader;
 import org.testinfected.petstore.MustacheRendering;
 import org.testinfected.petstore.Renderer;
 import org.testinfected.petstore.util.Charsets;
-import org.testinfected.petstore.util.ContextBuilder;
+import org.testinfected.petstore.util.Context;
 import org.w3c.dom.Element;
 
 import java.io.File;
@@ -39,7 +39,7 @@ public class OfflineRenderer {
         return this;
     }
 
-    public OfflineRenderer using(ContextBuilder context) {
+    public OfflineRenderer using(Context context) {
         return using(context.asMap());
     }
 

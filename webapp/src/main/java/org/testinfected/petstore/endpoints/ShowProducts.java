@@ -6,12 +6,11 @@ import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.testinfected.petstore.dispatch.Dispatch;
 import org.testinfected.petstore.dispatch.EndPoint;
-import org.testinfected.petstore.util.ContextBuilder;
+import org.testinfected.petstore.util.Context;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-import static org.testinfected.petstore.util.ContextBuilder.context;
+import static org.testinfected.petstore.util.Context.context;
 
 public class ShowProducts implements EndPoint {
 
@@ -27,7 +26,7 @@ public class ShowProducts implements EndPoint {
         String keyword = request.getParameter("keyword");
         List<Product> matchingProducts = productCatalog.findByKeyword(keyword);
 
-        ContextBuilder context = context().with("keyword", keyword);
+        Context context = context().with("keyword", keyword);
         if (matchingProducts.isEmpty()) {
             response.render("no-results", context.asMap());
         } else {
@@ -49,7 +48,7 @@ public class ShowProducts implements EndPoint {
             this.attachments = attachments;
         }
 
-        public String apply(@Nullable String fileName) {
+        public String apply(String fileName) {
             return attachments.getLocation(fileName);
         }
     }

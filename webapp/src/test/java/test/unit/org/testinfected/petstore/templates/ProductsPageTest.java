@@ -4,14 +4,13 @@ import com.github.mustachejava.TemplateFunction;
 import com.pyxis.petstore.domain.product.Product;
 import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.testinfected.petstore.util.ContextBuilder;
+import org.testinfected.petstore.util.Context;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.Paths;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,7 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
-import static org.testinfected.petstore.util.ContextBuilder.context;
+import static org.testinfected.petstore.util.Context.context;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
@@ -35,7 +34,7 @@ public class ProductsPageTest {
     Element productsPage;
     Paths paths = Paths.root();
     List<Product> productList = new ArrayList<Product>();
-    ContextBuilder context = context().with("products", productList).with("keyword", "dog");
+    Context context = context().with("products", productList).with("keyword", "dog");
 
     @Test public void
     displaysAllProductsFound() {
@@ -52,7 +51,7 @@ public class ProductsPageTest {
         addToProducts(aProduct().withNumber("LAB-1234").named("Labrador").describedAs("Friendly").withPhoto("labrador.png"));
 
         productsPage = renderProductsPage().using(context.with("photo", new TemplateFunction() {
-            public String apply(@Nullable String fileName) {
+            public String apply(String fileName) {
                 return "/photos/" + fileName;
             }
         })).asDom();

@@ -3,7 +3,7 @@ package org.testinfected.petstore.endpoints;
 import org.testinfected.petstore.dispatch.Dispatch;
 import org.testinfected.petstore.dispatch.EndPoint;
 
-import static org.testinfected.petstore.util.ContextBuilder.emptyContext;
+import static org.testinfected.petstore.util.Context.emptyContext;
 
 public class Home implements EndPoint {
 
