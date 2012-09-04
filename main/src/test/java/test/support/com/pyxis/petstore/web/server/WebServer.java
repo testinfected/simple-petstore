@@ -24,11 +24,6 @@ public class WebServer {
         this.launcher = new Launcher(SILENT);
     }
 
-    // todo should this go in Petstore?
-    public String getUrl() {
-        return "http://localhost:" + port;
-    }
-
     public void start() throws Exception {
         launcher.launch("--environment", "test", "--quiet", "--encoding", "utf-8", "--port", String.valueOf(port), root.getAbsolutePath());
     }

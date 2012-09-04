@@ -3,35 +3,35 @@ package test.support.com.pyxis.petstore.web;
 import com.objogate.wl.web.AsyncWebDriver;
 import test.support.com.pyxis.petstore.builders.Builders;
 import test.support.com.pyxis.petstore.builders.ProductBuilder;
-import test.support.com.pyxis.petstore.web.browser.BrowserControl;
 import test.support.com.pyxis.petstore.web.page.HomePage;
 import test.support.com.pyxis.petstore.web.page.Menu;
 import test.support.com.pyxis.petstore.web.page.ProductsPage;
 import test.support.com.pyxis.petstore.web.server.WebServer;
 
+import java.sql.SQLException;
+
 public class ApplicationDriver {
 
-    private final WebServer server;
-    private final BrowserControl browserControl;
     private final DatabaseDriver database;
 
+    private WebServer server;
     private AsyncWebDriver browser;
     private HomePage homePage;
     private ProductsPage productsPage;
     private Menu menu;
+    private TestEnvironment environment;
 
     public ApplicationDriver(TestEnvironment environment) {
-        this.server = new WebServer(environment.serverPort(), environment.webRoot());
+        this.environment = environment;
         // todo don't go backdoor to the database, use a REST service
         this.database = DatabaseDriver.create(environment.databaseProperties());
-        this.browserControl = environment.browserControl();
     }
 
     public void start() throws Exception {
         startDatabase();
-        startWebServer();
-        startBrowser();
-        openHomePage();
+        startServer();
+        launchBrowser();
+        makeDrivers();
     }
 
     private void startDatabase() throws Exception {
@@ -40,26 +40,37 @@ public class ApplicationDriver {
         database.connect();
     }
 
-    private void startWebServer() throws Exception {
-        server.start();
+    private void startServer() throws Exception {
+        server = environment.startServer();
     }
 
-    private void startBrowser() {
-        browser = browserControl.launch();
+    private void launchBrowser() {
+        browser = environment.launchBrowser();
+    }
+
+    private void makeDrivers() {
         menu = new Menu(browser);
         homePage = new HomePage(browser);
         productsPage = new ProductsPage(browser);
     }
 
-    public void openHomePage() {
-        browser.navigate().to(server.getUrl());
-    }
-
     public void stop() throws Exception {
         logout();
-        server.stop();
-        browser.quit();
+        stopServer();
+        stopBrowser();
+        stopDatabase();
+    }
+
+    private void stopDatabase() throws SQLException {
         database.stop();
+    }
+
+    private void stopBrowser() {
+        browser.quit();
+    }
+
+    private void stopServer() throws Exception {
+        server.stop();
     }
 
     public void logout() {

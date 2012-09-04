@@ -1,5 +1,6 @@
 package test.support.com.pyxis.petstore.web.server;
 
+@Deprecated
 public class ServerSettings {
 
     public final String scheme;

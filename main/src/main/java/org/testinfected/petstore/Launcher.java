@@ -16,7 +16,7 @@ public class Launcher {
     private static void stopOnExit(final Launcher launcher) {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                try { if (launcher !=null) launcher.stop(); } catch (Exception ignored) {}
+                try { if (launcher != null) launcher.stop(); } catch (Exception ignored) {}
             }
         });
     }

@@ -30,6 +30,7 @@ public class DatabaseDriver {
 
     public DatabaseDriver(DataSource dataSource) {
         this.dataSource = dataSource;
+        // todo assume database is up-to-date
         this.migrator = new DatabaseMigrator(dataSource);
         this.cleaner = new DatabaseCleaner(dataSource);
     }
