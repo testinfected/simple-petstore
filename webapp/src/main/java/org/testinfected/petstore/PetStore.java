@@ -1,5 +1,7 @@
 package org.testinfected.petstore;
 
+import org.simpleframework.http.Request;
+import org.simpleframework.http.Response;
 import org.testinfected.petstore.endpoints.Home;
 import org.testinfected.petstore.endpoints.Logout;
 import org.testinfected.petstore.endpoints.ShowProducts;
@@ -31,7 +33,6 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -41,7 +42,7 @@ public class PetStore {
     private static final String LOGGER_NAME = "access";
 
     private final WebLayout web;
-    private final DataSourceProperties databaseProperties;
+    private final DataSource dataSource;
     private final Logger logger = makeLogger();
     private final SystemClock clock = new SystemClock();
 
@@ -50,9 +51,9 @@ public class PetStore {
     private Charset outputEncoding = Charset.defaultCharset();
     private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
 
-    public PetStore(WebLayout layout, DataSourceProperties properties) {
+    public PetStore(WebLayout layout, DataSource dataSource) {
         this.web = layout;
-        this.databaseProperties = properties;
+        this.dataSource = dataSource;
     }
 
     public void encodeOutputAs(String charsetName) {
@@ -63,8 +64,12 @@ public class PetStore {
         this.outputEncoding = encoding;
     }
 
+    public void reportErrorsTo(FailureReporter failureReporter) {
+        this.failureReporter = failureReporter;
+    }
+
     public void quiet() {
-        failureReporter = FailureReporter.IGNORE;
+        reportErrorsTo(FailureReporter.IGNORE);
     }
 
     public void logToConsole() {
@@ -76,9 +81,6 @@ public class PetStore {
     }
 
     public void start(int port) throws Exception {
-        // mouahahaha wtf a single connection !?!
-        // todo scope this by http request
-        connection = connectToDatabase();
         server = new Server(port, failureReporter);
         server.run(new MiddlewareStack() {{
             use(new Failsafe(new MustacheRendering(new FileSystemResourceLoader(web.templates, web.encoding)), failureReporter));
@@ -87,7 +89,13 @@ public class PetStore {
             use(new ApacheCommonLogger(logger, clock));
             use(staticAssets());
             use(siteMesh());
-            run(dispatcher());
+            run(new Application() {
+                public void handle(Request request, Response response) throws Exception {
+                    connection = dataSource.getConnection();
+                    dispatcher().handle(request, response);
+                    connection.close();
+                }
+            });
         }});
     }
 
@@ -108,11 +116,6 @@ public class PetStore {
         return router;
     }
 
-    private Connection connectToDatabase() throws SQLException {
-        DataSource dataSource = DriverManagerDataSource.from(databaseProperties);
-        return dataSource.getConnection();
-    }
-
     private SiteMesh siteMesh() {
         Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(web.layouts, web.encoding));
         SiteMesh siteMesh = new SiteMesh(new HtmlPageSelector());
@@ -122,7 +125,6 @@ public class PetStore {
 
     public void stop() throws Exception {
         if (server != null) server.shutdown();
-        if (connection != null) connection.close();
     }
 
     private static Logger makeLogger() {

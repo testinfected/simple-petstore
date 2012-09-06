@@ -30,10 +30,6 @@ public class HttpResponse {
         assertHasStatusCode(200);
     }
 
-    public void assertNotFound() {
-        assertHasStatusCode(404);
-    }
-
     public void assertHasStatusCode(int code) {
         assertThat("response", response, hasStatusCode(code));
     }

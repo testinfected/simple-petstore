@@ -1,6 +1,7 @@
 package org.testinfected.petstore;
 
 import org.testinfected.cli.CLI;
+import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -63,7 +64,7 @@ public class Launcher {
 
         String webRoot = operands[WEB_ROOT];
         Environment env = Environment.load(env(cli));
-        petStore = new PetStore(WebLayout.standard(webRoot), env.database);
+        petStore = new PetStore(WebLayout.standard(webRoot), DriverManagerDataSource.from(env.database));
         petStore.encodeOutputAs(encoding(cli));
 
         if (quiet(cli)) {
