@@ -38,7 +38,7 @@ public class PetStoreTest {
     FailureReporter failureReporter = context.mock(FailureReporter.class);
     DataSource dataSource = context.mock(DataSource.class);
     PetStore petstore = new PetStore(WebLayout.standard(WebRoot.locate()), dataSource);
-    States database = context.states("database");
+    States database = context.states("database").startsAs("up");
 
     Connection connection;
     Console console = Console.captureStandardOutput();
@@ -48,7 +48,6 @@ public class PetStoreTest {
 
     @Before public void
     startServer() throws Exception {
-        database.startsAs("up");
         connection = connectToTestDatabase();
         context.checking(new Expectations() {{
             allowing(dataSource).getConnection(); will(returnValue(connection)); when(database.is("up"));

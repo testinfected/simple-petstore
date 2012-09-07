@@ -44,10 +44,11 @@ public class SiteMeshTest {
 
     @Before public void
     startServer() throws IOException {
+        response.startsAs("selected");
         context.checking(new Expectations() {{
             allowing(selector).select(with(any(Response.class))); will(returnValue(true)); when(response.is("selected"));
+            allowing(selector).select(with(any(Response.class))); will(returnValue(false)); when(response.isNot("selected"));
         }});
-        response.become("selected");
 
         server.run(new MiddlewareStack() {{
             use(siteMesh);
@@ -91,10 +92,7 @@ public class SiteMeshTest {
 
     @Test public void
     doesNotAffectPageWhenResponseIsNotSelected() throws IOException {
-        response.become("not selected");
-        context.checking(new Expectations() {{
-            oneOf(selector).select(with(any(Response.class))); will(returnValue(false));
-        }});
+        response.become("unselected");
         siteMesh.map("/decorated", new StaticDecorator("decorated page"));
 
         HttpResponse response = request.get("/decorated/page");

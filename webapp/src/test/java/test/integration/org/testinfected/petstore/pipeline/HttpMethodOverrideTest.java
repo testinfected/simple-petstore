@@ -31,16 +31,15 @@ public class HttpMethodOverrideTest {
 
     HttpMethodOverride methodOverride = new HttpMethodOverride();
 
-    Application application = new MiddlewareStack() {{
-        use(methodOverride);
-        run(runner);
-    }};
     Server server = new Server(9999);
     HttpRequest request = aRequest().to(server);
 
     @Before public void
     startServer() throws IOException {
-        server.run(application);
+        server.run(new MiddlewareStack() {{
+            use(methodOverride);
+            run(runner);
+        }});
     }
 
     @After public void

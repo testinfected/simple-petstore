@@ -11,8 +11,6 @@ import org.testinfected.petstore.decoration.LayoutTemplate;
 import org.testinfected.petstore.decoration.PageCompositor;
 import org.testinfected.petstore.dispatch.Router;
 import org.testinfected.petstore.dispatch.Routes;
-import org.testinfected.petstore.jdbc.DataSourceProperties;
-import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.ConnectionManager;

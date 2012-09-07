@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.simpleframework.http.Status;
-import org.testinfected.petstore.Application;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.petstore.pipeline.StaticAssets;
@@ -21,17 +20,16 @@ public class StaticAssetsTest {
     int NO_ASSET_SERVED = Status.NOT_FOUND.getCode();
 
     StaticAssets assets = new StaticAssets(respondWithCode(ASSET_SERVED), "/favicon.ico", "/static");
-    Application application = new MiddlewareStack() {{
-        use(assets);
-        run(respondWithCode(NO_ASSET_SERVED));
-    }};
 
     Server server = new Server(9999);
     HttpRequest request = aRequest().to(server);
 
     @Before public void
     startServer() throws IOException {
-        server.run(application);
+        server.run(new MiddlewareStack() {{
+            use(assets);
+            run(respondWithCode(NO_ASSET_SERVED));
+        }});
     }
 
     @After public void

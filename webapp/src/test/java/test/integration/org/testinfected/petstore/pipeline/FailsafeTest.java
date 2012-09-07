@@ -34,17 +34,15 @@ public class FailsafeTest {
     Failsafe failsafe = new Failsafe(renderer);
     Exception error = new Exception("Crashed!");
 
-    Application app = new MiddlewareStack() {{
-        use(failsafe);
-        run(crashesWith(error));
-    }};
-
     Server server = new Server(9999);
     HttpRequest request = aRequest().to(server);
 
     @Before public void
     startServer() throws IOException {
-        server.run(app);
+        server.run(new MiddlewareStack() {{
+            use(failsafe);
+            run(crashesWith(error));
+        }});
     }
 
     @After public void
@@ -59,7 +57,7 @@ public class FailsafeTest {
             oneOf(renderer).render(with("error"), with(same(error))); will(returnValue("Crashed!"));
         }});
 
-        HttpResponse response = request.get("/crash");
+        HttpResponse response = request.send();
         response.assertHasStatusCode(500);
         response.assertHasHeader("Content-Type", containsString("text/html"));
         response.assertHasContent(containsString("Crashed!"));
@@ -72,7 +70,7 @@ public class FailsafeTest {
             allowing(renderer).render(with(any(String.class)), with(any(Object.class)));
             oneOf(failureReporter).internalErrorOccurred(with(same(error)));
         }});
-        request.get("/crash");
+        request.send();
         context.assertIsSatisfied();
     }
 
