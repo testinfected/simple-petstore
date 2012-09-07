@@ -22,7 +22,7 @@ import test.support.org.testinfected.petstore.web.HttpRequest;
 import javax.sql.DataSource;
 import java.sql.Connection;
 
-import static org.testinfected.petstore.pipeline.ConnectionManager.JDBC_CONNECTION;
+import static org.jmock.Expectations.same;
 import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 @RunWith(JMock.class)
@@ -61,7 +61,7 @@ public class ConnectionManagerTest {
     @Test public void
     makesConnectionAvailableToNextApplication() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(app).handle(with(aRequestWithAttribute(JDBC_CONNECTION, same((Object) connection))), with(any(Response.class))); when(connectionStatus.is("opened"));
+            oneOf(app).handle(with(aRequestWithAttribute("jdbc.connection", sameConnection(connection))), with(any(Response.class))); when(connectionStatus.is("opened"));
         }});
 
         request.send();
@@ -74,6 +74,10 @@ public class ConnectionManagerTest {
         }});
 
         request.send();
+    }
+
+    private Matcher<Object> sameConnection(final Connection connection) {
+        return same((Object) connection);
     }
 
     private Matcher<Request> aRequestWithAttribute(final String attribute, Matcher<Object> connection) {

@@ -8,22 +8,45 @@ import java.sql.Connection;
 
 public class ConnectionManager extends AbstractMiddleware {
 
-    public static final String JDBC_CONNECTION = "jdbc.connection";
-
     private final DataSource dataSource;
 
     public ConnectionManager(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    @SuppressWarnings("unchecked")
     public void handle(Request request, Response response) throws Exception {
         Connection connection = dataSource.getConnection();
-        request.getAttributes().put(JDBC_CONNECTION, connection);
+        ConnectionReference ref = new ConnectionReference(request);
+        ref.set(connection);
+
         try {
             forward(request, response);
         } finally {
             connection.close();
+            ref.unset();
+        }
+    }
+
+    public static class ConnectionReference {
+        public static final String KEY = "jdbc.connection";
+
+        private final Request request;
+
+        public ConnectionReference(Request request) {
+            this.request = request;
+        }
+
+        public Connection get() {
+            return (Connection) request.getAttribute(KEY);
+        }
+
+        @SuppressWarnings("unchecked")
+        private void set(Connection connection) {
+            request.getAttributes().put(KEY, connection);
+        }
+
+        public void unset() {
+            request.getAttributes().remove(KEY);
         }
     }
 }

@@ -15,6 +15,7 @@ import org.testinfected.petstore.jdbc.DataSourceProperties;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
+import org.testinfected.petstore.pipeline.ConnectionManager;
 import org.testinfected.petstore.pipeline.Dispatcher;
 import org.testinfected.petstore.pipeline.Failsafe;
 import org.testinfected.petstore.pipeline.FileServer;
@@ -37,6 +38,8 @@ import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
+import static org.testinfected.petstore.pipeline.ConnectionManager.ConnectionReference;
+
 public class PetStore {
 
     private static final String LOGGER_NAME = "access";
@@ -47,7 +50,6 @@ public class PetStore {
     private final SystemClock clock = new SystemClock();
 
     private Server server;
-    private Connection connection;
     private Charset outputEncoding = Charset.defaultCharset();
     private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
 
@@ -89,24 +91,24 @@ public class PetStore {
             use(new ApacheCommonLogger(logger, clock));
             use(staticAssets());
             use(siteMesh());
+            use(new ConnectionManager(dataSource));
             run(new Application() {
                 public void handle(Request request, Response response) throws Exception {
-                    connection = dataSource.getConnection();
-                    dispatcher().handle(request, response);
-                    connection.close();
+                    ConnectionReference connection = new ConnectionReference(request);
+                    dispatcher(connection.get()).handle(request, response);
                 }
             });
         }});
     }
 
-    private Dispatcher dispatcher() {
+    private Dispatcher dispatcher(Connection connection) {
         Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(web.pages, web.encoding));
-        final Dispatcher dispatcher = new Dispatcher(drawRoutes(), renderer);
+        final Dispatcher dispatcher = new Dispatcher(drawRoutes(connection), renderer);
         dispatcher.setEncoding(outputEncoding);
         return dispatcher;
     }
 
-    private Router drawRoutes() {
+    private Router drawRoutes(final Connection connection) {
         Router router = new Router();
         router.draw(new Routes() {{
             map("/products").to(new ShowProducts(new ProductsDatabase(connection), new FileSystemPhotoStore("/photos")));
