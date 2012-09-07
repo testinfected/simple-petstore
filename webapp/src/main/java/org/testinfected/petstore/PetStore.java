@@ -38,6 +38,7 @@ import java.util.logging.Logger;
 
 import static org.testinfected.petstore.pipeline.ConnectionManager.ConnectionReference;
 
+// todo progressively move config to Launcher (i.e. Logger, ResourceLoader)
 public class PetStore {
 
     private static final String LOGGER_NAME = "access";
@@ -51,6 +52,8 @@ public class PetStore {
     private Charset outputEncoding = Charset.defaultCharset();
     private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
 
+    // todo considere passing in an instance of a ResourceLoader
+    // and making WebLayout an implementation detail
     public PetStore(WebLayout layout, DataSource dataSource) {
         this.web = layout;
         this.dataSource = dataSource;
@@ -80,6 +83,7 @@ public class PetStore {
         logger.addHandler(fileHandler(logFile));
     }
 
+    // todo Consider either passing in the server instead of the port or assembling the application
     public void start(int port) throws Exception {
         server = new Server(port, failureReporter);
         server.run(new MiddlewareStack() {{

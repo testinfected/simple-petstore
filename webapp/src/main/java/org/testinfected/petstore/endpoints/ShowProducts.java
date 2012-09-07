@@ -22,6 +22,7 @@ public class ShowProducts implements EndPoint {
         this.storage = storage;
     }
 
+    // todo find out missing domain concepts, this logic should not be in the web adapter layer
     public void process(Dispatch.Request request, Dispatch.Response response) throws Exception {
         String keyword = request.getParameter("keyword");
         List<Product> matchingProducts = productCatalog.findByKeyword(keyword);

@@ -11,6 +11,7 @@ import org.testinfected.petstore.util.Charsets;
 
 import java.nio.charset.Charset;
 
+// todo consider inlining in PetStore
 public class Dispatcher implements Application {
 
     private final Routing routing;

@@ -1,5 +1,6 @@
 package org.testinfected.petstore.jdbc;
 
+// todo Consider getting rid of that
 public class DataSourceProperties {
     public final String url;
     public final String username;

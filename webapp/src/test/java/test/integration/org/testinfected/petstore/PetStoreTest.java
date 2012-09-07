@@ -75,6 +75,8 @@ public class PetStoreTest {
         response.assertHasHeader("Server", containsString(Server.NAME));
     }
 
+
+    // todo makes sense to make those end-to-end diagnostics tests?
     @Test public void
     canProduceAccessLogFile() throws IOException {
         petstore.logToFile(logFile.path());
