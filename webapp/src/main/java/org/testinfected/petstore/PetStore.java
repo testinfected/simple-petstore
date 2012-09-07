@@ -1,20 +1,9 @@
 package org.testinfected.petstore;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.petstore.dispatch.EndPoint;
-import org.testinfected.petstore.dispatch.SimpleRequest;
-import org.testinfected.petstore.dispatch.SimpleResponse;
-import org.testinfected.petstore.endpoints.Home;
-import org.testinfected.petstore.endpoints.Logout;
-import org.testinfected.petstore.endpoints.ShowProducts;
 import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
 import org.testinfected.petstore.decoration.HtmlPageSelector;
 import org.testinfected.petstore.decoration.LayoutTemplate;
 import org.testinfected.petstore.decoration.PageCompositor;
-import org.testinfected.petstore.routing.Router;
-import org.testinfected.petstore.routing.Routes;
-import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.ConnectionManager;
 import org.testinfected.petstore.pipeline.Failsafe;
@@ -26,7 +15,6 @@ import org.testinfected.petstore.pipeline.SiteMesh;
 import org.testinfected.petstore.pipeline.StaticAssets;
 import org.testinfected.petstore.util.ConsoleErrorReporter;
 import org.testinfected.petstore.util.ConsoleHandler;
-import org.testinfected.petstore.util.FileSystemPhotoStore;
 import org.testinfected.petstore.util.PlainFormatter;
 import org.testinfected.time.lib.SystemClock;
 
@@ -36,8 +24,6 @@ import java.nio.charset.Charset;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
-
-import static org.testinfected.petstore.pipeline.ConnectionManager.ConnectionReference;
 
 // todo progressively move config to Launcher (i.e. Logger, ResourceLoader)
 public class PetStore {
@@ -95,7 +81,7 @@ public class PetStore {
             use(staticAssets());
             use(siteMesh());
             use(new ConnectionManager(dataSource));
-            run(new Routing(new MustacheRendering(new FileSystemResourceLoader(web.pages, web.encoding))));
+            run(new Routing(new MustacheRendering(new FileSystemResourceLoader(web.pages, web.encoding)), outputEncoding));
         }});
     }
 
@@ -128,31 +114,4 @@ public class PetStore {
         return handler;
     }
 
-    private class Routing implements Application {
-
-        private final Renderer renderer;
-
-        private Routing(final MustacheRendering renderer) {
-            this.renderer = renderer;
-        }
-
-        public void handle(Request request, Response response) throws Exception {
-            final ConnectionReference connection = new ConnectionReference(request);
-            Router router = new Router();
-            router.draw(new Routes() {{
-                map("/products").to(endpoint(new ShowProducts(new ProductsDatabase(connection.get()), new FileSystemPhotoStore("/photos"))));
-                delete("/logout").to(endpoint(new Logout()));
-                otherwise().to(endpoint(new Home()));
-            }});
-            router.handle(request, response);
-        }
-
-        private Application endpoint(final EndPoint endPoint) {
-            return new Application() {
-                public void handle(Request request, Response response) throws Exception {
-                    endPoint.process(new SimpleRequest(request), new SimpleResponse(response, renderer, outputEncoding));
-                }
-            };
-        }
-    }
 }

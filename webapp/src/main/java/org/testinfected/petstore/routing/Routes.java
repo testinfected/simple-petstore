@@ -1,38 +1,40 @@
 package org.testinfected.petstore.routing;
 
-import org.testinfected.petstore.util.HttpMethod;
+import org.simpleframework.http.Request;
+import org.simpleframework.http.Response;
+import org.testinfected.petstore.Application;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Routes implements RouteBuilder {
+import static org.testinfected.petstore.util.Matchers.anything;
 
-    private final List<StaticRouteDefinition> definitions = new ArrayList<StaticRouteDefinition>();
-    private StaticRouteDefinition defaultRouteDefinition;
+public class Routes implements RouteSet, Application {
 
-    public void defineRoutes(RouteSet routes) {
-        for (StaticRouteDefinition definition : this.definitions) {
-            routes.add(definition.toRoute());
+    private final List<Route> routingTable = new ArrayList<Route>();
+    // todo default to NotFound (renders 404) by default
+    private Route fallback;
+
+    public void add(Route route) {
+        routingTable.add(route);
+    }
+
+    public void draw(RouteBuilder routeBuilder) {
+        routeBuilder.build(this);
+    }
+
+    private Route routeMatching(Request request) {
+        for (Route route : routingTable) {
+            if (route.matches(request)) return route;
         }
-        routes.setDefaultRoute(defaultRouteDefinition.toRoute());
+        return fallback;
     }
 
-    public RouteDefinition map(String path) {
-        return openRoute().map(path);
+    public void handle(Request request, Response response) throws Exception {
+        routeMatching(request).handle(request, response);
     }
 
-    public RouteDefinition delete(String path) {
-        return map(path).via(HttpMethod.delete);
-    }
-
-    public RouteDefinition otherwise() {
-        defaultRouteDefinition = openRoute();
-        return defaultRouteDefinition;
-    }
-
-    private StaticRouteDefinition openRoute() {
-        StaticRouteDefinition definition = new StaticRouteDefinition();
-        definitions.add(definition);
-        return definition;
+    public void fallbackTo(Application application) {
+        this.fallback = new StaticRoute(anything(), application);
     }
 }

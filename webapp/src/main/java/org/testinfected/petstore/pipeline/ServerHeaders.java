@@ -5,7 +5,7 @@ import org.simpleframework.http.Response;
 import org.testinfected.petstore.Server;
 import org.testinfected.time.Clock;
 
-// Inline in ApplicationContainer since server should always include those headers?
+// todo consider inlining in ApplicationContainer since server should always include those headers
 public class ServerHeaders extends AbstractMiddleware {
 
     private final Clock clock;

@@ -46,6 +46,7 @@ public class FileServer implements Application {
         return request.getPath().getPath();
     }
 
+    // todo extract to its own application and delegate
     private void renderNotFound(ResourceNotFoundException notFound, Response response) throws IOException {
         response.reset();
         response.setCode(Status.NOT_FOUND.getCode());

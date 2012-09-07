@@ -1,41 +1,31 @@
 package org.testinfected.petstore.routing;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
+import org.testinfected.petstore.util.HttpMethod;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
-public class Router {
+public class Router implements RouteBuilder {
 
-    private final RoutingTable routingTable = new RoutingTable();
+    private final Collection<StaticRouteDefinition> definitions = new ArrayList<StaticRouteDefinition>();
 
-    public void draw(RouteBuilder routeBuilder) {
-        routeBuilder.defineRoutes(routingTable);
+    public void build(RouteSet routes) {
+        for (StaticRouteDefinition definition : this.definitions) {
+            routes.add(definition.toRoute());
+        }
     }
 
-    public void handle(Request request, Response response) throws Exception {
-        routingTable.locateRoute(request).handle(request, response);
+    public RouteDefinition map(String path) {
+        return openRoute().map(path);
     }
 
-    public static class RoutingTable implements RouteSet {
+    public RouteDefinition delete(String path) {
+        return map(path).via(HttpMethod.delete);
+    }
 
-        private final List<Route> routingTable = new ArrayList<Route>();
-        private Route defaultRoute;
-
-        public void add(Route route) {
-            routingTable.add(route);
-        }
-
-        public void setDefaultRoute(Route route) {
-            this.defaultRoute = route;
-        }
-
-        public Route locateRoute(Request request) {
-            for (Route route : routingTable) {
-                if (route.matches(request)) return route;
-            }
-            return defaultRoute;
-        }
+    private RouteDefinition openRoute() {
+        StaticRouteDefinition definition = new StaticRouteDefinition();
+        definitions.add(definition);
+        return definition;
     }
 }
