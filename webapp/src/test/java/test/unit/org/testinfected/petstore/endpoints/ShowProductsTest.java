@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 import org.testinfected.petstore.dispatch.Dispatch;
 import org.testinfected.petstore.endpoints.ShowProducts;
 import test.support.com.pyxis.petstore.builders.Builder;
-import test.support.org.testinfected.petstore.web.MockRequest;
+import test.support.org.testinfected.petstore.web.MockDispatchRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class ShowProductsTest {
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
     ShowProducts showProducts = new ShowProducts(productCatalog, attachmentStorage);
 
-    MockRequest request = new MockRequest();
+    MockDispatchRequest request = new MockDispatchRequest();
     Dispatch.Response response = context.mock(Dispatch.Response.class);
     String keyword = "dogs";
     List<Product> searchResults = new ArrayList<Product>();

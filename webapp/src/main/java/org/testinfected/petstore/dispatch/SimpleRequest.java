@@ -20,12 +20,4 @@ public class SimpleRequest implements Dispatch.Request {
             throw ExceptionImposter.imposterize(e);
         }
     }
-
-    public String getPath() {
-        return request.getPath().getPath();
-    }
-
-    public String getMethod() {
-        return request.getMethod();
-    }
 }

@@ -2,6 +2,9 @@ package org.testinfected.petstore;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
+import org.testinfected.petstore.dispatch.EndPoint;
+import org.testinfected.petstore.dispatch.SimpleRequest;
+import org.testinfected.petstore.dispatch.SimpleResponse;
 import org.testinfected.petstore.endpoints.Home;
 import org.testinfected.petstore.endpoints.Logout;
 import org.testinfected.petstore.endpoints.ShowProducts;
@@ -9,12 +12,11 @@ import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
 import org.testinfected.petstore.decoration.HtmlPageSelector;
 import org.testinfected.petstore.decoration.LayoutTemplate;
 import org.testinfected.petstore.decoration.PageCompositor;
-import org.testinfected.petstore.dispatch.Router;
-import org.testinfected.petstore.dispatch.Routes;
+import org.testinfected.petstore.routing.Router;
+import org.testinfected.petstore.routing.Routes;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.pipeline.ApacheCommonLogger;
 import org.testinfected.petstore.pipeline.ConnectionManager;
-import org.testinfected.petstore.pipeline.Dispatcher;
 import org.testinfected.petstore.pipeline.Failsafe;
 import org.testinfected.petstore.pipeline.FileServer;
 import org.testinfected.petstore.pipeline.HttpMethodOverride;
@@ -31,7 +33,6 @@ import org.testinfected.time.lib.SystemClock;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.sql.Connection;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -94,30 +95,8 @@ public class PetStore {
             use(staticAssets());
             use(siteMesh());
             use(new ConnectionManager(dataSource));
-            run(new Application() {
-                public void handle(Request request, Response response) throws Exception {
-                    ConnectionReference connection = new ConnectionReference(request);
-                    dispatcher(connection.get()).handle(request, response);
-                }
-            });
+            run(new Routing(new MustacheRendering(new FileSystemResourceLoader(web.pages, web.encoding))));
         }});
-    }
-
-    private Dispatcher dispatcher(Connection connection) {
-        Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(web.pages, web.encoding));
-        final Dispatcher dispatcher = new Dispatcher(drawRoutes(connection), renderer);
-        dispatcher.setEncoding(outputEncoding);
-        return dispatcher;
-    }
-
-    private Router drawRoutes(final Connection connection) {
-        Router router = new Router();
-        router.draw(new Routes() {{
-            map("/products").to(new ShowProducts(new ProductsDatabase(connection), new FileSystemPhotoStore("/photos")));
-            delete("/logout").to(new Logout());
-            otherwise().to(new Home());
-        }});
-        return router;
     }
 
     private SiteMesh siteMesh() {
@@ -147,5 +126,33 @@ public class PetStore {
         FileHandler handler = new FileHandler(logFile);
         handler.setFormatter(new PlainFormatter());
         return handler;
+    }
+
+    private class Routing implements Application {
+
+        private final Renderer renderer;
+
+        private Routing(final MustacheRendering renderer) {
+            this.renderer = renderer;
+        }
+
+        public void handle(Request request, Response response) throws Exception {
+            final ConnectionReference connection = new ConnectionReference(request);
+            Router router = new Router();
+            router.draw(new Routes() {{
+                map("/products").to(endpoint(new ShowProducts(new ProductsDatabase(connection.get()), new FileSystemPhotoStore("/photos"))));
+                delete("/logout").to(endpoint(new Logout()));
+                otherwise().to(endpoint(new Home()));
+            }});
+            router.handle(request, response);
+        }
+
+        private Application endpoint(final EndPoint endPoint) {
+            return new Application() {
+                public void handle(Request request, Response response) throws Exception {
+                    endPoint.process(new SimpleRequest(request), new SimpleResponse(response, renderer, outputEncoding));
+                }
+            };
+        }
     }
 }

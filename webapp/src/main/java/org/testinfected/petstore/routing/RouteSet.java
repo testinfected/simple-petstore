@@ -1,4 +1,4 @@
-package org.testinfected.petstore.dispatch;
+package org.testinfected.petstore.routing;
 
 public interface RouteSet {
 

@@ -5,10 +5,6 @@ import java.io.IOException;
 public interface Dispatch {
 
     public interface Request {
-        String getPath();
-
-        String getMethod();
-
         String getParameter(String name);
     }
 

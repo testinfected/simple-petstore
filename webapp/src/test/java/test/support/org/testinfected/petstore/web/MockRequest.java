@@ -1,46 +1,42 @@
 package test.support.org.testinfected.petstore.web;
 
-import org.testinfected.petstore.dispatch.Dispatch;
+import org.simpleframework.http.Path;
+import org.simpleframework.http.Request;
+import org.simpleframework.http.RequestWrapper;
+import org.simpleframework.http.parse.PathParser;
 
-import java.util.HashMap;
-import java.util.Map;
+public class MockRequest extends RequestWrapper {
 
-public class MockRequest implements Dispatch.Request {
+    private static final Request DUMMY_REQUEST = null;
+    private static final String POST = "POST";
 
-    private final Map<String, String> parameters = new HashMap<String, String>();
-    private String path;
     private String method;
+    private String path;
 
     public MockRequest() {
-        this("GET", "/");
+        super(DUMMY_REQUEST);
     }
 
-    public MockRequest(String method, String path) {
-        this.method = method;
+    public static Request post(String path) {
+        MockRequest request = new MockRequest();
+        request.setMethod(POST);
+        request.setPath(path);
+        return request;
+    }
+
+    private void setPath(String path) {
         this.path = path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-    
-    public void setMethod(String method) {
+    private void setMethod(String method) {
         this.method = method;
-    }
-
-    public String getPath() {
-        return path;
     }
 
     public String getMethod() {
         return method;
     }
 
-    public String getParameter(String name) {
-        return parameters.get(name);
-    }
-
-    public void addParameter(String name, String value) {
-        parameters.put(name, value);
+    public Path getPath() {
+        return new PathParser(path);
     }
 }

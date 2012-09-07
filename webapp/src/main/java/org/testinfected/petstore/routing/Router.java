@@ -1,9 +1,12 @@
-package org.testinfected.petstore.dispatch;
+package org.testinfected.petstore.routing;
+
+import org.simpleframework.http.Request;
+import org.simpleframework.http.Response;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Router implements Routing {
+public class Router {
 
     private final RoutingTable routingTable = new RoutingTable();
 
@@ -11,8 +14,8 @@ public class Router implements Routing {
         routeBuilder.defineRoutes(routingTable);
     }
 
-    public void dispatch(Dispatch.Request request, Dispatch.Response response) throws Exception {
-        routingTable.locateRoute(request).dispatch(request, response);
+    public void handle(Request request, Response response) throws Exception {
+        routingTable.locateRoute(request).handle(request, response);
     }
 
     public static class RoutingTable implements RouteSet {
@@ -28,7 +31,7 @@ public class Router implements Routing {
             this.defaultRoute = route;
         }
 
-        public Route locateRoute(Dispatch.Request request) {
+        public Route locateRoute(Request request) {
             for (Route route : routingTable) {
                 if (route.matches(request)) return route;
             }
