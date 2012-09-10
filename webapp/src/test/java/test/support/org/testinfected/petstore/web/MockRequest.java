@@ -4,25 +4,19 @@ import org.simpleframework.http.Path;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.RequestWrapper;
 import org.simpleframework.http.parse.PathParser;
+import org.testinfected.petstore.util.HttpMethod;
 
 //todo use where possible instead of using dynamic mocks
 public class MockRequest extends RequestWrapper {
 
     private static final Request DUMMY_REQUEST = null;
-    private static final String POST = "POST";
 
     private String method;
     private String path;
 
-    public MockRequest() {
+    public MockRequest(HttpMethod method) {
         super(DUMMY_REQUEST);
-    }
-
-    public static Request post(String path) {
-        MockRequest request = new MockRequest();
-        request.setMethod(POST);
-        request.setPath(path);
-        return request;
+        setMethod(method.name());
     }
 
     private void setPath(String path) {
@@ -39,5 +33,11 @@ public class MockRequest extends RequestWrapper {
 
     public Path getPath() {
         return new PathParser(path);
+    }
+
+    public static Request POST(String path) {
+        MockRequest request = new MockRequest(HttpMethod.POST);
+        request.setPath(path);
+        return request;
     }
 }

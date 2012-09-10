@@ -20,7 +20,7 @@ public class Router implements RouteBuilder {
     }
 
     public RouteDefinition delete(String path) {
-        return map(path).via(HttpMethod.delete);
+        return map(path).via(HttpMethod.DELETE);
     }
 
     private RouteDefinition openRoute() {

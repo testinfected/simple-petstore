@@ -14,12 +14,12 @@ import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.decoration.Decorator;
-import org.testinfected.petstore.util.RequestMatcher;
 import org.testinfected.petstore.decoration.Selector;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.petstore.pipeline.SiteMesh;
 import test.support.org.testinfected.petstore.web.HttpRequest;
 import test.support.org.testinfected.petstore.web.HttpResponse;
+import test.support.org.testinfected.petstore.web.Nothing;
 import test.support.org.testinfected.petstore.web.StaticResponse;
 
 import java.io.IOException;
@@ -31,7 +31,6 @@ import static test.support.org.testinfected.petstore.web.StaticResponse.respondW
 public class SiteMeshTest {
     Mockery context = new JUnit4Mockery();
     Selector selector = context.mock(Selector.class);
-    RequestMatcher matcher = context.mock(RequestMatcher.class);
     Decorator decorator = context.mock(Decorator.class);
     States response = context.states("response");
 
@@ -69,11 +68,7 @@ public class SiteMeshTest {
 
     @Test public void
     doesNotAffectPageIfRequestIsNotMatched() throws IOException {
-        siteMesh.map(matcher, decorator);
-        context.checking(new Expectations() {{
-            atLeast(1).of(matcher).matches(with(any(Request.class))); will(returnValue(false));
-        }});
-
+        siteMesh.map(noRequest(), decorator);
         HttpResponse response = request.get("/plain/page");
         response.assertHasContent(equalTo(originalPage));
     }
@@ -106,6 +101,10 @@ public class SiteMeshTest {
 
         HttpResponse response = request.get("/decorated/page");
         response.assertHasContent(equalTo("last decorator"));
+    }
+
+    private Nothing<Request> noRequest() {
+        return new Nothing<Request>();
     }
 
     private class StaticDecorator implements Decorator {

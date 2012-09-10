@@ -7,7 +7,7 @@ import org.testinfected.petstore.Application;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testinfected.petstore.util.Matchers.anything;
+import static org.testinfected.petstore.util.Matchers.anyRequest;
 
 public class Routes implements RouteSet, Application {
 
@@ -35,6 +35,6 @@ public class Routes implements RouteSet, Application {
     }
 
     public void fallbackTo(Application application) {
-        this.fallback = new StaticRoute(anything(), application);
+        this.fallback = new StaticRoute(anyRequest(), application);
     }
 }

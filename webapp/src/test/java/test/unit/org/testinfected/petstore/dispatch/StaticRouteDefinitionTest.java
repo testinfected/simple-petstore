@@ -4,14 +4,14 @@ import org.junit.Test;
 import org.simpleframework.http.Request;
 import org.testinfected.petstore.routing.StaticRouteDefinition;
 import org.testinfected.petstore.util.HttpMethod;
-import test.support.org.testinfected.petstore.web.MockRequest;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.petstore.routing.StaticRouteDefinition.staticRoute;
+import static test.support.org.testinfected.petstore.web.MockRequest.POST;
 
 public class StaticRouteDefinitionTest {
 
-    Request request = MockRequest.post("/path/to/resource");
+    Request request = POST("/path/to/resource");
 
     @Test public void
     matchesAllRequestsByDefault() throws Exception {
@@ -27,7 +27,7 @@ public class StaticRouteDefinitionTest {
 
     @Test public void
     matchesRequestOnlyWhenHttpMethodMatches() throws Exception {
-        assertThat("no match", staticRoute().via(HttpMethod.post).matches(request));
-        assertThat("match", !staticRoute().via(HttpMethod.delete).matches(request));
+        assertThat("no match", staticRoute().via(HttpMethod.POST).matches(request));
+        assertThat("match", !staticRoute().via(HttpMethod.DELETE).matches(request));
     }
 }

@@ -1,14 +1,9 @@
 package test.support.org.testinfected.petstore.web;
 
-import org.simpleframework.http.Request;
-import org.testinfected.petstore.util.RequestMatcher;
+import org.testinfected.petstore.util.Matcher;
 
-public class Nothing implements RequestMatcher {
-    public boolean matches(Request request) {
+public class Nothing<T> implements Matcher<T> {
+    public boolean matches(T actual) {
         return false;
-    }
-
-    public static Nothing nothing() {
-        return new Nothing();
     }
 }
