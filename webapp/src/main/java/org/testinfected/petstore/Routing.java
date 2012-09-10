@@ -38,7 +38,6 @@ public class Routing implements Application {
         routes.draw(new Router() {{
             map("/products").to(endpoint(new ShowProducts(new ProductsDatabase(connection), new FileSystemPhotoStore("/photos"))));
             delete("/logout").to(endpoint(new Logout()));
-            // todo match exactly
             map("/").to(endpoint(new Home()));
         }});
         return routes;

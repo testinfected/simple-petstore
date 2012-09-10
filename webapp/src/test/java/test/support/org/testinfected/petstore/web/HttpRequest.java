@@ -33,7 +33,7 @@ public class HttpRequest {
         return this;
     }
 
-    public HttpRequest forPath(String path) {
+    public HttpRequest withPath(String path) {
         this.path = path;
         return this;
     }
@@ -58,11 +58,11 @@ public class HttpRequest {
     }
 
     public HttpResponse get(String path) throws IOException {
-        return withMethod(HttpMethod.GET).forPath(path).send();
+        return withMethod(HttpMethod.GET).withPath(path).send();
     }
 
     public HttpResponse post(String path) throws IOException {
-        return withMethod(HttpMethod.POST).forPath(path).send();
+        return withMethod(HttpMethod.POST).withPath(path).send();
     }
 
     private HttpRequest withMethod(HttpMethod method) {

@@ -83,6 +83,7 @@ public class SiteMeshTest {
 
         HttpResponse response = request.get("/decorated/page");
         response.assertHasContent(equalTo(decoratedPage));
+        response.assertHasNoHeader("Transfer-Encoding");
     }
 
     @Test public void

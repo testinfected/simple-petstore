@@ -60,6 +60,7 @@ public class FailsafeTest {
         HttpResponse response = request.send();
         response.assertHasStatusCode(500);
         response.assertHasHeader("Content-Type", containsString("text/html"));
+        response.assertHasNoHeader("Transfer-Encoding");
         response.assertHasContent(containsString("Crashed!"));
     }
 

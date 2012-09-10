@@ -3,6 +3,7 @@ package org.testinfected.petstore.routing;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
+import org.testinfected.petstore.pipeline.NotFound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,7 @@ import static org.testinfected.petstore.util.Matchers.anyRequest;
 public class Routes implements RouteSet, Application {
 
     private final List<Route> routingTable = new ArrayList<Route>();
-    // todo default to NotFound (renders 404) by default
-    private Route fallback;
+    private Application fallback = new NotFound();
 
     public void add(Route route) {
         routingTable.add(route);
@@ -27,7 +27,7 @@ public class Routes implements RouteSet, Application {
         for (Route route : routingTable) {
             if (route.matches(request)) return route;
         }
-        return fallback;
+        return new StaticRoute(anyRequest(), fallback);
     }
 
     public void handle(Request request, Response response) throws Exception {
@@ -35,6 +35,6 @@ public class Routes implements RouteSet, Application {
     }
 
     public void fallbackTo(Application application) {
-        this.fallback = new StaticRoute(anyRequest(), application);
+        this.fallback = application;
     }
 }

@@ -50,6 +50,10 @@ public class HttpResponse {
         Assert.assertTrue("content mismatch", Arrays.equals(content, content()));
     }
 
+    public void assertHasContent(String content) {
+        assertHasContent(equalTo(content));
+    }
+
     public void assertHasContent(Matcher<? super String> contentMatcher) {
         assertThat("response", response, hasContent(contentMatcher));
     }

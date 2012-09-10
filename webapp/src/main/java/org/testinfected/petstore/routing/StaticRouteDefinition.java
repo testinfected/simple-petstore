@@ -6,7 +6,6 @@ import org.testinfected.petstore.util.Combination;
 import org.testinfected.petstore.util.HttpMethod;
 import org.testinfected.petstore.util.Matcher;
 
-import static org.testinfected.petstore.util.Combination.both;
 import static org.testinfected.petstore.util.Matchers.anyMethod;
 import static org.testinfected.petstore.util.Matchers.anyPath;
 import static org.testinfected.petstore.util.Matchers.equalTo;
@@ -25,7 +24,7 @@ public class StaticRouteDefinition implements RouteDefinition, Matcher<Request> 
     private Application app;
 
     public StaticRouteDefinition map(String path) {
-        return map(startingWith(path));
+        return map(equalTo(path));
     }
 
     public StaticRouteDefinition map(Matcher<String> path) {

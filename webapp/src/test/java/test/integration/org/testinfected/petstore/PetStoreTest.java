@@ -75,30 +75,29 @@ public class PetStoreTest {
         response.assertHasHeader("Server", containsString(Server.NAME));
     }
 
-
     // todo makes sense to make those end-to-end diagnostics tests?
     @Test public void
     canProduceAccessLogFile() throws IOException {
         petstore.logToFile(logFile.path());
 
-        request.get("/home").assertOK();
-        logFile.assertHasEntry(containsString("\"GET /home HTTP/1.1\" 200"));
+        request.get("/products").assertOK();
+        logFile.assertHasEntry(containsString("\"GET /products HTTP/1.1\" 200"));
     }
 
     @Test public void
     canOutputAccessLogToConsole() throws IOException {
         petstore.logToConsole();
 
-        request.get("/cart").assertOK();
-        console.assertHasEntry(containsString("\"GET /cart HTTP/1.1\" 200"));
+        request.get("/products").assertOK();
+        console.assertHasEntry(containsString("\"GET /products HTTP/1.1\" 200"));
     }
 
     @Test public void
     supportsHttpMethodOverride() throws IOException {
         petstore.logToConsole();
 
-        request.withParameter("_method", "PUT").post("/item").assertOK();
-        console.assertHasEntry(containsString("\"PUT /item HTTP/1.1\" 200"));
+        request.withParameter("_method", "DELETE").post("/logout").assertOK();
+        console.assertHasEntry(containsString("\"DELETE /logout HTTP/1.1\" 303"));
     }
 
     @Test public void
@@ -129,8 +128,16 @@ public class PetStoreTest {
     }
 
     @Test public void
-    renders404WhenResourceIsNotFound() throws IOException {
+    renders404WhenAssetIsNotFound() throws IOException {
         HttpResponse response = request.get("/images/missing.png");
+
+        response.assertHasStatusCode(404);
+        response.assertHasNoHeader("Transfer-Encoding");
+    }
+
+    @Test public void
+    renders404WhenNoRouteDefined() throws IOException {
+        HttpResponse response = request.get("/unrecognized/route");
 
         response.assertHasStatusCode(404);
         response.assertHasNoHeader("Transfer-Encoding");

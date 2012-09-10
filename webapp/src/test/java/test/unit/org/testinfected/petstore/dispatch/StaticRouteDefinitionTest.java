@@ -11,7 +11,7 @@ import static test.support.org.testinfected.petstore.web.MockRequest.POST;
 
 public class StaticRouteDefinitionTest {
 
-    Request request = POST("/path/to/resource");
+    Request request = POST("/resource");
 
     @Test public void
     matchesAllRequestsByDefault() throws Exception {
@@ -20,8 +20,8 @@ public class StaticRouteDefinitionTest {
     }
 
     @Test public void
-    matchesRequestWhenRequestPathStartsWithRoutePath() throws Exception {
-        StaticRouteDefinition route = staticRoute().map("/path");
+    matchesRequestWhenRequestPathMatch() throws Exception {
+        StaticRouteDefinition route = staticRoute().map("/resource");
         assertThat("no match", route.matches(request));
     }
 

@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 public class FileServerTest {
@@ -59,16 +58,14 @@ public class FileServerTest {
         HttpResponse response = request.get("/assets/image.png");
 
         response.assertHasHeader("Content-Length", "6597");
+        response.assertHasNoHeader("Transfer-Encoding");
         response.assertHasHeader("Last-Modified", modifiedDateOf(resourceFile("assets/image.png")));
     }
 
     @Test public void
-    renders404WhenFileIsNotFound() throws IOException {
+    rendersNotFoundWhenFileIsNotFound() throws IOException {
         HttpResponse response = request.get("/images/missing");
-
         response.assertHasStatusCode(404);
-        response.assertHasHeader("Content-Type", "text/plain");
-        response.assertHasContent(containsString("/images/missing"));
     }
 
     String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
@@ -81,6 +78,7 @@ public class FileServerTest {
 
     private File resourceFile(final String name) throws URISyntaxException {
         URL resource = getClass().getClassLoader().getResource(name);
+        if (resource == null) throw new IllegalArgumentException("No such file: " + name);
         return new File(resource.toURI());
     }
 
