@@ -4,6 +4,7 @@
 </head>
 <body>
 <div id="products">
+  {{#match-found}}
   <div id="match-found"><span id="match-count">{{matchCount}}</span> result(s)</div>
 
   <ul id="catalog">
@@ -21,6 +22,10 @@
     </li>
     {{/products}}
   </ul>
+  {{/match-found}}
+  {{^match-found}}
+  <div id="no-match">Your search for "<em>{{keyword}}</em>" did not match any products.</div>
+  {{/match-found}}
 </div>
 </body>
 </html>

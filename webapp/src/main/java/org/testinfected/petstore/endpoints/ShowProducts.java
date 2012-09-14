@@ -15,27 +15,24 @@ import static org.testinfected.petstore.util.Context.context;
 public class ShowProducts implements EndPoint {
 
     private final ProductCatalog productCatalog;
-    private final AttachmentStorage storage;
+    private final AttachmentStorage attachmentStorage;
 
-    public ShowProducts(ProductCatalog productCatalog, AttachmentStorage storage) {
+    public ShowProducts(ProductCatalog productCatalog, AttachmentStorage attachmentStorage) {
         this.productCatalog = productCatalog;
-        this.storage = storage;
+        this.attachmentStorage = attachmentStorage;
     }
 
-    // todo find out missing domain concepts, this logic should not be in the web adapter layer
     public void process(Dispatch.Request request, Dispatch.Response response) throws Exception {
         String keyword = request.getParameter("keyword");
-        List<Product> matchingProducts = productCatalog.findByKeyword(keyword);
+        List<Product> products = productCatalog.findByKeyword(keyword);
 
-        Context context = context().with("keyword", keyword);
-        if (matchingProducts.isEmpty()) {
-            response.render("no-results", context.asMap());
-        } else {
-            response.render("products", context.
-                    with("products", matchingProducts).
-                    and("matchCount", matchingProducts.size()).
-                    and("photo", LocateAttachment.in(storage)).asMap());
-        }
+        Context context = context().
+                with("match-found", !products.isEmpty()).
+                and("keyword", keyword).
+                and("products", products).
+                and("matchCount", products.size()).
+                and("photo", LocateAttachment.in(attachmentStorage));
+        response.render("products", context.asMap());
     }
 
     private static class LocateAttachment implements TemplateFunction {

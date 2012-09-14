@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.any;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
@@ -46,7 +47,7 @@ public class ShowProductsTest {
 
 
     @Before public void
-    configureDefaultPhoto() {
+    useDefaultPhotoForProductsMissingAPhoto() {
         context.checking(new Expectations() {{
             allowing(attachmentStorage).getLocation(with("missing.png")); will(returnValue("/photos/missing.png"));
         }});
@@ -59,11 +60,11 @@ public class ShowProductsTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    rendersNoMatchPageWhenSearchYieldsNoResult() throws Exception {
+    rendersNoMatchWhenSearchYieldsNoResult() throws Exception {
         searchYieldsNothing();
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with("no-results"), with(hasEntry("keyword", keyword)));
+            oneOf(response).render(with("products"), with(hasEntry("match-found", false)));
         }});
 
         showProducts.process(request, response);
@@ -71,20 +72,20 @@ public class ShowProductsTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    rendersProductsPageWithProductsInCatalogThatMatchKeyword() throws Exception {
+    rendersProductsInCatalogMatchingKeywordIfAny() throws Exception {
         searchYields(
                 aProduct().withNumber("LAB-1234").named("Labrador").describedAs("Friendly dog").withPhoto("labrador.png"),
                 aProduct().describedAs("Guard dog"));
 
         context.checking(new Expectations() {{
             allowing(attachmentStorage).getLocation(with("labrador.png")); will(returnValue("/photos/labrador.png"));
-            oneOf(response).render(with("products"), with(hasEntry("products", searchResults)));
+            oneOf(response).render(with("products"), with(allOf(hasEntry("match-found", true), hasEntry("products", searchResults))));
         }});
 
         showProducts.process(request, response);
     }
 
-
+    @SuppressWarnings("unchecked")
     @Test public void
     makesMatchCountAvailableToView() throws Exception {
         searchYields(aProduct(), aProduct(), aProduct());
@@ -96,6 +97,7 @@ public class ShowProductsTest {
         showProducts.process(request, response);
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     makesSearchKeywordAvailableToView() throws Exception {
         searchYields(aProduct());
@@ -107,6 +109,7 @@ public class ShowProductsTest {
         showProducts.process(request, response);
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     makesImageResolverAvailableToView() throws Exception {
         searchYields(aProduct().withPhoto("photo.png"));
@@ -133,7 +136,7 @@ public class ShowProductsTest {
     }
 
     private void searchYields(final Builder<Product>... products) {
-        searchResults.addAll(build(products));
+        this.searchResults.addAll(build(products));
 
         context.checking(new Expectations() {{
             allowing(productCatalog).findByKeyword(keyword); will(returnValue(searchResults));

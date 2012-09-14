@@ -39,7 +39,7 @@ public class PetStore {
     private Charset outputEncoding = Charset.defaultCharset();
     private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
 
-    // todo considere passing in an instance of a ResourceLoader
+    // todo consider passing in an instance of a ResourceLoader
     // and making WebLayout an implementation detail
     public PetStore(WebLayout layout, DataSource dataSource) {
         this.web = layout;

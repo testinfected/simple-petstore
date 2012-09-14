@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
 import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
@@ -36,6 +37,13 @@ public class ProductsPageTest {
     List<Product> productList = new ArrayList<Product>();
     Context context = context().with("products", productList).with("keyword", "dog");
 
+    @Test public void
+    indicatesWhenNoMatchWasFound() {
+        productsPage = renderProductsPage().asDom();
+        assertThat("products page", productsPage, hasUniqueSelector("#no-match", hasText(containsString("dog"))));
+    }
+
+    @SuppressWarnings("unchecked")
     @Test public void
     displaysAllProductsFound() {
         addToProducts(aProduct(), aProduct());
@@ -62,6 +70,7 @@ public class ProductsPageTest {
                 hasUniqueSelector(".product-description", hasText("Friendly")))));
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void
     productNameAndPhotoLinkToProductInventory() {
         addToProducts(aProduct().named("Labrador").withNumber("LAB-1234"));
@@ -80,6 +89,6 @@ public class ProductsPageTest {
     }
 
     private OfflineRenderer renderProductsPage() {
-        return OfflineRenderer.render(PRODUCTS_TEMPLATE).using(context).from(WebRoot.locatePages());
+        return OfflineRenderer.render(PRODUCTS_TEMPLATE).using(context.with("match-found", !productList.isEmpty())).from(WebRoot.locatePages());
     }
 }
