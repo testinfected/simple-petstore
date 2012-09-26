@@ -22,7 +22,7 @@ public class Routing implements Application {
     private final Renderer renderer;
     private final Charset charset;
 
-    public Routing(final MustacheRendering renderer, final Charset charset) {
+    public Routing(final Renderer renderer, final Charset charset) {
         this.renderer = renderer;
         this.charset = charset;
     }
