@@ -12,9 +12,10 @@ import java.sql.SQLException;
 
 public class ApplicationDriver {
 
+    private final WebServer server;
     private final DatabaseDriver database;
+    private final ConsoleDriver console = new ConsoleDriver();
 
-    private WebServer server;
     private AsyncWebDriver browser;
     private HomePage homePage;
     private ProductsPage productsPage;
@@ -23,15 +24,21 @@ public class ApplicationDriver {
 
     public ApplicationDriver(TestEnvironment environment) {
         this.environment = environment;
+        this.server = WebServer.configure(environment);
         // todo don't go backdoor to the database, use a REST service
         this.database = DatabaseDriver.create(environment.databaseProperties());
     }
 
     public void start() throws Exception {
+        suppressConsoleOutput();
         startDatabase();
         startServer();
-        launchBrowser();
+        openBrowser();
         makeDrivers();
+    }
+
+    private void suppressConsoleOutput() {
+        console.capture();
     }
 
     private void startDatabase() throws Exception {
@@ -41,11 +48,11 @@ public class ApplicationDriver {
     }
 
     private void startServer() throws Exception {
-        server = environment.startServer();
+        server.start();
     }
 
-    private void launchBrowser() {
-        browser = environment.launchBrowser();
+    private void openBrowser() {
+        browser = environment.openBrowser();
     }
 
     private void makeDrivers() {
@@ -59,6 +66,11 @@ public class ApplicationDriver {
         stopServer();
         stopBrowser();
         stopDatabase();
+        restoreConsoleOutput();
+    }
+
+    private void restoreConsoleOutput() {
+        console.release();
     }
 
     private void stopDatabase() throws SQLException {

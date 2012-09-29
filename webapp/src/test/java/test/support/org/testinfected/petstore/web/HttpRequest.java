@@ -65,6 +65,10 @@ public class HttpRequest {
         return withMethod(HttpMethod.POST).withPath(path).send();
     }
 
+    public HttpResponse delete(String path) throws IOException {
+        return withMethod(HttpMethod.DELETE).withPath(path).send();
+    }
+
     private HttpRequest withMethod(HttpMethod method) {
         this.method = method;
         return this;

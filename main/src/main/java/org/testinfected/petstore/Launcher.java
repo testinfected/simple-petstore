@@ -2,6 +2,7 @@ package org.testinfected.petstore;
 
 import org.testinfected.cli.CLI;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
+import org.testinfected.petstore.util.ConsoleHandler;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -68,9 +69,9 @@ public class Launcher {
         petStore.encodeOutputAs(encoding(cli));
 
         if (quiet(cli)) {
-            petStore.quiet();
+            petStore.reportErrorsTo(FailureReporter.IGNORE);
         } else {
-            petStore.logToConsole();
+            petStore.logTo(ConsoleHandler.toStandardOutput());
         }
 
         out.println("Starting http://localhost:" + port(cli));

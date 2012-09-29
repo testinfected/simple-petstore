@@ -14,18 +14,14 @@ import org.testinfected.petstore.pipeline.ServerHeaders;
 import org.testinfected.petstore.pipeline.SiteMesh;
 import org.testinfected.petstore.pipeline.StaticAssets;
 import org.testinfected.petstore.util.ConsoleErrorReporter;
-import org.testinfected.petstore.util.ConsoleHandler;
 import org.testinfected.petstore.util.PlainFormatter;
 import org.testinfected.time.lib.SystemClock;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
-// todo progressively move config to Launcher (i.e. Logger, ResourceLoader)
 public class PetStore {
 
     private static final String LOGGER_NAME = "access";
@@ -39,8 +35,7 @@ public class PetStore {
     private Charset outputEncoding = Charset.defaultCharset();
     private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
 
-    // todo consider passing in an instance of a ResourceLoader
-    // and making WebLayout an implementation detail
+    // todo pass the webroot instead?
     public PetStore(WebLayout layout, DataSource dataSource) {
         this.web = layout;
         this.dataSource = dataSource;
@@ -58,16 +53,9 @@ public class PetStore {
         this.failureReporter = failureReporter;
     }
 
-    public void quiet() {
-        reportErrorsTo(FailureReporter.IGNORE);
-    }
-
-    public void logToConsole() {
-        logger.addHandler(ConsoleHandler.toStandardOutput());
-    }
-
-    public void logToFile(String logFile) throws IOException {
-        logger.addHandler(fileHandler(logFile));
+    public void logTo(Handler handler) {
+        handler.setFormatter(new PlainFormatter());
+        logger.addHandler(handler);
     }
 
     // todo Consider either passing in the server instead of the port or assembling the application
@@ -107,11 +95,4 @@ public class PetStore {
         assets.serve("/favicon.ico", "/images", "/stylesheets", "/photos");
         return assets;
     }
-
-    private Handler fileHandler(String logFile) throws IOException {
-        FileHandler handler = new FileHandler(logFile);
-        handler.setFormatter(new PlainFormatter());
-        return handler;
-    }
-
 }

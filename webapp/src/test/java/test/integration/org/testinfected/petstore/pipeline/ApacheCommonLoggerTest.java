@@ -77,10 +77,10 @@ public class ApacheCommonLoggerTest {
         server.run(app);
 
         context.checking(new Expectations() {{
-            oneOf(logger).info(with(containsString("\"GET /logout HTTP/1.1\" 303 -")));
+            oneOf(logger).info(with(containsString("\"DELETE /logout HTTP/1.1\" 303 -")));
         }});
 
-        request.get("/logout");
+        request.delete("/logout");
     }
 
     //todo log also in case of exception

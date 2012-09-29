@@ -15,9 +15,9 @@ import test.support.com.pyxis.petstore.web.server.PassingServer;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
 import test.support.com.pyxis.petstore.web.server.ServerSettings;
 import org.testinfected.petstore.util.PropertyFile;
-import test.support.com.pyxis.petstore.web.server.WebServer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -82,7 +82,7 @@ public class TestEnvironment {
         return new ServerSettings(
                 asString(SERVER_SCHEME),
                 asString(SERVER_HOST),
-                asInt(SERVER_PORT),
+                getServerPort(),
                 asString(CONTEXT_PATH),
                 asString(WEBAPP_PATH));
     }
@@ -132,6 +132,7 @@ public class TestEnvironment {
         return serverLifeCycle;
     }
 
+    @Deprecated
     public BrowserControl browserControl() {
         return browserControl;
     }
@@ -151,26 +152,31 @@ public class TestEnvironment {
         return String.format("%s://%s:%s%s", serverSettings.scheme, serverSettings.host, serverSettings.port, serverSettings.contextPath);
     }
 
-    public AsyncWebDriver launchBrowser() {
+    public AsyncWebDriver openBrowser() {
         AsyncWebDriver browser = new AsyncWebDriver(new UnsynchronizedProber(), browserControl.launch());
-        browser.navigate().to("http://localhost:" + asInt(SERVER_PORT));
+        browser.navigate().to("http://localhost:" + getServerPort());
         return browser;
     }
 
-    public WebServer startServer() throws Exception {
-        WebServer server = new WebServer(asInt(SERVER_PORT), WebRoot.locate());
-        server.start();
-        return server;
+    public int getServerPort() {
+        return asInt(SERVER_PORT);
     }
 
+    public File getWebRoot() {
+        return WebRoot.locate();
+    }
+
+    // todo move to PropertyFile
     private String asString(final String key) {
         return properties.getProperty(key);
     }
 
+    // todo move to PropertyFile
     private int asInt(final String key) {
         return parseInt(asString(key));
     }
 
+    // todo move to PropertyFile
     private URL asUrl(String key) {
         String url = asString(key);
         try {

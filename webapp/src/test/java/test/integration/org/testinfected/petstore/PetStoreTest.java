@@ -16,7 +16,6 @@ import org.testinfected.petstore.Server;
 import org.testinfected.petstore.WebLayout;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import test.support.org.testinfected.petstore.jdbc.TestEnvironment;
-import test.support.org.testinfected.petstore.web.Console;
 import test.support.org.testinfected.petstore.web.HttpRequest;
 import test.support.org.testinfected.petstore.web.HttpResponse;
 import test.support.org.testinfected.petstore.web.LogFile;
@@ -26,6 +25,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.FileHandler;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.isA;
@@ -41,7 +41,6 @@ public class PetStoreTest {
     States database = context.states("database").startsAs("up");
 
     Connection connection;
-    Console console = Console.captureStandardOutput();
     LogFile logFile;
     int serverPort = 9999;
     HttpRequest request = aRequest().onPort(serverPort);
@@ -55,6 +54,7 @@ public class PetStoreTest {
         }});
 
         logFile = LogFile.create();
+        petstore.logTo(new FileHandler(logFile.path()));
         petstore.reportErrorsTo(failureReporter);
         petstore.encodeOutputAs("utf-8");
         petstore.start(serverPort);
@@ -64,7 +64,6 @@ public class PetStoreTest {
     stopServer() throws Exception {
         petstore.stop();
         logFile.clear();
-        console.terminate();
     }
 
     @Test public void
@@ -75,29 +74,15 @@ public class PetStoreTest {
         response.assertHasHeader("Server", containsString(Server.NAME));
     }
 
-    // todo makes sense to make those end-to-end diagnostics tests?
     @Test public void
-    canProduceAccessLogFile() throws IOException {
-        petstore.logToFile(logFile.path());
-
+    logsAllAccesses() throws IOException {
         request.get("/products").assertOK();
         logFile.assertHasEntry(containsString("\"GET /products HTTP/1.1\" 200"));
     }
 
     @Test public void
-    canOutputAccessLogToConsole() throws IOException {
-        petstore.logToConsole();
-
-        request.get("/products").assertOK();
-        console.assertHasEntry(containsString("\"GET /products HTTP/1.1\" 200"));
-    }
-
-    @Test public void
     supportsHttpMethodOverride() throws IOException {
-        petstore.logToConsole();
-
         request.withParameter("_method", "DELETE").post("/logout").assertOK();
-        console.assertHasEntry(containsString("\"DELETE /logout HTTP/1.1\" 303"));
     }
 
     @Test public void
@@ -115,7 +100,7 @@ public class PetStoreTest {
         HttpResponse response = request.get("/products");
 
         response.assertOK();
-        response.assertHasContent(containsLayoutHeader());
+        response.assertHasContent(layoutHeader());
     }
 
     @Test public void
@@ -144,7 +129,7 @@ public class PetStoreTest {
     }
 
     @Test public void
-    renders500ErrorsAndReportsFailure() throws Exception {
+    renders500ErrorsAndReportsFailureWhenSomethingGoesWrong() throws Exception {
         database.become("down");
         context.checking(new Expectations() {{
             oneOf(failureReporter).internalErrorOccurred(with(isA(SQLException.class)));
@@ -156,7 +141,7 @@ public class PetStoreTest {
         response.assertHasContent(containsString("Database is down"));
     }
 
-    private Matcher<String> containsLayoutHeader() {
+    private Matcher<String> layoutHeader() {
         return containsString("<div id=\"header\">");
     }
 
