@@ -1,6 +1,6 @@
 package test.support.org.testinfected.petstore.web;
 
-import org.testinfected.petstore.WebLayout;
+import org.testinfected.petstore.PetStore;
 
 import java.io.File;
 
@@ -13,11 +13,11 @@ public class WebRoot {
         return new File(System.getProperty(WEB_ROOT, RELATIVE_WEB_APP_PATH));
     }
 
-    public static File locateLayouts() {
-        return WebLayout.standard(locate()).layouts;
+    public static File layouts() {
+        return new File(WebRoot.locate(), PetStore.LAYOUT_DIR);
     }
 
-    public static File locatePages() {
-        return WebLayout.standard(locate()).pages;
+    public static File pages() {
+        return new File(WebRoot.locate(), PetStore.PAGES_DIR);
     }
 }

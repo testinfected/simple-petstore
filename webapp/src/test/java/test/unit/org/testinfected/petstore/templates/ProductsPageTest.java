@@ -89,6 +89,6 @@ public class ProductsPageTest {
     }
 
     private OfflineRenderer renderProductsPage() {
-        return OfflineRenderer.render(PRODUCTS_TEMPLATE).using(context.with("match-found", !productList.isEmpty())).from(WebRoot.locatePages());
+        return OfflineRenderer.render(PRODUCTS_TEMPLATE).using(context.with("match-found", !productList.isEmpty())).from(WebRoot.pages());
     }
 }

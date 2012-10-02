@@ -62,6 +62,10 @@ public class HttpResponse {
         assertThat("response encoding", detectedCharset(content()), containsString(charset));
     }
 
+    public void assertHasContentSize(long length) throws IOException {
+        assertHasContentSize((int) length);
+    }
+
     public void assertHasContentSize(int size) throws IOException {
         assertThat("response size", content().length, equalTo(size));
     }

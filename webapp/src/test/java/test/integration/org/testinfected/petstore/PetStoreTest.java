@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.testinfected.petstore.FailureReporter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Server;
-import org.testinfected.petstore.WebLayout;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import test.support.org.testinfected.petstore.jdbc.TestEnvironment;
 import test.support.org.testinfected.petstore.web.HttpRequest;
@@ -37,7 +36,7 @@ public class PetStoreTest {
     Mockery context = new JUnit4Mockery();
     FailureReporter failureReporter = context.mock(FailureReporter.class);
     DataSource dataSource = context.mock(DataSource.class);
-    PetStore petstore = new PetStore(WebLayout.standard(WebRoot.locate()), dataSource);
+    PetStore petstore = new PetStore(WebRoot.locate(), dataSource);
     States database = context.states("database").startsAs("up");
 
     Connection connection;
