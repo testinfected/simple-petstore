@@ -2,8 +2,6 @@ package test.support.com.pyxis.petstore.web;
 
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
-import org.testinfected.petstore.jdbc.DataSourceProperties;
-import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.jdbc.UnitOfWork;
@@ -23,10 +21,6 @@ public class DatabaseDriver {
     private ProductCatalog productCatalog;
 
     private DatabaseCleaner cleaner;
-
-    public static DatabaseDriver create(DataSourceProperties properties) {
-        return new DatabaseDriver(DriverManagerDataSource.from(properties));
-    }
 
     public DatabaseDriver(DataSource dataSource) {
         this.dataSource = dataSource;

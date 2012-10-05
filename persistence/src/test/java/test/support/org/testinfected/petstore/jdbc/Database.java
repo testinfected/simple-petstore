@@ -1,6 +1,5 @@
 package test.support.org.testinfected.petstore.jdbc;
 
-import org.testinfected.petstore.jdbc.DataSourceProperties;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import org.testinfected.petstore.jdbc.JDBCException;
 
@@ -14,8 +13,8 @@ public class Database {
     private final DataSource dataSource;
     private final DatabaseCleaner cleaner;
 
-    public static Database from(DataSourceProperties properties) {
-        return new Database(properties.url, properties.username, properties.password);
+    public static Database in(TestDatabaseEnvironment env) {
+        return new Database(env.url, env.username, env.password);
     }
 
     public Database(String url, String username, String password) {

@@ -14,7 +14,7 @@ import org.testinfected.petstore.FailureReporter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
-import test.support.org.testinfected.petstore.jdbc.TestEnvironment;
+import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import test.support.org.testinfected.petstore.web.HttpRequest;
 import test.support.org.testinfected.petstore.web.HttpResponse;
 import test.support.org.testinfected.petstore.web.LogFile;
@@ -145,6 +145,8 @@ public class PetStoreTest {
     }
 
     private Connection connectToTestDatabase() throws SQLException {
-        return DriverManagerDataSource.from(TestEnvironment.properties()).getConnection();
+        TestDatabaseEnvironment env = TestDatabaseEnvironment.load();
+        DriverManagerDataSource database = new DriverManagerDataSource(env.url, env.username, env.password);
+        return database.getConnection();
     }
 }

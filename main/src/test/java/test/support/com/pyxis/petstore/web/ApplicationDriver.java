@@ -26,7 +26,7 @@ public class ApplicationDriver {
         this.environment = environment;
         this.server = WebServer.configure(environment);
         // todo don't go backdoor to the database, use a REST service
-        this.database = DatabaseDriver.create(environment.databaseProperties());
+        this.database = new DatabaseDriver(environment.getDataSource());
     }
 
     public void start() throws Exception {

@@ -4,7 +4,7 @@ import com.objogate.wl.UnsynchronizedProber;
 import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testinfected.petstore.jdbc.DataSourceProperties;
+import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 import test.support.com.pyxis.petstore.web.browser.BrowserControl;
 import test.support.com.pyxis.petstore.web.browser.LastingBrowser;
 import test.support.com.pyxis.petstore.web.browser.PassingBrowser;
@@ -17,6 +17,7 @@ import test.support.com.pyxis.petstore.web.server.ServerSettings;
 import org.testinfected.petstore.util.PropertyFile;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -105,7 +106,7 @@ public class TestEnvironment {
         throw new IllegalArgumentException(BROWSER_LIFECYCLE + " should be one of lasting, passing, remote: " + lifeCycle);
     }
 
-    public Capabilities browserCapabilities() {
+    private Capabilities browserCapabilities() {
         Map<String, String> capabilities = new HashMap<String, String>();
         for (String property : properties.stringPropertyNames()) {
             if (isCapability(property)) {
@@ -138,12 +139,6 @@ public class TestEnvironment {
     }
 
     @Deprecated
-    // todo remove database connection properties from the test environment
-    public DataSourceProperties databaseProperties() {
-        return new DataSourceProperties(asString(JDBC_URL), asString(JDBC_USERNAME), asString(JDBC_PASSWORD));
-    }
-
-    @Deprecated
     public Routing getRoutes() {
         return new Routing(serverBaseUrl());
     }
@@ -156,6 +151,10 @@ public class TestEnvironment {
         AsyncWebDriver browser = new AsyncWebDriver(new UnsynchronizedProber(), browserControl.launch());
         browser.navigate().to("http://localhost:" + getServerPort());
         return browser;
+    }
+
+    public DataSource getDataSource() {
+        return new DriverManagerDataSource(asString(JDBC_URL), asString(JDBC_USERNAME), asString(JDBC_PASSWORD));
     }
 
     public int getServerPort() {

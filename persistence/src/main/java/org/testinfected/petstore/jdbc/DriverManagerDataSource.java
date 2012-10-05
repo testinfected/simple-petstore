@@ -14,10 +14,6 @@ public class DriverManagerDataSource implements DataSource {
     private final String username;
     private final String password;
 
-    public static DriverManagerDataSource from(DataSourceProperties properties) {
-        return new DriverManagerDataSource(properties.url, properties.username, properties.password);
-    }
-
     public DriverManagerDataSource(String url, String username, String password) {
         this.url = url;
         this.username = username;
