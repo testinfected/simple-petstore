@@ -58,12 +58,12 @@ public class ApacheCommonLoggerTest {
         final String responseBody = "a response with a size of 28";
         Application app = new MiddlewareStack() {{
             use(apacheCommonLogger);
-            run(respondWith(304, responseBody));
+            run(respondWith(200, responseBody));
         }};
         server.run(app);
 
         context.checking(new Expectations() {{
-            oneOf(logger).info(with("127.0.0.1 - - [27/Jun/2012:14:04:00 -0400] \"GET /products?keyword=dogs HTTP/1.1\" 304 28"));
+            oneOf(logger).info(with("127.0.0.1 - - [27/Jun/2012:14:04:00 -0400] \"GET /products?keyword=dogs HTTP/1.1\" 200 28"));
         }});
         request.get("/products?keyword=dogs");
     }
@@ -82,7 +82,4 @@ public class ApacheCommonLoggerTest {
 
         request.delete("/logout");
     }
-
-    //todo log also in case of exception
-
 }

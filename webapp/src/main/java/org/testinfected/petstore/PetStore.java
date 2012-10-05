@@ -69,10 +69,10 @@ public class PetStore {
     public void start(int port) throws Exception {
         server = new Server(port, failureReporter);
         server.run(new MiddlewareStack() {{
+            use(new ApacheCommonLogger(logger, clock));
             use(new Failsafe(new MustacheRendering(new FileSystemResourceLoader(new File(context, APP_DIR), UTF_8)), failureReporter));
             use(new ServerHeaders(clock));
             use(new HttpMethodOverride());
-            use(new ApacheCommonLogger(logger, clock));
             use(staticAssets());
             use(siteMesh());
             use(new ConnectionManager(dataSource));
