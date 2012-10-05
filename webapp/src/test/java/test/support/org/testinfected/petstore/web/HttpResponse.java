@@ -17,6 +17,7 @@ import static test.support.org.testinfected.petstore.web.HasContent.hasContent;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasHeader;
 import static test.support.org.testinfected.petstore.web.HasHeaderWithValue.hasNoHeader;
 import static test.support.org.testinfected.petstore.web.HasStatusCode.hasStatusCode;
+import static test.support.org.testinfected.petstore.web.HasStatusMessage.hasStatusMessage;
 
 public class HttpResponse {
 
@@ -32,6 +33,10 @@ public class HttpResponse {
 
     public void assertHasStatusCode(int code) {
         assertThat("response", response, hasStatusCode(code));
+    }
+
+    public void assertHasStatusMessage(String message) {
+        assertThat("response", response, hasStatusMessage(message));
     }
 
     public void assertHasNoHeader(String name) {

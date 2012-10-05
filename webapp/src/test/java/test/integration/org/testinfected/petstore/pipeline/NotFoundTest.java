@@ -16,11 +16,15 @@ import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 public class NotFoundTest {
 
     Server server = new Server(9999);
-    HttpRequest request = aRequest().to(server);
+    HttpRequest request = aRequest().withPath("/resource").to(server);
+    HttpResponse response;
+    String content = "Not found: /resource";
+    int contentLength = content.getBytes().length;
 
     @Before public void
-    startServer() throws IOException {
+    sendRequestToServer() throws IOException {
         server.run(new NotFound());
+        response = request.send();
     }
 
     @After public void
@@ -29,11 +33,32 @@ public class NotFoundTest {
     }
 
     @Test public void
-    rendersPageNotFound() throws IOException {
-        HttpResponse response = request.withPath("/resource").send();
+    setStatusCodeTo404() {
         response.assertHasStatusCode(404);
+    }
+
+    @Test public void
+    setStatusMessageToNotFound() {
+        response.assertHasStatusMessage("Not Found");
+    }
+
+    @Test public void
+    rendersPageNotFound() {
+        response.assertHasContent(content);
+    }
+
+    @Test public void
+    setsContentLengthHeader() throws IOException {
+        response.assertHasHeader("Content-Length", String.valueOf(contentLength));
+    }
+
+    @Test public void
+    setsResponseContentTypeToPlainText() {
         response.assertHasHeader("Content-Type", containsString("text/plain"));
-        response.assertHasContent("Not found: /resource");
+    }
+
+    @Test public void
+    ensuresResponseIsNotChunked() {
         response.assertHasNoHeader("Transfer-Encoding");
     }
 }

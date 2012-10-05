@@ -32,17 +32,22 @@ public class FailsafeTest {
     FailureReporter failureReporter = context.mock(FailureReporter.class);
 
     Failsafe failsafe = new Failsafe(renderer);
-    Exception error = new Exception("Crashed!");
+    Exception error = new Exception("Error");
 
     Server server = new Server(9999);
     HttpRequest request = aRequest().to(server);
+    HttpResponse response;
 
     @Before public void
-    startServer() throws IOException {
+    sendRequestToServer() throws IOException {
         server.run(new MiddlewareStack() {{
             use(failsafe);
-            run(crashesWith(error));
+            run(errorOccurs(error));
         }});
+        context.checking(new Expectations() {{
+            allowing(renderer).render(with("500"), with(same(error))); will(returnValue("Error"));
+        }});
+        response = request.send();
     }
 
     @After public void
@@ -51,31 +56,45 @@ public class FailsafeTest {
     }
 
     @Test public void
-    rendersErrorTemplateWhenInternalErrorOccurs() throws IOException {
-        failsafe.setErrorTemplate("error");
-        context.checking(new Expectations() {{
-            oneOf(renderer).render(with("error"), with(same(error))); will(returnValue("Crashed!"));
-        }});
-
-        HttpResponse response = request.send();
+    setStatusCodeTo500() {
         response.assertHasStatusCode(500);
-        response.assertHasHeader("Content-Type", containsString("text/html"));
-        response.assertHasNoHeader("Transfer-Encoding");
-        response.assertHasContent(containsString("Crashed!"));
     }
 
     @Test public void
-    notifiesFailureReporterWhenInternalErrorOccurs() throws IOException {
+    setStatusMessageToInternalServerError() {
+        response.assertHasStatusMessage("Internal Server Error");
+    }
+
+    @Test public void
+    rendersErrorTemplate() {
+        response.assertHasContent(containsString("Error"));
+    }
+
+    @Test public void
+    setsContentLengthHeader() throws IOException {
+        response.assertHasHeader("Content-Length", "5");
+    }
+
+    @Test public void
+    setsResponseContentTypeToHtml() {
+        response.assertHasHeader("Content-Type", containsString("text/html"));
+    }
+
+    @Test public void
+    ensuresResponseIsNotChunked() {
+        response.assertHasNoHeader("Transfer-Encoding");
+    }
+
+    @Test public void
+    notifiesFailureReporter() throws IOException {
         failsafe.reportErrorsTo(failureReporter);
         context.checking(new Expectations() {{
-            allowing(renderer).render(with(any(String.class)), with(any(Object.class)));
             oneOf(failureReporter).internalErrorOccurred(with(same(error)));
         }});
         request.send();
-        context.assertIsSatisfied();
     }
 
-    private Application crashesWith(final Exception error) {
+    private Application errorOccurs(final Exception error) {
         return new Application() {
             public void handle(Request request, Response response) throws Exception {
                 throw error;

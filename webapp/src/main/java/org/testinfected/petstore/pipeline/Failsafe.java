@@ -14,9 +14,7 @@ public class Failsafe extends AbstractMiddleware {
     private static final String ERROR_500 = "500";
 
     private final Renderer renderer;
-
     private FailureReporter failureReporter;
-    private String templateName = ERROR_500;
 
     public Failsafe(Renderer renderer) {
         this(renderer, FailureReporter.IGNORE);
@@ -25,10 +23,6 @@ public class Failsafe extends AbstractMiddleware {
     public Failsafe(Renderer renderer, FailureReporter failureReporter) {
         this.renderer = renderer;
         this.failureReporter = failureReporter;
-    }
-
-    public void setErrorTemplate(String templateName) {
-        this.templateName = templateName;
     }
 
     public void reportErrorsTo(FailureReporter failureReporter) {
@@ -65,9 +59,8 @@ public class Failsafe extends AbstractMiddleware {
 
     private void renderError(Exception error, Response response) throws IOException {
         response.set("Content-Type", "text/html; charset=" + Charsets.ISO_8859_1.name().toLowerCase());
-        String body = renderer.render(templateName, error);
+        String body = renderer.render(ERROR_500, error);
         byte[] bytes = body.getBytes(Charsets.ISO_8859_1);
-        response.setContentLength(bytes.length);
         response.getOutputStream(bytes.length).write(bytes);
     }
 }
