@@ -10,7 +10,6 @@ import org.simpleframework.http.Request;
 import org.testinfected.petstore.Application;
 import org.testinfected.petstore.routing.Routes;
 import org.testinfected.petstore.routing.StaticRoute;
-import org.testinfected.petstore.util.HttpMethod;
 import org.testinfected.petstore.util.Matcher;
 import test.support.org.testinfected.petstore.web.MockRequest;
 import test.support.org.testinfected.petstore.web.MockResponse;
@@ -23,7 +22,7 @@ public class RoutesTest {
 
     Routes routes = new Routes();
 
-    MockRequest request = new MockRequest(HttpMethod.POST);
+    MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
 
     Mockery context = new JUnit4Mockery();

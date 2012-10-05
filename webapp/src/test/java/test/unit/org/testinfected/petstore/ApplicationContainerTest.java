@@ -23,12 +23,15 @@ public class ApplicationContainerTest {
     FailureReporter monitor = context.mock(FailureReporter.class);
     ApplicationContainer applicationContainer = new ApplicationContainer(app, monitor);
 
+    Request request = context.mock(Request.class);
+    Response response = context.mock(Response.class);
+
     @Test public void
     reportsInternalErrors() throws Exception {
         Exception error = new Exception("Application error");
 
-        applicationFailsWith(error);
-        communicationSucceeds();
+        applicationWillFailWith(error);
+        communicationWillSucceed();
         expectInternalErrorReport(error);
 
         handleRequest();
@@ -38,14 +41,14 @@ public class ApplicationContainerTest {
     reportsCommunicationErrors() throws Exception {
         IOException error = new IOException("Communication error");
 
-        applicationSucceeds();
-        communicationFailsWith(error);
+        applicationWillSucceed();
+        communicationWillFailWith(error);
         expectCommunicationFailureReport(error);
 
         handleRequest();
     }
 
-    private void applicationFailsWith(final Exception failure) throws Exception {
+    private void applicationWillFailWith(final Exception failure) throws Exception {
         context.checking(new Expectations() {{
             allowing(app).handle(with(same(request)), with(same(response))); will(throwException(failure));
         }});
@@ -57,19 +60,19 @@ public class ApplicationContainerTest {
         }});
     }
 
-    private void communicationSucceeds() throws IOException {
+    private void communicationWillSucceed() throws IOException {
         context.checking(new Expectations() {{
             allowing(response).close();
         }});
     }
 
-    private void applicationSucceeds() throws Exception {
+    private void applicationWillSucceed() throws Exception {
         context.checking(new Expectations() {{
             allowing(app).handle(with(same(request)), with(same(response)));
         }});
     }
 
-    private void communicationFailsWith(final IOException failure) throws IOException {
+    private void communicationWillFailWith(final IOException failure) throws IOException {
         context.checking(new Expectations() {{
             allowing(response).close(); will(throwException(failure));
         }});
@@ -84,7 +87,4 @@ public class ApplicationContainerTest {
     private void handleRequest() {
         applicationContainer.handle(request, response);
     }
-
-    Request request = context.mock(Request.class);
-    Response response = context.mock(Response.class);
 }

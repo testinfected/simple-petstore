@@ -14,6 +14,8 @@ import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
 import org.testinfected.petstore.pipeline.Middleware;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
+import test.support.org.testinfected.petstore.web.MockRequest;
+import test.support.org.testinfected.petstore.web.MockResponse;
 
 @RunWith(JMock.class)
 public class MiddlewareStackTest {
@@ -25,9 +27,9 @@ public class MiddlewareStackTest {
     Middleware onTop = context.mock(Middleware.class, "on top");
     Middleware inTheMiddle = context.mock(Middleware.class, "in the middle");
     Middleware atBottom = context.mock(Middleware.class, "at bottom");
-    
-    Request request = context.mock(Request.class);
-    Response response = context.mock(Response.class);
+
+    Request request = new MockRequest();
+    Response response = new MockResponse();
     final States chain = new StateMachine("chain");
 
     @Test public void
