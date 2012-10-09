@@ -13,12 +13,12 @@ import org.testinfected.petstore.pipeline.MiddlewareStack;
 import org.testinfected.petstore.pipeline.ServerHeaders;
 import org.testinfected.petstore.pipeline.SiteMesh;
 import org.testinfected.petstore.pipeline.StaticAssets;
-import org.testinfected.petstore.util.ConsoleErrorReporter;
 import org.testinfected.petstore.util.PlainFormatter;
 import org.testinfected.time.lib.SystemClock;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
@@ -37,11 +37,10 @@ public class PetStore {
     private final File context;
     private final DataSource dataSource;
     private final Logger logger = makeLogger();
-
     private final SystemClock clock = new SystemClock();
-    private Server server;
+
     private Charset outputEncoding = Charset.defaultCharset();
-    private FailureReporter failureReporter = ConsoleErrorReporter.toStandardError();
+    private FailureReporter failureReporter = FailureReporter.IGNORE;
 
     public PetStore(File context, DataSource dataSource) {
         this.context = context;
@@ -65,9 +64,7 @@ public class PetStore {
         logger.addHandler(handler);
     }
 
-    // todo Consider either passing in the server instead of the port or assembling the application
-    public void start(int port) throws Exception {
-        server = new Server(port, failureReporter);
+    public void start(Server server) throws IOException {
         server.run(new MiddlewareStack() {{
             use(new ApacheCommonLogger(logger, clock));
             use(new Failsafe(new MustacheRendering(new FileSystemResourceLoader(new File(context, APP_DIR), UTF_8)), failureReporter));
@@ -85,10 +82,6 @@ public class PetStore {
         SiteMesh siteMesh = new SiteMesh(new HtmlPageSelector());
         siteMesh.map("/", new PageCompositor(new HtmlDocumentProcessor(), new LayoutTemplate("main", renderer)));
         return siteMesh;
-    }
-
-    public void stop() throws Exception {
-        if (server != null) server.shutdown();
     }
 
     private static Logger makeLogger() {

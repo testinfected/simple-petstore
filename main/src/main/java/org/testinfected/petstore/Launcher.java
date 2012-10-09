@@ -2,6 +2,7 @@ package org.testinfected.petstore;
 
 import org.testinfected.cli.CLI;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
+import org.testinfected.petstore.util.ConsoleErrorReporter;
 import org.testinfected.petstore.util.ConsoleHandler;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public class Launcher {
     private final PrintStream out;
     private final CLI cli;
 
-    private PetStore petStore;
+    private Server server;
 
     public Launcher(PrintStream out) {
         this.out = out;
@@ -66,18 +67,20 @@ public class Launcher {
 
         String webRoot = operands[WEB_ROOT];
         Environment env = Environment.load(env(cli));
-        petStore = new PetStore(new File(webRoot), new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
+
+        out.println("Starting http://localhost:" + port(cli));
+        server = new Server(port(cli));
+
+        PetStore petStore = new PetStore(new File(webRoot), new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
         petStore.encodeOutputAs(encoding(cli));
 
-        if (quiet(cli)) {
-            petStore.reportErrorsTo(FailureReporter.IGNORE);
-        } else {
+        if (!quiet(cli)) {
+            petStore.reportErrorsTo(ConsoleErrorReporter.toStandardError());
             petStore.logTo(ConsoleHandler.toStandardOutput());
         }
 
-        out.println("Starting http://localhost:" + port(cli));
-        petStore.start(port(cli));
-        out.println("Serving files from " + webRoot);
+        petStore.start(server);
+        out.println("Serving files from: " + webRoot);
     }
 
     private int port(CLI cli) {
@@ -97,7 +100,7 @@ public class Launcher {
     }
 
     public void stop() throws Exception {
-        petStore.stop();
+        server.shutdown();
         out.println("Stopped.");
     }
 

@@ -42,7 +42,9 @@ public class PetStoreTest {
     Connection connection;
     LogFile logFile;
     int serverPort = 9999;
+    Server server = new Server(serverPort);
     HttpRequest request = aRequest().onPort(serverPort);
+
 
     @Before public void
     startServer() throws Exception {
@@ -56,12 +58,12 @@ public class PetStoreTest {
         petstore.logTo(new FileHandler(logFile.path()));
         petstore.reportErrorsTo(failureReporter);
         petstore.encodeOutputAs("utf-8");
-        petstore.start(serverPort);
+        petstore.start(server);
     }
 
     @After public void
     stopServer() throws Exception {
-        petstore.stop();
+        server.shutdown();
         logFile.clear();
     }
 
