@@ -8,7 +8,6 @@ import org.testinfected.petstore.util.Context;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
-import test.support.org.testinfected.petstore.web.Paths;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ public class ProductsPageTest {
     String PRODUCTS_TEMPLATE = "products";
 
     Element productsPage;
-    Paths paths = Paths.root();
     List<Product> productList = new ArrayList<Product>();
     Context context = context().with("products", productList).with("keyword", "dog");
 
@@ -65,9 +63,9 @@ public class ProductsPageTest {
         })).asDom();
 
         assertThat("products page", productsPage, hasUniqueSelector("li[id='product-LAB-1234']", anElement(
-                hasUniqueSelector(".product-image", hasImage(paths.pathFor("/photos/labrador.png"))),
+                hasUniqueSelector(".product-image", hasImage("/photos/labrador.png"))),
                 hasUniqueSelector(".product-name", hasText("Labrador")),
-                hasUniqueSelector(".product-description", hasText("Friendly")))));
+                hasUniqueSelector(".product-description", hasText("Friendly"))));
     }
 
     @SuppressWarnings("unchecked")
@@ -77,7 +75,7 @@ public class ProductsPageTest {
 
         productsPage = renderProductsPage().asDom();
         assertThat("products page", productsPage, hasSelector("li a", hasSize(2)));
-        assertThat("products page", productsPage, hasSelector("li a", everyItem(hasAttribute("href", equalTo(paths.itemsPath("LAB-1234"))))));
+        assertThat("products page", productsPage, hasSelector("li a", everyItem(hasAttribute("href", equalTo("/products/LAB-1234/items")))));
     }
 
     private void addToProducts(Builder<Product>... products) {

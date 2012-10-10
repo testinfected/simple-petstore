@@ -4,7 +4,6 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Element;
-import test.support.org.testinfected.petstore.web.Paths;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,7 +20,6 @@ public class HeaderTest {
 
     String HEADER_TEMPLATE = "header";
     Element header;
-    Paths paths = Paths.root();
 
     @Before public void
     renderHeader() {
@@ -38,7 +36,7 @@ public class HeaderTest {
     containsASearchBoxToQueryTheProductCatalog() {
         assertThat("header", header,
                 hasUniqueSelector("#search-box form",
-                        hasAttribute("action", paths.productsPath()),
+                        hasAttribute("action", "/products"),
                         hasAttribute("method", equalToIgnoringCase("GET"))));
         assertThat("header", header,
                 hasUniqueSelector("#search-box form", hasChildren(keywordInputField(), searchButton())));
