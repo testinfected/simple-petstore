@@ -1,7 +1,7 @@
 package test.support.org.testinfected.petstore.jdbc;
 
 import org.testinfected.petstore.jdbc.JDBCTransactor;
-import org.testinfected.petstore.jdbc.UnitOfWork;
+import org.testinfected.petstore.UnitOfWork;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

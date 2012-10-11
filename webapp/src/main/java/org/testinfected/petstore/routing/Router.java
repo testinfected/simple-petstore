@@ -19,6 +19,14 @@ public class Router implements RouteBuilder {
         return openRoute().map(path);
     }
 
+    public RouteDefinition post(String path) {
+        return map(path).via(HttpMethod.POST);
+    }
+
+    public RouteDefinition get(String path) {
+        return map(path).via(HttpMethod.GET);
+    }
+
     public RouteDefinition delete(String path) {
         return map(path).via(HttpMethod.DELETE);
     }

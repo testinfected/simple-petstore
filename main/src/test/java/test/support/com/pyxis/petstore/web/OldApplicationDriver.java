@@ -31,7 +31,7 @@ public class OldApplicationDriver {
     }
 
     public void open(Routing routes) {
-        browser.navigate().to(routes.urlFor(HomePage.class));
+        browser.navigate().to(routes.toHome());
     }
 
     public void logout() {

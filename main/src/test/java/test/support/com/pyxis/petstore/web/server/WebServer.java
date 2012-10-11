@@ -1,7 +1,6 @@
 package test.support.com.pyxis.petstore.web.server;
 
 import org.testinfected.petstore.Launcher;
-import test.support.com.pyxis.petstore.web.TestEnvironment;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,10 +8,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 public class WebServer {
-
-    public static WebServer configure(TestEnvironment environment) {
-        return new WebServer(environment.getServerPort(), environment.getWebRoot());
-    }
 
     private static final PrintStream SILENT = new PrintStream(new OutputStream() {
         public void write(int b) throws IOException {

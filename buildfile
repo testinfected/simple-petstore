@@ -1,4 +1,4 @@
-require 'buildr/java/cobertura'
+#require 'buildr/java/cobertura'
 require 'buildr/jetty'
 
 VERSION_NUMBER = '0.1-SNAPSHOT'
@@ -91,11 +91,10 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
               project(:domain).test.compile.target, project(:oldinfra).test.compile.target,
               project(:webapp).test.compile.target, project(:persistence).test.compile.target,
               :flyway, HAMCREST, LOG
-    test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty
+    test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :htmlunit
 
     test.using :integration, :properties => { 
       'web.root' => project(:webapp).path_to(:src, :main, :webapp),
-      'server.lifecycle' => 'external',
       'browser.lifecycle' => 'remote',
       'browser.remote.url' => Buildr.settings.profile['filter']['selenium.server.url'],
       'browser.remote.capability.browserName' => Buildr.settings.profile['filter']['selenium.server.browser'],

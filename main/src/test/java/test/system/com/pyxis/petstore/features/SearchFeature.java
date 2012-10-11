@@ -6,8 +6,6 @@ import org.junit.Test;
 import test.support.com.pyxis.petstore.web.ApplicationDriver;
 import test.support.com.pyxis.petstore.web.TestEnvironment;
 
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
-
 public class SearchFeature {
 
     ApplicationDriver application = new ApplicationDriver(TestEnvironment.load());
@@ -24,7 +22,7 @@ public class SearchFeature {
 
     @Test public void
     searchesForAProductNotAvailableInStore() throws Exception {
-        application.addProducts(aProduct().named("Labrador Retriever"));
+        application.addProduct("LAB-1234", "Labrador Retriever");
 
         application.searchFor("Dalmatian");
         application.showsNoResult();
@@ -32,9 +30,9 @@ public class SearchFeature {
 
     @Test public void
     searchesAndFindsProductsInCatalog() throws Exception {
-        application.addProducts(aProduct("LAB-1234").named("Labrador Retriever"),
-                aProduct("CHE-5678").named("Chesapeake").describedAs("Chesapeake bay retriever"),
-                aProduct().named("Dalmatian"));
+        application.addProduct("LAB-1234", "Labrador Retriever");
+        application.addProduct("CHE-5678", "Chesapeake", "Chesapeake bay retriever");
+        application.addProduct("DAL-6666", "Dalmatian");
 
         application.searchFor("retriever");
         application.displaysNumberOfResults(2);

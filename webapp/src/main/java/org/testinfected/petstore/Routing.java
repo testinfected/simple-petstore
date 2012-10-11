@@ -1,13 +1,16 @@
 package org.testinfected.petstore;
 
+import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
+import org.testinfected.petstore.controller.CreateProduct;
 import org.testinfected.petstore.dispatch.EndPoint;
 import org.testinfected.petstore.dispatch.SimpleRequest;
 import org.testinfected.petstore.dispatch.SimpleResponse;
 import org.testinfected.petstore.endpoints.Home;
 import org.testinfected.petstore.endpoints.Logout;
 import org.testinfected.petstore.endpoints.ShowProducts;
+import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.pipeline.ConnectionManager;
 import org.testinfected.petstore.routing.Router;
@@ -36,7 +39,8 @@ public class Routing implements Application {
     private Routes drawRoutes(final Connection connection) {
         Routes routes = new Routes();
         routes.draw(new Router() {{
-            map("/products").to(endpoint(new ShowProducts(new ProductsDatabase(connection), new FileSystemPhotoStore("/photos"))));
+            get("/products").to(endpoint(new ShowProducts(new ProductsDatabase(connection), new FileSystemPhotoStore("/photos"))));
+            post("/products").to(new CreateProduct(new PurchasingAgent(new ProductsDatabase(connection), new JDBCTransactor(connection))));
             delete("/logout").to(endpoint(new Logout()));
             map("/").to(endpoint(new Home()));
         }});

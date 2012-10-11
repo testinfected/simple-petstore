@@ -15,9 +15,10 @@ import test.support.com.pyxis.petstore.web.server.PassingServer;
 import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
 import test.support.com.pyxis.petstore.web.server.ServerSettings;
 import org.testinfected.petstore.util.PropertyFile;
+import test.support.org.testinfected.petstore.jdbc.DatabaseCleaner;
+import test.support.org.testinfected.petstore.web.HttpRequest;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
-import javax.sql.DataSource;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import static java.lang.Integer.parseInt;
+import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 public class TestEnvironment {
 
@@ -46,6 +48,7 @@ public class TestEnvironment {
     public static final String JDBC_PASSWORD = "jdbc.password";
 
     private static final String TEST_PROPERTIES = "test.properties";
+    private static final int HTTP_TIMEOUT_IN_MILLIS = 5000;
 
     private static TestEnvironment environment;
 
@@ -83,7 +86,7 @@ public class TestEnvironment {
         return new ServerSettings(
                 asString(SERVER_SCHEME),
                 asString(SERVER_HOST),
-                getServerPort(),
+                serverPort(),
                 asString(CONTEXT_PATH),
                 asString(WEBAPP_PATH));
     }
@@ -149,19 +152,24 @@ public class TestEnvironment {
 
     public AsyncWebDriver openBrowser() {
         AsyncWebDriver browser = new AsyncWebDriver(new UnsynchronizedProber(), browserControl.launch());
-        browser.navigate().to("http://localhost:" + getServerPort());
+        browser.navigate().to("http://localhost:" + serverPort());
         return browser;
     }
 
-    public DataSource getDataSource() {
-        return new DriverManagerDataSource(asString(JDBC_URL), asString(JDBC_USERNAME), asString(JDBC_PASSWORD));
+    public HttpRequest webClient() {
+        return aRequest().onPort(serverPort()).withTimeOut(HTTP_TIMEOUT_IN_MILLIS);
     }
 
-    public int getServerPort() {
+    public void cleanUp() throws Exception {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource(asString(JDBC_URL), asString(JDBC_USERNAME), asString(JDBC_PASSWORD));
+        new DatabaseCleaner(dataSource).clean();
+    }
+
+    public int serverPort() {
         return asInt(SERVER_PORT);
     }
 
-    public File getWebRoot() {
+    public File webRoot() {
         return WebRoot.locate();
     }
 

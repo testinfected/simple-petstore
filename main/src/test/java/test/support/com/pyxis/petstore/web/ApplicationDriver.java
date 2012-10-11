@@ -1,21 +1,19 @@
 package test.support.com.pyxis.petstore.web;
 
 import com.objogate.wl.web.AsyncWebDriver;
-import test.support.com.pyxis.petstore.builders.Builders;
-import test.support.com.pyxis.petstore.builders.ProductBuilder;
 import test.support.com.pyxis.petstore.web.page.HomePage;
 import test.support.com.pyxis.petstore.web.page.Menu;
 import test.support.com.pyxis.petstore.web.page.ProductsPage;
 import test.support.com.pyxis.petstore.web.server.WebServer;
 
-import java.sql.SQLException;
+import java.io.IOException;
 
 public class ApplicationDriver {
 
     private final WebServer server;
-    private final DatabaseDriver database;
     private final ConsoleDriver console = new ConsoleDriver();
 
+    private RestDriver rest;
     private AsyncWebDriver browser;
     private HomePage homePage;
     private ProductsPage productsPage;
@@ -24,14 +22,13 @@ public class ApplicationDriver {
 
     public ApplicationDriver(TestEnvironment environment) {
         this.environment = environment;
-        this.server = WebServer.configure(environment);
-        // todo don't go backdoor to the database, use a REST service
-        this.database = new DatabaseDriver(environment.getDataSource());
+        this.server = new WebServer(environment.serverPort(), environment.webRoot());
+        this.rest = new RestDriver(environment.webClient());
     }
 
     public void start() throws Exception {
         suppressConsoleOutput();
-        startDatabase();
+        cleanupEnvironment();
         startServer();
         openBrowser();
         makeDrivers();
@@ -41,10 +38,8 @@ public class ApplicationDriver {
         console.capture();
     }
 
-    private void startDatabase() throws Exception {
-        database.migrate();
-        database.clean();
-        database.connect();
+    private void cleanupEnvironment() throws Exception {
+        environment.cleanUp();
     }
 
     private void startServer() throws Exception {
@@ -65,16 +60,11 @@ public class ApplicationDriver {
         logout();
         stopServer();
         stopBrowser();
-        stopDatabase();
         restoreConsoleOutput();
     }
 
     private void restoreConsoleOutput() {
         console.release();
-    }
-
-    private void stopDatabase() throws SQLException {
-        database.stop();
     }
 
     private void stopBrowser() {
@@ -107,7 +97,11 @@ public class ApplicationDriver {
         productsPage.displaysProduct(number, name);
     }
 
-    public void addProducts(ProductBuilder... products) throws Exception {
-        database.addProducts(Builders.build(products));
+    public void addProduct(String number, String name) throws IOException {
+        addProduct(number, name, "");
+    }
+
+    public void addProduct(String number, String name, String description) throws IOException {
+        rest.addProduct(number, name, description);
     }
 }

@@ -17,15 +17,22 @@ import java.util.Map;
 public class HttpRequest {
 
     private final Map<String, String> parameters = new HashMap<String, String>();
-    
-    private int timeout = 5000;
+
     private HttpMethod method = HttpMethod.GET;
     private String path = "/";
-    private Paths paths  = Paths.root();
     private int port;
+    private int timeoutInMillis = 5000;
 
     public static HttpRequest aRequest() {
         return new HttpRequest();
+    }
+
+    public HttpRequest but() {
+        HttpRequest other = aRequest().withTimeOut(timeoutInMillis).onPort(port).withMethod(method).withPath(path);
+        for (String name : parameters.keySet()) {
+            other.withParameter(name, parameters.get(name));
+        }
+        return other;
     }
 
     public HttpRequest onPort(int port) {
@@ -50,7 +57,7 @@ public class HttpRequest {
 
     public HttpResponse send() throws IOException {
         WebClient client = new WebClient();
-        client.setTimeout(timeout);
+        client.setTimeout(timeoutInMillis);
         WebRequest request = new WebRequest(requestUrl(), method);
         request.setRequestParameters(requestParameters());
 
@@ -69,7 +76,12 @@ public class HttpRequest {
         return withMethod(HttpMethod.DELETE).withPath(path).send();
     }
 
-    private HttpRequest withMethod(HttpMethod method) {
+    public HttpRequest withTimeOut(int timeoutInMillis) {
+        this.timeoutInMillis = timeoutInMillis;
+        return this;
+    }
+
+    public HttpRequest withMethod(HttpMethod method) {
         this.method = method;
         return this;
     }
@@ -84,7 +96,7 @@ public class HttpRequest {
 
     private URL requestUrl() throws MalformedURLException {
         try {
-            return new URL("http://localhost:" + port + paths.pathFor(path));
+            return new URL("http://localhost:" + port + path);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
