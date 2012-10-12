@@ -30,21 +30,16 @@ public class Routing implements Application {
         this.charset = charset;
     }
 
-    public void handle(Request request, Response response) throws Exception {
-        final Connection connection = new ConnectionManager.ConnectionReference(request).get();
-        Routes routes = drawRoutes(connection);
-        routes.handle(request, response);
-    }
+    public void handle(final Request request, final Response response) throws Exception {
+        Routes routes = Routes.draw(new Router() {{
+            Connection connection = ConnectionManager.get(request);
 
-    private Routes drawRoutes(final Connection connection) {
-        Routes routes = new Routes();
-        routes.draw(new Router() {{
             get("/products").to(endpoint(new ShowProducts(new ProductsDatabase(connection), new FileSystemPhotoStore("/photos"))));
             post("/products").to(new CreateProduct(new PurchasingAgent(new ProductsDatabase(connection), new JDBCTransactor(connection))));
             delete("/logout").to(endpoint(new Logout()));
             map("/").to(endpoint(new Home()));
         }});
-        return routes;
+        routes.handle(request, response);
     }
 
     private Application endpoint(final EndPoint endPoint) {

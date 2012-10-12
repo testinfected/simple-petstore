@@ -8,6 +8,10 @@ import org.testinfected.petstore.util.Charsets;
 
 public class NotFound implements Application {
 
+    public static Application notFound() {
+        return new NotFound();
+    }
+
     public void handle(Request request, Response response) throws Exception {
         response.setCode(Status.NOT_FOUND.getCode());
         response.setText(Status.NOT_FOUND.getDescription());

@@ -32,13 +32,14 @@ public class RoutesTest {
     Application fallbackApp = context.mock(Application.class, "fallback app");
 
     @Test public void
-    routesToFallbackApplicationWhenNoRouteMatches() throws Exception {
+    routesToDefaultApplicationWhenNoRouteMatches() throws Exception {
+        routes.defaultsTo(fallbackApp).add(new StaticRoute(never(), wrongApp));
+
         context.checking(new Expectations() {{
             never(wrongApp);
             oneOf(fallbackApp).handle(with(same(request)), with(same(response)));
         }});
-        routes.add(new StaticRoute(noRequest(), wrongApp));
-        routes.fallbackTo(fallbackApp);
+
         routes.handle(request, response);
     }
 
@@ -54,7 +55,7 @@ public class RoutesTest {
         routes.handle(request, response);
     }
 
-    private Matcher<Request> noRequest() {
+    private Matcher<Request> never() {
         return new Nothing<Request>();
     }
 }

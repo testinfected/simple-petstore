@@ -1,5 +1,7 @@
 package org.testinfected.petstore;
 
+import org.simpleframework.http.Request;
+import org.simpleframework.http.Response;
 import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
 import org.testinfected.petstore.decoration.HtmlPageSelector;
 import org.testinfected.petstore.decoration.LayoutTemplate;

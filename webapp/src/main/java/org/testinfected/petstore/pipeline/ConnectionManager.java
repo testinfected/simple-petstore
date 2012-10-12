@@ -17,17 +17,21 @@ public class ConnectionManager extends AbstractMiddleware {
     public void handle(Request request, Response response) throws Exception {
         Connection connection = dataSource.getConnection();
         ConnectionReference ref = new ConnectionReference(request);
-        ref.set(connection);
 
+        ref.set(connection);
         try {
             forward(request, response);
         } finally {
-            connection.close();
             ref.unset();
+            connection.close();
         }
     }
 
-    public static class ConnectionReference {
+    public static Connection get(Request request) {
+        return new ConnectionReference(request).get();
+    }
+
+    private static class ConnectionReference {
         public static final String KEY = "jdbc.connection";
 
         private final Request request;
