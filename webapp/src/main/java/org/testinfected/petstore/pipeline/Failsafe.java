@@ -4,7 +4,7 @@ import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
 import org.testinfected.petstore.FailureReporter;
-import org.testinfected.petstore.Renderer;
+import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.petstore.util.Charsets;
 
 import java.io.IOException;
@@ -13,14 +13,14 @@ public class Failsafe extends AbstractMiddleware {
 
     private static final String ERROR_500 = "500";
 
-    private final Renderer renderer;
+    private final RenderingEngine renderer;
     private FailureReporter failureReporter;
 
-    public Failsafe(Renderer renderer) {
+    public Failsafe(RenderingEngine renderer) {
         this(renderer, FailureReporter.IGNORE);
     }
 
-    public Failsafe(Renderer renderer, FailureReporter failureReporter) {
+    public Failsafe(RenderingEngine renderer, FailureReporter failureReporter) {
         this.renderer = renderer;
         this.failureReporter = failureReporter;
     }

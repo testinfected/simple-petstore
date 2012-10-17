@@ -57,6 +57,7 @@ public class BufferedResponse extends ResponseWrapper {
 
     public void flush() throws IOException {
         byte[] content = getContent();
+        setContentLength(content.length);
         response.getOutputStream(content.length).write(content);
     }
 

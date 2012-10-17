@@ -1,10 +1,8 @@
 package test.support.org.testinfected.petstore.web;
 
 import org.testinfected.hamcrest.ExceptionImposter;
-import org.testinfected.petstore.FileSystemResourceLoader;
 import org.testinfected.petstore.MustacheRendering;
-import org.testinfected.petstore.Renderer;
-import org.testinfected.petstore.util.Charsets;
+import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.petstore.util.Context;
 import org.w3c.dom.Element;
 
@@ -21,7 +19,7 @@ public class OfflineRenderer {
 
     private final String template;
 
-    private Renderer renderer;
+    private RenderingEngine renderer;
     private Object context;
     private String content;
 
@@ -31,10 +29,10 @@ public class OfflineRenderer {
     }
 
     public OfflineRenderer from(File location) {
-        return with(new MustacheRendering(new FileSystemResourceLoader(location, Charsets.UTF_8)));
+        return with(new MustacheRendering(location));
     }
 
-    public OfflineRenderer with(Renderer renderer) {
+    public OfflineRenderer with(RenderingEngine renderer) {
         this.renderer = renderer;
         return this;
     }

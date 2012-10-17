@@ -59,6 +59,6 @@ public class NotFoundTest {
 
     @Test public void
     ensuresResponseIsNotChunked() {
-        response.assertHasNoHeader("Transfer-Encoding");
+        response.assertNotChunked();
     }
 }

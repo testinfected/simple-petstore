@@ -2,17 +2,17 @@ package org.testinfected.petstore.dispatch;
 
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
-import org.testinfected.petstore.Renderer;
+import org.testinfected.petstore.RenderingEngine;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class SimpleResponse implements Dispatch.Response {
     private final Response response;
-    private final Renderer renderer;
+    private final RenderingEngine renderer;
     private final Charset charset;
 
-    public SimpleResponse(Response response, Renderer renderer, Charset charset) {
+    public SimpleResponse(Response response, RenderingEngine renderer, Charset charset) {
         this.response = response;
         this.renderer = renderer;
         this.charset = charset;

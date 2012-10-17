@@ -3,41 +3,43 @@ package org.testinfected.petstore.pipeline;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
-import org.testinfected.petstore.Resource;
-import org.testinfected.petstore.ResourceLoader;
-import org.testinfected.petstore.ResourceNotFoundException;
+import org.testinfected.petstore.util.MimeTypes;
 import org.testinfected.petstore.util.Streams;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class FileServer implements Application {
 
-    private final ResourceLoader resourceLoader;
     private final Application notFound = new NotFound();
+    private final File root;
 
-    public FileServer(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
+    public FileServer(File root) {
+        this.root = root;
     }
 
     public void handle(Request request, Response response) throws Exception {
         try {
             renderFile(request, response);
-        } catch (ResourceNotFoundException e) {
+        } catch (FileNotFoundException e) {
             renderNotFound(request, response);
         }
     }
 
     private void renderFile(Request request, Response response) throws IOException {
-        Resource resource = resourceLoader.load(fileName(request));
-        response.set("Content-Type", resource.mimeType());
-        response.setDate("Last-Modified", resource.lastModified());
-        response.setContentLength(resource.contentLength());
-        InputStream file = resource.open();
+        File file = new File(root, fileName(request));
+        response.set("Content-Type", MimeTypes.guessFrom(file.getName()));
+        response.setDate("Last-Modified", file.lastModified());
+        response.setContentLength((int) file.length());
+
+        InputStream in = new FileInputStream(file);
         try {
-            Streams.copy(file, response.getOutputStream(resource.contentLength()));
+            Streams.copy(in, response.getOutputStream());
         } finally {
-            Streams.close(file);
+            Streams.close(in);
         }
     }
 

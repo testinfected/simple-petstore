@@ -82,8 +82,8 @@ public class SiteMeshTest {
         siteMesh.map("/decorated", decorator);
 
         HttpResponse response = request.get("/decorated/page");
+        response.assertNotChunked();
         response.assertHasContent(equalTo(decoratedPage));
-        response.assertHasNoHeader("Transfer-Encoding");
     }
 
     @Test public void

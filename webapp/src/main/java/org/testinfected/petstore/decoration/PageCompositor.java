@@ -1,7 +1,5 @@
 package org.testinfected.petstore.decoration;
 
-import org.testinfected.petstore.Renderer;
-
 import java.io.IOException;
 
 public class PageCompositor implements Decorator {

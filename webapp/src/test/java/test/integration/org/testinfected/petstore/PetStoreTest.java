@@ -91,9 +91,9 @@ public class PetStoreTest {
         HttpResponse response = request.get("/");
 
         response.assertOK();
+        response.assertNotChunked();
         response.assertHasHeader("Content-Type", "text/html; charset=utf-8");
         response.assertContentIsEncodedAs("UTF-8");
-        response.assertHasNoHeader("Transfer-Encoding");
     }
 
     @Test public void
@@ -101,6 +101,7 @@ public class PetStoreTest {
         HttpResponse response = request.get("/products");
 
         response.assertOK();
+        response.assertNotChunked();
         response.assertHasContent(layoutHeader());
     }
 
@@ -109,8 +110,8 @@ public class PetStoreTest {
         HttpResponse response = request.get("/images/logo.png");
 
         response.assertOK();
+        response.assertNotChunked();
         response.assertHasHeader("Content-Type", "image/png");
-        response.assertHasNoHeader("Transfer-Encoding");
     }
 
     @Test public void
@@ -118,7 +119,7 @@ public class PetStoreTest {
         HttpResponse response = request.get("/images/missing.png");
 
         response.assertHasStatusCode(404);
-        response.assertHasNoHeader("Transfer-Encoding");
+        response.assertNotChunked();
     }
 
     @Test public void
@@ -126,7 +127,7 @@ public class PetStoreTest {
         HttpResponse response = request.get("/unrecognized/route");
 
         response.assertHasStatusCode(404);
-        response.assertHasNoHeader("Transfer-Encoding");
+        response.assertNotChunked();
     }
 
     @Test public void
@@ -138,7 +139,7 @@ public class PetStoreTest {
 
         HttpResponse response = request.get("/products");
         response.assertHasStatusCode(500);
-        response.assertHasNoHeader("Transfer-Encoding");
+        response.assertNotChunked();
         response.assertHasContent(containsString("Database is down"));
     }
 

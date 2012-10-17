@@ -3,7 +3,6 @@ package test.integration.org.testinfected.petstore.pipeline;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.testinfected.petstore.ClassPathResourceLoader;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.FileServer;
 import org.testinfected.petstore.util.Streams;
@@ -24,22 +23,27 @@ import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 public class FileServerTest {
 
-    FileServer fileServer = new FileServer(new ClassPathResourceLoader());
+    File base = locateBase();
+    FileServer fileServer = new FileServer(base);
 
     Server server = new Server(9999);
     HttpRequest request = aRequest().to(server);
-    File file;
+    File file = new File(base, "assets/image.png");
+
+    private static File locateBase() {
+        URL fileLocation = FileServerTest.class.getClassLoader().getResource("assets/image.png");
+        File asset;
+        try {
+            asset = new File(fileLocation.toURI());
+        } catch (Exception e) {
+            throw new AssertionError("Unable to locate assets/image.png");
+        }
+        return asset.getParentFile().getParentFile();
+    }
 
     @Before public void
     startServer() throws IOException {
         server.run(fileServer);
-    }
-
-    @Before public void
-    locateFileOnFileSystem() throws URISyntaxException {
-        URL fileLocation = getClass().getClassLoader().getResource("assets/image.png");
-        if (fileLocation == null) throw new IllegalArgumentException("No such file: " + "assets/image.png");
-        file = new File(fileLocation.toURI());
     }
 
     @After public void
@@ -67,7 +71,7 @@ public class FileServerTest {
         HttpResponse response = request.get("/assets/image.png");
 
         response.assertHasHeader("Content-Length", valueOf(file.length()));
-        response.assertHasNoHeader("Transfer-Encoding");
+        response.assertNotChunked();
         response.assertHasHeader("Last-Modified", modifiedDateOf(file));
     }
 

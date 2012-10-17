@@ -78,4 +78,9 @@ public class HttpResponse {
     private byte[] content() throws IOException {
         return toBytes(response.getContentAsStream());
     }
+
+    public void assertNotChunked() {
+        assertHasNoHeader("Transfer-Encoding");
+
+    }
 }

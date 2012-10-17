@@ -12,7 +12,7 @@ import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
 import org.testinfected.petstore.FailureReporter;
-import org.testinfected.petstore.Renderer;
+import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.Failsafe;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
@@ -28,7 +28,7 @@ import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 public class FailsafeTest {
 
     Mockery context = new JUnit4Mockery();
-    Renderer renderer = context.mock(Renderer.class);
+    RenderingEngine renderer = context.mock(RenderingEngine.class);
     FailureReporter failureReporter = context.mock(FailureReporter.class);
 
     Failsafe failsafe = new Failsafe(renderer);
@@ -82,7 +82,7 @@ public class FailsafeTest {
 
     @Test public void
     ensuresResponseIsNotChunked() {
-        response.assertHasNoHeader("Transfer-Encoding");
+        response.assertNotChunked();
     }
 
     @Test public void

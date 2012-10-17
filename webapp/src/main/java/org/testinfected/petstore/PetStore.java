@@ -1,7 +1,5 @@
 package org.testinfected.petstore;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
 import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
 import org.testinfected.petstore.decoration.HtmlPageSelector;
 import org.testinfected.petstore.decoration.LayoutTemplate;
@@ -24,8 +22,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
-
-import static org.testinfected.petstore.util.Charsets.UTF_8;
 
 public class PetStore {
 
@@ -69,18 +65,18 @@ public class PetStore {
     public void start(Server server) throws IOException {
         server.run(new MiddlewareStack() {{
             use(new ApacheCommonLogger(logger, clock));
-            use(new Failsafe(new MustacheRendering(new FileSystemResourceLoader(new File(context, APP_DIR), UTF_8)), failureReporter));
+            use(new Failsafe(new MustacheRendering(new File(context, APP_DIR)), failureReporter));
             use(new ServerHeaders(clock));
             use(new HttpMethodOverride());
             use(staticAssets());
             use(siteMesh());
             use(new ConnectionManager(dataSource));
-            run(new Routing(new MustacheRendering(new FileSystemResourceLoader(new File(context, PAGES_DIR), UTF_8)), outputEncoding));
+            run(new Routing(new MustacheRendering(new File(context, PAGES_DIR)), outputEncoding));
         }});
     }
 
     private SiteMesh siteMesh() {
-        Renderer renderer = new MustacheRendering(new FileSystemResourceLoader(new File(context, LAYOUT_DIR), UTF_8));
+        RenderingEngine renderer = new MustacheRendering(new File(context, LAYOUT_DIR));
         SiteMesh siteMesh = new SiteMesh(new HtmlPageSelector());
         siteMesh.map("/", new PageCompositor(new HtmlDocumentProcessor(), new LayoutTemplate("main", renderer)));
         return siteMesh;
@@ -93,7 +89,7 @@ public class PetStore {
     }
 
     private StaticAssets staticAssets() {
-        final StaticAssets assets = new StaticAssets(new FileServer(new FileSystemResourceLoader(new File(context, PUBLIC_DIR), UTF_8)));
+        final StaticAssets assets = new StaticAssets(new FileServer(new File(context, PUBLIC_DIR)));
         assets.serve("/favicon.ico", "/images", "/stylesheets", "/photos");
         return assets;
     }

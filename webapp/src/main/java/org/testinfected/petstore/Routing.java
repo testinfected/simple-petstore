@@ -22,10 +22,10 @@ import java.sql.Connection;
 
 public class Routing implements Application {
 
-    private final Renderer renderer;
+    private final RenderingEngine renderer;
     private final Charset charset;
 
-    public Routing(final Renderer renderer, final Charset charset) {
+    public Routing(final RenderingEngine renderer, final Charset charset) {
         this.renderer = renderer;
         this.charset = charset;
     }
