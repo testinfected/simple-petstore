@@ -5,6 +5,7 @@ import org.simpleframework.http.Status;
 import org.testinfected.petstore.RenderingEngine;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
 public class SimpleResponse implements Dispatch.Response {
@@ -18,12 +19,11 @@ public class SimpleResponse implements Dispatch.Response {
         this.charset = charset;
     }
 
-    public void render(String template, Object context) throws IOException {
+    public void render(String view, Object context) throws IOException {
         response.set("Content-Type", "text/html; charset=" + charset.name().toLowerCase());
-        String body = renderer.render(template, context);
-        byte[] bytes = body.getBytes(charset);
-        response.setContentLength(bytes.length);
-        response.getOutputStream(bytes.length).write(bytes);
+        OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), charset);
+        renderer.render(out, view, context);
+        out.flush();
     }
 
     public void redirectTo(String location) {

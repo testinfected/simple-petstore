@@ -1,8 +1,9 @@
 package org.testinfected.petstore.decoration;
 
 import java.io.IOException;
+import java.io.Writer;
 
 public interface Decorator {
 
-    String decorate(String content) throws IOException;
+    void decorate(Writer out, String content) throws IOException;
 }

@@ -8,6 +8,7 @@ import org.testinfected.petstore.util.BufferedResponse;
 import org.testinfected.petstore.util.Matcher;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -33,28 +34,40 @@ public class SiteMesh extends AbstractMiddleware {
     }
 
     public void handle(Request request, Response response) throws Exception {
+        String body = captureResponse(request, response);
+        if (subjectToDecoration(request, response)) {
+            decorate(decoratorFor(request), response, body);
+        } else {
+            write(response, body);
+        }
+    }
+
+    private void decorate(Decorator decorator, Response response, String content) throws IOException {
+        OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream());
+        decorator.decorate(out, content);
+        out.flush();
+    }
+
+    private void write(Response response, String body) throws IOException {
+        response.getPrintStream().print(body);
+    }
+
+    private String captureResponse(Request request, Response response) throws Exception {
         BufferedResponse buffer = new BufferedResponse(response);
         forward(request, buffer);
-        if (shouldDecorate(request, buffer)) decorate(request, buffer);
-        buffer.flush();
+        return buffer.getBody();
     }
 
-    private boolean shouldDecorate(Request request, Response response) {
-        return underDecoration(request) && selected(response);
+    private boolean subjectToDecoration(Request request, Response response) {
+        return isMapped(request) && isSelected(response);
     }
 
-    private boolean underDecoration(Request request) {
+    private boolean isMapped(Request request) {
         return decoratorFor(request) != null;
     }
 
-    private boolean selected(Response response) {
+    private boolean isSelected(Response response) {
         return selector.select(response);
-    }
-
-    private void decorate(Request request, BufferedResponse response) throws IOException {
-        String decorated = decoratorFor(request).decorate(response.getBody());
-        response.reset();
-        response.getPrintStream().print(decorated);
     }
 
     private Decorator decoratorFor(Request request) {
@@ -80,5 +93,4 @@ public class SiteMesh extends AbstractMiddleware {
             return matcher.matches(request);
         }
     }
-
 }

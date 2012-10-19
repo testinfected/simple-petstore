@@ -4,10 +4,12 @@ import org.simpleframework.http.ContentType;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.ResponseWrapper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
 public class BufferedResponse extends ResponseWrapper {
@@ -55,12 +57,6 @@ public class BufferedResponse extends ResponseWrapper {
         return buffer.toByteArray();
     }
 
-    public void flush() throws IOException {
-        byte[] content = getContent();
-        setContentLength(content.length);
-        response.getOutputStream(content.length).write(content);
-    }
-
     private String getCharset() {
         ContentType type = getContentType();
 
@@ -69,5 +65,18 @@ public class BufferedResponse extends ResponseWrapper {
         }
 
         return type.getCharset();
+    }
+
+    private static class Buffer extends ByteArrayOutputStream implements WritableByteChannel {
+
+        public int write(ByteBuffer src) throws IOException {
+            byte[] bytes = src.array();
+            write(bytes);
+            return bytes.length;
+        }
+
+        public boolean isOpen() {
+            return true;
+        }
     }
 }

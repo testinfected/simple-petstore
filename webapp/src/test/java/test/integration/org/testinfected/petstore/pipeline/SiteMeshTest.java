@@ -23,9 +23,12 @@ import test.support.org.testinfected.petstore.web.Nothing;
 import test.support.org.testinfected.petstore.web.StaticResponse;
 
 import java.io.IOException;
+import java.io.Writer;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static test.support.org.testinfected.petstore.web.StaticResponse.respondWith;
+import static test.unit.org.testinfected.petstore.util.WriteToOutput.anOutput;
+import static test.unit.org.testinfected.petstore.util.WriteToOutput.writeToOutput;
 
 @RunWith(JMock.class)
 public class SiteMeshTest {
@@ -37,7 +40,7 @@ public class SiteMeshTest {
     SiteMesh siteMesh = new SiteMesh(selector);
 
     Server server = new Server(9999);
-    String originalPage = "plain page";
+    String originalPage = "<plain page>";
     StaticResponse app = respondWith(Status.OK, originalPage);
     HttpRequest request = HttpRequest.aRequest().to(server);
 
@@ -75,21 +78,20 @@ public class SiteMeshTest {
 
     @Test public void
     decoratesContentWhenRequestMatchesRegisteredDecorator() throws IOException {
-        final String decoratedPage = "decorated page";
+        final String decoratedPage = "<decorated page>";
         context.checking(new Expectations() {{
-            oneOf(decorator).decorate(with(originalPage)); will(returnValue(decoratedPage));
+            oneOf(decorator).decorate(with(anOutput()), with(originalPage)); will(writeToOutput(decoratedPage));
         }});
         siteMesh.map("/decorated", decorator);
 
         HttpResponse response = request.get("/decorated/page");
-        response.assertNotChunked();
         response.assertHasContent(equalTo(decoratedPage));
     }
 
     @Test public void
     doesNotAffectPageWhenResponseIsNotSelected() throws IOException {
         response.become("unselected");
-        siteMesh.map("/decorated", new StaticDecorator("decorated page"));
+        siteMesh.map("/decorated", new StaticDecorator("<decorated page>"));
 
         HttpResponse response = request.get("/decorated/page");
         response.assertHasContent(equalTo(originalPage));
@@ -97,8 +99,8 @@ public class SiteMeshTest {
 
     @Test public void
     appliesDecoratorsInReverseOrderOfAddition() throws IOException {
-        siteMesh.map("/decorated", new StaticDecorator("first decorator"));
-        siteMesh.map("/decorated/page", new StaticDecorator("last decorator"));
+        siteMesh.map("/decorated", new StaticDecorator("<decoration by first decorator>"));
+        siteMesh.map("/decorated/page", new StaticDecorator("<decoration by last decorator>"));
 
         HttpResponse response = request.get("/decorated/page");
         response.assertHasContent(equalTo("last decorator"));
@@ -115,8 +117,8 @@ public class SiteMeshTest {
             this.decoration = decoratedContent;
         }
 
-        public String decorate(String content) {
-            return decoration;
+        public void decorate(Writer out, String content) throws IOException {
+            out.write(decoration);
         }
     }
 }

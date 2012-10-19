@@ -56,9 +56,4 @@ public class NotFoundTest {
     setsResponseContentTypeToPlainText() {
         response.assertHasHeader("Content-Type", containsString("text/plain"));
     }
-
-    @Test public void
-    ensuresResponseIsNotChunked() {
-        response.assertNotChunked();
-    }
 }

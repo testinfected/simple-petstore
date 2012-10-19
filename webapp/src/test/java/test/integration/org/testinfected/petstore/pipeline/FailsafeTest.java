@@ -87,11 +87,6 @@ public class FailsafeTest {
     }
 
     @Test public void
-    ensuresResponseIsNotChunked() {
-        response.assertNotChunked();
-    }
-
-    @Test public void
     notifiesFailureReporter() throws IOException {
         failsafe.reportErrorsTo(failureReporter);
         context.checking(new Expectations() {{

@@ -9,7 +9,7 @@ public interface Dispatch {
     }
 
     public interface Response {
-        void render(String template, Object context) throws IOException;
+        void render(String view, Object context) throws IOException;
 
         void redirectTo(String location);
     }

@@ -11,11 +11,15 @@ import org.testinfected.petstore.decoration.Decorator;
 import org.testinfected.petstore.decoration.Layout;
 import org.testinfected.petstore.decoration.PageCompositor;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static test.unit.org.testinfected.petstore.util.WriteToOutput.anOutput;
+import static test.unit.org.testinfected.petstore.util.WriteToOutput.writeToOutput;
 
 @RunWith(JMock.class)
 public class PageCompositorTest {
@@ -26,17 +30,23 @@ public class PageCompositorTest {
 
     Decorator compositor = new PageCompositor(contentProcessor, layout);
 
-    String originalPage = "original page";
-    String decoratedPage = "decorated page";
+    String originalPage = "<original page>";
+    String decoratedPage = "<decorated page>";
     Map<String, String> data = new HashMap<String, String>();
 
     @Test public void
     processesContentAndRendersLayout() throws Exception {
         context.checking(new Expectations() {{
             oneOf(contentProcessor).process(with(originalPage)); will(returnValue(data));
-            oneOf(layout).render(with(same(data))); will(returnValue(decoratedPage));
+            oneOf(layout).render(with(anOutput()), with(same(data))); will(writeToOutput(decoratedPage));
         }});
 
-        assertThat("output", compositor.decorate(originalPage), equalTo(decoratedPage));
+        assertThat("decorated page", decorate(originalPage), equalTo(decoratedPage));
+    }
+
+    private String decorate(final String page) throws IOException {
+        StringWriter out = new StringWriter();
+        compositor.decorate(out, page);
+        return out.toString();
     }
 }

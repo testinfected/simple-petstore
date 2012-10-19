@@ -3,6 +3,7 @@ package org.testinfected.petstore.decoration;
 import org.testinfected.petstore.RenderingEngine;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
 
 public class LayoutTemplate implements Layout {
@@ -15,7 +16,7 @@ public class LayoutTemplate implements Layout {
         this.templateName = templateName;
     }
 
-    public String render(Map<String, String> content) throws IOException {
-        return renderer.render(templateName, content);
+    public void render(Writer out, Map<String, String> content) throws IOException {
+        renderer.render(out, templateName, content);
     }
 }

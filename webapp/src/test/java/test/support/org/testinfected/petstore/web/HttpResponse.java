@@ -79,8 +79,11 @@ public class HttpResponse {
         return toBytes(response.getContentAsStream());
     }
 
+    public void assertChunked() {
+        assertHasHeader("Transfer-Encoding", "chunked");
+    }
+
     public void assertNotChunked() {
         assertHasNoHeader("Transfer-Encoding");
-
     }
 }

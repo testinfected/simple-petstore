@@ -1,12 +1,13 @@
 package test.support.org.testinfected.petstore.web;
 
-import org.testinfected.hamcrest.ExceptionImposter;
 import org.testinfected.petstore.MustacheRendering;
 import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.petstore.util.Context;
 import org.w3c.dom.Element;
 
 import java.io.File;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashMap;
 
 import static test.support.org.testinfected.petstore.web.HTMLDocument.toElement;
@@ -21,7 +22,6 @@ public class OfflineRenderer {
 
     private RenderingEngine renderer;
     private Object context;
-    private String content;
 
     private OfflineRenderer(String template) {
         this.template = template;
@@ -47,20 +47,17 @@ public class OfflineRenderer {
     }
 
     public String asString() {
-        render();
-        return content;
+        StringWriter buffer = new StringWriter();
+        render(buffer);
+        return buffer.toString();
     }
 
     public Element asDom() {
         return toElement(asString());
     }
 
-    private void render() {
-        try {
-            content = renderer.render(template, context);
-        } catch (Exception e) {
-            throw ExceptionImposter.imposterize(e);
-        }
+    private void render(final Writer writer) {
+        renderer.render(writer, template, context);
     }
 }
 

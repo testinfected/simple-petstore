@@ -1,6 +1,7 @@
 package org.testinfected.petstore.decoration;
 
 import java.io.IOException;
+import java.io.Writer;
 
 public class PageCompositor implements Decorator {
 
@@ -12,7 +13,7 @@ public class PageCompositor implements Decorator {
         this.processor = processor;
     }
 
-    public String decorate(String content) throws IOException {
-        return layout.render(processor.process(content));
+    public void decorate(Writer out, String content) throws IOException {
+        layout.render(out, processor.process(content));
     }
 }

@@ -8,10 +8,8 @@ import org.testinfected.petstore.util.Charsets;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.io.Writer;
 
 public class MustacheRendering implements RenderingEngine {
@@ -32,9 +30,9 @@ public class MustacheRendering implements RenderingEngine {
         this.base = base;
     }
 
-    public String render(String template, Object context) throws IOException {
-        Mustache mustache = mustacheFactory.compile(templateFile(template));
-        return execute(mustache, context);
+    public void render(Writer out, String view, Object context) {
+        Mustache mustache = mustacheFactory.compile(templateFile(view));
+        mustache.execute(out, context);
     }
 
     private Reader read(String resourceName) {
@@ -44,12 +42,6 @@ public class MustacheRendering implements RenderingEngine {
         } catch (FileNotFoundException e) {
             throw new MustacheException("Template not found: " + resourceName);
         }
-    }
-
-    private String execute(Mustache mustache, Object context) throws IOException {
-        Writer writer = new StringWriter();
-        mustache.execute(writer, context);
-        return writer.toString();
     }
 
     private String templateFile(String templateName) {

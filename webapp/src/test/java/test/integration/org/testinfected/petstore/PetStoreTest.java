@@ -1,5 +1,7 @@
 package test.integration.org.testinfected.petstore;
 
+import com.pyxis.petstore.domain.product.Product;
+import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -13,7 +15,11 @@ import org.junit.runner.RunWith;
 import org.testinfected.petstore.FailureReporter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Server;
-import org.testinfected.petstore.jdbc.DriverManagerDataSource;
+import org.testinfected.petstore.Transactor;
+import org.testinfected.petstore.UnitOfWork;
+import org.testinfected.petstore.jdbc.JDBCTransactor;
+import org.testinfected.petstore.jdbc.ProductsDatabase;
+import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import test.support.org.testinfected.petstore.web.HttpRequest;
 import test.support.org.testinfected.petstore.web.HttpResponse;
@@ -28,6 +34,7 @@ import java.util.logging.FileHandler;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.isA;
+import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 @RunWith(JMock.class)
@@ -37,9 +44,13 @@ public class PetStoreTest {
     FailureReporter failureReporter = context.mock(FailureReporter.class);
     DataSource dataSource = context.mock(DataSource.class);
     PetStore petstore = new PetStore(WebRoot.locate(), dataSource);
-    States database = context.states("database").startsAs("up");
 
-    Connection connection;
+    States databaseStatus = context.states("database").startsAs("up");
+    Database database = Database.in(TestDatabaseEnvironment.load());
+    Connection connection = database.connect();
+    Transactor transactor = new JDBCTransactor(connection);
+    ProductCatalog productCatalog = new ProductsDatabase(connection);
+
     LogFile logFile;
     int serverPort = 9999;
     Server server = new Server(serverPort);
@@ -48,11 +59,11 @@ public class PetStoreTest {
 
     @Before public void
     startServer() throws Exception {
-        connection = connectToTestDatabase();
         context.checking(new Expectations() {{
-            allowing(dataSource).getConnection(); will(returnValue(connection)); when(database.is("up"));
-            allowing(dataSource).getConnection(); will(throwException(new SQLException("Database is down"))); when(database.isNot("up"));
+            allowing(dataSource).getConnection(); will(returnValue(connection)); when(databaseStatus.is("up"));
+            allowing(dataSource).getConnection(); will(throwException(new SQLException("Database is down"))); when(databaseStatus.isNot("up"));
         }});
+        database.clean();
 
         logFile = LogFile.create();
         petstore.logTo(new FileHandler(logFile.path()));
@@ -87,22 +98,24 @@ public class PetStoreTest {
     }
 
     @Test public void
-    rendersDynamicContentAsHtmlProperlyEncoded() throws IOException {
-        HttpResponse response = request.get("/");
+    rendersDynamicContentAsHtmlProperlyEncoded() throws Exception {
+        addProducts(aProduct().named("French Bouledogue (Bouledogue français)").build());
+        HttpResponse response = request.get("/products?keyword=bouledogue");
 
         response.assertOK();
-        response.assertNotChunked();
+        response.assertHasContent(productsList());
         response.assertHasHeader("Content-Type", "text/html; charset=utf-8");
         response.assertContentIsEncodedAs("UTF-8");
+        response.assertChunked();
     }
 
     @Test public void
     appliesLayoutToHtmlPages() throws IOException {
-        HttpResponse response = request.get("/products");
+        HttpResponse response = request.get("/");
 
         response.assertOK();
-        response.assertNotChunked();
         response.assertHasContent(layoutHeader());
+        response.assertChunked();
     }
 
     @Test public void
@@ -110,8 +123,8 @@ public class PetStoreTest {
         HttpResponse response = request.get("/images/logo.png");
 
         response.assertOK();
-        response.assertNotChunked();
         response.assertHasHeader("Content-Type", "image/png");
+        response.assertNotChunked();
     }
 
     @Test public void
@@ -119,7 +132,6 @@ public class PetStoreTest {
         HttpResponse response = request.get("/images/missing.png");
 
         response.assertHasStatusCode(404);
-        response.assertNotChunked();
     }
 
     @Test public void
@@ -127,29 +139,35 @@ public class PetStoreTest {
         HttpResponse response = request.get("/unrecognized/route");
 
         response.assertHasStatusCode(404);
-        response.assertNotChunked();
     }
 
     @Test public void
     renders500ErrorsAndReportsFailureWhenSomethingGoesWrong() throws Exception {
-        database.become("down");
+        databaseStatus.become("down");
         context.checking(new Expectations() {{
             oneOf(failureReporter).internalErrorOccurred(with(isA(SQLException.class)));
         }});
 
         HttpResponse response = request.get("/products");
         response.assertHasStatusCode(500);
-        response.assertNotChunked();
         response.assertHasContent(containsString("Database is down"));
+    }
+
+    private Matcher<String> productsList() {
+        return containsString("<div id=\"products\">");
     }
 
     private Matcher<String> layoutHeader() {
         return containsString("<div id=\"header\">");
     }
 
-    private Connection connectToTestDatabase() throws SQLException {
-        TestDatabaseEnvironment env = TestDatabaseEnvironment.load();
-        DriverManagerDataSource database = new DriverManagerDataSource(env.url, env.username, env.password);
-        return database.getConnection();
+    private void addProducts(final Product... products) throws Exception {
+        transactor.perform(new UnitOfWork() {
+            public void execute() throws Exception {
+                for (Product product : products) {
+                    productCatalog.add(product);
+                }
+            }
+        });
     }
 }
