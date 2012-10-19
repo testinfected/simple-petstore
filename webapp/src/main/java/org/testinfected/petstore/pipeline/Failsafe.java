@@ -4,24 +4,21 @@ import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
 import org.testinfected.petstore.FailureReporter;
-import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.petstore.util.Charsets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class Failsafe extends AbstractMiddleware {
 
-    private static final String ERROR_500 = "500";
-
-    private final RenderingEngine renderer;
     private FailureReporter failureReporter;
 
-    public Failsafe(RenderingEngine renderer) {
-        this(renderer, FailureReporter.IGNORE);
+    public Failsafe() {
+        this(FailureReporter.IGNORE);
     }
 
-    public Failsafe(RenderingEngine renderer, FailureReporter failureReporter) {
-        this.renderer = renderer;
+    public Failsafe(FailureReporter failureReporter) {
         this.failureReporter = failureReporter;
     }
 
@@ -43,7 +40,7 @@ public class Failsafe extends AbstractMiddleware {
     }
 
     private void failsafeResponse(Exception error, Response response) throws IOException {
-        setErrorStatus(response);
+        setInternalErrorStatus(response);
         resetContent(response);
         renderError(error, response);
     }
@@ -52,15 +49,31 @@ public class Failsafe extends AbstractMiddleware {
         response.reset();
     }
 
-    private void setErrorStatus(Response response) {
+    private void setInternalErrorStatus(Response response) {
         response.setText(Status.INTERNAL_SERVER_ERROR.getDescription());
         response.setCode(Status.INTERNAL_SERVER_ERROR.getCode());
     }
 
     private void renderError(Exception error, Response response) throws IOException {
         response.set("Content-Type", "text/html; charset=" + Charsets.ISO_8859_1.name().toLowerCase());
-        String body = renderer.render(ERROR_500, error);
+        String body = formatAsHtml(error);
         byte[] bytes = body.getBytes(Charsets.ISO_8859_1);
         response.getOutputStream(bytes.length).write(bytes);
+    }
+
+    private String formatAsHtml(Exception error) {
+        StringWriter buffer = new StringWriter();
+        PrintWriter print = new PrintWriter(buffer);
+        print.println("<h1>Oups!</h1>");
+        print.println("<h2>Sorry, an internal error occurred</h2>");
+        print.println("<p>");
+        print.println("  <strong>" + error.toString() + "</strong>");
+        print.println("  <ul>");
+        for (StackTraceElement stackTraceElement : error.getStackTrace()) {
+            print.println("    <li>" + stackTraceElement.toString() + "</li>");
+        }
+        print.println("  </ul>");
+        print.println("</p>");
+        return buffer.toString();
     }
 }

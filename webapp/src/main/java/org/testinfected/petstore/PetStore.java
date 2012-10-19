@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 public class PetStore {
 
-    public static final String APP_DIR = "app";
     public static final String PAGES_DIR = "app/pages";
     public static final String LAYOUT_DIR = "app/layout";
     public static final String PUBLIC_DIR = "public";
@@ -65,7 +64,7 @@ public class PetStore {
     public void start(Server server) throws IOException {
         server.run(new MiddlewareStack() {{
             use(new ApacheCommonLogger(logger, clock));
-            use(new Failsafe(new MustacheRendering(new File(context, APP_DIR)), failureReporter));
+            use(new Failsafe(failureReporter));
             use(new ServerHeaders(clock));
             use(new HttpMethodOverride());
             use(staticAssets());

@@ -12,7 +12,6 @@ import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
 import org.testinfected.petstore.FailureReporter;
-import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.petstore.Server;
 import org.testinfected.petstore.pipeline.Failsafe;
 import org.testinfected.petstore.pipeline.MiddlewareStack;
@@ -28,11 +27,19 @@ import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 public class FailsafeTest {
 
     Mockery context = new JUnit4Mockery();
-    RenderingEngine renderer = context.mock(RenderingEngine.class);
     FailureReporter failureReporter = context.mock(FailureReporter.class);
 
-    Failsafe failsafe = new Failsafe(renderer);
-    Exception error = new Exception("Error");
+    Failsafe failsafe = new Failsafe();
+
+    String errorMessage = "An internal error occurred!";
+    Exception error = new Exception(errorMessage);
+    {
+        error.setStackTrace(new StackTraceElement[] {
+                new StackTraceElement("stack", "trace", "line", 1),
+                new StackTraceElement("stack", "trace", "line", 2)
+        });
+    }
+    String expectedContentLength = "208";
 
     Server server = new Server(9999);
     HttpRequest request = aRequest().to(server);
@@ -42,10 +49,7 @@ public class FailsafeTest {
     sendRequestToServer() throws IOException {
         server.run(new MiddlewareStack() {{
             use(failsafe);
-            run(errorOccurs(error));
-        }});
-        context.checking(new Expectations() {{
-            allowing(renderer).render(with("500"), with(same(error))); will(returnValue("Error"));
+            run(failWith(error));
         }});
         response = request.send();
     }
@@ -67,12 +71,14 @@ public class FailsafeTest {
 
     @Test public void
     rendersErrorTemplate() {
-        response.assertHasContent(containsString("Error"));
+        response.assertHasContent(containsString(errorMessage));
+        response.assertHasContent(containsString("stack.trace(line:1)"));
+        response.assertHasContent(containsString("stack.trace(line:2)"));
     }
 
     @Test public void
     setsContentLengthHeader() throws IOException {
-        response.assertHasHeader("Content-Length", "5");
+        response.assertHasHeader("Content-Length", expectedContentLength);
     }
 
     @Test public void
@@ -94,7 +100,7 @@ public class FailsafeTest {
         request.send();
     }
 
-    private Application errorOccurs(final Exception error) {
+    private Application failWith(final Exception error) {
         return new Application() {
             public void handle(Request request, Response response) throws Exception {
                 throw error;
