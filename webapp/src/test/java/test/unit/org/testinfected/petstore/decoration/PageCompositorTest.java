@@ -18,8 +18,8 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static test.unit.org.testinfected.petstore.util.WriteToOutput.anOutput;
-import static test.unit.org.testinfected.petstore.util.WriteToOutput.writeToOutput;
+import static test.support.org.testinfected.petstore.web.WriteToOutput.anOutput;
+import static test.support.org.testinfected.petstore.web.WriteToOutput.writeToOutput;
 
 @RunWith(JMock.class)
 public class PageCompositorTest {

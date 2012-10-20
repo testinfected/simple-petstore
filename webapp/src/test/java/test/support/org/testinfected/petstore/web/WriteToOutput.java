@@ -1,4 +1,4 @@
-package test.unit.org.testinfected.petstore.util;
+package test.support.org.testinfected.petstore.web;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

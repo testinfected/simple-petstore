@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.simpleframework.http.Status.OK;
 
 public class HtmlPageSelectorTest {
     Mockery context = new JUnit4Mockery();
@@ -22,7 +23,7 @@ public class HtmlPageSelectorTest {
 
     @Test public void
     selectsHtmlContent() throws IOException {
-        response.setCode(Status.OK.getCode());
+        response.setCode(OK.getCode());
         response.setContentType("text/html; charset=iso-8859-1");
         assertThat("content selection", selector.select(response), equalTo(true));
     }
@@ -35,7 +36,14 @@ public class HtmlPageSelectorTest {
 
     @Test public void
     doesNotSelectContentIfNotHtml() throws IOException {
+        response.setCode(OK.getCode());
         response.setContentType("text/plain");
+        assertThat("content selection", selector.select(response), equalTo(false));
+    }
+
+    @Test public void
+    doesNotSelectResponseWithoutContentType() throws IOException {
+        response.setCode(OK.getCode());
         assertThat("content selection", selector.select(response), equalTo(false));
     }
 

@@ -15,7 +15,9 @@ public class HtmlPageSelector implements Selector {
     }
 
     private boolean isHtml(Response response) {
-        return contentTypeOf(response).startsWith(MimeTypes.TEXT_HTML);
+        return
+            contentTypeOf(response) != null &&
+            contentTypeOf(response).startsWith(MimeTypes.TEXT_HTML);
     }
 
     private String contentTypeOf(Response response) {
