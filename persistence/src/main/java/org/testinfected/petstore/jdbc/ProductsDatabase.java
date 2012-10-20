@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+// todo this should throw specialized exceptions
 public class ProductsDatabase implements ProductCatalog {
 
     private final Connection connection;
@@ -36,7 +37,7 @@ public class ProductsDatabase implements ProductCatalog {
         } catch (SQLException e) {
             throw ExceptionImposter.imposterize(e);
         } finally {
-            if (insert != null) close(insert);
+            close(insert);
         }
     }
 
@@ -59,13 +60,14 @@ public class ProductsDatabase implements ProductCatalog {
         } catch (SQLException e) {
             throw ExceptionImposter.imposterize(e);
         } finally {
-            if (query != null) close(query);
+            close(query);
 
         }
         return matches;
     }
 
     private void close(Statement statement) {
+        if (statement == null) return;
         try {
             statement.close();
         } catch (SQLException ignored) {

@@ -3,8 +3,8 @@ package org.testinfected.petstore.routing;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
-import org.testinfected.petstore.pipeline.Middleware;
-import org.testinfected.petstore.pipeline.NotFound;
+import org.testinfected.petstore.middlewares.Middleware;
+import org.testinfected.petstore.middlewares.NotFound;
 
 import java.util.ArrayList;
 import java.util.List;

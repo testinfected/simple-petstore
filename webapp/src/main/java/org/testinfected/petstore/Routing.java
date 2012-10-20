@@ -1,18 +1,15 @@
 package org.testinfected.petstore;
 
-import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
-import org.testinfected.petstore.controller.CreateProduct;
-import org.testinfected.petstore.dispatch.EndPoint;
-import org.testinfected.petstore.dispatch.SimpleRequest;
-import org.testinfected.petstore.dispatch.SimpleResponse;
-import org.testinfected.petstore.endpoints.Home;
-import org.testinfected.petstore.endpoints.Logout;
-import org.testinfected.petstore.endpoints.ShowProducts;
+import org.testinfected.petstore.controllers.CreateProduct;
+import org.testinfected.petstore.controllers.Home;
+import org.testinfected.petstore.controllers.ListProducts;
+import org.testinfected.petstore.controllers.Logout;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
-import org.testinfected.petstore.pipeline.ConnectionManager;
+import org.testinfected.petstore.middlewares.ConnectionManager;
+import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.testinfected.petstore.routing.Router;
 import org.testinfected.petstore.routing.Routes;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
@@ -34,18 +31,18 @@ public class Routing implements Application {
         Routes routes = Routes.draw(new Router() {{
             Connection connection = ConnectionManager.get(request);
 
-            get("/products").to(endpoint(new ShowProducts(new ProductsDatabase(connection), new FileSystemPhotoStore("/photos"))));
-            post("/products").to(new CreateProduct(new PurchasingAgent(new ProductsDatabase(connection), new JDBCTransactor(connection))));
-            delete("/logout").to(endpoint(new Logout()));
-            map("/").to(endpoint(new Home()));
+            get("/products").to(controller(new ListProducts(new ProductsDatabase(connection), new FileSystemPhotoStore("/photos"))));
+            post("/products").to(controller(new CreateProduct(new PurchasingAgent(new ProductsDatabase(connection), new JDBCTransactor(connection)))));
+            delete("/logout").to(controller(new Logout()));
+            map("/").to(controller(new Home()));
         }});
         routes.handle(request, response);
     }
 
-    private Application endpoint(final EndPoint endPoint) {
+    private Application controller(final Controller controller) {
         return new Application() {
             public void handle(Request request, Response response) throws Exception {
-                endPoint.process(new SimpleRequest(request), new SimpleResponse(response, renderer, charset));
+                controller.process(new SimpleRequest(request), new SimpleResponse(response, renderer, charset));
             }
         };
     }

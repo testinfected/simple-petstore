@@ -2,8 +2,8 @@ package org.testinfected.petstore;
 
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
-import org.testinfected.petstore.pipeline.MiddlewareStack;
-import org.testinfected.petstore.pipeline.ServerHeaders;
+import org.testinfected.petstore.middlewares.MiddlewareStack;
+import org.testinfected.petstore.middlewares.ServerHeaders;
 import org.testinfected.time.Clock;
 import org.testinfected.time.lib.SystemClock;
 

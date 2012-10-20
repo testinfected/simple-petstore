@@ -12,8 +12,8 @@ import org.junit.runner.RunWith;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
-import org.testinfected.petstore.pipeline.Middleware;
-import org.testinfected.petstore.pipeline.MiddlewareStack;
+import org.testinfected.petstore.middlewares.Middleware;
+import org.testinfected.petstore.middlewares.MiddlewareStack;
 import test.support.org.testinfected.petstore.web.MockRequest;
 import test.support.org.testinfected.petstore.web.MockResponse;
 
