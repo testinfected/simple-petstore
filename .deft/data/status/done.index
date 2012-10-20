@@ -6,3 +6,5 @@ apache-logs
 method-override
 layout
 migrations
+environments
+search
