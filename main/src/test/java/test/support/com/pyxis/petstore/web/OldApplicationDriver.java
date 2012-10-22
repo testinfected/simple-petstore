@@ -48,18 +48,6 @@ public class OldApplicationDriver {
         productsPage.displays();
     }
 
-    public void showsNoResult() {
-        productsPage.showsNoResult();
-    }
-
-    public void displaysNumberOfResults(int matchCount) {
-        productsPage.displaysNumberOfResults(matchCount);
-    }
-
-    public void displaysProduct(String number, String name) {
-        productsPage.displaysProduct(number, name);
-    }
-
     public void consultInventoryOf(String product) {
         searchFor(product);
         browseInventory(product);

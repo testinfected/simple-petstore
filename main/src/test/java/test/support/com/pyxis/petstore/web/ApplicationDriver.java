@@ -2,6 +2,7 @@ package test.support.com.pyxis.petstore.web;
 
 import com.objogate.wl.web.AsyncWebDriver;
 import test.support.com.pyxis.petstore.web.page.HomePage;
+import test.support.com.pyxis.petstore.web.page.ItemsPage;
 import test.support.com.pyxis.petstore.web.page.Menu;
 import test.support.com.pyxis.petstore.web.page.ProductsPage;
 import test.support.com.pyxis.petstore.web.server.WebServer;
@@ -13,12 +14,13 @@ public class ApplicationDriver {
     private final WebServer server;
     private final ConsoleDriver console = new ConsoleDriver();
 
+    private TestEnvironment environment;
     private RestDriver rest;
     private AsyncWebDriver browser;
     private HomePage homePage;
     private ProductsPage productsPage;
+    private ItemsPage itemsPage;
     private Menu menu;
-    private TestEnvironment environment;
 
     public ApplicationDriver(TestEnvironment environment) {
         this.environment = environment;
@@ -54,6 +56,7 @@ public class ApplicationDriver {
         menu = new Menu(browser);
         homePage = new HomePage(browser);
         productsPage = new ProductsPage(browser);
+        itemsPage = new ItemsPage(browser);
     }
 
     public void stop() throws Exception {
@@ -103,5 +106,19 @@ public class ApplicationDriver {
 
     public void addProduct(String number, String name, String description) throws IOException {
         rest.addProduct(number, name, description);
+    }
+
+    public void consultInventoryOf(String product) {
+        searchFor(product);
+        browseInventory(product);
+    }
+
+    public void browseInventory(String product) {
+        productsPage.browseItemsOf(product);
+        itemsPage.displays();
+    }
+
+    public void showsNoItemAvailable() {
+        itemsPage.showsNoItemAvailable();
     }
 }

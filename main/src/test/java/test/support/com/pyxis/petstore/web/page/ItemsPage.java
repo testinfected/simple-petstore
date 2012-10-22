@@ -3,8 +3,8 @@ package test.support.com.pyxis.petstore.web.page;
 import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.By;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.testinfected.hamcrest.core.StringMatchers.being;
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
 
@@ -15,20 +15,20 @@ public class ItemsPage extends Page {
     }
 
 	public void displaysItem(String number, String description, String price) {
-        browser.element(numberOfItem(number)).assertText(being(number));
-        browser.element(descriptionOfItem(number)).assertText(being(description));
-        browser.element(priceOfItem(number)).assertText(being(price));
+        browser.element(itemNumber(number)).assertText(equalTo(number));
+        browser.element(itemDescription(number)).assertText(equalTo(description));
+        browser.element(itemPrice(number)).assertText(equalTo(price));
 	}
 
-    private By priceOfItem(String number) {
+    private By itemPrice(String number) {
         return cssSelector(domIdOf(number) + " .price");
     }
 
-    private By descriptionOfItem(String number) {
+    private By itemDescription(String number) {
         return cssSelector(domIdOf(number) + " .description");
     }
 
-    private By numberOfItem(String number) {
+    private By itemNumber(String number) {
         return cssSelector(domIdOf(number) + " .number");
     }
 
