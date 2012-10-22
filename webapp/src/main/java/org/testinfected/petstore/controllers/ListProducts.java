@@ -29,7 +29,7 @@ public class ListProducts implements Controller {
                 with("match-found", !products.isEmpty()).
                 and("keyword", keyword).
                 and("products", products).
-                and("matchCount", products.size()).
+                and("match-count", products.size()).
                 and("photo", LocateAttachment.in(attachmentStorage));
         response.render("products", context.asMap());
     }

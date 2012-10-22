@@ -55,8 +55,7 @@ public class ListProductsTest {
     @Before public void
     prepareRequest() {
         context.checking(new Expectations() {{
-            allowing(request).getParameter("keyword");
-            will(returnValue(keyword));
+            allowing(request).getParameter("keyword"); will(returnValue(keyword));
         }});
     }
 
@@ -93,7 +92,7 @@ public class ListProductsTest {
         searchYields(aProduct(), aProduct(), aProduct());
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with(view()), with(hasEntry("matchCount", 3)));
+            oneOf(response).render(with(view()), with(hasEntry("match-count", 3)));
         }});
 
         listProducts.process(request, response);
