@@ -1,4 +1,4 @@
-package test.unit.org.testinfected.petstore.templates;
+package test.unit.org.testinfected.petstore.views;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;

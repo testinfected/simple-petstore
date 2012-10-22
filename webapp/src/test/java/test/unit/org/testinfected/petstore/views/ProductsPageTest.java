@@ -1,4 +1,4 @@
-package test.unit.org.testinfected.petstore.templates;
+package test.unit.org.testinfected.petstore.views;
 
 import com.github.mustachejava.TemplateFunction;
 import com.pyxis.petstore.domain.product.Product;
