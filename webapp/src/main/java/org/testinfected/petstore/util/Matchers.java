@@ -25,7 +25,7 @@ public final class Matchers {
         return RequestHasPath.hasPath(path);
     }
 
-    public static Matcher<Request> hasNormalizedPath(Matcher<String> path) {
+    public static Matcher<Request> hasNormalizedPath(Matcher<? super String> path) {
         return RequestHasPath.hasNormalizedPath(path);
     }
 

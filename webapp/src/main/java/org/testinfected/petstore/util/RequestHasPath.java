@@ -19,7 +19,7 @@ public class RequestHasPath implements Matcher<Request> {
         return new RequestHasPath(path);
     }
 
-    public static RequestHasPath hasNormalizedPath(final Matcher<String> path) {
+    public static RequestHasPath hasNormalizedPath(final Matcher<? super String> path) {
         return new RequestHasPath(new Matcher<Path>() {
             public boolean matches(Path actual) {
                 return path.matches(actual.getPath());

@@ -4,6 +4,7 @@ import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.controllers.CreateProduct;
 import org.testinfected.petstore.controllers.Home;
+import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.controllers.Logout;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
@@ -16,6 +17,8 @@ import org.testinfected.petstore.util.FileSystemPhotoStore;
 
 import java.nio.charset.Charset;
 import java.sql.Connection;
+
+import static org.testinfected.petstore.util.HasPattern.pattern;
 
 public class Routing implements Application {
 
@@ -33,6 +36,7 @@ public class Routing implements Application {
 
             get("/products").to(controller(new ListProducts(new ProductsDatabase(connection), new FileSystemPhotoStore("/photos"))));
             post("/products").to(controller(new CreateProduct(new PurchasingAgent(new ProductsDatabase(connection), new JDBCTransactor(connection)))));
+            map(pattern("/products/([^/]+)/items")).to(controller(new ListItems()));
             delete("/logout").to(controller(new Logout()));
             map("/").to(controller(new Home()));
         }});

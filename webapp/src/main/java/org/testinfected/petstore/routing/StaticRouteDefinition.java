@@ -11,7 +11,6 @@ import static org.testinfected.petstore.util.Matchers.anyPath;
 import static org.testinfected.petstore.util.Matchers.equalTo;
 import static org.testinfected.petstore.util.Matchers.hasMethod;
 import static org.testinfected.petstore.util.Matchers.hasNormalizedPath;
-import static org.testinfected.petstore.util.Matchers.startingWith;
 
 public class StaticRouteDefinition implements RouteDefinition, Matcher<Request> {
 
@@ -27,7 +26,7 @@ public class StaticRouteDefinition implements RouteDefinition, Matcher<Request> 
         return map(equalTo(path));
     }
 
-    public StaticRouteDefinition map(Matcher<String> path) {
+    public StaticRouteDefinition map(Matcher<? super String> path) {
         this.path = hasNormalizedPath(path);
         return this;
     }

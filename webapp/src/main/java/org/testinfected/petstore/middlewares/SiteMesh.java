@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import static org.testinfected.petstore.util.Matchers.hasNormalizedPath;
-import static org.testinfected.petstore.util.StartingWith.startingWith;
+import static org.testinfected.petstore.util.Matchers.startingWith;
 
 public class SiteMesh extends AbstractMiddleware {
 

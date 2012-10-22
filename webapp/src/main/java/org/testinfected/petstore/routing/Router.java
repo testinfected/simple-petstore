@@ -1,6 +1,7 @@
 package org.testinfected.petstore.routing;
 
 import org.testinfected.petstore.util.HttpMethod;
+import org.testinfected.petstore.util.Matcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +14,10 @@ public class Router implements RouteBuilder {
         for (StaticRouteDefinition definition : this.definitions) {
             routes.add(definition.toRoute());
         }
+    }
+
+    public RouteDefinition map(Matcher<? super String> path) {
+        return openRoute().map(path);
     }
 
     public RouteDefinition map(String path) {

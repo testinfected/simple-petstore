@@ -9,7 +9,7 @@ public interface RouteDefinition {
 
     RouteDefinition map(String path);
 
-    RouteDefinition map(Matcher<String> path);
+    RouteDefinition map(Matcher<? super String> path);
 
     RouteDefinition via(HttpMethod method);
 
