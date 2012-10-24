@@ -36,7 +36,7 @@ public class MiddlewareStack implements Application {
         chain = runner;
         for (Iterator<Middleware> middlewares = stack.descendingIterator(); middlewares.hasNext(); ) {
             Middleware previous = middlewares.next();
-            previous.chain(chain);
+            previous.connectTo(chain);
             chain = previous;
         }
         return chain;

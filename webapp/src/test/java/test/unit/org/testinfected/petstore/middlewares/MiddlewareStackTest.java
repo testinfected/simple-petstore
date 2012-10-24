@@ -47,9 +47,9 @@ public class MiddlewareStackTest {
 
     private void expectMiddlewaresToBeChainedFromTopToBottomThen(final State state) {
         context.checking(new Expectations() {{
-            oneOf(onTop).chain(inTheMiddle);
-            oneOf(inTheMiddle).chain(atBottom);
-            oneOf(atBottom).chain(application); then(state);
+            oneOf(onTop).connectTo(inTheMiddle);
+            oneOf(inTheMiddle).connectTo(atBottom);
+            oneOf(atBottom).connectTo(application); then(state);
         }});
     }
 

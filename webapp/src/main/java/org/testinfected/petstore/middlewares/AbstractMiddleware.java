@@ -6,16 +6,16 @@ import org.testinfected.petstore.Application;
 
 public abstract class AbstractMiddleware implements Middleware {
 
-    private Application app = new Application() {
+    private Application successor = new Application() {
         public void handle(Request request, Response response) throws Exception {
         }
     };
 
-    public void chain(Application app) {
-        this.app = app;
+    public void connectTo(Application successor) {
+        this.successor = successor;
     }
 
     protected void forward(Request request, Response response) throws Exception {
-        app.handle(request, response);
+        successor.handle(request, response);
     }
 }

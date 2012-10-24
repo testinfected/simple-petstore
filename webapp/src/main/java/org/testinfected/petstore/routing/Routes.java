@@ -3,16 +3,24 @@ package org.testinfected.petstore.routing;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
-import org.testinfected.petstore.middlewares.Middleware;
-import org.testinfected.petstore.middlewares.NotFound;
+import org.testinfected.petstore.middlewares.AbstractMiddleware;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Routes implements Middleware, RouteSet {
+import static org.testinfected.petstore.middlewares.NotFound.notFound;
+
+public class Routes extends AbstractMiddleware implements RouteSet {
 
     private final List<Route> routingTable = new ArrayList<Route>();
-    private Application fallback = NotFound.notFound();
+
+    public Routes() {
+        this(notFound());
+    }
+
+    public Routes(final Application fallback) {
+        connectTo(fallback);
+    }
 
     public static Routes draw(RouteBuilder routeBuilder) {
         Routes routes = new Routes();
@@ -20,27 +28,27 @@ public class Routes implements Middleware, RouteSet {
         return routes;
     }
 
+    public Routes defaultsTo(Application app) {
+        connectTo(app);
+        return this;
+    }
+
     public void add(Route route) {
         routingTable.add(route);
     }
 
-    private Application routeFor(Request request) {
+    private Route routeFor(Request request) {
         for (Route route : routingTable) {
             if (route.matches(request)) return route;
         }
-        return fallback;
+        return null;
     }
 
     public void handle(Request request, Response response) throws Exception {
-        routeFor(request).handle(request, response);
-    }
-
-    public void chain(Application app) {
-        this.fallback = app;
-    }
-
-    public Routes defaultsTo(Application app) {
-        chain(app);
-        return this;
+        Route route = routeFor(request);
+        if (route != null)
+            route.handle(request, response);
+        else
+            forward(request, response);
     }
 }

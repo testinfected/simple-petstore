@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
+import org.testinfected.petstore.middlewares.NotFound;
 import org.testinfected.petstore.routing.Route;
 import org.testinfected.petstore.routing.Routes;
 import org.testinfected.petstore.util.Matcher;
@@ -21,7 +22,7 @@ import static org.testinfected.petstore.util.Matchers.anyRequest;
 @RunWith(JMock.class)
 public class RoutesTest {
 
-    Routes routes = new Routes();
+    Routes routes = new Routes(NotFound.notFound());
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
