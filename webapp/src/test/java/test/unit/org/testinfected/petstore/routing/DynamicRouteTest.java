@@ -61,7 +61,7 @@ public class DynamicRouteTest {
         Route route = route().map("/resource/:id").to(app).draw();
 
         context.checking(new Expectations() {{
-            one(app).handle(with(hasParameter("id", "1")), with(any(Response.class)));
+            oneOf(app).handle(with(hasParameter("id", "1")), with(any(Response.class)));
         }});
 
         route.handle(new MockRequest("/resource/1"), new MockResponse());

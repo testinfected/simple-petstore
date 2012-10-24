@@ -53,7 +53,7 @@ public class ListProductsTest {
     }
 
     @Before public void
-    prepareRequest() {
+    stubRequest() {
         context.checking(new Expectations() {{
             allowing(request).getParameter("keyword"); will(returnValue(keyword));
         }});
@@ -61,7 +61,7 @@ public class ListProductsTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    rendersNoMatchWhenSearchYieldsNoResult() throws Exception {
+    indicatesNoMatchWhenSearchYieldsNoResult() throws Exception {
         searchYieldsNothing();
 
         context.checking(new Expectations() {{
@@ -92,7 +92,7 @@ public class ListProductsTest {
         searchYields(aProduct(), aProduct(), aProduct());
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with(view()), with(hasEntry("match-count", 3)));
+            oneOf(response).render(with(any(String.class)), with(hasEntry("match-count", 3)));
         }});
 
         listProducts.process(request, response);
@@ -104,7 +104,7 @@ public class ListProductsTest {
         searchYields(aProduct());
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with(view()), with(hasEntry("keyword", keyword)));
+            oneOf(response).render(with(any(String.class)), with(hasEntry("keyword", keyword)));
         }});
 
         listProducts.process(request, response);
@@ -116,7 +116,7 @@ public class ListProductsTest {
         searchYields(aProduct().withPhoto("photo.png"));
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with(view()), with(hasLambda("photo"))); will(call("photo", "photo.png"));
+            oneOf(response).render(with(any(String.class)), with(hasLambda("photo"))); will(call("photo", "photo.png"));
             oneOf(attachmentStorage).getLocation(with("photo.png"));
         }});
 
@@ -125,10 +125,6 @@ public class ListProductsTest {
 
     private Matcher<Map<? extends String, ?>> hasEntry(String name, Object value) {
         return Matchers.hasEntry(name, value);
-    }
-
-    private Matcher<String> view() {
-        return any(String.class);
     }
 
     @SuppressWarnings("unchecked")
