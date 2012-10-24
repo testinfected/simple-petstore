@@ -57,8 +57,7 @@ public class Failsafe extends AbstractMiddleware {
     private void renderError(Exception error, Response response) throws IOException {
         response.set("Content-Type", "text/html; charset=" + Charsets.ISO_8859_1.name().toLowerCase());
         String body = formatAsHtml(error);
-        byte[] bytes = body.getBytes(Charsets.ISO_8859_1);
-        response.getOutputStream(bytes.length).write(bytes);
+        response.getPrintStream().print(body);
     }
 
     private String formatAsHtml(Exception error) {

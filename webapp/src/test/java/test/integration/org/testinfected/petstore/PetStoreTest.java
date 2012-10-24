@@ -56,6 +56,7 @@ public class PetStoreTest {
     Server server = new Server(serverPort);
     HttpRequest request = aRequest().onPort(serverPort);
 
+    String encoding = "utf-16";
 
     @Before public void
     startServer() throws Exception {
@@ -68,7 +69,7 @@ public class PetStoreTest {
         logFile = LogFile.create();
         petstore.logTo(new FileHandler(logFile.path()));
         petstore.reportErrorsTo(failureReporter);
-        petstore.encodeOutputAs("utf-8");
+        petstore.encodeOutputAs(encoding);
         petstore.start(server);
     }
 
@@ -104,8 +105,8 @@ public class PetStoreTest {
 
         response.assertOK();
         response.assertHasContent(productsList());
-        response.assertHasHeader("Content-Type", "text/html; charset=utf-8");
-        response.assertContentIsEncodedAs("UTF-8");
+        response.assertHasHeader("Content-Type", "text/html; charset=" + encoding);
+        response.assertContentIsEncodedAs(encoding);
         response.assertChunked();
     }
 

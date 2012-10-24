@@ -9,7 +9,8 @@ public class StaticResponse implements Application {
 
     private int code;
     private String page;
-    private String contentType = "text/html; charset=iso-8859-1";
+    private String contentType = "text/html";
+    private String encoding = "iso-8859-1";
 
     public static StaticResponse respondWith(Status status) {
         return respondWithCode(status.getCode());
@@ -36,10 +37,18 @@ public class StaticResponse implements Application {
         this.page = page;
     }
 
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public void setContentEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
     public void handle(Request request, Response response) throws Exception {
         response.setCode(code);
         response.setContentLength(contentLength());
-        response.set("Content-Type", contentType);
+        response.set("Content-Type", contentType + "; charset=" + encoding);
         response.getPrintStream(contentLength()).print(page);
     }
 

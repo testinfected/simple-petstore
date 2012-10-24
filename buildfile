@@ -76,7 +76,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     compile.with_transitive project(:domain), project(:persistence), project(:persistence).compile.dependencies
 
     test.with project(:domain).test.compile.target, project(:persistence).test.compile.target,
-      project(:persistence).test.resources.target, HAMCREST, :antlr_runtime, :cssselectors, :hamcrest_dom
+      project(:persistence).test.resources.target, HAMCREST, :antlr_runtime, :cssselectors, :hamcrest_dom, :flyway, NO_LOG
     test.with_transitive :nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy, :mysql
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
 

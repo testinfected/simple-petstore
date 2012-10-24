@@ -34,28 +34,29 @@ public class SiteMesh extends AbstractMiddleware {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        String body = captureResponse(request, response);
+        BufferedResponse buffer = captureResponse(request, response);
         if (subjectToDecoration(request, response)) {
-            decorate(decoratorFor(request), response, body);
+            decorate(decoratorFor(request), response, buffer);
         } else {
-            write(response, body);
+            write(response, buffer);
         }
     }
 
-    private void decorate(Decorator decorator, Response response, String content) throws IOException {
-        OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream());
-        decorator.decorate(out, content);
+    private void decorate(Decorator decorator, Response response, BufferedResponse buffer) throws IOException {
+        response.remove("Content-Length");
+        OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), buffer.getCharset());
+        decorator.decorate(out, buffer.getBody());
         out.flush();
     }
 
-    private void write(Response response, String body) throws IOException {
-        response.getPrintStream().print(body);
+    private void write(Response response, BufferedResponse buffer) throws IOException {
+        response.getOutputStream().write(buffer.getContent());
     }
 
-    private String captureResponse(Request request, Response response) throws Exception {
+    private BufferedResponse captureResponse(Request request, Response response) throws Exception {
         BufferedResponse buffer = new BufferedResponse(response);
         forward(request, buffer);
-        return buffer.getBody();
+        return buffer;
     }
 
     private boolean subjectToDecoration(Request request, Response response) {

@@ -57,10 +57,10 @@ public class BufferedResponse extends ResponseWrapper {
         return buffer.toByteArray();
     }
 
-    private String getCharset() {
+    public String getCharset() {
         ContentType type = getContentType();
 
-        if(type == null || type.getCharset()==null) {
+        if(type == null || type.getCharset() == null) {
             return Charsets.ISO_8859_1.name();
         }
 

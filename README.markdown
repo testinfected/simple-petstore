@@ -22,7 +22,7 @@ To install Buildr, follow Buildr installation [instructions](http://buildr.apach
 
 To build and run all tests, ue:
 
-`buildr integration`
+`buildr package`
 
 ## Running
 

@@ -39,8 +39,6 @@ public class FailsafeTest {
                 new StackTraceElement("stack", "trace", "line", 2)
         });
     }
-    String expectedContentLength = "208";
-
     Server server = new Server(9999);
     HttpRequest request = aRequest().to(server);
     HttpResponse response;
@@ -74,11 +72,6 @@ public class FailsafeTest {
         response.assertHasContent(containsString(errorMessage));
         response.assertHasContent(containsString("stack.trace(line:1)"));
         response.assertHasContent(containsString("stack.trace(line:2)"));
-    }
-
-    @Test public void
-    setsContentLengthHeader() throws IOException {
-        response.assertHasHeader("Content-Length", expectedContentLength);
     }
 
     @Test public void

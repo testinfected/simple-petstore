@@ -46,7 +46,7 @@ public class ProductsPageTest {
     displaysAllProductsFound() {
         addToProducts(aProduct(), aProduct());
 
-        productsPage = renderProductsPage().using(context.with("matchCount", 2)).asDom();
+        productsPage = renderProductsPage().using(context.with("match-count", 2)).asDom();
 
         assertThat("products page", productsPage, hasUniqueSelector("#match-count", hasText("2")));
         assertThat("products page", productsPage, hasSelector("#catalog li[id^='product']", hasSize(2)));
