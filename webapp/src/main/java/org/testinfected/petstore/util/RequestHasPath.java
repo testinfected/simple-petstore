@@ -5,9 +5,9 @@ import org.simpleframework.http.Request;
 
 public class RequestHasPath implements Matcher<Request> {
 
-    private Matcher<Path> path;
+    private Matcher<? super Path> path;
 
-    public RequestHasPath(Matcher<Path> path) {
+    public RequestHasPath(Matcher<? super Path> path) {
         this.path = path;
     }
 
@@ -15,7 +15,7 @@ public class RequestHasPath implements Matcher<Request> {
         return path.matches(actual.getPath());
     }
 
-    public static RequestHasPath hasPath(Matcher<Path> path) {
+    public static RequestHasPath hasPath(Matcher<? super Path> path) {
         return new RequestHasPath(path);
     }
 

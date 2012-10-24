@@ -1,23 +1,18 @@
 package org.testinfected.petstore.routing;
 
 import org.testinfected.petstore.util.HttpMethod;
-import org.testinfected.petstore.util.Matcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Router implements RouteBuilder {
 
-    private final Collection<StaticRouteDefinition> definitions = new ArrayList<StaticRouteDefinition>();
+    private final Collection<DynamicRouteDefinition> routes = new ArrayList<DynamicRouteDefinition>();
 
-    public void build(RouteSet routes) {
-        for (StaticRouteDefinition definition : this.definitions) {
-            routes.add(definition.toRoute());
+    public void build(RouteSet routeSet) {
+        for (DynamicRouteDefinition route : this.routes) {
+            routeSet.add(route.draw());
         }
-    }
-
-    public RouteDefinition map(Matcher<? super String> path) {
-        return openRoute().map(path);
     }
 
     public RouteDefinition map(String path) {
@@ -37,8 +32,8 @@ public class Router implements RouteBuilder {
     }
 
     private RouteDefinition openRoute() {
-        StaticRouteDefinition definition = new StaticRouteDefinition();
-        definitions.add(definition);
+        DynamicRouteDefinition definition = DynamicRouteDefinition.route();
+        routes.add(definition);
         return definition;
     }
 }

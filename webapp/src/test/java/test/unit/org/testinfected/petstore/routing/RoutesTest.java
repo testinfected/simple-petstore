@@ -7,9 +7,10 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.simpleframework.http.Request;
+import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
+import org.testinfected.petstore.routing.Route;
 import org.testinfected.petstore.routing.Routes;
-import org.testinfected.petstore.routing.StaticRoute;
 import org.testinfected.petstore.util.Matcher;
 import test.support.org.testinfected.petstore.web.MockRequest;
 import test.support.org.testinfected.petstore.web.MockResponse;
@@ -33,7 +34,7 @@ public class RoutesTest {
 
     @Test public void
     routesToDefaultApplicationWhenNoRouteMatches() throws Exception {
-        routes.defaultsTo(fallbackApp).add(new StaticRoute(never(), wrongApp));
+        routes.defaultsTo(fallbackApp).add(new StaticRoute(noRequest(), wrongApp));
 
         context.checking(new Expectations() {{
             never(wrongApp);
@@ -55,7 +56,25 @@ public class RoutesTest {
         routes.handle(request, response);
     }
 
-    private Matcher<Request> never() {
+    private Matcher<Request> noRequest() {
         return new Nothing<Request>();
+    }
+
+    private class StaticRoute implements Route {
+        private final Matcher<Request> requestMatcher;
+        private final Application app;
+
+        public StaticRoute(Matcher<Request> requestMatcher, Application app) {
+            this.requestMatcher = requestMatcher;
+            this.app = app;
+        }
+
+        public void handle(Request request, Response response) throws Exception {
+            app.handle(request, response);
+        }
+
+        public boolean matches(Request actual) {
+            return requestMatcher.matches(actual);
+        }
     }
 }

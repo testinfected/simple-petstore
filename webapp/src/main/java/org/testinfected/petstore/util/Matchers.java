@@ -21,7 +21,7 @@ public final class Matchers {
         return new Anything<String>();
     }
 
-    public static Matcher<Request> hasPath(Matcher<Path> path) {
+    public static Matcher<Request> hasPath(Matcher<? super Path> path) {
         return RequestHasPath.hasPath(path);
     }
 
@@ -33,7 +33,7 @@ public final class Matchers {
         return StartingWith.startingWith(prefix);
     }
 
-    public static Matcher<Request> hasMethod(Matcher<String> method) {
+    public static Matcher<Request> hasMethod(Matcher<? super String> method) {
         return RequestHasMethod.hasMethod(method);
     }
 
