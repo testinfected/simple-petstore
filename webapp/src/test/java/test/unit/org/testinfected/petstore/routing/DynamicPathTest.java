@@ -10,6 +10,7 @@ import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasSize;
 
 public class DynamicPathTest {
 
@@ -48,7 +49,7 @@ public class DynamicPathTest {
     extractBoundParametersFromDynamicSegments() {
         DynamicPath dynamicPath = new DynamicPath("/products/:number/items/:id");
         Map<String, String> boundParameters = dynamicPath.extractBoundParameters(path("/products/LAB-1234/items/12345678"));
-        assertThat("bound parameters values", boundParameters.values(), Matchers.hasSize(2));
+        assertThat("bound parameters values", boundParameters.values(), hasSize(2));
         assertThat("bound parameters", boundParameters, allOf(hasEntry("number", "LAB-1234"), hasEntry("id", "12345678")));
     }
 

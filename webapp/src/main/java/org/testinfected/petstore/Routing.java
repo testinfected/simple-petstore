@@ -45,7 +45,7 @@ public class Routing implements Application {
         Routes routes = Routes.draw(new Router() {{
             get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));
             post("/products").to(controller(new CreateProduct(requestListener)));
-            get("/products/:id/items").to(controller(new ListItems(itemInventory)));
+            get("/products/:number/items").to(controller(new ListItems(itemInventory)));
             delete("/logout").to(controller(new Logout()));
             map("/").to(controller(new Home()));
         }});

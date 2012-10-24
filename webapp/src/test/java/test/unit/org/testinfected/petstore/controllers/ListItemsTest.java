@@ -37,7 +37,7 @@ public class ListItemsTest {
         }});
 
         context.checking(new Expectations(){{
-            allowing(request).getParameter("product"); will(returnValue("LAB-1234"));
+            allowing(request).getParameter("number"); will(returnValue("LAB-1234"));
             oneOf(response).render(with("items"), with(hasEntry("items", items)));
         }});
 
