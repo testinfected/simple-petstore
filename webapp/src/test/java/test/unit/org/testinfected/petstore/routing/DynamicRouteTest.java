@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
+import org.testinfected.petstore.ExceptionImposter;
 import org.testinfected.petstore.routing.Route;
 import org.testinfected.petstore.util.HttpMethod;
 import test.support.org.testinfected.petstore.web.MockRequest;
@@ -73,7 +74,7 @@ public class DynamicRouteTest {
                 try {
                     return actual.getParameter(name);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    throw ExceptionImposter.imposterize(e);
                 }
             }
         };

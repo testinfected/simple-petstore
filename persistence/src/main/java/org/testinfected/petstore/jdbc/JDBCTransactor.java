@@ -21,7 +21,7 @@ public class JDBCTransactor implements Transactor {
             unitOfWork.execute();
             connection.commit();
         } catch (SQLException e) {
-            throw e;
+            throw new JDBCException("Could not commit transaction", e);
         } catch (Exception e) {
             connection.rollback();
             throw e;

@@ -95,10 +95,6 @@ public class HttpRequest {
     }
 
     private URL requestUrl() throws MalformedURLException {
-        try {
-            return new URL("http://localhost:" + port + path);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+        return new URL("http://localhost:" + port + path);
     }
 }
