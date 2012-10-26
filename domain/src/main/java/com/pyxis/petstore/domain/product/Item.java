@@ -49,6 +49,11 @@ public class Item implements Serializable {
         this.price = price;
     }
 
+    // This is only temporary
+    public Product getProduct() {
+        return product;
+    }
+
     public String getProductNumber() {
         return product.getNumber();
     }

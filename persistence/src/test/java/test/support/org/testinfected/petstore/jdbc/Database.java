@@ -27,7 +27,7 @@ public class Database {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
-            throw new JDBCException("Failed to connect to database", e);
+            throw new JDBCException("Could not connect to database", e);
         }
     }
 
