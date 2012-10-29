@@ -51,4 +51,8 @@ public class ItemsPage extends Page {
     public void displays() {
         browser.assertTitle(containsString("PetStore - Items"));
     }
+
+    public void returnToCatalog() {
+        browser.element(id("continue-shopping")).click();
+    }
 }

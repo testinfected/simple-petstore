@@ -121,4 +121,16 @@ public class ApplicationDriver {
     public void showsNoItemAvailable() {
         itemsPage.showsNoItemAvailable();
     }
+
+    public void addItem(String productNumber, String itemNumber, String itemDescription, String itemPrice) throws IOException {
+        rest.addItem(productNumber, itemNumber, itemDescription, itemPrice);
+    }
+
+    public void displaysItem(String number, String description, String price) {
+        itemsPage.displaysItem(number, description, price);
+    }
+
+    public void returnToCatalog() {
+        itemsPage.returnToCatalog();
+    }
 }
