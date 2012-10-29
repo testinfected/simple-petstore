@@ -20,16 +20,22 @@ import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
+import static org.testinfected.petstore.jdbc.DatabaseIdentifier.idOf;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
 
 public class ItemsDatabaseTest {
 
@@ -74,22 +80,40 @@ public class ItemsDatabaseTest {
         assertThat("available items", availableItems, Matchers.<Item>empty());
     }
 
-//    @Test public void
-//    findsItemsByNumber() throws Exception {
-//        Product product = aProduct().build();
-//        givenInCatalog(product);
-//        givenInInventory(anItem().of(product).withNumber("12345678"));
-//
-//        Item found = itemInventory.find(new ItemNumber("12345678"));
-//        assertThat("item", found, hasNumber("12345678"));
-//    }
+    @SuppressWarnings("unchecked")
+    @Test public void
+    storesAndRetrievesCompleteItemDetails() throws Exception {
+        Product labrador = aProduct().build();
+        Product dalmatian = aProduct().build();
+        givenInCatalog(labrador, dalmatian);
 
-    private Matcher<Item> hasNumber(final String number) {
-        return new FeatureMatcher<Item, String>(equalTo(number), "has number", "number") {
-            @Override protected String featureValueOf(Item actual) {
-                return actual.getNumber();
-            }
-        };
+        Collection<Item> sampleItems = build(
+                a(labrador).withNumber("12345678").describedAs("Chocolate male").priced("58.00"),
+                a(dalmatian).withNumber("87654321"));
+
+        for (final Item item : sampleItems) {
+            transactor.perform(new UnitOfWork() {
+                public void execute() throws Exception {
+                    itemInventory.add(item);
+                }
+            });
+            List<Item> found = itemInventory.findByProductNumber(item.getProductNumber());
+            assertThat("item", uniqueElement(found), sameItemAs(item));
+        }
+    }
+
+    private Item uniqueElement(List<Item> items) {
+        if (items.isEmpty()) throw new AssertionError("No item matches");
+        if (items.size() > 1) throw new AssertionError("Several items match");
+        return items.get(0);
+    }
+
+    private Matcher<Item> sameItemAs(Item original) {
+        return allOf(hasField("id", equalTo(idOf(original).get())),
+                hasProperty("number", equalTo(original.getNumber())),
+                hasProperty("price", equalTo(original.getPrice())),
+                hasProperty("description", equalTo(original.getDescription())),
+                hasProperty("productNumber", equalTo(original.getProductNumber())));
     }
 
     private Matcher<Item> hasProductNumber(final String number) {
@@ -102,10 +126,6 @@ public class ItemsDatabaseTest {
 
     private void givenInCatalog(final Product... products) throws Exception {
         givenInCatalog(asList(products));
-    }
-
-    private void givenInCatalog(final Builder<Product>... products) throws Exception {
-        givenInCatalog(build(products));
     }
 
     private void givenInCatalog(final List<Product> products) throws Exception {

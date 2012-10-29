@@ -55,7 +55,7 @@ public class Product implements Serializable {
 	}
 
     public boolean hasPhoto() {
-        return photo != null;
+        return photo != null && photo.getFileName() != null;
     }
 
     @Override
