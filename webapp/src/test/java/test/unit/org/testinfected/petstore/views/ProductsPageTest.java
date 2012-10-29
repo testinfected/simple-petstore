@@ -46,7 +46,7 @@ public class ProductsPageTest {
     displaysAllProductsFound() {
         addToProducts(aProduct(), aProduct());
 
-        productsPage = renderProductsPage().using(context.with("match-count", 2)).asDom();
+        productsPage = renderProductsPage().using("match-count", 2).asDom();
 
         assertThat("products page", productsPage, hasUniqueSelector("#match-count", hasText("2")));
         assertThat("products page", productsPage, hasSelector("#catalog li[id^='product']", hasSize(2)));
@@ -56,11 +56,11 @@ public class ProductsPageTest {
     displaysProductDetails() throws Exception {
         addToProducts(aProduct().withNumber("LAB-1234").named("Labrador").describedAs("Friendly").withPhoto("labrador.png"));
 
-        productsPage = renderProductsPage().using(context.with("photo", new TemplateFunction() {
+        productsPage = renderProductsPage().using("photo", new TemplateFunction() {
             public String apply(String fileName) {
                 return "/photos/" + fileName;
             }
-        })).asDom();
+        }).asDom();
 
         assertThat("products page", productsPage, hasUniqueSelector("li[id='product-LAB-1234']", anElement(
                 hasUniqueSelector(".product-image", hasImage("/photos/labrador.png"))),

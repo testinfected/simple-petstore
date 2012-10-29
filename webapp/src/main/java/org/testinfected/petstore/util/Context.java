@@ -15,16 +15,20 @@ public class Context {
         return context().asMap();
     }
 
-    public Context with(String name, Object attribute) {
-        map.put(name, attribute);
+    public Context with(String name, Object value) {
+        map.put(name, value);
         return this;
     }
 
-    public Context and(String name, Object attribute) {
-        return with(name, attribute);
+    public Context and(String name, Object value) {
+        return with(name, value);
     }
 
     public Map<String, Object> asMap() {
         return map;
+    }
+
+    public void withAll(Map<String, Object> attributes) {
+        map.putAll(attributes);
     }
 }

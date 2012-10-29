@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.HashMap;
+import java.util.Map;
 
 import static test.support.org.testinfected.petstore.web.HTMLDocument.toElement;
 
@@ -21,11 +21,10 @@ public class OfflineRenderer {
     private final String template;
 
     private RenderingEngine renderer;
-    private Object context;
+    private Context context = Context.context();
 
     private OfflineRenderer(String template) {
         this.template = template;
-        this.context = new HashMap<String, String>();
     }
 
     public OfflineRenderer from(File location) {
@@ -41,8 +40,13 @@ public class OfflineRenderer {
         return using(context.asMap());
     }
 
-    public OfflineRenderer using(Object context) {
-        this.context = context;
+    public OfflineRenderer using(Map<String, Object> context) {
+        this.context.withAll(context);
+        return this;
+    }
+
+    public OfflineRenderer using(String key, Object value) {
+        context.with(key, value);
         return this;
     }
 
@@ -57,7 +61,7 @@ public class OfflineRenderer {
     }
 
     private void render(final Writer writer) {
-        renderer.render(writer, template, context);
+        renderer.render(writer, template, context.asMap());
     }
 }
 
