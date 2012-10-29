@@ -23,7 +23,19 @@ public class ProductsDatabase implements ProductCatalog {
     }
 
     public Product findByNumber(String productNumber) {
-        return null;
+        PreparedStatement query = null;
+        try {
+            query = connection.prepareStatement("select number from products where number = ?");
+            query.setString(1, productNumber);
+            ResultSet resultSet = query.executeQuery();
+
+            resultSet.next();
+            return new Product(resultSet.getString("number"), null);
+        } catch (SQLException e) {
+            throw ExceptionImposter.imposterize(e);
+        } finally {
+            close(query);
+        }
     }
 
     public void add(Product product) {
