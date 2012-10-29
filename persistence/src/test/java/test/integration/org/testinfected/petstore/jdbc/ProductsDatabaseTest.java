@@ -8,13 +8,13 @@ import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.testinfected.petstore.jdbc.JDBCTransactor;
-import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
+import org.testinfected.petstore.jdbc.JDBCTransactor;
+import org.testinfected.petstore.jdbc.ProductsDatabase;
 import test.support.com.pyxis.petstore.builders.Builder;
-import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import test.support.org.testinfected.petstore.jdbc.Database;
+import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -24,11 +24,13 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.iterableWithSize;
+import static org.hamcrest.Matchers.nullValue;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
@@ -47,6 +49,16 @@ public class ProductsDatabaseTest {
     @After public void
     closeConnection() throws SQLException {
         connection.close();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test public void
+    findsProductsByNumber() throws Exception {
+        given(aProduct().withNumber("PRD-0001"));
+
+        Product product = productCatalog.findByNumber("PRD-0001");
+        assertThat("no match", product, not(nullValue()));
+        assertThat("product", product, productWithNumber("PRD-0001"));
     }
 
     @SuppressWarnings("unchecked")
@@ -143,6 +155,14 @@ public class ProductsDatabaseTest {
         return new FeatureMatcher<Product, String>(equalTo(name), "a product named", "product name") {
             @Override protected String featureValueOf(Product actual) {
                 return actual.getName();
+            }
+        };
+    }
+
+    private Matcher<Product> productWithNumber(String number) {
+        return new FeatureMatcher<Product, String>(equalTo(number), "a product with number", "product number") {
+            @Override protected String featureValueOf(Product actual) {
+                return actual.getNumber();
             }
         };
     }
