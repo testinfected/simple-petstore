@@ -3,6 +3,7 @@ gems:
   
 repositories:
   remote:
+    - http://repo1.maven.org/maven2
 
 artifacts:
   cli: org.testinfected:cli:jar:1.0

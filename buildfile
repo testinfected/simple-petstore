@@ -15,6 +15,7 @@ Project.local_task :jetty
 ['db-migrate', 'db-clean', 'db-reset', 'db-init'].each { |t| Project.local_task t }
 
 define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NUMBER do
+  compile.options.source = '1.6'
   compile.options.target = '1.6'
   
   define 'domain' do
