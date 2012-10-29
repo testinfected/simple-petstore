@@ -7,5 +7,5 @@ public interface ProcurementRequestListener {
 
     void addProduct(Product product) throws Exception;
 
-    void addItem(Item item);
+    void addItem(Item item) throws Exception;
 }

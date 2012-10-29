@@ -1,5 +1,7 @@
 package test.unit.org.testinfected.petstore.procurement;
 
+import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.hamcrest.Description;
@@ -16,7 +18,8 @@ import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.procurement.PurchasingAgent;
 
-import static org.jmock.Expectations.any;
+import static org.hamcrest.Matchers.any;
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
 @RunWith(JMock.class)
@@ -24,8 +27,9 @@ public class PurchasingAgentTest {
 
     Mockery context = new JUnit4Mockery();
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
+    ItemInventory itemInventory = context.mock(ItemInventory.class);
     Transactor transactor = context.mock(Transactor.class);
-    PurchasingAgent purchasingAgent = new PurchasingAgent(productCatalog, transactor);
+    PurchasingAgent purchasingAgent = new PurchasingAgent(productCatalog, itemInventory, transactor);
 
     @Test public void
     addsNewProductToProductCatalog() throws Exception {
@@ -37,6 +41,18 @@ public class PurchasingAgentTest {
         }});
 
         purchasingAgent.addProduct(product);
+    }
+
+    @Test public void
+    addsNewItemsToInventory() throws Exception {
+        final Item item = anItem().build();
+
+        context.checking(new Expectations() {{
+            oneOf(transactor).perform(with(aUnitOfWork())); will(performUnitOfWork());
+            oneOf(itemInventory).add(with(same(item)));
+        }});
+
+        purchasingAgent.addItem(item);
     }
 
     private Matcher<UnitOfWork> aUnitOfWork() {

@@ -39,6 +39,9 @@ public class PersistentItemInventory implements ItemInventory {
                 uniqueResult();
     }
 
+    public void add(Item item) {
+    }
+
     private Session currentSession() {
         return sessionFactory.getCurrentSession();
     }

@@ -16,4 +16,7 @@ public class ItemDatabase implements ItemInventory {
     public Item find(ItemNumber itemNumber) {
         return null;
     }
+
+    public void add(Item item) {
+    }
 }

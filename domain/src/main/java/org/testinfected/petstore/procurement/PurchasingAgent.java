@@ -1,6 +1,7 @@
 package org.testinfected.petstore.procurement;
 
 import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.testinfected.petstore.Transactor;
@@ -10,7 +11,7 @@ public class PurchasingAgent implements ProcurementRequestListener {
     private final ProductCatalog productCatalog;
     private final Transactor transactor;
 
-    public PurchasingAgent(ProductCatalog productCatalog, Transactor transactor) {
+    public PurchasingAgent(ProductCatalog productCatalog, ItemInventory itemInventory, Transactor transactor) {
         this.productCatalog = productCatalog;
         this.transactor = transactor;
     }

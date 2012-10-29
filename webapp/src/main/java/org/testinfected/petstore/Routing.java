@@ -40,8 +40,8 @@ public class Routing implements Application {
         final Connection connection = ConnectionManager.get(request);
         final Transactor transactor = new JDBCTransactor(connection);
         final ProductCatalog productCatalog = new ProductsDatabase(connection);
-        final ProcurementRequestListener requestListener = new PurchasingAgent(productCatalog, transactor);
         final ItemInventory itemInventory = new ItemDatabase();
+        final ProcurementRequestListener requestListener = new PurchasingAgent(productCatalog, itemInventory, transactor);
 
         Routes routes = Routes.draw(new Router() {{
             get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));
