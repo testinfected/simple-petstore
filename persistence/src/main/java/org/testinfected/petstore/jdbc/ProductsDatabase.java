@@ -22,6 +22,10 @@ public class ProductsDatabase implements ProductCatalog {
         this.connection = connection;
     }
 
+    public Product findByNumber(String productNumber) {
+        return null;
+    }
+
     public void add(Product product) {
         PreparedStatement insert = null;
         try {

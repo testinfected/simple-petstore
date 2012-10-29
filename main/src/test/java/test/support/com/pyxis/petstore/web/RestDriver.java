@@ -31,8 +31,7 @@ public class RestDriver {
     public void addItem(String productNumber, String itemNumber, String itemDescription, String itemPrice) throws IOException {
         HttpRequest post = request.but()
                 .withMethod(HttpMethod.POST)
-                .withPath("/items")
-                .withParameter("product", productNumber)
+                .withPath("/products/" + productNumber + "/items")
                 .withParameter("number", itemNumber)
                 .withParameter("description", itemDescription)
                 .withParameter("price", itemPrice);

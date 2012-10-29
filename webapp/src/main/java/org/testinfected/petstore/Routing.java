@@ -5,6 +5,7 @@ import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
+import org.testinfected.petstore.controllers.CreateItem;
 import org.testinfected.petstore.controllers.CreateProduct;
 import org.testinfected.petstore.controllers.Home;
 import org.testinfected.petstore.controllers.ListItems;
@@ -45,7 +46,8 @@ public class Routing implements Application {
         Routes routes = Routes.draw(new Router() {{
             get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));
             post("/products").to(controller(new CreateProduct(requestListener)));
-            get("/products/:number/items").to(controller(new ListItems(itemInventory)));
+            get("/products/:product/items").to(controller(new ListItems(itemInventory)));
+            post("/products/:product/items").to(controller(new CreateItem(productCatalog, requestListener)));
             delete("/logout").to(controller(new Logout()));
             map("/").to(controller(new Home()));
         }});

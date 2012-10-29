@@ -39,7 +39,7 @@ public class ListItemsTest {
     @Before public void
     stubHttpRequest() {
         context.checking(new Expectations() {{
-            allowing(request).getParameter("number"); will(returnValue(productNumber));
+            allowing(request).getParameter("product"); will(returnValue(productNumber));
         }});
     }
 

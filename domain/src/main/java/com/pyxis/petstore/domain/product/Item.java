@@ -49,6 +49,10 @@ public class Item implements Serializable {
         this.price = price;
     }
 
+    public String getProductNumber() {
+        return product.getNumber();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

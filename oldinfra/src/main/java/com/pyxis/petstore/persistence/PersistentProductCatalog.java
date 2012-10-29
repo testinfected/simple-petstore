@@ -30,6 +30,10 @@ public class PersistentProductCatalog implements ProductCatalog {
         currentSession().save(product);
     }
 
+    public Product findByNumber(String productNumber) {
+        return null;
+    }
+
     @SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public List<Product> findByKeyword(String keyword) {
