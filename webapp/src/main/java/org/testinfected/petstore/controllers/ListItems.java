@@ -20,8 +20,8 @@ public class ListItems implements Controller {
         String productNumber = request.getParameter("product");
         List<Item> items = itemInventory.findByProductNumber (productNumber);
         response.render("items", context().
-                with("match-found", !items.isEmpty()).
-                and("match-count", items.size()).
+                with("in-stock", !items.isEmpty()).
+                and("item-count", items.size()).
                 and("items", items).asMap());
     }
 }

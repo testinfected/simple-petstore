@@ -49,7 +49,7 @@ public class ListItemsTest {
         searchYields(anItem().of(aProduct().withNumber(productNumber)));
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with("items"), with(allOf(hasEntry("match-found", true), hasEntry("items", items))));
+            oneOf(response).render(with("items"), with(allOf(hasEntry("in-stock", true), hasEntry("items", items))));
         }});
 
         listItems.process(request, response);
@@ -61,7 +61,7 @@ public class ListItemsTest {
         searchYieldsNothing();
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with("items"), with(hasEntry("match-found", false)));
+            oneOf(response).render(with("items"), with(hasEntry("in-stock", false)));
         }});
 
         listItems.process(request, response);
@@ -73,7 +73,7 @@ public class ListItemsTest {
         searchYields(anItem(), anItem(), anItem());
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with(any(String.class)), with(hasEntry("match-count", 3)));
+            oneOf(response).render(with(any(String.class)), with(hasEntry("item-count", 3)));
         }});
 
         listItems.process(request, response);
