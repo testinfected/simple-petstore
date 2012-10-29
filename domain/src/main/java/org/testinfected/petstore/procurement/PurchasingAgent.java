@@ -9,10 +9,12 @@ import org.testinfected.petstore.UnitOfWork;
 
 public class PurchasingAgent implements ProcurementRequestListener {
     private final ProductCatalog productCatalog;
+    private final ItemInventory itemInventory;
     private final Transactor transactor;
 
     public PurchasingAgent(ProductCatalog productCatalog, ItemInventory itemInventory, Transactor transactor) {
         this.productCatalog = productCatalog;
+        this.itemInventory = itemInventory;
         this.transactor = transactor;
     }
 
@@ -24,6 +26,11 @@ public class PurchasingAgent implements ProcurementRequestListener {
         });
     }
 
-    public void addItem(Item item) {
+    public void addItem(final Item item) throws Exception {
+        transactor.perform(new UnitOfWork() {
+            public void execute() throws Exception {
+                itemInventory.add(item);
+            }
+        });
     }
 }
