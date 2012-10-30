@@ -8,8 +8,20 @@
   <div id="in-stock"><span id="item-count">{{item-count}}</span> item(s) available for purchase</div>
 
   <table id="inventory">
+    <tr>
+      <th>Reference number</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th></th>
+    </tr>
     {{#items}}
     <tr id="item-{{number}}">
+      <td class="number">{{number}}</td>
+      <td class="description">{{description}}</td>
+      <td class="price">{{price}}</td>
+      <td>
+        <form></form>
+      </td>
     </tr>
     {{/items}}
   </table>

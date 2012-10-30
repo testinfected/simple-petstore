@@ -10,6 +10,15 @@ img {
 	border-width: 0;
 }
 
+table {
+	border-collapse: collapse;
+}
+
+th {
+	border-bottom: 1px solid black;
+	text-align: left;
+}
+
 body.petstore {
 	margin: 0 auto;
 	font: 100% "Georgia", "Arial", serif;
@@ -139,6 +148,28 @@ body.petstore {
 	color: #414141;
 	vertical-align: 200%;
 	font-size: 16px;
+}
+
+#items {
+	padding-top: 90px;
+	min-height: 370px;
+}
+
+#inventory {
+	margin-top: 50px;
+	width: 85%;
+}
+
+#inventory th {
+	border: none;
+	font-weight: normal;
+	font-size: 22px;
+	height: 50px;
+}
+
+#inventory td {
+	padding-top: 2px;
+	padding-bottom: 4px;
 }
 
 #footer {
