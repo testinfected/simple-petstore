@@ -20,11 +20,18 @@
       <td class="description">{{description}}</td>
       <td class="price">{{price}}</td>
       <td>
-        <form></form>
+        <form action="/cartitems" method="post">
+          <input type="hidden" name="item_number" value="{{number}}"/>
+          <button class="add-to-cart" id="add-to-cart-{{number}}">Add to cart</button>
+        </form>
       </td>
     </tr>
     {{/items}}
   </table>
+
+  <div id="items-actions">
+    <a id="continue-shopping" class="continue" href="/">&laquo; continue shopping</a>
+  </div>
 
   {{/in-stock}}
   {{^in-stock}}

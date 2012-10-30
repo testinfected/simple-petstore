@@ -2,7 +2,6 @@ package test.system.com.pyxis.petstore.features;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.ApplicationDriver;
 import test.support.com.pyxis.petstore.web.TestEnvironment;
@@ -30,7 +29,7 @@ public class BrowseCatalogFeature {
         application.showsNoItemAvailable();
     }
 
-    @Ignore("wip") @Test public void
+    @Test public void
     consultsAProductAvailableItems() throws IOException {
         application.addProduct("LIZ-0001", "Iguana");
         application.addItem("LIZ-0001", "12345678", "Green Adult", "18.50");

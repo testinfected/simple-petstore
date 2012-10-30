@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasBlankText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasId;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasNoSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
@@ -79,6 +81,34 @@ public class ItemsPageTest {
                                 hasText("Green Adult"),
                                 hasText("18.50"),
                                 hasChild(hasTag("form")))));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test public void
+    addToCartButtonAddsItemToShoppingCart() {
+        addAsAvailable(anItem().withNumber("12345678"));
+
+        itemsPage = renderItemsPage().asDom();
+
+        assertThat("items page", itemsPage,
+                hasUniqueSelector("form",
+                        hasAttribute("action", "/cartitems"),
+                        hasAttribute("method", "post"),
+                        hasUniqueSelector("button", hasId("add-to-cart-12345678"))));
+        assertThat("items page", itemsPage,
+                hasUniqueSelector("form input[type='hidden']",
+                        hasAttribute("name", "item_number"),
+                        hasAttribute("value", "12345678")));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test public void
+    returnsToHomePageToContinueShopping() {
+        addAsAvailable(anItem());
+
+        itemsPage = renderItemsPage().asDom();
+
+        assertThat("items page", itemsPage, hasUniqueSelector("a#continue-shopping", hasAttribute("href", "/")));
     }
 
     private void addAsAvailable(Builder<Item>... items) {

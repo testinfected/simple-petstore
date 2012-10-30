@@ -172,6 +172,32 @@ body.petstore {
 	padding-bottom: 4px;
 }
 
+#items-actions {
+	margin-top: 45px;
+	margin-left: 638px;
+	margin-bottom: 40px;
+}
+
+.add-to-cart {
+	margin-right: 0;
+	font: 14px "Georgia", "Arial", serif;
+	padding: 5px 10px;
+	text-align: center;
+	color: black;
+	height: 30px;
+	background-color: #c6ee22;
+	border: solid #6a6a6a 2px;
+	cursor: pointer;
+	-moz-border-radius: 4px 4px 4px 4px;
+}
+
+.continue {
+	padding-top: 15px;
+	font-size: 14px;
+	color: #696969;
+	text-decoration: underline;
+}
+
 #footer {
 	width: 960px;
 	margin: 0 auto;
