@@ -31,6 +31,7 @@ import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
+import static org.testinfected.petstore.jdbc.Properties.productOf;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
@@ -83,7 +84,7 @@ public class ItemsDatabaseTest {
     @SuppressWarnings("unchecked")
     @Test public void
     storesAndRetrievesCompleteItemDetails() throws Exception {
-        Product labrador = aProduct().build();
+        Product labrador = aProduct().named("Labrador").describedAs("A fun and friendly dog").withPhoto("labrador.jpg").build();
         Product dalmatian = aProduct().build();
         givenInCatalog(labrador, dalmatian);
 
@@ -113,7 +114,16 @@ public class ItemsDatabaseTest {
                 hasProperty("number", equalTo(original.getNumber())),
                 hasProperty("price", equalTo(original.getPrice())),
                 hasProperty("description", equalTo(original.getDescription())),
-                hasProperty("productNumber", equalTo(original.getProductNumber())));
+                hasProperty("productNumber", equalTo(original.getProductNumber())),
+                hasField("product", sameProductAs(productOf(original).get())));
+    }
+
+    private Matcher<Product> sameProductAs(Product original) {
+        return allOf(hasField("id", equalTo(idOf(original).get())),
+                hasProperty("number", equalTo(original.getNumber())),
+                hasProperty("name", equalTo(original.getName())),
+                hasProperty("description", equalTo(original.getDescription())),
+                hasProperty("photoFileName", equalTo(original.getPhotoFileName())));
     }
 
     private Matcher<Item> hasProductNumber(final String number) {

@@ -29,14 +29,16 @@ public class ItemDatabase implements ItemInventory {
         PreparedStatement query = null;
         try {
             query = connection.prepareStatement(
-                    "select item.id, item.number, item.price, item.description, item.product_id " +
+                    "select " +
+                        "item.id, item.number, item.price, item.description, item.product_id, " +
+                        "product.id, product.name, product.number, product.description, product.photo_file_name " +
                     "from items item " +
                     "join products product on item.product_id = product.id " +
                     "where product.number = ?");
             query.setString(1, productNumber);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
-                Product product = new Product(productNumber, null);
+                Product product = new ProductRecord().hydrate(rs);
                 Item item = new Item(new ItemNumber(rs.getString("number")), product, rs.getBigDecimal("price"));
                 item.setDescription(rs.getString("description"));
                 idOf(item).set(rs.getLong("id"));
