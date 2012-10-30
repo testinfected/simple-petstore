@@ -1,6 +1,5 @@
 package org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.product.Attachment;
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.testinfected.petstore.ExceptionImposter;
@@ -27,14 +26,14 @@ public class ProductsDatabase implements ProductCatalog {
     public Product findByNumber(String productNumber) {
         PreparedStatement query = null;
         try {
-            query = connection.prepareStatement("select id, number from products where number = ?");
+            query = connection.prepareStatement(
+                    "select id, name, number, description, photo_file_name " +
+                    "from products where number = ?");
             query.setString(1, productNumber);
             ResultSet resultSet = query.executeQuery();
 
             resultSet.next();
-            Product product = new Product(resultSet.getString("number"), null);
-            idOf(product).set(resultSet.getLong("id"));
-            return product;
+            return new ProductRecord().hydrate(resultSet);
         } catch (SQLException e) {
             throw ExceptionImposter.imposterize(e);
         } finally {
@@ -80,12 +79,7 @@ public class ProductsDatabase implements ProductCatalog {
             ResultSet resultSet = query.executeQuery();
 
             while (resultSet.next()) {
-                Product product = new Product(resultSet.getString("number"), resultSet.getString("name"));
-                product.setDescription(resultSet.getString("description"));
-                String photoFileName = resultSet.getString("photo_file_name");
-                product.attachPhoto(new Attachment(photoFileName));
-
-                idOf(product).set(resultSet.getLong("id"));
+                Product product = new ProductRecord().hydrate(resultSet);
                 matches.add(product);
             }
         } catch (SQLException e) {

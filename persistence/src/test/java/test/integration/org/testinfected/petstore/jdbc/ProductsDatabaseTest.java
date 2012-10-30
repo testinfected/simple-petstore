@@ -102,14 +102,20 @@ public class ProductsDatabaseTest {
                 aProduct().named("Dalmatian"));
 
         for (final Product product : sampleProducts) {
-            transactor.perform(new UnitOfWork() {
-                public void execute() throws Exception {
-                    productCatalog.add(product);
-                }
-            });
-            List<Product> found = productCatalog.findByKeyword(product.getName());
-            assertThat("product", uniqueElement(found), sameProductAs(product));
+            save(product);
+            assertCanBeFoundByNumberWithSameState(product);
+            assertCanBeFoundByKeywordWithSameState(product);
         }
+    }
+
+    private void assertCanBeFoundByNumberWithSameState(Product product) {
+        Product found = productCatalog.findByNumber(product.getNumber());
+        assertThat("find by number", found, sameProductAs(product));
+    }
+
+    private void assertCanBeFoundByKeywordWithSameState(Product product) {
+        List<Product> found = productCatalog.findByKeyword(product.getName());
+        assertThat("find by keyword", uniqueElement(found), sameProductAs(product));
     }
 
     private Product uniqueElement(List<Product> products) {
@@ -137,6 +143,10 @@ public class ProductsDatabaseTest {
     }
 
     private void given(final Product product) throws Exception {
+        save(product);
+    }
+
+    private void save(final Product product) throws Exception {
         transactor.perform(new UnitOfWork() {
             public void execute() throws Exception {
                 productCatalog.add(product);
