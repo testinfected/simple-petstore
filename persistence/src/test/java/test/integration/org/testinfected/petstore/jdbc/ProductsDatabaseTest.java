@@ -29,7 +29,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.hamcrest.Matchers.nullValue;
-import static org.testinfected.petstore.jdbc.DatabaseIdentifier.idOf;
+import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;

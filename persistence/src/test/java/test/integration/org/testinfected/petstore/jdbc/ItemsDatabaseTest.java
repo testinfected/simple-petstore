@@ -30,7 +30,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
-import static org.testinfected.petstore.jdbc.DatabaseIdentifier.idOf;
+import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;

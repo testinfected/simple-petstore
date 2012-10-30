@@ -6,6 +6,8 @@ import com.pyxis.petstore.domain.product.Product;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static org.testinfected.petstore.jdbc.Properties.idOf;
+
 public class ProductRecord implements Record<Product> {
 
     public Product hydrate(ResultSet resultSet) throws SQLException {
@@ -14,7 +16,7 @@ public class ProductRecord implements Record<Product> {
         String photoFileName = resultSet.getString("photo_file_name");
         product.attachPhoto(new Attachment(photoFileName));
 
-        DatabaseIdentifier.idOf(product).set(resultSet.getLong("id"));
+        idOf(product).set(resultSet.getLong("id"));
         return product;
     }
 }
