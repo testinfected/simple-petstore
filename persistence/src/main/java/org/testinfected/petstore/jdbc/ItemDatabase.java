@@ -70,7 +70,7 @@ public class ItemDatabase implements ItemInventory {
             generatedKeys.first();
             idOf(item).set(generatedKeys.getLong(1));
         } catch (SQLException e) {
-            throw new JDBCException("Could not insert item: " + item, e);
+            throw new JDBCException("Could not insert item " + item, e);
         } finally {
             close(insert);
         }
@@ -79,7 +79,7 @@ public class ItemDatabase implements ItemInventory {
     private void executeInsert(PreparedStatement insert) throws SQLException {
         int rowsInserted = insert.executeUpdate();
         if (rowsInserted != 1) {
-            throw new SQLException("Unexpected row count: " + rowsInserted + "; expected: 1");
+            throw new SQLException("Unexpected row count of " + rowsInserted + "; expected was 1");
         }
     }
 

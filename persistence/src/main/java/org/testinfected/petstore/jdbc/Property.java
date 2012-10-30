@@ -20,7 +20,7 @@ public class Property<T>  {
             field.setAccessible(true);
             return field;
         } catch (NoSuchFieldException e) {
-            throw new IllegalArgumentException("Entity has no field " + name + ": " + entity, e);
+            throw new IllegalArgumentException(entity.getClass().getName() + " has no field '" + name + "'", e);
         }
     }
 

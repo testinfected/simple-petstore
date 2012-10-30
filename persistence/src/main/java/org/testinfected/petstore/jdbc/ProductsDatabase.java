@@ -51,7 +51,7 @@ public class ProductsDatabase implements ProductCatalog {
             generatedKeys.first();
             Properties.idOf(product).set(generatedKeys.getLong(1));
         } catch (SQLException e) {
-            throw new JDBCException("Could not insert product: " + product, e);
+            throw new JDBCException("Could not insert product " + product, e);
         } finally {
             close(insert);
         }
@@ -60,7 +60,7 @@ public class ProductsDatabase implements ProductCatalog {
     private void executeInsert(PreparedStatement insert) throws SQLException {
         int rowsInserted = insert.executeUpdate();
         if (rowsInserted != 1) {
-            throw new SQLException("Unexpected row count: " + rowsInserted + "; expected: 1");
+            throw new SQLException("Unexpected row count of " + rowsInserted + "; expected was 1");
         }
     }
 
