@@ -1,6 +1,7 @@
 package test.support.com.pyxis.petstore.web;
 
 import com.objogate.wl.web.AsyncWebDriver;
+import test.support.com.pyxis.petstore.web.page.CartPage;
 import test.support.com.pyxis.petstore.web.page.HomePage;
 import test.support.com.pyxis.petstore.web.page.ItemsPage;
 import test.support.com.pyxis.petstore.web.page.Menu;
@@ -20,6 +21,7 @@ public class ApplicationDriver {
     private HomePage homePage;
     private ProductsPage productsPage;
     private ItemsPage itemsPage;
+    private CartPage cartPage;
     private Menu menu;
 
     public ApplicationDriver(TestEnvironment environment) {
@@ -57,6 +59,7 @@ public class ApplicationDriver {
         homePage = new HomePage(browser);
         productsPage = new ProductsPage(browser);
         itemsPage = new ItemsPage(browser);
+        cartPage = new CartPage(browser);
     }
 
     public void stop() throws Exception {
@@ -132,5 +135,36 @@ public class ApplicationDriver {
 
     public void returnToCatalog() {
         itemsPage.returnToCatalog();
+    }
+
+    public void showsCartIsEmpty() {
+        menu.showsCartIsEmpty();
+    }
+
+    public void showsCartTotalQuantity(int quantity) {
+        menu.showsCartTotalQuantity(quantity);
+    }
+
+    public void showsItemInCart(String itemNumber, String itemDescription, String totalPrice) {
+        cartPage.showsItemInCart(itemNumber, itemDescription, totalPrice);
+    }
+
+    public void showsGrandTotal(String price) {
+        cartPage.showsGrandTotal(price);
+    }
+
+    public void buy(String product, String itemNumber) {
+        consultInventoryOf(product);
+        buy(itemNumber);
+    }
+
+    public void buy(String itemNumber) {
+        itemsPage.addToCart(itemNumber);
+        cartPage.displays();
+    }
+
+    public void continueShopping() {
+        cartPage.continueShopping();
+        homePage.displays();
     }
 }
