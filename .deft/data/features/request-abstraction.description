@@ -1,0 +1,1 @@
+Extend and generalize request/response abstractions accross web code, and provide a default implementation using simpleframework

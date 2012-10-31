@@ -1,0 +1,1 @@
+Extract path mapping from site decoration middleware into its own middleware
