@@ -25,9 +25,9 @@ public class ShopFeature {
 
     @Ignore("wip") @Test public void
     shopsForItemsAndAddsThemToCart() throws IOException {
-        application.addProduct("LIZ-001", "Iguana");
-        application.addItem("LIZ-001", "12345678", "Green Adult", "18.50");
-        application.addItem("LIZ-001", "87654321", "Blue Female", "58.97");
+        application.addProduct("LIZ-0001", "Iguana", "Big lizard", "iguana.png");
+        application.addItem("LIZ-0001", "12345678", "Green Adult", "18.50");
+        application.addItem("LIZ-0001", "87654321", "Blue Female", "58.97");
 
         application.showsCartIsEmpty();
 

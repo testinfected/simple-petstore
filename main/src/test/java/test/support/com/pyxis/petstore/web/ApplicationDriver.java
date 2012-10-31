@@ -108,7 +108,11 @@ public class ApplicationDriver {
     }
 
     public void addProduct(String number, String name, String description) throws IOException {
-        rest.addProduct(number, name, description);
+        rest.addProduct(number, name, description, "");
+    }
+
+    public void addProduct(String number, String name, String description, String photo) throws IOException {
+        rest.addProduct(number, name, description, photo);
     }
 
     public void consultInventoryOf(String product) {

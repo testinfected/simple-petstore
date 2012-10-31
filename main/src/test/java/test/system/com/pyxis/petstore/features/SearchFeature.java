@@ -22,7 +22,7 @@ public class SearchFeature {
 
     @Test public void
     searchesForAProductNotAvailableInStore() throws Exception {
-        application.addProduct("LAB-1234", "Labrador Retriever");
+        application.addProduct("LAB-1234", "Labrador Retriever", "Friendly dog", "labrador.jpg");
 
         application.searchFor("Dalmatian");
         application.showsNoResult();
@@ -30,13 +30,13 @@ public class SearchFeature {
 
     @Test public void
     searchesAndFindsProductsInCatalog() throws Exception {
-        application.addProduct("LAB-1234", "Labrador Retriever");
-        application.addProduct("CHE-5678", "Chesapeake", "Chesapeake bay retriever");
-        application.addProduct("DAL-6666", "Dalmatian");
+        application.addProduct("LAB-1234", "Labrador Retriever", "Friendly dog", "labrador.jpg");
+        application.addProduct("CHE-5678", "Golden", "Golden retriever", "golden.jpg");
+        application.addProduct("DAL-6666", "Dalmatian", "A very tall dog", "dalmatian.jpg");
 
         application.searchFor("retriever");
         application.displaysNumberOfResults(2);
         application.displaysProduct("LAB-1234", "Labrador Retriever");
-        application.displaysProduct("CHE-5678", "Chesapeake");
+        application.displaysProduct("CHE-5678", "Golden");
     }
 }

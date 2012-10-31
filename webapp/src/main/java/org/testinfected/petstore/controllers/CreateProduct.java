@@ -1,23 +1,24 @@
 package org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.product.Product;
 import org.testinfected.petstore.Controller;
-import org.testinfected.petstore.procurement.ProcurementRequestListener;
+import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 
 public class CreateProduct implements Controller {
 
     public static final int CREATED = 201;
 
-    private final ProcurementRequestListener requestListener;
+    private final ProcurementRequestHandler requestHandler;
 
-    public CreateProduct(ProcurementRequestListener requestListener) {
-        this.requestListener = requestListener;
+    public CreateProduct(ProcurementRequestHandler requestHandler) {
+        this.requestHandler = requestHandler;
     }
 
     public void process(Request request, Response response) throws Exception {
-        final Product product = new Product(request.getParameter("number"), request.getParameter("name"));
-        product.setDescription(request.getParameter("description"));
-        requestListener.addProduct(product);
+        requestHandler.addProductToCatalog(
+                request.getParameter("number"),
+                request.getParameter("name"),
+                request.getParameter("description"),
+                request.getParameter("photo"));
 
         response.renderHead(CREATED);
     }

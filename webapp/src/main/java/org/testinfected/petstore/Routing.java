@@ -18,7 +18,7 @@ import org.testinfected.petstore.jdbc.ItemDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.middlewares.ConnectionManager;
-import org.testinfected.petstore.procurement.ProcurementRequestListener;
+import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.testinfected.petstore.routing.Router;
 import org.testinfected.petstore.routing.Routes;
@@ -44,13 +44,13 @@ public class Routing implements Application {
         final Transactor transactor = new JDBCTransactor(connection);
         final ProductCatalog productCatalog = new ProductsDatabase(connection);
         final ItemInventory itemInventory = new ItemDatabase(connection);
-        final ProcurementRequestListener requestListener = new PurchasingAgent(productCatalog, itemInventory, transactor);
+        final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
 
         Routes routes = Routes.draw(new Router() {{
             get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));
-            post("/products").to(controller(new CreateProduct(requestListener)));
+            post("/products").to(controller(new CreateProduct(requestHandler)));
             get("/products/:product/items").to(controller(new ListItems(itemInventory)));
-            post("/products/:product/items").to(controller(new CreateItem(productCatalog, requestListener)));
+            post("/products/:product/items").to(controller(new CreateItem(requestHandler)));
             post("/cart_items").to(controller(new CreateCartItem(new SalesAssistant() {
                 public void addToCart(ItemNumber itemNumber) {
                 }

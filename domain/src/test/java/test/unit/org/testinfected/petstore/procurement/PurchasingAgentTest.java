@@ -1,6 +1,5 @@
 package test.unit.org.testinfected.petstore.procurement;
 
-import com.pyxis.petstore.domain.product.Item;
 import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
@@ -18,7 +17,10 @@ import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.procurement.PurchasingAgent;
 
+import java.math.BigDecimal;
+
 import static org.hamcrest.Matchers.any;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
 
@@ -33,26 +35,26 @@ public class PurchasingAgentTest {
 
     @Test public void
     addsNewProductToProductCatalog() throws Exception {
-        final Product product = aProduct().build();
-
         context.checking(new Expectations() {{
             oneOf(transactor).perform(with(aUnitOfWork())); will(performUnitOfWork());
-            oneOf(productCatalog).add(with(same(product)));
+            oneOf(productCatalog).add(with(samePropertyValuesAs(
+                    aProduct("LAB-1234").named("Labrador").describedAs("Friendly Dog").withPhoto("Labrador.jpg").build())));
         }});
 
-        purchasingAgent.addProduct(product);
+        purchasingAgent.addProductToCatalog("LAB-1234", "Labrador", "Friendly Dog", "Labrador.jpg");
     }
 
     @Test public void
     addsNewItemsToInventory() throws Exception {
-        final Item item = anItem().build();
-
+        final Product product = aProduct().withNumber("LAB-1234").build();
         context.checking(new Expectations() {{
+            allowing(productCatalog).findByNumber(with("LAB-1234")); will(returnValue(product));
             oneOf(transactor).perform(with(aUnitOfWork())); will(performUnitOfWork());
-            oneOf(itemInventory).add(with(same(item)));
+            oneOf(itemInventory).add(with(samePropertyValuesAs(
+                    anItem().of(product).withNumber("12345678").describedAs("Chocolate Male").priced("599.00").build())));
         }});
 
-        purchasingAgent.addItem(item);
+        purchasingAgent.addToInventory("LAB-1234", "12345678", "Chocolate Male", new BigDecimal("599.00"));
     }
 
     private Matcher<UnitOfWork> aUnitOfWork() {

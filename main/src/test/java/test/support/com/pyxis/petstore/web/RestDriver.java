@@ -16,13 +16,14 @@ public class RestDriver {
         this.request = request;
     }
 
-    public void addProduct(String number, String name, String description) throws IOException {
+    public void addProduct(String number, String name, String description, String photo) throws IOException {
         HttpRequest post = request.but()
                 .withMethod(HttpMethod.POST)
                 .withPath("/products")
                 .withParameter("number", number)
                 .withParameter("name", name)
-                .withParameter("description", description);
+                .withParameter("description", description)
+                .withParameter("photo", photo);
 
         HttpResponse response = post.send();
         response.assertHasStatusMessage(CREATED);

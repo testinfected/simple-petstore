@@ -24,14 +24,14 @@ public class BrowseCatalogFeature {
 
     @Test public void
     consultsAProductCurrentlyOutOfStock() throws IOException {
-        application.addProduct("LIZ-0001", "Iguana");
+        application.addProduct("LIZ-0001", "Iguana", "Big lizard", "iguana.png");
         application.consultInventoryOf("Iguana");
         application.showsNoItemAvailable();
     }
 
     @Test public void
     consultsAProductAvailableItems() throws IOException {
-        application.addProduct("LIZ-0001", "Iguana");
+        application.addProduct("LIZ-0001", "Iguana", "Big lizard", "iguana.png");
         application.addItem("LIZ-0001", "12345678", "Green Adult", "18.50");
 
         application.consultInventoryOf("Iguana");

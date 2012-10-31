@@ -1,11 +1,7 @@
 package org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.product.Item;
-import com.pyxis.petstore.domain.product.ItemNumber;
-import com.pyxis.petstore.domain.product.Product;
-import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.testinfected.petstore.Controller;
-import org.testinfected.petstore.procurement.ProcurementRequestListener;
+import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 
 import java.math.BigDecimal;
 
@@ -13,19 +9,18 @@ public class CreateItem implements Controller {
 
     private static final int CREATED = 201;
 
-    private final ProductCatalog productCatalog;
-    private final ProcurementRequestListener requestListener;
+    private final ProcurementRequestHandler requestHandler;
 
-    public CreateItem(ProductCatalog productCatalog, ProcurementRequestListener requestListener) {
-        this.productCatalog = productCatalog;
-        this.requestListener = requestListener;
+    public CreateItem(ProcurementRequestHandler requestHandler) {
+        this.requestHandler = requestHandler;
     }
 
     public void process(Request request, Response response) throws Exception {
-        final Product product = productCatalog.findByNumber(request.getParameter("product"));
-        final Item item = new Item(new ItemNumber(request.getParameter("number")), product, new BigDecimal(request.getParameter("price")));
-        item.setDescription(request.getParameter("description"));
-        requestListener.addItem(item);
+        requestHandler.addToInventory(
+                request.getParameter("product"),
+                request.getParameter("number"),
+                request.getParameter("description"),
+                new BigDecimal(request.getParameter("price")));
 
         response.renderHead(CREATED);
     }
