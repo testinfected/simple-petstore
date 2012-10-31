@@ -7,12 +7,15 @@ import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChildren;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasId;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasNoSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
@@ -40,6 +43,12 @@ public class HeaderTest {
                         hasAttribute("method", equalToIgnoringCase("GET"))));
         assertThat("header", header,
                 hasUniqueSelector("#search-box form", hasChildren(keywordInputField(), searchButton())));
+    }
+
+    @Test public void
+    cartLinkIsInactiveWhenCartIsEmpty() {
+        assertThat("header", header, hasNoSelector("#shopping-cart a"));
+        assertThat("header", header, hasText(containsString("0")));
     }
 
     @SuppressWarnings("unchecked")

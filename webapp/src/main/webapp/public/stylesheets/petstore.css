@@ -44,6 +44,17 @@ body.petstore {
 	position: relative;
 }
 
+#header ul li {
+	display: inline;
+	margin-right: 30px;
+}
+
+#header ul {
+	position: absolute;
+	top: 73px;
+	left: 740px;
+}
+
 #content {
 	color: #84a208;
 }
