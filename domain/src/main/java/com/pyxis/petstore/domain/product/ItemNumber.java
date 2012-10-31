@@ -37,6 +37,6 @@ public class ItemNumber implements Serializable {
     }
 
     public String toString() {
-        return number;
+        return "#" + number;
     }
 }

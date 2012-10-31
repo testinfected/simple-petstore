@@ -1,10 +1,13 @@
 package org.testinfected.petstore;
 
+import com.pyxis.petstore.domain.order.SalesAssistant;
 import com.pyxis.petstore.domain.product.AttachmentStorage;
 import com.pyxis.petstore.domain.product.ItemInventory;
+import com.pyxis.petstore.domain.product.ItemNumber;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
+import org.testinfected.petstore.controllers.CreateCartItem;
 import org.testinfected.petstore.controllers.CreateItem;
 import org.testinfected.petstore.controllers.CreateProduct;
 import org.testinfected.petstore.controllers.Home;
@@ -48,6 +51,10 @@ public class Routing implements Application {
             post("/products").to(controller(new CreateProduct(requestListener)));
             get("/products/:product/items").to(controller(new ListItems(itemInventory)));
             post("/products/:product/items").to(controller(new CreateItem(productCatalog, requestListener)));
+            post("/cart_items").to(controller(new CreateCartItem(new SalesAssistant() {
+                public void addToCart(ItemNumber itemNumber) {
+                }
+            })));
             delete("/logout").to(controller(new Logout()));
             map("/").to(controller(new Home()));
         }});

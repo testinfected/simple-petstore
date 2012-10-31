@@ -32,14 +32,14 @@ public class ShopFeature {
         application.showsCartIsEmpty();
 
         application.buy("Iguana", "12345678");
-        application.showsItemInCart("12345678", "Green Adult", "18.50");
-        application.showsGrandTotal("18.50");
         application.showsCartTotalQuantity(1);
+        application.showsGrandTotal("18.50");
+        application.showsItemInCart("12345678", "Green Adult", "18.50");
         application.continueShopping();
 
         application.buy("Iguana", "87654321");
-        application.showsItemInCart("87654321", "Blue Female", "58.97");
-        application.showsGrandTotal("77.47");
         application.showsCartTotalQuantity(2);
+        application.showsGrandTotal("77.47");
+        application.showsItemInCart("87654321", "Blue Female", "58.97");
     }
 }

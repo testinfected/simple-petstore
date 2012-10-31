@@ -92,7 +92,7 @@ public class ItemsPageTest {
 
         assertThat("items page", itemsPage,
                 hasUniqueSelector("form",
-                        hasAttribute("action", "/cartitems"),
+                        hasAttribute("action", "/cart_items"),
                         hasAttribute("method", "post"),
                         hasUniqueSelector("button", hasId("add-to-cart-12345678"))));
         assertThat("items page", itemsPage,
