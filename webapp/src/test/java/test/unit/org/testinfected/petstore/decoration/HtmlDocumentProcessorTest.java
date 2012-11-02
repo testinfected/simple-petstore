@@ -1,11 +1,14 @@
 package test.unit.org.testinfected.petstore.decoration;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.testinfected.petstore.decoration.ContentProcessor;
 import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
 
+import java.util.Map;
+
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasEntry;
 
 public class HtmlDocumentProcessorTest {
 
@@ -22,17 +25,21 @@ public class HtmlDocumentProcessorTest {
 
     @Test public void
     extractsHtmlHead() {
-        assertThat("html chunks", processor.process(page), hasEntry("head", "\n<title>Page Title</title>\n"));
+        assertThat("html chunks", processor.process(page), hasChunk("head", "\n<title>Page Title</title>\n"));
     }
 
     @Test public void
     extractsHtmlBody() {
-        assertThat("html chunks", processor.process(page), hasEntry("body", "\n...\n"));
+        assertThat("html chunks", processor.process(page), hasChunk("body", "\n...\n"));
     }
 
     @Test public void
     extractsHtmlTitle() {
-        assertThat("html chunks", processor.process(page), hasEntry("title", "Page Title"));
+        assertThat("html chunks", processor.process(page), hasChunk("title", "Page Title"));
+    }
+
+    private Matcher<Map<? extends String, ? extends Object>> hasChunk(final String key, final String value) {
+        return Matchers.<String, Object>hasEntry(key, value);
     }
 
 }

@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface ContentProcessor {
 
-    Map<String, String> process(String content);
+    Map<String, Object> process(String content);
 }

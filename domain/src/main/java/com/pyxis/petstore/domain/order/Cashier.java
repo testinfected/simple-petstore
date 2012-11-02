@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 public class Cashier implements CheckoutAssistant, PaymentCollector, SalesAssistant {
     private final OrderNumberSequence orderNumberSequence;
     private final OrderBook orderBook;
+    private final Cart cart;
 
     @Autowired
-    public Cashier(OrderNumberSequence orderNumberSequence, OrderBook orderBook) {
+    public Cashier(OrderNumberSequence orderNumberSequence, OrderBook orderBook, Cart cart) {
         this.orderNumberSequence = orderNumberSequence;
         this.orderBook = orderBook;
+        this.cart = cart;
     }
 
     public Order checkout(Cart cart) {
@@ -32,6 +34,6 @@ public class Cashier implements CheckoutAssistant, PaymentCollector, SalesAssist
     }
 
     public Cart cartContent() {
-        return new Cart();
+        return cart;
     }
 }

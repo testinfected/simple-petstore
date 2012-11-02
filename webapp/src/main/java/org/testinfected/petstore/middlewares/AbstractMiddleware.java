@@ -6,7 +6,7 @@ import org.testinfected.petstore.Application;
 
 public abstract class AbstractMiddleware implements Middleware {
 
-    private Application successor = new Application() {
+    protected Application successor = new Application() {
         public void handle(Request request, Response response) throws Exception {
         }
     };

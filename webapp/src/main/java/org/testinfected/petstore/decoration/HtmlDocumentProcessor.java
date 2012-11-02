@@ -11,8 +11,8 @@ public class HtmlDocumentProcessor implements ContentProcessor {
     private final Pattern title = Pattern.compile(".*<head>.*<title>(.*)</title>.*</head>.*", Pattern.DOTALL);
     private final Pattern body = Pattern.compile(".*<body>(.*)</body>.*", Pattern.DOTALL);
 
-    public Map<String, String> process(String content) {
-        Map<String, String> chunks = new HashMap<String, String>();
+    public Map<String, Object> process(String content) {
+        Map<String, Object> chunks = new HashMap<String, Object>();
 
         chunks.put("head", extractHead(content));
         chunks.put("title", extractTitle(content));

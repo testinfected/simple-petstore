@@ -1,5 +1,6 @@
 package test.unit.org.testinfected.petstore.views;
 
+import com.pyxis.petstore.domain.order.Cart;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,10 +24,11 @@ public class HeaderTest {
 
     String HEADER_TEMPLATE = "header";
     Element header;
+    Cart cart = new Cart();
 
     @Before public void
     renderHeader() {
-        header = render(HEADER_TEMPLATE).from(WebRoot.layouts()).asDom();
+        header = render(HEADER_TEMPLATE).with("cart", cart).from(WebRoot.layouts()).asDom();
     }
 
     @Test public void

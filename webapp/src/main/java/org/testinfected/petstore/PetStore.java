@@ -1,9 +1,5 @@
 package org.testinfected.petstore;
 
-import org.testinfected.petstore.decoration.HtmlDocumentProcessor;
-import org.testinfected.petstore.decoration.HtmlPageSelector;
-import org.testinfected.petstore.decoration.LayoutTemplate;
-import org.testinfected.petstore.decoration.PageCompositor;
 import org.testinfected.petstore.middlewares.ApacheCommonLogger;
 import org.testinfected.petstore.middlewares.ConnectionManager;
 import org.testinfected.petstore.middlewares.Failsafe;
@@ -11,7 +7,6 @@ import org.testinfected.petstore.middlewares.FileServer;
 import org.testinfected.petstore.middlewares.HttpMethodOverride;
 import org.testinfected.petstore.middlewares.MiddlewareStack;
 import org.testinfected.petstore.middlewares.ServerHeaders;
-import org.testinfected.petstore.middlewares.SiteMesh;
 import org.testinfected.petstore.middlewares.StaticAssets;
 import org.testinfected.petstore.util.PlainFormatter;
 import org.testinfected.time.lib.SystemClock;
@@ -68,17 +63,10 @@ public class PetStore {
             use(new ServerHeaders(clock));
             use(new HttpMethodOverride());
             use(staticAssets());
-            use(siteMesh());
+            use(new SiteLayout(new MustacheRendering(new File(context, LAYOUT_DIR))));
             use(new ConnectionManager(dataSource));
             run(new Routing(new MustacheRendering(new File(context, PAGES_DIR)), outputEncoding));
         }});
-    }
-
-    private SiteMesh siteMesh() {
-        RenderingEngine renderer = new MustacheRendering(new File(context, LAYOUT_DIR));
-        SiteMesh siteMesh = new SiteMesh(new HtmlPageSelector());
-        siteMesh.map("/", new PageCompositor(new HtmlDocumentProcessor(), new LayoutTemplate("main", renderer)));
-        return siteMesh;
     }
 
     private static Logger makeLogger() {

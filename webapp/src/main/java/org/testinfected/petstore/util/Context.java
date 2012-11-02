@@ -11,7 +11,7 @@ public class Context {
         return new Context();
     }
 
-    public static Map<String, ?> emptyContext() {
+    public static Map<String, Object> emptyContext() {
         return context().asMap();
     }
 
@@ -24,7 +24,7 @@ public class Context {
         return with(name, value);
     }
 
-    public Map<String, ?> asMap() {
+    public Map<String, Object> asMap() {
         return map;
     }
 }

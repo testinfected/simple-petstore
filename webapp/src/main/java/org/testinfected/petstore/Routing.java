@@ -1,5 +1,6 @@
 package org.testinfected.petstore;
 
+import com.pyxis.petstore.domain.order.Cart;
 import com.pyxis.petstore.domain.order.Cashier;
 import com.pyxis.petstore.domain.product.AttachmentStorage;
 import com.pyxis.petstore.domain.product.ItemInventory;
@@ -45,7 +46,8 @@ public class Routing implements Application {
         final ProductCatalog productCatalog = new ProductsDatabase(connection);
         final ItemInventory itemInventory = new ItemDatabase(connection);
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
-        final Cashier cashier = new Cashier(null, null);
+        final Cart cart = new Cart();
+        final Cashier cashier = new Cashier(null, null, cart);
 
         Routes routes = Routes.draw(new Router() {{
             get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));
@@ -57,6 +59,7 @@ public class Routing implements Application {
             delete("/logout").to(controller(new Logout()));
             map("/").to(controller(new Home()));
         }});
+
         routes.handle(request, response);
     }
 

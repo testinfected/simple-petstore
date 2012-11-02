@@ -15,7 +15,9 @@
   <div id="menu">
     <ul>
       <li id="shopping-cart">
-      Cart (0)
+      {{#cart}}
+        Cart ({{totalQuantity}})
+      {{/cart}}
       </li>
     </ul>
   </div>
