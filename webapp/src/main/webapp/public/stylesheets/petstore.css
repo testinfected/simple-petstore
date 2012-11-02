@@ -161,17 +161,17 @@ body.petstore {
 	font-size: 16px;
 }
 
-#items {
+#items, #cart {
 	padding-top: 90px;
 	min-height: 370px;
 }
 
-#inventory {
+#inventory, #cart-content {
 	margin-top: 50px;
 	width: 85%;
 }
 
-#inventory th {
+#inventory th, #cart-content th {
 	border: none;
 	font-weight: normal;
 	font-size: 22px;
@@ -200,6 +200,12 @@ body.petstore {
 	border: solid #6a6a6a 2px;
 	cursor: pointer;
 	-moz-border-radius: 4px 4px 4px 4px;
+}
+
+#cart-actions {
+	height: 40px;
+	margin-top: 45px;
+	margin-left: 550px;
 }
 
 .continue {

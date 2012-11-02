@@ -20,7 +20,7 @@
       <td class="description">{{description}}</td>
       <td class="price">{{price}}</td>
       <td>
-        <form action="/cart_items" method="post">
+        <form action="/cart" method="post">
           <input type="hidden" name="item_number" value="{{number}}"/>
           <button class="add-to-cart" id="add-to-cart-{{number}}">Add to cart</button>
         </form>

@@ -46,7 +46,7 @@ public class ProductsPageTest {
     displaysAllProductsFound() {
         addToProducts(aProduct(), aProduct());
 
-        productsPage = renderProductsPage().using("match-count", 2).asDom();
+        productsPage = renderProductsPage().with("match-count", 2).asDom();
 
         assertThat("products page", productsPage, hasUniqueSelector("#match-count", hasText("2")));
         assertThat("products page", productsPage, hasSelector("#catalog li[id^='product']", hasSize(2)));
@@ -56,7 +56,7 @@ public class ProductsPageTest {
     displaysProductDetails() throws Exception {
         addToProducts(aProduct().withNumber("LAB-1234").named("Labrador").describedAs("Friendly").withPhoto("labrador.png"));
 
-        productsPage = renderProductsPage().using("photo", new TemplateFunction() {
+        productsPage = renderProductsPage().with("photo", new TemplateFunction() {
             public String apply(String fileName) {
                 return "/photos/" + fileName;
             }
@@ -87,6 +87,6 @@ public class ProductsPageTest {
     }
 
     private OfflineRenderer renderProductsPage() {
-        return OfflineRenderer.render(PRODUCTS_TEMPLATE).using(context.with("match-found", !productList.isEmpty())).from(WebRoot.pages());
+        return OfflineRenderer.render(PRODUCTS_TEMPLATE).withContext(context.and("match-found", !productList.isEmpty())).from(WebRoot.pages());
     }
 }

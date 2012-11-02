@@ -47,7 +47,7 @@ public class ItemsPageTest {
     displaysNumberOfItemsAvailable() {
         addAsAvailable(anItem(), anItem());
 
-        itemsPage = renderItemsPage().using("item-count", 2).asDom();
+        itemsPage = renderItemsPage().with("item-count", 2).asDom();
 
         assertThat("items page", itemsPage, hasUniqueSelector("#item-count", hasText("2")));
         assertThat("items page", itemsPage, hasSelector("#inventory tr[id^='item']", hasSize(2)));
@@ -92,7 +92,7 @@ public class ItemsPageTest {
 
         assertThat("items page", itemsPage,
                 hasUniqueSelector("form",
-                        hasAttribute("action", "/cart_items"),
+                        hasAttribute("action", "/cart"),
                         hasAttribute("method", "post"),
                         hasUniqueSelector("button", hasId("add-to-cart-12345678"))));
         assertThat("items page", itemsPage,
@@ -116,6 +116,6 @@ public class ItemsPageTest {
     }
 
     private OfflineRenderer renderItemsPage() {
-        return OfflineRenderer.render(ITEMS_TEMPLATE).using(context.with("in-stock", !itemAvailable.isEmpty())).from(WebRoot.pages());
+        return OfflineRenderer.render(ITEMS_TEMPLATE).withContext(context.and("in-stock", !itemAvailable.isEmpty())).from(WebRoot.pages());
     }
 }

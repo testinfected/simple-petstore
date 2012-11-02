@@ -8,7 +8,6 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Map;
 
 import static test.support.org.testinfected.petstore.web.HTMLDocument.toElement;
 
@@ -21,32 +20,28 @@ public class OfflineRenderer {
     private final String template;
 
     private RenderingEngine renderer;
-    private Context context = Context.context();
+    private Object context = Context.context();
 
     private OfflineRenderer(String template) {
         this.template = template;
     }
 
     public OfflineRenderer from(File location) {
-        return with(new MustacheRendering(location));
+        return using(new MustacheRendering(location));
     }
 
-    public OfflineRenderer with(RenderingEngine renderer) {
+    public OfflineRenderer using(RenderingEngine renderer) {
         this.renderer = renderer;
         return this;
     }
 
-    public OfflineRenderer using(Context context) {
-        return using(context.asMap());
-    }
-
-    public OfflineRenderer using(Map<String, Object> context) {
-        this.context.withAll(context);
+    public OfflineRenderer withContext(Object context) {
+        this.context = context;
         return this;
     }
 
-    public OfflineRenderer using(String key, Object value) {
-        context.with(key, value);
+    public OfflineRenderer with(String key, Object value) {
+        ((Context) context).with(key, value);
         return this;
     }
 
@@ -61,7 +56,11 @@ public class OfflineRenderer {
     }
 
     private void render(final Writer writer) {
-        renderer.render(writer, template, context.asMap());
+        renderer.render(writer, template, context());
+    }
+
+    private Object context() {
+        return context instanceof Context ? ((Context) context).asMap() : context;
     }
 }
 

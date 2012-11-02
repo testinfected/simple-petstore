@@ -44,7 +44,6 @@ public class ListProductsTest {
     String keyword = "dogs";
     List<Product> searchResults = new ArrayList<Product>();
 
-
     @Before public void
     useDefaultPhotoForProductsMissingAPhoto() {
         context.checking(new Expectations() {{

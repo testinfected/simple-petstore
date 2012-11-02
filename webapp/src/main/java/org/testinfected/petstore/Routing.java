@@ -1,9 +1,8 @@
 package org.testinfected.petstore;
 
-import com.pyxis.petstore.domain.order.SalesAssistant;
+import com.pyxis.petstore.domain.order.Cashier;
 import com.pyxis.petstore.domain.product.AttachmentStorage;
 import com.pyxis.petstore.domain.product.ItemInventory;
-import com.pyxis.petstore.domain.product.ItemNumber;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
@@ -14,6 +13,7 @@ import org.testinfected.petstore.controllers.Home;
 import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.controllers.Logout;
+import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.jdbc.ItemDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
@@ -45,16 +45,15 @@ public class Routing implements Application {
         final ProductCatalog productCatalog = new ProductsDatabase(connection);
         final ItemInventory itemInventory = new ItemDatabase(connection);
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
+        final Cashier cashier = new Cashier(null, null);
 
         Routes routes = Routes.draw(new Router() {{
             get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));
             post("/products").to(controller(new CreateProduct(requestHandler)));
             get("/products/:product/items").to(controller(new ListItems(itemInventory)));
             post("/products/:product/items").to(controller(new CreateItem(requestHandler)));
-            post("/cart_items").to(controller(new CreateCartItem(new SalesAssistant() {
-                public void addToCart(ItemNumber itemNumber) {
-                }
-            })));
+            get("/cart").to(controller(new ShowCart(cashier)));
+            post("/cart").to(controller(new CreateCartItem(cashier)));
             delete("/logout").to(controller(new Logout()));
             map("/").to(controller(new Home()));
         }});
