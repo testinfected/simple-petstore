@@ -33,10 +33,10 @@ public class CartTest {
             cart.add(anItem().withNumber(itemNumber).build());
         }
         assertTrue("empty cart", !cart.isEmpty());
-        assertThat("items", cart.getItems(), containsItems(
-                number("11111111"),
-                number("22222222"),
-                number("33333333")));
+        assertThat("cart", cart, aCartContaining(
+                itemWith(number("11111111")),
+                itemWith(number("22222222")),
+                itemWith(number("33333333"))));
         assertThat("total quantity", cart.getTotalQuantity(), equalTo(3));
     }
 
@@ -92,7 +92,7 @@ public class CartTest {
     }
                                                                             
     private Matcher<Cart> aCartContaining(Matcher<CartItem>... cartItemMatchers) {
-        return new FeatureMatcher<Cart, Iterable<CartItem>>(containsItems(cartItemMatchers), "a cart containing", "cart content") {
+        return new FeatureMatcher<Cart, Iterable<CartItem>>(containsItems(cartItemMatchers), "a cart with items", "cart content") {
             @Override protected List<CartItem> featureValueOf(Cart actual) {
                 return cart.getItems();
             }

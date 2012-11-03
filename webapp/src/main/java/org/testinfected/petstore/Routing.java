@@ -5,6 +5,7 @@ import com.pyxis.petstore.domain.order.Cashier;
 import com.pyxis.petstore.domain.product.AttachmentStorage;
 import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.hibernate.jdbc.ConnectionManager;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.controllers.CreateCartItem;
@@ -15,10 +16,8 @@ import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.controllers.Logout;
 import org.testinfected.petstore.controllers.ShowCart;
-import org.testinfected.petstore.jdbc.ItemDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
-import org.testinfected.petstore.middlewares.ConnectionManager;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.testinfected.petstore.routing.Router;
@@ -47,7 +46,7 @@ public class Routing implements Application {
         final ItemInventory itemInventory = new ItemDatabase(connection);
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
         final Cart cart = new Cart();
-        final Cashier cashier = new Cashier(null, null, cart);
+        final Cashier cashier = new Cashier(null, null, itemInventory, cart);
 
         Routes routes = Routes.draw(new Router() {{
             get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));
