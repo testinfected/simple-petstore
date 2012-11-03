@@ -45,6 +45,10 @@ public class OfflineRenderer {
         return this;
     }
 
+    public OfflineRenderer with(String key, Builder<?> valueBuilder) {
+        return with(key, valueBuilder.build());
+    }
+
     public OfflineRenderer with(String key, Object value) {
         ((Context) context).with(key, value);
         return this;

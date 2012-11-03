@@ -147,11 +147,6 @@ th {
 	height: 50px;
 }
 
-#cart-content td,#inventory td {
-	padding-top: 2px;
-	padding-bottom: 4px;
-}
-
 #cart-summary {
 	border-top: 3px double black;
 	height: 35px;

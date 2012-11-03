@@ -16,7 +16,12 @@
     <ul>
       <li id="shopping-cart">
       {{#cart}}
-        Cart ({{totalQuantity}})
+        {{#empty}}
+        Cart (0)
+        {{/empty}}
+        {{^empty}}
+        <a href="/cart" id="view_cart">Cart ({{totalQuantity}})</a>
+        {{/empty}}
       {{/cart}}
       </li>
     </ul>
