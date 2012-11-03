@@ -15,7 +15,7 @@ import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.Application;
 import org.testinfected.petstore.Server;
-import org.testinfected.petstore.middlewares.ConnectionManager;
+import org.testinfected.petstore.middlewares.ConnectionScope;
 import org.testinfected.petstore.middlewares.MiddlewareStack;
 import test.support.org.testinfected.petstore.web.HttpRequest;
 
@@ -35,7 +35,7 @@ public class ConnectionManagerTest {
 
     States connectionStatus = context.states("connection").startsAs("closed");
 
-    ConnectionManager connectionManager = new ConnectionManager(dataSource);
+    ConnectionScope connectionScope = new ConnectionScope(dataSource);
 
     Server server = new Server(9999);
     HttpRequest request = aRequest().to(server);
@@ -48,7 +48,7 @@ public class ConnectionManagerTest {
         }});
 
         server.run(new MiddlewareStack() {{
-            use(connectionManager);
+            use(connectionScope);
             run(app);
         }});
     }
@@ -61,7 +61,7 @@ public class ConnectionManagerTest {
     @Test public void
     makesConnectionAvailableToNextApplication() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(app).handle(with(aRequestWithAttribute("jdbc.connection", sameConnection(connection))), with(any(Response.class))); when(connectionStatus.is("opened"));
+            oneOf(app).handle(with(aRequestWithAttribute(Connection.class, sameConnection(connection))), with(any(Response.class))); when(connectionStatus.is("opened"));
         }});
 
         request.send();
@@ -80,8 +80,8 @@ public class ConnectionManagerTest {
         return same((Object) connection);
     }
 
-    private Matcher<Request> aRequestWithAttribute(final String attribute, Matcher<Object> connection) {
-        return new FeatureMatcher<Request, Object>(connection, "a request with attribute " + attribute, attribute) {
+    private Matcher<Request> aRequestWithAttribute(final Object attribute, Matcher<Object> connection) {
+        return new FeatureMatcher<Request, Object>(connection, "a request with attribute " + attribute, attribute.toString()) {
             protected Object featureValueOf(Request actual) {
                 return actual.getAttribute(attribute);
             }

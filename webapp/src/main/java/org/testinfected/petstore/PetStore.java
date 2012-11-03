@@ -1,7 +1,7 @@
 package org.testinfected.petstore;
 
 import org.testinfected.petstore.middlewares.ApacheCommonLogger;
-import org.testinfected.petstore.middlewares.ConnectionManager;
+import org.testinfected.petstore.middlewares.ConnectionScope;
 import org.testinfected.petstore.middlewares.Failsafe;
 import org.testinfected.petstore.middlewares.FileServer;
 import org.testinfected.petstore.middlewares.HttpMethodOverride;
@@ -64,7 +64,7 @@ public class PetStore {
             use(new HttpMethodOverride());
             use(staticAssets());
             use(new SiteLayout(new MustacheRendering(new File(context, LAYOUT_DIR))));
-            use(new ConnectionManager(dataSource));
+            use(new ConnectionScope(dataSource));
             run(new Routing(new MustacheRendering(new File(context, PAGES_DIR)), outputEncoding));
         }});
     }

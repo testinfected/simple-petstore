@@ -5,7 +5,6 @@ import com.pyxis.petstore.domain.order.Cashier;
 import com.pyxis.petstore.domain.product.AttachmentStorage;
 import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ProductCatalog;
-import org.hibernate.jdbc.ConnectionManager;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.controllers.CreateCartItem;
@@ -28,6 +27,9 @@ import org.testinfected.petstore.util.FileSystemPhotoStore;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 
+import static org.testinfected.petstore.SessionScope.session;
+import static org.testinfected.petstore.middlewares.ConnectionScope.ConnectionReference;
+
 public class Routing implements Application {
 
     private final RenderingEngine renderer;
@@ -41,12 +43,13 @@ public class Routing implements Application {
     public void handle(final Request request, final Response response) throws Exception {
         final AttachmentStorage attachmentStorage = new FileSystemPhotoStore("/photos");
 
-        final Connection connection = ConnectionManager.get(request);
+        final Cart cart = session(request).cart();
+
+        final Connection connection = new ConnectionReference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);
         final ProductCatalog productCatalog = new ProductsDatabase(connection);
         final ItemInventory itemInventory = new ItemsDatabase(connection);
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
-        final Cart cart = new Cart();
         final Cashier cashier = new Cashier(null, null, itemInventory, cart);
 
         Routes routes = Routes.draw(new Router() {{
