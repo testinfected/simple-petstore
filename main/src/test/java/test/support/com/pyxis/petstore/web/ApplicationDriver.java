@@ -171,4 +171,8 @@ public class ApplicationDriver {
         cartPage.continueShopping();
         homePage.displays();
     }
+
+    public void showsItemQuantity(String itemNumber, int quantity) {
+        cartPage.showsItemQuantity(itemNumber, quantity);
+    }
 }

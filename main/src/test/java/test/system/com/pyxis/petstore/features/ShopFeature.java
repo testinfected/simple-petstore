@@ -41,4 +41,19 @@ public class ShopFeature {
         application.showsGrandTotal("77.47");
         application.showsItemInCart("87654321", "Blue Female", "58.97");
     }
+
+
+    @Test public void
+    shopsForTheSameItemMultipleTimes() throws IOException {
+        application.addProduct("LIZ-0001", "Iguana", "Big lizard", "iguana.png");
+        application.addItem("LIZ-0001", "12345678", "Green Adult", "18.50");
+        application.buy("Iguana", "12345678");
+
+        application.showsItemQuantity("12345678", 1);
+        application.continueShopping();
+
+        application.buy("Iguana", "12345678");
+        application.showsItemQuantity("12345678", 2);
+        application.showsCartTotalQuantity(2);
+    }
 }
