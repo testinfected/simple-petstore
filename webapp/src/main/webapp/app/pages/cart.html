@@ -13,10 +13,27 @@
       <th>Price</th>
       <th>Total</th>
     </tr>
+    {{#items}}
+    <tr id="cart-item-{{itemNumber}}">
+      <td class="count">{{quantity}}</td>
+      <td class="text">{{itemDescription}}</td>
+      <td class="price">{{unitPrice}}</td>
+      <td class="total">{{totalPrice}}</td>
+      <td></td>
+    </tr>
+    {{/items}}
+    <tr id="cart-summary">
+      <td></td>
+      <td></td>
+      <td class="price">Grand total:</td>
+      <td class="total" id="cart-grand-total">{{grandTotal}}</td>
+      <td></td>
+    </tr>
   </table>
 
   <div id="cart-actions">
     <a id="continue-shopping" class="continue" href="/">&laquo; continue shopping</a>
+    <div id="checkout"><a href="/checkout">Checkout</a></div>
   </div>
 </div>
 </body>

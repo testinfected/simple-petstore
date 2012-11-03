@@ -183,6 +183,11 @@ body.petstore {
 	padding-bottom: 4px;
 }
 
+#cart-content td {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
 #items-actions {
 	margin-top: 45px;
 	margin-left: 638px;
@@ -202,6 +207,11 @@ body.petstore {
 	-moz-border-radius: 4px 4px 4px 4px;
 }
 
+#cart-summary {
+	border-top: 3px double black;
+	height: 35px;
+}
+
 #cart-actions {
 	height: 40px;
 	margin-top: 45px;
@@ -213,6 +223,23 @@ body.petstore {
 	font-size: 14px;
 	color: #696969;
 	text-decoration: underline;
+}
+
+#checkout {
+	display: inline;
+	font: 14px "Georgia", "Arial", serif;
+	padding: 5px 10px;
+	margin-left: 50px;
+	text-align: center;
+	color: black;
+	background-color: #c6ee22;
+	border: solid #6a6a6a 2px;
+	-moz-border-radius: 4px 4px 4px 4px;
+}
+
+#checkout a {
+	color: black;
+	cursor: pointer;
 }
 
 #footer {

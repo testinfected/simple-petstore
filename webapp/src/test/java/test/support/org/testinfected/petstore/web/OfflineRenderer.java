@@ -4,6 +4,7 @@ import org.testinfected.petstore.MustacheRendering;
 import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.petstore.util.Context;
 import org.w3c.dom.Element;
+import test.support.com.pyxis.petstore.builders.Builder;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -33,6 +34,10 @@ public class OfflineRenderer {
     public OfflineRenderer using(RenderingEngine renderer) {
         this.renderer = renderer;
         return this;
+    }
+
+    public OfflineRenderer withContext(Builder<?> contextBuilder) {
+        return withContext(contextBuilder.build());
     }
 
     public OfflineRenderer withContext(Object context) {
