@@ -3,7 +3,6 @@ package org.testinfected.petstore.jdbc;
 import com.pyxis.petstore.domain.product.Item;
 import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ItemNumber;
-import com.pyxis.petstore.domain.product.Product;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,11 +15,11 @@ import java.util.List;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static org.testinfected.petstore.jdbc.Properties.productOf;
 
-public class ItemDatabase implements ItemInventory {
+public class ItemsDatabase implements ItemInventory {
 
     private final Connection connection;
 
-    public ItemDatabase(Connection connection) {
+    public ItemsDatabase(Connection connection) {
         this.connection = connection;
     }
 
@@ -38,23 +37,36 @@ public class ItemDatabase implements ItemInventory {
             query.setString(1, productNumber);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
-                Product product = new ProductRecord().hydrate(rs);
-                Item item = new Item(new ItemNumber(rs.getString("number")), product, rs.getBigDecimal("price"));
-                item.setDescription(rs.getString("description"));
-                idOf(item).set(rs.getLong("id"));
-                matches.add(item);
+                matches.add(new ItemRecord().hydrate(rs));
             }
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);
         } finally {
             close(query);
-
         }
         return matches;
     }
 
     public Item find(ItemNumber itemNumber) {
-        return null;
+        PreparedStatement query = null;
+        try {
+            query = connection.prepareStatement(
+                    "select " +
+                            "item.id, item.number, item.price, item.description, item.product_id, " +
+                            "product.id, product.name, product.number, product.description, product.photo_file_name " +
+                            "from items item " +
+                            "join products product on item.product_id = product.id " +
+                            "where item.number = ?");
+            query.setString(1, itemNumber.getNumber());
+            ResultSet rs = query.executeQuery();
+            rs.next();
+
+            return new ItemRecord().hydrate(rs);
+        } catch (SQLException e) {
+            throw new JDBCException("Could not execute query", e);
+        } finally {
+            close(query);
+        }
     }
 
     public void add(Item item) {

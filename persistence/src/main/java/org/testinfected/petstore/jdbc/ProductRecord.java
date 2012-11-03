@@ -17,11 +17,11 @@ public class ProductRecord implements Record<Product> {
         Product product = new Product(number(rs), name(rs));
         product.setDescription(description(rs));
         product.attachPhoto(new Attachment(photoFileName(rs)));
-        idOf(product).set(getId(rs));
+        idOf(product).set(id(rs));
         return product;
     }
 
-    private long getId(ResultSet rs) throws SQLException {
+    private long id(ResultSet rs) throws SQLException {
         return rs.getLong(getColumnIndex(rs, "id"));
     }
 

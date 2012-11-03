@@ -39,7 +39,7 @@ public class ProductsDatabaseTest {
     Database database = Database.in(TestDatabaseEnvironment.load());
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
-    ProductsDatabase productCatalog = new ProductsDatabase(connection);
+    ProductsDatabase productsDatabase = new ProductsDatabase(connection);
 
     @Before public void
     resetDatabase() throws Exception {
@@ -56,7 +56,7 @@ public class ProductsDatabaseTest {
     findsProductsByNumber() throws Exception {
         given(aProduct().withNumber("PRD-0001"));
 
-        Product product = productCatalog.findByNumber("PRD-0001");
+        Product product = productsDatabase.findByNumber("PRD-0001");
         assertThat("no match", product, not(nullValue()));
         assertThat("product", product, productWithNumber("PRD-0001"));
     }
@@ -68,7 +68,7 @@ public class ProductsDatabaseTest {
                 aProduct().named("French Bulldog"),
                 aProduct().named("Labrador Retriever"));
 
-        Collection<Product> matches = productCatalog.findByKeyword("bull");
+        Collection<Product> matches = productsDatabase.findByKeyword("bull");
         assertThat("matching products", matches, hasSize(equalTo(2)));
         assertThat("matches", matches, containsInAnyOrder(productNamed("English Bulldog"), productNamed("French Bulldog")));
     }
@@ -80,7 +80,7 @@ public class ProductsDatabaseTest {
                 aProduct().named("Golden").describedAs("Kids best friend"),
                 aProduct().named("Poodle").describedAs("Annoying"));
 
-        List<Product> matches = productCatalog.findByKeyword("friend");
+        List<Product> matches = productsDatabase.findByKeyword("friend");
         assertThat("matching products", matches, hasSize(equalTo(2)));
         assertThat("matches", matches, containsInAnyOrder(productNamed("Labrador"), productNamed("Golden")));
     }
@@ -90,7 +90,7 @@ public class ProductsDatabaseTest {
     findsNothingWhenNoProductInCatalogMatchesKeyword() throws Exception {
         given(aProduct().named("Dalmatian").describedAs("A big dog"));
 
-        Collection<Product> matchingProducts = productCatalog.findByKeyword("bulldog");
+        Collection<Product> matchingProducts = productsDatabase.findByKeyword("bulldog");
         assertThat("matching products", matchingProducts, is(empty()));
     }
 
@@ -109,12 +109,12 @@ public class ProductsDatabaseTest {
     }
 
     private void assertCanBeFoundByNumberWithSameState(Product product) {
-        Product found = productCatalog.findByNumber(product.getNumber());
+        Product found = productsDatabase.findByNumber(product.getNumber());
         assertThat("find by number", found, sameProductAs(product));
     }
 
     private void assertCanBeFoundByKeywordWithSameState(Product product) {
-        List<Product> found = productCatalog.findByKeyword(product.getName());
+        List<Product> found = productsDatabase.findByKeyword(product.getName());
         assertThat("find by keyword", uniqueElement(found), sameProductAs(product));
     }
 
@@ -149,7 +149,7 @@ public class ProductsDatabaseTest {
     private void save(final Product product) throws Exception {
         transactor.perform(new UnitOfWork() {
             public void execute() throws Exception {
-                productCatalog.add(product);
+                productsDatabase.add(product);
             }
         });
     }

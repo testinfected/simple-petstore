@@ -1,6 +1,7 @@
 package test.integration.org.testinfected.petstore.jdbc;
 
 import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.product.ItemNumber;
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.hamcrest.FeatureMatcher;
@@ -11,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
-import org.testinfected.petstore.jdbc.ItemDatabase;
+import org.testinfected.petstore.jdbc.ItemsDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import test.support.com.pyxis.petstore.builders.Builder;
@@ -45,7 +46,7 @@ public class ItemsDatabaseTest {
     Transactor transactor = new JDBCTransactor(connection);
     ProductCatalog productCatalog = new ProductsDatabase(connection);
 
-    ItemDatabase itemInventory = new ItemDatabase(connection);
+    ItemsDatabase itemsDatabase = new ItemsDatabase(connection);
 
     @Before public void
     resetDatabase() throws Exception {
@@ -59,12 +60,23 @@ public class ItemsDatabaseTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
+    findsItemsByNumber() throws Exception {
+        Product product = aProduct().build();
+        givenInCatalog(product);
+        givenInInventory(anItem().of(product).withNumber("12345678"));
+
+        Item found = itemsDatabase.find(new ItemNumber("12345678"));
+        assertThat("item", found, hasNumber("12345678"));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test public void
     findsItemsByProductNumber() throws Exception {
         Product product = aProduct().withNumber("LAB-1234").build();
         givenInCatalog(product);
         givenInInventory(anItem().of(product), anItem().of(product));
 
-        List<Item> availableItems = itemInventory.findByProductNumber("LAB-1234");
+        List<Item> availableItems = itemsDatabase.findByProductNumber("LAB-1234");
         assertThat("available items", availableItems, hasSize(2));
         assertThat("available items", availableItems, everyItem(hasProductNumber("LAB-1234")));
     }
@@ -77,7 +89,7 @@ public class ItemsDatabaseTest {
         givenInCatalog(productWithItems, productWithNoItem);
         givenInInventory(anItem().of(productWithItems));
 
-        List<Item> availableItems = itemInventory.findByProductNumber(productWithNoItem.getNumber());
+        List<Item> availableItems = itemsDatabase.findByProductNumber(productWithNoItem.getNumber());
         assertThat("available items", availableItems, Matchers.<Item>empty());
     }
 
@@ -93,14 +105,20 @@ public class ItemsDatabaseTest {
                 a(dalmatian).withNumber("87654321"));
 
         for (final Item item : sampleItems) {
-            transactor.perform(new UnitOfWork() {
-                public void execute() throws Exception {
-                    itemInventory.add(item);
-                }
-            });
-            List<Item> found = itemInventory.findByProductNumber(item.getProductNumber());
-            assertThat("item", uniqueElement(found), sameItemAs(item));
+            save(item);
+            assertCanBeFoundByNumberWithSameState(item);
+            assertCanBeFoundByProductNumberWithSameState(item);
         }
+    }
+
+    private void assertCanBeFoundByNumberWithSameState(Item item) {
+        Item found = itemsDatabase.find(new ItemNumber(item.getNumber()));
+        assertThat("item", found, sameItemAs(item));
+    }
+
+    private void assertCanBeFoundByProductNumberWithSameState(Item item) {
+        List<Item> found = itemsDatabase.findByProductNumber(item.getProductNumber());
+        assertThat("item", uniqueElement(found), sameItemAs(item));
     }
 
     private Item uniqueElement(List<Item> items) {
@@ -159,10 +177,22 @@ public class ItemsDatabaseTest {
     }
 
     private void givenInInventory(final Item item) throws Exception {
+        save(item);
+    }
+
+    private void save(final Item item) throws Exception {
         transactor.perform(new UnitOfWork() {
             public void execute() throws Exception {
-                itemInventory.add(item);
+                itemsDatabase.add(item);
             }
         });
+    }
+
+    private Matcher<Item> hasNumber(final String number) {
+        return new FeatureMatcher<Item, String>(equalTo(number), "has number", "number") {
+            @Override protected String featureValueOf(Item actual) {
+                return actual.getNumber();
+            }
+        };
     }
 }

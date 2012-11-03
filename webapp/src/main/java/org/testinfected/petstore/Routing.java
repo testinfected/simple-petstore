@@ -16,6 +16,7 @@ import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.controllers.Logout;
 import org.testinfected.petstore.controllers.ShowCart;
+import org.testinfected.petstore.jdbc.ItemsDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
@@ -43,7 +44,7 @@ public class Routing implements Application {
         final Connection connection = ConnectionManager.get(request);
         final Transactor transactor = new JDBCTransactor(connection);
         final ProductCatalog productCatalog = new ProductsDatabase(connection);
-        final ItemInventory itemInventory = new ItemDatabase(connection);
+        final ItemInventory itemInventory = new ItemsDatabase(connection);
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
         final Cart cart = new Cart();
         final Cashier cashier = new Cashier(null, null, itemInventory, cart);
