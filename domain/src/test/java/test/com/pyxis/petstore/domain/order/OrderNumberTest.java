@@ -42,7 +42,11 @@ public class OrderNumberTest {
     
     @Test public void
     normalizesValues() {
-        OrderNumber orderNumber = new OrderNumber(1);
-        assertThat("number", orderNumber.getNumber(), equalTo("00000001"));
+        assertThat("number", numberFor(1), equalTo("00000001"));
+        assertThat("number", numberFor(10000000), equalTo("10000000"));
+    }
+
+    private String numberFor(final long number) {
+        return new OrderNumber(number).getNumber();
     }
 }
