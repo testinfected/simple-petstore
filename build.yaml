@@ -26,7 +26,7 @@ artifacts:
   antlr_runtime: org.antlr:antlr-runtime:jar:3.0.1
   cssselectors: com.3levers.cssselectors:cssselectors:jar:1.0
   hamcrest_dom: org.testinfected.hamcrest-matchers:dom-matchers:jar:1.5
-  selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.21.0
+  selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.26.0
   windowlicker_web: com.googlecode.windowlicker:windowlicker-web:jar:r268
   htmlunit: net.sourceforge.htmlunit:htmlunit:jar:2.9
   juniversalchardet: com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3
@@ -88,4 +88,5 @@ junit: 4.8.1
 jmock: 2.5.1
 
 selenium:
+  version: 2.26.0
   silent: true

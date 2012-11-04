@@ -41,8 +41,8 @@ module Buildr
       end
     end
     
-    DOWNLOAD_URL = "http://selenium.googlecode.com/files/selenium-server-standalone-#{VERSION}.jar"
-    SELENIUM_SERVER = Buildr.artifact("org.seleniumhq.selenium:selenium-server-standalone:jar:#{VERSION}")
+    DOWNLOAD_URL = "http://selenium.googlecode.com/files/selenium-server-standalone-#{version}.jar"
+    SELENIUM_SERVER = Buildr.artifact("org.seleniumhq.selenium:selenium-server-standalone:jar:#{version}")
     Buildr.download( SELENIUM_SERVER => DOWNLOAD_URL  )
     SLF4J_BINDING = silent? ? 'slf4j-nop' : 'slf4j-simple'
     REQUIRED_LIBRAIRIES = [ SELENIUM_SERVER, 
