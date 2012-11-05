@@ -7,34 +7,59 @@ import java.util.regex.Pattern;
 
 public class HtmlDocumentProcessor implements ContentProcessor {
 
-    private final Pattern head = Pattern.compile(".*<head>(.*)</head>.*", Pattern.DOTALL);
-    private final Pattern title = Pattern.compile(".*<head>.*<title>(.*)</title>.*</head>.*", Pattern.DOTALL);
-    private final Pattern body = Pattern.compile(".*<body>(.*)</body>.*", Pattern.DOTALL);
+    private static final int TEXT = 1;
+    private static final int NAME = 1;
+    private static final int CONTENT = 2;
 
-    public Map<String, Object> process(String content) {
+    private static final Pattern HEAD = Pattern.compile(".*<head>(.*)</head>.*", Pattern.DOTALL);
+    private static final Pattern TITLE_ELEMENT = Pattern.compile("<title>.*</title>\\s*\n?", Pattern.DOTALL);
+    private static final Pattern TITLE = Pattern.compile(".*<title>(.*)</title>.*", Pattern.DOTALL);
+    private static final Pattern BODY = Pattern.compile(".*<body>(.*)</body>.*", Pattern.DOTALL);
+    private static final Pattern META = Pattern.compile("<meta name=\"([^\"]*)\" content=\"([^\"]*)\"", Pattern.DOTALL);
+
+    public Map<String, Object> process(String html) {
         Map<String, Object> chunks = new HashMap<String, Object>();
-
-        chunks.put("head", extractHead(content));
-        chunks.put("title", extractTitle(content));
-        chunks.put("body", extractBody(content));
+        addHead(chunks, html);
+        addTitle(chunks, html);
+        addBody(chunks, html);
+        addMetaData(chunks, html);
         return chunks;
     }
 
-    private String extractHead(String html) {
-        return extract(html, head);
+    private void addHead(Map<String, Object> chunks, String html) {
+        String head = extract(html, HEAD);
+        if (head == null) return;
+        chunks.put("head", stripTitle(head));
     }
 
-    private String extractTitle(String html) {
-        return extract(html, title);
-    }
-
-    private String extractBody(String html) {
-        return extract(html, body);
+    private String stripTitle(String head) {
+        return TITLE_ELEMENT.matcher(head).replaceFirst("");
     }
 
     private String extract(String html, Pattern pattern) {
         Matcher matcher = pattern.matcher(html);
         if (!matcher.matches()) return null;
-        return matcher.group(1);
+        return matcher.group(TEXT);
+    }
+
+    private void addTitle(Map<String, Object> chunks, String html) {
+        String head = extract(html, HEAD);
+        if (head == null) return;
+        String title = extract(head, TITLE);
+        if (title == null) return;
+        chunks.put("title", title);
+    }
+
+    private void addBody(Map<String, Object> chunks, String html) {
+        String body = extract(html, BODY);
+        if (body == null) return;
+        chunks.put("body", body);
+    }
+
+    private void addMetaData(Map<String, Object> chunks, String head) {
+        Matcher matcher = META.matcher(head);
+        while (matcher.find()) {
+            chunks.put("meta[" + matcher.group(NAME) + "]", matcher.group(CONTENT));
+        }
     }
 }

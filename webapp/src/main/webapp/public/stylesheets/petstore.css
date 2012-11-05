@@ -58,7 +58,6 @@ body.petstore {
 #header ul li a {
 	color: black;
 	font-size: 17px;
-	text-decoration: underline;
 }
 
 #content {
@@ -107,6 +106,24 @@ body.petstore {
 
 #search img {
 	padding-top: 2px;
+}
+
+#home.overline, #shopping-cart.overline.cart {
+	border-top: solid #c6ee22 2px;
+}
+
+#home.overline.cart, #shopping-cart.overline {
+	border-top: none;
+}
+
+#tab {
+	margin-top: -1px;
+	margin-left: 792px;
+}
+
+#tab.cart {
+	margin-top: -1px;
+	margin-left: 875px;
 }
 
 #products {

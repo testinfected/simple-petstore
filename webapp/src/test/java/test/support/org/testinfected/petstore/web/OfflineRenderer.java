@@ -54,6 +54,10 @@ public class OfflineRenderer {
         return this;
     }
 
+    public OfflineRenderer and(String key, Object value) {
+        return with(key, value);
+    }
+
     public String asString() {
         StringWriter buffer = new StringWriter();
         render(buffer);
@@ -72,4 +76,6 @@ public class OfflineRenderer {
         return context instanceof Context ? ((Context) context).asMap() : context;
     }
 }
+
+
 

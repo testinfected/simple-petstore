@@ -7,10 +7,12 @@ import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChildren;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasId;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasNoSelector;
@@ -27,14 +29,14 @@ public class HeaderTest {
     Element header;
 
     @Test public void
-    hasAClickableLogoThatReturnsToTheHomePage() {
+    logoReturnsToTheHomePage() {
         header = renderHeader().asDom();
         assertThat("content", header, hasUniqueSelector("#logo a", hasAttribute("href", "/")));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
-    containsASearchBoxToQueryTheProductCatalog() {
+    searchBoxQueriesTheProductCatalog() {
         header = renderHeader().asDom();
         assertThat("header", header,
                 hasUniqueSelector("#search-box form",
@@ -56,8 +58,23 @@ public class HeaderTest {
     displaysTotalItemsInCartAndLinksToCart() throws Exception {
         header = renderHeader().with("cart", aCart().containing(anItem(), anItem())).asDom();
         assertThat("header", header, hasUniqueSelector("#shopping-cart a",
-                        hasAttribute("href", "/cart"),
-                        hasText(containsString("2"))));
+                hasAttribute("href", "/cart"),
+                hasText(containsString("2"))));
+    }
+
+    @Test public void
+    linksToHomePage() {
+        header = renderHeader().asDom();
+        assertThat("header", header, hasUniqueSelector("#home a", hasAttribute("href", "/")));
+    }
+
+    @Test public void
+    indicatesWhenDisplayingCartContent() {
+        header = renderHeader().with("cart", aCart()).and("meta[section]", "cart").asDom();
+        assertThat("header", header, allOf(
+                hasUniqueSelector("#home.overline.cart"),
+                hasUniqueSelector("#shopping-cart.overline.cart"),
+                hasUniqueSelector("#tab.cart", hasChild(allOf(hasTag("img"), hasAttribute("src", "/images/tab.png"))))));
     }
 
     @SuppressWarnings("unchecked")

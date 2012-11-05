@@ -14,23 +14,29 @@ public class HtmlDocumentProcessorTest {
 
     ContentProcessor processor = new HtmlDocumentProcessor();
 
-    String page = "<html>\n" +
+    String page =
+            "<html>\n" +
             "<head>\n" +
-            "<title>Page Title</title>\n" +
+            "<title>Page Title</title>   \n" +
+            "<meta name=\"description\" content=\"Description\"/>\n" +
+            "<meta name=\"author\" content=\"Author\"/>\n" +
             "</head>\n" +
             "<body>\n" +
-            "...\n" +
+            "Content of the body\n" +
             "</body>\n" +
             "</html>\n";
 
     @Test public void
-    extractsHtmlHead() {
-        assertThat("html chunks", processor.process(page), hasChunk("head", "\n<title>Page Title</title>\n"));
+    extractsHtmlHeadMinusTitle() {
+        assertThat("html chunks", processor.process(page), hasChunk("head",
+                        "\n" +
+                        "<meta name=\"description\" content=\"Description\"/>\n" +
+                        "<meta name=\"author\" content=\"Author\"/>\n"));
     }
 
     @Test public void
     extractsHtmlBody() {
-        assertThat("html chunks", processor.process(page), hasChunk("body", "\n...\n"));
+        assertThat("html chunks", processor.process(page), hasChunk("body", "\nContent of the body\n"));
     }
 
     @Test public void
@@ -38,8 +44,13 @@ public class HtmlDocumentProcessorTest {
         assertThat("html chunks", processor.process(page), hasChunk("title", "Page Title"));
     }
 
+    @Test public void
+    extractsMetaData() {
+        assertThat("html chunks", processor.process(page), hasChunk("meta[description]", "Description"));
+        assertThat("html chunks", processor.process(page), hasChunk("meta[author]", "Author"));
+    }
+
     private Matcher<Map<? extends String, ? extends Object>> hasChunk(final String key, final String value) {
         return Matchers.<String, Object>hasEntry(key, value);
     }
-
 }
