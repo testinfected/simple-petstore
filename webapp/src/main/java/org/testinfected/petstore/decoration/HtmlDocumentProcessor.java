@@ -11,10 +11,9 @@ public class HtmlDocumentProcessor implements ContentProcessor {
     private static final int NAME = 1;
     private static final int CONTENT = 2;
 
-    private static final Pattern HEAD = Pattern.compile(".*<head>(.*)</head>.*", Pattern.DOTALL);
-    private static final Pattern TITLE_ELEMENT = Pattern.compile("<title>.*</title>\\s*\n?", Pattern.DOTALL);
-    private static final Pattern TITLE = Pattern.compile(".*<title>(.*)</title>.*", Pattern.DOTALL);
-    private static final Pattern BODY = Pattern.compile(".*<body>(.*)</body>.*", Pattern.DOTALL);
+    private static final Pattern HEAD = Pattern.compile("<head>\n?(.*?)\n?</head>", Pattern.DOTALL);
+    private static final Pattern TITLE = Pattern.compile("<title>\n?(.*?)\n?</title>\\s*\n?", Pattern.DOTALL);
+    private static final Pattern BODY = Pattern.compile("<body>\n?(.*?)\n?</body>", Pattern.DOTALL);
     private static final Pattern META = Pattern.compile("<meta name=\"([^\"]*)\" content=\"([^\"]*)\"", Pattern.DOTALL);
 
     public Map<String, Object> process(String html) {
@@ -33,12 +32,12 @@ public class HtmlDocumentProcessor implements ContentProcessor {
     }
 
     private String stripTitle(String head) {
-        return TITLE_ELEMENT.matcher(head).replaceFirst("");
+        return TITLE.matcher(head).replaceFirst("");
     }
 
     private String extract(String html, Pattern pattern) {
         Matcher matcher = pattern.matcher(html);
-        if (!matcher.matches()) return null;
+        if (!matcher.find()) return null;
         return matcher.group(TEXT);
     }
 
@@ -47,7 +46,7 @@ public class HtmlDocumentProcessor implements ContentProcessor {
         if (head == null) return;
         String title = extract(head, TITLE);
         if (title == null) return;
-        chunks.put("title", title);
+        chunks.put("title", title.trim());
     }
 
     private void addBody(Map<String, Object> chunks, String html) {

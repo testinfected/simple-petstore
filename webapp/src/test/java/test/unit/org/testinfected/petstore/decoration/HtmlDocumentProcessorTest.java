@@ -17,9 +17,11 @@ public class HtmlDocumentProcessorTest {
     String page =
             "<html>\n" +
             "<head>\n" +
-            "<title>Page Title</title>   \n" +
-            "<meta name=\"description\" content=\"Description\"/>\n" +
-            "<meta name=\"author\" content=\"Author\"/>\n" +
+            "  <title>\n" +
+            "  Page Title  \n" +
+            "  </title>   \n" +
+            "  <meta name=\"description\" content=\"Description\"/>\n" +
+            "  <meta name=\"author\" content=\"Author\"/>\n" +
             "</head>\n" +
             "<body>\n" +
             "Content of the body\n" +
@@ -29,14 +31,13 @@ public class HtmlDocumentProcessorTest {
     @Test public void
     extractsHtmlHeadMinusTitle() {
         assertThat("html chunks", processor.process(page), hasChunk("head",
-                        "\n" +
-                        "<meta name=\"description\" content=\"Description\"/>\n" +
-                        "<meta name=\"author\" content=\"Author\"/>\n"));
+                        "  <meta name=\"description\" content=\"Description\"/>\n" +
+                        "  <meta name=\"author\" content=\"Author\"/>"));
     }
 
     @Test public void
     extractsHtmlBody() {
-        assertThat("html chunks", processor.process(page), hasChunk("body", "\nContent of the body\n"));
+        assertThat("html chunks", processor.process(page), hasChunk("body", "Content of the body"));
     }
 
     @Test public void
