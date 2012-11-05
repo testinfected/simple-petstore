@@ -1,9 +1,8 @@
 package test.unit.org.testinfected.petstore;
 
 import com.pyxis.petstore.domain.order.Cart;
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeDiagnosingMatcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.AllOf;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -20,8 +19,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.sameInstance;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 
 @RunWith(JMock.class)
@@ -40,8 +37,8 @@ public class MainLayoutTest {
         final Writer out = new StringWriter();
         context.checking(new Expectations() {{
             oneOf(view).render(with(same(out)), with(allOf(
-                    hasEntry("cart", sameInstance(cart)),
-                    hasEntry("another key", equalTo("a value")))));
+                    hasEntry("cart", cart),
+                    hasEntry("another key", "a value"))));
         }});
 
         Context context = Context.context().with("another key", "a value");
@@ -52,34 +49,7 @@ public class MainLayoutTest {
         return AllOf.allOf(matchers);
     }
 
-    // My head hurts because of generics. Can't make Hamcrest Matchers.hasEntry work
-    private Matcher<? super Map<String, Object>> hasEntry(final String key, final Matcher<?> valueMatcher) {
-        return new TypeSafeDiagnosingMatcher<Map<String, Object>>() {
-            protected boolean matchesSafely(Map<String, Object> map, Description mismatchDescription) {
-                if (!entryFound(map)) {
-                    mismatchDescription.appendText("map was ").appendValueList("[", ", ", "]", map.entrySet());
-                    return false;
-                }
-                return true;
-            }
-
-            private boolean entryFound(Map<String, Object> map) {
-                for (Map.Entry<String, Object> entry : map.entrySet()) {
-                    if (key.equals(entry.getKey()) && valueMatcher.matches(entry.getValue())) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            public void describeTo(Description description) {
-                description.appendText("map containing [")
-                        .appendText(key)
-                        .appendText("->")
-                        .appendDescriptionOf(valueMatcher)
-                        .appendText("]");
-            }
-        };
+    private Matcher<Map<? extends String, ? extends Object>> hasEntry(String key, Object value) {
+        return Matchers.hasEntry(key, value);
     }
-
 }

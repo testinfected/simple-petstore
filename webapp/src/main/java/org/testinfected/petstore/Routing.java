@@ -7,6 +7,7 @@ import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
+import org.testinfected.petstore.controllers.Checkout;
 import org.testinfected.petstore.controllers.CreateCartItem;
 import org.testinfected.petstore.controllers.CreateItem;
 import org.testinfected.petstore.controllers.CreateProduct;
@@ -59,6 +60,7 @@ public class Routing implements Application {
             post("/products/:product/items").to(controller(new CreateItem(requestHandler)));
             get("/cart").to(controller(new ShowCart(cashier)));
             post("/cart").to(controller(new CreateCartItem(cashier)));
+            get("/checkout").to(controller(new Checkout(cashier)));
             delete("/logout").to(controller(new Logout()));
             map("/").to(controller(new Home()));
         }});
