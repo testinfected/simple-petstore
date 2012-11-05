@@ -2,7 +2,7 @@ package test.support.com.pyxis.petstore.web.page;
 
 import com.objogate.wl.web.AsyncWebDriver;
 
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.containsString;
 
 public class HomePage extends Page {
 
@@ -11,6 +11,6 @@ public class HomePage extends Page {
     }
 
     public void displays() {
-        browser.assertTitle(equalTo("PetStore"));
+        browser.assertTitle(containsString("Home"));
     }
 }
