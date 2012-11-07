@@ -15,6 +15,7 @@ import org.testinfected.petstore.controllers.Home;
 import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.controllers.Logout;
+import org.testinfected.petstore.controllers.PlaceOrder;
 import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.jdbc.ItemsDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
@@ -28,7 +29,7 @@ import org.testinfected.petstore.util.FileSystemPhotoStore;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 
-import static org.testinfected.petstore.SessionScope.session;
+import static org.testinfected.petstore.SessionScope.inSessionOf;
 import static org.testinfected.petstore.middlewares.ConnectionScope.ConnectionReference;
 
 public class Routing implements Application {
@@ -44,7 +45,7 @@ public class Routing implements Application {
     public void handle(final Request request, final Response response) throws Exception {
         final AttachmentStorage attachmentStorage = new FileSystemPhotoStore("/photos");
 
-        final Cart cart = session(request).cart();
+        final Cart cart = inSessionOf(request).cart();
 
         final Connection connection = new ConnectionReference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);
@@ -61,6 +62,7 @@ public class Routing implements Application {
             get("/cart").to(controller(new ShowCart(cashier)));
             post("/cart").to(controller(new CreateCartItem(cashier)));
             get("/checkout").to(controller(new Checkout(cashier)));
+            post("/checkout").to(controller(new PlaceOrder(cashier)));
             delete("/logout").to(controller(new Logout()));
             map("/").to(controller(new Home()));
         }});

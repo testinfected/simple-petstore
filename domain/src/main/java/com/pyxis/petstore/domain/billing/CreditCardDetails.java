@@ -31,6 +31,18 @@ public class CreditCardDetails extends PaymentMethod implements Serializable {
         this.billingAddress = billingAddress;
     }
 
+    public String getFirstName() {
+        return billingAddress.getFirstName();
+    }
+
+    public String getLastName() {
+        return billingAddress.getLastName();
+    }
+
+    public String getEmail() {
+        return billingAddress.getEmailAddress();
+    }
+
     public CreditCardType getCardType() {
         return cardType;
     }

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-import static org.testinfected.petstore.SessionScope.session;
+import static org.testinfected.petstore.SessionScope.inSessionOf;
 
 public class SiteLayout extends AbstractMiddleware {
 
@@ -27,7 +27,7 @@ public class SiteLayout extends AbstractMiddleware {
 
     public void handle(Request request, Response response) throws Exception {
         SiteMesh siteMesh = new SiteMesh(new HtmlPageSelector());
-        MainLayout main = new MainLayout(session(request).cart(), new Template<Map<String, Object>>("main", renderer));
+        MainLayout main = new MainLayout(inSessionOf(request).cart(), new Template<Map<String, Object>>("main", renderer));
         siteMesh.map("/", new PageCompositor(new HtmlDocumentProcessor(), main));
         siteMesh.connectTo(successor);
         siteMesh.handle(request, response);

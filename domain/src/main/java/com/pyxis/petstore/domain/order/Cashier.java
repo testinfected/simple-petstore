@@ -40,4 +40,8 @@ public class Cashier implements CheckoutAssistant, PaymentCollector, SalesAssist
     public Cart cartContent() {
         return cart;
     }
+
+    public OrderNumber placeOrder(PaymentMethod paymentMethod) {
+        return null;
+    }
 }
