@@ -1,7 +1,10 @@
 package test.unit.org.testinfected.petstore.controllers;
 
 import com.pyxis.petstore.domain.order.Cart;
+import com.pyxis.petstore.domain.order.CartItem;
 import com.pyxis.petstore.domain.order.SalesAssistant;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -11,6 +14,10 @@ import org.junit.runner.RunWith;
 import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.ShowCart;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
+import static org.hamcrest.Matchers.allOf;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 
@@ -25,14 +32,22 @@ public class ShowCartTest {
     Controller.Response response = context.mock(Controller.Response.class);
 
     @Test public void
-    makesCartContentAvailableToView() throws Exception {
-        final Cart cart = aCart().containing(anItem()).build();
+    makesOrderDetailsAvailableToView() throws Exception {
+        Cart cart = aCart().containing(anItem()).build();
+        final Iterable<CartItem> items = cart.getItems();
+        final BigDecimal total = cart.getGrandTotal();
 
         context.checking(new Expectations() {{
-            allowing(salesAssistant).cartContent(); will(returnValue(cart));
-            oneOf(response).render(with("cart"), with(same(cart)));
+            allowing(salesAssistant).orderContent(); will(returnValue(items));
+            allowing(salesAssistant).orderTotal(); will(returnValue(total));
+
+            oneOf(response).render(with("cart"), with(allOf(hasEntry("items", items), hasEntry("total", total))));
         }});
 
         showCart.process(request, response);
+    }
+
+    private Matcher<Map<? extends String,? extends Object>> hasEntry(String key, Object value) {
+        return Matchers.hasEntry(key, value);
     }
 }

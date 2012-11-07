@@ -21,7 +21,7 @@ public class OfflineRenderer {
     private final String template;
 
     private RenderingEngine renderer;
-    private Object context = Context.context();
+    private Context context = Context.context();
 
     private OfflineRenderer(String template) {
         this.template = template;
@@ -36,21 +36,12 @@ public class OfflineRenderer {
         return this;
     }
 
-    public OfflineRenderer withContext(Builder<?> contextBuilder) {
-        return withContext(contextBuilder.build());
-    }
-
-    public OfflineRenderer withContext(Object context) {
-        this.context = context;
-        return this;
-    }
-
     public OfflineRenderer with(String key, Builder<?> valueBuilder) {
         return with(key, valueBuilder.build());
     }
 
     public OfflineRenderer with(String key, Object value) {
-        ((Context) context).with(key, value);
+        context.with(key, value);
         return this;
     }
 
@@ -69,11 +60,7 @@ public class OfflineRenderer {
     }
 
     private void render(final Writer writer) {
-        renderer.render(writer, template, context());
-    }
-
-    private Object context() {
-        return context instanceof Context ? ((Context) context).asMap() : context;
+        renderer.render(writer, template, context.asMap());
     }
 }
 

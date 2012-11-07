@@ -1,6 +1,6 @@
 package test.unit.org.testinfected.petstore.views;
 
-import com.pyxis.petstore.domain.product.Item;
+import com.pyxis.petstore.domain.order.Cart;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.ItemBuilder;
@@ -24,11 +24,12 @@ public class CartPageTest {
     String CART_TEMPLATE = "cart";
 
     Element cartPage;
+    Cart cart = aCart().build();
 
     @SuppressWarnings("unchecked")
     @Test public void
     displaysColumnHeadings() {
-        cartPage = renderCartPage().withContext(aCart()).asDom();
+        cartPage = renderCartPage().asDom();
         assertThat("cart page", cartPage,
                 hasSelector("#cart-content th",
                         matches(hasText("Quantity"),
@@ -39,35 +40,36 @@ public class CartPageTest {
 
     @Test public void
     letsReturnToHomePageToContinueShopping() {
-        cartPage = renderCartPage().withContext(aCart().containing(anItem())).asDom();
+        cartPage = renderCartPage().asDom();
         assertThat("cart page", cartPage, hasUniqueSelector("a#continue-shopping", hasAttribute("href", "/")));
     }
 
     @Test public void
     displaysCartGrandTotal() {
-        cartPage = renderCartPage().withContext(aCart().containing(
-                anItem().priced("20.00"),
-                anItem().priced("12.99"),
-                anItem().priced("43.97"))).asDom();
+        addToCart(anItem().priced("20.00"), anItem().priced("12.99"), anItem().priced("43.97"));
         String grandTotal = "76.96";
 
+        cartPage = renderCartPage().asDom();
         assertThat("cart page", cartPage, hasUniqueSelector("#cart-grand-total", hasText(grandTotal)));
     }
 
     @Test public void
     displaysOneCartItemPerLine() {
-        ItemBuilder anItem = anItem();
-        ItemBuilder anotherItem = anItem();
-        cartPage = renderCartPage().withContext(aCart().containing(anItem, anItem, anotherItem)).asDom();
+        ItemBuilder item = anItem();
+        ItemBuilder otherItem = anItem();
+        addToCart(item, item, otherItem);
+
+        cartPage = renderCartPage().asDom();
         assertThat("cart page", cartPage, hasSelector("#cart-content tr[id^='cart-item']", hasSize(2)));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
-        Item item = anItem().withNumber("12345678").priced("18.50").describedAs("Green Adult").build();
+        ItemBuilder item = anItem().withNumber("12345678").priced("18.50").describedAs("Green Adult");
+        addToCart(item, item);
 
-        cartPage = renderCartPage().withContext(aCart().containing(item, item)).asDom();
+        cartPage = renderCartPage().asDom();
         assertThat("cart page", cartPage,
                 hasSelector("tr#cart-item-12345678 td",
                         matches(hasText("2"),
@@ -79,11 +81,17 @@ public class CartPageTest {
 
     @Test public void
     rendersPaymentFormToCheckout() {
-        cartPage = renderCartPage().withContext(aCart().containing(anItem())).asDom();
+        cartPage = renderCartPage().asDom();
         assertThat("cart page", cartPage, hasUniqueSelector("#checkout a", hasAttribute("href", "/checkout")));
     }
 
+    private void addToCart(final ItemBuilder... items) {
+        for (ItemBuilder item : items) {
+            cart.add(item.build());
+        }
+    }
+
     private OfflineRenderer renderCartPage() {
-        return OfflineRenderer.render(CART_TEMPLATE).from(WebRoot.pages());
+        return OfflineRenderer.render(CART_TEMPLATE).from(WebRoot.pages()).with("items", cart.getItems()).and("total", cart.getGrandTotal());
     }
 }

@@ -15,7 +15,7 @@ public class Checkout implements Controller {
 
     public void process(Request request, Response response) throws Exception {
         response.render("checkout", context().
-                with("cart", salesAssistant.cartContent()).
+                with("total", salesAssistant.orderTotal()).
                 and("cardTypes", CreditCardType.options().entrySet()).
                 asMap());
     }

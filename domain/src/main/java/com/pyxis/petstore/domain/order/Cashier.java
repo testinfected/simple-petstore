@@ -6,6 +6,8 @@ import com.pyxis.petstore.domain.product.ItemNumber;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class Cashier implements CheckoutAssistant, PaymentCollector, SalesAssistant {
     private final OrderNumberSequence orderNumberSequence;
@@ -37,8 +39,12 @@ public class Cashier implements CheckoutAssistant, PaymentCollector, SalesAssist
         cart.add(inventory.find(itemNumber));
     }
 
-    public Cart cartContent() {
-        return cart;
+    public BigDecimal orderTotal() {
+        return cart.getGrandTotal();
+    }
+
+    public Iterable<CartItem> orderContent() {
+        return cart.getItems();
     }
 
     public OrderNumber placeOrder(PaymentMethod paymentMethod) {

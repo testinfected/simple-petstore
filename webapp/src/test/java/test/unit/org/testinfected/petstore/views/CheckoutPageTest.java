@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +21,6 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.matches;
 import static org.testinfected.hamcrest.dom.DomMatchers.matchesInAnyOrder;
-import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class CheckoutPageTest {
@@ -32,7 +31,7 @@ public class CheckoutPageTest {
     @Before public void
     renderCheckoutPage() {
         checkoutPage = render(CHECKOUT_TEMPLATE).
-                with("cart", aCart().containing(anItem().priced("100.00"))).
+                with("total", new BigDecimal("100.00")).
                 and("cardTypes", CreditCardType.options().entrySet()).from(WebRoot.pages()).asDom();
     }
 

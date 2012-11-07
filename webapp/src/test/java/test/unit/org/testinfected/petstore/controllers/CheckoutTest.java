@@ -1,7 +1,6 @@
 package test.unit.org.testinfected.petstore.controllers;
 
 import com.pyxis.petstore.domain.billing.CreditCardType;
-import com.pyxis.petstore.domain.order.Cart;
 import com.pyxis.petstore.domain.order.SalesAssistant;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -15,10 +14,8 @@ import org.junit.runner.RunWith;
 import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.Checkout;
 
+import java.math.BigDecimal;
 import java.util.Map;
-
-import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 
 @RunWith(JMock.class)
 public class CheckoutTest {
@@ -31,13 +28,13 @@ public class CheckoutTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    makesCartContentAndCartTypesAvailableToView() throws Exception {
-        final Cart cart = aCart().containing(anItem()).build();
+    makesOrderTotalAndCartTypesAvailableToView() throws Exception {
+        final BigDecimal total = new BigDecimal("324.98");
         final Map<CreditCardType, String> cardTypes = CreditCardType.options();
 
         context.checking(new Expectations() {{
-            allowing(salesAssistant).cartContent(); will(returnValue(cart));
-            oneOf(response).render(with("checkout"), with(allOf(hasEntry("cart", cart), hasEntry("cardTypes", cardTypes.entrySet()))));
+            allowing(salesAssistant).orderTotal(); will(returnValue(total));
+            oneOf(response).render(with("checkout"), with(allOf(hasEntry("total", total), hasEntry("cardTypes", cardTypes.entrySet()))));
         }});
 
         checkout.process(request, response);

@@ -3,6 +3,8 @@ package org.testinfected.petstore.controllers;
 import com.pyxis.petstore.domain.order.SalesAssistant;
 import org.testinfected.petstore.Controller;
 
+import static org.testinfected.petstore.util.Context.context;
+
 public class ShowCart implements Controller {
     private final SalesAssistant salesAssistant;
 
@@ -11,6 +13,9 @@ public class ShowCart implements Controller {
     }
 
     public void process(Request request, Response response) throws Exception {
-        response.render("cart", salesAssistant.cartContent());
+        response.render("cart", context().
+                with("items", salesAssistant.orderContent()).
+                and("total", salesAssistant.orderTotal()).
+                asMap());
     }
 }

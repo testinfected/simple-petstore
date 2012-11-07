@@ -8,7 +8,6 @@ import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ItemNumber;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -16,12 +15,13 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.iterableWithSize;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 
 @RunWith(JMock.class)
@@ -36,33 +36,38 @@ public class CashierTest {
     @SuppressWarnings("unchecked")
     @Test public void
     findsItemInInventoryAndAddToCart() {
-        final Item item = anItem().withNumber("12345678").build();
-        cart.add(item);
-        cart.add(anItem().build());
+        final Item itemAlreadyInCart = anItem().withNumber("12345678").build();
+        cart.add(itemAlreadyInCart);
 
         context.checking(new Expectations() {{
-            allowing(inventory).find(with(equal(new ItemNumber("12345678")))); will(returnValue(item));
+            allowing(inventory).find(with(equal(new ItemNumber("12345678")))); will(returnValue(itemAlreadyInCart));
         }});
 
         cashier.addToCart(new ItemNumber("12345678"));
-        assertThat("cart items", cart.getItems(), hasSize((2)));
-        assertThat("cart", cashier.cartContent(), aCartContaining(itemWith(number("12345678"), quantity(2))));
+        assertThat("order content", cashier.orderContent(), containsItems(itemWith(number("12345678"), quantity(2))));
     }
 
-    private Matcher<Cart> aCartContaining(Matcher<CartItem>... cartItemMatchers) {
-        return new FeatureMatcher<Cart, Iterable<CartItem>>(containsItems(cartItemMatchers), "a cart with items", "cart content") {
-            @Override protected List<CartItem> featureValueOf(Cart actual) {
-                return cart.getItems();
-            }
-        };
+    @SuppressWarnings("unchecked")
+    @Test public void
+    knowsCurrentOrderDetails() {
+        cart.add(anItem().withNumber("12345678").priced("100.00").build());
+        cart.add(anItem().withNumber("87654321").priced("150.00").build());
+
+        assertThat("order total", cashier.orderTotal(), equalTo(new BigDecimal("250.00")));
+        assertThat("order content", cashier.orderContent(), hasItemCount(2));
+        assertThat("order content", cashier.orderContent(), containsItems(itemWith(number("12345678")), itemWith(number("87654321"))));
+    }
+
+    private Matcher<Iterable<CartItem>> hasItemCount(final int count) {
+        return iterableWithSize(count);
     }
 
     private Matcher<? super Iterable<CartItem>> containsItems(Matcher<CartItem>... cartItemMatchers) {
-        return Matchers.hasItems(cartItemMatchers);
+        return hasItems(cartItemMatchers);
     }
 
-    private Matcher<CartItem> itemWith(Matcher<CartItem>... cartItemMatchers) {
-        return allOf(cartItemMatchers);
+    private Matcher<CartItem> itemWith(Matcher<CartItem>... itemMatchers) {
+        return allOf(itemMatchers);
     }
 
     private Matcher<CartItem> quantity(int count) {

@@ -2,7 +2,6 @@ package test.unit.org.testinfected.petstore.views;
 
 import com.pyxis.petstore.domain.product.Item;
 import org.junit.Test;
-import org.testinfected.petstore.util.Context;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
@@ -23,16 +22,15 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.matches;
-import static org.testinfected.petstore.util.Context.context;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class ItemsPageTest {
     String ITEMS_TEMPLATE = "items";
 
     Element itemsPage;
     List<Item> itemAvailable = new ArrayList<Item>();
-    Context context = context().with("items", itemAvailable);
 
     @Test public void
     indicatesWhenNoItemIsAvailable() {
@@ -97,7 +95,7 @@ public class ItemsPageTest {
                         hasUniqueSelector("button", hasId("add-to-cart-12345678"))));
         assertThat("items page", itemsPage,
                 hasUniqueSelector("form input[type='hidden']",
-                        hasAttribute("name", "item_number"),
+                        hasAttribute("name", "item-number"),
                         hasAttribute("value", "12345678")));
     }
 
@@ -116,6 +114,6 @@ public class ItemsPageTest {
     }
 
     private OfflineRenderer renderItemsPage() {
-        return OfflineRenderer.render(ITEMS_TEMPLATE).withContext(context.and("in-stock", !itemAvailable.isEmpty())).from(WebRoot.pages());
+        return render(ITEMS_TEMPLATE).with("items", itemAvailable).and("in-stock", !itemAvailable.isEmpty()).from(WebRoot.pages());
     }
 }

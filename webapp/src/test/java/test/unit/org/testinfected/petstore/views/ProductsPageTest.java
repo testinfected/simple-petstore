@@ -4,7 +4,6 @@ import com.github.mustachejava.TemplateFunction;
 import com.pyxis.petstore.domain.product.Product;
 import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.testinfected.petstore.util.Context;
 import org.w3c.dom.Element;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
@@ -24,16 +23,15 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
-import static org.testinfected.petstore.util.Context.context;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class ProductsPageTest {
     String PRODUCTS_TEMPLATE = "products";
 
     Element productsPage;
     List<Product> productList = new ArrayList<Product>();
-    Context context = context().with("products", productList).with("keyword", "dog");
 
     @Test public void
     indicatesWhenNoMatchWasFound() {
@@ -87,6 +85,9 @@ public class ProductsPageTest {
     }
 
     private OfflineRenderer renderProductsPage() {
-        return OfflineRenderer.render(PRODUCTS_TEMPLATE).withContext(context.and("match-found", !productList.isEmpty())).from(WebRoot.pages());
+        return render(PRODUCTS_TEMPLATE).
+                with("products", productList).
+                and("keyword", "dog").
+                and("match-found", !productList.isEmpty()).from(WebRoot.pages());
     }
 }

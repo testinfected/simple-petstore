@@ -3,11 +3,15 @@ package com.pyxis.petstore.domain.order;
 import com.pyxis.petstore.domain.billing.PaymentMethod;
 import com.pyxis.petstore.domain.product.ItemNumber;
 
+import java.math.BigDecimal;
+
 public interface SalesAssistant {
 
     void addToCart(ItemNumber itemNumber);
 
-    Cart cartContent();
+    Iterable<CartItem> orderContent();
+
+    BigDecimal orderTotal();
 
     OrderNumber placeOrder(PaymentMethod paymentMethod);
 }
