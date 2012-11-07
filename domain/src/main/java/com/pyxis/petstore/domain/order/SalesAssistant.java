@@ -13,5 +13,5 @@ public interface SalesAssistant {
 
     BigDecimal orderTotal();
 
-    OrderNumber placeOrder(PaymentMethod paymentMethod);
+    OrderNumber placeOrder(PaymentMethod paymentMethod) throws Exception;
 }

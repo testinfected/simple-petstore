@@ -52,7 +52,7 @@ public class Routing implements Application {
         final ProductCatalog productCatalog = new ProductsDatabase(connection);
         final ItemInventory itemInventory = new ItemsDatabase(connection);
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
-        final Cashier cashier = new Cashier(null, null, itemInventory, cart);
+        final Cashier cashier = new Cashier(null, null, itemInventory, cart, transactor);
 
         Routes routes = Routes.draw(new Router() {{
             get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));

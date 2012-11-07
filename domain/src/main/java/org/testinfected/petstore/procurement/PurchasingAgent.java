@@ -44,6 +44,5 @@ public class PurchasingAgent implements ProcurementRequestHandler {
                 itemInventory.add(item);
             }
         });
-
     }
 }

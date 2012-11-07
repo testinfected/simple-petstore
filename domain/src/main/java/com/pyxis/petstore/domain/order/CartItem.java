@@ -44,4 +44,8 @@ public class CartItem implements Serializable {
     public boolean holds(Item item) {
         return this.item.equals(item);
     }
+
+    public String toString() {
+        return item.toString() + " (" + unitPrice + "$ x " + quantity + ")";
+    }
 }
