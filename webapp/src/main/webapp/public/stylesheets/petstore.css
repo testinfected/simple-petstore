@@ -19,6 +19,16 @@ th {
 	text-align: left;
 }
 
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+fieldset ol {
+  margin: 0;
+}
+
 body.petstore {
 	margin: 0 auto;
 	font: 100% "Georgia", "Arial", serif;
@@ -248,7 +258,7 @@ body.petstore {
 	text-decoration: underline;
 }
 
-#checkout {
+#checkout, #order {
 	display: inline;
 	font: 14px "Georgia", "Arial", serif;
 	padding: 5px 10px;
@@ -263,6 +273,64 @@ body.petstore {
 #checkout a {
 	color: black;
 	cursor: pointer;
+}
+
+#purchase {
+	margin-top: 80px;
+	min-height: 390px;
+	color: #333333;
+}
+
+#purchase p, #purchase span {
+	margin-left: 40px;
+	font-size: 20px;
+}
+
+#purchase fieldset {
+    margin-top: 10px;
+}
+
+fieldset#billing-address {
+	margin-top: 30px;
+}
+
+#purchase li {
+	list-style-type: none;
+	padding-left: 0;
+	margin-top: 10px;
+}
+
+#purchase input, select {
+	margin-left: 140px;
+	border: solid gray 1px;
+	-moz-border-radius: 4px 4px 4px 4px;
+	height: 23px;
+}
+
+#purchase input {
+    padding-left: 7px;
+    width: 293px;
+}
+
+#purchase select {
+	width: 302px;
+	padding: 5px;
+	height: 30px;
+}
+
+#purchase label {
+	position: absolute;
+	line-height: 23px;
+}
+
+fieldset#purchase-actions {
+	margin-top: 45px;
+	margin-left: 150px;
+	margin-bottom: 40px;
+}
+
+#purchase-actions li {
+  display: inline;
 }
 
 #footer {

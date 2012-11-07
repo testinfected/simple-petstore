@@ -33,11 +33,11 @@ public class CheckoutTest {
     @Test public void
     makesCartContentAndCartTypesAvailableToView() throws Exception {
         final Cart cart = aCart().containing(anItem()).build();
-        final Object cardTypes = CreditCardType.options();
+        final Map<CreditCardType, String> cardTypes = CreditCardType.options();
 
         context.checking(new Expectations() {{
             allowing(salesAssistant).cartContent(); will(returnValue(cart));
-            oneOf(response).render(with("checkout"), with(allOf(hasEntry("cart", cart), hasEntry("cardTypes", cardTypes))));
+            oneOf(response).render(with("checkout"), with(allOf(hasEntry("cart", cart), hasEntry("cardTypes", cardTypes.entrySet()))));
         }});
 
         checkout.process(request, response);

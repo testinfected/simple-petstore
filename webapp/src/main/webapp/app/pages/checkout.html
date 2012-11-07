@@ -1,0 +1,55 @@
+<html>
+<head>
+  <title>Checkout</title>
+  <meta name="section" content="cart">
+</head>
+<body>
+<div id="purchase">
+  <span>Billing information - Cart total: <span id="cart-grand-total">{{cart.grandTotal}}</span></span>
+
+  <form action="/checkout" method="post">
+    <fieldset id="billing-address">
+    <ol>
+      <li>
+        <label for="first-name">First name:</label>
+        <input id="first-name" type="text" name="first-name" value="" size="33"/>
+      </li>
+      <li>
+        <label for="last-name">Last name:</label>
+        <input id="last-name" type="text" name="last-name" value="" size="33"/>
+      </li>
+      <li>
+        <label for="email">Email:</label>
+        <input id="email" type="text" name="email" value="" size="33"/>
+      </li>
+    </ol>
+    </fieldset>
+    <fieldset id="payment-details">
+    <ol>
+      <li>
+        <label for="card-type">Card type:</label>
+        <select id="card-type" name="card-type">
+          {{#cardTypes}}
+          <option value="{{key}}">{{value}}</option>
+          {{/cardTypes}}
+        </select>
+      </li>
+      <li>
+        <label for="card-number">Card number:</label>
+        <input id="card-number" type="text" name="card-number" value="" size="33"/>
+      </li>
+      <li>
+        <label for="expiry-date">Expiration date:</label>
+        <input id="expiry-date" type="text" name="expiry-date" value="" size="33"/>
+      </li>
+    </ol>
+    </fieldset>
+    <fieldset id="purchase-actions">
+      <ol>
+        <li><a id="continue-shopping" class="continue" href="/">&laquo; continue shopping</a></li>
+        <li><button id="order">Submit order</button></li>
+      </ol>
+    </fieldset>
+  </form>
+</div>
+</body>
