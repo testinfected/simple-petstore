@@ -1,15 +1,3 @@
-class Buildr::CompileTask
-  def with_transitive(*specs)
-    with Buildr.transitive(Buildr.artifacts(specs), :scopes => [nil, 'compile', 'runtime'], :optional => false)
-  end
-end
-  
-class Buildr::TestTask
-  def with_transitive(*specs)
-      with Buildr.transitive(Buildr.artifacts(specs), :scopes => [nil, 'compile', 'runtime'], :optional => false)
-  end
-end  
-
 class Buildr::Packaging::Java::WarTask
   def exclude(*specs)
     self.libs -= Buildr.artifacts(specs)

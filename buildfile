@@ -19,16 +19,15 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   compile.options.target = '1.6'
   
   define 'domain' do
-    compile.with_transitive :hibernate_annotations, :hibernate_validator, :spring_context
+    compile.with transitive(artifacts(:hibernate_annotations, :hibernate_validator, :spring_context))
     test.with HAMCREST, :hamcrest_validation, NO_LOG
     package :jar
   end
 
   define 'persistence' do
-    compile.with_transitive project(:domain), project(:domain).compile.dependencies
+    compile.with transitive(project(:domain), project(:domain).compile.dependencies)
 
-    test.with project(:domain).test.compile.target, HAMCREST, :flyway, NO_LOG
-    test.with_transitive :mysql
+    test.with project(:domain).test.compile.target, HAMCREST, :flyway, NO_LOG, :mysql
 
     package(:jar)
   end
@@ -36,11 +35,11 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   define 'oldinfra' do
     resources.filter.deactivate
     compile.with project(:domain)
-    compile.with_transitive :hibernate_annotations, :hibernate_validator, :spring_context, :spring_tx
+    compile.with transitive(artifacts(:hibernate_annotations, :hibernate_validator, :spring_context, :spring_tx))
     
     test.resources.filter.using 'test.log.dir' => _(:target, :logs)
     test.with project(:domain).test.compile.target, project(:persistence).test.compile.target, :flyway, HAMCREST, LOG
-    test.with_transitive :hamcrest_jpa, :commons_dbcp, :spring_orm, :javassist, :mysql
+    test.with transitive(artifacts(:hamcrest_jpa, :commons_dbcp, :spring_orm, :javassist, :mysql))
 
     package :jar
   end
@@ -49,12 +48,12 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     resources.filter.using 'log.dir' => _(:target, :logs)
     
     compile.with project(:domain), project(:domain).compile.dependencies, project(:oldinfra), project(:oldinfra).compile.dependencies, VELOCITY
-    compile.with_transitive :spring_web, :spring_mvc, :servlet_api
+    compile.with transitive(artifacts(:spring_web, :spring_mvc, :servlet_api))
     
     test.setup { makedirs _(:target, :logs) }
     test.resources.filter.using 'webapp.dir' => _(:src, :main, :webapp), 'test.log.dir' => _(:target, :logs)
     test.with project(:domain).test.compile.target, HAMCREST 
-    test.with_transitive :hamcrest_dom, :hamcrest_spring, :nekohtml, :commons_lang, :spring_support, :spring_test
+    test.with transitive(artifacts(:hamcrest_dom, :hamcrest_spring, :nekohtml, :commons_lang, :spring_support, :spring_test))
 
     package :war
     package(:war).exclude :servlet_api
@@ -74,11 +73,11 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
 
   define 'webapp' do
     compile.with :simpleframework, MUSTACHE, :time
-    compile.with_transitive project(:domain), project(:persistence), project(:persistence).compile.dependencies
+    compile.with transitive(artifacts(project(:domain), project(:persistence), project(:persistence).compile.dependencies))
 
     test.with project(:domain).test.compile.target, project(:persistence).test.compile.target,
-      project(:persistence).test.resources.target, HAMCREST, :antlr_runtime, :cssselectors, :hamcrest_dom, :flyway, NO_LOG
-    test.with_transitive :nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy, :mysql
+      project(:persistence).test.resources.target, HAMCREST, :antlr_runtime, :cssselectors, :hamcrest_dom, :flyway, NO_LOG, :mysql
+    test.with transitive(artifacts(:nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy))
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
 
     package :jar
@@ -92,7 +91,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
               project(:domain).test.compile.target, project(:oldinfra).test.compile.target,
               project(:webapp).test.compile.target, project(:persistence).test.compile.target,
               :flyway, HAMCREST, LOG
-    test.with_transitive :selenium_firefox_driver, :windowlicker_web, :jetty, :htmlunit
+    test.with transitive(artifacts(:selenium_firefox_driver, :windowlicker_web, :jetty, :htmlunit))
 
     test.using :integration, :properties => { 
       'web.root' => project(:webapp).path_to(:src, :main, :webapp),

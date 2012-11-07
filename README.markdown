@@ -7,7 +7,7 @@ The intention is to progressively refactor the [petstore](https://github.com/tes
 I have in mind to use the following tools:
 
 - [Simpleframework](http://www.simpleframework.org/) to replace Spring MVC
-- A simple templating engine (mustache?)
+- A simple templating engine (mustache)
 - Plain JDBC to replace Hibernate
 - No IoC container to replace Spring Core
 - [Buildr](http://buildr.apache.org) to replace Maven
@@ -16,7 +16,9 @@ This is a work in progress.
 
 ## Building
 
-To build the application, I use rvm with ruby-1.8.7-p334 with Buildr 1.4.7. I guess it should work fine with ruby 1.9.2 as well, though you won't get growl notifications on OSX (RubyCocoa does not support ruby-1.9).
+To build the application, I use rvm with ruby-1.8.7-p334 with Buildr 1.4.8. I guess it should work fine with ruby 1.9.2 as well, though you won't get growl notifications on OSX (RubyCocoa does not support ruby-1.9).
+
+Buildr 1.4.8 supports Java 7.
 
 To install Buildr, follow Buildr installation [instructions](http://buildr.apache.org/installing.html).
 
