@@ -39,7 +39,7 @@ public class Database {
         cleaner.clean();
     }
 
-    public void prepare() throws Exception {
+    public void reset() throws Exception {
         migrate();
         clean();
     }

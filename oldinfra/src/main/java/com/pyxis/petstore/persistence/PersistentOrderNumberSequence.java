@@ -21,7 +21,7 @@ public class PersistentOrderNumberSequence implements OrderNumberSequence {
     @Transactional
     public OrderNumber nextOrderNumber() {
         Session session = sessionFactory.getCurrentSession();
-        session.createSQLQuery("insert into order_number_sequence values(null)").executeUpdate();
+        session.createSQLQuery("insert into order_numbers values(null)").executeUpdate();
         Long nextValue = (Long) session.createSQLQuery("select @@identity").
                 addScalar("@@identity", Hibernate.LONG).
                 uniqueResult();

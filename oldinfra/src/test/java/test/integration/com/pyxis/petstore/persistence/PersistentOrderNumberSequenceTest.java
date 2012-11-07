@@ -46,7 +46,7 @@ public class PersistentOrderNumberSequenceTest {
     private void seedSequenceNumberWith(final long seed) throws Exception {
         database.perform(new UnitOfWork() {
             public void work(Session session) {
-                SQLQuery query = session.createSQLQuery("insert into order_number_sequence values (:seed)");
+                SQLQuery query = session.createSQLQuery("insert into order_numbers values (:seed)");
                 query.setLong("seed", seed);
                 assertUpdateExecutes(query);
             }

@@ -17,7 +17,7 @@ public class DatabaseCleaner {
             Product.class
     };
     private static final String[] SEQUENCE_NAMES = {
-            "order_number_sequence"
+            "order_numbers"
     };
 
     private final Database database;

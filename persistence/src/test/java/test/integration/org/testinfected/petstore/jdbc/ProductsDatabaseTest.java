@@ -43,7 +43,7 @@ public class ProductsDatabaseTest {
 
     @Before public void
     resetDatabase() throws Exception {
-        database.prepare();
+        database.reset();
     }
 
     @After public void

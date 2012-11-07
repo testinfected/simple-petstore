@@ -12,7 +12,8 @@ public class DatabaseCleaner {
 
     private static final String[] TABLES = {
             "items",
-            "products"
+            "products",
+            "order_numbers"
     };
     private final DataSource dataSource;
 
