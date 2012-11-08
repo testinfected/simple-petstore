@@ -7,6 +7,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
+import org.jmock.States;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.jmock.integration.junit4.JMock;
@@ -31,14 +32,18 @@ public class PurchasingAgentTest {
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
     ItemInventory itemInventory = context.mock(ItemInventory.class);
     Transactor transactor = context.mock(Transactor.class);
+
     PurchasingAgent purchasingAgent = new PurchasingAgent(productCatalog, itemInventory, transactor);
+
+    States transaction = context.states("transaction").startsAs("not started");
 
     @Test public void
     addsNewProductToProductCatalog() throws Exception {
         context.checking(new Expectations() {{
             oneOf(transactor).perform(with(aUnitOfWork())); will(performUnitOfWork());
             oneOf(productCatalog).add(with(samePropertyValuesAs(
-                    aProduct("LAB-1234").named("Labrador").describedAs("Friendly Dog").withPhoto("Labrador.jpg").build())));
+                    aProduct("LAB-1234").named("Labrador").
+                            describedAs("Friendly Dog").withPhoto("Labrador.jpg").build()))); when(transaction.is("started"));
         }});
 
         purchasingAgent.addProductToCatalog("LAB-1234", "Labrador", "Friendly Dog", "Labrador.jpg");
@@ -51,7 +56,8 @@ public class PurchasingAgentTest {
             allowing(productCatalog).findByNumber(with("LAB-1234")); will(returnValue(product));
             oneOf(transactor).perform(with(aUnitOfWork())); will(performUnitOfWork());
             oneOf(itemInventory).add(with(samePropertyValuesAs(
-                    anItem().of(product).withNumber("12345678").describedAs("Chocolate Male").priced("599.00").build())));
+                    anItem().of(product).withNumber("12345678").
+                            describedAs("Chocolate Male").priced("599.00").build()))); when(transaction.is("started"));
         }});
 
         purchasingAgent.addToInventory("LAB-1234", "12345678", "Chocolate Male", new BigDecimal("599.00"));
@@ -62,13 +68,21 @@ public class PurchasingAgentTest {
     }
 
     private PerformUnitOfWork performUnitOfWork() {
-        return new PerformUnitOfWork();
+        return new PerformUnitOfWork(transaction);
     }
 
     private static class PerformUnitOfWork implements Action {
+        private final States transaction;
+
+        public PerformUnitOfWork(States transaction) {
+            this.transaction = transaction;
+        }
+
         public Object invoke(Invocation invocation) throws Throwable {
             UnitOfWork work = (UnitOfWork) invocation.getParameter(0);
+            transaction.become("started");
             work.execute();
+            transaction.become("committed");
             return null;
         }
 
