@@ -13,10 +13,9 @@ import org.junit.runner.RunWith;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
-import static org.testinfected.hamcrest.spring.SpringMatchers.hasAttribute;
-import static com.pyxis.petstore.Maybe.some;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.testinfected.hamcrest.spring.SpringMatchers.hasAttribute;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 
 @RunWith(JMock.class)
@@ -31,7 +30,7 @@ public class ReceiptsControllerTest {
     @Test public void
     fetchesOrderByNumberAndDisplaysReceipt() {
         context.checking(new Expectations() {{
-            oneOf(orderBook).find(new OrderNumber("00000100")); will(returnValue(some(order)));
+            oneOf(orderBook).find(new OrderNumber("00000100")); will(returnValue(order));
         }});
         String view = controller.show("00000100", model);
         assertThat("view", view, equalTo("receipts/show"));

@@ -1,6 +1,5 @@
 package org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.Maybe;
 import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.order.OrderBook;
 import com.pyxis.petstore.domain.order.OrderNumber;
@@ -11,8 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-// todo: Eliminate duplication in insert and select statements (see ProductDatabase, ItemDatabase)
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
+
+// todo: Eliminate duplication in insert and select statements (see ProductDatabase, ItemDatabase)
 
 public class OrderDatabase implements OrderBook {
 
@@ -22,7 +22,7 @@ public class OrderDatabase implements OrderBook {
         this.connection = connection;
     }
 
-    public Maybe<Order> find(OrderNumber orderNumber) {
+    public Order find(OrderNumber orderNumber) {
         PreparedStatement query = null;
         try {
             query = connection.prepareStatement(
@@ -32,7 +32,7 @@ public class OrderDatabase implements OrderBook {
             query.setString(1, orderNumber.getNumber());
             ResultSet rs = query.executeQuery();
             rs.next();
-            return Maybe.some(new OrderRecord().hydrate(rs));
+            return new OrderRecord().hydrate(rs);
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);
         } finally {

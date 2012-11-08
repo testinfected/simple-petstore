@@ -21,7 +21,7 @@ public class OrderNumberDatabaseSequence implements OrderNumberSequence {
         Statement statement = null;
         try {
             statement = connection.createStatement();
-            int updateCount = statement.executeUpdate("insert into order_numbers values(null)", RETURN_GENERATED_KEYS);
+            int updateCount = statement.executeUpdate("insert into order_numbers() values()", RETURN_GENERATED_KEYS);
             if (updateCount != 1) {
                 throw new SQLException("Unexpected row count of " + updateCount + "; expected was 1");
             }
@@ -30,7 +30,7 @@ public class OrderNumberDatabaseSequence implements OrderNumberSequence {
             keys.next();
             return new OrderNumber(keys.getLong(1));
         } catch (SQLException e) {
-            throw new JDBCException("Could not generate sequence", e);
+            throw new JDBCException("Could not generate order number", e);
         } finally {
             close(statement);
         }
@@ -41,7 +41,6 @@ public class OrderNumberDatabaseSequence implements OrderNumberSequence {
         try {
             statement.close();
         } catch (SQLException ignored) {
-
         }
     }
 }

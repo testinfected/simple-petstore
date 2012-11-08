@@ -1,6 +1,5 @@
 package test.integration.com.pyxis.petstore.persistence;
 
-import com.pyxis.petstore.Maybe;
 import com.pyxis.petstore.domain.order.CartItem;
 import com.pyxis.petstore.domain.order.LineItem;
 import com.pyxis.petstore.domain.order.Order;
@@ -62,9 +61,8 @@ public class PersistentOrderBookTest {
     findsOrdersByNumber() {
         database.given(anOrder().withNumber("00000100"));
 
-        Maybe<Order> entry = orderBook.find(new OrderNumber("00000100"));
-        assertThat("no match", entry.exists());
-        assertThat("match", entry.bare(), orderWithNumber("00000100"));
+        Order match = orderBook.find(new OrderNumber("00000100"));
+        assertThat("match", match, orderWithNumber("00000100"));
     }
 
     @Test(expected = ConstraintViolationException.class) public void

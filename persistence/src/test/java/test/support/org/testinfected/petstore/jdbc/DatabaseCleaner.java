@@ -11,6 +11,9 @@ import java.sql.SQLException;
 public class DatabaseCleaner {
 
     private static final String[] TABLES = {
+            "line_items",
+            "orders",
+            "payments",
             "items",
             "products",
             "order_numbers"

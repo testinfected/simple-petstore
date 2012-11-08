@@ -1,10 +1,10 @@
 package test.integration.org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.Maybe;
 import com.pyxis.petstore.domain.billing.PaymentMethod;
 import com.pyxis.petstore.domain.order.LineItem;
 import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.order.OrderNumber;
+import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
@@ -13,6 +13,7 @@ import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.OrderDatabase;
+import test.support.com.pyxis.petstore.builders.OrderBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
@@ -52,6 +53,15 @@ public class OrderDatabaseTest {
         connection.close();
     }
 
+    @Test public void
+    findsOrdersByNumber() throws Exception {
+        given(anOrder().withNumber("00000100"));
+        given(anOrder().withNumber("00000101"));
+
+        Order match = orderDatabase.find(new OrderNumber("00000100"));
+        assertThat("match", match, orderWithNumber("00000100"));
+    }
+
     @SuppressWarnings("unchecked")
     @Test public void
     canRoundTripOrdersWillCompleteDetails() throws Exception {
@@ -64,10 +74,18 @@ public class OrderDatabaseTest {
         }
     }
 
+    private Matcher<? super Order> orderWithNumber(String orderNumber) {
+        return new FeatureMatcher<Order, String>(equalTo(orderNumber), "an order with number", "order number") {
+            @Override protected String featureValueOf(Order order) {
+                return order.getNumber();
+            }
+        };
+    }
+
     private void assertCanSaveAndFindByNumberWithSameState(Order sample) throws Exception {
         save(sample);
-        Maybe<Order> found = orderDatabase.find(new OrderNumber(sample.getNumber()));
-        assertThat("found by number", found.bare(), sameOrderAs(sample));
+        Order found = orderDatabase.find(new OrderNumber(sample.getNumber()));
+        assertThat("found by number", found, sameOrderAs(sample));
     }
 
     private Matcher<Order> sameOrderAs(Order original) {
@@ -96,6 +114,10 @@ public class OrderDatabaseTest {
     private Matcher<? super LineItem> sameLineItemAs(final LineItem original) {
         return allOf(hasField("id", equalTo(idOf(original).get())),
                 samePropertyValuesAs(original));
+    }
+
+    private void given(OrderBuilder orderBuilder) throws Exception {
+        save(orderBuilder.build());
     }
 
     private void save(final Order order) throws Exception {

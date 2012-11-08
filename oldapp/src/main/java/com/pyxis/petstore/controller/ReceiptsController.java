@@ -1,6 +1,5 @@
 package com.pyxis.petstore.controller;
 
-import com.pyxis.petstore.Maybe;
 import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.order.OrderBook;
 import com.pyxis.petstore.domain.order.OrderNumber;
@@ -23,8 +22,8 @@ public class ReceiptsController {
 
     @RequestMapping(value = "/{orderNumber}", method = RequestMethod.GET)
     public String show(@PathVariable String orderNumber, Model model) {
-        Maybe<Order> entry = orderBook.find(new OrderNumber(orderNumber));
-        if (entry.exists()) model.addAttribute(entry.bare());
+        Order order = orderBook.find(new OrderNumber(orderNumber));
+        model.addAttribute("order", order);
         return "receipts/show";
     }
 }
