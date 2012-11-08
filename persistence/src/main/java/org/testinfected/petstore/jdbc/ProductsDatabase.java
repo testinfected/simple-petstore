@@ -12,6 +12,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
+
 public class ProductsDatabase implements ProductCatalog {
 
     private final Connection connection;
@@ -41,7 +43,7 @@ public class ProductsDatabase implements ProductCatalog {
     public void add(Product product) {
         PreparedStatement insert = null;
         try {
-            insert = connection.prepareStatement("insert into products(name, description, photo_file_name, number) values(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            insert = connection.prepareStatement("insert into products(name, description, photo_file_name, number) values(?, ?, ?, ?)", RETURN_GENERATED_KEYS);
             insert.setString(1, product.getName());
             insert.setString(2, product.getDescription());
             insert.setString(3, product.hasPhoto() ? product.getPhotoFileName() : null);

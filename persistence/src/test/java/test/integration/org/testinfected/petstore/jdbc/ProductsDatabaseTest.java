@@ -26,9 +26,9 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
@@ -96,26 +96,26 @@ public class ProductsDatabaseTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    storesAndRetrievesCompleteProductDetails() throws Exception {
+    canRoundTripProductsWithCompleteDetails() throws Exception {
         final Collection<Product> sampleProducts = build(
                 aProduct().named("Labrador").describedAs("Labrador Retriever").withPhoto("labrador.png"),
                 aProduct().named("Dalmatian"));
 
-        for (final Product product : sampleProducts) {
-            save(product);
-            assertCanBeFoundByNumberWithSameState(product);
-            assertCanBeFoundByKeywordWithSameState(product);
+        for (final Product sample : sampleProducts) {
+            save(sample);
+            assertCanBeFoundByNumberWithSameState(sample);
+            assertCanBeFoundByKeywordWithSameState(sample);
         }
     }
 
-    private void assertCanBeFoundByNumberWithSameState(Product product) {
-        Product found = productsDatabase.findByNumber(product.getNumber());
-        assertThat("find by number", found, sameProductAs(product));
+    private void assertCanBeFoundByNumberWithSameState(Product sample) {
+        Product found = productsDatabase.findByNumber(sample.getNumber());
+        assertThat("found by number", found, sameProductAs(sample));
     }
 
-    private void assertCanBeFoundByKeywordWithSameState(Product product) {
-        List<Product> found = productsDatabase.findByKeyword(product.getName());
-        assertThat("find by keyword", uniqueElement(found), sameProductAs(product));
+    private void assertCanBeFoundByKeywordWithSameState(Product sample) {
+        List<Product> found = productsDatabase.findByKeyword(sample.getName());
+        assertThat("found by keyword", uniqueElement(found), sameProductAs(sample));
     }
 
     private Product uniqueElement(List<Product> products) {
@@ -126,10 +126,7 @@ public class ProductsDatabaseTest {
 
     private Matcher<Product> sameProductAs(Product original) {
         return allOf(hasField("id", equalTo(idOf(original).get())),
-                     hasProperty("number", equalTo(original.getNumber())),
-                     hasProperty("name", equalTo(original.getName())),
-                     hasProperty("description", equalTo(original.getDescription())),
-                     hasProperty("photoFileName", equalTo(original.getPhotoFileName())));
+                     samePropertyValuesAs(original));
     }
 
     private void given(final Builder<Product>... products) throws Exception {

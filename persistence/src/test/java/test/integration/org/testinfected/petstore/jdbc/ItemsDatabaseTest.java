@@ -29,8 +29,8 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static org.testinfected.petstore.jdbc.Properties.productOf;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
@@ -95,7 +95,7 @@ public class ItemsDatabaseTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    storesAndRetrievesCompleteItemDetails() throws Exception {
+    canRoundTripItemsWithCompleteDetails() throws Exception {
         Product labrador = aProduct().named("Labrador").describedAs("A fun and friendly dog").withPhoto("labrador.jpg").build();
         Product dalmatian = aProduct().build();
         givenInCatalog(labrador, dalmatian);
@@ -111,14 +111,14 @@ public class ItemsDatabaseTest {
         }
     }
 
-    private void assertCanBeFoundByNumberWithSameState(Item item) {
-        Item found = itemsDatabase.find(new ItemNumber(item.getNumber()));
-        assertThat("item", found, sameItemAs(item));
+    private void assertCanBeFoundByNumberWithSameState(Item sample) {
+        Item found = itemsDatabase.find(new ItemNumber(sample.getNumber()));
+        assertThat("found by number", found, sameItemAs(sample));
     }
 
-    private void assertCanBeFoundByProductNumberWithSameState(Item item) {
-        List<Item> found = itemsDatabase.findByProductNumber(item.getProductNumber());
-        assertThat("item", uniqueElement(found), sameItemAs(item));
+    private void assertCanBeFoundByProductNumberWithSameState(Item sample) {
+        List<Item> found = itemsDatabase.findByProductNumber(sample.getProductNumber());
+        assertThat("found by product number", uniqueElement(found), sameItemAs(sample));
     }
 
     private Item uniqueElement(List<Item> items) {
@@ -129,19 +129,13 @@ public class ItemsDatabaseTest {
 
     private Matcher<Item> sameItemAs(Item original) {
         return allOf(hasField("id", equalTo(idOf(original).get())),
-                hasProperty("number", equalTo(original.getNumber())),
-                hasProperty("price", equalTo(original.getPrice())),
-                hasProperty("description", equalTo(original.getDescription())),
-                hasProperty("productNumber", equalTo(original.getProductNumber())),
+                samePropertyValuesAs(original),
                 hasField("product", sameProductAs(productOf(original).get())));
     }
 
     private Matcher<Product> sameProductAs(Product original) {
         return allOf(hasField("id", equalTo(idOf(original).get())),
-                hasProperty("number", equalTo(original.getNumber())),
-                hasProperty("name", equalTo(original.getName())),
-                hasProperty("description", equalTo(original.getDescription())),
-                hasProperty("photoFileName", equalTo(original.getPhotoFileName())));
+                samePropertyValuesAs(original));
     }
 
     private Matcher<Item> hasProductNumber(final String number) {

@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static org.testinfected.petstore.jdbc.Properties.productOf;
 
@@ -60,7 +61,6 @@ public class ItemsDatabase implements ItemInventory {
             query.setString(1, itemNumber.getNumber());
             ResultSet rs = query.executeQuery();
             rs.next();
-
             return new ItemRecord().hydrate(rs);
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);
@@ -72,7 +72,7 @@ public class ItemsDatabase implements ItemInventory {
     public void add(Item item) {
         PreparedStatement insert = null;
         try {
-            insert = connection.prepareStatement("insert into items(number, product_id, price, description) values(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            insert = connection.prepareStatement("insert into items(number, product_id, price, description) values(?, ?, ?, ?)", RETURN_GENERATED_KEYS);
             insert.setString(1, item.getNumber());
             insert.setLong(2, idOf(productOf(item).get()).get());
             insert.setBigDecimal(3, item.getPrice());
