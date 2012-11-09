@@ -33,7 +33,7 @@ public class ItemsDatabase implements ItemInventory {
                         "item.id, item.number, item.price, item.description, item.product_id, " +
                         "product.id, product.name, product.number, product.description, product.photo_file_name " +
                     "from items item " +
-                    "join products product on item.product_id = product.id " +
+                    "inner join products product on item.product_id = product.id " +
                     "where product.number = ?");
             query.setString(1, productNumber);
             ResultSet rs = query.executeQuery();

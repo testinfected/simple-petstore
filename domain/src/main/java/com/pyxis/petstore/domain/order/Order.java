@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.pyxis.petstore.domain.order.LineItem.from;
+
 @Entity  @Access(AccessType.FIELD) @Table(name = "orders")
 public class Order {
 
@@ -39,8 +41,12 @@ public class Order {
 
     public void addItemsFrom(Cart cart) {
         for (CartItem cartItem : cart.getItems()) {
-            lines.add(LineItem.from(cartItem));
+            addLineItem(from(cartItem));
         }
+    }
+
+    public void addLineItem(LineItem lineItem) {
+        lines.add(lineItem);
     }
 
     public BigDecimal getTotalPrice() {

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 
+// todo: Eliminate duplication in record classes
 public class ProductRecord implements Record<Product> {
 
     private static final String PRODUCTS_TABLE = "products";

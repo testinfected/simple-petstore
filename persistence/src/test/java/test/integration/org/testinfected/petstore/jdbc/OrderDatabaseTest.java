@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
-import org.testinfected.petstore.jdbc.OrderDatabase;
+import org.testinfected.petstore.jdbc.OrdersDatabase;
 import test.support.com.pyxis.petstore.builders.OrderBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
@@ -33,6 +33,8 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
+import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
+import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
 
@@ -41,7 +43,7 @@ public class OrderDatabaseTest {
     Database database = Database.in(TestDatabaseEnvironment.load());
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
-    OrderDatabase orderDatabase = new OrderDatabase(connection);
+    OrdersDatabase orderDatabase = new OrdersDatabase(connection);
 
     @Before public void
     resetDatabase() throws Exception {
@@ -66,7 +68,11 @@ public class OrderDatabaseTest {
     @Test public void
     canRoundTripOrdersWillCompleteDetails() throws Exception {
         final Collection<Order> sampleOrders = build(
-                anOrder()
+                anOrder(),
+                anOrder().from(aCart().containing(
+                        anItem().withNumber("00000100").priced("100.00"),
+                        anItem().withNumber("00000100").priced("100.00"),
+                        anItem().withNumber("00000111").describedAs("White lizard")))
         );
 
         for (Order sample : sampleOrders) {

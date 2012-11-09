@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 
+// todo: Eliminate duplication in record classes
 public class ItemRecord implements Record<Item> {
 
     private static final String ITEMS_TABLE = "items";
