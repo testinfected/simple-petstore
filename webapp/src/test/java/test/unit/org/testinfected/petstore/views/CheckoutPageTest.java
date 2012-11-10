@@ -14,7 +14,6 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasName;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
@@ -44,7 +43,7 @@ public class CheckoutPageTest {
     @Test public void
     displaysPurchaseForm() {
         assertThat("checkout page", checkoutPage, hasCheckoutForm(anElement(
-                hasAttribute("action", "/checkout"),
+                hasAttribute("action", "/orders"),
                 hasAttribute("method", "post")
         )));
         assertThat("checkout page", checkoutPage, hasCheckoutForm(hasEmptyBillingInformation()));
@@ -122,18 +121,5 @@ public class CheckoutPageTest {
     @SuppressWarnings("unchecked")
     private Matcher<Element> hasOption(String value, String text) {
         return anElement(hasAttribute("value", value), hasText(text));
-    }
-
-    @SuppressWarnings("unchecked")
-    private Matcher<Element> hasCreditCardDetails(CreditCardType cardType, String cardNumber, String cardExpiryDate) {
-        return anElement(
-                hasSelectedCardType(cardType),
-                hasCardNumberAndExpiryDate(cardNumber, cardExpiryDate));
-    }
-
-    @SuppressWarnings("unchecked")
-    private Matcher<Element> hasSelectedCardType(CreditCardType cardType) {
-        return hasSelectionList(
-                hasName("card-type"), hasChild(anElement(hasAttribute("value", cardType.toString()), hasAttribute("selected", "selected"))));
     }
 }

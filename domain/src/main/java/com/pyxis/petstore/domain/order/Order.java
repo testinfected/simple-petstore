@@ -84,4 +84,8 @@ public class Order {
     public int getLineItemCount() {
         return lines.size();
     }
+
+    public String toString() {
+        return "#" + number.toString();
+    }
 }

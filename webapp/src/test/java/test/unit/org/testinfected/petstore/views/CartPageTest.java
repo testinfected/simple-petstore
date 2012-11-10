@@ -82,7 +82,7 @@ public class CartPageTest {
     @Test public void
     rendersPaymentFormToCheckout() {
         cartPage = renderCartPage().asDom();
-        assertThat("cart page", cartPage, hasUniqueSelector("#checkout a", hasAttribute("href", "/checkout")));
+        assertThat("cart page", cartPage, hasUniqueSelector("#checkout a", hasAttribute("href", "/orders/new")));
     }
 
     private void addToCart(final ItemBuilder... items) {

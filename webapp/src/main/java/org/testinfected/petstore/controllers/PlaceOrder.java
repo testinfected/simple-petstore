@@ -17,7 +17,7 @@ public class PlaceOrder implements Controller {
 
     public void process(Request request, Response response) throws Exception {
         OrderNumber orderNumber = salesAssistant.placeOrder(readPaymentDetailsFrom(request));
-        response.redirectTo("/receipts/" + orderNumber.getNumber());
+        response.redirectTo("/orders/" + orderNumber.getNumber());
     }
 
     private CreditCardDetails readPaymentDetailsFrom(Request request) {

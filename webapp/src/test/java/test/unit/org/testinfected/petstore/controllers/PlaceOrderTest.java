@@ -37,7 +37,7 @@ public class PlaceOrderTest {
         context.checking(new Expectations() {{
             oneOf(salesAssistant).placeOrder(with(samePaymentMethodAs(validPaymentDetails))); will(returnValue(new OrderNumber(orderNumber)));
 
-            oneOf(response).redirectTo("/receipts/" + orderNumber);
+            oneOf(response).redirectTo("/orders/" + orderNumber);
         }});
 
         placeOrder.process(request, response);

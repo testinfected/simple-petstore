@@ -2,6 +2,8 @@ package org.testinfected.petstore;
 
 import com.pyxis.petstore.domain.order.Cart;
 import com.pyxis.petstore.domain.order.Cashier;
+import com.pyxis.petstore.domain.order.OrderBook;
+import com.pyxis.petstore.domain.order.OrderNumberSequence;
 import com.pyxis.petstore.domain.product.AttachmentStorage;
 import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ProductCatalog;
@@ -17,8 +19,11 @@ import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.controllers.Logout;
 import org.testinfected.petstore.controllers.PlaceOrder;
 import org.testinfected.petstore.controllers.ShowCart;
+import org.testinfected.petstore.controllers.ShowOrder;
 import org.testinfected.petstore.jdbc.ItemsDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
+import org.testinfected.petstore.jdbc.OrderNumberDatabaseSequence;
+import org.testinfected.petstore.jdbc.OrdersDatabase;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.procurement.PurchasingAgent;
@@ -52,7 +57,9 @@ public class Routing implements Application {
         final ProductCatalog productCatalog = new ProductsDatabase(connection);
         final ItemInventory itemInventory = new ItemsDatabase(connection);
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
-        final Cashier cashier = new Cashier(null, null, itemInventory, cart, transactor);
+        final OrderNumberSequence orderNumberSequence = new OrderNumberDatabaseSequence(connection);
+        final OrderBook orderBook = new OrdersDatabase(connection);
+        final Cashier cashier = new Cashier(orderNumberSequence, orderBook, itemInventory, cart, transactor);
 
         Routes routes = Routes.draw(new Router() {{
             get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));
@@ -61,8 +68,9 @@ public class Routing implements Application {
             post("/products/:product/items").to(controller(new CreateItem(requestHandler)));
             get("/cart").to(controller(new ShowCart(cashier)));
             post("/cart").to(controller(new CreateCartItem(cashier)));
-            get("/checkout").to(controller(new Checkout(cashier)));
-            post("/checkout").to(controller(new PlaceOrder(cashier)));
+            get("/orders/new").to(controller(new Checkout(cashier)));
+            get("/orders/:number").to(controller(new ShowOrder(orderBook)));
+            post("/orders").to(controller(new PlaceOrder(cashier)));
             delete("/logout").to(controller(new Logout()));
             map("/").to(controller(new Home()));
         }});
