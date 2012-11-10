@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
 import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
+import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
 import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
@@ -72,7 +73,8 @@ public class OrderDatabaseTest {
                 anOrder().from(aCart().containing(
                         anItem().withNumber("00000100").priced("100.00"),
                         anItem().withNumber("00000100").priced("100.00"),
-                        anItem().withNumber("00000111").describedAs("White lizard")))
+                        anItem().withNumber("00000111").describedAs("White lizard"))),
+                anOrder().paidWith(validVisaDetails())
         );
 
         for (Order sample : sampleOrders) {

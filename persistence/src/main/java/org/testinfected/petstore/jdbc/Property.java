@@ -15,13 +15,26 @@ public class Property<T>  {
     }
 
     private Field lookupField(final String name) {
-        try {
-            Field field = entity.getClass().getDeclaredField(name);
-            field.setAccessible(true);
-            return field;
-        } catch (NoSuchFieldException e) {
-            throw new IllegalArgumentException(entity.getClass().getName() + " has no field '" + name + "'", e);
+        Class<?> type = entity.getClass();
+        while (type != Object.class) {
+            Field f = findField(type, name);
+            if (f != null) return f;
+            type = type.getSuperclass();
         }
+        throw new IllegalArgumentException(entity.getClass().getName() + " has no field '" + name + "'");
+    }
+
+    private static Field findField(Class<?> type, String name) {
+        Field[] fields = type.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getName().equals(name)) return makeAccessible(field);
+        }
+        return null;
+    }
+
+    private static Field makeAccessible(Field field) {
+        field.setAccessible(true);
+        return field;
     }
 
     public void set(T value) {

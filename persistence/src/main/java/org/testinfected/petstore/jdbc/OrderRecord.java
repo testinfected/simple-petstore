@@ -16,6 +16,8 @@ public class OrderRecord {
 
     public Order hydrate(ResultSet rs) throws SQLException {
         Order order = new Order(new OrderNumber(number(rs)));
+        if (paymentId(rs) != null)
+            order.pay(new PaymentRecord().hydrate(rs));
         idOf(order).set(id(rs));
         return order;
     }
@@ -26,6 +28,10 @@ public class OrderRecord {
 
     private String number(ResultSet rs) throws SQLException {
         return rs.getString(getColumnIndex(rs, "number"));
+    }
+
+    private String paymentId(ResultSet rs) throws SQLException {
+        return rs.getString(getColumnIndex(rs, "payment_id"));
     }
 
     private int getColumnIndex(ResultSet rs, final String columnName) throws SQLException {
