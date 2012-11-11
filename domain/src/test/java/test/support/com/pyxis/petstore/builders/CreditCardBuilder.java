@@ -9,7 +9,7 @@ import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
 
 public class CreditCardBuilder implements Builder<CreditCardDetails> {
 
-    private CreditCardType cardType;
+    private CreditCardType cardType = CreditCardType.visa;
     private String cardNumber;
     private String cardExpiryDate;
     private Address billingAddress = anAddress().build();
@@ -33,10 +33,6 @@ public class CreditCardBuilder implements Builder<CreditCardDetails> {
                 billedTo(aValidAddress());
     }
 
-    public CreditCardDetails build() {
-        return new CreditCardDetails(cardType, cardNumber, cardExpiryDate, billingAddress);
-    }
-
     public CreditCardBuilder ofType(CreditCardType type) {
         this.cardType = type;
         return this;
@@ -55,5 +51,9 @@ public class CreditCardBuilder implements Builder<CreditCardDetails> {
     public CreditCardBuilder billedTo(AddressBuilder addressBuilder) {
         this.billingAddress = addressBuilder.build();
         return this;
+    }
+
+    public CreditCardDetails build() {
+        return new CreditCardDetails(cardType, cardNumber, cardExpiryDate, billingAddress);
     }
 }

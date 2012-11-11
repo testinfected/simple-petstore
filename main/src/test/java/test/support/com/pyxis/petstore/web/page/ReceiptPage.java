@@ -42,7 +42,7 @@ public class ReceiptPage extends Page {
     }
 
     public void displays() {
-        browser.assertTitle(containsString("Receipt"));
+        browser.assertTitle(containsString("Order Details"));
     }
 
     private By cellDisplayingNameOfItem(String itemNumber) {

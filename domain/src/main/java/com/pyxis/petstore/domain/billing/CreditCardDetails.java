@@ -31,6 +31,26 @@ public class CreditCardDetails extends PaymentMethod implements Serializable {
         this.billingAddress = billingAddress;
     }
 
+    public CreditCardType getCardType() {
+        return cardType;
+    }
+
+    public String getCardCommonName() {
+        return cardType.commonName();
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public String getCardExpiryDate() {
+        return cardExpiryDate;
+    }
+
+    public Address getBillingAddress() {
+        return billingAddress;
+    }
+
     public String getFirstName() {
         return billingAddress.getFirstName();
     }
@@ -43,20 +63,8 @@ public class CreditCardDetails extends PaymentMethod implements Serializable {
         return billingAddress.getEmailAddress();
     }
 
-    public CreditCardType getCardType() {
-        return cardType;
-    }
-
     public void setCardType(CreditCardType cardType) {
         this.cardType = cardType;
-    }
-
-    public String getCardCommonName() {
-        return cardType.commonName();
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
     }
 
     public void setCardNumber(String cardNumber) {
@@ -65,14 +73,6 @@ public class CreditCardDetails extends PaymentMethod implements Serializable {
 
     public void setCardExpiryDate(String cardExpiryDate) {
         this.cardExpiryDate = cardExpiryDate;
-    }
-
-    public String getCardExpiryDate() {
-        return cardExpiryDate;
-    }
-
-    public Address getBillingAddress() {
-        return billingAddress;
     }
 
     public void setBillingAddress(Address billingAddress) {

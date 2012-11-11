@@ -1,0 +1,74 @@
+<html>
+<head>
+  <title>Order Details</title>
+</head>
+<body>
+<div id="receipt">
+  <p>Thank you, order number <span id="order-number">{{order.number}}</span> has been confirmed.</p>
+
+  <table id="order-details">
+    <tr>
+      <th>Quantity</th>
+      <th>Item</th>
+      <th>Price</th>
+      <th>Total</th>
+    </tr>
+    {{#order.lineItems}}
+    <tr id="line-item-{{itemNumber}}">
+      <td class="count">{{quantity}}</td>
+      <td class="text">{{itemDescription}}</td>
+      <td class="price">{{itemUnitPrice}}</td>
+      <td class="total">{{totalPrice}}</td>
+    </tr>
+    {{/order.lineItems}}
+    <tr id="order-summary">
+      <td colspan="2"></td>
+      <td class="price">Grand total:</td>
+      <td id="order-total" class="total">{{order.totalPrice}}</td>
+    </tr>
+  </table>
+
+  <br/>
+  <br/>
+
+  <div id="billing-address">
+    <p class="title">Billing address</p>
+    <ul>
+      <li id="first-name">
+        <label>First name:</label>
+        <span>{{order.paymentMethod.firstName}}</span><br/>
+      </li>
+      <li id="last-name">
+        <label>Last name:</label>
+        <span>{{order.paymentMethod.lastName}}</span><br/>
+      </li>
+      <li id="email">
+        <label>Email address:</label>
+        <span>{{order.paymentMethod.email}}</span><br/>
+      </li>
+    </ul>
+  </div>
+
+  <div id="payment-details">
+    <p class="title">Payment details</p>
+    <ul>
+      <li id="card-type">
+        <label>Card type:</label>
+        <span>{{order.paymentMethod.cardCommonName}}</span><br/>
+      </li>
+      <li id="card-number">
+        <label>Card number:</label>
+        <span>{{order.paymentMethod.cardNumber}}</span><br/>
+      </li>
+      <li id="card-expiry">
+        <label>Card expiry date:</label>
+        <span>{{order.paymentMethod.cardExpiryDate}}</span><br/>
+      </li>
+    </ul>
+  </div>
+
+  <div id="receipt-actions">
+    <a id="continue-shopping" class="continue" href="/">&laquo; continue shopping</a>
+  </div>
+</div>
+</body>

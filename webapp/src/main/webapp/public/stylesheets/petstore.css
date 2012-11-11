@@ -199,12 +199,12 @@ body.petstore {
 	min-height: 370px;
 }
 
-#inventory, #cart-content {
+#inventory, #cart-content, #order-details {
 	margin-top: 50px;
 	width: 85%;
 }
 
-#inventory th, #cart-content th {
+#inventory th, #cart-content th, #order-details th {
 	border: none;
 	font-weight: normal;
 	font-size: 22px;
@@ -331,6 +331,59 @@ fieldset#purchase-actions {
 
 #purchase-actions li {
   display: inline;
+}
+
+#receipt {
+	padding-top: 40px;
+	min-height: 420px;
+}
+
+#order-number {
+	color: #84a208;
+}
+
+#receipt table {
+	margin-top: 20px;
+}
+
+#receipt td {
+	height: 35px;
+}
+
+.title {
+	font-weight: bold;
+	margin-left: 0;
+	color: #84a208;
+}
+
+#order-summary {
+	border-top: 3px double black;
+}
+
+#receipt #payment-details {
+	margin-left: 550px;
+}
+
+#receipt-actions {
+	margin-top: 45px;
+	margin-left: 0;
+}
+
+#receipt #billing-address {
+	float: left;
+}
+
+#receipt #billing-address span, #receipt #payment-details span {
+	margin-left: 140px;
+}
+
+#receipt #billing-address label, #receipt #payment-details label {
+	position: absolute;
+}
+
+#receipt #billing-address ul, #receipt #payment-details ul {
+	list-style-type: none;
+	padding-left: 0;
 }
 
 #footer {

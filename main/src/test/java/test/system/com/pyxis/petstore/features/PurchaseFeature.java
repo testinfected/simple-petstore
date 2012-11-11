@@ -2,7 +2,6 @@ package test.system.com.pyxis.petstore.features;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import test.support.com.pyxis.petstore.web.ApplicationDriver;
 import test.support.com.pyxis.petstore.web.TestEnvironment;
@@ -26,7 +25,7 @@ public class PurchaseFeature {
         application.stop();
     }
 
-    @Ignore("wip") @Test public void
+    @Test public void
     purchasesSeveralItemsUsingACreditCard() {
         application.buy("Labrador Retriever", "11111111");
         application.buy("Golden Retriever", "22222222");
