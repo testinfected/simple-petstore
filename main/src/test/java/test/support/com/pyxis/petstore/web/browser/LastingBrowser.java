@@ -42,7 +42,7 @@ public class LastingBrowser implements BrowserControl {
         private ShutdownHook(final LastingFirefox browser) {
             super(new Runnable() {
                 public void run() {
-                    browser.shutdown();
+                    try { browser.shutdown(); } catch (Exception ignored) {}
                 }
             });
         }

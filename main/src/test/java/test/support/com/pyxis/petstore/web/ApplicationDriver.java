@@ -48,7 +48,7 @@ public class ApplicationDriver {
     }
 
     private void cleanupEnvironment() throws Exception {
-        environment.cleanUp();
+        environment.clean();
     }
 
     private void startServer() throws Exception {

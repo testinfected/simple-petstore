@@ -118,20 +118,17 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
       selenium.stop
     end
 
-    def run_migrations(action)
-      Java::Commands.java("org.testinfected.petstore.Migrations", action.to_s,
-        Buildr.settings.profile['filter']['jdbc.url'],
-        Buildr.settings.profile['filter']['jdbc.username'],
-        Buildr.settings.profile['filter']['jdbc.password'],
-        :classpath => [project.compile.target] + [:slf4j_simple, :mysql] + project.compile.dependencies) do
+    def migrations(action)
+      Java::Commands.java("org.testinfected.petstore.Migrations", "-e", Buildr.environment, action.to_s,
+        :classpath => [project.compile.target, project.resources.target] + [:slf4j_simple, :mysql] + project.compile.dependencies) do
           exit
         end
     end
 
-    task 'db-migrate' => :compile do run_migrations :migrate; end
-    task 'db-clean' => :compile do run_migrations :clean; end
-    task 'db-reset' => :compile do run_migrations :reset; end
-    task 'db-init' => :compile do run_migrations :init; end
+    task 'db-init' => :compile do migrations :init; end
+    task 'db-migrate' => :compile do migrations :migrate; end
+    task 'db-clean' => :compile do migrations :clean; end
+    task 'db-reset' => :compile do migrations :reset; end
   end
 
   task :run => project(:main) do

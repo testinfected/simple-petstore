@@ -4,18 +4,13 @@ import com.objogate.wl.UnsynchronizedProber;
 import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testinfected.petstore.jdbc.DriverManagerDataSource;
+import org.testinfected.petstore.Migrations;
+import org.testinfected.petstore.util.PropertyFile;
 import test.support.com.pyxis.petstore.web.browser.BrowserControl;
 import test.support.com.pyxis.petstore.web.browser.LastingBrowser;
 import test.support.com.pyxis.petstore.web.browser.PassingBrowser;
 import test.support.com.pyxis.petstore.web.browser.RemoteBrowser;
-import test.support.com.pyxis.petstore.web.server.ExternalServer;
-import test.support.com.pyxis.petstore.web.server.LastingServer;
-import test.support.com.pyxis.petstore.web.server.PassingServer;
-import test.support.com.pyxis.petstore.web.server.ServerLifeCycle;
-import test.support.com.pyxis.petstore.web.server.ServerSettings;
-import org.testinfected.petstore.util.PropertyFile;
-import test.support.org.testinfected.petstore.jdbc.DatabaseCleaner;
+import test.support.com.pyxis.petstore.web.server.*;
 import test.support.org.testinfected.petstore.web.HttpRequest;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -42,10 +37,6 @@ public class TestEnvironment {
     public static final String BROWSER_LIFECYCLE = "browser.lifecycle";
     public static final String BROWSER_REMOTE_URL = "browser.remote.url";
     public static final String BROWSER_REMOTE_CAPABILITY = "browser.remote.capability.";
-
-    public static final String JDBC_URL = "jdbc.url";
-    public static final String JDBC_USERNAME = "jdbc.username";
-    public static final String JDBC_PASSWORD = "jdbc.password";
 
     private static final String TEST_PROPERTIES = "test.properties";
     private static final int HTTP_TIMEOUT_IN_MILLIS = 5000;
@@ -160,9 +151,8 @@ public class TestEnvironment {
         return aRequest().onPort(serverPort()).withTimeOut(HTTP_TIMEOUT_IN_MILLIS);
     }
 
-    public void cleanUp() throws Exception {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource(asString(JDBC_URL), asString(JDBC_USERNAME), asString(JDBC_PASSWORD));
-        new DatabaseCleaner(dataSource).clean();
+    public void clean() throws Exception {
+        Migrations.main("-e", "test", "clean");
     }
 
     public int serverPort() {

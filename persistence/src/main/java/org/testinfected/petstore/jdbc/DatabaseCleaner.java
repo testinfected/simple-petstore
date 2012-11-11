@@ -1,4 +1,4 @@
-package test.support.org.testinfected.petstore.jdbc;
+package org.testinfected.petstore.jdbc;
 
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.UnitOfWork;

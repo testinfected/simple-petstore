@@ -1,30 +1,35 @@
 package org.testinfected.petstore;
 
 import com.googlecode.flyway.core.Flyway;
+import org.testinfected.petstore.jdbc.DatabaseCleaner;
 import org.testinfected.petstore.jdbc.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
 public class Migrations {
 
-    public static final int ACTION = 0;
-    public static final int DATABASE_URL = 1;
-    public static final int DATABASE_USERNAME = 2;
-    public static final int DATABASE_PASSSWORD = 3;
+    private static final int ENVIRONMENT = 1;
+    private static final int ACTION = 2;
 
     private final Flyway flyway;
+    private final DatabaseCleaner databaseCleaner;
 
     public Migrations(DataSource dataSource) {
         flyway = new Flyway();
         flyway.setDataSource(dataSource);
         flyway.setSqlMigrationPrefix("");
+        databaseCleaner = new DatabaseCleaner(dataSource);
     }
 
     public void migrate() {
         flyway.migrate();
     }
 
-    public void clean() {
+    public void clean() throws Exception {
+        databaseCleaner.clean();
+    }
+
+    public void drop() {
         flyway.clean();
     }
 
@@ -34,16 +39,19 @@ public class Migrations {
 
     public void reset() {
         flyway.clean();
-        flyway.init();
+        flyway.migrate();
     }
 
-    public static void main(String[] args) {
-        DataSource dataSource = new DriverManagerDataSource(args[DATABASE_URL], args[DATABASE_USERNAME], args[DATABASE_PASSSWORD]);
+    public static void main(String... args) throws Exception {
+        Environment env = Environment.load(args[ENVIRONMENT]);
+
+        DataSource dataSource = new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword);
         Migrations migrations = new Migrations(dataSource);
         String action = args[ACTION];
         if (action.equals("migrate")) migrations.migrate();
-        if (action.equals("clean")) migrations.clean();
+        if (action.equals("drop")) migrations.migrate();
         if (action.equals("init")) migrations.init();
         if (action.equals("reset")) migrations.reset();
+        if (action.equals("clean")) migrations.clean();
     }
 }
