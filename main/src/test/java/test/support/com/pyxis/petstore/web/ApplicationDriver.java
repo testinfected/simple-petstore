@@ -1,14 +1,8 @@
 package test.support.com.pyxis.petstore.web;
 
 import com.objogate.wl.web.AsyncWebDriver;
-import test.support.com.pyxis.petstore.web.page.CartPage;
-import test.support.com.pyxis.petstore.web.page.HomePage;
-import test.support.com.pyxis.petstore.web.page.ItemsPage;
-import test.support.com.pyxis.petstore.web.page.Menu;
-import test.support.com.pyxis.petstore.web.page.ProductsPage;
-import test.support.com.pyxis.petstore.web.page.PurchasePage;
-import test.support.com.pyxis.petstore.web.page.ReceiptPage;
-import test.support.com.pyxis.petstore.web.server.WebServer;
+import test.support.com.pyxis.petstore.web.page.*;
+import test.support.com.pyxis.petstore.web.page.OrderPage;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -25,8 +19,8 @@ public class ApplicationDriver {
     private ProductsPage productsPage;
     private ItemsPage itemsPage;
     private CartPage cartPage;
-    private PurchasePage purchasePage;
-    private ReceiptPage receiptPage;
+    private CheckoutPage checkoutPage;
+    private OrderPage orderPage;
     private Menu menu;
 
     public ApplicationDriver(TestEnvironment environment) {
@@ -65,8 +59,8 @@ public class ApplicationDriver {
         productsPage = new ProductsPage(browser);
         itemsPage = new ItemsPage(browser);
         cartPage = new CartPage(browser);
-        purchasePage = new PurchasePage(browser);
-        receiptPage = new ReceiptPage(browser);
+        checkoutPage = new CheckoutPage(browser);
+        orderPage = new OrderPage(browser);
     }
 
     public void stop() throws Exception {
@@ -185,34 +179,38 @@ public class ApplicationDriver {
 
     public void checkout() {
         cartPage.checkout();
-        purchasePage.displays();
+        checkoutPage.displays();
     }
 
     public void showsTotalToPay(String total) {
-        purchasePage.showsTotalToPay(new BigDecimal(total));
+        checkoutPage.showsTotalToPay(new BigDecimal(total));
     }
 
     public void pay(String firstName, String lastName, String email, String cardType, String cardNumber, String cardExpiryDate) {
-        purchasePage.willBillTo(firstName, lastName, email);
-        purchasePage.willPayUsingCreditCard(cardType, cardNumber, cardExpiryDate);
-        purchasePage.confirmOrder();
-        receiptPage.displays();
+        checkoutPage.willBillTo(firstName, lastName, email);
+        checkoutPage.willPayUsingCreditCard(cardType, cardNumber, cardExpiryDate);
+        checkoutPage.confirmOrder();
+        orderPage.displays();
     }
 
     public void showsTotalPaid(String total) {
-        receiptPage.showsTotalPaid(new BigDecimal(total));
+        orderPage.showsTotalPaid(new BigDecimal(total));
     }
 
     public void showsLineItem(String itemNumber, String itemDescription, String totalPrice) {
-        receiptPage.showsLineItem(itemNumber, itemDescription, totalPrice);
+        orderPage.showsLineItem(itemNumber, itemDescription, totalPrice);
     }
 
     public void showsCreditCardDetails(String cardType, String cardNumber, String cardExpiryDate) {
-        receiptPage.showsCreditCardDetails(cardType, cardNumber, cardExpiryDate);
+        orderPage.showsCreditCardDetails(cardType, cardNumber, cardExpiryDate);
     }
 
     public void showsBillingInformation(String firstName, String lastName, String emailAddress) {
-        receiptPage.showsBillingInformation(firstName, lastName, emailAddress);
+        orderPage.showsBillingInformation(firstName, lastName, emailAddress);
     }
 
+    public void returnShopping() {
+        orderPage.returnShopping();
+        homePage.displays();
+    }
 }

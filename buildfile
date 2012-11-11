@@ -84,14 +84,9 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
   
   define 'main' do
-    compile.with project(:webapp).compile.target, project(:webapp).compile.dependencies, :cli, :flyway, :jcl_over_slf4j
-    test.resources.filter.using 'webapp.dir' => project(:oldapp).path_to(:src, :main, :webapp),
-                                'test.log.dir' => _(:target, :logs)
-    test.with project(:oldapp).compile.target, project(:oldapp).resources.target, project(:oldapp).package(:war).libs, 
-              project(:domain).test.compile.target, project(:oldinfra).test.compile.target,
-              project(:webapp).test.compile.target, project(:persistence).test.compile.target,
-              :flyway, HAMCREST, LOG
-    test.with transitive(artifacts(:selenium_firefox_driver, :windowlicker_web, :jetty, :htmlunit))
+    compile.with project(:webapp), project(:webapp).compile.dependencies, project(:webapp), :cli, :flyway, :jcl_over_slf4j
+    test.with project(:webapp).test.compile.target, HAMCREST, :flyway, :mysql, NO_LOG
+    test.with transitive(artifacts(:selenium_firefox_driver, :windowlicker_web, :htmlunit))
 
     test.using :integration, :properties => { 
       'web.root' => project(:webapp).path_to(:src, :main, :webapp),
@@ -102,16 +97,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
       'browser.remote.capability.name' => 'PetStore System Tests'
     }
 
-    integration(project(:oldapp).package(:war)).setup do
+    integration.setup do
       selenium.run
-      jetty.url = "http://localhost:#{Buildr.settings.profile['filter']['test.server.port']}"
-      jetty.with :properties => {
-        'jdbc.url' => Buildr.settings.profile['filter']['test.jdbc.url'],
-        'jdbc.username' => Buildr.settings.profile['filter']['test.jdbc.username'],
-        'jdbc.password' => Buildr.settings.profile['filter']['test.jdbc.password']
-      }
-      jetty.use.invoke
-      jetty.deploy("#{jetty.url}#{Buildr.settings.profile['filter']['context.path']}", project(:oldapp).package(:war))
     end
     
     integration.teardown do
@@ -128,6 +115,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     task 'db-init' => :compile do migrations :init; end
     task 'db-migrate' => :compile do migrations :migrate; end
     task 'db-clean' => :compile do migrations :clean; end
+    task 'db-drop' => :compile do migrations :drop; end
     task 'db-reset' => :compile do migrations :reset; end
   end
 

@@ -10,9 +10,9 @@ import static org.hamcrest.Matchers.containsString;
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
 
-public class ReceiptPage extends Page {
+public class OrderPage extends Page {
 
-    public ReceiptPage(AsyncWebDriver browser) {
+    public OrderPage(AsyncWebDriver browser) {
         super(browser);
     }
 
@@ -37,7 +37,7 @@ public class ReceiptPage extends Page {
         browser.element(cssSelector("#email span")).assertText(being(emailAddress));
     }
 
-    public void continueShopping() {
+    public void returnShopping() {
         browser.element(id("continue-shopping")).click();
     }
 

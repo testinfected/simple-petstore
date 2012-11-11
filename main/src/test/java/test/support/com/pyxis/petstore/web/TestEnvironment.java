@@ -10,7 +10,6 @@ import test.support.com.pyxis.petstore.web.browser.BrowserControl;
 import test.support.com.pyxis.petstore.web.browser.LastingBrowser;
 import test.support.com.pyxis.petstore.web.browser.PassingBrowser;
 import test.support.com.pyxis.petstore.web.browser.RemoteBrowser;
-import test.support.com.pyxis.petstore.web.server.*;
 import test.support.org.testinfected.petstore.web.HttpRequest;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -26,13 +25,7 @@ import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 public class TestEnvironment {
 
-    public static final String SERVER_LIFECYCLE = "server.lifecycle";
-    public static final String SERVER_SCHEME = "server.scheme";
-    public static final String SERVER_HOST = "server.host";
     public static final String SERVER_PORT = "server.port";
-
-    public static final String CONTEXT_PATH = "context.path";
-    public static final String WEBAPP_PATH = "webapp.path";
 
     public static final String BROWSER_LIFECYCLE = "browser.lifecycle";
     public static final String BROWSER_REMOTE_URL = "browser.remote.url";
@@ -55,14 +48,10 @@ public class TestEnvironment {
     }
 
     private final Properties properties;
-    private final ServerSettings serverSettings;
-    private final ServerLifeCycle serverLifeCycle;
     private final BrowserControl browserControl;
 
     public TestEnvironment(Properties properties) {
         this.properties = configure(properties);
-        this.serverSettings = readServerSettings();
-        this.serverLifeCycle = selectServer();
         this.browserControl = selectBrowser();
     }
 
@@ -71,25 +60,6 @@ public class TestEnvironment {
         props.putAll(defaults);
         props.putAll(System.getProperties());
         return props;
-    }
-
-    private ServerSettings readServerSettings() {
-        return new ServerSettings(
-                asString(SERVER_SCHEME),
-                asString(SERVER_HOST),
-                serverPort(),
-                asString(CONTEXT_PATH),
-                asString(WEBAPP_PATH));
-    }
-
-    private ServerLifeCycle selectServer() {
-        String lifeCycle = asString(SERVER_LIFECYCLE);
-        // new tests don't use a server lifecycle
-        if (lifeCycle == null) return null;
-        if (lifeCycle.equals("lasting")) return new LastingServer(serverSettings);
-        if (lifeCycle.equals("passing")) return new PassingServer(serverSettings);
-        if (lifeCycle.equals("external")) return new ExternalServer();
-        throw new IllegalArgumentException(SERVER_LIFECYCLE + " should be one of lasting, passing, external: " + lifeCycle);
     }
 
     private BrowserControl selectBrowser() {
@@ -116,29 +86,6 @@ public class TestEnvironment {
 
     private boolean isCapability(String property) {
         return property.startsWith(BROWSER_REMOTE_CAPABILITY);
-    }
-
-    public Properties getProperties() {
-        return properties;
-    }
-
-    @Deprecated
-    public ServerLifeCycle getServerLifeCycle() {
-        return serverLifeCycle;
-    }
-
-    @Deprecated
-    public BrowserControl browserControl() {
-        return browserControl;
-    }
-
-    @Deprecated
-    public Routing getRoutes() {
-        return new Routing(serverBaseUrl());
-    }
-
-    private String serverBaseUrl() {
-        return String.format("%s://%s:%s%s", serverSettings.scheme, serverSettings.host, serverSettings.port, serverSettings.contextPath);
     }
 
     public AsyncWebDriver openBrowser() {

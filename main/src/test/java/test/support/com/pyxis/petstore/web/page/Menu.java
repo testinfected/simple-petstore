@@ -1,7 +1,6 @@
 package test.support.com.pyxis.petstore.web.page;
 
 import com.objogate.wl.web.AsyncWebDriver;
-import org.openqa.selenium.By;
 
 import static java.lang.String.valueOf;
 import static org.hamcrest.Matchers.containsString;
@@ -29,17 +28,5 @@ public class Menu extends Page {
 
     public void logout() {
         browser.element(id("logout")).click();
-    }
-
-    public void cart() {
-        browser.element(cssSelector("#shopping-cart a")).click();
-    }
-
-    public void logo() {
-        browser.element(By.cssSelector("#logo a")).click();
-    }
-
-    public void home() {
-        browser.element(By.cssSelector("#home a")).click();
     }
 }

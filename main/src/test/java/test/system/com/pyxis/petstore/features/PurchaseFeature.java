@@ -39,7 +39,7 @@ public class PurchaseFeature {
         application.showsBillingInformation("John", "Doe", "jdoe@gmail.com");
         application.showsCreditCardDetails("Visa", "4111111111111111", "12/12");
 
-        application.continueShopping();
+        application.returnShopping();
         application.showsCartIsEmpty();
     }
 

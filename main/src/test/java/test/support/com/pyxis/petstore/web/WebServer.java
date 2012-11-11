@@ -1,4 +1,4 @@
-package test.support.com.pyxis.petstore.web.server;
+package test.support.com.pyxis.petstore.web;
 
 import org.testinfected.petstore.Launcher;
 

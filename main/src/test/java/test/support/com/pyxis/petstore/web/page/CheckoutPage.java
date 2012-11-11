@@ -9,9 +9,9 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.testinfected.hamcrest.core.StringMatchers.being;
 import static org.openqa.selenium.By.id;
 
-public class PurchasePage extends Page {
+public class CheckoutPage extends Page {
 
-    public PurchasePage(AsyncWebDriver browser) {
+    public CheckoutPage(AsyncWebDriver browser) {
         super(browser);
     }
 
