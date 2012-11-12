@@ -16,12 +16,12 @@ This is a work in progress.
 
 To prepare the development and test databases in MySQL:
 
-`create database petstore_dev;
- create user 'petstore'@'localhost' identified by 'petstore';
- grant all on petstore_dev.* to 'petstore'@'localhost';
- create database petstore_test;
- create user 'testbot'@'localhost' identified by 'petstore';
- grant all on petstore_test.* to 'testbot'@'localhost';`
+`create database petstore_dev;`
+`create user 'petstore'@'localhost' identified by 'petstore';`
+`grant all on petstore_dev.* to 'petstore'@'localhost';`
+`create database petstore_test;`
+`create user 'testbot'@'localhost' identified by 'petstore';`
+`grant all on petstore_test.* to 'testbot'@'localhost';`
 
 ## Building
 
