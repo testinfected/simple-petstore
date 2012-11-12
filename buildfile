@@ -5,10 +5,8 @@ VERSION_NUMBER = '0.1-SNAPSHOT'
 
 HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]
 NO_LOG = [:jcl_over_slf4j, :slf4j_api, :slf4j_silent]
-
 MUSTACHE = [:guava, :mustache]
 
-Project.local_task :jetty
 ['db-migrate', 'db-clean', 'db-reset', 'db-drop', 'db-init'].each { |t| Project.local_task t }
 
 define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NUMBER do
@@ -62,7 +60,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
 
     def migrations(action)
       Java::Commands.java("org.testinfected.petstore.Migrations", "-e", Buildr.environment, action.to_s,
-        :classpath => [project.compile.target, project.resources.target] + [:slf4j_simple, :mysql] + project.compile.dependencies) do
+        :classpath => [project.compile.target, project.resources.target] + [:slf4j_api, :slf4j_simple, :mysql] + project.compile.dependencies) do
           exit
         end
     end
@@ -75,7 +73,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
 
   task :run => project(:main) do
-    cp = [project(:main).compile.target, project(:main).resources.target] + project(:main).compile.dependencies + [:mysql]
+    cp = [project(:main).compile.target, project(:main).resources.target] + project(:main).compile.dependencies +
+         [:mysql, :simpleframework, MUSTACHE, :time]
     Java::Commands.java("org.testinfected.petstore.Launcher", "-p", Buildr.settings.profile['server.port'], "-e", Buildr.environment, project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
   end
 
