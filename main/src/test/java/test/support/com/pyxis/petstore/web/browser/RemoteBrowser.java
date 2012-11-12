@@ -17,10 +17,6 @@ public class RemoteBrowser implements BrowserControl {
         this.capabilities.merge(capabilities);
     }
 
-    public WebDriver webDriver() {
-        return launch();
-    }
-
     public WebDriver launch() {
         return new RemoteWebDriver(url, capabilities);
     }

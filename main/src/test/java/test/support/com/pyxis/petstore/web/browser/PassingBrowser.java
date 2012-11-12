@@ -5,10 +5,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class PassingBrowser implements BrowserControl {
 
-    public WebDriver webDriver() {
-        return launch();
-    }
-
     public WebDriver launch() {
         return new FirefoxDriver();
     }
