@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CartBuilder implements Builder<Cart> {
 
-    private List<Item> items = new ArrayList<Item>();
+    private final List<Item> items = new ArrayList<Item>();
 
     public static CartBuilder anEmptyCart() {
         return aCart();

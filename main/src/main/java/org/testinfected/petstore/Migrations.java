@@ -49,7 +49,7 @@ public class Migrations {
         Migrations migrations = new Migrations(dataSource);
         String action = args[ACTION];
         if (action.equals("migrate")) migrations.migrate();
-        if (action.equals("drop")) migrations.migrate();
+        if (action.equals("drop")) migrations.drop();
         if (action.equals("init")) migrations.init();
         if (action.equals("reset")) migrations.reset();
         if (action.equals("clean")) migrations.clean();

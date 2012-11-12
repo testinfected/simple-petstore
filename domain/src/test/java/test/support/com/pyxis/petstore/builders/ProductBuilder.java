@@ -26,18 +26,10 @@ public class ProductBuilder implements Builder<Product> {
         return this;
     }
 
-    public ProductBuilder withoutAName() {
-        return named(null);
-    }
-
     public ProductBuilder describedAs(String description) {
 		this.description = description;
 		return this;
 	}
-
-    public ProductBuilder withNoDescription() {
-        return describedAs(null);
-    }
 
     public ProductBuilder withPhoto(String name) {
 		this.photo = new Attachment(name);
@@ -53,11 +45,6 @@ public class ProductBuilder implements Builder<Product> {
     	this.number = number;
     	return this;
     }
-
-    public ProductBuilder withoutANumber() {
-        return withNumber(null);
-    }
-
 
     public Product build() {
         Product product = new Product(number, name);

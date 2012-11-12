@@ -37,9 +37,4 @@ public class AddressBuilder implements Builder<Address> {
         this.emailAddress = emailAddress;
         return this;
     }
-
-	public AddressBuilder withName(String firstName, String lastName) {
-		withFirstName(firstName);
-		return withLastName(lastName);
-	}
 }

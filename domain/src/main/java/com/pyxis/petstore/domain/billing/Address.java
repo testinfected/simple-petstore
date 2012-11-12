@@ -1,15 +1,11 @@
 package com.pyxis.petstore.domain.billing;
 
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 
-@Embeddable
 public class Address implements Serializable {
-    private String firstName;
-    private String lastName;
-    private String emailAddress;
-
-    public Address() {}
+    private final String firstName;
+    private final String lastName;
+    private final String emailAddress;
 
     public Address(String firstName, String lastName, String emailAddress) {
         this.firstName = firstName;
@@ -27,18 +23,6 @@ public class Address implements Serializable {
 
     public String getEmailAddress() {
         return emailAddress;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
     }
 
     @Override

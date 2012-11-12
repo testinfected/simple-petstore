@@ -1,29 +1,19 @@
 package com.pyxis.petstore.domain.product;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-@Entity @Access(AccessType.FIELD) @Table(name = "products")
 public class Product implements Serializable {
 
     public static final String MISSING_PHOTO = "missing.png";
 
     @SuppressWarnings("unused")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private @Id Long id;
+	private long id;
 
-    private @NotNull String number;
+    private final String number;
+    private final String name;
 
-    private @NotNull String name;
     private String description;
-
-    @Embedded @AttributeOverrides(
-        @AttributeOverride(name = "fileName", column = @Column(name = "photo_file_name"))
-    )
     private Attachment photo;
-
-    Product() {}
 
     public Product(String number, String name) {
         this.number = number;

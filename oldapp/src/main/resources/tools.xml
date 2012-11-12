@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<tools>
-    <data key="base" value="${context.path}"/>
-    <toolbox scope="application">
-        <tool key="display" class="org.apache.velocity.tools.generic.DisplayTool"/>
-        <tool key="date" class="org.apache.velocity.tools.generic.DateTool" format="yyyy-MM-dd"/>
-    </toolbox>
-</tools>

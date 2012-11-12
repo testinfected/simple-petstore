@@ -1,16 +1,10 @@
 package com.pyxis.petstore.domain.order;
 
-import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
-
 import static java.lang.String.valueOf;
 
-@Embeddable
 public class OrderNumber {
 
-    @NotNull private String number;
-
-    OrderNumber() {}
+    private final String number;
 
     public OrderNumber(String number) {
         this.number = number;

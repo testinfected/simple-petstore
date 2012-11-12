@@ -1,10 +1,7 @@
 package com.pyxis.petstore.domain.order;
 
 import com.pyxis.petstore.domain.billing.PaymentMethod;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.IndexColumn;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,24 +9,15 @@ import java.util.List;
 
 import static com.pyxis.petstore.domain.order.LineItem.from;
 
-@Entity  @Access(AccessType.FIELD) @Table(name = "orders")
 public class Order {
 
 	@SuppressWarnings("unused")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private @Id Long id;
+    private long id;
 
-    private OrderNumber number;
+    private final OrderNumber number;
+    private final List<LineItem> lines = new ArrayList<LineItem>();
 
-    @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name="order_id", nullable = false)
-    @IndexColumn(name = "order_line", base=1)
-    private List<LineItem> lines = new ArrayList<LineItem>();
-
-    @ManyToOne(cascade = CascadeType.PERSIST) @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinColumn(name = "payment_id")
     private PaymentMethod paymentMethod;
-
-    Order() {}
 
     public Order(OrderNumber number) {
         this.number = number;

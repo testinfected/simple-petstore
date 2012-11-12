@@ -1,27 +1,19 @@
 package com.pyxis.petstore.domain.product;
 
-import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-@Entity @Access(AccessType.FIELD) @Table(name = "items")
 public class Item implements Serializable {
 
 	@SuppressWarnings("unused")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private @Id Long id;
+	private long id;
 
-    private @NotNull @Valid ItemNumber number;
+    private final ItemNumber number;
+	private final Product product;
 
-    @ManyToOne @JoinColumn(name = "product_id")
-	private @NotNull Product product;
-    private @NotNull BigDecimal price;
+    private BigDecimal price;
 
     private String description;
-
-    Item() {}
 
     public Item(ItemNumber number, Product product, BigDecimal price) {
         this.number = number;
@@ -33,12 +25,8 @@ public class Item implements Serializable {
         return number.getNumber();
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
+    public String getProductNumber() {
+        return product.getNumber();
     }
 
     public BigDecimal getPrice() {
@@ -49,8 +37,12 @@ public class Item implements Serializable {
         this.price = price;
     }
 
-    public String getProductNumber() {
-        return product.getNumber();
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

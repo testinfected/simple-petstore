@@ -1,20 +1,16 @@
 package com.pyxis.petstore.domain.order;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity  @Access(AccessType.FIELD) @Table(name = "line_items")
 public class LineItem {
 
 	@SuppressWarnings("unused")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private @Id Long id;
-
-    private String itemNumber;
-    private String itemDescription;
-    private BigDecimal itemUnitPrice;
-    private int quantity;
-    private BigDecimal totalPrice;
+    private long id;
+    private final String itemNumber;
+    private final String itemDescription;
+    private final BigDecimal itemUnitPrice;
+    private final int quantity;
+    private final BigDecimal totalPrice;
 
     public static LineItem from(CartItem cartItem) {
         return new LineItem(
@@ -24,8 +20,6 @@ public class LineItem {
                 cartItem.getQuantity(),
                 cartItem.getTotalPrice());
     }
-
-    LineItem() {}
 
     public LineItem(String itemNumber, String itemDescription, BigDecimal itemUnitPrice, int quantity, BigDecimal totalPrice) {
         this.itemNumber = itemNumber;

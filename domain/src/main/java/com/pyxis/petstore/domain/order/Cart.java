@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Cart implements Basket, Serializable {
+public class Cart implements Serializable {
 
     private final List<CartItem> cartItems = new ArrayList<CartItem>();
 

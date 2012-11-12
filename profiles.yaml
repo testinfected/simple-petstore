@@ -1,57 +1,5 @@
-defaults: &defaults
-  test.log.file: test.log
-  test.jdbc.url: jdbc:mysql://localhost:3306/petstore_test
-  test.jdbc.username: testbot
-  test.jdbc.password: petstore
-  test.timeServer.port: 10013
-  test.server.host: localhost
-  test.server.port: 8081
-  jdbc.driverClassName: com.mysql.jdbc.Driver
-  hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-  selenium.server.url: http://localhost:4444/wd/hub
-  selenium.server.browser: firefox
-  selenium.server.browser.version: 7
-  
 development:
-  filter:
-    <<: *defaults
-    jdbc.url: jdbc:mysql://localhost:3306/petstore_dev
-    jdbc.username: petstore
-    jdbc.password: petstore
-    context.path: /petstore
-    log.file: development.log    
-  server.port: 8080    
+  server.port: 8080
   
 test:
-  filter:
-    <<: *defaults
-    jdbc.url: jdbc:mysql://localhost:3306/petstore_test
-    jdbc.username: testbot
-    jdbc.password: petstore
-    context.path: /petstore
-    log.file: test.log
   server.port: 8081
-
-production:
-  filter:
-    <<: *defaults
-    jdbc.url: jdbc:mysql://localhost:3306/petstore-prod
-    jdbc.username: sysadmin
-    jdbc.password: petstore
-    context.path: /petstore
-    log.file: production.log
-    timeServer.host: time.nist.gov
-    timeServer.port: 13  
-  server.port: 80
-  
-integration:
-  filter:
-    <<: *defaults
-    jdbc.url: jdbc:mysql://localhost:3306/petstore-edge
-    jdbc.username: integrator
-    jdbc.password: petstore
-    context.path: /petstore
-    log.file: integration.log
-    timeServer.host: localhost
-    timeServer.port: 10000    
-  server.port: 8000  
