@@ -12,8 +12,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.sql.Statement.RETURN_GENERATED_KEYS;
-
 public class ProductsDatabase implements ProductCatalog {
 
     private final Connection connection;
@@ -41,29 +39,11 @@ public class ProductsDatabase implements ProductCatalog {
     }
 
     public void add(Product product) {
-        PreparedStatement insert = null;
-        try {
-            insert = connection.prepareStatement("insert into products(name, description, photo_file_name, number) values(?, ?, ?, ?)", RETURN_GENERATED_KEYS);
-            insert.setString(1, product.getName());
-            insert.setString(2, product.getDescription());
-            insert.setString(3, product.hasPhoto() ? product.getPhotoFileName() : null);
-            insert.setString(4, product.getNumber());
-            executeInsert(insert);
-            ResultSet generatedKeys = insert.getGeneratedKeys();
-            generatedKeys.first();
-            Properties.idOf(product).set(generatedKeys.getLong(1));
-        } catch (SQLException e) {
-            throw new JDBCException("Could not insert product " + product, e);
-        } finally {
-            close(insert);
-        }
+        insert(product);
     }
 
-    private void executeInsert(PreparedStatement insert) throws SQLException {
-        int rowsInserted = insert.executeUpdate();
-        if (rowsInserted != 1) {
-            throw new SQLException("Unexpected row count of " + rowsInserted + "; expected was 1");
-        }
+    private void insert(Product product) {
+        new Insert(product).execute(connection);
     }
 
     public List<Product> findByKeyword(String keyword) {
@@ -102,4 +82,5 @@ public class ProductsDatabase implements ProductCatalog {
     private String matchAnywhere(final String pattern) {
         return "%" + pattern + "%";
     }
+
 }
