@@ -15,8 +15,6 @@ public class Row {
     private final Map<String, Column> columns;
     private final Map<String, Object> values = new HashMap<String, Object>();
 
-    private ResultSet resultSet;
-
     public Row(final String tableName, Map<String, Column> columns) {
         this.columns = columns;
         this.tableName = tableName;
@@ -56,26 +54,33 @@ public class Row {
         return mapping;
     }
 
-    public void readFrom(ResultSet resultSet) {
-        this.resultSet = resultSet;
+    public void readFrom(ResultSet resultSet) throws SQLException {
+        for (String key : columns.keySet()) {
+            Column column = columns.get(key);
+            int index = findColumnIndex(resultSet, column.getName());
+            values.put(key, column.getValue(resultSet, index));
+        }
     }
 
     public String getString(String key) throws SQLException {
-        return resultSet.getString(getColumnIndex(columns.get(key).getName()));
+        return getValue(key, String.class);
     }
 
     public long getLong(String key) throws SQLException {
-        return resultSet.getLong(key);
+        return getValue(key, Long.class);
     }
 
-    private int getColumnIndex(final String columnName) throws SQLException {
+    public <T> T getValue(String key, Class<T> type) {
+        return type.cast(values.get(key));
+    }
+
+    private int findColumnIndex(ResultSet resultSet, final String columnName) throws SQLException {
         ResultSetMetaData metaData = resultSet.getMetaData();
         int columnCount = metaData.getColumnCount();
 
-        for (int i = 1; i <= columnCount; i++) {
-            if (metaData.getColumnName(i).equalsIgnoreCase(columnName) &&
-                    metaData.getTableName(i).equalsIgnoreCase(tableName))
-                return i;
+        for (int index = 1; index <= columnCount; index++) {
+            if (metaData.getColumnName(index).equals(columnName) && metaData.getTableName(index).equals(tableName))
+                return index;
         }
 
         throw new SQLException("Result set has no column '" + columnName + "'");

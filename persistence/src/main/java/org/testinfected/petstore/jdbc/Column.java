@@ -1,6 +1,7 @@
 package org.testinfected.petstore.jdbc;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -27,5 +28,12 @@ public class Column {
 
     public void setValue(PreparedStatement statement, int index, Object value) throws SQLException {
         statement.setObject(index, value, sqlType);
+    }
+
+    public Object getValue(ResultSet resultSet, int index) throws SQLException {
+        if (sqlType == Types.BIGINT)
+            return resultSet.getLong(index);
+        else
+            return resultSet.getString(index);
     }
 }
