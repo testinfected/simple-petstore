@@ -6,6 +6,8 @@ import com.pyxis.petstore.domain.product.Product;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 
@@ -53,5 +55,14 @@ public class ProductRecord implements Record<Product> {
         }
 
         throw new SQLException("Result set has no column '" + columnName + "'");
+    }
+
+    public Map<String, Object> dehydrate(Product product) {
+        Map<String, Object> row = new HashMap<String, Object>();
+        row.put("number", product.getNumber());
+        row.put("name", product.getName());
+        row.put("description", product.getDescription());
+        row.put("photo", product.hasPhoto() ? product.getPhotoFileName() : null);
+        return row;
     }
 }
