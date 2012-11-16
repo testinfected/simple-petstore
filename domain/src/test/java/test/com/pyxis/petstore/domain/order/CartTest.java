@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
@@ -20,7 +19,7 @@ public class CartTest {
 
     @Test public void
     isEmptyByDefault() {
-        assertTrue("contains item(s)", cart.isEmpty());
+        assertThat("contains item(s)", cart.isEmpty());
         assertThat("grand total", cart.getGrandTotal(), equalTo(BigDecimal.ZERO));
         assertThat("total quantity", cart.getTotalQuantity(), equalTo(0));
     }
@@ -32,7 +31,7 @@ public class CartTest {
         for (String itemNumber : itemNumbers) {
             cart.add(anItem().withNumber(itemNumber).build());
         }
-        assertTrue("empty cart", !cart.isEmpty());
+        assertThat("empty cart", !cart.isEmpty());
         assertThat("cart", cart, aCartContaining(
                 itemWith(number("11111111")),
                 itemWith(number("22222222")),
@@ -75,7 +74,7 @@ public class CartTest {
         havingAddedItemsToCart();
 
         cart.clear();
-        assertTrue("contains item(s)", cart.isEmpty());
+        assertThat("contains item(s)", cart.isEmpty());
     }
 
     @SuppressWarnings("unchecked")
@@ -99,7 +98,7 @@ public class CartTest {
         };
     }
 
-    private Matcher<? super Iterable<CartItem>> containsItems(Matcher<CartItem>... cartItemMatchers) {
+    private Matcher<? super Iterable<CartItem>> containsItems(Matcher<? super CartItem>... cartItemMatchers) {
         return contains(cartItemMatchers);
     }
 

@@ -101,7 +101,7 @@ public class CashierTest {
         assertThat("next order", cashier.orderContent(), isEmpty());
     }
 
-    private Matcher<Iterable<CartItem>> isEmpty() {
+    private Matcher<Iterable<? extends CartItem>> isEmpty() {
         return emptyIterable();
     }
 
@@ -145,7 +145,7 @@ public class CashierTest {
         return iterableWithSize(count);
     }
 
-    private Matcher<? super Iterable<CartItem>> containsItems(Matcher<CartItem>... cartItemMatchers) {
+    private Matcher<Iterable<CartItem>> containsItems(Matcher<? super CartItem>... cartItemMatchers) {
         return hasItems(cartItemMatchers);
     }
 

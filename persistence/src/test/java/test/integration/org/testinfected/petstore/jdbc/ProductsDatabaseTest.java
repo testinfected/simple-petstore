@@ -151,7 +151,7 @@ public class ProductsDatabaseTest {
         });
     }
 
-    private Matcher<Collection<Product>> empty() {
+    private Matcher<Collection<? extends Product>> empty() {
         return Matchers.empty();
     }
 
@@ -159,7 +159,7 @@ public class ProductsDatabaseTest {
         return iterableWithSize(sizeMatcher);
     }
 
-    private Matcher<Product> productNamed(String name) {
+    private Matcher<? super Product> productNamed(String name) {
         return new FeatureMatcher<Product, String>(equalTo(name), "a product with name", "name") {
             @Override protected String featureValueOf(Product actual) {
                 return actual.getName();
@@ -167,7 +167,7 @@ public class ProductsDatabaseTest {
         };
     }
 
-    private Matcher<Product> productWithNumber(String number) {
+    private Matcher<? super Product> productWithNumber(String number) {
         return new FeatureMatcher<Product, String>(equalTo(number), "a product with number", "product number") {
             @Override protected String featureValueOf(Product actual) {
                 return actual.getNumber();
