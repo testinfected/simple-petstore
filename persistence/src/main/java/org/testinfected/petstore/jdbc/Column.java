@@ -5,10 +5,16 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 public class Column {
-    private final String name;
+    public static Column varchar(String name) {
+        return new Column(name, Types.VARCHAR);
+    }
 
-    public Column(String name) {
+    private final String name;
+    private final int sqlType;
+
+    public Column(String name, int sqlType) {
         this.name = name;
+        this.sqlType = sqlType;
     }
 
     public String getName() {
@@ -16,6 +22,6 @@ public class Column {
     }
 
     public void setValue(PreparedStatement statement, int index, Object value) throws SQLException {
-        statement.setObject(index, value, Types.VARCHAR);
+        statement.setObject(index, value, sqlType);
     }
 }
