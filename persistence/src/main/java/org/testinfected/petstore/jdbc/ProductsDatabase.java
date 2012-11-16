@@ -15,6 +15,10 @@ import java.util.List;
 public class ProductsDatabase implements ProductCatalog {
 
     private final Connection connection;
+    Table table = new Table("products");
+    {
+        table.addColumns("name", "description", "photo_file_name", "number");
+    }
 
     public ProductsDatabase(Connection connection) {
         this.connection = connection;
@@ -39,11 +43,7 @@ public class ProductsDatabase implements ProductCatalog {
     }
 
     public void add(Product product) {
-        insert(product);
-    }
-
-    private void insert(Product product) {
-        new Insert(product).execute(connection);
+        new Insert(product, table).execute(connection);
     }
 
     public List<Product> findByKeyword(String keyword) {
@@ -82,5 +82,4 @@ public class ProductsDatabase implements ProductCatalog {
     private String matchAnywhere(final String pattern) {
         return "%" + pattern + "%";
     }
-
 }
