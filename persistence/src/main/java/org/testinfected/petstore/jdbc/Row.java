@@ -1,6 +1,8 @@
 package org.testinfected.petstore.jdbc;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,11 +11,15 @@ import java.util.Map;
 
 public class Row {
 
+    private final String tableName;
     private final Map<String, Column> columns;
     private final Map<String, Object> values = new HashMap<String, Object>();
 
-    public Row(Map<String, Column> columns) {
+    private ResultSet resultSet;
+
+    public Row(final String tableName, Map<String, Column> columns) {
         this.columns = columns;
+        this.tableName = tableName;
     }
 
     public void setValue(String columnKey, Object value) {
@@ -32,7 +38,7 @@ public class Row {
         return listColumns().get(index - 1);
     }
 
-    public void writeValues(PreparedStatement statement) throws SQLException {
+    public void writeTo(PreparedStatement statement) throws SQLException {
         final Map<String, ?> byColumn = sortByColumns(values);
 
         for (int index = 1; index <= columnCount(); index++) {
@@ -48,5 +54,30 @@ public class Row {
             mapping.put(column.getName(), values.get(key));
         }
         return mapping;
+    }
+
+    public void readFrom(ResultSet resultSet) {
+        this.resultSet = resultSet;
+    }
+
+    public String getString(String key) throws SQLException {
+        return resultSet.getString(getColumnIndex(columns.get(key).getName()));
+    }
+
+    public long getLong(String key) throws SQLException {
+        return resultSet.getLong(key);
+    }
+
+    private int getColumnIndex(final String columnName) throws SQLException {
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        for (int i = 1; i <= columnCount; i++) {
+            if (metaData.getColumnName(i).equalsIgnoreCase(columnName) &&
+                    metaData.getTableName(i).equalsIgnoreCase(tableName))
+                return i;
+        }
+
+        throw new SQLException("Result set has no column '" + columnName + "'");
     }
 }

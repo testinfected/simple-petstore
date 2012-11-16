@@ -3,6 +3,7 @@ package org.testinfected.petstore.jdbc;
 import com.pyxis.petstore.domain.product.Product;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -35,9 +36,15 @@ public class Table {
         return names;
     }
 
+    public Product readRecord(ResultSet resultSet) throws SQLException {
+        Row row = new Row(name, columns);
+        row.readFrom(resultSet);
+        return record.hydrate(row);
+    }
+
     public void writeRecord(PreparedStatement statement, Product product) throws SQLException {
-        Row row = new Row(columns);
+        Row row = new Row(name, columns);
         record.dehydrate(row, product);
-        row.writeValues(statement);
+        row.writeTo(statement);
     }
 }

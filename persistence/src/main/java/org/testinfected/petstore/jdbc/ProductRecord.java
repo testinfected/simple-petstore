@@ -12,6 +12,23 @@ import static org.testinfected.petstore.jdbc.Properties.idOf;
 // todo: Eliminate duplication in record classes
 public class ProductRecord implements Record<Product> {
 
+    public Product hydrate(Row row) throws SQLException {
+        Product product = new Product(row.getString("number"), row.getString("name"));
+        product.setDescription(row.getString("description"));
+        product.attachPhoto(new Attachment(row.getString("photo")));
+        idOf(product).set(row.getLong("id"));
+        return product;
+    }
+
+    public void dehydrate(Row row, Product product) {
+        row.setValue("id", idOf(product).get());
+        row.setValue("number", product.getNumber());
+        row.setValue("name", product.getName());
+        row.setValue("description", product.getDescription());
+        row.setValue("photo", product.hasPhoto() ? product.getPhotoFileName() : null);
+    }
+
+    // todo all below this is obsolete
     private static final String PRODUCTS_TABLE = "products";
 
     public Product hydrate(ResultSet rs) throws SQLException {
@@ -53,12 +70,5 @@ public class ProductRecord implements Record<Product> {
         }
 
         throw new SQLException("Result set has no column '" + columnName + "'");
-    }
-
-    public void dehydrate(Row row, Product product) {
-        row.setValue("number", product.getNumber());
-        row.setValue("name", product.getName());
-        row.setValue("description", product.getDescription());
-        row.setValue("photo", product.hasPhoto() ? product.getPhotoFileName() : null);
     }
 }

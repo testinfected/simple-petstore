@@ -2,7 +2,6 @@ package org.testinfected.petstore.jdbc;
 
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
-import org.testinfected.petstore.ExceptionImposter;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,8 +10,9 @@ import java.util.List;
 public class ProductsDatabase implements ProductCatalog {
 
     private final Connection connection;
-    Table table = new Table("products");
+    private final Table table = new Table("products");
     {
+        table.addColumn(Column.bigint("id"));
         table.addColumn(Column.varchar("number"));
         table.addColumn(Column.varchar("name"));
         table.addColumn(Column.varchar("description"));
@@ -33,9 +33,9 @@ public class ProductsDatabase implements ProductCatalog {
             ResultSet resultSet = query.executeQuery();
 
             resultSet.next();
-            return new ProductRecord().hydrate(resultSet);
+            return table.readRecord(resultSet);
         } catch (SQLException e) {
-            throw ExceptionImposter.imposterize(e);
+            throw new JDBCException("Could not execute query", e);
         } finally {
             close(query);
         }
@@ -56,11 +56,10 @@ public class ProductsDatabase implements ProductCatalog {
                     "or lower(description) like ?");
             query.setString(1, matchAnywhere(keyword));
             query.setString(2, matchAnywhere(keyword));
-            ResultSet resultSet = query.executeQuery();
 
+            ResultSet resultSet = query.executeQuery();
             while (resultSet.next()) {
-                Product product = new ProductRecord().hydrate(resultSet);
-                matches.add(product);
+                matches.add(table.readRecord(resultSet));
             }
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);

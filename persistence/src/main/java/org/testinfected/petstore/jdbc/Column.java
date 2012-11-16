@@ -9,6 +9,10 @@ public class Column {
         return new Column(name, Types.VARCHAR);
     }
 
+    public static Column bigint(String name) {
+        return new Column(name, Types.BIGINT);
+    }
+
     private final String name;
     private final int sqlType;
 
