@@ -13,8 +13,7 @@ artifacts:
   mustache: com.github.spullara.mustache.java:compiler:jar:0.8.3
   flyway: com.googlecode.flyway:flyway-core:jar:2.0
 
-  #todo update to latest
-  mysql: mysql:mysql-connector-java:jar:5.1.11
+  mysql: mysql:mysql-connector-java:jar:5.1.21
 
   # -- Scope test
   hamcrest_core: org.hamcrest:hamcrest-core:jar:1.3
