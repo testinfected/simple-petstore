@@ -8,22 +8,26 @@ import java.util.Iterator;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 public class Insert {
-    private Product product;
     private final Table table;
+    private final Product product;
 
-    public Insert(Product product, final Table products) {
+    public static Insert into(Table table, Product product) {
+        return new Insert(table, product);
+    }
+
+    public Insert(Table table, final Product product) {
+        this.table = table;
         this.product = product;
-        this.table = products;
     }
 
     public void execute(final Connection connection) {
         PreparedStatement insert = null;
         try {
             insert = connection.prepareStatement(buildSql(), RETURN_GENERATED_KEYS);
-            insert.setString(1, product.getName());
-            insert.setString(2, product.getDescription());
-            insert.setString(3, product.hasPhoto() ? product.getPhotoFileName() : null);
-            insert.setString(4, product.getNumber());
+            insert.setObject(1, product.getNumber(), Types.VARCHAR);
+            insert.setObject(2, product.getName(), Types.VARCHAR);
+            insert.setObject(3, product.getDescription(), Types.VARCHAR);
+            insert.setObject(4, product.hasPhoto() ? product.getPhotoFileName() : null, Types.VARCHAR);
             execute(insert);
             ResultSet generatedKeys = insert.getGeneratedKeys();
             generatedKeys.first();
@@ -40,13 +44,13 @@ public class Insert {
         sql.append("insert into ");
         sql.append(table.getName());
         sql.append("(");
-        for (Iterator<String> columns = table.getColumns(); columns.hasNext(); ) {
+        for (Iterator<String> columns = table.columnNames(); columns.hasNext(); ) {
             String column = columns.next();
             sql.append(column);
             if (columns.hasNext()) sql.append(", ");
         }
         sql.append(") values(");
-        for (Iterator<String> columns = table.getColumns(); columns.hasNext(); ) {
+        for (Iterator<Column> columns = table.columns(); columns.hasNext(); ) {
             columns.next();
             sql.append("?");
             if (columns.hasNext()) sql.append(", ");

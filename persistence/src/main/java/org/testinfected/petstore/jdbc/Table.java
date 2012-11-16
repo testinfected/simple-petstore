@@ -1,13 +1,10 @@
 package org.testinfected.petstore.jdbc;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 public class Table {
     private final String name;
-    private final Collection<String> columns = new ArrayList<String>();
+    private final Map<String, Column> columns = new LinkedHashMap<String, Column>();
 
     public Table(String name) {
         this.name = name;
@@ -17,11 +14,23 @@ public class Table {
         return name;
     }
 
-    public Iterator<String> getColumns() {
-        return columns.iterator();
+    public Iterator<String> columnNames() {
+        List<String> columnNames = new ArrayList<String>();
+        for (Column column : columns.values()) {
+            columnNames.add(column.getName());
+        }
+        return columnNames.iterator();
     }
 
-    public void addColumns(String... names) {
-        columns.addAll(Arrays.asList(names));
+    public Iterator<Column> columns() {
+        return columns.values().iterator();
+    }
+
+    public void addColumn(Column column) {
+        addColumn(column.getName(), column);
+    }
+
+    public void addColumn(String name, Column column) {
+        columns.put(name, column);
     }
 }

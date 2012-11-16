@@ -4,11 +4,7 @@ import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.testinfected.petstore.ExceptionImposter;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +13,10 @@ public class ProductsDatabase implements ProductCatalog {
     private final Connection connection;
     Table table = new Table("products");
     {
-        table.addColumns("name", "description", "photo_file_name", "number");
+        table.addColumn(new Column("number"));
+        table.addColumn(new Column("name"));
+        table.addColumn(new Column("description"));
+        table.addColumn("photo", new Column("photo_file_name"));
     }
 
     public ProductsDatabase(Connection connection) {
@@ -43,7 +42,7 @@ public class ProductsDatabase implements ProductCatalog {
     }
 
     public void add(Product product) {
-        new Insert(product, table).execute(connection);
+        Insert.into(table, product).execute(connection);
     }
 
     public List<Product> findByKeyword(String keyword) {
