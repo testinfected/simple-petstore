@@ -21,7 +21,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
 
   define 'persistence' do
     compile.with project(:domain)
-    test.with project(:domain).test.compile.target, HAMCREST, :flyway, NO_LOG, :mysql
+    test.with project(:domain).test.compile.target, HAMCREST, :flyway, :mysql, NO_LOG
     package(:jar)
   end
 
@@ -29,17 +29,18 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     compile.with :simpleframework, MUSTACHE, :time
     compile.with project(:domain), project(:persistence)
 
-    test.with project(:domain).test.compile.target, project(:persistence).test.compile.target,
-      project(:persistence).test.resources.target, HAMCREST, :antlr_runtime, :cssselectors, :hamcrest_dom, :flyway, NO_LOG, :mysql
-    test.with transitive(artifacts(:nekohtml, :htmlunit, :juniversalchardet, :jmock_legacy))
+    test.with project(:domain).test.compile.target, project(:persistence).test.compile.target, project(:persistence).test.resources.target
+    test.with HAMCREST, :antlr_runtime, :cssselectors, :hamcrest_dom, :flyway, NO_LOG, :mysql, :juniversalchardet
+    test.with transitive(artifacts(:nekohtml, :htmlunit, :jmock_legacy))
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
 
     package :jar
   end
   
   define 'main' do
-    compile.with project(:domain), project(:persistence), project(:webapp), :cli, :flyway, :jcl_over_slf4j
-    test.with project(:webapp).test.compile.target, :simpleframework, MUSTACHE, :time, HAMCREST, :flyway, :mysql, NO_LOG
+    compile.with project(:domain), project(:persistence), project(:webapp), :cli, :flyway
+    test.with project(:webapp).test.compile.target
+    test.with :simpleframework, MUSTACHE, :time, HAMCREST, :flyway, :mysql, NO_LOG
     test.with transitive(artifacts(:selenium_firefox_driver, :windowlicker_web, :htmlunit))
 
     test.using :integration, :properties => { 
@@ -60,7 +61,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
 
     def migrations(action)
       Java::Commands.java("org.testinfected.petstore.Migrations", "-e", Buildr.environment, action.to_s,
-        :classpath => [project.compile.target, project.resources.target] + [:slf4j_api, :slf4j_simple, :mysql] + project.compile.dependencies) do
+        :classpath => [project.compile.target, project.resources.target, :mysql] + project.compile.dependencies) do
           exit
         end
     end
@@ -73,8 +74,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
 
   task :run => project(:main) do
-    cp = [project(:main).compile.target, project(:main).resources.target] + project(:main).compile.dependencies +
-         [:mysql, :simpleframework, MUSTACHE, :time]
+    cp = [project(:main).compile.target, project(:main).resources.target, project(:main).compile.dependencies,
+          :mysql, :simpleframework, MUSTACHE, :time]
     Java::Commands.java("org.testinfected.petstore.Launcher", "-p", Buildr.settings.profile['server.port'], "-e", Buildr.environment, project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
   end
 

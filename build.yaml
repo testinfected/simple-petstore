@@ -11,11 +11,8 @@ artifacts:
   simpleframework: org.simpleframework:simple:jar:4.1.21
   guava: com.google.guava:guava:jar:12.0
   mustache: com.github.spullara.mustache.java:compiler:jar:0.8.3
+  flyway: com.googlecode.flyway:flyway-core:jar:2.0
 
-  # Soon flyway will no longer have a dependency on commons_logging
-  slf4j_api: org.slf4j:slf4j-api:jar:1.5.6
-  slf4j_simple: org.slf4j:slf4j-simple:jar:1.5.6
-  flyway: com.googlecode.flyway:flyway-core:jar:1.7
   #todo update to latest
   mysql: mysql:mysql-connector-java:jar:5.1.11
 
@@ -29,12 +26,13 @@ artifacts:
   hamcrest_dom: org.testinfected.hamcrest-matchers:dom-matchers:jar:1.5
   selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.26.0
   windowlicker_web: com.googlecode.windowlicker:windowlicker-web:jar:r268
-  jcl_over_slf4j: org.slf4j:jcl-over-slf4j:jar:1.5.6
-  htmlunit: net.sourceforge.htmlunit:htmlunit:jar:2.9
   juniversalchardet: com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3
   nekohtml: net.sourceforge.nekohtml:nekohtml:jar:1.9.15
   jmock_legacy: org.jmock:jmock-legacy:jar:2.5.1
+  jcl_over_slf4j: org.slf4j:jcl-over-slf4j:jar:1.5.6
+  slf4j_api: org.slf4j:slf4j-api:jar:1.5.6
   slf4j_silent: org.slf4j:slf4j-nop:jar:1.5.6
+  htmlunit: net.sourceforge.htmlunit:htmlunit:jar:2.9
 
 #todo update to 4.10
 junit: 4.8.1
