@@ -31,9 +31,6 @@ public class Column {
     }
 
     public Object getValue(ResultSet resultSet, int index) throws SQLException {
-        if (sqlType == Types.BIGINT)
-            return resultSet.getLong(index);
-        else
-            return resultSet.getString(index);
+        return resultSet.getObject(index);
     }
 }
