@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface ProductCatalog {
 
-	List<Product> findByKeyword(String keyword);
+    void add(Product product);
 
     Product findByNumber(String productNumber);
 
-	void add(Product product);
+	List<Product> findByKeyword(String keyword);
 }

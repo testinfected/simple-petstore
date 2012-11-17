@@ -20,11 +20,7 @@ import org.testinfected.petstore.controllers.Logout;
 import org.testinfected.petstore.controllers.PlaceOrder;
 import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.controllers.ShowOrder;
-import org.testinfected.petstore.jdbc.ItemsDatabase;
-import org.testinfected.petstore.jdbc.JDBCTransactor;
-import org.testinfected.petstore.jdbc.OrderNumberDatabaseSequence;
-import org.testinfected.petstore.jdbc.OrdersDatabase;
-import org.testinfected.petstore.jdbc.ProductsDatabase;
+import org.testinfected.petstore.jdbc.*;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.testinfected.petstore.routing.Router;
@@ -54,7 +50,7 @@ public class Routing implements Application {
 
         final Connection connection = new ConnectionReference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);
-        final ProductCatalog productCatalog = new ProductsDatabase(connection);
+        final ProductCatalog productCatalog = new ProductsDatabase(Tables.products(), connection);
         final ItemInventory itemInventory = new ItemsDatabase(connection);
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
         final OrderNumberSequence orderNumberSequence = new OrderNumberDatabaseSequence(connection);

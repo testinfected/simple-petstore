@@ -20,6 +20,11 @@ public class Select {
     }
 
     public Product single(final Connection connection) {
+        return list(connection).get(0);
+    }
+
+    public List<Product> list(final Connection connection) {
+        List<Product> products = new ArrayList<Product>();
         PreparedStatement query = null;
         try {
             query = connection.prepareStatement(selectStatementFor(from));
@@ -27,13 +32,15 @@ public class Select {
                 setParameter(query, index);
             }
             ResultSet resultSet = query.executeQuery();
-            resultSet.next();
-            return from.readRecord(resultSet);
+            while (resultSet.next()) {
+                products.add(from.readRecord(resultSet));
+            }
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);
         } finally {
             Sql.close(query);
         }
+        return products;
     }
 
     private String selectStatementFor(final Table table) {
@@ -54,7 +61,11 @@ public class Select {
         whereClause.append(" ").append(clause);
     }
 
-    private void addParameter(Object value) {
+    public void addParameter(Object value) {
         parameters.add(value);
+    }
+
+    public void or(String clause) {
+        where("or " + clause);
     }
 }

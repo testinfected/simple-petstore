@@ -19,6 +19,7 @@ import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
+import org.testinfected.petstore.jdbc.Tables;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import test.support.org.testinfected.petstore.web.HttpRequest;
@@ -49,7 +50,7 @@ public class PetStoreTest {
     Database database = Database.in(TestDatabaseEnvironment.load());
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
-    ProductCatalog productCatalog = new ProductsDatabase(connection);
+    ProductCatalog productCatalog = new ProductsDatabase(Tables.products(), connection);
 
     LogFile logFile;
     int serverPort = 9999;

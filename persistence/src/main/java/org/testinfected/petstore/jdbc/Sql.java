@@ -16,12 +16,16 @@ public final class Sql {
         }
     }
 
-    static String asString(Iterable<?> elements) {
+    public static String asString(Iterable<?> elements) {
         StringBuilder builder = new StringBuilder();
         for (Iterator<?> it = elements.iterator(); it.hasNext(); ) {
             builder.append(it.next());
             if (it.hasNext()) builder.append(", ");
         }
         return builder.toString();
+    }
+
+    public static String matchAnywhere(final String pattern) {
+        return "%" + pattern + "%";
     }
 }
