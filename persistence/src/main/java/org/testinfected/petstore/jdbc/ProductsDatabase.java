@@ -10,13 +10,13 @@ import java.util.List;
 public class ProductsDatabase implements ProductCatalog {
 
     private final Connection connection;
-    private final Table table = new Table("products");
+    private final Table productsTable = new Table("products");
     {
-        table.addColumn(Column.bigint("id"));
-        table.addColumn(Column.varchar("number"));
-        table.addColumn(Column.varchar("name"));
-        table.addColumn(Column.varchar("description"));
-        table.addColumn(Column.varchar("photo_file_name"));
+        productsTable.addColumn(Column.bigint("id"));
+        productsTable.addColumn(Column.varchar("number"));
+        productsTable.addColumn(Column.varchar("name"));
+        productsTable.addColumn(Column.varchar("description"));
+        productsTable.addColumn(Column.varchar("photo_file_name"));
     }
 
     public ProductsDatabase(Connection connection) {
@@ -24,25 +24,13 @@ public class ProductsDatabase implements ProductCatalog {
     }
 
     public Product findByNumber(String productNumber) {
-        PreparedStatement query = null;
-        try {
-            query = connection.prepareStatement(
-                    "select id, name, number, description, photo_file_name " +
-                    "from products where number = ?");
-            query.setString(1, productNumber);
-            ResultSet resultSet = query.executeQuery();
-
-            resultSet.next();
-            return table.readRecord(resultSet);
-        } catch (SQLException e) {
-            throw new JDBCException("Could not execute query", e);
-        } finally {
-            close(query);
-        }
+        Select select = Select.from(productsTable);
+        select.where("number", productNumber);
+        return select.single(connection);
     }
 
     public void add(Product product) {
-        Insert.into(table, product).execute(connection);
+        Insert.into(productsTable, product).execute(connection);
     }
 
     public List<Product> findByKeyword(String keyword) {
@@ -59,7 +47,7 @@ public class ProductsDatabase implements ProductCatalog {
 
             ResultSet resultSet = query.executeQuery();
             while (resultSet.next()) {
-                matches.add(table.readRecord(resultSet));
+                matches.add(productsTable.readRecord(resultSet));
             }
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);
@@ -80,4 +68,5 @@ public class ProductsDatabase implements ProductCatalog {
     private String matchAnywhere(final String pattern) {
         return "%" + pattern + "%";
     }
+
 }
