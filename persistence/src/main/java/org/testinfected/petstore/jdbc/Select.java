@@ -32,6 +32,7 @@ public class Select {
                 setParameter(query, index);
             }
             ResultSet resultSet = query.executeQuery();
+
             while (resultSet.next()) {
                 products.add(from.readRecord(resultSet));
             }
@@ -44,7 +45,7 @@ public class Select {
     }
 
     private String selectStatementFor(final Table table) {
-        return "select " + Sql.asString(table.columnNames()) + " from " + from.getName() + " where " + whereClause;
+        return "select " + Sql.asString(table.columnNames()) + " from " + from.getName() + " where" + whereClause;
     }
 
     private void setParameter(PreparedStatement query, int index) throws SQLException {
@@ -52,20 +53,18 @@ public class Select {
         query.setObject(index + 1, parameters.get(index), sqlType);
     }
 
-    public void where(String columnName, Object value) {
-        where(columnName + " = ?");
-        addParameter(value);
-    }
-
-    public void where(String clause) {
+    public void where(String clause, Object... values) {
         whereClause.append(" ").append(clause);
+        addParameters(values);
     }
 
-    public void addParameter(Object value) {
+    private void addParameters(Object... values) {
+        for (Object value : values) {
+            addParameter(value);
+        }
+    }
+
+    private void addParameter(Object value) {
         parameters.add(value);
-    }
-
-    public void or(String clause) {
-        where("or " + clause);
     }
 }

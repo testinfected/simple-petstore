@@ -6,6 +6,8 @@ import com.pyxis.petstore.domain.product.ProductCatalog;
 import java.sql.Connection;
 import java.util.List;
 
+import static org.testinfected.petstore.jdbc.Sql.matchAnywhere;
+
 public class ProductsDatabase implements ProductCatalog {
 
     private final Table productsTable;
@@ -22,16 +24,13 @@ public class ProductsDatabase implements ProductCatalog {
 
     public Product findByNumber(String productNumber) {
         Select select = Select.from(productsTable);
-        select.where("number", productNumber);
+        select.where("number = ?", productNumber);
         return select.single(connection);
     }
 
     public List<Product> findByKeyword(String keyword) {
         Select select = Select.from(productsTable);
-        select.where("lower(name) like ?");
-        select.or("lower(description) like ?");
-        select.addParameter(Sql.matchAnywhere(keyword));
-        select.addParameter(Sql.matchAnywhere(keyword));
+        select.where("lower(name) like ? or lower(description) like ?", matchAnywhere(keyword), matchAnywhere(keyword));
         return select.list(connection);
     }
 }
