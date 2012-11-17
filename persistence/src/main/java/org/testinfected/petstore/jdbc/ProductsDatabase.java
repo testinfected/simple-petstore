@@ -16,7 +16,7 @@ public class ProductsDatabase implements ProductCatalog {
         table.addColumn(Column.varchar("number"));
         table.addColumn(Column.varchar("name"));
         table.addColumn(Column.varchar("description"));
-        table.addColumn("photo", Column.varchar("photo_file_name"));
+        table.addColumn(Column.varchar("photo_file_name"));
     }
 
     public ProductsDatabase(Connection connection) {

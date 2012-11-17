@@ -4,28 +4,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Row {
 
     private final String tableName;
-    private final Map<String, Column> columns;
+    private final List<Column> columns = new ArrayList<Column>();
     private final Map<String, Object> values = new HashMap<String, Object>();
 
-    public Row(final String tableName, Map<String, Column> columns) {
-        this.columns = columns;
+    public Row(final String tableName, Collection<Column> columns) {
+        this.columns.addAll(columns);
         this.tableName = tableName;
     }
 
-    public void setValue(String columnKey, Object value) {
-        values.put(columnKey, value);
-    }
-
-    private List<Column> listColumns() {
-        return new ArrayList<Column>(columns.values());
+    public void setValue(String name, Object value) {
+        values.put(name, value);
     }
 
     private int columnCount() {
@@ -33,32 +26,20 @@ public class Row {
     }
 
     private Column columnAt(int index) {
-        return listColumns().get(index - 1);
+        return columns.get(index - 1);
     }
 
     public void writeTo(PreparedStatement statement) throws SQLException {
-        final Map<String, ?> byColumn = sortByColumns(values);
-
         for (int index = 1; index <= columnCount(); index++) {
             Column column = columnAt(index);
-            column.setValue(statement, index, byColumn.get(column.getName()));
+            column.setValue(statement, index, values.get(column.getName()));
         }
-    }
-
-    private Map<String, ?> sortByColumns(final Map<String, Object> values) {
-        Map<String, Object> mapping = new HashMap<String, Object>();
-        for (String key : columns.keySet()) {
-            Column column = columns.get(key);
-            mapping.put(column.getName(), values.get(key));
-        }
-        return mapping;
     }
 
     public void readFrom(ResultSet resultSet) throws SQLException {
-        for (String key : columns.keySet()) {
-            Column column = columns.get(key);
+        for (Column column : columns) {
             int index = findColumnIndex(resultSet, column.getName());
-            values.put(key, column.getValue(resultSet, index));
+            values.put(column.getName(), column.getValue(resultSet, index));
         }
     }
 

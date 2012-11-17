@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Table {
     private final String name;
-    private final Map<String, Column> columns = new LinkedHashMap<String, Column>();
+    private final List<Column> columns = new ArrayList<Column>();
     private final ProductRecord record = new ProductRecord();
 
     public Table(String name) {
@@ -21,16 +21,12 @@ public class Table {
     }
 
     public void addColumn(Column column) {
-        addColumn(column.getName(), column);
-    }
-
-    public void addColumn(String key, Column column) {
-        columns.put(key, column);
+        columns.add(column);
     }
 
     public Iterable<String> columnNames() {
         List<String> names = new ArrayList<String>();
-        for (Column column : columns.values()) {
+        for (Column column : columns) {
             names.add(column.getName());
         }
         return names;

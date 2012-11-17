@@ -15,7 +15,7 @@ public class ProductRecord implements Record<Product> {
     public Product hydrate(Row row) throws SQLException {
         Product product = new Product(row.getString("number"), row.getString("name"));
         product.setDescription(row.getString("description"));
-        product.attachPhoto(new Attachment(row.getString("photo")));
+        product.attachPhoto(new Attachment(row.getString("photo_file_name")));
         idOf(product).set(row.getLong("id"));
         return product;
     }
@@ -25,7 +25,7 @@ public class ProductRecord implements Record<Product> {
         row.setValue("number", product.getNumber());
         row.setValue("name", product.getName());
         row.setValue("description", product.getDescription());
-        row.setValue("photo", product.hasPhoto() ? product.getPhotoFileName() : null);
+        row.setValue("photo_file_name", product.hasPhoto() ? product.getPhotoFileName() : null);
     }
 
     // todo all below this is obsolete
