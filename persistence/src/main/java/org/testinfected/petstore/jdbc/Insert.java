@@ -41,6 +41,7 @@ public class Insert<T> {
         sql.append("insert into ").append(record.table());
         sql.append("(").append(Sql.asString(record.columns())).append(")");
         sql.append(" values(").append(Sql.asString(parametersFor(record.columns()))).append(")");
+        System.out.println(sql);
         return sql.toString();
     }
 

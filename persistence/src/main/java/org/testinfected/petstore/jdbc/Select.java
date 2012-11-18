@@ -4,21 +4,43 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Select<T> {
 
     public static <T> Select<T> from(final Record<T> record) {
-        return new Select<T>(record);
+        return from(record, record.table());
+    }
+
+    public static <T> Select<T> from(final Record<T> record, String alias) {
+        return new Select<T>(record, alias);
     }
 
     private final Record<T> from;
+    private final List<Record<?>> joins = new ArrayList<Record<?>>();
+    private final StringBuilder joinClause = new StringBuilder();
     private final StringBuilder whereClause = new StringBuilder();
     private final List<Object> parameters = new ArrayList<Object>();
+    private final Map<String, String> aliases = new HashMap<String, String>();
 
-    private Select(final Record<T> from) {
+    public Select(Record<T> from, String alias) {
         this.from = from;
+        aliasTable(from.table(), alias);
+    }
+
+    private void aliasTable(final String table, String alias) {
+        aliases.put(table, alias);
+    }
+
+    public void join(Record<?> join, String alias, String clause) {
+        joins.add(join);
+        aliasTable(join.table(), alias);
+        joinClause.append(" inner join ").append(join.table()).append(" ").append(aliasOf(join)).append(" on ").append(clause);
+    }
+
+    public void where(String clause, Object... values) {
+        whereClause.append(" where ").append(clause);
+        addParameters(values);
     }
 
     public T single(final Connection connection) {
@@ -47,17 +69,40 @@ public class Select<T> {
     }
 
     private String buildSelectStatement() {
-        return "select " + Sql.asString(from.columns()) + " from " + from.table() + " where" + whereClause;
+        StringBuilder sql = new StringBuilder();
+        sql.append("select ").append(Sql.asString(listColumns()));
+        sql.append(" from ").append(from.table()).append(" ").append(aliasOf(from));
+        sql.append(joinClause);
+        sql.append(whereClause);
+        System.out.println(sql);
+        return sql.toString();
     }
+
+    private Collection<String> listColumns() {
+        Collection<String> names = new ArrayList<String>();
+        names.addAll(columnsFor(from));
+        for (Record<?> join : joins) {
+            names.addAll(columnsFor(join));
+        }
+        return names;
+    }
+
+    private String aliasOf(final Record<?> record) {
+        return aliases.get(record.table());
+    }
+
+    public List<String> columnsFor(Record<?> record) {
+        List<String> columns = new ArrayList<String>();
+        for (String column : record.columns()) {
+            columns.add(aliasOf(record) + "." + column);
+        }
+        return columns;
+    }
+
 
     private void setParameter(PreparedStatement query, int index) throws SQLException {
         int sqlType = query.getParameterMetaData().getParameterType(index + 1);
         query.setObject(index + 1, parameters.get(index), sqlType);
-    }
-
-    public void where(String clause, Object... values) {
-        whereClause.append(" ").append(clause);
-        addParameters(values);
     }
 
     private void addParameters(Object... values) {
