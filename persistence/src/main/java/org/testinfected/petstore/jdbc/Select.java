@@ -1,5 +1,7 @@
 package org.testinfected.petstore.jdbc;
 
+import com.pyxis.petstore.domain.billing.PaymentMethod;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,10 +19,12 @@ public class Select<T> {
     }
 
     private final Record<T> from;
+
     private final List<Record<?>> joins = new ArrayList<Record<?>>();
     private final StringBuilder joinClause = new StringBuilder();
     private final StringBuilder whereClause = new StringBuilder();
     private final List<Object> parameters = new ArrayList<Object>();
+    private final StringBuilder orderByClause = new StringBuilder();
     private final Map<String, String> aliases = new HashMap<String, String>();
 
     public Select(Record<T> from, String alias) {
@@ -32,10 +36,19 @@ public class Select<T> {
         aliases.put(table, alias);
     }
 
-    public void join(Record<?> join, String alias, String clause) {
+    public void innerJoin(Record<?> join, String alias, String clause) {
+        join(join, alias, "inner join", clause);
+    }
+
+    public void leftJoin(Record<PaymentMethod> join, String alias, String clause) {
+        join(join, alias, "left outer join", clause);
+    }
+
+    private void join(Record<?> join, String alias, String joinType, String clause) {
         joins.add(join);
         aliasTable(join.table(), alias);
-        joinClause.append(" inner join ").append(join.table()).append(" ").append(aliasOf(join)).append(" on ").append(clause);
+        joinClause.append(" ").append(joinType).append(" ").append(join.table()).append(" ").append(aliasOf(join)).append(" on ").append(clause);
+
     }
 
     public void where(String clause, Object... values) {
@@ -70,12 +83,21 @@ public class Select<T> {
 
     private String buildSelectStatement() {
         StringBuilder sql = new StringBuilder();
-        sql.append("select ").append(Sql.asString(listColumns()));
-        sql.append(" from ").append(from.table()).append(" ").append(aliasOf(from));
+        sql.append(selectClause());
+        sql.append(fromClause());
         sql.append(joinClause);
         sql.append(whereClause);
+        sql.append(orderByClause);
         System.out.println(sql);
         return sql.toString();
+    }
+
+    private String fromClause() {
+        return " from " + from.table() + " " + aliasOf(from);
+    }
+
+    private String selectClause() {
+        return "select " + Sql.asString(listColumns());
     }
 
     private Collection<String> listColumns() {
@@ -91,6 +113,7 @@ public class Select<T> {
         return aliases.get(record.table());
     }
 
+
     public List<String> columnsFor(Record<?> record) {
         List<String> columns = new ArrayList<String>();
         for (String column : record.columns()) {
@@ -98,7 +121,6 @@ public class Select<T> {
         }
         return columns;
     }
-
 
     private void setParameter(PreparedStatement query, int index) throws SQLException {
         int sqlType = query.getParameterMetaData().getParameterType(index + 1);
@@ -113,5 +135,9 @@ public class Select<T> {
 
     private void addParameter(Object value) {
         parameters.add(value);
+    }
+
+    public void orderBy(String clause) {
+        orderByClause.append(" order by ").append(clause);
     }
 }

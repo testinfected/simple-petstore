@@ -30,7 +30,7 @@ public class Insert<T> {
             executeInsert(insert);
             Properties.idOf(entity).set(generatedIdOf(insert));
         } catch (SQLException e) {
-            throw new JDBCException("Could not insert product " + entity, e);
+            throw new JDBCException("Could not insert entity " + entity, e);
         } finally {
             Sql.close(insert);
         }

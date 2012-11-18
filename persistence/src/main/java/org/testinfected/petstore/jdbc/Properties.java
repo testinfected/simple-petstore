@@ -1,5 +1,6 @@
 package org.testinfected.petstore.jdbc;
 
+import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.product.Product;
 
 public class Properties {
@@ -10,6 +11,10 @@ public class Properties {
 
     public static Property<Product> productOf(Object entity) {
         return new Property<Product>(entity, "product");
+    }
+
+    public static Property<Order> orderOf(Object entity) {
+        return new Property<Order>(entity, "order");
     }
 }
 

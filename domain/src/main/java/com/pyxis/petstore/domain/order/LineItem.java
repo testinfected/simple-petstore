@@ -6,6 +6,8 @@ public class LineItem {
 
 	@SuppressWarnings("unused")
     private long id;
+    @SuppressWarnings("unused")
+    private Order order;
     private final String itemNumber;
     private final String itemDescription;
     private final BigDecimal itemUnitPrice;

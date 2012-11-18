@@ -73,6 +73,10 @@ public class Order {
         return lines.size();
     }
 
+    public int lineOf(LineItem lineItem) {
+        return lines.indexOf(lineItem);
+    }
+
     public String toString() {
         return "#" + number.toString();
     }

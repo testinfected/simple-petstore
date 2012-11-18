@@ -19,14 +19,14 @@ public class ItemsDatabase implements ItemInventory {
 
     public List<Item> findByProductNumber(String productNumber) {
         Select<Item> select = Select.from(items, "item");
-        select.join(products, "product", "item.product_id = product.id");
+        select.innerJoin(products, "product", "item.product_id = product.id");
         select.where("product.number = ?", productNumber);
         return select.list(connection);
     }
 
     public Item find(ItemNumber itemNumber) {
         Select<Item> select = Select.from(items, "item");
-        select.join(products, "product", "item.product_id = product.id");
+        select.innerJoin(products, "product", "item.product_id = product.id");
         select.where("item.number = ?", itemNumber.getNumber());
         return select.single(connection);
     }
