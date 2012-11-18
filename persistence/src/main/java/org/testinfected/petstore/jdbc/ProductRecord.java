@@ -12,20 +12,26 @@ import static org.testinfected.petstore.jdbc.Properties.idOf;
 // todo: Eliminate duplication in record classes
 public class ProductRecord implements Record<Product> {
 
+    public static final String ID = "id";
+    public static final String NUMBER = "number";
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
+    public static final String PHOTO = "photo_file_name";
+
     public Product hydrate(Row row) throws SQLException {
-        Product product = new Product(row.getString("number"), row.getString("name"));
-        product.setDescription(row.getString("description"));
-        product.attachPhoto(new Attachment(row.getString("photo_file_name")));
-        idOf(product).set(row.getLong("id"));
+        Product product = new Product(row.getString(NUMBER), row.getString(NAME));
+        product.setDescription(row.getString(DESCRIPTION));
+        product.attachPhoto(new Attachment(row.getString(PHOTO)));
+        idOf(product).set(row.getLong(ID));
         return product;
     }
 
     public void dehydrate(Row row, Product product) {
-        row.setValue("id", idOf(product).get());
-        row.setValue("number", product.getNumber());
-        row.setValue("name", product.getName());
-        row.setValue("description", product.getDescription());
-        row.setValue("photo_file_name", product.hasPhoto() ? product.getPhotoFileName() : null);
+        row.setValue(ID, idOf(product).get());
+        row.setValue(NUMBER, product.getNumber());
+        row.setValue(NAME, product.getName());
+        row.setValue(DESCRIPTION, product.getDescription());
+        row.setValue(PHOTO, product.hasPhoto() ? product.getPhotoFileName() : null);
     }
 
     // todo all below this is obsolete

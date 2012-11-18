@@ -15,7 +15,6 @@ import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.ItemsDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
-import org.testinfected.petstore.jdbc.Tables;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
@@ -28,10 +27,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.hamcrest.Matchers.*;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static org.testinfected.petstore.jdbc.Properties.productOf;
 import static test.support.com.pyxis.petstore.builders.Builders.build;
@@ -45,7 +41,7 @@ public class ItemsDatabaseTest {
     Database database = Database.in(TestDatabaseEnvironment.load());
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
-    ProductCatalog productCatalog = new ProductsDatabase(Tables.products(), connection);
+    ProductCatalog productCatalog = new ProductsDatabase(connection);
 
     ItemsDatabase itemsDatabase = new ItemsDatabase(connection);
 

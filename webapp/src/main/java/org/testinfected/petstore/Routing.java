@@ -50,7 +50,7 @@ public class Routing implements Application {
 
         final Connection connection = new ConnectionReference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);
-        final ProductCatalog productCatalog = new ProductsDatabase(Tables.products(), connection);
+        final ProductCatalog productCatalog = new ProductsDatabase(connection);
         final ItemInventory itemInventory = new ItemsDatabase(connection);
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
         final OrderNumberSequence orderNumberSequence = new OrderNumberDatabaseSequence(connection);

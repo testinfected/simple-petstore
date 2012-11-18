@@ -14,6 +14,10 @@ public class Column {
         return new Column(name, Types.BIGINT);
     }
 
+    public static Column decimal(String name) {
+        return new Column(name, Types.DECIMAL);
+    }
+
     private final String name;
     private final int sqlType;
 

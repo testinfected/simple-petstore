@@ -10,9 +10,30 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import static org.testinfected.petstore.jdbc.Properties.idOf;
+import static org.testinfected.petstore.jdbc.Properties.productOf;
 
 // todo: Eliminate duplication in record classes
-public class ItemRecord {
+public class ItemRecord implements Record<Item> {
+
+    public static final String ID = "id";
+    public static final String NUMBER = "number";
+    public static final String PRODUCT = "product_id";
+    public static final String PRICE = "price";
+    public static final String DESCRIPTION = "description";
+
+    @Override
+    public Item hydrate(Row row) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void dehydrate(Row row, Item item) throws SQLException {
+        row.setValue(ID, idOf(item).get());
+        row.setValue(NUMBER, item.getNumber());
+        row.setValue(PRODUCT, idOf(productOf(item).get()).get());
+        row.setValue(PRICE, item.getPrice());
+        row.setValue(DESCRIPTION, item.getDescription());
+    }
 
     private static final String ITEMS_TABLE = "items";
 

@@ -10,11 +10,10 @@ import static org.testinfected.petstore.jdbc.Sql.matchAnywhere;
 
 public class ProductsDatabase implements ProductCatalog {
 
-    private final Table<Product> productsTable;
     private final Connection connection;
+    private final Table<Product> productsTable = Tables.products();
 
-    public ProductsDatabase(Table<Product> products, Connection connection) {
-        this.productsTable = products;
+    public ProductsDatabase(Connection connection) {
         this.connection = connection;
     }
 

@@ -11,7 +11,6 @@ import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
-import org.testinfected.petstore.jdbc.Tables;
 import test.support.com.pyxis.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
@@ -40,7 +39,7 @@ public class ProductsDatabaseTest {
     Database database = Database.in(TestDatabaseEnvironment.load());
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
-    ProductsDatabase productsDatabase = new ProductsDatabase(Tables.products(), connection);
+    ProductsDatabase productsDatabase = new ProductsDatabase(connection);
 
     @Before public void
     resetDatabase() throws Exception {

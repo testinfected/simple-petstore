@@ -4,21 +4,14 @@ import com.pyxis.petstore.domain.product.Item;
 import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ItemNumber;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.sql.Statement.RETURN_GENERATED_KEYS;
-import static org.testinfected.petstore.jdbc.Properties.idOf;
-import static org.testinfected.petstore.jdbc.Properties.productOf;
 
 public class ItemsDatabase implements ItemInventory {
 
     private final Connection connection;
+    private final Table<Item> itemsTable = Tables.items();
 
     public ItemsDatabase(Connection connection) {
         this.connection = connection;
@@ -70,29 +63,7 @@ public class ItemsDatabase implements ItemInventory {
     }
 
     public void add(Item item) {
-        PreparedStatement insert = null;
-        try {
-            insert = connection.prepareStatement("insert into items(number, product_id, price, description) values(?, ?, ?, ?)", RETURN_GENERATED_KEYS);
-            insert.setString(1, item.getNumber());
-            insert.setLong(2, idOf(productOf(item).get()).get());
-            insert.setBigDecimal(3, item.getPrice());
-            insert.setString(4, item.getDescription());
-            executeInsert(insert);
-            ResultSet generatedKeys = insert.getGeneratedKeys();
-            generatedKeys.first();
-            idOf(item).set(generatedKeys.getLong(1));
-        } catch (SQLException e) {
-            throw new JDBCException("Could not insert item " + item, e);
-        } finally {
-            close(insert);
-        }
-    }
-
-    private void executeInsert(PreparedStatement insert) throws SQLException {
-        int rowsInserted = insert.executeUpdate();
-        if (rowsInserted != 1) {
-            throw new SQLException("Unexpected row count of " + rowsInserted + "; expected was 1");
-        }
+        Insert.into(itemsTable, item).execute(connection);
     }
 
     private void close(Statement statement) {
