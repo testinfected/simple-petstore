@@ -10,23 +10,23 @@ import java.util.List;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 public class Insert<T> {
-    private final Table<T> table;
+    private final Record<T> record;
     private final T entity;
 
-    public static <T> Insert<T> into(Table<T> table, T entity) {
-        return new Insert<T>(table, entity);
+    public static <T> Insert<T> into(Record<T> record, T entity) {
+        return new Insert<T>(record, entity);
     }
 
-    public Insert(Table<T> table, final T entity) {
-        this.table = table;
+    public Insert(Record<T> record, final T entity) {
+        this.record = record;
         this.entity = entity;
     }
 
     public void execute(final Connection connection) {
         PreparedStatement insert = null;
         try {
-            insert = connection.prepareStatement(insertStatementFor(table), RETURN_GENERATED_KEYS);
-            table.writeRecord(insert, entity);
+            insert = connection.prepareStatement(buildInsertStatement(), RETURN_GENERATED_KEYS);
+            record.dehydrate(insert, entity);
             executeInsert(insert);
             Properties.idOf(entity).set(generatedIdOf(insert));
         } catch (SQLException e) {
@@ -36,11 +36,11 @@ public class Insert<T> {
         }
     }
 
-    private String insertStatementFor(final Table<T> table) {
+    private String buildInsertStatement() {
         StringBuilder sql = new StringBuilder();
-        sql.append("insert into ").append(table.getName());
-        sql.append("(").append(Sql.asString(table.columnNames())).append(")");
-        sql.append(" values(").append(Sql.asString(parametersFor(table.columnNames()))).append(")");
+        sql.append("insert into ").append(record.table());
+        sql.append("(").append(Sql.asString(record.columns())).append(")");
+        sql.append(" values(").append(Sql.asString(parametersFor(record.columns()))).append(")");
         return sql.toString();
     }
 

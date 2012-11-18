@@ -9,15 +9,15 @@ import java.util.List;
 
 public class Select<T> {
 
-    public static <T> Select<T> from(final Table<T> table) {
-        return new Select<T>(table);
+    public static <T> Select<T> from(final Record<T> record) {
+        return new Select<T>(record);
     }
 
-    private final Table<T> from;
+    private final Record<T> from;
     private final StringBuilder whereClause = new StringBuilder();
     private final List<Object> parameters = new ArrayList<Object>();
 
-    private Select(final Table<T> from) {
+    private Select(final Record<T> from) {
         this.from = from;
     }
 
@@ -29,14 +29,14 @@ public class Select<T> {
         List<T> entities = new ArrayList<T>();
         PreparedStatement query = null;
         try {
-            query = connection.prepareStatement(selectStatementFor(from));
+            query = connection.prepareStatement(buildSelectStatement());
             for (int index = 0; index < parameters.size(); index++) {
                 setParameter(query, index);
             }
             ResultSet resultSet = query.executeQuery();
 
             while (resultSet.next()) {
-                entities.add(from.readRecord(resultSet));
+                entities.add(from.hydrate(resultSet));
             }
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);
@@ -46,8 +46,8 @@ public class Select<T> {
         return entities;
     }
 
-    private String selectStatementFor(final Table table) {
-        return "select " + Sql.asString(table.columnNames()) + " from " + from.getName() + " where" + whereClause;
+    private String buildSelectStatement() {
+        return "select " + Sql.asString(from.columns()) + " from " + from.table() + " where" + whereClause;
     }
 
     private void setParameter(PreparedStatement query, int index) throws SQLException {

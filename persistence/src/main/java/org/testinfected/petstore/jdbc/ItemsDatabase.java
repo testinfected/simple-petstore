@@ -11,7 +11,7 @@ import java.util.List;
 public class ItemsDatabase implements ItemInventory {
 
     private final Connection connection;
-    private final Table<Item> itemsTable = Tables.items();
+    private final ItemRecord items = new ItemRecord(new ProductRecord());
 
     public ItemsDatabase(Connection connection) {
         this.connection = connection;
@@ -31,7 +31,7 @@ public class ItemsDatabase implements ItemInventory {
             query.setString(1, productNumber);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
-                matches.add(new ItemRecord().hydrate(rs));
+                matches.add(items.hydrate(rs));
             }
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);
@@ -54,7 +54,7 @@ public class ItemsDatabase implements ItemInventory {
             query.setString(1, itemNumber.getNumber());
             ResultSet rs = query.executeQuery();
             rs.next();
-            return new ItemRecord().hydrate(rs);
+            return items.hydrate(rs);
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);
         } finally {
@@ -63,7 +63,7 @@ public class ItemsDatabase implements ItemInventory {
     }
 
     public void add(Item item) {
-        Insert.into(itemsTable, item).execute(connection);
+        Insert.into(items, item).execute(connection);
     }
 
     private void close(Statement statement) {

@@ -11,24 +11,24 @@ import static org.testinfected.petstore.jdbc.Sql.matchAnywhere;
 public class ProductsDatabase implements ProductCatalog {
 
     private final Connection connection;
-    private final Table<Product> productsTable = Tables.products();
+    private final Record<Product> products = new ProductRecord();
 
     public ProductsDatabase(Connection connection) {
         this.connection = connection;
     }
 
     public void add(Product product) {
-        Insert.into(productsTable, product).execute(connection);
+        Insert.into(new ProductRecord(), product).execute(connection);
     }
 
     public Product findByNumber(String productNumber) {
-        Select<Product> select = Select.from(productsTable);
+        Select<Product> select = Select.from(products);
         select.where("number = ?", productNumber);
         return select.single(connection);
     }
 
     public List<Product> findByKeyword(String keyword) {
-        Select<Product> select = Select.from(productsTable);
+        Select<Product> select = Select.from(products);
         select.where("lower(name) like ? or lower(description) like ?", matchAnywhere(keyword), matchAnywhere(keyword));
         return select.list(connection);
     }
