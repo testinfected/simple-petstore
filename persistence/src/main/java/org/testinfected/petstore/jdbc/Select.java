@@ -1,30 +1,32 @@
 package org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.product.Product;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.sql.*;
-import java.util.*;
+public class Select<T> {
 
-public class Select {
-
-    public static Select from(final Table table) {
-        return new Select(table);
+    public static <T> Select<T> from(final Table<T> table) {
+        return new Select<T>(table);
     }
 
-    private final Table from;
+    private final Table<T> from;
     private final StringBuilder whereClause = new StringBuilder();
     private final List<Object> parameters = new ArrayList<Object>();
 
-    private Select(final Table from) {
+    private Select(final Table<T> from) {
         this.from = from;
     }
 
-    public Product single(final Connection connection) {
+    public T single(final Connection connection) {
         return list(connection).get(0);
     }
 
-    public List<Product> list(final Connection connection) {
-        List<Product> products = new ArrayList<Product>();
+    public List<T> list(final Connection connection) {
+        List<T> entities = new ArrayList<T>();
         PreparedStatement query = null;
         try {
             query = connection.prepareStatement(selectStatementFor(from));
@@ -34,14 +36,14 @@ public class Select {
             ResultSet resultSet = query.executeQuery();
 
             while (resultSet.next()) {
-                products.add(from.readRecord(resultSet));
+                entities.add(from.readRecord(resultSet));
             }
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);
         } finally {
             Sql.close(query);
         }
-        return products;
+        return entities;
     }
 
     private String selectStatementFor(final Table table) {

@@ -1,11 +1,13 @@
 package org.testinfected.petstore.jdbc;
 
+import com.pyxis.petstore.domain.product.Product;
+
 public final class Tables {
 
     private Tables() {}
 
-    public static Table products() {
-        Table table = new Table("products");
+    public static Table<Product> products() {
+        Table<Product> table = new Table<Product>("products", new ProductRecord());
 
         table.addColumn(Column.bigint("id"));
         table.addColumn(Column.varchar("number"));

@@ -1,19 +1,19 @@
 package org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.product.Product;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Table {
+public class Table<T> {
     private final String name;
     private final List<Column> columns = new ArrayList<Column>();
-    private final ProductRecord record = new ProductRecord();
+    private final Record<T> record;
 
-    public Table(String name) {
+    public Table(String name, Record<T> record) {
         this.name = name;
+        this.record = record;
     }
 
     public String getName() {
@@ -32,15 +32,15 @@ public class Table {
         return names;
     }
 
-    public Product readRecord(ResultSet resultSet) throws SQLException {
+    public T readRecord(ResultSet resultSet) throws SQLException {
         Row row = new Row(name, columns);
         row.readFrom(resultSet);
         return record.hydrate(row);
     }
 
-    public void writeRecord(PreparedStatement statement, Product product) throws SQLException {
+    public void writeRecord(PreparedStatement statement, T entity) throws SQLException {
         Row row = new Row(name, columns);
-        record.dehydrate(row, product);
+        record.dehydrate(row, entity);
         row.writeTo(statement);
     }
 }

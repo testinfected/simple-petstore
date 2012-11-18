@@ -1,41 +1,42 @@
 package org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.product.Product;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
-public class Insert {
-    private final Table table;
-    private final Product product;
+public class Insert<T> {
+    private final Table<T> table;
+    private final T entity;
 
-    public static Insert into(Table table, Product product) {
-        return new Insert(table, product);
+    public static <T> Insert<T> into(Table<T> table, T entity) {
+        return new Insert<T>(table, entity);
     }
 
-    public Insert(Table table, final Product product) {
+    public Insert(Table<T> table, final T entity) {
         this.table = table;
-        this.product = product;
+        this.entity = entity;
     }
 
     public void execute(final Connection connection) {
         PreparedStatement insert = null;
         try {
             insert = connection.prepareStatement(insertStatementFor(table), RETURN_GENERATED_KEYS);
-            table.writeRecord(insert, product);
+            table.writeRecord(insert, entity);
             executeInsert(insert);
-            Properties.idOf(product).set(generatedIdOf(insert));
+            Properties.idOf(entity).set(generatedIdOf(insert));
         } catch (SQLException e) {
-            throw new JDBCException("Could not insert product " + product, e);
+            throw new JDBCException("Could not insert product " + entity, e);
         } finally {
             Sql.close(insert);
         }
     }
 
-    private String insertStatementFor(final Table table) {
+    private String insertStatementFor(final Table<T> table) {
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ").append(table.getName());
         sql.append("(").append(Sql.asString(table.columnNames())).append(")");

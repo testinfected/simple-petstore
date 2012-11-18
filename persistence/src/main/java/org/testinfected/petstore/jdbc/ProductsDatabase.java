@@ -10,10 +10,10 @@ import static org.testinfected.petstore.jdbc.Sql.matchAnywhere;
 
 public class ProductsDatabase implements ProductCatalog {
 
-    private final Table productsTable;
+    private final Table<Product> productsTable;
     private final Connection connection;
 
-    public ProductsDatabase(Table products, Connection connection) {
+    public ProductsDatabase(Table<Product> products, Connection connection) {
         this.productsTable = products;
         this.connection = connection;
     }
@@ -23,13 +23,13 @@ public class ProductsDatabase implements ProductCatalog {
     }
 
     public Product findByNumber(String productNumber) {
-        Select select = Select.from(productsTable);
+        Select<Product> select = Select.from(productsTable);
         select.where("number = ?", productNumber);
         return select.single(connection);
     }
 
     public List<Product> findByKeyword(String keyword) {
-        Select select = Select.from(productsTable);
+        Select<Product> select = Select.from(productsTable);
         select.where("lower(name) like ? or lower(description) like ?", matchAnywhere(keyword), matchAnywhere(keyword));
         return select.list(connection);
     }
