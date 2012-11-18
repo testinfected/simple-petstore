@@ -2,6 +2,7 @@ package org.testinfected.petstore.jdbc;
 
 import com.pyxis.petstore.domain.order.OrderNumber;
 import com.pyxis.petstore.domain.order.OrderNumberSequence;
+import org.testinfected.petstore.jdbc.support.JDBCException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

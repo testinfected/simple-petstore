@@ -1,8 +1,10 @@
-package org.testinfected.petstore.jdbc;
+package org.testinfected.petstore.jdbc.records;
 
 import com.pyxis.petstore.domain.product.Item;
 import com.pyxis.petstore.domain.product.ItemNumber;
 import com.pyxis.petstore.domain.product.Product;
+import org.testinfected.petstore.jdbc.support.AbstractRecord;
+import org.testinfected.petstore.jdbc.support.Record;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;

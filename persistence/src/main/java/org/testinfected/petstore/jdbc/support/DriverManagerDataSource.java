@@ -1,4 +1,4 @@
-package org.testinfected.petstore.jdbc;
+package org.testinfected.petstore.jdbc.support;
 
 import javax.sql.DataSource;
 import java.io.IOException;

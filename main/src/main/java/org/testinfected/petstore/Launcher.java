@@ -1,7 +1,7 @@
 package org.testinfected.petstore;
 
 import org.testinfected.cli.CLI;
-import org.testinfected.petstore.jdbc.DriverManagerDataSource;
+import org.testinfected.petstore.jdbc.support.DriverManagerDataSource;
 import org.testinfected.petstore.util.ConsoleErrorReporter;
 import org.testinfected.petstore.util.ConsoleHandler;
 

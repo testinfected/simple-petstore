@@ -21,6 +21,7 @@ import org.testinfected.petstore.controllers.PlaceOrder;
 import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.controllers.ShowOrder;
 import org.testinfected.petstore.jdbc.*;
+import org.testinfected.petstore.jdbc.ItemsDatabase;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.testinfected.petstore.routing.Router;

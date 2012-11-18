@@ -3,6 +3,10 @@ package org.testinfected.petstore.jdbc;
 import com.pyxis.petstore.domain.product.Item;
 import com.pyxis.petstore.domain.product.ItemInventory;
 import com.pyxis.petstore.domain.product.ItemNumber;
+import org.testinfected.petstore.jdbc.records.ItemRecord;
+import org.testinfected.petstore.jdbc.records.ProductRecord;
+import org.testinfected.petstore.jdbc.support.Insert;
+import org.testinfected.petstore.jdbc.support.Select;
 
 import java.sql.Connection;
 import java.util.List;
@@ -18,17 +22,17 @@ public class ItemsDatabase implements ItemInventory {
     }
 
     public List<Item> findByProductNumber(String productNumber) {
-        Select<Item> select = Select.from(items, "item");
-        select.innerJoin(products, "product", "item.product_id = product.id");
-        select.where("product.number = ?", productNumber);
-        return select.list(connection);
+        return Select.from(items, "item").
+                innerJoin(products, "product", "item.product_id = product.id").
+                where("product.number = ?", productNumber).
+                list(connection);
     }
 
     public Item find(ItemNumber itemNumber) {
-        Select<Item> select = Select.from(items, "item");
-        select.innerJoin(products, "product", "item.product_id = product.id");
-        select.where("item.number = ?", itemNumber.getNumber());
-        return select.single(connection);
+        return Select.from(items, "item").
+                innerJoin(products, "product", "item.product_id = product.id").
+                where("item.number = ?", itemNumber.getNumber()).
+                first(connection);
     }
 
     public void add(Item item) {

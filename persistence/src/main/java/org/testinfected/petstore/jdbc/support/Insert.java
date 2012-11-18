@@ -1,4 +1,6 @@
-package org.testinfected.petstore.jdbc;
+package org.testinfected.petstore.jdbc.support;
+
+import org.testinfected.petstore.jdbc.Properties;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

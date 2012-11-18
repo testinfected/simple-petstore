@@ -1,4 +1,4 @@
-package org.testinfected.petstore.jdbc;
+package org.testinfected.petstore.jdbc.support;
 
 import com.pyxis.petstore.domain.billing.PaymentMethod;
 
@@ -36,28 +36,35 @@ public class Select<T> {
         aliases.put(table, alias);
     }
 
-    public void innerJoin(Record<?> join, String alias, String clause) {
-        join(join, alias, "inner join", clause);
+    public Select<T> innerJoin(Record<?> join, String alias, String clause) {
+        return join(join, alias, "inner join", clause);
     }
 
-    public void leftJoin(Record<PaymentMethod> join, String alias, String clause) {
-        join(join, alias, "left outer join", clause);
+    public Select<T> leftJoin(Record<PaymentMethod> join, String alias, String clause) {
+        return join(join, alias, "left outer join", clause);
     }
 
-    private void join(Record<?> join, String alias, String joinType, String clause) {
+    private Select<T> join(Record<?> join, String alias, String joinType, String clause) {
         joins.add(join);
         aliasTable(join.table(), alias);
         joinClause.append(" ").append(joinType).append(" ").append(join.table()).append(" ").append(aliasOf(join)).append(" on ").append(clause);
-
+        return this;
     }
 
-    public void where(String clause, Object... values) {
+    public Select<T> where(String clause, Object... values) {
         whereClause.append(" where ").append(clause);
         addParameters(values);
+        return this;
     }
 
-    public T single(final Connection connection) {
-        return list(connection).get(0);
+    public Select<T> orderBy(String clause) {
+        orderByClause.append(" order by ").append(clause);
+        return this;
+    }
+
+    public T first(final Connection connection) {
+        List<T> entities = list(connection);
+        return entities.get(0);
     }
 
     public List<T> list(final Connection connection) {
@@ -109,10 +116,10 @@ public class Select<T> {
         return names;
     }
 
+
     private String aliasOf(final Record<?> record) {
         return aliases.get(record.table());
     }
-
 
     public List<String> columnsFor(Record<?> record) {
         List<String> columns = new ArrayList<String>();
@@ -135,9 +142,5 @@ public class Select<T> {
 
     private void addParameter(Object value) {
         parameters.add(value);
-    }
-
-    public void orderBy(String clause) {
-        orderByClause.append(" order by ").append(clause);
     }
 }

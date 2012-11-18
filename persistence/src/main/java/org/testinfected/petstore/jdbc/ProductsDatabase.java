@@ -2,11 +2,15 @@ package org.testinfected.petstore.jdbc;
 
 import com.pyxis.petstore.domain.product.Product;
 import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.testinfected.petstore.jdbc.records.ProductRecord;
+import org.testinfected.petstore.jdbc.support.Insert;
+import org.testinfected.petstore.jdbc.support.Record;
+import org.testinfected.petstore.jdbc.support.Select;
 
 import java.sql.Connection;
 import java.util.List;
 
-import static org.testinfected.petstore.jdbc.Sql.matchAnywhere;
+import static org.testinfected.petstore.jdbc.support.Sql.matchAnywhere;
 
 public class ProductsDatabase implements ProductCatalog {
 
@@ -18,18 +22,16 @@ public class ProductsDatabase implements ProductCatalog {
     }
 
     public void add(Product product) {
-        Insert.into(new ProductRecord(), product).execute(connection);
+        Insert.into(products, product).execute(connection);
     }
 
     public Product findByNumber(String productNumber) {
-        Select<Product> select = Select.from(products);
-        select.where("number = ?", productNumber);
-        return select.single(connection);
+        return Select.from(products).where("number = ?", productNumber).first(connection);
     }
 
     public List<Product> findByKeyword(String keyword) {
-        Select<Product> select = Select.from(products);
-        select.where("lower(name) like ? or lower(description) like ?", matchAnywhere(keyword), matchAnywhere(keyword));
-        return select.list(connection);
+        return Select.from(products).
+                where("lower(name) like ? or lower(description) like ?", matchAnywhere(keyword), matchAnywhere(keyword)).
+                list(connection);
     }
 }

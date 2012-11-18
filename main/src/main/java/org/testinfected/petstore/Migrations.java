@@ -2,7 +2,7 @@ package org.testinfected.petstore;
 
 import com.googlecode.flyway.core.Flyway;
 import org.testinfected.petstore.jdbc.DatabaseCleaner;
-import org.testinfected.petstore.jdbc.DriverManagerDataSource;
+import org.testinfected.petstore.jdbc.support.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 

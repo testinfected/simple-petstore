@@ -1,7 +1,8 @@
-package org.testinfected.petstore.jdbc;
+package org.testinfected.petstore.jdbc.records;
 
 import com.pyxis.petstore.domain.product.Attachment;
 import com.pyxis.petstore.domain.product.Product;
+import org.testinfected.petstore.jdbc.support.AbstractRecord;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

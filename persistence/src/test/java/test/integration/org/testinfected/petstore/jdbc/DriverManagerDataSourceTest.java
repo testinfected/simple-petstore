@@ -3,7 +3,7 @@ package test.integration.org.testinfected.petstore.jdbc;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.testinfected.petstore.jdbc.DriverManagerDataSource;
+import org.testinfected.petstore.jdbc.support.DriverManagerDataSource;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
 import java.sql.Connection;

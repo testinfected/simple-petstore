@@ -4,6 +4,11 @@ import com.pyxis.petstore.domain.order.LineItem;
 import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.order.OrderBook;
 import com.pyxis.petstore.domain.order.OrderNumber;
+import org.testinfected.petstore.jdbc.records.LineItemRecord;
+import org.testinfected.petstore.jdbc.records.OrderRecord;
+import org.testinfected.petstore.jdbc.records.PaymentRecord;
+import org.testinfected.petstore.jdbc.support.Insert;
+import org.testinfected.petstore.jdbc.support.Select;
 
 import java.sql.*;
 import java.util.List;
@@ -23,44 +28,47 @@ public class OrdersDatabase implements OrderBook {
     }
 
     public Order find(OrderNumber orderNumber) {
-        Order order = selectOrderAndPayment(orderNumber);
-        List<LineItem> lineItems = selectLineItems(order);
-        for (LineItem lineItem : lineItems) {
-            order.addLineItem(lineItem);
-        }
+        Order order = findOrder(orderNumber);
+        addLinesToOrder(order, findLineItemsOf(order));
         return order;
     }
 
-    private Order selectOrderAndPayment(OrderNumber orderNumber) {
-        Select<Order> select = Select.from(orders, "_order");
-        select.leftJoin(payments, "payment", "_order.payment_id = payment.id");
-        select.where("_order.number = ?", orderNumber);
-        return select.single(connection);
+    private void addLinesToOrder(Order order, List<LineItem> lineItems) {
+        for (LineItem lineItem : lineItems) {
+            order.addLineItem(lineItem);
+        }
     }
 
-    private List<LineItem> selectLineItems(Order order) {
-        Select<LineItem> select = Select.from(lineItems);
-        select.where("order_id = ?", idOf(order).get());
-        select.orderBy("order_line");
-        return select.list(connection);
+    private Order findOrder(OrderNumber orderNumber) {
+        return Select.from(orders, "_order").
+                leftJoin(payments, "payment", "_order.payment_id = payment.id").
+                where("_order.number = ?", orderNumber).
+                first(connection);
+    }
+
+    private List<LineItem> findLineItemsOf(Order order) {
+        return Select.from(lineItems).
+                where("order_id = ?", idOf(order).get()).
+                orderBy("order_line").
+                list(connection);
     }
 
     public void record(Order order) {
-        insertPayment(order);
-        insertOrder(order);
-        insertLineItems(order);
+        recordPayment(order);
+        recordOrder(order);
+        recordLineItems(order);
     }
 
-    private void insertPayment(Order order) {
+    private void recordPayment(Order order) {
         if (!order.isPaid()) return;
         Insert.into(payments, order.getPaymentMethod()).execute(connection);
     }
 
-    private void insertOrder(Order order) {
+    private void recordOrder(Order order) {
         Insert.into(orders, order).execute(connection);
     }
 
-    private void insertLineItems(Order order) {
+    private void recordLineItems(Order order) {
         for (LineItem lineItem : order.getLineItems()) {
             associate(order, lineItem);
             insertLineItem(lineItem);

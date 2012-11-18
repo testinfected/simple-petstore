@@ -1,4 +1,4 @@
-package org.testinfected.petstore.jdbc;
+package org.testinfected.petstore.jdbc.support;
 
 import java.sql.SQLException;
 import java.sql.Statement;
