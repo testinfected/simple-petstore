@@ -10,8 +10,6 @@ import org.testinfected.petstore.jdbc.support.Select;
 import java.sql.Connection;
 import java.util.List;
 
-import static org.testinfected.petstore.jdbc.support.Sql.matchAnywhere;
-
 public class ProductsDatabase implements ProductCatalog {
 
     private final Connection connection;
@@ -33,5 +31,9 @@ public class ProductsDatabase implements ProductCatalog {
         return Select.from(products).
                 where("lower(name) like ? or lower(description) like ?", matchAnywhere(keyword), matchAnywhere(keyword)).
                 list(connection);
+    }
+
+    private static String matchAnywhere(final String pattern) {
+        return "%" + pattern + "%";
     }
 }

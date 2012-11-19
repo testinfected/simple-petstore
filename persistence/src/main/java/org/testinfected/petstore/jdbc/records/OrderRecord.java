@@ -3,7 +3,6 @@ package org.testinfected.petstore.jdbc.records;
 import com.pyxis.petstore.domain.billing.PaymentMethod;
 import com.pyxis.petstore.domain.order.Order;
 import com.pyxis.petstore.domain.order.OrderNumber;
-import org.testinfected.petstore.jdbc.support.AbstractRecord;
 import org.testinfected.petstore.jdbc.support.Record;
 
 import java.sql.*;

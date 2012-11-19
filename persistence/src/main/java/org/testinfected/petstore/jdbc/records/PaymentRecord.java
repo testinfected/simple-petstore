@@ -4,7 +4,6 @@ import com.pyxis.petstore.domain.billing.Address;
 import com.pyxis.petstore.domain.billing.CreditCardDetails;
 import com.pyxis.petstore.domain.billing.CreditCardType;
 import com.pyxis.petstore.domain.billing.PaymentMethod;
-import org.testinfected.petstore.jdbc.support.AbstractRecord;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

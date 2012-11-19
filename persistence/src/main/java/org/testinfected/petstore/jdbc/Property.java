@@ -1,4 +1,4 @@
-package org.testinfected.petstore.jdbc.support;
+package org.testinfected.petstore.jdbc;
 
 import org.testinfected.petstore.ExceptionImposter;
 

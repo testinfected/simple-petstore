@@ -1,10 +1,7 @@
 package org.testinfected.petstore.jdbc.support;
 
-import org.testinfected.petstore.jdbc.Properties;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class Insert<T> {
             insert = connection.prepareStatement(buildInsertStatement(), RETURN_GENERATED_KEYS);
             record.dehydrate(insert, entity);
             executeInsert(insert);
-            Properties.idOf(entity).set(generatedIdOf(insert));
+            record.setGeneratedKeys(insert.getGeneratedKeys(), entity);
         } catch (SQLException e) {
             throw new JDBCException("Could not insert entity " + entity, e);
         } finally {
@@ -43,7 +40,6 @@ public class Insert<T> {
         sql.append("insert into ").append(record.table());
         sql.append("(").append(Sql.asString(record.columns())).append(")");
         sql.append(" values(").append(Sql.asString(parametersFor(record.columns()))).append(")");
-        System.out.println(sql);
         return sql.toString();
     }
 
@@ -60,11 +56,5 @@ public class Insert<T> {
         if (rowsInserted != 1) {
             throw new SQLException("Unexpected row count of " + rowsInserted + "; expected was 1");
         }
-    }
-
-    private long generatedIdOf(PreparedStatement insert) throws SQLException {
-        ResultSet generatedKeys = insert.getGeneratedKeys();
-        generatedKeys.first();
-        return generatedKeys.getLong(1);
     }
 }

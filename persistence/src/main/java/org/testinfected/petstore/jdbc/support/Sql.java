@@ -24,8 +24,4 @@ public final class Sql {
         }
         return builder.toString();
     }
-
-    public static String matchAnywhere(final String pattern) {
-        return "%" + pattern + "%";
-    }
 }

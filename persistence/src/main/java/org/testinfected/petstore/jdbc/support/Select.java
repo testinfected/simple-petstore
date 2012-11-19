@@ -95,7 +95,6 @@ public class Select<T> {
         sql.append(joinClause);
         sql.append(whereClause);
         sql.append(orderByClause);
-        System.out.println(sql);
         return sql.toString();
     }
 
@@ -115,7 +114,6 @@ public class Select<T> {
         }
         return names;
     }
-
 
     private String aliasOf(final Record<?> record) {
         return aliases.get(record.table());

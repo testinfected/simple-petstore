@@ -14,4 +14,6 @@ public interface Record<T> {
     T hydrate(ResultSet rs) throws SQLException;
 
     void dehydrate(PreparedStatement statement, T entity) throws SQLException;
+
+    void setGeneratedKeys(ResultSet generatedKeys, T entity) throws SQLException;
 }

@@ -1,4 +1,7 @@
-package org.testinfected.petstore.jdbc.support;
+package org.testinfected.petstore.jdbc.records;
+
+import org.testinfected.petstore.jdbc.Properties;
+import org.testinfected.petstore.jdbc.support.Record;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -21,5 +24,15 @@ public abstract class AbstractRecord<T> implements Record<T> {
         }
 
         throw new SQLException("Result set has no column '" + columnName + "'");
+    }
+
+    @Override
+    public void setGeneratedKeys(ResultSet generatedKeys, T entity) throws SQLException {
+        Properties.idOf(entity).set(generatedId(generatedKeys));
+    }
+
+    private long generatedId(ResultSet rs) throws SQLException {
+        rs.first();
+        return rs.getLong(1);
     }
 }
