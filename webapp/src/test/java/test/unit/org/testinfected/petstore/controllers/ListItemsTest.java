@@ -1,7 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.product.Item;
-import com.pyxis.petstore.domain.product.ItemInventory;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.product.ItemInventory;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
@@ -13,16 +13,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.ListItems;
-import test.support.com.pyxis.petstore.builders.Builder;
+import test.support.org.testinfected.petstore.builders.Builder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.allOf;
-import static test.support.com.pyxis.petstore.builders.Builders.build;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.petstore.builders.Builders.build;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
 @RunWith(JMock.class)
 public class ListItemsTest {

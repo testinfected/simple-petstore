@@ -1,6 +1,6 @@
 package org.testinfected.petstore;
 
-import com.pyxis.petstore.domain.order.Cart;
+import org.testinfected.petstore.order.Cart;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.decoration.HtmlDocumentProcessor;

@@ -1,9 +1,9 @@
 package test.unit.org.testinfected.petstore.views;
 
-import com.pyxis.petstore.domain.order.Cart;
+import org.testinfected.petstore.order.Cart;
 import org.junit.Test;
 import org.w3c.dom.Element;
-import test.support.com.pyxis.petstore.builders.ItemBuilder;
+import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -16,8 +16,8 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.matches;
-import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class CartPageTest {
 

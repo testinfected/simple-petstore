@@ -1,6 +1,5 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.product.ProductCatalog;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -18,7 +17,6 @@ public class CreateItemTest {
 
     Mockery context = new JUnit4Mockery();
     ProcurementRequestHandler requestHandler = context.mock(ProcurementRequestHandler.class);
-    ProductCatalog productCatalog = context.mock(ProductCatalog.class);
     CreateItem createItem = new CreateItem(requestHandler);
 
     Controller.Request request = context.mock(Controller.Request.class);

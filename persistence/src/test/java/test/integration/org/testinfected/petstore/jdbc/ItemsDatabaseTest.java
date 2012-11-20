@@ -1,9 +1,9 @@
 package test.integration.org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.product.Item;
-import com.pyxis.petstore.domain.product.ItemNumber;
-import com.pyxis.petstore.domain.product.Product;
-import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.product.ItemNumber;
+import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.product.ProductCatalog;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -15,7 +15,7 @@ import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.ItemsDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
-import test.support.com.pyxis.petstore.builders.Builder;
+import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
@@ -30,10 +30,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static org.testinfected.petstore.jdbc.Properties.productOf;
-import static test.support.com.pyxis.petstore.builders.Builders.build;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.a;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.petstore.builders.Builders.build;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.a;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
 
 public class ItemsDatabaseTest {

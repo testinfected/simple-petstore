@@ -1,6 +1,6 @@
 package test.integration.org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.product.Product;
+import org.testinfected.petstore.product.Product;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -11,7 +11,7 @@ import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
-import test.support.com.pyxis.petstore.builders.Builder;
+import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
@@ -30,8 +30,8 @@ import static org.hamcrest.Matchers.iterableWithSize;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
-import static test.support.com.pyxis.petstore.builders.Builders.build;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.petstore.builders.Builders.build;
+import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
 
 public class ProductsDatabaseTest {

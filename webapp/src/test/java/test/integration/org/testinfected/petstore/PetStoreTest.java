@@ -1,7 +1,7 @@
 package test.integration.org.testinfected.petstore;
 
-import com.pyxis.petstore.domain.product.Product;
-import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.product.ProductCatalog;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -34,7 +34,7 @@ import java.util.logging.FileHandler;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.isA;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 @RunWith(JMock.class)

@@ -1,8 +1,8 @@
 package test.unit.org.testinfected.petstore.procurement;
 
-import com.pyxis.petstore.domain.product.ItemInventory;
-import com.pyxis.petstore.domain.product.Product;
-import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.product.ProductCatalog;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
@@ -22,8 +22,8 @@ import java.math.BigDecimal;
 
 import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
 @RunWith(JMock.class)
 public class PurchasingAgentTest {

@@ -1,6 +1,6 @@
 package org.testinfected.petstore.util;
 
-import com.pyxis.petstore.domain.product.AttachmentStorage;
+import org.testinfected.petstore.product.AttachmentStorage;
 
 public class FileSystemPhotoStore implements AttachmentStorage {
 

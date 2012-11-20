@@ -1,9 +1,9 @@
 package org.testinfected.petstore.controllers;
 
 import com.github.mustachejava.TemplateFunction;
-import com.pyxis.petstore.domain.product.AttachmentStorage;
-import com.pyxis.petstore.domain.product.Product;
-import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.testinfected.petstore.product.AttachmentStorage;
+import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.util.Context;
 

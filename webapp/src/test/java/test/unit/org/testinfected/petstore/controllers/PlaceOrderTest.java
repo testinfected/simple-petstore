@@ -1,9 +1,9 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.billing.CreditCardDetails;
-import com.pyxis.petstore.domain.billing.PaymentMethod;
-import com.pyxis.petstore.domain.order.OrderNumber;
-import com.pyxis.petstore.domain.order.SalesAssistant;
+import org.testinfected.petstore.billing.CreditCardDetails;
+import org.testinfected.petstore.billing.PaymentMethod;
+import org.testinfected.petstore.order.OrderNumber;
+import org.testinfected.petstore.order.SalesAssistant;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -15,7 +15,7 @@ import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.PlaceOrder;
 
 import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.validVisaDetails;
+import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
 
 @RunWith(JMock.class)
 public class PlaceOrderTest {

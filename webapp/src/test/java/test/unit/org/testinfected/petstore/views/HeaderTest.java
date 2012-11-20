@@ -19,8 +19,8 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasNoSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
-import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class HeaderTest {

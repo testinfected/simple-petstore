@@ -1,8 +1,8 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.order.Order;
-import com.pyxis.petstore.domain.order.OrderBook;
-import com.pyxis.petstore.domain.order.OrderNumber;
+import org.testinfected.petstore.order.Order;
+import org.testinfected.petstore.order.OrderBook;
+import org.testinfected.petstore.order.OrderNumber;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -14,7 +14,7 @@ import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.ShowOrder;
 
 import static org.hamcrest.Matchers.hasEntry;
-import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
+import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 
 @RunWith(JMock.class)
 public class ShowOrderTest {

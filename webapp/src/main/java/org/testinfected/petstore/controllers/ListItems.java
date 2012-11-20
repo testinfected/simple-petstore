@@ -1,7 +1,7 @@
 package org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.product.Item;
-import com.pyxis.petstore.domain.product.ItemInventory;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.Controller;
 
 import java.util.List;

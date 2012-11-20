@@ -1,8 +1,8 @@
 package org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.product.Item;
-import com.pyxis.petstore.domain.product.ItemInventory;
-import com.pyxis.petstore.domain.product.ItemNumber;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.petstore.product.ItemNumber;
 import org.testinfected.petstore.jdbc.records.ItemRecord;
 import org.testinfected.petstore.jdbc.records.ProductRecord;
 import org.testinfected.petstore.jdbc.support.Insert;

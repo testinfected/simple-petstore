@@ -1,11 +1,11 @@
 package test.unit.org.testinfected.petstore.views;
 
 import com.github.mustachejava.TemplateFunction;
-import com.pyxis.petstore.domain.product.Product;
+import org.testinfected.petstore.product.Product;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.w3c.dom.Element;
-import test.support.com.pyxis.petstore.builders.Builder;
+import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -23,8 +23,8 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
-import static test.support.com.pyxis.petstore.builders.Builders.build;
-import static test.support.com.pyxis.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.petstore.builders.Builders.build;
+import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class ProductsPageTest {

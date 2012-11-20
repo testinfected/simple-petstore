@@ -1,6 +1,6 @@
 package test.unit.org.testinfected.petstore;
 
-import com.pyxis.petstore.domain.order.Cart;
+import org.testinfected.petstore.order.Cart;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.AllOf;
@@ -19,7 +19,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
-import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
+import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 
 @RunWith(JMock.class)
 public class MainLayoutTest {
@@ -49,7 +49,7 @@ public class MainLayoutTest {
         return AllOf.allOf(matchers);
     }
 
-    private Matcher<Map<? extends String, ? extends Object>> hasEntry(String key, Object value) {
+    private Matcher<Map<? extends String, ?>> hasEntry(String key, Object value) {
         return Matchers.hasEntry(key, value);
     }
 }

@@ -1,7 +1,7 @@
 package org.testinfected.petstore.jdbc.records;
 
-import com.pyxis.petstore.domain.product.Attachment;
-import com.pyxis.petstore.domain.product.Product;
+import org.testinfected.petstore.product.Attachment;
+import org.testinfected.petstore.product.Product;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

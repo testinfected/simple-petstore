@@ -1,8 +1,8 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.order.Cart;
-import com.pyxis.petstore.domain.order.CartItem;
-import com.pyxis.petstore.domain.order.SalesAssistant;
+import org.testinfected.petstore.order.Cart;
+import org.testinfected.petstore.order.CartItem;
+import org.testinfected.petstore.order.SalesAssistant;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
@@ -18,8 +18,8 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.allOf;
-import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 @RunWith(JMock.class)
 public class ShowCartTest {
@@ -47,7 +47,7 @@ public class ShowCartTest {
         showCart.process(request, response);
     }
 
-    private Matcher<Map<? extends String,? extends Object>> hasEntry(String key, Object value) {
+    private Matcher<Map<? extends String, ?>> hasEntry(String key, Object value) {
         return Matchers.hasEntry(key, value);
     }
 }

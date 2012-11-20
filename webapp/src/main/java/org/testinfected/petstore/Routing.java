@@ -1,12 +1,12 @@
 package org.testinfected.petstore;
 
-import com.pyxis.petstore.domain.order.Cart;
-import com.pyxis.petstore.domain.order.Cashier;
-import com.pyxis.petstore.domain.order.OrderBook;
-import com.pyxis.petstore.domain.order.OrderNumberSequence;
-import com.pyxis.petstore.domain.product.AttachmentStorage;
-import com.pyxis.petstore.domain.product.ItemInventory;
-import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.testinfected.petstore.order.Cart;
+import org.testinfected.petstore.order.Cashier;
+import org.testinfected.petstore.order.OrderBook;
+import org.testinfected.petstore.order.OrderNumberSequence;
+import org.testinfected.petstore.product.AttachmentStorage;
+import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.petstore.product.ProductCatalog;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.petstore.controllers.Checkout;

@@ -1,9 +1,9 @@
 package org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.order.LineItem;
-import com.pyxis.petstore.domain.order.Order;
-import com.pyxis.petstore.domain.order.OrderBook;
-import com.pyxis.petstore.domain.order.OrderNumber;
+import org.testinfected.petstore.order.LineItem;
+import org.testinfected.petstore.order.Order;
+import org.testinfected.petstore.order.OrderBook;
+import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.jdbc.records.LineItemRecord;
 import org.testinfected.petstore.jdbc.records.OrderRecord;
 import org.testinfected.petstore.jdbc.records.PaymentRecord;

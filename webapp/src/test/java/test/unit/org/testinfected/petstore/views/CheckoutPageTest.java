@@ -1,6 +1,6 @@
 package test.unit.org.testinfected.petstore.views;
 
-import com.pyxis.petstore.domain.billing.CreditCardType;
+import org.testinfected.petstore.billing.CreditCardType;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;

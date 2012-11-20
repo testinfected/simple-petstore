@@ -1,7 +1,7 @@
 package org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.order.Order;
-import com.pyxis.petstore.domain.product.Product;
+import org.testinfected.petstore.order.Order;
+import org.testinfected.petstore.product.Product;
 
 public class Properties {
 

@@ -1,7 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.billing.CreditCardType;
-import com.pyxis.petstore.domain.order.SalesAssistant;
+import org.testinfected.petstore.billing.CreditCardType;
+import org.testinfected.petstore.order.SalesAssistant;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.AllOf;
@@ -44,7 +44,7 @@ public class CheckoutTest {
         return AllOf.allOf(matchers);
     }
 
-    private Matcher<Map<? extends String, ? extends Object>> hasEntry(String key, Object value) {
+    private Matcher<Map<? extends String, ?>> hasEntry(String key, Object value) {
         return Matchers.hasEntry(key, value);
     }
 }

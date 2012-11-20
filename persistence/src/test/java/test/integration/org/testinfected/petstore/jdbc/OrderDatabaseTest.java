@@ -1,9 +1,9 @@
 package test.integration.org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.billing.PaymentMethod;
-import com.pyxis.petstore.domain.order.LineItem;
-import com.pyxis.petstore.domain.order.Order;
-import com.pyxis.petstore.domain.order.OrderNumber;
+import org.testinfected.petstore.billing.PaymentMethod;
+import org.testinfected.petstore.order.LineItem;
+import org.testinfected.petstore.order.Order;
+import org.testinfected.petstore.order.OrderNumber;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.junit.After;
@@ -13,7 +13,7 @@ import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.OrdersDatabase;
-import test.support.com.pyxis.petstore.builders.OrderBuilder;
+import test.support.org.testinfected.petstore.builders.OrderBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
@@ -32,11 +32,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
-import static test.support.com.pyxis.petstore.builders.Builders.build;
-import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
-import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.validVisaDetails;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
-import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
+import static test.support.org.testinfected.petstore.builders.Builders.build;
+import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
+import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
 
 public class OrderDatabaseTest {

@@ -1,12 +1,12 @@
 package org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.billing.Address;
-import com.pyxis.petstore.domain.billing.CreditCardDetails;
-import com.pyxis.petstore.domain.order.OrderNumber;
-import com.pyxis.petstore.domain.order.SalesAssistant;
+import org.testinfected.petstore.billing.Address;
+import org.testinfected.petstore.billing.CreditCardDetails;
+import org.testinfected.petstore.order.OrderNumber;
+import org.testinfected.petstore.order.SalesAssistant;
 import org.testinfected.petstore.Controller;
 
-import static com.pyxis.petstore.domain.billing.CreditCardType.valueOf;
+import static org.testinfected.petstore.billing.CreditCardType.valueOf;
 
 public class PlaceOrder implements Controller {
     private final SalesAssistant salesAssistant;

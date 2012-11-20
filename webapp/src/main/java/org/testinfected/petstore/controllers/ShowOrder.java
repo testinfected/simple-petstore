@@ -1,8 +1,8 @@
 package org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.order.Order;
-import com.pyxis.petstore.domain.order.OrderBook;
-import com.pyxis.petstore.domain.order.OrderNumber;
+import org.testinfected.petstore.order.Order;
+import org.testinfected.petstore.order.OrderBook;
+import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.Controller;
 
 import static org.testinfected.petstore.util.Context.context;

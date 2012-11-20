@@ -1,6 +1,6 @@
 package org.testinfected.petstore.jdbc.records;
 
-import com.pyxis.petstore.domain.order.LineItem;
+import org.testinfected.petstore.order.LineItem;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;

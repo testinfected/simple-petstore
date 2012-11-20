@@ -1,9 +1,9 @@
 package test.unit.org.testinfected.petstore.views;
 
-import com.pyxis.petstore.domain.product.Item;
+import org.testinfected.petstore.product.Item;
 import org.junit.Test;
 import org.w3c.dom.Element;
-import test.support.com.pyxis.petstore.builders.Builder;
+import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -22,8 +22,8 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.matches;
-import static test.support.com.pyxis.petstore.builders.Builders.build;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.builders.Builders.build;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class ItemsPageTest {

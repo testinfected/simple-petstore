@@ -1,6 +1,6 @@
 package org.testinfected.petstore.jdbc.support;
 
-import com.pyxis.petstore.domain.billing.PaymentMethod;
+import org.testinfected.petstore.billing.PaymentMethod;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

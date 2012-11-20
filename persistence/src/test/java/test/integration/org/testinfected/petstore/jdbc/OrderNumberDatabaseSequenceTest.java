@@ -1,7 +1,7 @@
 package test.integration.org.testinfected.petstore.jdbc;
 
-import com.pyxis.petstore.domain.order.OrderNumber;
-import com.pyxis.petstore.domain.order.OrderNumberSequence;
+import org.testinfected.petstore.order.OrderNumber;
+import org.testinfected.petstore.order.OrderNumberSequence;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.junit.After;

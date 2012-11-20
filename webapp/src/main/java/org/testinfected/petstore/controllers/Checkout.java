@@ -1,7 +1,7 @@
 package org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.billing.CreditCardType;
-import com.pyxis.petstore.domain.order.SalesAssistant;
+import org.testinfected.petstore.billing.CreditCardType;
+import org.testinfected.petstore.order.SalesAssistant;
 import org.testinfected.petstore.Controller;
 
 import static org.testinfected.petstore.util.Context.context;

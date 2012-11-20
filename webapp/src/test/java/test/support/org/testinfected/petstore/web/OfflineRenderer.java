@@ -4,7 +4,7 @@ import org.testinfected.petstore.MustacheRendering;
 import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.petstore.util.Context;
 import org.w3c.dom.Element;
-import test.support.com.pyxis.petstore.builders.Builder;
+import test.support.org.testinfected.petstore.builders.Builder;
 
 import java.io.File;
 import java.io.StringWriter;

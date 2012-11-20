@@ -1,11 +1,11 @@
 package org.testinfected.petstore.procurement;
 
-import com.pyxis.petstore.domain.product.Attachment;
-import com.pyxis.petstore.domain.product.Item;
-import com.pyxis.petstore.domain.product.ItemInventory;
-import com.pyxis.petstore.domain.product.ItemNumber;
-import com.pyxis.petstore.domain.product.Product;
-import com.pyxis.petstore.domain.product.ProductCatalog;
+import org.testinfected.petstore.product.Attachment;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.petstore.product.ItemNumber;
+import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 

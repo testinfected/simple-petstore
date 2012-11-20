@@ -1,7 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.pyxis.petstore.domain.order.SalesAssistant;
-import com.pyxis.petstore.domain.product.ItemNumber;
+import org.testinfected.petstore.order.SalesAssistant;
+import org.testinfected.petstore.product.ItemNumber;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

@@ -3,8 +3,8 @@ package test.unit.org.testinfected.petstore.views;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.w3c.dom.Element;
-import test.support.com.pyxis.petstore.builders.ItemBuilder;
-import test.support.com.pyxis.petstore.builders.OrderBuilder;
+import test.support.org.testinfected.petstore.builders.ItemBuilder;
+import test.support.org.testinfected.petstore.builders.OrderBuilder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -12,12 +12,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
-import static test.support.com.pyxis.petstore.builders.AddressBuilder.anAddress;
-import static test.support.com.pyxis.petstore.builders.CartBuilder.aCart;
-import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aCreditCard;
-import static test.support.com.pyxis.petstore.builders.CreditCardBuilder.aVisa;
-import static test.support.com.pyxis.petstore.builders.ItemBuilder.anItem;
-import static test.support.com.pyxis.petstore.builders.OrderBuilder.anOrder;
+import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
+import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
+import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aCreditCard;
+import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class OrderPageTest {
