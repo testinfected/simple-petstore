@@ -1,5 +1,6 @@
 package test.unit.org.testinfected.petstore.order;
 
+import org.testinfected.petstore.QueryUnitOfWork;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.CartItem;
@@ -88,7 +89,7 @@ public class CashierTest {
         PaymentMethod paymentMethod = validVisaDetails().build();
 
         context.checking(new Expectations() {{
-            oneOf(transactor).perform(with(aUnitOfWork())); will(performUnitOfWork());
+            oneOf(transactor).performQuery(with(aQuery())); will(performUnitOfWork());
             allowing(sequence).nextOrderNumber(); will(returnValue(nextNumber)); when(transaction.is("started"));
             oneOf(orderBook).record(with(anOrder(
                     withNumber(nextNumber.getNumber()),
@@ -169,31 +170,31 @@ public class CashierTest {
         };
     }
 
-    private Matcher<UnitOfWork> aUnitOfWork() {
-        return any(UnitOfWork.class);
+    private Matcher<QueryUnitOfWork> aQuery() {
+        return any(QueryUnitOfWork.class);
     }
 
-    private PerformUnitOfWork performUnitOfWork() {
-        return new PerformUnitOfWork(transaction);
+    private PerformQuery performUnitOfWork() {
+        return new PerformQuery(transaction);
     }
 
-    private static class PerformUnitOfWork implements Action {
+    private static class PerformQuery implements Action {
         private final States transaction;
 
-        public PerformUnitOfWork(States transaction) {
+        public PerformQuery(States transaction) {
             this.transaction = transaction;
         }
 
         public Object invoke(Invocation invocation) throws Throwable {
-            UnitOfWork work = (UnitOfWork) invocation.getParameter(0);
+            QueryUnitOfWork work = (QueryUnitOfWork) invocation.getParameter(0);
             transaction.become("started");
             work.execute();
             transaction.become("committed");
-            return null;
+            return work.result;
         }
 
         public void describeTo(Description description) {
-            description.appendText("performs unit of work");
+            description.appendText("performs query");
         }
     }
 

@@ -43,11 +43,10 @@ public class Cashier implements SalesAssistant {
                 order.addItemsFrom(cart);
                 order.pay(paymentMethod);
                 orderBook.record(order);
+                cart.clear();
                 return nextNumber;
             }
         };
-        transactor.perform(transaction);
-        cart.clear();
-        return transaction.result;
+        return transactor.performQuery(transaction);
     }
 }

@@ -62,7 +62,7 @@ public class Select<T> {
 
     public T first(final Connection connection) {
         List<T> entities = list(connection);
-        return entities.get(0);
+        return entities.isEmpty() ? null : entities.get(0);
     }
 
     public List<T> list(final Connection connection) {

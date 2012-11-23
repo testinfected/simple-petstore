@@ -1,5 +1,6 @@
 package org.testinfected.petstore.jdbc;
 
+import org.testinfected.petstore.QueryUnitOfWork;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.support.JDBCException;
@@ -29,6 +30,12 @@ public class JDBCTransactor implements Transactor {
         } finally {
             resetAutoCommitTo(autoCommit);
         }
+    }
+
+    @Override
+    public <T> T performQuery(QueryUnitOfWork<T> query) throws Exception {
+        perform(query);
+        return query.result;
     }
 
     private void resetAutoCommitTo(boolean autoCommit) {
