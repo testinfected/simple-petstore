@@ -6,8 +6,6 @@ import java.sql.SQLException;
 
 public interface Record<T> {
 
-    Table table();
-
     T hydrate(ResultSet rs) throws SQLException;
 
     void dehydrate(PreparedStatement st, T entity) throws SQLException;

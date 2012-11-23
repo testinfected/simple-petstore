@@ -9,15 +9,15 @@ import java.util.List;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 public class Insert<T> {
-    private final Record<T> record;
+    private final Table<T> into;
     private final T entity;
 
-    public static <T> Insert<T> into(Record<T> record, T entity) {
-        return new Insert<T>(record, entity);
+    public static <T> Insert<T> into(Table<T> table, T entity) {
+        return new Insert<T>(table, entity);
     }
 
-    public Insert(Record<T> record, final T entity) {
-        this.record = record;
+    public Insert(Table<T> table, final T entity) {
+        this.into = table;
         this.entity = entity;
     }
 
@@ -25,9 +25,9 @@ public class Insert<T> {
         PreparedStatement insert = null;
         try {
             insert = connection.prepareStatement(buildInsertStatement(), RETURN_GENERATED_KEYS);
-            record.dehydrate(insert, entity);
+            into.dehydrate(insert, entity);
             executeInsert(insert);
-            record.handleKeys(insert.getGeneratedKeys(), entity);
+            into.handleKeys(insert.getGeneratedKeys(), entity);
         } catch (SQLException e) {
             throw new JDBCException("Could not insert entity " + entity, e);
         } finally {
@@ -37,9 +37,9 @@ public class Insert<T> {
 
     private String buildInsertStatement() {
         StringBuilder sql = new StringBuilder();
-        sql.append("insert into ").append(record.table().name());
-        sql.append("(").append(Sql.asString(record.table().columnNames())).append(")");
-        sql.append(" values(").append(Sql.asString(parametersFor(record.table().columnNames()))).append(")");
+        sql.append("insert into ").append(into.name());
+        sql.append("(").append(Sql.asString(into.columnNames())).append(")");
+        sql.append(" values(").append(Sql.asString(parametersFor(into.columnNames()))).append(")");
         return sql.toString();
     }
 

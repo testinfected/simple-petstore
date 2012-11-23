@@ -1,20 +1,21 @@
 package org.testinfected.petstore.jdbc.support;
 
 import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table {
-
-    public static Table named(String name) {
-        return new Table(name);
-    }
+public class Table<T> {
 
     private final String name;
+    private final Record<T> record;
     private final List<Column<?>> columns = new ArrayList<Column<?>>();
 
-    public Table(String name) {
+    public Table(String name, Record<T> record) {
         this.name = name;
+        this.record = record;
     }
 
     public String name() {
@@ -52,5 +53,17 @@ public class Table {
 
     public int indexOf(Column<?> column) {
         return columns.indexOf(column) + 1;
+    }
+
+    public T hydrate(ResultSet resultSet) throws SQLException {
+        return record.hydrate(resultSet);
+    }
+
+    public void dehydrate(PreparedStatement statement, T entity) throws SQLException {
+        record.dehydrate(statement, entity);
+    }
+
+    public void handleKeys(ResultSet keys, T entity) throws SQLException {
+        record.handleKeys(keys, entity);
     }
 }

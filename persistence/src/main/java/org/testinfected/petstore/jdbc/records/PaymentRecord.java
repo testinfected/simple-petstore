@@ -15,7 +15,8 @@ import static org.testinfected.petstore.jdbc.Properties.idOf;
 
 public class PaymentRecord extends AbstractRecord<PaymentMethod> {
 
-    private final Table payments = Table.named("payments");
+    private final Table<PaymentMethod> payments = new Table<PaymentMethod>("payments", this);
+
     private final Column<Long> id = payments.LONG("id");
     private final Column<String> paymentType = payments.STRING("payment_type");
     private final Column<String> cardType = payments.STRING("card_type");
@@ -27,9 +28,8 @@ public class PaymentRecord extends AbstractRecord<PaymentMethod> {
 
     public static final String CREDIT_CARD = "credit_card";
 
-    @Override
-    public Table table() {
-        return payments;
+    public static Table<PaymentMethod> buildTable() {
+        return new PaymentRecord().payments;
     }
 
     @Override

@@ -7,11 +7,11 @@ import java.sql.SQLException;
 
 public class Column<T> {
 
-    private final Table table;
+    private final Table<?> table;
     private final String name;
     private final Type<T> type;
 
-    public Column(Table table, String name, Type<T> type) {
+    public Column(Table<?> table, String name, Type<T> type) {
         this.table = table;
         this.name = name;
         this.type = type;

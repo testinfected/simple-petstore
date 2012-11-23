@@ -1,7 +1,6 @@
 package org.testinfected.petstore.jdbc.records;
 
 import org.testinfected.petstore.jdbc.support.Column;
-import org.testinfected.petstore.jdbc.support.Record;
 import org.testinfected.petstore.jdbc.support.Table;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemNumber;
@@ -17,22 +16,22 @@ import static org.testinfected.petstore.jdbc.Properties.productOf;
 
 public class ItemRecord extends AbstractRecord<Item> {
 
-    private final Table items = Table.named("items");
+    private final Table<Product> products;
+
+    private final Table<Item> items = new Table<Item>("items", this);
+
     private final Column<Long> id = items.LONG("id");
     private final Column<String> number = items.STRING("number");
     private final Column<Long> product = items.LONG("product_id");
     private final Column<BigDecimal> price = items.BIG_DECIMAL("price");
     private final Column<String> description = items.STRING("description");
 
-    private final Record<Product> products;
-
-    public ItemRecord(Record<Product> products) {
-        this.products = products;
+    public static Table<Item> buildTable(Table<Product> products) {
+        return new ItemRecord(products).items;
     }
 
-    @Override
-    public Table table() {
-        return items;
+    public ItemRecord(Table<Product> products) {
+        this.products = products;
     }
 
     @Override

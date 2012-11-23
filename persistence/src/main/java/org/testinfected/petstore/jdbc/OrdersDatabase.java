@@ -1,16 +1,18 @@
 package org.testinfected.petstore.jdbc;
 
-import org.testinfected.petstore.order.LineItem;
-import org.testinfected.petstore.order.Order;
-import org.testinfected.petstore.order.OrderBook;
-import org.testinfected.petstore.order.OrderNumber;
+import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.jdbc.records.LineItemRecord;
 import org.testinfected.petstore.jdbc.records.OrderRecord;
 import org.testinfected.petstore.jdbc.records.PaymentRecord;
 import org.testinfected.petstore.jdbc.support.Insert;
 import org.testinfected.petstore.jdbc.support.Select;
+import org.testinfected.petstore.jdbc.support.Table;
+import org.testinfected.petstore.order.LineItem;
+import org.testinfected.petstore.order.Order;
+import org.testinfected.petstore.order.OrderBook;
+import org.testinfected.petstore.order.OrderNumber;
 
-import java.sql.*;
+import java.sql.Connection;
 import java.util.List;
 
 import static org.testinfected.petstore.jdbc.Properties.idOf;
@@ -19,9 +21,9 @@ import static org.testinfected.petstore.jdbc.Properties.orderOf;
 public class OrdersDatabase implements OrderBook {
 
     private final Connection connection;
-    private final PaymentRecord payments = new PaymentRecord();
-    private final OrderRecord orders = new OrderRecord(payments);
-    private final LineItemRecord lineItems = new LineItemRecord();
+    private final Table<PaymentMethod> payments = PaymentRecord.buildTable();
+    private final Table<Order> orders = OrderRecord.buildTable(payments);
+    private final Table<LineItem> lineItems = LineItemRecord.buildTable();
 
     public OrdersDatabase(Connection connection) {
         this.connection = connection;

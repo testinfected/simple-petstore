@@ -1,12 +1,14 @@
 package org.testinfected.petstore.jdbc;
 
-import org.testinfected.petstore.product.Item;
-import org.testinfected.petstore.product.ItemInventory;
-import org.testinfected.petstore.product.ItemNumber;
 import org.testinfected.petstore.jdbc.records.ItemRecord;
 import org.testinfected.petstore.jdbc.records.ProductRecord;
 import org.testinfected.petstore.jdbc.support.Insert;
 import org.testinfected.petstore.jdbc.support.Select;
+import org.testinfected.petstore.jdbc.support.Table;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.petstore.product.ItemNumber;
+import org.testinfected.petstore.product.Product;
 
 import java.sql.Connection;
 import java.util.List;
@@ -14,8 +16,8 @@ import java.util.List;
 public class ItemsDatabase implements ItemInventory {
 
     private final Connection connection;
-    private final ProductRecord products = new ProductRecord();
-    private final ItemRecord items = new ItemRecord(products);
+    private final Table<Product> products = ProductRecord.buildTable();
+    private final Table<Item> items = ItemRecord.buildTable(products);
 
     public ItemsDatabase(Connection connection) {
         this.connection = connection;

@@ -13,16 +13,16 @@ import static org.testinfected.petstore.jdbc.Properties.idOf;
 
 public class ProductRecord extends AbstractRecord<Product> {
 
-    private final Table products = Table.named("products");
+    private final Table<Product> products = new Table<Product>("products", this);
+
     private final Column<Long> id = products.LONG("id");
     private final Column<String> number = products.STRING("number");
     private final Column<String> name = products.STRING("name");
     private final Column<String> description = products.STRING("description");
     private final Column<String> photo = products.STRING("photo_file_name");
 
-    @Override
-    public Table table() {
-        return products;
+    public static Table<Product> buildTable() {
+        return new ProductRecord().products;
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.testinfected.petstore.jdbc.records;
 
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.jdbc.support.Column;
-import org.testinfected.petstore.jdbc.support.Record;
 import org.testinfected.petstore.jdbc.support.Table;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderNumber;
@@ -16,19 +15,20 @@ import static org.testinfected.petstore.jdbc.Properties.idOf;
 
 public class OrderRecord extends AbstractRecord<Order> {
 
-    private final Table orders = Table.named("orders");
+    private final Table<? extends PaymentMethod> payments;
+
+    private final Table<Order> orders = new Table<Order>("orders", this);
+
     private final Column<Long> id = orders.LONG("id");
     private final Column<String> number = orders.STRING("number");
     private final Column<Long> payment = orders.LONG("payment_id");
-    private final Record<? extends PaymentMethod> payments;
 
-    public OrderRecord(Record<? extends PaymentMethod> payments) {
-        this.payments = payments;
+    public static Table<Order> buildTable(Table<? extends PaymentMethod> payments) {
+        return new OrderRecord(payments).orders;
     }
 
-    @Override
-    public Table table() {
-        return orders;
+    public OrderRecord(Table<? extends PaymentMethod> payments) {
+        this.payments = payments;
     }
 
     @Override

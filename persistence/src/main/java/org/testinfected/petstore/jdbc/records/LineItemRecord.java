@@ -14,7 +14,8 @@ import static org.testinfected.petstore.jdbc.Properties.orderOf;
 
 public class LineItemRecord extends AbstractRecord<LineItem> {
 
-    private final Table lineItems = Table.named("line_items");
+    private final Table<LineItem> lineItems = new Table<LineItem>("line_items", this);
+
     private final Column<Long> id = lineItems.LONG("id");
     private final Column<String> number = lineItems.STRING("item_number");
     private final Column<String> description = lineItems.STRING("item_description");
@@ -24,9 +25,8 @@ public class LineItemRecord extends AbstractRecord<LineItem> {
     private final Column<Long> order = lineItems.LONG("order_id");
     private final Column<Integer> line = lineItems.INT("order_line");
 
-    @Override
-    public Table table() {
-        return lineItems;
+    public static Table<LineItem> buildTable() {
+        return new LineItemRecord().lineItems;
     }
 
     @Override
