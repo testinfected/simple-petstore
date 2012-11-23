@@ -1,79 +1,50 @@
 package org.testinfected.petstore.jdbc.records;
 
+import org.testinfected.petstore.jdbc.support.Column;
+import org.testinfected.petstore.jdbc.support.Table;
 import org.testinfected.petstore.order.LineItem;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static org.testinfected.petstore.jdbc.Properties.orderOf;
 
 public class LineItemRecord extends AbstractRecord<LineItem> {
 
-    public static final String TABLE = "line_items";
-    public static final String ID = "id";
-    public static final String NUMBER = "item_number";
-    public static final String DESCRIPTION = "item_description";
-    public static final String UNIT_PRICE = "item_unit_price";
-    public static final String QUANTITY = "quantity";
-    public static final String TOTAL_PRICE = "total_price";
-    public static final String ORDER = "order_id";
-    public static final String LINE = "order_line";
+    private final Table lineItems = Table.named("line_items");
+    private final Column<Long> id = lineItems.LONG("id");
+    private final Column<String> number = lineItems.STRING("item_number");
+    private final Column<String> description = lineItems.STRING("item_description");
+    private final Column<BigDecimal> unitPrice = lineItems.BIG_DECIMAL("item_unit_price");
+    private final Column<Integer> quantity = lineItems.INT("quantity");
+    private final Column<BigDecimal> totalPrice = lineItems.BIG_DECIMAL("total_price");
+    private final Column<Long> order = lineItems.LONG("order_id");
+    private final Column<Integer> line = lineItems.INT("order_line");
 
     @Override
-    public String table() {
-        return TABLE;
-    }
-
-    @Override
-    public List<String> columns() {
-        return Arrays.asList(ID, NUMBER, DESCRIPTION, UNIT_PRICE, QUANTITY, TOTAL_PRICE, ORDER, LINE);
+    public Table table() {
+        return lineItems;
     }
 
     @Override
     public LineItem hydrate(ResultSet rs) throws SQLException {
-        LineItem lineItem = new LineItem(number(rs), description(rs), unitPrice(rs), quantity(rs), totalPrice(rs));
-        idOf(lineItem).set(id(rs));
+        LineItem lineItem = new LineItem(number.get(rs), description.get(rs), unitPrice.get(rs), quantity.get(rs), totalPrice.get(rs));
+        idOf(lineItem).set(id.get(rs));
         return lineItem;
     }
 
     @Override
-    public void dehydrate(PreparedStatement statement, LineItem lineItem) throws SQLException {
-        statement.setLong(indexOf(ID), idOf(lineItem).get());
-        statement.setString(indexOf(NUMBER), lineItem.getItemNumber());
-        statement.setBigDecimal(indexOf(UNIT_PRICE), lineItem.getItemUnitPrice());
-        statement.setString(indexOf(DESCRIPTION), lineItem.getItemDescription());
-        statement.setInt(indexOf(QUANTITY), lineItem.getQuantity());
-        statement.setBigDecimal(indexOf(TOTAL_PRICE), lineItem.getTotalPrice());
-        statement.setLong(indexOf(ORDER), idOf(orderOf(lineItem).get()).get());
-        statement.setInt(indexOf(LINE), orderOf(lineItem).get().lineOf(lineItem));
-    }
-
-    private long id(ResultSet rs) throws SQLException {
-        return rs.getLong(findColumn(rs, ID));
-    }
-
-    private String number(ResultSet rs) throws SQLException {
-        return rs.getString(findColumn(rs, NUMBER));
-    }
-
-    private String description(ResultSet rs) throws SQLException {
-        return rs.getString(findColumn(rs, DESCRIPTION));
-    }
-
-    private BigDecimal unitPrice(ResultSet rs) throws SQLException {
-        return rs.getBigDecimal(findColumn(rs, UNIT_PRICE));
-    }
-
-    private int quantity(ResultSet rs) throws SQLException {
-        return rs.getInt(findColumn(rs, QUANTITY));
-    }
-
-    private BigDecimal totalPrice(ResultSet rs) throws SQLException {
-        return rs.getBigDecimal(findColumn(rs, TOTAL_PRICE));
+    public void dehydrate(PreparedStatement st, LineItem lineItem) throws SQLException {
+        id.set(st, idOf(lineItem).get());
+        number.set(st, lineItem.getItemNumber());
+        unitPrice.set(st, lineItem.getItemUnitPrice());
+        description.set(st, lineItem.getItemDescription());
+        quantity.set(st, lineItem.getQuantity());
+        totalPrice.set(st, lineItem.getTotalPrice());
+        order.set(st, idOf(orderOf(lineItem).get()).get());
+        line.set(st, orderOf(lineItem).get().lineOf(lineItem));
     }
 }

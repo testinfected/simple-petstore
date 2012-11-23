@@ -1,71 +1,45 @@
 package org.testinfected.petstore.jdbc.records;
 
+import org.testinfected.petstore.jdbc.support.Column;
+import org.testinfected.petstore.jdbc.support.Table;
 import org.testinfected.petstore.product.Attachment;
 import org.testinfected.petstore.product.Product;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 
 public class ProductRecord extends AbstractRecord<Product> {
 
-    public static final String TABLE = "products";
-
-    public static final String ID = "id";
-    public static final String NUMBER = "number";
-    public static final String NAME = "name";
-    public static final String DESCRIPTION = "description";
-    public static final String PHOTO = "photo_file_name";
-
-    @Override
-    public String table() {
-        return TABLE;
-    }
+    private final Table products = Table.named("products");
+    private final Column<Long> id = products.LONG("id");
+    private final Column<String> number = products.STRING("number");
+    private final Column<String> name = products.STRING("name");
+    private final Column<String> description = products.STRING("description");
+    private final Column<String> photo = products.STRING("photo_file_name");
 
     @Override
-    public List<String> columns() {
-        return Arrays.asList(ID, NUMBER, NAME, DESCRIPTION, PHOTO);
+    public Table table() {
+        return products;
     }
 
     @Override
     public Product hydrate(ResultSet rs) throws SQLException {
-        Product product = new Product(number(rs), name(rs));
-        product.setDescription(description(rs));
-        product.attachPhoto(new Attachment(photoFileName(rs)));
-        idOf(product).set(id(rs));
+        Product product = new Product(number.get(rs), name.get(rs));
+        product.setDescription(description.get(rs));
+        product.attachPhoto(new Attachment(photo.get(rs)));
+        idOf(product).set(id.get(rs));
         return product;
     }
 
     @Override
-    public void dehydrate(PreparedStatement statement, Product product) throws SQLException {
-        statement.setLong(indexOf(ID), idOf(product).get());
-        statement.setString(indexOf(NUMBER), product.getNumber());
-        statement.setString(indexOf(NAME), product.getName());
-        statement.setString(indexOf(DESCRIPTION), product.getDescription());
-        statement.setString(indexOf(PHOTO), product.hasPhoto() ? product.getPhotoFileName() : null);
-    }
-
-    private long id(ResultSet rs) throws SQLException {
-        return rs.getLong(findColumn(rs, ID));
-    }
-
-    private String photoFileName(ResultSet rs) throws SQLException {
-        return rs.getString(findColumn(rs, PHOTO));
-    }
-
-    private String description(ResultSet rs) throws SQLException {
-        return rs.getString(findColumn(rs, DESCRIPTION));
-    }
-
-    private String name(ResultSet rs) throws SQLException {
-        return rs.getString(findColumn(rs, NAME));
-    }
-
-    private String number(ResultSet rs) throws SQLException {
-        return rs.getString(findColumn(rs, NUMBER));
+    public void dehydrate(PreparedStatement st, Product product) throws SQLException {
+        id.set(st, idOf(product).get());
+        number.set(st, product.getNumber());
+        name.set(st, product.getName());
+        description.set(st, product.getDescription());
+        photo.set(st, product.hasPhoto() ? product.getPhotoFileName() : null);
     }
 }

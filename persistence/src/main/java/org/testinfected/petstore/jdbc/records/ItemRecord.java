@@ -1,29 +1,28 @@
 package org.testinfected.petstore.jdbc.records;
 
+import org.testinfected.petstore.jdbc.support.Column;
+import org.testinfected.petstore.jdbc.support.Record;
+import org.testinfected.petstore.jdbc.support.Table;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemNumber;
 import org.testinfected.petstore.product.Product;
-import org.testinfected.petstore.jdbc.support.Record;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static org.testinfected.petstore.jdbc.Properties.productOf;
 
 public class ItemRecord extends AbstractRecord<Item> {
 
-    public static final String TABLE = "items";
-
-    public static final String ID = "id";
-    public static final String NUMBER = "number";
-    public static final String PRODUCT = "product_id";
-    public static final String PRICE = "price";
-    public static final String DESCRIPTION = "description";
+    private final Table items = Table.named("items");
+    private final Column<Long> id = items.LONG("id");
+    private final Column<String> number = items.STRING("number");
+    private final Column<Long> product = items.LONG("product_id");
+    private final Column<BigDecimal> price = items.BIG_DECIMAL("price");
+    private final Column<String> description = items.STRING("description");
 
     private final Record<Product> products;
 
@@ -32,49 +31,24 @@ public class ItemRecord extends AbstractRecord<Item> {
     }
 
     @Override
-    public String table() {
-        return TABLE;
-    }
-
-    @Override
-    public List<String> columns() {
-        return Arrays.asList(ID, NUMBER, PRODUCT, PRICE, DESCRIPTION);
+    public Table table() {
+        return items;
     }
 
     @Override
     public Item hydrate(ResultSet rs) throws SQLException {
-        Item item = new Item(new ItemNumber(number(rs)), product(rs), price(rs));
-        item.setDescription(description(rs));
-        idOf(item).set(id(rs));
+        Item item = new Item(new ItemNumber(number.get(rs)), products.hydrate(rs), price.get(rs));
+        item.setDescription(description.get(rs));
+        idOf(item).set(id.get(rs));
         return item;
     }
 
     @Override
-    public void dehydrate(PreparedStatement statement, Item item) throws SQLException {
-        statement.setLong(indexOf(ID), idOf(item).get());
-        statement.setString(indexOf(NUMBER), item.getNumber());
-        statement.setLong(indexOf(PRODUCT), idOf(productOf(item).get()).get());
-        statement.setBigDecimal(indexOf(PRICE), item.getPrice());
-        statement.setString(indexOf(DESCRIPTION), item.getDescription());
-    }
-
-    private String number(ResultSet rs) throws SQLException {
-        return rs.getString(findColumn(rs, NUMBER));
-    }
-
-    private Product product(ResultSet rs) throws SQLException {
-        return products.hydrate(rs);
-    }
-
-    private BigDecimal price(ResultSet rs) throws SQLException {
-        return rs.getBigDecimal(findColumn(rs, PRICE));
-    }
-
-    private String description(ResultSet rs) throws SQLException {
-        return rs.getString(findColumn(rs, DESCRIPTION));
-    }
-
-    private long id(ResultSet rs) throws SQLException {
-        return rs.getLong(findColumn(rs, ID));
+    public void dehydrate(PreparedStatement st, Item item) throws SQLException {
+        id.set(st, idOf(item).get());
+        number.set(st, item.getNumber());
+        product.set(st, idOf(productOf(item).get()).get());
+        price.set(st, item.getPrice());
+        description.set(st, item.getDescription());
     }
 }

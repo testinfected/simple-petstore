@@ -23,14 +23,14 @@ public class ItemsDatabase implements ItemInventory {
 
     public List<Item> findByProductNumber(String productNumber) {
         return Select.from(items, "item").
-                innerJoin(products, "product", "item.product_id = product.id").
+                join(products, "product", "item.product_id = product.id").
                 where("product.number = ?", productNumber).
                 list(connection);
     }
 
     public Item find(ItemNumber itemNumber) {
         return Select.from(items, "item").
-                innerJoin(products, "product", "item.product_id = product.id").
+                join(products, "product", "item.product_id = product.id").
                 where("item.number = ?", itemNumber.getNumber()).
                 first(connection);
     }

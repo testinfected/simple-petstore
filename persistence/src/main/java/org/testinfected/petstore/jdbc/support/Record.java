@@ -3,17 +3,14 @@ package org.testinfected.petstore.jdbc.support;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 public interface Record<T> {
 
-    String table();
-
-    List<String> columns();
+    Table table();
 
     T hydrate(ResultSet rs) throws SQLException;
 
-    void dehydrate(PreparedStatement statement, T entity) throws SQLException;
+    void dehydrate(PreparedStatement st, T entity) throws SQLException;
 
-    void setGeneratedKeys(ResultSet generatedKeys, T entity) throws SQLException;
+    void handleKeys(ResultSet keys, T entity) throws SQLException;
 }

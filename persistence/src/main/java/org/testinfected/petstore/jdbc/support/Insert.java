@@ -27,7 +27,7 @@ public class Insert<T> {
             insert = connection.prepareStatement(buildInsertStatement(), RETURN_GENERATED_KEYS);
             record.dehydrate(insert, entity);
             executeInsert(insert);
-            record.setGeneratedKeys(insert.getGeneratedKeys(), entity);
+            record.handleKeys(insert.getGeneratedKeys(), entity);
         } catch (SQLException e) {
             throw new JDBCException("Could not insert entity " + entity, e);
         } finally {
@@ -37,9 +37,9 @@ public class Insert<T> {
 
     private String buildInsertStatement() {
         StringBuilder sql = new StringBuilder();
-        sql.append("insert into ").append(record.table());
-        sql.append("(").append(Sql.asString(record.columns())).append(")");
-        sql.append(" values(").append(Sql.asString(parametersFor(record.columns()))).append(")");
+        sql.append("insert into ").append(record.table().name());
+        sql.append("(").append(Sql.asString(record.table().columnNames())).append(")");
+        sql.append(" values(").append(Sql.asString(parametersFor(record.table().columnNames()))).append(")");
         return sql.toString();
     }
 

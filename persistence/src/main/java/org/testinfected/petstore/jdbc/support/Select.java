@@ -1,7 +1,5 @@
 package org.testinfected.petstore.jdbc.support;
 
-import org.testinfected.petstore.billing.PaymentMethod;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +9,7 @@ import java.util.*;
 public class Select<T> {
 
     public static <T> Select<T> from(final Record<T> record) {
-        return from(record, record.table());
+        return from(record, record.table().name());
     }
 
     public static <T> Select<T> from(final Record<T> record, String alias) {
@@ -29,25 +27,25 @@ public class Select<T> {
 
     public Select(Record<T> from, String alias) {
         this.from = from;
-        aliasTable(from.table(), alias);
+        aliasTable(from.table().name(), alias);
     }
 
     private void aliasTable(final String table, String alias) {
         aliases.put(table, alias);
     }
 
-    public Select<T> innerJoin(Record<?> join, String alias, String clause) {
-        return join(join, alias, "inner join", clause);
+    public Select<T> join(Record<?> join, String alias, String clause) {
+        return withJoin(join, alias, "inner join", clause);
     }
 
-    public Select<T> leftJoin(Record<PaymentMethod> join, String alias, String clause) {
-        return join(join, alias, "left outer join", clause);
+    public Select<T> leftJoin(Record<?> join, String alias, String clause) {
+        return withJoin(join, alias, "left outer join", clause);
     }
 
-    private Select<T> join(Record<?> join, String alias, String joinType, String clause) {
+    private Select<T> withJoin(Record<?> join, String alias, String joinType, String clause) {
         joins.add(join);
-        aliasTable(join.table(), alias);
-        joinClause.append(" ").append(joinType).append(" ").append(join.table()).append(" ").append(aliasOf(join)).append(" on ").append(clause);
+        aliasTable(join.table().name(), alias);
+        joinClause.append(" ").append(joinType).append(" ").append(join.table().name()).append(" ").append(aliasOf(join)).append(" on ").append(clause);
         return this;
     }
 
@@ -99,7 +97,7 @@ public class Select<T> {
     }
 
     private String fromClause() {
-        return " from " + from.table() + " " + aliasOf(from);
+        return " from " + from.table().name() + " " + aliasOf(from);
     }
 
     private String selectClause() {
@@ -116,12 +114,12 @@ public class Select<T> {
     }
 
     private String aliasOf(final Record<?> record) {
-        return aliases.get(record.table());
+        return aliases.get(record.table().name());
     }
 
     public List<String> columnsFor(Record<?> record) {
         List<String> columns = new ArrayList<String>();
-        for (String column : record.columns()) {
+        for (String column : record.table().columnNames()) {
             columns.add(aliasOf(record) + "." + column);
         }
         return columns;
