@@ -4,11 +4,15 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.CreateProduct;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
+import org.testinfected.petstore.product.DuplicateProductException;
+
+import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
 @RunWith(JMock.class)
 public class CreateProductTest {
@@ -20,17 +24,28 @@ public class CreateProductTest {
     Controller.Request request = context.mock(Controller.Request.class);
     Controller.Response response = context.mock(Controller.Response.class);
     final int CREATED = 201;
+    final int FORBIDDEN = 409;
+
+    @Before public void prepareRequest() {
+        setRequestParametersTo("LAB-1234", "Labrador", "Friendly Dog", "labrador.jpg");
+    }
 
     @Test public void
     makesProductProcurementRequestAndRespondsWithCreated() throws Exception {
-        setRequestParametersTo("LAB-1234", "Labrador", "Friendly Dog", "labrador.jpg");
-
         context.checking(new Expectations() {{
             oneOf(requestHandler).addProductToCatalog(with("LAB-1234"), with("Labrador"), with("Friendly Dog"), with("labrador.jpg"));
+            oneOf(response).renderHead(CREATED);
         }});
 
+        createProduct.process(request, response);
+    }
+
+    @Test public void
+    respondsWithConflictWhenProductAlreadyExists() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(response).renderHead(CREATED);
+            oneOf(requestHandler).addProductToCatalog(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(String.class)));
+                will(throwException(new DuplicateProductException(aProduct().build())));
+            oneOf(response).renderHead(FORBIDDEN);
         }});
 
         createProduct.process(request, response);

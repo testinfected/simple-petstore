@@ -1,6 +1,5 @@
 package test.integration.org.testinfected.petstore.jdbc;
 
-import org.testinfected.petstore.product.Product;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -11,7 +10,10 @@ import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
+import org.testinfected.petstore.product.DuplicateProductException;
+import org.testinfected.petstore.product.Product;
 import test.support.org.testinfected.petstore.builders.Builder;
+import test.support.org.testinfected.petstore.builders.ProductBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
@@ -24,11 +26,9 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.iterableWithSize;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
@@ -106,6 +106,15 @@ public class ProductsDatabaseTest {
             assertCanBeFoundByNumberWithSameState(sample);
             assertCanBeFoundByKeywordWithSameState(sample);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test(expected = DuplicateProductException.class) public void
+    productNumbersAreUnique() throws Exception {
+        ProductBuilder anExistingProduct = aProduct().withNumber("LAB-1234");
+        given(anExistingProduct);
+
+        productsDatabase.add(anExistingProduct.build());
     }
 
     private void assertCanBeFoundByNumberWithSameState(Product sample) {

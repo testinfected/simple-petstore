@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ProductCatalog {
 
-    void add(Product product);
+    void add(Product product) throws DuplicateProductException;
 
     Product findByNumber(String productNumber);
 

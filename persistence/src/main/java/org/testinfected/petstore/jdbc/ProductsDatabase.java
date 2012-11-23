@@ -2,12 +2,15 @@ package org.testinfected.petstore.jdbc;
 
 import org.testinfected.petstore.jdbc.records.ProductRecord;
 import org.testinfected.petstore.jdbc.support.Insert;
+import org.testinfected.petstore.jdbc.support.JDBCException;
 import org.testinfected.petstore.jdbc.support.Select;
 import org.testinfected.petstore.jdbc.support.Table;
+import org.testinfected.petstore.product.DuplicateProductException;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
 
 import java.sql.Connection;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public class ProductsDatabase implements ProductCatalog {
@@ -19,8 +22,13 @@ public class ProductsDatabase implements ProductCatalog {
         this.connection = connection;
     }
 
-    public void add(Product product) {
-        Insert.into(products, product).execute(connection);
+    public void add(Product product) throws DuplicateProductException {
+        try {
+            Insert.into(products, product).execute(connection);
+        } catch (JDBCException e) {
+            if (e.causedBy(SQLIntegrityConstraintViolationException.class)) throw new DuplicateProductException(product, e.getCause());
+            throw e;
+        }
     }
 
     public Product findByNumber(String productNumber) {
