@@ -6,9 +6,6 @@ import org.testinfected.petstore.product.DuplicateProductException;
 
 public class CreateProduct implements Controller {
 
-    private static final int CREATED = 201;
-    private static final int FORBIDDEN = 409;
-
     private final ProcurementRequestHandler requestHandler;
 
     public CreateProduct(ProcurementRequestHandler requestHandler) {
@@ -22,9 +19,9 @@ public class CreateProduct implements Controller {
                     request.getParameter("name"),
                     request.getParameter("description"),
                     request.getParameter("photo"));
-            response.renderHead(CREATED);
+            response.renderHead(HttpCodes.CREATED);
         } catch (DuplicateProductException e) {
-            response.renderHead(FORBIDDEN);
+            response.renderHead(HttpCodes.CONFLICT);
         }
     }
 }

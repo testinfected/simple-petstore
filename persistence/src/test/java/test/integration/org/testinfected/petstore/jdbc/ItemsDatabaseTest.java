@@ -1,21 +1,20 @@
 package test.integration.org.testinfected.petstore.jdbc;
 
-import org.testinfected.petstore.product.Item;
-import org.testinfected.petstore.product.ItemNumber;
-import org.testinfected.petstore.product.Product;
-import org.testinfected.petstore.product.ProductCatalog;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.testinfected.petstore.QueryUnitOfWork;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.ItemsDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
+import org.testinfected.petstore.product.*;
 import test.support.org.testinfected.petstore.builders.Builder;
+import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
@@ -24,14 +23,13 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.testinfected.petstore.jdbc.Properties.idOf;
 import static org.testinfected.petstore.jdbc.Properties.productOf;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
-import static test.support.org.testinfected.petstore.builders.ItemBuilder.a;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.an;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
@@ -58,9 +56,7 @@ public class ItemsDatabaseTest {
     @SuppressWarnings("unchecked")
     @Test public void
     findsItemsByNumber() throws Exception {
-        Product product = aProduct().build();
-        givenInCatalog(product);
-        givenInInventory(anItem().of(product).withNumber("12345678"));
+        given(anItem().of(inCatalog(aProduct())).withNumber("12345678"));
 
         Item found = itemsDatabase.find(new ItemNumber("12345678"));
         assertThat("item", found, hasNumber("12345678"));
@@ -69,9 +65,8 @@ public class ItemsDatabaseTest {
     @SuppressWarnings("unchecked")
     @Test public void
     findsItemsByProductNumber() throws Exception {
-        Product product = aProduct().withNumber("LAB-1234").build();
-        givenInCatalog(product);
-        givenInInventory(anItem().of(product), anItem().of(product));
+        Product product = inCatalog(aProduct().withNumber("LAB-1234"));
+        given(anItem().of(product), anItem().of(product));
 
         List<Item> availableItems = itemsDatabase.findByProductNumber("LAB-1234");
         assertThat("available items", availableItems, hasSize(2));
@@ -81,31 +76,34 @@ public class ItemsDatabaseTest {
     @SuppressWarnings("unchecked")
     @Test public void
     findsNothingIfProductHasNoAssociatedItemInInventory() throws Exception {
-        Product productWithNoItem = aProduct().withNumber("DAL-5432").build();
-        Product productWithItems = aProduct().withNumber("BOU-6789").build();
-        givenInCatalog(productWithItems, productWithNoItem);
-        givenInInventory(anItem().of(productWithItems));
+        given(anItem().of(inCatalog(aProduct().withNumber("DAL-5432"))));
 
-        List<Item> availableItems = itemsDatabase.findByProductNumber(productWithNoItem.getNumber());
+        List<Item> availableItems = itemsDatabase.findByProductNumber(inCatalog(aProduct().withNumber("BOU-6789")).getNumber());
         assertThat("available items", availableItems, Matchers.<Item>empty());
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     canRoundTripItemsWithCompleteDetails() throws Exception {
-        Product labrador = aProduct().named("Labrador").describedAs("A fun and friendly dog").withPhoto("labrador.jpg").build();
-        Product dalmatian = aProduct().build();
-        givenInCatalog(labrador, dalmatian);
-
         Collection<Item> sampleItems = build(
-                a(labrador).withNumber("12345678").describedAs("Chocolate male").priced("58.00"),
-                a(dalmatian).withNumber("87654321"));
+                an(inCatalog(aProduct().named("Labrador").describedAs("A fun and friendly dog").withPhoto("labrador.jpg"))).
+                        withNumber("12345678").describedAs("Chocolate male").priced("58.00"),
+                an(inCatalog(aProduct())).withNumber("87654321"));
 
         for (final Item item : sampleItems) {
             save(item);
             assertCanBeFoundByNumberWithSameState(item);
             assertCanBeFoundByProductNumberWithSameState(item);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test(expected = DuplicateItemException.class) public void
+    referenceNumberShouldBeUnique() throws Exception {
+        ItemBuilder existingItem = anItem().of(inCatalog(aProduct().withNumber("LAB-1234")));
+        given(existingItem);
+
+        save(existingItem.build());
     }
 
     private void assertCanBeFoundByNumberWithSameState(Item sample) {
@@ -143,31 +141,25 @@ public class ItemsDatabaseTest {
         };
     }
 
-    private void givenInCatalog(final Product... products) throws Exception {
-        givenInCatalog(asList(products));
-    }
-
-    private void givenInCatalog(final List<Product> products) throws Exception {
-        for (final Product product : products) givenInCatalog(product);
-    }
-
-    private void givenInCatalog(final Product product) throws Exception {
-        transactor.perform(new UnitOfWork() {
-            public void execute() throws Exception {
+    private Product inCatalog(final Builder<Product> builder) throws Exception {
+        return transactor.performQuery(new QueryUnitOfWork<Product>() {
+            public Product query() throws Exception {
+                Product product = builder.build();
                 productCatalog.add(product);
+                return product;
             }
         });
     }
 
-    private void givenInInventory(final Builder<Item>... items) throws Exception {
-        givenInInventory(build(items));
+    private void given(final Builder<Item>... items) throws Exception {
+        given(build(items));
     }
 
-    private void givenInInventory(final List<Item> items) throws Exception {
-        for (final Item item : items) givenInInventory(item);
+    private void given(final List<Item> items) throws Exception {
+        for (final Item item : items) given(item);
     }
 
-    private void givenInInventory(final Item item) throws Exception {
+    private void given(final Item item) throws Exception {
         save(item);
     }
 

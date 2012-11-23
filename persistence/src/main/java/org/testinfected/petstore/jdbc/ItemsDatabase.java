@@ -3,14 +3,13 @@ package org.testinfected.petstore.jdbc;
 import org.testinfected.petstore.jdbc.records.ItemRecord;
 import org.testinfected.petstore.jdbc.records.ProductRecord;
 import org.testinfected.petstore.jdbc.support.Insert;
+import org.testinfected.petstore.jdbc.support.JDBCException;
 import org.testinfected.petstore.jdbc.support.Select;
 import org.testinfected.petstore.jdbc.support.Table;
-import org.testinfected.petstore.product.Item;
-import org.testinfected.petstore.product.ItemInventory;
-import org.testinfected.petstore.product.ItemNumber;
-import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.product.*;
 
 import java.sql.Connection;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public class ItemsDatabase implements ItemInventory {
@@ -37,7 +36,13 @@ public class ItemsDatabase implements ItemInventory {
                 first(connection);
     }
 
-    public void add(Item item) {
-        Insert.into(items, item).execute(connection);
+    public void add(Item item) throws DuplicateItemException {
+        try {
+            Insert.into(items, item).execute(connection);
+        } catch (JDBCException e) {
+            if (e.causedBy(SQLIntegrityConstraintViolationException.class)) throw new DuplicateItemException(item, e.getCause());
+
+            throw e;
+        }
     }
 }

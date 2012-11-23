@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.CreateProduct;
+import org.testinfected.petstore.controllers.HttpCodes;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateProductException;
 
@@ -23,8 +24,6 @@ public class CreateProductTest {
 
     Controller.Request request = context.mock(Controller.Request.class);
     Controller.Response response = context.mock(Controller.Response.class);
-    final int CREATED = 201;
-    final int FORBIDDEN = 409;
 
     @Before public void prepareRequest() {
         setRequestParametersTo("LAB-1234", "Labrador", "Friendly Dog", "labrador.jpg");
@@ -34,7 +33,7 @@ public class CreateProductTest {
     makesProductProcurementRequestAndRespondsWithCreated() throws Exception {
         context.checking(new Expectations() {{
             oneOf(requestHandler).addProductToCatalog(with("LAB-1234"), with("Labrador"), with("Friendly Dog"), with("labrador.jpg"));
-            oneOf(response).renderHead(CREATED);
+            oneOf(response).renderHead(HttpCodes.CREATED);
         }});
 
         createProduct.process(request, response);
@@ -45,7 +44,7 @@ public class CreateProductTest {
         context.checking(new Expectations() {{
             oneOf(requestHandler).addProductToCatalog(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(String.class)));
                 will(throwException(new DuplicateProductException(aProduct().build())));
-            oneOf(response).renderHead(FORBIDDEN);
+            oneOf(response).renderHead(HttpCodes.CONFLICT);
         }});
 
         createProduct.process(request, response);

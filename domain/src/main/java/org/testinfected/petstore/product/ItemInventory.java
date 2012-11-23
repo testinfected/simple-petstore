@@ -8,5 +8,5 @@ public interface ItemInventory {
 
     Item find(ItemNumber itemNumber);
 
-    void add(Item item);
+    void add(Item item) throws DuplicateItemException;
 }
