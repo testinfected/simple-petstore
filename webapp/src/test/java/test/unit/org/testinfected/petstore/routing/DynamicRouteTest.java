@@ -12,8 +12,6 @@ import org.testinfected.petstore.Application;
 import org.testinfected.petstore.ExceptionImposter;
 import org.testinfected.petstore.routing.Route;
 import org.testinfected.petstore.util.HttpMethod;
-import test.support.org.testinfected.petstore.web.MockRequest;
-import test.support.org.testinfected.petstore.web.MockResponse;
 
 import java.io.IOException;
 
@@ -22,6 +20,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.testinfected.petstore.routing.DynamicRouteDefinition.route;
 import static test.support.org.testinfected.petstore.web.MockRequest.GET;
 import static test.support.org.testinfected.petstore.web.MockRequest.POST;
+import static test.support.org.testinfected.petstore.web.MockRequest.aRequest;
+import static test.support.org.testinfected.petstore.web.MockResponse.aResponse;
 
 public class DynamicRouteTest {
 
@@ -65,7 +65,7 @@ public class DynamicRouteTest {
             oneOf(app).handle(with(hasParameter("id", "1")), with(any(Response.class)));
         }});
 
-        route.handle(new MockRequest("/resource/1"), new MockResponse());
+        route.handle(aRequest().withPath("/resource/1"), aResponse());
     }
 
     private Matcher<Request> hasParameter(final String name, String value) {

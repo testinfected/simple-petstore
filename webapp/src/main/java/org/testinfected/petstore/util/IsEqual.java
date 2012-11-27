@@ -1,13 +1,17 @@
 package org.testinfected.petstore.util;
 
 public class IsEqual<T> implements Matcher<T> {
-    private final T expected;
+    private final T other;
 
-    public IsEqual(T expected) {
-        this.expected = expected;
+    public IsEqual(T other) {
+        this.other = other;
     }
 
     public boolean matches(T actual) {
-        return expected.equals(actual);
+        return other.equals(actual);
+    }
+
+    public static <T> IsEqual<T> equalTo(T other) {
+        return new IsEqual<T>(other);
     }
 }

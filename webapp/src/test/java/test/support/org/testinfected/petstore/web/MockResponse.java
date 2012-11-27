@@ -10,4 +10,8 @@ public class MockResponse extends ResponseWrapper {
     public MockResponse() {
         super(DUMMY_RESPONSE);
     }
+
+    public static MockResponse aResponse() {
+        return new MockResponse();
+    }
 }

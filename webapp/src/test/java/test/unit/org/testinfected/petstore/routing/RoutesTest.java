@@ -18,14 +18,16 @@ import test.support.org.testinfected.petstore.web.MockResponse;
 import test.support.org.testinfected.petstore.web.Nothing;
 
 import static org.testinfected.petstore.util.Matchers.anyRequest;
+import static test.support.org.testinfected.petstore.web.MockRequest.aRequest;
+import static test.support.org.testinfected.petstore.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class RoutesTest {
 
     Routes routes = new Routes(NotFound.notFound());
 
-    MockRequest request = new MockRequest();
-    MockResponse response = new MockResponse();
+    MockRequest request = aRequest();
+    MockResponse response = aResponse();
 
     Mockery context = new JUnit4Mockery();
     Application wrongApp = context.mock(Application.class, "wrong app");

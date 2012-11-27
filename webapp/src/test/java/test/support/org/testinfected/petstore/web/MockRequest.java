@@ -20,23 +20,20 @@ public class MockRequest extends RequestWrapper {
 
     public MockRequest() {
         super(DUMMY_REQUEST);
-
-    }
-    public MockRequest(String path) {
-        this();
-        setPath(path);
     }
 
-    private void setPath(String path) {
+    public MockRequest withPath(String path) {
         this.path = path;
+        return this;
     }
 
-    private void setMethod(HttpMethod method) {
-        setMethod(method.name());
+    public MockRequest withMethod(HttpMethod method) {
+        return withMethod(method.name());
     }
 
-    private void setMethod(String method) {
+    public MockRequest withMethod(String method) {
         this.method = method;
+        return this;
     }
 
     public String getMethod() {
@@ -51,15 +48,15 @@ public class MockRequest extends RequestWrapper {
         return params.get(name);
     }
 
+    public static MockRequest aRequest() {
+        return new MockRequest();
+    }
+
     public static Request POST(String path) {
-        MockRequest request = new MockRequest(path);
-        request.setMethod(HttpMethod.POST);
-        return request;
+        return aRequest().withPath(path).withMethod(HttpMethod.POST);
     }
 
     public static Request GET(String path) {
-        MockRequest request = new MockRequest(path);
-        request.setMethod(HttpMethod.GET);
-        return request;
+        return aRequest().withPath(path).withMethod(HttpMethod.GET);
     }
 }

@@ -26,7 +26,7 @@ import static org.jmock.Expectations.same;
 import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
 
 @RunWith(JMock.class)
-public class ConnectionManagerTest {
+public class ConnectionScopeTest {
 
     Mockery context = new JUnit4Mockery();
     DataSource dataSource = context.mock(DataSource.class);

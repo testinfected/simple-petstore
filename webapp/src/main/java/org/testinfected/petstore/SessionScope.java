@@ -12,7 +12,7 @@ public class SessionScope {
         this.session = session;
     }
 
-    public static SessionScope inSessionOf(Request request) throws Exception {
+    public static SessionScope sessionScopeOf(Request request) throws Exception {
         return new SessionScope(request.getSession());
     }
 

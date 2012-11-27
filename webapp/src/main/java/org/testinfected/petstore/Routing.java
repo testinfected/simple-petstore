@@ -31,7 +31,7 @@ import org.testinfected.petstore.util.FileSystemPhotoStore;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 
-import static org.testinfected.petstore.SessionScope.inSessionOf;
+import static org.testinfected.petstore.SessionScope.sessionScopeOf;
 import static org.testinfected.petstore.middlewares.ConnectionScope.ConnectionReference;
 
 public class Routing implements Application {
@@ -47,7 +47,7 @@ public class Routing implements Application {
     public void handle(final Request request, final Response response) throws Exception {
         final AttachmentStorage attachmentStorage = new FileSystemPhotoStore("/photos");
 
-        final Cart cart = inSessionOf(request).cart();
+        final Cart cart = sessionScopeOf(request).cart();
 
         final Connection connection = new ConnectionReference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);

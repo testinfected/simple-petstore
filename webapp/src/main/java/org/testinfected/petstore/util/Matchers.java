@@ -6,7 +6,7 @@ import org.simpleframework.http.Request;
 public final class Matchers {
 
     public static <T> Matcher<T> equalTo(T other) {
-        return new IsEqual<T>(other);
+        return IsEqual.equalTo(other);
     }
 
     public static Matcher<Request> anyRequest() {
@@ -34,6 +34,10 @@ public final class Matchers {
     }
 
     public static Matcher<Request> hasMethod(Matcher<? super String> method) {
+        return RequestHasMethod.hasMethod(method);
+    }
+
+    public static Matcher<Request> hasMethod(String method) {
         return RequestHasMethod.hasMethod(method);
     }
 
