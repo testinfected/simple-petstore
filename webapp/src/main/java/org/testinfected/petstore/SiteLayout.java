@@ -2,17 +2,18 @@ package org.testinfected.petstore;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
-import org.testinfected.petstore.decoration.Template;
-import org.testinfected.petstore.middlewares.AbstractMiddleware;
-import org.testinfected.petstore.middlewares.FilterMap;
-import org.testinfected.petstore.decoration.SiteMesh;
+import org.testinfected.support.RenderingEngine;
+import org.testinfected.support.Template;
+import org.testinfected.support.middlewares.AbstractMiddleware;
+import org.testinfected.support.middlewares.FilterMap;
+import org.testinfected.support.middlewares.SiteMesh;
 import org.testinfected.petstore.order.Cart;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-import static org.testinfected.petstore.SessionScope.sessionScopeOf;
+import static org.testinfected.petstore.util.SessionScope.sessionScopeOf;
 
 public class SiteLayout extends AbstractMiddleware {
 

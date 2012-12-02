@@ -1,7 +1,7 @@
 package test.support.org.testinfected.petstore.web;
 
 import org.hamcrest.Matcher;
-import org.testinfected.petstore.util.Streams;
+import org.testinfected.support.util.Streams;
 
 import java.io.File;
 import java.io.FileInputStream;

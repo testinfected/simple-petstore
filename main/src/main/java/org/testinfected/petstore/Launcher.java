@@ -2,8 +2,9 @@ package org.testinfected.petstore;
 
 import org.testinfected.cli.CLI;
 import org.testinfected.petstore.jdbc.support.DriverManagerDataSource;
-import org.testinfected.petstore.util.ConsoleErrorReporter;
-import org.testinfected.petstore.util.ConsoleHandler;
+import org.testinfected.support.util.ConsoleErrorReporter;
+import org.testinfected.support.util.ConsoleHandler;
+import org.testinfected.support.Server;
 
 import java.io.File;
 import java.io.IOException;

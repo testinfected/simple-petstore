@@ -24,15 +24,17 @@ import org.testinfected.petstore.jdbc.*;
 import org.testinfected.petstore.jdbc.ItemsDatabase;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.procurement.PurchasingAgent;
-import org.testinfected.petstore.routing.Router;
-import org.testinfected.petstore.routing.Routes;
+import org.testinfected.support.Application;
+import org.testinfected.support.RenderingEngine;
+import org.testinfected.support.routing.Router;
+import org.testinfected.support.middlewares.Routes;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
 
 import java.nio.charset.Charset;
 import java.sql.Connection;
 
-import static org.testinfected.petstore.SessionScope.sessionScopeOf;
-import static org.testinfected.petstore.middlewares.ConnectionScope.ConnectionReference;
+import static org.testinfected.petstore.util.SessionScope.sessionScopeOf;
+import static org.testinfected.support.middlewares.ConnectionScope.ConnectionReference;
 
 public class Routing implements Application {
 

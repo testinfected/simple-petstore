@@ -2,6 +2,7 @@ package org.testinfected.petstore;
 
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
+import org.testinfected.support.RenderingEngine;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

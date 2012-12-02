@@ -12,17 +12,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.petstore.FailureReporter;
+import org.testinfected.support.FailureReporter;
 import org.testinfected.petstore.PetStore;
-import org.testinfected.petstore.Server;
+import org.testinfected.support.Server;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
-import test.support.org.testinfected.petstore.web.HttpRequest;
-import test.support.org.testinfected.petstore.web.HttpResponse;
+import test.support.org.testinfected.support.web.HttpRequest;
+import test.support.org.testinfected.support.web.HttpResponse;
 import test.support.org.testinfected.petstore.web.LogFile;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -35,7 +35,7 @@ import java.util.logging.FileHandler;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.isA;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
-import static test.support.org.testinfected.petstore.web.HttpRequest.aRequest;
+import static test.support.org.testinfected.support.web.HttpRequest.aRequest;
 
 @RunWith(JMock.class)
 public class PetStoreTest {
