@@ -1,10 +1,8 @@
 package org.testinfected.support.middlewares;
 
-import org.simpleframework.http.Path;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.support.Application;
+import org.testinfected.support.*;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,8 +21,12 @@ public class StaticAssets extends AbstractMiddleware {
         this.urls.addAll(Arrays.asList(urls));
     }
 
+    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
+    }
+
     public void handle(Request request, Response response) throws Exception {
-        if (assetRequested(request.getPath())) {
+        if (assetRequested(request.pathInfo())) {
             serve(request, response);
         } else {
             forward(request, response);
@@ -32,12 +34,12 @@ public class StaticAssets extends AbstractMiddleware {
     }
 
     private void serve(Request request, Response response) throws Exception {
-        fileServer.handle(request, response);
+        fileServer.handle(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
     }
 
-    private boolean assetRequested(Path request) throws Exception {
+    private boolean assetRequested(String path) throws Exception {
         for (String url : urls) {
-            if (request.getPath().startsWith(url)) return true;
+            if (path.startsWith(url)) return true;
         }
         return false;
     }
