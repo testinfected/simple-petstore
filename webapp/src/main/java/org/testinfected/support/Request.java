@@ -13,4 +13,10 @@ public interface Request {
     <T> T unwrap(Class<T> type);
 
     String ip();
+
+    Object attribute(Object key);
+
+    void setAttribute(Object key, Object value);
+
+    void removeAttribute(Object key);
 }

@@ -1,9 +1,12 @@
 package org.testinfected.support.middlewares;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
+import org.testinfected.support.SimpleRequest;
+import org.testinfected.support.SimpleResponse;
 
 import javax.sql.DataSource;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 
 public class ConnectionScope extends AbstractMiddleware {
@@ -14,13 +17,17 @@ public class ConnectionScope extends AbstractMiddleware {
         this.dataSource = dataSource;
     }
 
+    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
+    }
+
     public void handle(Request request, Response response) throws Exception {
         Connection connection = dataSource.getConnection();
         ConnectionReference ref = new ConnectionReference(request);
 
         ref.set(connection);
         try {
-            forward(request, response);
+            forward(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
         } finally {
             ref.unset();
             connection.close();
@@ -31,21 +38,24 @@ public class ConnectionScope extends AbstractMiddleware {
 
         private final Request request;
 
+        public ConnectionReference(org.simpleframework.http.Request request) {
+            this(new SimpleRequest(request));
+        }
+
         public ConnectionReference(Request request) {
             this.request = request;
         }
 
         public Connection get() {
-            return (Connection) request.getAttribute(Connection.class);
+            return (Connection) request.attribute(Connection.class);
         }
 
-        @SuppressWarnings("unchecked")
         private void set(Connection connection) {
-            request.getAttributes().put(Connection.class, connection);
+            request.setAttribute(Connection.class, connection);
         }
 
         public void unset() {
-            request.getAttributes().remove(Connection.class);
+            request.removeAttribute(Connection.class);
         }
     }
 }

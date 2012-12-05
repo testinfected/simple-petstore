@@ -4,6 +4,10 @@ import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.testinfected.support.Application;
 import org.testinfected.support.Middleware;
+import org.testinfected.support.SimpleRequest;
+import org.testinfected.support.SimpleResponse;
+
+import java.nio.charset.Charset;
 
 public abstract class AbstractMiddleware implements Middleware {
 
