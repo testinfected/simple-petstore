@@ -1,6 +1,5 @@
 package org.testinfected.support.matchers;
 
-import org.simpleframework.http.Path;
 import org.testinfected.support.Matcher;
 import org.testinfected.support.Request;
 
@@ -14,11 +13,7 @@ public final class Matchers {
         return Anything.anything();
     }
 
-    public static <T> Matcher<T> nothing() {
-        return Nothing.nothing();
-    }
-
-    public static Matcher<org.simpleframework.http.Request> anyRequest() {
+    public static Matcher<Request> anyRequest() {
         return anything();
     }
 
@@ -26,15 +21,11 @@ public final class Matchers {
         return anything();
     }
 
-    public static Matcher<org.simpleframework.http.Request> hasPath(Matcher<? super Path> path) {
-        return RequestHasPath.hasPath(path);
+    public static <T> Matcher<T> nothing() {
+        return Nothing.nothing();
     }
 
-    public static Matcher<org.simpleframework.http.Request> withPath(Matcher<? super String> path) {
-        return RequestHasPath.hasNormalizedPath(path);
-    }
-
-    public static Matcher<Request> hasNormalizedPath(Matcher<? super String> path) {
+    public static Matcher<Request> withPath(Matcher<? super String> path) {
         return RequestWithPath.withPath(path);
     }
 
@@ -42,12 +33,12 @@ public final class Matchers {
         return StartingWith.startingWith(prefix);
     }
 
-    public static Matcher<org.simpleframework.http.Request> hasMethod(Matcher<? super String> method) {
-        return RequestHasMethod.hasMethod(method);
+    public static Matcher<Request> withMethod(Matcher<? super String> method) {
+        return RequestWithMethod.withMethod(method);
     }
 
-    public static Matcher<org.simpleframework.http.Request> hasMethod(String method) {
-        return RequestHasMethod.hasMethod(method);
+    public static Matcher<Request> withMethod(String method) {
+        return RequestWithMethod.withMethod(method);
     }
 
     @SuppressWarnings("unchecked")

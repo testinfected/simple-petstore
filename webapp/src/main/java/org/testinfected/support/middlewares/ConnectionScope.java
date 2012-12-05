@@ -51,7 +51,7 @@ public class ConnectionScope extends AbstractMiddleware {
         }
 
         private void set(Connection connection) {
-            request.setAttribute(Connection.class, connection);
+            request.attribute(Connection.class, connection);
         }
 
         public void unset() {

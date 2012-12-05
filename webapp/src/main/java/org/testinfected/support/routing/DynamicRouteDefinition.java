@@ -13,12 +13,12 @@ public class DynamicRouteDefinition implements RouteDefinition {
         return new DynamicRouteDefinition();
     }
 
-    private DynamicPath path;
+    private String path;
     private Matcher<? super String> method = anyMethod();
     private Application app;
 
     public DynamicRouteDefinition map(String path) {
-        this.path = new DynamicPath(path);
+        this.path = path;
         return this;
     }
 

@@ -48,6 +48,10 @@ public class MockRequest implements Request {
         return path;
     }
 
+    public void addParameter(String name, String value) {
+        params.put(name, value);
+    }
+
     public String parameter(String name) {
         return params.get(name);
     }
@@ -72,7 +76,7 @@ public class MockRequest implements Request {
         return null;
     }
 
-    public void setAttribute(Object key, Object value) {
+    public void attribute(Object key, Object value) {
     }
 
     public void removeAttribute(Object key) {

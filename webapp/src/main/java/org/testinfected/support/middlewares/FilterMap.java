@@ -6,8 +6,8 @@ import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.testinfected.support.matchers.Matchers.hasNormalizedPath;
 import static org.testinfected.support.matchers.Matchers.startingWith;
+import static org.testinfected.support.matchers.Matchers.withPath;
 
 public class FilterMap extends AbstractMiddleware {
 
@@ -32,7 +32,7 @@ public class FilterMap extends AbstractMiddleware {
     }
 
     public void map(String pathPrefix, Middleware filter) {
-        filters.put(hasNormalizedPath(startingWith(pathPrefix)), filter);
+        filters.put(withPath(startingWith(pathPrefix)), filter);
     }
 
     public void map(Matcher<Request> requestMatcher, Middleware filter) {

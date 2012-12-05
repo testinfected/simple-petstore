@@ -46,7 +46,7 @@ public class SimpleRequest implements org.testinfected.support.Request {
     }
 
     @SuppressWarnings("unchecked")
-    public void setAttribute(Object key, Object value) {
+    public void attribute(Object key, Object value) {
         request.getAttributes().put(key, value);
     }
 

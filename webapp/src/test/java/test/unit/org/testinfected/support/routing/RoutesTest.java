@@ -6,16 +6,13 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.support.Application;
+import org.testinfected.support.*;
+import org.testinfected.support.matchers.Nothing;
 import org.testinfected.support.middlewares.NotFound;
-import org.testinfected.support.routing.Route;
 import org.testinfected.support.middlewares.Routes;
-import org.testinfected.support.Matcher;
+import org.testinfected.support.routing.Route;
 import test.support.org.testinfected.support.web.MockSimpleRequest;
 import test.support.org.testinfected.support.web.MockSimpleResponse;
-import org.testinfected.support.matchers.Nothing;
 
 import static org.testinfected.support.matchers.Matchers.anyRequest;
 import static test.support.org.testinfected.support.web.MockSimpleRequest.aRequest;
@@ -75,16 +72,16 @@ public class RoutesTest {
         public void handle(org.testinfected.support.Request request, org.testinfected.support.Response response) throws Exception {
         }
 
-        public boolean matches(org.testinfected.support.Request actual) {
+        public boolean matches(Request actual) {
             return matches(actual.unwrap(org.simpleframework.http.Request.class));
         }
 
-        public void handle(Request request, Response response) throws Exception {
+        public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
             app.handle(request, response);
         }
 
-        public boolean matches(Request actual) {
-            return requestMatcher.matches(actual);
+        public boolean matches(org.simpleframework.http.Request actual) {
+            return requestMatcher.matches(new SimpleRequest(actual));
         }
     }
 }

@@ -1,15 +1,15 @@
 package org.testinfected.support.routing;
 
-import org.simpleframework.http.RequestWrapper;
 import org.testinfected.support.*;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 import org.testinfected.support.matchers.Combination;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import static org.testinfected.support.matchers.Matchers.hasMethod;
-import static org.testinfected.support.matchers.Matchers.hasPath;
+import static org.testinfected.support.matchers.Matchers.*;
 
 public class DynamicRoute implements Route {
 
@@ -17,18 +17,17 @@ public class DynamicRoute implements Route {
     private final Matcher<? super String> method;
     private final Application app;
 
-    public DynamicRoute(DynamicPath path, Matcher<? super String> method, Application app) {
-        this.path = path;
+    public DynamicRoute(String pathPattern, Matcher<? super String> method, Application app) {
+        this.path = new DynamicPath(pathPattern);
         this.method = method;
         this.app = app;
     }
 
     public boolean matches(Request request) {
-        org.simpleframework.http.Request rq = request.unwrap(org.simpleframework.http.Request.class);
-        return both(hasMethod(method)).and(hasPath(path)).matches(rq);
+        return both(withMethod(method)).and(withPath(path)).matches(request);
     }
 
-    private Combination<org.simpleframework.http.Request> both(Matcher<org.simpleframework.http.Request> matcher) {
+    private Combination<Request> both(Matcher<Request> matcher) {
         return Combination.both(matcher);
     }
 
@@ -37,13 +36,20 @@ public class DynamicRoute implements Route {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        final Map<String, String> boundParameters = path.extractBoundParameters(request.pathInfo());
+        app.handle(new BoundParameters(request.unwrap(org.simpleframework.http.Request.class)), response.unwrap(org.simpleframework.http.Response.class));
+    }
 
-        app.handle(new RequestWrapper(request.unwrap(org.simpleframework.http.Request.class)) {
-            public String getParameter(String name) throws IOException {
-                if (boundParameters.containsKey(name)) return boundParameters.get(name);
-                else return super.getParameter(name);
-            }
-        }, response.unwrap(org.simpleframework.http.Response.class));
+    public class BoundParameters extends org.simpleframework.http.RequestWrapper {
+        private final Map<String, String> boundParameters;
+
+        public BoundParameters(org.simpleframework.http.Request request) {
+            super(request);
+            boundParameters = path.boundParameters(request.getPath().getPath());
+        }
+
+        public String getParameter(String name) throws IOException {
+            if (boundParameters.containsKey(name)) return boundParameters.get(name);
+            else return super.getParameter(name);
+        }
     }
 }

@@ -18,7 +18,7 @@ public interface Request {
 
     Object attribute(Object key);
 
-    void setAttribute(Object key, Object value);
+    void attribute(Object key, Object value);
 
     void removeAttribute(Object key);
 }

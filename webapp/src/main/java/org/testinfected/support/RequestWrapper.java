@@ -1,7 +1,7 @@
 package org.testinfected.support;
 
 public class RequestWrapper implements Request {
-    private final Request request;
+    protected final Request request;
 
     public RequestWrapper(Request request) {
         this.request = request;
@@ -39,8 +39,8 @@ public class RequestWrapper implements Request {
         return request.attribute(key);
     }
 
-    public void setAttribute(Object key, Object value) {
-        request.setAttribute(key, value);
+    public void attribute(Object key, Object value) {
+        request.attribute(key, value);
     }
 
     public void removeAttribute(Object key) {
