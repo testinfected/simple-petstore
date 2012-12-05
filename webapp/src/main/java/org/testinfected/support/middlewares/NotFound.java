@@ -1,10 +1,9 @@
 package org.testinfected.support.middlewares;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.simpleframework.http.Status;
-import org.testinfected.support.Application;
+import org.testinfected.support.*;
 import org.testinfected.support.util.Charsets;
+
+import java.nio.charset.Charset;
 
 public class NotFound implements Application {
 
@@ -12,12 +11,15 @@ public class NotFound implements Application {
         return new NotFound();
     }
 
+    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
+    }
+
     public void handle(Request request, Response response) throws Exception {
-        response.setCode(Status.NOT_FOUND.getCode());
-        response.setText(Status.NOT_FOUND.getDescription());
-        String body = "Not found: " + request.getPath().getPath();
+        response.status(HttpStatus.NOT_FOUND);
+        String body = "Not found: " + request.pathInfo();
         byte[] bytes = body.getBytes(Charsets.ISO_8859_1);
-        response.set("Content-Type", "text/plain");
-        response.getOutputStream(bytes.length).write(bytes);
+        response.contentType("text/plain");
+        response.outputStream(bytes.length).write(bytes);
     }
 }

@@ -100,6 +100,10 @@ public class SimpleResponse implements org.testinfected.support.Response {
         return response.getOutputStream();
     }
 
+    public OutputStream outputStream(int bufferSize) throws IOException {
+        return response.getOutputStream(bufferSize);
+    }
+
     public void reset() {
         try {
             response.reset();

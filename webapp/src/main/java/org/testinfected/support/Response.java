@@ -35,6 +35,8 @@ public interface Response {
 
     OutputStream outputStream() throws IOException;
 
+    OutputStream outputStream(int bufferSize) throws IOException;
+
     PrintWriter writer() throws IOException;
 
     void body(String body) throws IOException;
