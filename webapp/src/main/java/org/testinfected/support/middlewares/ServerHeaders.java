@@ -1,9 +1,9 @@
 package org.testinfected.support.middlewares;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.support.Server;
+import org.testinfected.support.*;
 import org.testinfected.time.Clock;
+
+import java.nio.charset.Charset;
 
 public class ServerHeaders extends AbstractMiddleware {
 
@@ -13,9 +13,13 @@ public class ServerHeaders extends AbstractMiddleware {
         this.clock = clock;
     }
 
+    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
+    }
+
     public void handle(Request request, Response response) throws Exception {
-        response.set("Server", Server.NAME);
-        response.setDate("Date", clock.now().getTime());
+        response.header("Server", Server.NAME);
+        response.headerDate("Date", clock.now().getTime());
 
         forward(request, response);
     }
