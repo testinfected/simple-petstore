@@ -8,15 +8,15 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.simpleframework.http.Request;
 import org.testinfected.support.Application;
-import org.testinfected.support.middlewares.FilterMap;
+import org.testinfected.support.Matcher;
 import org.testinfected.support.Middleware;
+import org.testinfected.support.Request;
+import org.testinfected.support.matchers.Matchers;
+import org.testinfected.support.middlewares.FilterMap;
 import test.support.org.testinfected.support.web.MockRequest;
 import test.support.org.testinfected.support.web.MockResponse;
-import org.testinfected.support.matchers.Nothing;
 
-import static org.testinfected.support.matchers.Matchers.anyRequest;
 import static test.support.org.testinfected.support.web.MockRequest.aRequest;
 import static test.support.org.testinfected.support.web.MockResponse.aResponse;
 
@@ -103,7 +103,11 @@ public class FilterMapTest {
         }});
     }
 
-    private Nothing<Request> noRequest() {
-        return new Nothing<Request>();
+    private Matcher<Request> anyRequest() {
+        return Matchers.anything();
+    }
+
+    private Matcher<Request> noRequest() {
+        return Matchers.nothing();
     }
 }

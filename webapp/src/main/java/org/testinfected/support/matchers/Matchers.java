@@ -1,8 +1,8 @@
 package org.testinfected.support.matchers;
 
 import org.simpleframework.http.Path;
-import org.simpleframework.http.Request;
 import org.testinfected.support.Matcher;
+import org.testinfected.support.Request;
 
 public final class Matchers {
 
@@ -10,35 +10,43 @@ public final class Matchers {
         return IsEqual.equalTo(other);
     }
 
-    public static Matcher<Request> anyRequest() {
-        return new Anything<Request>();
+    public static <T> Matcher<T> anything() {
+        return Anything.anything();
     }
 
-    public static Matcher<String> anyPath() {
-        return new Anything<String>();
+    public static <T> Matcher<T> nothing() {
+        return Nothing.nothing();
+    }
+
+    public static Matcher<org.simpleframework.http.Request> anyRequest() {
+        return anything();
     }
 
     public static Matcher<String> anyMethod() {
-        return new Anything<String>();
+        return anything();
     }
 
-    public static Matcher<Request> hasPath(Matcher<? super Path> path) {
+    public static Matcher<org.simpleframework.http.Request> hasPath(Matcher<? super Path> path) {
         return RequestHasPath.hasPath(path);
     }
 
-    public static Matcher<Request> hasNormalizedPath(Matcher<? super String> path) {
+    public static Matcher<org.simpleframework.http.Request> withPath(Matcher<? super String> path) {
         return RequestHasPath.hasNormalizedPath(path);
+    }
+
+    public static Matcher<Request> hasNormalizedPath(Matcher<? super String> path) {
+        return RequestWithPath.withPath(path);
     }
 
     public static Matcher<String> startingWith(String prefix) {
         return StartingWith.startingWith(prefix);
     }
 
-    public static Matcher<Request> hasMethod(Matcher<? super String> method) {
+    public static Matcher<org.simpleframework.http.Request> hasMethod(Matcher<? super String> method) {
         return RequestHasMethod.hasMethod(method);
     }
 
-    public static Matcher<Request> hasMethod(String method) {
+    public static Matcher<org.simpleframework.http.Request> hasMethod(String method) {
         return RequestHasMethod.hasMethod(method);
     }
 

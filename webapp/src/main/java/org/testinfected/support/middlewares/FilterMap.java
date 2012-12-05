@@ -1,10 +1,8 @@
 package org.testinfected.support.middlewares;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.support.Matcher;
-import org.testinfected.support.Middleware;
+import org.testinfected.support.*;
 
+import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -15,11 +13,14 @@ public class FilterMap extends AbstractMiddleware {
 
     private final Map<Matcher<Request>, Middleware> filters = new LinkedHashMap<Matcher<Request>, Middleware>();
 
-    @Override
+    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
+    }
+
     public void handle(Request request, Response response) throws Exception {
         Middleware filter = filterMappedTo(request);
         filter.connectTo(successor);
-        filter.handle(request, response);
+        filter.handle(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
     }
 
     private Middleware filterMappedTo(Request request) {
@@ -40,6 +41,10 @@ public class FilterMap extends AbstractMiddleware {
 
     private static class PassThrough extends AbstractMiddleware {
         public void handle(Request request, Response response) throws Exception {
+            forward(request, response);
+        }
+
+        public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
             forward(request, response);
         }
     }
