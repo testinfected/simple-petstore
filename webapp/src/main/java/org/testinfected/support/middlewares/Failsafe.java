@@ -1,14 +1,12 @@
 package org.testinfected.support.middlewares;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.simpleframework.http.Status;
-import org.testinfected.support.FailureReporter;
+import org.testinfected.support.*;
 import org.testinfected.support.util.Charsets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 
 public class Failsafe extends AbstractMiddleware {
 
@@ -24,6 +22,10 @@ public class Failsafe extends AbstractMiddleware {
 
     public void reportErrorsTo(FailureReporter failureReporter) {
         this.failureReporter = failureReporter;
+    }
+
+    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public void handle(Request request, Response response) throws Exception {
@@ -50,29 +52,28 @@ public class Failsafe extends AbstractMiddleware {
     }
 
     private void setInternalErrorStatus(Response response) {
-        response.setText(Status.INTERNAL_SERVER_ERROR.getDescription());
-        response.setCode(Status.INTERNAL_SERVER_ERROR.getCode());
+        response.status(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private void renderError(Exception error, Response response) throws IOException {
-        response.set("Content-Type", "text/html; charset=" + Charsets.ISO_8859_1.name().toLowerCase());
-        String body = formatAsHtml(error);
-        response.getPrintStream().print(body);
+        response.contentType("text/html; charset=" + Charsets.ISO_8859_1.name().toLowerCase());
+        response.body(formatAsHtml(error));
     }
 
     private String formatAsHtml(Exception error) {
-        StringWriter buffer = new StringWriter();
-        PrintWriter print = new PrintWriter(buffer);
-        print.println("<h1>Oups!</h1>");
-        print.println("<h2>Sorry, an internal error occurred</h2>");
-        print.println("<p>");
-        print.println("  <strong>" + error.toString() + "</strong>");
-        print.println("  <ul>");
+        StringWriter html = new StringWriter();
+        PrintWriter buffer = new PrintWriter(html);
+        buffer.println("<h1>Oups!</h1>");
+        buffer.println("<h2>Sorry, an internal error occurred</h2>");
+        buffer.println("<p>");
+        buffer.println("  <strong>" + error.toString() + "</strong>");
+        buffer.println("  <ul>");
         for (StackTraceElement stackTraceElement : error.getStackTrace()) {
-            print.println("    <li>" + stackTraceElement.toString() + "</li>");
+            buffer.println("    <li>" + stackTraceElement.toString() + "</li>");
         }
-        print.println("  </ul>");
-        print.println("</p>");
-        return buffer.toString();
+        buffer.println("  </ul>");
+        buffer.println("</p>");
+
+        return html.toString();
     }
 }

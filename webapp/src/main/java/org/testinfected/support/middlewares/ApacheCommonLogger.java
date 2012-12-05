@@ -31,7 +31,7 @@ public class ApacheCommonLogger extends AbstractMiddleware {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        forward(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
+        forward(request, response);
         String msg = String.format(COMMON_LOG_FORMAT,
                 request.ip(),
                 "-",

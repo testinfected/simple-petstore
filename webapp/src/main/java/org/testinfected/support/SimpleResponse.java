@@ -1,10 +1,14 @@
 package org.testinfected.support;
 
+import org.simpleframework.http.ContentType;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
+import org.testinfected.support.util.Charsets;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 
 import static org.simpleframework.http.Status.SEE_OTHER;
@@ -38,12 +42,61 @@ public class SimpleResponse implements org.testinfected.support.Response {
         response.set("Location", location);
     }
 
-    public int statusCode() {
-        return response.getCode();
+    public void header(String name, String value) {
+        response.set(name, value);
+    }
+
+    public void contentType(String mediaType) {
+        header("Content-Type", mediaType);
     }
 
     public int contentLength() {
         return response.getContentLength();
+    }
+
+    public int statusCode() {
+        return response.getCode();
+    }
+
+    public void status(HttpStatus status) {
+        statusCode(status.code);
+        statusText(status.text);
+    }
+
+    public void statusCode(int code) {
+        response.setCode(code);
+    }
+
+    public void statusText(String reason) {
+        response.setText(reason);
+    }
+
+    public PrintWriter writer() throws IOException {
+        return new PrintWriter(new OutputStreamWriter(response.getOutputStream(), charset));
+    }
+
+    public void body(String body) throws IOException {
+        Writer writer = writer();
+        writer.write(body);
+        writer.flush();
+    }
+
+    public Charset charset() {
+        ContentType type = response.getContentType();
+
+        if(type == null || type.getCharset() == null) {
+            return Charsets.ISO_8859_1;
+        }
+
+        return Charset.forName(type.getCharset());
+    }
+
+    public void reset() {
+        try {
+            response.reset();
+        } catch (IOException e) {
+            throw new HttpException("Response has already been committed");
+        }
     }
 
     public <T> T unwrap(Class<T> type) {

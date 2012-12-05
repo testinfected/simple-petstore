@@ -27,7 +27,7 @@ public class ConnectionScope extends AbstractMiddleware {
 
         ref.set(connection);
         try {
-            forward(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
+            forward(request, response);
         } finally {
             ref.unset();
             connection.close();
