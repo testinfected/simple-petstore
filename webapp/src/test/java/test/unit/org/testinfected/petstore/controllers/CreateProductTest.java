@@ -7,11 +7,12 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.CreateProduct;
 import org.testinfected.petstore.controllers.HttpCodes;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateProductException;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
@@ -22,8 +23,8 @@ public class CreateProductTest {
     ProcurementRequestHandler requestHandler = context.mock(ProcurementRequestHandler.class);
     CreateProduct createProduct = new CreateProduct(requestHandler);
 
-    Controller.Request request = context.mock(Controller.Request.class);
-    Controller.Response response = context.mock(Controller.Response.class);
+    Request request = context.mock(Request.class);
+    Response response = context.mock(Response.class);
 
     @Before public void prepareRequest() {
         setRequestParametersTo("LAB-1234", "Labrador", "Friendly Dog", "labrador.jpg");

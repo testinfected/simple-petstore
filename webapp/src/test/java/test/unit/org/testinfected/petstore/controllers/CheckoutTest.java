@@ -1,7 +1,5 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.billing.CreditCardType;
-import org.testinfected.petstore.order.SalesAssistant;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.AllOf;
@@ -11,8 +9,11 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.petstore.Controller;
+import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.controllers.Checkout;
+import org.testinfected.petstore.order.SalesAssistant;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -23,8 +24,8 @@ public class CheckoutTest {
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
     Checkout checkout = new Checkout(salesAssistant);
 
-    Controller.Request request = context.mock(Controller.Request.class);
-    Controller.Response response = context.mock(Controller.Response.class);
+    Request request = context.mock(Request.class);
+    Response response = context.mock(Response.class);
 
     @SuppressWarnings("unchecked")
     @Test public void

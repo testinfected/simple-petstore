@@ -4,7 +4,7 @@ import org.simpleframework.http.Request;
 
 import java.io.IOException;
 
-public class SimpleRequest implements Controller.Request {
+public class SimpleRequest implements org.testinfected.support.Request {
 
     private final Request request;
 

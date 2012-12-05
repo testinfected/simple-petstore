@@ -1,8 +1,10 @@
 package org.testinfected.petstore.controllers;
 
+import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
-import org.testinfected.petstore.Controller;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 
 import java.util.List;
 

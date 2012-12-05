@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 
 import static org.simpleframework.http.Status.SEE_OTHER;
 
-public class SimpleResponse implements Controller.Response {
+public class SimpleResponse implements org.testinfected.support.Response {
 
     private final Response response;
     private final RenderingEngine renderer;

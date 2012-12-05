@@ -1,7 +1,5 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.product.Item;
-import org.testinfected.petstore.product.ItemInventory;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
@@ -11,8 +9,11 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.ListItems;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 import test.support.org.testinfected.petstore.builders.Builder;
 
 import java.util.ArrayList;
@@ -31,8 +32,8 @@ public class ListItemsTest {
     ItemInventory itemInventory = context.mock(ItemInventory.class);
     ListItems listItems = new ListItems(itemInventory);
 
-    Controller.Request request = context.mock(Controller.Request.class);
-    Controller.Response response = context.mock(Controller.Response.class);
+    Request request = context.mock(Request.class);
+    Response response = context.mock(Response.class);
     List<Item> items = new ArrayList<Item>();
     String productNumber = "LAB-1234";
 

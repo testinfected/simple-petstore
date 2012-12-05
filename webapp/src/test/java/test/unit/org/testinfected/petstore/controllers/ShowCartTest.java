@@ -1,8 +1,5 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.order.Cart;
-import org.testinfected.petstore.order.CartItem;
-import org.testinfected.petstore.order.SalesAssistant;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
@@ -11,8 +8,12 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.ShowCart;
+import org.testinfected.petstore.order.Cart;
+import org.testinfected.petstore.order.CartItem;
+import org.testinfected.petstore.order.SalesAssistant;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -28,8 +29,8 @@ public class ShowCartTest {
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
     ShowCart showCart = new ShowCart(salesAssistant);
 
-    Controller.Request request = context.mock(Controller.Request.class);
-    Controller.Response response = context.mock(Controller.Response.class);
+    Request request = context.mock(Request.class);
+    Response response = context.mock(Response.class);
 
     @Test public void
     makesOrderDetailsAvailableToView() throws Exception {

@@ -1,11 +1,13 @@
 package org.testinfected.petstore.controllers;
 
 import com.github.mustachejava.TemplateFunction;
+import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
-import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.util.Context;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 
 import java.util.List;
 

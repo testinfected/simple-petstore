@@ -1,9 +1,5 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.billing.CreditCardDetails;
-import org.testinfected.petstore.billing.PaymentMethod;
-import org.testinfected.petstore.order.OrderNumber;
-import org.testinfected.petstore.order.SalesAssistant;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -11,8 +7,13 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.petstore.Controller;
+import org.testinfected.petstore.billing.CreditCardDetails;
+import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
+import org.testinfected.petstore.order.OrderNumber;
+import org.testinfected.petstore.order.SalesAssistant;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
@@ -24,8 +25,8 @@ public class PlaceOrderTest {
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
     PlaceOrder placeOrder = new PlaceOrder(salesAssistant);
 
-    Controller.Request request = context.mock(Controller.Request.class);
-    Controller.Response response = context.mock(Controller.Response.class);
+    Request request = context.mock(Request.class);
+    Response response = context.mock(Response.class);
 
     String orderNumber = "12345678";
 

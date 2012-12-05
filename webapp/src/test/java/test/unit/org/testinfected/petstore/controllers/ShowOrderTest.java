@@ -1,8 +1,5 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.order.Order;
-import org.testinfected.petstore.order.OrderBook;
-import org.testinfected.petstore.order.OrderNumber;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -10,8 +7,12 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.controllers.ShowOrder;
+import org.testinfected.petstore.order.Order;
+import org.testinfected.petstore.order.OrderBook;
+import org.testinfected.petstore.order.OrderNumber;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 
 import static org.hamcrest.Matchers.hasEntry;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
@@ -23,8 +24,8 @@ public class ShowOrderTest {
     OrderBook orderBook = context.mock(OrderBook.class);
     ShowOrder showOrder = new ShowOrder(orderBook);
 
-    Controller.Request request = context.mock(Controller.Request.class);
-    Controller.Response response = context.mock(Controller.Response.class);
+    Request request = context.mock(Request.class);
+    Response response = context.mock(Response.class);
 
     String orderNumber = "00000100";
 

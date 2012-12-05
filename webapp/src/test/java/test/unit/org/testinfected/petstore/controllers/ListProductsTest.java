@@ -1,9 +1,6 @@
 package test.unit.org.testinfected.petstore.controllers;
 
 import com.google.common.base.Function;
-import org.testinfected.petstore.product.AttachmentStorage;
-import org.testinfected.petstore.product.Product;
-import org.testinfected.petstore.product.ProductCatalog;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -18,7 +15,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.petstore.controllers.ListProducts;
-import org.testinfected.petstore.Controller;
+import org.testinfected.petstore.product.AttachmentStorage;
+import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.product.ProductCatalog;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 import test.support.org.testinfected.petstore.builders.Builder;
 
 import java.util.ArrayList;
@@ -39,8 +40,8 @@ public class ListProductsTest {
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
     ListProducts listProducts = new ListProducts(productCatalog, attachmentStorage);
 
-    Controller.Request request = context.mock(Controller.Request.class);
-    Controller.Response response = context.mock(Controller.Response.class);
+    Request request = context.mock(Request.class);
+    Response response = context.mock(Response.class);
     String keyword = "dogs";
     List<Product> searchResults = new ArrayList<Product>();
 
