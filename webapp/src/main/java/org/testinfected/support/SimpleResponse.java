@@ -5,10 +5,7 @@ import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
 import org.testinfected.support.util.Charsets;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 
 import static org.simpleframework.http.Status.SEE_OTHER;
@@ -46,12 +43,20 @@ public class SimpleResponse implements org.testinfected.support.Response {
         response.set(name, value);
     }
 
+    public void headerDate(String name, long date) {
+        response.setDate(name, date);
+    }
+
     public void contentType(String mediaType) {
         header("Content-Type", mediaType);
     }
 
     public int contentLength() {
         return response.getContentLength();
+    }
+
+    public void contentLength(int length) {
+        response.setContentLength(length);
     }
 
     public int statusCode() {
@@ -89,6 +94,10 @@ public class SimpleResponse implements org.testinfected.support.Response {
         }
 
         return Charset.forName(type.getCharset());
+    }
+
+    public OutputStream outputStream() throws IOException {
+        return response.getOutputStream();
     }
 
     public void reset() {

@@ -21,6 +21,10 @@ public class SimpleRequest implements org.testinfected.support.Request {
         return request.getTarget();
     }
 
+    public String pathInfo() {
+        return request.getPath().getPath();
+    }
+
     public String method() {
         return request.getMethod();
     }

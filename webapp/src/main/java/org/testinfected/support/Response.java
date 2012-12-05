@@ -1,6 +1,7 @@
 package org.testinfected.support;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
@@ -14,6 +15,8 @@ public interface Response {
 
     void header(String name, String value);
 
+    void headerDate(String name, long date);
+
     void contentType(String contentType);
 
     int statusCode();
@@ -26,7 +29,11 @@ public interface Response {
 
     int contentLength();
 
+    void contentLength(int length);
+
     Charset charset();
+
+    OutputStream outputStream() throws IOException;
 
     PrintWriter writer() throws IOException;
 

@@ -8,6 +8,8 @@ public interface Request {
 
     String uri();
 
+    String pathInfo();
+
     String getParameter(String name);
 
     <T> T unwrap(Class<T> type);
