@@ -10,6 +10,9 @@ import java.nio.charset.Charset;
 
 public class MockResponse implements Response {
 
+    private String contentType;
+    private HttpStatus status;
+
     public static MockResponse aResponse() {
         return new MockResponse();
     }
@@ -32,20 +35,27 @@ public class MockResponse implements Response {
     public void headerDate(String name, long date) {
     }
 
+    public void removeHeader(String name) {
+    }
+
     public void contentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String contentType() {
+        return contentType;
     }
 
     public int statusCode() {
-        return 0;
+        return status.code;
     }
 
     public void status(HttpStatus status) {
+        this.status = status;
     }
 
     public void statusCode(int code) {
-    }
-
-    public void statusText(String reason) {
+        status(HttpStatus.forCode(code));
     }
 
     public int contentLength() {
@@ -79,5 +89,15 @@ public class MockResponse implements Response {
 
     public <T> T unwrap(Class<T> type) {
         return null;
+    }
+
+    public MockResponse withContentType(String contentType) {
+        contentType(contentType);
+        return this;
+    }
+
+    public MockResponse withStatus(HttpStatus status) {
+        status(status);
+        return this;
     }
 }

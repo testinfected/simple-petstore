@@ -17,15 +17,17 @@ public interface Response {
 
     void headerDate(String name, long date);
 
+    void removeHeader(String name);
+
     void contentType(String contentType);
+
+    String contentType();
 
     int statusCode();
 
     void status(HttpStatus status);
 
     void statusCode(int code);
-
-    void statusText(String reason);
 
     int contentLength();
 

@@ -1,13 +1,11 @@
 package org.testinfected.support.middlewares;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.support.View;
+import org.testinfected.support.*;
 import org.testinfected.support.decoration.*;
-import org.testinfected.support.decoration.BufferedResponse;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 public class SiteMesh extends AbstractMiddleware {
@@ -24,9 +22,13 @@ public class SiteMesh extends AbstractMiddleware {
         this.decorator = decorator;
     }
 
+    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
+    }
+
     public void handle(Request request, Response response) throws Exception {
         BufferedResponse capture = captureResponse(request, response);
-        if (isSelected(capture)) {
+        if (isSelected(new SimpleResponse(capture, null, Charset.defaultCharset()))) {
             decorate(response, capture);
         } else {
             write(response, capture);
@@ -34,19 +36,19 @@ public class SiteMesh extends AbstractMiddleware {
     }
 
     private void decorate(Response response, BufferedResponse buffer) throws IOException {
-        response.remove("Content-Length");
-        OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), buffer.getCharset());
+        response.removeHeader("Content-Length");
+        OutputStreamWriter out = new OutputStreamWriter(response.outputStream(), buffer.getCharset());
         decorator.decorate(out, buffer.getBody());
         out.flush();
     }
 
     private void write(Response response, BufferedResponse buffer) throws IOException {
-        response.getOutputStream().write(buffer.getContent());
+        response.outputStream().write(buffer.getContent());
     }
 
     private BufferedResponse captureResponse(Request request, Response response) throws Exception {
-        BufferedResponse buffer = new BufferedResponse(response);
-        forward(request, buffer);
+        BufferedResponse buffer = new BufferedResponse(response.unwrap(org.simpleframework.http.Response.class));
+        forward(request, new SimpleResponse(buffer, null, Charset.defaultCharset()));
         return buffer;
     }
 

@@ -9,12 +9,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.simpleframework.http.Response;
-import org.simpleframework.http.Status;
+import org.testinfected.support.HttpStatus;
+import org.testinfected.support.MiddlewareStack;
+import org.testinfected.support.Response;
 import org.testinfected.support.Server;
 import org.testinfected.support.decoration.Decorator;
 import org.testinfected.support.decoration.Selector;
-import org.testinfected.support.MiddlewareStack;
 import org.testinfected.support.middlewares.SiteMesh;
 import test.support.org.testinfected.support.web.HttpRequest;
 import test.support.org.testinfected.support.web.HttpResponse;
@@ -37,7 +37,7 @@ public class SiteMeshTest {
     SiteMesh siteMesh = new SiteMesh(selector, new FakeDecorator());
 
     Server server = new Server(9999);
-    StaticResponse app = respondWith(Status.OK, originalPage);
+    StaticResponse app = respondWith(HttpStatus.OK.code, originalPage);
     HttpRequest request = HttpRequest.aRequest().to(server);
 
     @Before public void

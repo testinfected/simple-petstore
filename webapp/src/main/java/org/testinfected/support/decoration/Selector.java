@@ -1,6 +1,6 @@
 package org.testinfected.support.decoration;
 
-import org.simpleframework.http.Response;
+import org.testinfected.support.Response;
 
 public interface Selector {
 

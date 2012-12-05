@@ -214,11 +214,11 @@ public enum HttpStatus {
         this.code = code;
     }
 
-    public static String textFor(int code) {
-        for(HttpStatus status : values()) {
-            if(status.code == code)
-                return status.text;
+    public static HttpStatus forCode(int code) {
+        for (HttpStatus status : values()) {
+            if (status.code == code)
+                return status;
         }
-        return "Unknown";
+        throw new IllegalArgumentException("No status with code " + code);
     }
 }

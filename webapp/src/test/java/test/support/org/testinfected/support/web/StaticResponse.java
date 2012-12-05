@@ -4,6 +4,7 @@ import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
 import org.testinfected.support.Application;
+import org.testinfected.support.HttpStatus;
 
 public class StaticResponse implements Application {
 
@@ -11,6 +12,10 @@ public class StaticResponse implements Application {
     private String page;
     private String contentType = "text/html";
     private String encoding = "iso-8859-1";
+
+    public static StaticResponse respondWith(HttpStatus status) {
+        return respondWithCode(status.code);
+    }
 
     public static StaticResponse respondWith(Status status) {
         return respondWithCode(status.getCode());

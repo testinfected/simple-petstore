@@ -47,8 +47,16 @@ public class SimpleResponse implements org.testinfected.support.Response {
         response.setDate(name, date);
     }
 
+    public void removeHeader(String name) {
+        response.remove(name);
+    }
+
     public void contentType(String mediaType) {
         header("Content-Type", mediaType);
+    }
+
+    public String contentType() {
+        return response.getValue("Content-Type");
     }
 
     public int contentLength() {
