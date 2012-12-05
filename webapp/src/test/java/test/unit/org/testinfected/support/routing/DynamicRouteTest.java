@@ -11,7 +11,7 @@ import org.simpleframework.http.Response;
 import org.testinfected.support.Application;
 import org.testinfected.petstore.ExceptionImposter;
 import org.testinfected.support.routing.Route;
-import org.testinfected.support.routing.HttpMethod;
+import org.testinfected.support.HttpMethod;
 
 import java.io.IOException;
 

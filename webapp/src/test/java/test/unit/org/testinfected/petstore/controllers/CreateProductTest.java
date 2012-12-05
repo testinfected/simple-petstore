@@ -53,10 +53,10 @@ public class CreateProductTest {
 
     private void setRequestParametersTo(final String number, final String name, final String description, final String photoFileName) {
         context.checking(new Expectations() {{
-            allowing(request).getParameter("number"); will(returnValue(number));
-            allowing(request).getParameter("name"); will(returnValue(name));
-            allowing(request).getParameter("description"); will(returnValue(description));
-            allowing(request).getParameter("photo"); will(returnValue(photoFileName));
+            allowing(request).parameter("number"); will(returnValue(number));
+            allowing(request).parameter("name"); will(returnValue(name));
+            allowing(request).parameter("description"); will(returnValue(description));
+            allowing(request).parameter("photo"); will(returnValue(photoFileName));
         }});
     }
 }

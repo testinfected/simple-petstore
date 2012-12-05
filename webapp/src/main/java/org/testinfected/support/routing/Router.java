@@ -1,5 +1,7 @@
 package org.testinfected.support.routing;
 
+import org.testinfected.support.HttpMethod;
+
 import java.util.ArrayList;
 import java.util.Collection;
 

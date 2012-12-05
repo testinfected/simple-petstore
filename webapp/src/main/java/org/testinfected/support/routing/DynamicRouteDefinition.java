@@ -1,6 +1,7 @@
 package org.testinfected.support.routing;
 
 import org.testinfected.support.Application;
+import org.testinfected.support.HttpMethod;
 import org.testinfected.support.Matcher;
 
 import static org.testinfected.support.matchers.Matchers.anyMethod;

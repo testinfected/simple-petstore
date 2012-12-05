@@ -19,10 +19,10 @@ public class CreateItem implements Controller {
     public void process(Request request, Response response) throws Exception {
         try {
             requestHandler.addToInventory(
-                    request.getParameter("product"),
-                    request.getParameter("number"),
-                    request.getParameter("description"),
-                    new BigDecimal(request.getParameter("price")));
+                    request.parameter("product"),
+                    request.parameter("number"),
+                    request.parameter("description"),
+                    new BigDecimal(request.parameter("price")));
             response.renderHead(HttpCodes.CREATED);
         } catch (DuplicateItemException e) {
             response.renderHead(HttpCodes.CONFLICT);

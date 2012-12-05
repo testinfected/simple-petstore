@@ -55,7 +55,7 @@ public class ListProductsTest {
     @Before public void
     stubRequest() {
         context.checking(new Expectations() {{
-            allowing(request).getParameter("keyword"); will(returnValue(keyword));
+            allowing(request).parameter("keyword"); will(returnValue(keyword));
         }});
     }
 

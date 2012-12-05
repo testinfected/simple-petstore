@@ -4,7 +4,7 @@ import org.simpleframework.http.Path;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.RequestWrapper;
 import org.simpleframework.http.parse.PathParser;
-import org.testinfected.support.routing.HttpMethod;
+import org.testinfected.support.HttpMethod;
 
 import java.io.IOException;
 import java.util.HashMap;

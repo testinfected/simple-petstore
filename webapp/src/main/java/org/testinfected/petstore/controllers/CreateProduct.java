@@ -17,10 +17,10 @@ public class CreateProduct implements Controller {
     public void process(Request request, Response response) throws Exception {
         try {
             requestHandler.addProductToCatalog(
-                    request.getParameter("number"),
-                    request.getParameter("name"),
-                    request.getParameter("description"),
-                    request.getParameter("photo"));
+                    request.parameter("number"),
+                    request.parameter("name"),
+                    request.parameter("description"),
+                    request.parameter("photo"));
             response.renderHead(HttpCodes.CREATED);
         } catch (DuplicateProductException e) {
             response.renderHead(HttpCodes.CONFLICT);

@@ -24,12 +24,12 @@ public class PlaceOrder implements Controller {
 
     private CreditCardDetails readPaymentDetailsFrom(Request request) {
         return new CreditCardDetails(
-                    valueOf(request.getParameter("card-type")),
-                    request.getParameter("card-number"),
-                    request.getParameter("expiry-date"),
+                    valueOf(request.parameter("card-type")),
+                    request.parameter("card-number"),
+                    request.parameter("expiry-date"),
                     new Address(
-                            request.getParameter("first-name"),
-                            request.getParameter("last-name"),
-                            request.getParameter("email")));
+                            request.parameter("first-name"),
+                            request.parameter("last-name"),
+                            request.parameter("email")));
     }
 }

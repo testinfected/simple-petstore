@@ -52,7 +52,7 @@ public class HttpMethodOverrideTest {
         context.checking(new Expectations() {{
             oneOf(runner).handle(with(aRequestWithMethod("GET")), with(any(Response.class)));
         }});
-        request.get("/");
+        request.withParameter("_method", "delete").get("/");
     }
 
     @Test public void

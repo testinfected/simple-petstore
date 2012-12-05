@@ -55,10 +55,10 @@ public class CreateItemTest {
 
     private void setRequestParametersTo(final String productNumber, final String itemNumber, final String description, final String price) {
         context.checking(new Expectations() {{
-            allowing(request).getParameter("product"); will(returnValue(productNumber));
-            allowing(request).getParameter("number"); will(returnValue(itemNumber));
-            allowing(request).getParameter("description"); will(returnValue(description));
-            allowing(request).getParameter("price"); will(returnValue(price));
+            allowing(request).parameter("product"); will(returnValue(productNumber));
+            allowing(request).parameter("number"); will(returnValue(itemNumber));
+            allowing(request).parameter("description"); will(returnValue(description));
+            allowing(request).parameter("price"); will(returnValue(price));
         }});
     }
 }

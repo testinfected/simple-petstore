@@ -46,12 +46,12 @@ public class PlaceOrderTest {
 
     private void havingRequestParametersCapturing(final CreditCardDetails paymentDetails) {
         context.checking(new Expectations() {{
-            allowing(request).getParameter("first-name"); will(returnValue(paymentDetails.getFirstName()));
-            allowing(request).getParameter("last-name"); will(returnValue(paymentDetails.getLastName()));
-            allowing(request).getParameter("email"); will(returnValue(paymentDetails.getEmail()));
-            allowing(request).getParameter("card-number"); will(returnValue(paymentDetails.getCardNumber()));
-            allowing(request).getParameter("card-type"); will(returnValue(paymentDetails.getCardType().toString()));
-            allowing(request).getParameter("expiry-date"); will(returnValue(paymentDetails.getCardExpiryDate()));
+            allowing(request).parameter("first-name"); will(returnValue(paymentDetails.getFirstName()));
+            allowing(request).parameter("last-name"); will(returnValue(paymentDetails.getLastName()));
+            allowing(request).parameter("email"); will(returnValue(paymentDetails.getEmail()));
+            allowing(request).parameter("card-number"); will(returnValue(paymentDetails.getCardNumber()));
+            allowing(request).parameter("card-type"); will(returnValue(paymentDetails.getCardType().toString()));
+            allowing(request).parameter("expiry-date"); will(returnValue(paymentDetails.getCardExpiryDate()));
         }});
     }
 

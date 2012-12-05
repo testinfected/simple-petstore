@@ -29,7 +29,7 @@ public class SimpleRequest implements org.testinfected.support.Request {
         return request.getMethod();
     }
 
-    public String getParameter(String name) {
+    public String parameter(String name) {
         try {
             return request.getParameter(name);
         } catch (IOException e) {

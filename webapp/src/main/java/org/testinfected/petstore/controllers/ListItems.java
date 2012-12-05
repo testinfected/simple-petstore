@@ -19,7 +19,7 @@ public class ListItems implements Controller {
     }
 
     public void process(Request request, Response response) throws Exception {
-        String productNumber = request.getParameter("product");
+        String productNumber = request.parameter("product");
         List<Item> items = itemInventory.findByProductNumber (productNumber);
         response.render("items", context().
                 with("in-stock", !items.isEmpty()).

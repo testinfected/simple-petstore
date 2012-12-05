@@ -24,7 +24,7 @@ public class ListProducts implements Controller {
     }
 
     public void process(Request request, Response response) throws Exception {
-        String keyword = request.getParameter("keyword");
+        String keyword = request.parameter("keyword");
         List<Product> products = productCatalog.findByKeyword(keyword);
 
         Context context = context().

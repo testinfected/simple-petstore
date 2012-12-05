@@ -38,7 +38,7 @@ public class CreateCartItemTest {
 
     private void addItemNumberToRequestParameters(final String number) {
         context.checking(new Expectations() {{
-            allowing(request).getParameter("item-number"); will(returnValue(number));
+            allowing(request).parameter("item-number"); will(returnValue(number));
         }});
     }
 }

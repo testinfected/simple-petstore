@@ -10,7 +10,7 @@ public interface Request {
 
     String pathInfo();
 
-    String getParameter(String name);
+    String parameter(String name);
 
     <T> T unwrap(Class<T> type);
 

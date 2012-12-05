@@ -42,7 +42,7 @@ public class ShowOrderTest {
     @Before public void
     stubHttpRequest() {
         context.checking(new Expectations() {{
-            allowing(request).getParameter("number"); will(returnValue(orderNumber));
+            allowing(request).parameter("number"); will(returnValue(orderNumber));
         }});
     }
 }
