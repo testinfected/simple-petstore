@@ -26,6 +26,8 @@ import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.testinfected.support.Application;
 import org.testinfected.support.RenderingEngine;
+import org.testinfected.support.SimpleRequest;
+import org.testinfected.support.SimpleResponse;
 import org.testinfected.support.routing.Router;
 import org.testinfected.support.middlewares.Routes;
 import org.testinfected.petstore.util.FileSystemPhotoStore;

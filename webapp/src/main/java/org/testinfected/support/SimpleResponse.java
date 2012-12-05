@@ -1,8 +1,7 @@
-package org.testinfected.petstore;
+package org.testinfected.support;
 
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
-import org.testinfected.support.RenderingEngine;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -37,5 +36,18 @@ public class SimpleResponse implements org.testinfected.support.Response {
     public void redirectTo(String location) {
         renderHead(SEE_OTHER.getCode());
         response.set("Location", location);
+    }
+
+    public int statusCode() {
+        return response.getCode();
+    }
+
+    public int contentLength() {
+        return response.getContentLength();
+    }
+
+    public <T> T unwrap(Class<T> type) {
+        if (!type.isAssignableFrom(response.getClass())) throw new IllegalArgumentException("Unsupported type: " + type.getName());
+        return type.cast(response);
     }
 }

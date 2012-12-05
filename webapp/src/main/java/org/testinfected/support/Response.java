@@ -9,4 +9,10 @@ public interface Response {
     void redirectTo(String location);
 
     void renderHead(int statusCode);
+
+    int statusCode();
+
+    int contentLength();
+
+    <T> T unwrap(Class<T> type);
 }
