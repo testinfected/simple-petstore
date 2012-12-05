@@ -8,19 +8,18 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
-import org.testinfected.support.Application;
 import org.testinfected.petstore.ExceptionImposter;
-import org.testinfected.support.routing.Route;
+import org.testinfected.support.Application;
 import org.testinfected.support.HttpMethod;
+import org.testinfected.support.routing.DynamicRoute;
+import org.testinfected.support.routing.Route;
 
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.testinfected.support.routing.DynamicRouteDefinition.route;
-import static test.support.org.testinfected.support.web.MockRequest.GET;
-import static test.support.org.testinfected.support.web.MockRequest.POST;
-import static test.support.org.testinfected.support.web.MockRequest.aRequest;
+import static test.support.org.testinfected.support.web.MockRequest.*;
 import static test.support.org.testinfected.support.web.MockResponse.aResponse;
 
 public class DynamicRouteTest {

@@ -41,14 +41,14 @@ public class DynamicPathTest {
     @Test public void
     staticPathsHaveNoBoundParameters() {
         DynamicPath dynamicPath = new DynamicPath("/products");
-        Map<String, String> boundParameters = dynamicPath.extractBoundParameters(path("/products"));
+        Map<String, String> boundParameters = dynamicPath.extractBoundParameters("/products");
         assertThat("bound parameters values", boundParameters.values(), Matchers.<String>empty());
     }
 
     @Test public void
     extractBoundParametersFromDynamicSegments() {
         DynamicPath dynamicPath = new DynamicPath("/products/:number/items/:id");
-        Map<String, String> boundParameters = dynamicPath.extractBoundParameters(path("/products/LAB-1234/items/12345678"));
+        Map<String, String> boundParameters = dynamicPath.extractBoundParameters("/products/LAB-1234/items/12345678");
         assertThat("bound parameters values", boundParameters.values(), hasSize(2));
         assertThat("bound parameters", boundParameters, allOf(hasEntry("number", "LAB-1234"), hasEntry("id", "12345678")));
     }

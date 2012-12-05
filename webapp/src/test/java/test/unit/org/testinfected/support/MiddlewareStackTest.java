@@ -14,8 +14,8 @@ import org.simpleframework.http.Response;
 import org.testinfected.support.Application;
 import org.testinfected.support.Middleware;
 import org.testinfected.support.MiddlewareStack;
-import test.support.org.testinfected.support.web.MockRequest;
-import test.support.org.testinfected.support.web.MockResponse;
+import test.support.org.testinfected.support.web.MockSimpleRequest;
+import test.support.org.testinfected.support.web.MockSimpleResponse;
 
 @RunWith(JMock.class)
 public class MiddlewareStackTest {
@@ -28,8 +28,8 @@ public class MiddlewareStackTest {
     Middleware inTheMiddle = context.mock(Middleware.class, "in the middle");
     Middleware atBottom = context.mock(Middleware.class, "at bottom");
 
-    Request request = new MockRequest();
-    Response response = new MockResponse();
+    Request request = new MockSimpleRequest();
+    Response response = new MockSimpleResponse();
     final States chain = new StateMachine("chain");
 
     @Test public void

@@ -14,11 +14,11 @@ import org.testinfected.support.Middleware;
 import org.testinfected.support.Request;
 import org.testinfected.support.matchers.Matchers;
 import org.testinfected.support.middlewares.FilterMap;
-import test.support.org.testinfected.support.web.MockRequest;
-import test.support.org.testinfected.support.web.MockResponse;
+import test.support.org.testinfected.support.web.MockSimpleRequest;
+import test.support.org.testinfected.support.web.MockSimpleResponse;
 
-import static test.support.org.testinfected.support.web.MockRequest.aRequest;
-import static test.support.org.testinfected.support.web.MockResponse.aResponse;
+import static test.support.org.testinfected.support.web.MockSimpleRequest.aRequest;
+import static test.support.org.testinfected.support.web.MockSimpleResponse.aResponse;
 
 @RunWith(JMock.class)
 public class FilterMapTest {
@@ -29,8 +29,8 @@ public class FilterMapTest {
 
     FilterMap filters = new FilterMap();
 
-    MockRequest request = aRequest();
-    MockResponse response = aResponse();
+    MockSimpleRequest request = aRequest();
+    MockSimpleResponse response = aResponse();
 
     @Before public void
     chainWithSuccessor() {

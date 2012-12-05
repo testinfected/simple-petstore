@@ -38,7 +38,8 @@ public class DynamicPath implements Matcher<Path> {
         return segment.startsWith(":");
     }
 
-    public Map<String, String> extractBoundParameters(Path actual) {
+    public Map<String, String> extractBoundParameters(String path) {
+        Path actual = new PathParser(path);
         Map<String, String> boundParameters = new HashMap<String, String>();
 
         String[] parts = pattern.getSegments();

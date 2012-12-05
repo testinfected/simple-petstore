@@ -1,13 +1,11 @@
 package org.testinfected.support.routing;
 
-import org.simpleframework.http.Request;
 import org.simpleframework.http.RequestWrapper;
-import org.simpleframework.http.Response;
-import org.testinfected.support.Application;
+import org.testinfected.support.*;
 import org.testinfected.support.matchers.Combination;
-import org.testinfected.support.Matcher;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 import static org.testinfected.support.matchers.Matchers.hasMethod;
@@ -26,21 +24,26 @@ public class DynamicRoute implements Route {
     }
 
     public boolean matches(Request request) {
-        return both(hasMethod(method)).and(hasPath(path)).matches(request);
+        org.simpleframework.http.Request rq = request.unwrap(org.simpleframework.http.Request.class);
+        return both(hasMethod(method)).and(hasPath(path)).matches(rq);
     }
 
-    private Combination<Request> both(Matcher<Request> matcher) {
+    private Combination<org.simpleframework.http.Request> both(Matcher<org.simpleframework.http.Request> matcher) {
         return Combination.both(matcher);
     }
 
-    public void handle(Request request, Response response) throws Exception {
-        final Map<String, String> boundParameters = path.extractBoundParameters(request.getPath());
+    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
+    }
 
-        app.handle(new RequestWrapper(request) {
+    public void handle(Request request, Response response) throws Exception {
+        final Map<String, String> boundParameters = path.extractBoundParameters(request.pathInfo());
+
+        app.handle(new RequestWrapper(request.unwrap(org.simpleframework.http.Request.class)) {
             public String getParameter(String name) throws IOException {
                 if (boundParameters.containsKey(name)) return boundParameters.get(name);
                 else return super.getParameter(name);
             }
-        }, response);
+        }, response.unwrap(org.simpleframework.http.Response.class));
     }
 }

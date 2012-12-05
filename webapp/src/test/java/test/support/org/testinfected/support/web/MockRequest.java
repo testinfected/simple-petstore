@@ -1,26 +1,30 @@
 package test.support.org.testinfected.support.web;
 
-import org.simpleframework.http.Path;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.RequestWrapper;
-import org.simpleframework.http.parse.PathParser;
 import org.testinfected.support.HttpMethod;
+import org.testinfected.support.Request;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MockRequest extends RequestWrapper {
-
-    private static final Request DUMMY_REQUEST = null;
+public class MockRequest implements Request {
 
     private final Map<String, String> params = new HashMap<String, String>();
     private String method;
     private String path;
 
-    public MockRequest() {
-        super(DUMMY_REQUEST);
+    public static MockRequest aRequest() {
+        return new MockRequest();
     }
+
+    public static Request POST(String path) {
+        return aRequest().withPath(path).withMethod(HttpMethod.POST);
+    }
+
+    public static Request GET(String path) {
+        return aRequest().withPath(path).withMethod(HttpMethod.GET);
+    }
+
+    public MockRequest() {}
 
     public MockRequest withPath(String path) {
         this.path = path;
@@ -36,27 +40,41 @@ public class MockRequest extends RequestWrapper {
         return this;
     }
 
-    public String getMethod() {
+    public String method() {
         return method;
     }
 
-    public Path getPath() {
-        return new PathParser(path);
+    public String pathInfo() {
+        return path;
     }
 
-    public String getParameter(String name) throws IOException {
+    public String parameter(String name) {
         return params.get(name);
     }
 
-    public static MockRequest aRequest() {
-        return new MockRequest();
+    public String protocol() {
+        return null;
     }
 
-    public static Request POST(String path) {
-        return aRequest().withPath(path).withMethod(HttpMethod.POST);
+    public String uri() {
+        return null;
     }
 
-    public static Request GET(String path) {
-        return aRequest().withPath(path).withMethod(HttpMethod.GET);
+    public <T> T unwrap(Class<T> type) {
+        return (T) new MockSimpleRequest().withMethod(method).withPath(path);
+    }
+
+    public String ip() {
+        return null;
+    }
+
+    public Object attribute(Object key) {
+        return null;
+    }
+
+    public void setAttribute(Object key, Object value) {
+    }
+
+    public void removeAttribute(Object key) {
     }
 }
