@@ -45,7 +45,7 @@ public class ShowCartTest {
             oneOf(response).render(with("cart"), with(allOf(hasEntry("items", items), hasEntry("total", total))));
         }});
 
-        showCart.process(request, response);
+        showCart.handle(request, response);
     }
 
     private Matcher<Map<? extends String, ?>> hasEntry(String key, Object value) {

@@ -37,7 +37,7 @@ public class CreateProductTest {
             oneOf(response).renderHead(HttpCodes.CREATED);
         }});
 
-        createProduct.process(request, response);
+        createProduct.handle(request, response);
     }
 
     @Test public void
@@ -48,7 +48,7 @@ public class CreateProductTest {
             oneOf(response).renderHead(HttpCodes.CONFLICT);
         }});
 
-        createProduct.process(request, response);
+        createProduct.handle(request, response);
     }
 
     private void setRequestParametersTo(final String number, final String name, final String description, final String photoFileName) {

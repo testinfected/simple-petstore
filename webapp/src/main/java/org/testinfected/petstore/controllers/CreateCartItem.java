@@ -14,7 +14,7 @@ public class CreateCartItem implements Controller {
         this.salesAssistant = salesAssistant;
     }
 
-    public void process(Request request, Response response) throws Exception {
+    public void handle(Request request, Response response) throws Exception {
         String number = request.parameter("item-number");
         salesAssistant.addToCart(new ItemNumber(number));
         response.redirectTo("/cart");

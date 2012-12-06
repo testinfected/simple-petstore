@@ -36,7 +36,7 @@ public class ShowOrderTest {
             allowing(orderBook).find(new OrderNumber(orderNumber)); will(returnValue(order));
             oneOf(response).render(with("order"), with(hasEntry("order", order)));
         }});
-        showOrder.process(request, response);
+        showOrder.handle(request, response);
     }
 
     @Before public void

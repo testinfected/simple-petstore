@@ -41,7 +41,7 @@ public class PlaceOrderTest {
             oneOf(response).redirectTo("/orders/" + orderNumber);
         }});
 
-        placeOrder.process(request, response);
+        placeOrder.handle(request, response);
     }
 
     private void havingRequestParametersCapturing(final CreditCardDetails paymentDetails) {

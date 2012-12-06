@@ -1,13 +1,13 @@
 package org.testinfected.support.middlewares;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.support.Application;
-import org.testinfected.support.Middleware;
+import org.testinfected.support.*;
 
 public abstract class AbstractMiddleware implements Middleware {
 
     protected Application successor = new Application() {
+        public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+        }
+
         public void handle(Request request, Response response) throws Exception {
         }
     };
@@ -16,11 +16,11 @@ public abstract class AbstractMiddleware implements Middleware {
         this.successor = successor;
     }
 
-    protected void forward(org.testinfected.support.Request request, org.testinfected.support.Response response) throws Exception {
+    protected void forward(Request request, Response response) throws Exception {
         forward(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
     }
 
-    protected void forward(Request request, Response response) throws Exception {
+    protected void forward(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
         successor.handle(request, response);
     }
 }

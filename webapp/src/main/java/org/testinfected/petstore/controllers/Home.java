@@ -8,7 +8,7 @@ import static org.testinfected.petstore.util.Context.emptyContext;
 
 public class Home implements Controller {
 
-    public void process(Request request, Response response) throws Exception {
+    public void handle(Request request, Response response) throws Exception {
         response.render("home", emptyContext());
     }
 }

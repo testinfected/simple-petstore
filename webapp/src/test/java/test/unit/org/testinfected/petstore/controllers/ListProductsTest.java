@@ -68,7 +68,7 @@ public class ListProductsTest {
             oneOf(response).render(with("products"), with(hasEntry("match-found", false)));
         }});
 
-        listProducts.process(request, response);
+        listProducts.handle(request, response);
     }
 
     @SuppressWarnings("unchecked")
@@ -83,7 +83,7 @@ public class ListProductsTest {
             oneOf(response).render(with("products"), with(allOf(hasEntry("match-found", true), hasEntry("products", searchResults))));
         }});
 
-        listProducts.process(request, response);
+        listProducts.handle(request, response);
     }
 
     @SuppressWarnings("unchecked")
@@ -95,7 +95,7 @@ public class ListProductsTest {
             oneOf(response).render(with(any(String.class)), with(hasEntry("match-count", 3)));
         }});
 
-        listProducts.process(request, response);
+        listProducts.handle(request, response);
     }
 
     @SuppressWarnings("unchecked")
@@ -107,7 +107,7 @@ public class ListProductsTest {
             oneOf(response).render(with(any(String.class)), with(hasEntry("keyword", keyword)));
         }});
 
-        listProducts.process(request, response);
+        listProducts.handle(request, response);
     }
 
     @SuppressWarnings("unchecked")
@@ -120,7 +120,7 @@ public class ListProductsTest {
             oneOf(attachmentStorage).getLocation(with("photo.png"));
         }});
 
-        listProducts.process(request, response);
+        listProducts.handle(request, response);
     }
 
     private Matcher<Map<? extends String, ?>> hasEntry(String name, Object value) {

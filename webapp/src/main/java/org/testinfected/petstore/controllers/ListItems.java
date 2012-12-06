@@ -18,7 +18,7 @@ public class ListItems implements Controller {
         this.itemInventory = itemInventory;
     }
 
-    public void process(Request request, Response response) throws Exception {
+    public void handle(Request request, Response response) throws Exception {
         String productNumber = request.parameter("product");
         List<Item> items = itemInventory.findByProductNumber (productNumber);
         response.render("items", context().

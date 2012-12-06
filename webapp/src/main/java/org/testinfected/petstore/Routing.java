@@ -1,36 +1,20 @@
 package org.testinfected.petstore;
 
+import org.testinfected.petstore.controllers.*;
+import org.testinfected.petstore.jdbc.*;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.Cashier;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumberSequence;
+import org.testinfected.petstore.procurement.ProcurementRequestHandler;
+import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ProductCatalog;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.petstore.controllers.Checkout;
-import org.testinfected.petstore.controllers.CreateCartItem;
-import org.testinfected.petstore.controllers.CreateItem;
-import org.testinfected.petstore.controllers.CreateProduct;
-import org.testinfected.petstore.controllers.Home;
-import org.testinfected.petstore.controllers.ListItems;
-import org.testinfected.petstore.controllers.ListProducts;
-import org.testinfected.petstore.controllers.Logout;
-import org.testinfected.petstore.controllers.PlaceOrder;
-import org.testinfected.petstore.controllers.ShowCart;
-import org.testinfected.petstore.controllers.ShowOrder;
-import org.testinfected.petstore.jdbc.*;
-import org.testinfected.petstore.jdbc.ItemsDatabase;
-import org.testinfected.petstore.procurement.ProcurementRequestHandler;
-import org.testinfected.petstore.procurement.PurchasingAgent;
-import org.testinfected.support.Application;
-import org.testinfected.support.RenderingEngine;
-import org.testinfected.support.SimpleRequest;
-import org.testinfected.support.SimpleResponse;
-import org.testinfected.support.routing.Router;
-import org.testinfected.support.middlewares.Routes;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
+import org.testinfected.support.*;
+import org.testinfected.support.middlewares.Routes;
+import org.testinfected.support.routing.Router;
 
 import java.nio.charset.Charset;
 import java.sql.Connection;
@@ -48,10 +32,14 @@ public class Routing implements Application {
         this.charset = charset;
     }
 
+    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
+    }
+
     public void handle(final Request request, final Response response) throws Exception {
         final AttachmentStorage attachmentStorage = new FileSystemPhotoStore("/photos");
 
-        final Cart cart = sessionScopeOf(request).cart();
+        final Cart cart = sessionScopeOf(request.unwrap(org.simpleframework.http.Request.class)).cart();
 
         final Connection connection = new ConnectionReference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);
@@ -81,8 +69,12 @@ public class Routing implements Application {
 
     private Application controller(final Controller controller) {
         return new Application() {
+            public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+                handle(new SimpleRequest(request), new SimpleResponse(response, renderer, charset));
+            }
+
             public void handle(Request request, Response response) throws Exception {
-                controller.process(new SimpleRequest(request), new SimpleResponse(response, renderer, charset));
+                controller.handle(request, response);
             }
         };
     }

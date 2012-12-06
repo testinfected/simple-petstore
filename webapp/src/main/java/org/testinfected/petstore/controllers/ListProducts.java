@@ -23,7 +23,7 @@ public class ListProducts implements Controller {
         this.attachmentStorage = attachmentStorage;
     }
 
-    public void process(Request request, Response response) throws Exception {
+    public void handle(Request request, Response response) throws Exception {
         String keyword = request.parameter("keyword");
         List<Product> products = productCatalog.findByKeyword(keyword);
 

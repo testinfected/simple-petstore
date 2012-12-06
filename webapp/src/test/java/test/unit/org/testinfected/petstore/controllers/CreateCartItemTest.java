@@ -33,7 +33,7 @@ public class CreateCartItemTest {
             oneOf(response).redirectTo("/cart");
         }});
 
-        createCartItem.process(request, response);
+        createCartItem.handle(request, response);
     }
 
     private void addItemNumberToRequestParameters(final String number) {

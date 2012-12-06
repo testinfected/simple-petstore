@@ -14,7 +14,7 @@ public class ShowCart implements Controller {
         this.salesAssistant = salesAssistant;
     }
 
-    public void process(Request request, Response response) throws Exception {
+    public void handle(Request request, Response response) throws Exception {
         response.render("cart", context().
                 with("items", salesAssistant.orderContent()).
                 and("total", salesAssistant.orderTotal()).

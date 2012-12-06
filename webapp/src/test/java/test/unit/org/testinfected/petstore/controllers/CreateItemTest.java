@@ -39,7 +39,7 @@ public class CreateItemTest {
             oneOf(response).renderHead(HttpCodes.CREATED);
         }});
 
-        createItem.process(request, response);
+        createItem.handle(request, response);
     }
 
     @Test public void
@@ -50,7 +50,7 @@ public class CreateItemTest {
             oneOf(response).renderHead(HttpCodes.CONFLICT);
         }});
 
-        createItem.process(request, response);
+        createItem.handle(request, response);
     }
 
     private void setRequestParametersTo(final String productNumber, final String itemNumber, final String description, final String price) {

@@ -16,7 +16,7 @@ public class CreateItem implements Controller {
         this.requestHandler = requestHandler;
     }
 
-    public void process(Request request, Response response) throws Exception {
+    public void handle(Request request, Response response) throws Exception {
         try {
             requestHandler.addToInventory(
                     request.parameter("product"),

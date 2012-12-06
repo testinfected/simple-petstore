@@ -53,7 +53,7 @@ public class ListItemsTest {
             oneOf(response).render(with("items"), with(allOf(hasEntry("in-stock", true), hasEntry("items", items))));
         }});
 
-        listItems.process(request, response);
+        listItems.handle(request, response);
     }
 
     @SuppressWarnings("unchecked")
@@ -65,7 +65,7 @@ public class ListItemsTest {
             oneOf(response).render(with("items"), with(hasEntry("in-stock", false)));
         }});
 
-        listItems.process(request, response);
+        listItems.handle(request, response);
     }
 
     @SuppressWarnings("unchecked")
@@ -77,7 +77,7 @@ public class ListItemsTest {
             oneOf(response).render(with(any(String.class)), with(hasEntry("item-count", 3)));
         }});
 
-        listItems.process(request, response);
+        listItems.handle(request, response);
     }
 
     private Matcher<Map<? extends String, ?>> hasEntry(String name, Object value) {

@@ -6,7 +6,7 @@ import org.testinfected.support.Response;
 
 public class Logout implements Controller {
 
-    public void process(Request request, Response response) {
+    public void handle(Request request, Response response) {
         response.redirectTo("/");
     }
 }

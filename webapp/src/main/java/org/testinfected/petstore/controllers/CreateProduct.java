@@ -14,7 +14,7 @@ public class CreateProduct implements Controller {
         this.requestHandler = requestHandler;
     }
 
-    public void process(Request request, Response response) throws Exception {
+    public void handle(Request request, Response response) throws Exception {
         try {
             requestHandler.addProductToCatalog(
                     request.parameter("number"),

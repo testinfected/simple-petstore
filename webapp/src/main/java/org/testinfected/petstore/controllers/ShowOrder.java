@@ -16,7 +16,7 @@ public class ShowOrder implements Controller {
         this.orderBook = orderBook;
     }
 
-    public void process(Request request, Response response) throws Exception {
+    public void handle(Request request, Response response) throws Exception {
         String number = request.parameter("number");
         Order order = orderBook.find(new OrderNumber(number));
         response.render("order", context().with("order", order).asMap());

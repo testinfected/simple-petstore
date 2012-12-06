@@ -15,7 +15,7 @@ public class Checkout implements Controller {
         this.salesAssistant = salesAssistant;
     }
 
-    public void process(Request request, Response response) throws Exception {
+    public void handle(Request request, Response response) throws Exception {
         response.render("checkout", context().
                 with("total", salesAssistant.orderTotal()).
                 and("cardTypes", CreditCardType.options().entrySet()).

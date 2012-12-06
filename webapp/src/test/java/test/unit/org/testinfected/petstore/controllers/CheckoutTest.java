@@ -38,7 +38,7 @@ public class CheckoutTest {
             oneOf(response).render(with("checkout"), with(allOf(hasEntry("total", total), hasEntry("cardTypes", cardTypes.entrySet()))));
         }});
 
-        checkout.process(request, response);
+        checkout.handle(request, response);
     }
 
     private Matcher<Map<String, Object>> allOf(final Matcher<? super Map<String, Object>>... matchers) {

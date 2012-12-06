@@ -5,5 +5,5 @@ import org.testinfected.support.Response;
 
 public interface Controller {
 
-    void process(Request request, Response response) throws Exception;
+    void handle(Request request, Response response) throws Exception;
 }
