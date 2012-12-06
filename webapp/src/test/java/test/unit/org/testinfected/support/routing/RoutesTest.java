@@ -69,7 +69,7 @@ public class RoutesTest {
             this.app = app;
         }
 
-        public void handle(org.testinfected.support.Request request, org.testinfected.support.Response response) throws Exception {
+        public void handle(Request request, Response response) throws Exception {
         }
 
         public boolean matches(Request actual) {

@@ -8,17 +8,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.support.Application;
-import org.testinfected.support.FailureReporter;
-import org.testinfected.support.Server;
+import org.testinfected.support.*;
 import org.testinfected.support.middlewares.Failsafe;
-import org.testinfected.support.MiddlewareStack;
 import test.support.org.testinfected.support.web.HttpRequest;
 import test.support.org.testinfected.support.web.HttpResponse;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static test.support.org.testinfected.support.web.HttpRequest.aRequest;
@@ -90,6 +86,10 @@ public class FailsafeTest {
 
     private Application failWith(final Exception error) {
         return new Application() {
+            public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
+                handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
+            }
+
             public void handle(Request request, Response response) throws Exception {
                 throw error;
             }

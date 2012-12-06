@@ -3,8 +3,9 @@ package test.integration.org.testinfected.support.middlewares;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.testinfected.support.Server;
+import org.testinfected.support.HttpStatus;
 import org.testinfected.support.MiddlewareStack;
+import org.testinfected.support.Server;
 import org.testinfected.support.middlewares.ServerHeaders;
 import org.testinfected.time.lib.BrokenClock;
 import test.support.org.testinfected.support.web.HttpRequest;
@@ -28,7 +29,7 @@ public class ServerHeadersTest {
     startServer() throws IOException {
         server.run(new MiddlewareStack() {{
             use(serverHeaders);
-            run(respondWith(SEE_OTHER));
+            run(respondWith(HttpStatus.SEE_OTHER));
         }});
     }
 

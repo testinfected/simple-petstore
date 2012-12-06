@@ -23,8 +23,8 @@ public class SimpleResponse implements org.testinfected.support.Response {
     }
 
     public void render(String view, Object context) throws IOException {
-        response.set("Content-Type", "text/html; charset=" + charset.name().toLowerCase());
-        OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), charset);
+        contentType("text/html; charset=" + charset.name().toLowerCase());
+        Writer out = writer();
         renderer.render(out, view, context);
         out.flush();
     }
@@ -84,12 +84,12 @@ public class SimpleResponse implements org.testinfected.support.Response {
         response.setText(reason);
     }
 
-    public PrintWriter writer() throws IOException {
-        return new PrintWriter(new OutputStreamWriter(response.getOutputStream(), charset));
+    public Writer writer() throws IOException {
+        return new OutputStreamWriter(response.getOutputStream(), charset());
     }
 
     public void body(String body) throws IOException {
-        Writer writer = writer();
+        Writer writer = new BufferedWriter(writer());
         writer.write(body);
         writer.flush();
     }
@@ -97,7 +97,7 @@ public class SimpleResponse implements org.testinfected.support.Response {
     public Charset charset() {
         ContentType type = response.getContentType();
 
-        if(type == null || type.getCharset() == null) {
+        if (type == null || type.getCharset() == null) {
             return Charsets.ISO_8859_1;
         }
 

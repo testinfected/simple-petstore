@@ -2,7 +2,7 @@ package org.testinfected.support;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 
 public interface Response {
@@ -39,7 +39,7 @@ public interface Response {
 
     OutputStream outputStream(int bufferSize) throws IOException;
 
-    PrintWriter writer() throws IOException;
+    Writer writer() throws IOException;
 
     void body(String body) throws IOException;
 

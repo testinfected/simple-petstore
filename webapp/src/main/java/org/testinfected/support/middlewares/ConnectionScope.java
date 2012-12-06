@@ -38,10 +38,6 @@ public class ConnectionScope extends AbstractMiddleware {
 
         private final Request request;
 
-        public ConnectionReference(org.simpleframework.http.Request request) {
-            this(new SimpleRequest(request));
-        }
-
         public ConnectionReference(Request request) {
             this.request = request;
         }

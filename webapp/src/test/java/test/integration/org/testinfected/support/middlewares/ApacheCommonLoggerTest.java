@@ -10,9 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.support.Application;
+import org.testinfected.support.MiddlewareStack;
 import org.testinfected.support.Server;
 import org.testinfected.support.middlewares.ApacheCommonLogger;
-import org.testinfected.support.MiddlewareStack;
 import org.testinfected.time.Clock;
 import test.support.org.testinfected.support.web.HttpRequest;
 
@@ -66,6 +66,7 @@ public class ApacheCommonLoggerTest {
             oneOf(logger).info(with("127.0.0.1 - - [27/Jun/2012:14:04:00 -0400] \"GET /products?keyword=dogs HTTP/1.1\" 200 28"));
         }});
         request.get("/products?keyword=dogs");
+        Thread.sleep(50);
     }
 
     @Test public void
@@ -81,5 +82,6 @@ public class ApacheCommonLoggerTest {
         }});
 
         request.delete("/logout");
+        Thread.sleep(50);
     }
 }

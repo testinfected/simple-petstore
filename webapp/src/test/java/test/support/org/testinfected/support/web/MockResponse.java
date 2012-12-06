@@ -5,7 +5,7 @@ import org.testinfected.support.Response;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 
 public class MockResponse implements Response {
@@ -77,7 +77,7 @@ public class MockResponse implements Response {
         return null;
     }
 
-    public PrintWriter writer() throws IOException {
+    public Writer writer() throws IOException {
         return null;
     }
 
