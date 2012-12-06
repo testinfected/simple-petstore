@@ -26,7 +26,7 @@ public class SiteLayout extends AbstractMiddleware {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        Cart cart = sessionScopeOf(request.unwrap(org.simpleframework.http.Request.class)).cart();
+        Cart cart = sessionScopeOf(request).cart();
         FilterMap filtering = new FilterMap();
         filtering.map("/", SiteMesh.html(new MainLayout("main", renderer, cart)));
         filtering.connectTo(successor);

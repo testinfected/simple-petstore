@@ -39,7 +39,7 @@ public class Routing implements Application {
     public void handle(final Request request, final Response response) throws Exception {
         final AttachmentStorage attachmentStorage = new FileSystemPhotoStore("/photos");
 
-        final Cart cart = sessionScopeOf(request.unwrap(org.simpleframework.http.Request.class)).cart();
+        final Cart cart = sessionScopeOf(request).cart();
 
         final Connection connection = new ConnectionReference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);

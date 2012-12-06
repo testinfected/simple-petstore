@@ -1,7 +1,9 @@
 package test.support.org.testinfected.support.web;
 
+import org.simpleframework.util.lease.LeaseException;
 import org.testinfected.support.HttpMethod;
 import org.testinfected.support.Request;
+import org.testinfected.support.Session;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,6 +66,7 @@ public class MockRequest implements Request {
         return null;
     }
 
+    // todo remove when transition to request/response complete
     public <T> T unwrap(Class<T> type) {
         return (T) new MockSimpleRequest().withMethod(method).withPath(path);
     }
@@ -80,5 +83,9 @@ public class MockRequest implements Request {
     }
 
     public void removeAttribute(Object key) {
+    }
+
+    public Session session() throws LeaseException {
+        return null;
     }
 }

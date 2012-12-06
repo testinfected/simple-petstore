@@ -1,6 +1,7 @@
 package org.testinfected.support;
 
 import org.simpleframework.http.Request;
+import org.simpleframework.util.lease.LeaseException;
 import org.testinfected.petstore.ExceptionImposter;
 
 import java.io.IOException;
@@ -52,6 +53,14 @@ public class SimpleRequest implements org.testinfected.support.Request {
 
     public void removeAttribute(Object key) {
         request.getAttributes().remove(key);
+    }
+
+    public Session session() {
+        try {
+            return new SimpleSession(request.getSession());
+        } catch (LeaseException e) {
+            throw new HttpException("Cannot acquire session", e);
+        }
     }
 
     public <T> T unwrap(Class<T> type) {

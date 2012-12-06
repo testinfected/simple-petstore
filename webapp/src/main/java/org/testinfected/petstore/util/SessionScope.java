@@ -1,8 +1,8 @@
 package org.testinfected.petstore.util;
 
 import org.testinfected.petstore.order.Cart;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.session.Session;
+import org.testinfected.support.Request;
+import org.testinfected.support.Session;
 
 public class SessionScope {
 
@@ -13,12 +13,12 @@ public class SessionScope {
     }
 
     public static SessionScope sessionScopeOf(Request request) throws Exception {
-        return new SessionScope(request.getSession());
+        return new SessionScope(request.session());
     }
 
     @SuppressWarnings("unchecked")
     public Cart cart() {
-        if (!session.containsKey(Cart.class)) {
+        if (!session.contains(Cart.class)) {
             session.put(Cart.class, new Cart());
         }
         return (Cart) session.get(Cart.class);

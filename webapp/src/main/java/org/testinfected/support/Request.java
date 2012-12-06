@@ -1,5 +1,7 @@
 package org.testinfected.support;
 
+import org.simpleframework.util.lease.LeaseException;
+
 public interface Request {
 
     String protocol();
@@ -21,4 +23,6 @@ public interface Request {
     void attribute(Object key, Object value);
 
     void removeAttribute(Object key);
+
+    Session session() throws LeaseException;
 }

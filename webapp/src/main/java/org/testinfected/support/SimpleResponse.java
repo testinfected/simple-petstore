@@ -116,7 +116,7 @@ public class SimpleResponse implements org.testinfected.support.Response {
         try {
             response.reset();
         } catch (IOException e) {
-            throw new HttpException("Response has already been committed");
+            throw new HttpException("Response has already been committed", e);
         }
     }
 
