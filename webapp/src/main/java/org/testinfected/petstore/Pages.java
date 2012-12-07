@@ -17,4 +17,8 @@ public class Pages {
     public Page checkout() {
         return PageTemplate.html(engine, "checkout");
     }
+
+    public Page items() {
+        return PageTemplate.html(engine, "items");
+    }
 }

@@ -9,39 +9,41 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.testinfected.petstore.Page;
 import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
-import org.testinfected.support.Request;
-import org.testinfected.support.Response;
 import test.support.org.testinfected.petstore.builders.Builder;
+import test.support.org.testinfected.support.web.MockRequest;
+import test.support.org.testinfected.support.web.MockResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.Matchers.allOf;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.support.web.MockRequest.aRequest;
+import static test.support.org.testinfected.support.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class ListItemsTest {
 
     Mockery context = new JUnit4Mockery();
     ItemInventory itemInventory = context.mock(ItemInventory.class);
-    ListItems listItems = new ListItems(itemInventory);
+    Page page = context.mock(Page.class);
+    ListItems listItems = new ListItems(itemInventory, page);
 
-    Request request = context.mock(Request.class);
-    Response response = context.mock(Response.class);
+    MockRequest request = aRequest();
+    MockResponse response = aResponse();
     List<Item> items = new ArrayList<Item>();
     String productNumber = "LAB-1234";
 
     @Before public void
-    stubHttpRequest() {
-        context.checking(new Expectations() {{
-            allowing(request).parameter("product"); will(returnValue(productNumber));
-        }});
+    prepareRequest() {
+        request.addParameter("product", productNumber);
     }
 
     @SuppressWarnings("unchecked")
@@ -50,7 +52,7 @@ public class ListItemsTest {
         searchYields(anItem().of(aProduct().withNumber(productNumber)));
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with("items"), with(allOf(hasEntry("in-stock", true), hasEntry("items", items))));
+            oneOf(page).render(with(response), with(allOf(hasEntry("in-stock", true), hasEntry("items", items))));
         }});
 
         listItems.handle(request, response);
@@ -62,7 +64,7 @@ public class ListItemsTest {
         searchYieldsNothing();
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with("items"), with(hasEntry("in-stock", false)));
+            oneOf(page).render(with(response), with(hasEntry("in-stock", false)));
         }});
 
         listItems.handle(request, response);
@@ -74,7 +76,7 @@ public class ListItemsTest {
         searchYields(anItem(), anItem(), anItem());
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with(any(String.class)), with(hasEntry("item-count", 3)));
+            oneOf(page).render(with(response), with(hasEntry("item-count", 3)));
         }});
 
         listItems.handle(request, response);

@@ -68,7 +68,7 @@ public class Routing implements Application {
         Routes routes = Routes.draw(new Router() {{
             get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));
             post("/products").to(controller(new CreateProduct(requestHandler)));
-            get("/products/:product/items").to(controller(new ListItems(itemInventory)));
+            get("/products/:product/items").to(controller(new ListItems(itemInventory, pages.items())));
             post("/products/:product/items").to(controller(new CreateItem(requestHandler)));
             get("/cart").to(controller(new ShowCart(cashier)));
             post("/cart").to(controller(new CreateCartItem(cashier)));

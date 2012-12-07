@@ -28,7 +28,8 @@ public class CreateProductTest {
     MockRequest request = aRequest();
     MockResponse response = aResponse();
 
-    @Before public void prepareRequest() {
+    @Before public void
+    prepareRequest() {
         request.addParameter("number", "LAB-1234");
         request.addParameter("name", "Labrador");
         request.addParameter("description", "Friendly Dog");

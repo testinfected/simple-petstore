@@ -15,6 +15,7 @@ public class MockResponse implements Response {
 
     private String contentType;
     private HttpStatus status;
+    private String location;
 
     public static MockResponse aResponse() {
         return new MockResponse();
@@ -27,6 +28,11 @@ public class MockResponse implements Response {
     }
 
     public void redirectTo(String location) {
+        this.location = location;
+    }
+
+    public void assertRedirectedTo(String expectedLocation) {
+        assertThat("redirection", location, equalTo(expectedLocation));
     }
 
     public void header(String name, String value) {
