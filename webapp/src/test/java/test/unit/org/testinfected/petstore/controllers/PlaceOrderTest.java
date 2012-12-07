@@ -12,11 +12,13 @@ import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
-import org.testinfected.support.Request;
-import org.testinfected.support.Response;
+import test.support.org.testinfected.support.web.MockRequest;
+import test.support.org.testinfected.support.web.MockResponse;
 
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
+import static test.support.org.testinfected.support.web.MockRequest.aRequest;
+import static test.support.org.testinfected.support.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class PlaceOrderTest {
@@ -25,34 +27,30 @@ public class PlaceOrderTest {
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
     PlaceOrder placeOrder = new PlaceOrder(salesAssistant);
 
-    Request request = context.mock(Request.class);
-    Response response = context.mock(Response.class);
+    MockRequest request = aRequest();
+    MockResponse response = aResponse();
 
     String orderNumber = "12345678";
 
     @Test public void
     placesOrderAndRedirectsToReceiptPage() throws Exception {
         final CreditCardDetails validPaymentDetails = validVisaDetails().build();
-        havingRequestParametersCapturing(validPaymentDetails);
-
+        requestSubmits(validPaymentDetails);
         context.checking(new Expectations() {{
             oneOf(salesAssistant).placeOrder(with(samePaymentMethodAs(validPaymentDetails))); will(returnValue(new OrderNumber(orderNumber)));
-
-            oneOf(response).redirectTo("/orders/" + orderNumber);
         }});
 
         placeOrder.handle(request, response);
+        response.assertRedirectedTo("/orders/" + orderNumber);
     }
 
-    private void havingRequestParametersCapturing(final CreditCardDetails paymentDetails) {
-        context.checking(new Expectations() {{
-            allowing(request).parameter("first-name"); will(returnValue(paymentDetails.getFirstName()));
-            allowing(request).parameter("last-name"); will(returnValue(paymentDetails.getLastName()));
-            allowing(request).parameter("email"); will(returnValue(paymentDetails.getEmail()));
-            allowing(request).parameter("card-number"); will(returnValue(paymentDetails.getCardNumber()));
-            allowing(request).parameter("card-type"); will(returnValue(paymentDetails.getCardType().toString()));
-            allowing(request).parameter("expiry-date"); will(returnValue(paymentDetails.getCardExpiryDate()));
-        }});
+    private void requestSubmits(final CreditCardDetails paymentDetails) {
+        request.addParameter("first-name", paymentDetails.getFirstName());
+        request.addParameter("last-name", paymentDetails.getLastName());
+        request.addParameter("email", paymentDetails.getEmail());
+        request.addParameter("card-number", paymentDetails.getCardNumber());
+        request.addParameter("card-type", paymentDetails.getCardType().toString());
+        request.addParameter("expiry-date", paymentDetails.getCardExpiryDate());
     }
 
     private Matcher<? extends PaymentMethod> samePaymentMethodAs(CreditCardDetails paymentMethod) {

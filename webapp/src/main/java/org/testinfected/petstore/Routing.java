@@ -66,7 +66,7 @@ public class Routing implements Application {
         final Cashier cashier = new Cashier(orderNumberSequence, orderBook, itemInventory, cart, transactor);
 
         Routes routes = Routes.draw(new Router() {{
-            get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage)));
+            get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage, pages.products())));
             post("/products").to(controller(new CreateProduct(requestHandler)));
             get("/products/:product/items").to(controller(new ListItems(itemInventory, pages.items())));
             post("/products/:product/items").to(controller(new CreateItem(requestHandler)));

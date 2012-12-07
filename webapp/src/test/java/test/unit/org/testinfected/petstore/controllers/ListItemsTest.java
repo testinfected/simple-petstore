@@ -33,8 +33,8 @@ public class ListItemsTest {
 
     Mockery context = new JUnit4Mockery();
     ItemInventory itemInventory = context.mock(ItemInventory.class);
-    Page page = context.mock(Page.class);
-    ListItems listItems = new ListItems(itemInventory, page);
+    Page itemsPage = context.mock(Page.class);
+    ListItems listItems = new ListItems(itemInventory, itemsPage);
 
     MockRequest request = aRequest();
     MockResponse response = aResponse();
@@ -52,7 +52,7 @@ public class ListItemsTest {
         searchYields(anItem().of(aProduct().withNumber(productNumber)));
 
         context.checking(new Expectations() {{
-            oneOf(page).render(with(response), with(allOf(hasEntry("in-stock", true), hasEntry("items", items))));
+            oneOf(itemsPage).render(with(response), with(allOf(hasEntry("in-stock", true), hasEntry("items", items))));
         }});
 
         listItems.handle(request, response);
@@ -64,7 +64,7 @@ public class ListItemsTest {
         searchYieldsNothing();
 
         context.checking(new Expectations() {{
-            oneOf(page).render(with(response), with(hasEntry("in-stock", false)));
+            oneOf(itemsPage).render(with(response), with(hasEntry("in-stock", false)));
         }});
 
         listItems.handle(request, response);
@@ -76,7 +76,7 @@ public class ListItemsTest {
         searchYields(anItem(), anItem(), anItem());
 
         context.checking(new Expectations() {{
-            oneOf(page).render(with(response), with(hasEntry("item-count", 3)));
+            oneOf(itemsPage).render(with(response), with(hasEntry("item-count", 3)));
         }});
 
         listItems.handle(request, response);

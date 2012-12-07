@@ -21,4 +21,8 @@ public class Pages {
     public Page items() {
         return PageTemplate.html(engine, "items");
     }
+
+    public Page products() {
+        return PageTemplate.html(engine, "products");
+    }
 }

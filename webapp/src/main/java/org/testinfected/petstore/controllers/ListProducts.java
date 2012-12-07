@@ -2,6 +2,7 @@ package org.testinfected.petstore.controllers;
 
 import com.github.mustachejava.TemplateFunction;
 import org.testinfected.petstore.Controller;
+import org.testinfected.petstore.Page;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
@@ -17,10 +18,12 @@ public class ListProducts implements Controller {
 
     private final ProductCatalog productCatalog;
     private final AttachmentStorage attachmentStorage;
+    private final Page productsPage;
 
-    public ListProducts(ProductCatalog productCatalog, AttachmentStorage attachmentStorage) {
+    public ListProducts(ProductCatalog productCatalog, AttachmentStorage attachmentStorage, Page productsPage) {
         this.productCatalog = productCatalog;
         this.attachmentStorage = attachmentStorage;
+        this.productsPage = productsPage;
     }
 
     public void handle(Request request, Response response) throws Exception {
@@ -33,7 +36,7 @@ public class ListProducts implements Controller {
                 and("products", products).
                 and("match-count", products.size()).
                 and("photo", LocateAttachment.in(attachmentStorage));
-        response.render("products", context.asMap());
+        productsPage.render(response, context.asMap());
     }
 
     private static class LocateAttachment implements TemplateFunction {

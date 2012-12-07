@@ -14,13 +14,14 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.testinfected.petstore.Page;
 import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
-import org.testinfected.support.Request;
-import org.testinfected.support.Response;
 import test.support.org.testinfected.petstore.builders.Builder;
+import test.support.org.testinfected.support.web.MockRequest;
+import test.support.org.testinfected.support.web.MockResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.any;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
+import static test.support.org.testinfected.support.web.MockRequest.aRequest;
+import static test.support.org.testinfected.support.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class ListProductsTest {
@@ -38,10 +41,11 @@ public class ListProductsTest {
     Mockery context = new JUnit4Mockery();
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
     AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
-    ListProducts listProducts = new ListProducts(productCatalog, attachmentStorage);
+    Page productsPage = context.mock(Page.class);
+    ListProducts listProducts = new ListProducts(productCatalog, attachmentStorage, productsPage);
 
-    Request request = context.mock(Request.class);
-    Response response = context.mock(Response.class);
+    MockRequest request = aRequest();
+    MockResponse response = aResponse();
     String keyword = "dogs";
     List<Product> searchResults = new ArrayList<Product>();
 
@@ -53,10 +57,8 @@ public class ListProductsTest {
     }
 
     @Before public void
-    stubRequest() {
-        context.checking(new Expectations() {{
-            allowing(request).parameter("keyword"); will(returnValue(keyword));
-        }});
+    prepareRequest() {
+        request.addParameter("keyword", keyword);
     }
 
     @SuppressWarnings("unchecked")
@@ -65,7 +67,7 @@ public class ListProductsTest {
         searchYieldsNothing();
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with("products"), with(hasEntry("match-found", false)));
+            oneOf(productsPage).render(with(response), with(hasEntry("match-found", false)));
         }});
 
         listProducts.handle(request, response);
@@ -80,7 +82,7 @@ public class ListProductsTest {
 
         context.checking(new Expectations() {{
             allowing(attachmentStorage).getLocation(with("labrador.png")); will(returnValue("/photos/labrador.png"));
-            oneOf(response).render(with("products"), with(allOf(hasEntry("match-found", true), hasEntry("products", searchResults))));
+            oneOf(productsPage).render(with(response), with(allOf(hasEntry("match-found", true), hasEntry("products", searchResults))));
         }});
 
         listProducts.handle(request, response);
@@ -92,7 +94,7 @@ public class ListProductsTest {
         searchYields(aProduct(), aProduct(), aProduct());
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with(any(String.class)), with(hasEntry("match-count", 3)));
+            oneOf(productsPage).render(with(response), with(hasEntry("match-count", 3)));
         }});
 
         listProducts.handle(request, response);
@@ -104,7 +106,7 @@ public class ListProductsTest {
         searchYields(aProduct());
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with(any(String.class)), with(hasEntry("keyword", keyword)));
+            oneOf(productsPage).render(with(response), with(hasEntry("keyword", keyword)));
         }});
 
         listProducts.handle(request, response);
@@ -116,7 +118,7 @@ public class ListProductsTest {
         searchYields(aProduct().withPhoto("photo.png"));
 
         context.checking(new Expectations() {{
-            oneOf(response).render(with(any(String.class)), with(hasLambda("photo"))); will(call("photo", "photo.png"));
+            oneOf(productsPage).render(with(response), with(hasLambda("photo"))); will(call("photo", "photo.png"));
             oneOf(attachmentStorage).getLocation(with("photo.png"));
         }});
 

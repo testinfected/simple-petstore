@@ -26,8 +26,8 @@ import static test.support.org.testinfected.support.web.MockResponse.aResponse;
 public class CheckoutTest {
     Mockery context = new JUnit4Mockery();
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
-    Page page = context.mock(Page.class);
-    Checkout checkout = new Checkout(salesAssistant, page);
+    Page checkoutPage = context.mock(Page.class);
+    Checkout checkout = new Checkout(salesAssistant, checkoutPage);
 
     MockRequest request = aRequest();
     MockResponse response = aResponse();
@@ -40,7 +40,7 @@ public class CheckoutTest {
 
         context.checking(new Expectations() {{
             allowing(salesAssistant).orderTotal(); will(returnValue(total));
-            oneOf(page).render(with(response), with(allOf(hasEntry("total", total), hasEntry("cardTypes", cardTypes.entrySet()))));
+            oneOf(checkoutPage).render(with(response), with(allOf(hasEntry("total", total), hasEntry("cardTypes", cardTypes.entrySet()))));
         }});
 
         checkout.handle(request, response);
