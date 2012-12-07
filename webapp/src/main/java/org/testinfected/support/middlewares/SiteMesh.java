@@ -4,7 +4,7 @@ import org.testinfected.support.*;
 import org.testinfected.support.decoration.*;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class SiteMesh extends AbstractMiddleware {
 
     public void handle(Request request, Response response) throws Exception {
         BufferedResponse capture = captureResponse(request, response);
-        if (isSelected(new SimpleResponse(capture, null, Charset.defaultCharset()))) {
+        if (shouldDecorate(capture)) {
             decorate(response, capture);
         } else {
             write(response, capture);
@@ -37,22 +37,27 @@ public class SiteMesh extends AbstractMiddleware {
 
     private void decorate(Response response, BufferedResponse buffer) throws IOException {
         response.removeHeader("Content-Length");
-        OutputStreamWriter out = new OutputStreamWriter(response.outputStream(), buffer.getCharset());
-        decorator.decorate(out, buffer.getBody());
+        Writer out = response.writer();
+        decorator.decorate(out, buffer.body());
         out.flush();
     }
 
     private void write(Response response, BufferedResponse buffer) throws IOException {
-        response.outputStream().write(buffer.getContent());
+        response.outputStream().write(buffer.content());
     }
 
     private BufferedResponse captureResponse(Request request, Response response) throws Exception {
-        BufferedResponse buffer = new BufferedResponse(response.unwrap(org.simpleframework.http.Response.class));
-        forward(request, new SimpleResponse(buffer, null, Charset.defaultCharset()));
-        return buffer;
+        BufferedResponse capture = new BufferedResponse(response);
+        forward(request, capture);
+        return capture;
     }
 
-    private boolean isSelected(Response response) {
+    private boolean shouldDecorate(Response response) {
         return selector.select(response);
+    }
+
+    // todo remove eventually
+    protected void forward(Request request, Response response) throws Exception {
+        successor.handle(request, response);
     }
 }

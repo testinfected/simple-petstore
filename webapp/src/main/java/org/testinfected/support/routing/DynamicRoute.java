@@ -1,15 +1,14 @@
 package org.testinfected.support.routing;
 
 import org.testinfected.support.*;
-import org.testinfected.support.Request;
-import org.testinfected.support.Response;
 import org.testinfected.support.matchers.Combination;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import static org.testinfected.support.matchers.Matchers.*;
+import static org.testinfected.support.matchers.Matchers.withMethod;
+import static org.testinfected.support.matchers.Matchers.withPath;
 
 public class DynamicRoute implements Route {
 

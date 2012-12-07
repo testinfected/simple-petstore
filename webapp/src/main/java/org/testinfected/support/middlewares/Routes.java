@@ -57,6 +57,7 @@ public class Routes extends AbstractMiddleware implements RouteSet {
             forward(request, response);
     }
 
+    //todo remove eventually
     protected void forward(Request request, Response response) throws Exception {
         successor.handle(request, response);
     }
