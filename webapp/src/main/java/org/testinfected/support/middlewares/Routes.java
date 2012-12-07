@@ -1,11 +1,12 @@
 package org.testinfected.support.middlewares;
 
-import org.testinfected.support.*;
+import org.testinfected.support.Application;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 import org.testinfected.support.routing.Route;
 import org.testinfected.support.routing.RouteBuilder;
 import org.testinfected.support.routing.RouteSet;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,20 +46,11 @@ public class Routes extends AbstractMiddleware implements RouteSet {
         return null;
     }
 
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
-    }
-
     public void handle(Request request, Response response) throws Exception {
         Route route = routeFor(request);
         if (route != null)
             route.handle(request, response);
         else
             forward(request, response);
-    }
-
-    //todo remove eventually
-    protected void forward(Request request, Response response) throws Exception {
-        successor.handle(request, response);
     }
 }

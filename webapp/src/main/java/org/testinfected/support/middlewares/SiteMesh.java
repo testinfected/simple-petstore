@@ -1,11 +1,17 @@
 package org.testinfected.support.middlewares;
 
-import org.testinfected.support.*;
-import org.testinfected.support.decoration.*;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
+import org.testinfected.support.View;
+import org.testinfected.support.decoration.BufferedResponse;
+import org.testinfected.support.decoration.Decorator;
+import org.testinfected.support.decoration.HtmlDocumentProcessor;
+import org.testinfected.support.decoration.HtmlPageSelector;
+import org.testinfected.support.decoration.PageCompositor;
+import org.testinfected.support.decoration.Selector;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.charset.Charset;
 import java.util.Map;
 
 public class SiteMesh extends AbstractMiddleware {
@@ -20,10 +26,6 @@ public class SiteMesh extends AbstractMiddleware {
     public SiteMesh(Selector selector, Decorator decorator) {
         this.selector = selector;
         this.decorator = decorator;
-    }
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public void handle(Request request, Response response) throws Exception {
@@ -54,10 +56,5 @@ public class SiteMesh extends AbstractMiddleware {
 
     private boolean shouldDecorate(Response response) {
         return selector.select(response);
-    }
-
-    // todo remove eventually
-    protected void forward(Request request, Response response) throws Exception {
-        successor.handle(request, response);
     }
 }

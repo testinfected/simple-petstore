@@ -2,11 +2,8 @@ package org.testinfected.support.middlewares;
 
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
-import org.testinfected.support.SimpleRequest;
-import org.testinfected.support.SimpleResponse;
 
 import javax.sql.DataSource;
-import java.nio.charset.Charset;
 import java.sql.Connection;
 
 public class ConnectionScope extends AbstractMiddleware {
@@ -15,10 +12,6 @@ public class ConnectionScope extends AbstractMiddleware {
 
     public ConnectionScope(DataSource dataSource) {
         this.dataSource = dataSource;
-    }
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public void handle(Request request, Response response) throws Exception {

@@ -1,11 +1,16 @@
 package org.testinfected.support.middlewares;
 
-import org.testinfected.support.*;
+import org.testinfected.support.Application;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 import org.testinfected.support.util.MimeTypes;
 import org.testinfected.support.util.Streams;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class FileServer implements Application {
 
@@ -14,10 +19,6 @@ public class FileServer implements Application {
 
     public FileServer(File root) {
         this.root = root;
-    }
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public void handle(Request request, Response response) throws Exception {

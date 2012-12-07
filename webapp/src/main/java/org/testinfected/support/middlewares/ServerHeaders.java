@@ -1,9 +1,9 @@
 package org.testinfected.support.middlewares;
 
-import org.testinfected.support.*;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
+import org.testinfected.support.Server;
 import org.testinfected.time.Clock;
-
-import java.nio.charset.Charset;
 
 public class ServerHeaders extends AbstractMiddleware {
 
@@ -11,10 +11,6 @@ public class ServerHeaders extends AbstractMiddleware {
 
     public ServerHeaders(Clock clock) {
         this.clock = clock;
-    }
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public void handle(Request request, Response response) throws Exception {

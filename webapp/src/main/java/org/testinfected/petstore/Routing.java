@@ -52,10 +52,6 @@ public class Routing implements Application {
         this.charset = charset;
     }
 
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
-    }
-
     public void handle(final Request request, final Response response) throws Exception {
         final AttachmentStorage attachmentStorage = new FileSystemPhotoStore("/photos");
 
@@ -89,9 +85,6 @@ public class Routing implements Application {
 
     private Application controller(final Controller controller) {
         return new Application() {
-            public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-            }
-
             public void handle(final Request req, Response resp) throws Exception {
                 controller.handle(
                         new SimpleRequest(new org.simpleframework.http.RequestWrapper(req.unwrap(org.simpleframework.http.Request.class)) {

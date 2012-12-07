@@ -2,12 +2,9 @@ package org.testinfected.support.middlewares;
 
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
-import org.testinfected.support.SimpleRequest;
-import org.testinfected.support.SimpleResponse;
 import org.testinfected.time.Clock;
 
 import java.io.Serializable;
-import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -24,10 +21,6 @@ public class ApacheCommonLogger extends AbstractMiddleware {
     public ApacheCommonLogger(Logger logger, Clock clock) {
         this.logger = logger;
         this.clock = clock;
-    }
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public void handle(Request request, Response response) throws Exception {

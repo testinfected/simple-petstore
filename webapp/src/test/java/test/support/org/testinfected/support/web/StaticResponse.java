@@ -1,8 +1,9 @@
 package test.support.org.testinfected.support.web;
 
-import org.testinfected.support.*;
-
-import java.nio.charset.Charset;
+import org.testinfected.support.Application;
+import org.testinfected.support.HttpStatus;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 
 public class StaticResponse implements Application {
 
@@ -37,10 +38,6 @@ public class StaticResponse implements Application {
 
     public void setContentEncoding(String encoding) {
         this.encoding = encoding;
-    }
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public void handle(Request request, Response response) throws Exception {

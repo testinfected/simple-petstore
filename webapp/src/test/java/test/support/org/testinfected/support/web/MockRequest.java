@@ -65,9 +65,8 @@ public class MockRequest implements Request {
         return null;
     }
 
-    // todo remove when transition to request/response complete
     public <T> T unwrap(Class<T> type) {
-        return (T) new MockSimpleRequest().withMethod(method).withPath(path);
+        return null;
     }
 
     public String ip() {

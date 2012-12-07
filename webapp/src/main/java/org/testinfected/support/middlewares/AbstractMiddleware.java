@@ -8,9 +8,6 @@ import org.testinfected.support.Response;
 public abstract class AbstractMiddleware implements Middleware {
 
     protected Application successor = new Application() {
-        public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        }
-
         public void handle(Request request, Response response) throws Exception {
         }
     };

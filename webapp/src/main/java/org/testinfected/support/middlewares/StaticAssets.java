@@ -1,8 +1,9 @@
 package org.testinfected.support.middlewares;
 
-import org.testinfected.support.*;
+import org.testinfected.support.Application;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,10 +20,6 @@ public class StaticAssets extends AbstractMiddleware {
 
     public void serve(String... urls) {
         this.urls.addAll(Arrays.asList(urls));
-    }
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public void handle(Request request, Response response) throws Exception {

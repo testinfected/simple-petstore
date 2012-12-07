@@ -76,13 +76,5 @@ public class RoutesTest {
         public boolean matches(Request actual) {
             return requestMatcher.matches(actual);
         }
-
-        public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-            app.handle(request, response);
-        }
-
-        public boolean matches(org.simpleframework.http.Request actual) {
-            return requestMatcher.matches(new SimpleRequest(actual));
-        }
     }
 }

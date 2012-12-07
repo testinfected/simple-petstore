@@ -1,6 +1,5 @@
 package org.testinfected.support;
 
-import java.nio.charset.Charset;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
@@ -25,10 +24,6 @@ public class MiddlewareStack implements Application {
         if (!assembled()) assemble();
 
         chain.handle(request, response);
-    }
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public Application assemble() {

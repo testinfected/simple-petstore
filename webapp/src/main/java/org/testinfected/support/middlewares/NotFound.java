@@ -1,18 +1,15 @@
 package org.testinfected.support.middlewares;
 
-import org.testinfected.support.*;
+import org.testinfected.support.Application;
+import org.testinfected.support.HttpStatus;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 import org.testinfected.support.util.Charsets;
-
-import java.nio.charset.Charset;
 
 public class NotFound implements Application {
 
     public static Application notFound() {
         return new NotFound();
-    }
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public void handle(Request request, Response response) throws Exception {

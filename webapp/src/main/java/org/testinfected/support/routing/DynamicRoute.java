@@ -5,11 +5,8 @@ import org.testinfected.support.Matcher;
 import org.testinfected.support.Request;
 import org.testinfected.support.RequestWrapper;
 import org.testinfected.support.Response;
-import org.testinfected.support.SimpleRequest;
-import org.testinfected.support.SimpleResponse;
 import org.testinfected.support.matchers.Combination;
 
-import java.nio.charset.Charset;
 import java.util.Map;
 
 import static org.testinfected.support.matchers.Matchers.withMethod;
@@ -33,10 +30,6 @@ public class DynamicRoute implements Route {
 
     private Combination<Request> both(Matcher<Request> matcher) {
         return Combination.both(matcher);
-    }
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
     }
 
     public void handle(Request request, Response response) throws Exception {

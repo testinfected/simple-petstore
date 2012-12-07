@@ -1,33 +1,21 @@
 package org.testinfected.support.middlewares;
 
-import org.testinfected.support.*;
+import org.testinfected.support.HttpMethod;
+import org.testinfected.support.Request;
+import org.testinfected.support.RequestWrapper;
+import org.testinfected.support.Response;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 public class HttpMethodOverride extends AbstractMiddleware {
 
     public static String METHOD_OVERRIDE_PARAMETER = "_method";
-
-    public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-        handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
-    }
 
     public void handle(Request request, Response response) throws Exception {
         if (overrideDetected(request)) {
             request = overrideMethod(request);
         }
         forward(request, response);
-    }
-
-    // this will eventually go away
-    protected void forward(final Request rq, Response response) throws Exception {
-        successor.handle(rq, response);
-//        super.forward(new SimpleRequest(new org.simpleframework.http.RequestWrapper(rq.unwrap(org.simpleframework.http.Request.class)) {
-//            public String getMethod() {
-//                return rq.method();
-//            }
-//        }), response);
     }
 
     private Request overrideMethod(final Request request) throws IOException {
