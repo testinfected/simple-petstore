@@ -3,6 +3,7 @@ package org.testinfected.support;
 import org.simpleframework.http.ContentType;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.Status;
+import org.simpleframework.http.parse.ContentParser;
 import org.testinfected.support.util.Charsets;
 
 import java.io.*;
@@ -14,16 +15,13 @@ public class SimpleResponse implements org.testinfected.support.Response {
 
     private final Response response;
     private final RenderingEngine renderer;
-    private final Charset charset;
 
-    public SimpleResponse(Response response, RenderingEngine renderer, Charset charset) {
+    public SimpleResponse(Response response, RenderingEngine renderer) {
         this.response = response;
         this.renderer = renderer;
-        this.charset = charset;
     }
 
     public void render(String view, Object context) throws IOException {
-        contentType("text/html; charset=" + charset.name().toLowerCase());
         Writer out = writer();
         renderer.render(out, view, context);
         out.flush();
@@ -85,7 +83,7 @@ public class SimpleResponse implements org.testinfected.support.Response {
     }
 
     public Writer writer() throws IOException {
-        return new OutputStreamWriter(response.getOutputStream(), charset());
+        return new OutputStreamWriter(outputStream(), charset());
     }
 
     public void body(String body) throws IOException {
@@ -95,7 +93,7 @@ public class SimpleResponse implements org.testinfected.support.Response {
     }
 
     public Charset charset() {
-        ContentType type = response.getContentType();
+        ContentType type = contentType() != null ? new ContentParser(contentType()) : null;
 
         if (type == null || type.getCharset() == null) {
             return Charsets.ISO_8859_1;

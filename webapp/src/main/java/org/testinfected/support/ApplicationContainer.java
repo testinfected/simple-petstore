@@ -5,7 +5,6 @@ import org.simpleframework.http.Response;
 import org.simpleframework.http.core.Container;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 public class ApplicationContainer implements Container {
 
@@ -28,7 +27,7 @@ public class ApplicationContainer implements Container {
     }
 
     private void run(Request request, Response response) throws Exception {
-        app.handle(new SimpleRequest(request), new SimpleResponse(response, null, Charset.defaultCharset()));
+        app.handle(new SimpleRequest(request), new SimpleResponse(response, null));
     }
 
     private void close(Response response) {

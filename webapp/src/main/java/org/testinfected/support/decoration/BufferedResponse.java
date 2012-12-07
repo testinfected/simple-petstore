@@ -1,11 +1,15 @@
 package org.testinfected.support.decoration;
 
-import org.simpleframework.http.ContentType;
 import org.testinfected.support.Response;
 import org.testinfected.support.ResponseWrapper;
-import org.testinfected.support.util.Charsets;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
@@ -37,11 +41,13 @@ public class BufferedResponse extends ResponseWrapper {
     }
 
     public void body(String body) throws IOException {
-        buffer.getPrintStream().print(body);
+        Writer writer = new BufferedWriter(writer());
+        writer.write(body);
+        writer.flush();
     }
 
     public String body() throws UnsupportedEncodingException {
-        return buffer.getBody();
+        return new String(content(), charset());
     }
 
     public byte[] content() {
@@ -73,14 +79,6 @@ public class BufferedResponse extends ResponseWrapper {
             return buffer;
         }
 
-        public PrintStream getPrintStream() throws IOException {
-            return getPrintStream(0);
-        }
-
-        public PrintStream getPrintStream(int size) throws IOException {
-            return new PrintStream(getOutputStream(), false, getCharset());
-        }
-
         public WritableByteChannel getByteChannel() throws IOException {
             return buffer;
         }
@@ -89,22 +87,8 @@ public class BufferedResponse extends ResponseWrapper {
             return buffer;
         }
 
-        public String getBody() throws UnsupportedEncodingException {
-            return new String(getContent(), getCharset());
-        }
-
         public byte[] getContent() {
             return buffer.toByteArray();
-        }
-
-        public String getCharset() {
-            ContentType type = getContentType();
-
-            if(type == null || type.getCharset() == null) {
-                return Charsets.ISO_8859_1.name();
-            }
-
-            return type.getCharset();
         }
 
         private static class Buffer extends ByteArrayOutputStream implements WritableByteChannel {

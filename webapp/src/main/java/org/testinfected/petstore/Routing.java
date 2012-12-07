@@ -36,7 +36,6 @@ import org.testinfected.support.middlewares.Routes;
 import org.testinfected.support.routing.Router;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.sql.Connection;
 
 import static org.testinfected.petstore.util.SessionScope.sessionScopeOf;
@@ -45,11 +44,9 @@ import static org.testinfected.support.middlewares.ConnectionScope.ConnectionRef
 public class Routing implements Application {
 
     private final RenderingEngine renderer;
-    private final Charset charset;
 
-    public Routing(final RenderingEngine renderer, final Charset charset) {
+    public Routing(final RenderingEngine renderer) {
         this.renderer = renderer;
-        this.charset = charset;
     }
 
     public void handle(final Request request, final Response response) throws Exception {
@@ -85,7 +82,7 @@ public class Routing implements Application {
 
     private Application controller(final Controller controller) {
         return new Application() {
-            public void handle(final Request req, Response resp) throws Exception {
+            public void handle(final Request req, final Response resp) throws Exception {
                 controller.handle(
                         new SimpleRequest(new org.simpleframework.http.RequestWrapper(req.unwrap(org.simpleframework.http.Request.class)) {
                             public String getMethod() {
@@ -96,7 +93,13 @@ public class Routing implements Application {
                                 return req.parameter(name);
                             }
                         }),
-                        new SimpleResponse(resp.unwrap(org.simpleframework.http.Response.class), renderer, charset));
+                        new SimpleResponse(resp.unwrap(org.simpleframework.http.Response.class), renderer) {
+
+                            public String contentType() {
+                                return resp.contentType();
+                            }
+                        }
+                );
             }
         };
     }

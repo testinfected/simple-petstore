@@ -5,6 +5,7 @@ import org.testinfected.support.FailureReporter;
 import org.testinfected.support.Server;
 import org.testinfected.support.middlewares.ApacheCommonLogger;
 import org.testinfected.support.middlewares.ConnectionScope;
+import org.testinfected.support.middlewares.ContentTypeFallback;
 import org.testinfected.support.middlewares.Failsafe;
 import org.testinfected.support.middlewares.FileServer;
 import org.testinfected.support.middlewares.HttpMethodOverride;
@@ -68,7 +69,9 @@ public class PetStore {
             use(staticAssets());
             use(new SiteLayout(new MustacheRendering(new File(context, LAYOUT_DIR))));
             use(new ConnectionScope(dataSource));
-            run(new Routing(new MustacheRendering(new File(context, PAGES_DIR)), outputEncoding));
+            // todo would probably be better to have separate media type and encoding fallbacks
+            use(new ContentTypeFallback("text/html; charset=" + outputEncoding.name().toLowerCase()));
+            run(new Routing(new MustacheRendering(new File(context, PAGES_DIR))));
         }});
     }
 
