@@ -44,9 +44,11 @@ import static org.testinfected.support.middlewares.ConnectionScope.ConnectionRef
 public class Routing implements Application {
 
     private final RenderingEngine renderer;
+    private final Pages pages;
 
     public Routing(final RenderingEngine renderer) {
         this.renderer = renderer;
+        this.pages = Pages.using(renderer);
     }
 
     public void handle(final Request request, final Response response) throws Exception {
@@ -70,7 +72,7 @@ public class Routing implements Application {
             post("/products/:product/items").to(controller(new CreateItem(requestHandler)));
             get("/cart").to(controller(new ShowCart(cashier)));
             post("/cart").to(controller(new CreateCartItem(cashier)));
-            get("/orders/new").to(controller(new Checkout(cashier)));
+            get("/orders/new").to(controller(new Checkout(cashier, pages.checkout())));
             get("/orders/:number").to(controller(new ShowOrder(orderBook)));
             post("/orders").to(controller(new PlaceOrder(cashier)));
             delete("/logout").to(controller(new Logout()));

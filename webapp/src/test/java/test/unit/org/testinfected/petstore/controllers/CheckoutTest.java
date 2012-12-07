@@ -9,6 +9,7 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.testinfected.petstore.Page;
 import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.controllers.Checkout;
 import org.testinfected.petstore.order.SalesAssistant;
@@ -18,14 +19,18 @@ import org.testinfected.support.Response;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import static test.support.org.testinfected.support.web.MockRequest.aRequest;
+import static test.support.org.testinfected.support.web.MockResponse.aResponse;
+
 @RunWith(JMock.class)
 public class CheckoutTest {
     Mockery context = new JUnit4Mockery();
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
-    Checkout checkout = new Checkout(salesAssistant);
+    Page page = context.mock(Page.class);
+    Checkout checkout = new Checkout(salesAssistant, page);
 
-    Request request = context.mock(Request.class);
-    Response response = context.mock(Response.class);
+    Request request = aRequest();
+    Response response = aResponse();
 
     @SuppressWarnings("unchecked")
     @Test public void
@@ -35,7 +40,7 @@ public class CheckoutTest {
 
         context.checking(new Expectations() {{
             allowing(salesAssistant).orderTotal(); will(returnValue(total));
-            oneOf(response).render(with("checkout"), with(allOf(hasEntry("total", total), hasEntry("cardTypes", cardTypes.entrySet()))));
+            oneOf(page).render(with(response), with(allOf(hasEntry("total", total), hasEntry("cardTypes", cardTypes.entrySet()))));
         }});
 
         checkout.handle(request, response);
