@@ -45,7 +45,7 @@ public class FilterMap extends AbstractMiddleware {
         }
 
         public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-            forward(request, response);
+            successor.handle(request, response);
         }
     }
 }

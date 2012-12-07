@@ -1,6 +1,9 @@
 package org.testinfected.support.middlewares;
 
-import org.testinfected.support.*;
+import org.testinfected.support.Application;
+import org.testinfected.support.Middleware;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 
 public abstract class AbstractMiddleware implements Middleware {
 
@@ -17,10 +20,6 @@ public abstract class AbstractMiddleware implements Middleware {
     }
 
     protected void forward(Request request, Response response) throws Exception {
-        forward(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
-    }
-
-    protected void forward(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
         successor.handle(request, response);
     }
 }

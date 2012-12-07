@@ -11,12 +11,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.support.Application;
-import org.testinfected.support.Server;
+import org.testinfected.support.*;
 import org.testinfected.support.middlewares.ConnectionScope;
-import org.testinfected.support.MiddlewareStack;
 import test.support.org.testinfected.support.web.HttpRequest;
 
 import javax.sql.DataSource;
@@ -83,7 +79,7 @@ public class ConnectionScopeTest {
     private Matcher<Request> aRequestWithAttribute(final Object attribute, Matcher<Object> connection) {
         return new FeatureMatcher<Request, Object>(connection, "a request with attribute " + attribute, attribute.toString()) {
             protected Object featureValueOf(Request actual) {
-                return actual.getAttribute(attribute);
+                return actual.attribute(attribute);
             }
         };
     }

@@ -22,11 +22,12 @@ public class HttpMethodOverride extends AbstractMiddleware {
 
     // this will eventually go away
     protected void forward(final Request rq, Response response) throws Exception {
-        super.forward(new SimpleRequest(new org.simpleframework.http.RequestWrapper(rq.unwrap(org.simpleframework.http.Request.class)) {
-            public String getMethod() {
-                return rq.method();
-            }
-        }), response);
+        successor.handle(rq, response);
+//        super.forward(new SimpleRequest(new org.simpleframework.http.RequestWrapper(rq.unwrap(org.simpleframework.http.Request.class)) {
+//            public String getMethod() {
+//                return rq.method();
+//            }
+//        }), response);
     }
 
     private Request overrideMethod(final Request request) throws IOException {

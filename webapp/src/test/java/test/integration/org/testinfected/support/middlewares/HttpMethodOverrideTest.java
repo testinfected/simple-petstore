@@ -10,12 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.support.Application;
-import org.testinfected.support.Server;
+import org.testinfected.support.*;
 import org.testinfected.support.middlewares.HttpMethodOverride;
-import org.testinfected.support.MiddlewareStack;
 import test.support.org.testinfected.support.web.HttpRequest;
 
 import java.io.IOException;
@@ -88,7 +84,7 @@ public class HttpMethodOverrideTest {
     private Matcher<Request> aRequestWithMethod(Matcher<? super String> methodMatcher) {
         return new FeatureMatcher<Request, String>(methodMatcher, "a request with method", "method") {
             protected String featureValueOf(Request request) {
-                return request.getMethod();
+                return request.method();
             }
         };
     }
