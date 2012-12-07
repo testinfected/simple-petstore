@@ -1,7 +1,21 @@
 package org.testinfected.petstore;
 
-import org.testinfected.petstore.controllers.*;
-import org.testinfected.petstore.jdbc.*;
+import org.testinfected.petstore.controllers.Checkout;
+import org.testinfected.petstore.controllers.CreateCartItem;
+import org.testinfected.petstore.controllers.CreateItem;
+import org.testinfected.petstore.controllers.CreateProduct;
+import org.testinfected.petstore.controllers.Home;
+import org.testinfected.petstore.controllers.ListItems;
+import org.testinfected.petstore.controllers.ListProducts;
+import org.testinfected.petstore.controllers.Logout;
+import org.testinfected.petstore.controllers.PlaceOrder;
+import org.testinfected.petstore.controllers.ShowCart;
+import org.testinfected.petstore.controllers.ShowOrder;
+import org.testinfected.petstore.jdbc.ItemsDatabase;
+import org.testinfected.petstore.jdbc.JDBCTransactor;
+import org.testinfected.petstore.jdbc.OrderNumberDatabaseSequence;
+import org.testinfected.petstore.jdbc.OrdersDatabase;
+import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.Cashier;
 import org.testinfected.petstore.order.OrderBook;
@@ -12,10 +26,16 @@ import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
-import org.testinfected.support.*;
+import org.testinfected.support.Application;
+import org.testinfected.support.RenderingEngine;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
+import org.testinfected.support.SimpleRequest;
+import org.testinfected.support.SimpleResponse;
 import org.testinfected.support.middlewares.Routes;
 import org.testinfected.support.routing.Router;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 
@@ -70,11 +90,20 @@ public class Routing implements Application {
     private Application controller(final Controller controller) {
         return new Application() {
             public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
-                handle(new SimpleRequest(request), new SimpleResponse(response, renderer, charset));
             }
 
-            public void handle(Request request, Response response) throws Exception {
-                controller.handle(request, response);
+            public void handle(final Request req, Response resp) throws Exception {
+                controller.handle(
+                        new SimpleRequest(new org.simpleframework.http.RequestWrapper(req.unwrap(org.simpleframework.http.Request.class)) {
+                            public String getMethod() {
+                                return req.method();
+                            }
+
+                            public String getParameter(String name) throws IOException {
+                                return req.parameter(name);
+                            }
+                        }),
+                        new SimpleResponse(resp.unwrap(org.simpleframework.http.Response.class), renderer, charset));
             }
         };
     }

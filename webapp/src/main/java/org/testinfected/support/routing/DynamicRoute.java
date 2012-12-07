@@ -1,9 +1,14 @@
 package org.testinfected.support.routing;
 
-import org.testinfected.support.*;
+import org.testinfected.support.Application;
+import org.testinfected.support.Matcher;
+import org.testinfected.support.Request;
+import org.testinfected.support.RequestWrapper;
+import org.testinfected.support.Response;
+import org.testinfected.support.SimpleRequest;
+import org.testinfected.support.SimpleResponse;
 import org.testinfected.support.matchers.Combination;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
@@ -35,20 +40,20 @@ public class DynamicRoute implements Route {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        app.handle(new BoundParameters(request.unwrap(org.simpleframework.http.Request.class)), response.unwrap(org.simpleframework.http.Response.class));
+        app.handle(new BoundParameters(request), response);
     }
 
-    public class BoundParameters extends org.simpleframework.http.RequestWrapper {
+    public class BoundParameters extends RequestWrapper {
         private final Map<String, String> boundParameters;
 
-        public BoundParameters(org.simpleframework.http.Request request) {
+        public BoundParameters(Request request) {
             super(request);
-            boundParameters = path.boundParameters(request.getPath().getPath());
+            boundParameters = path.boundParameters(request.pathInfo());
         }
 
-        public String getParameter(String name) throws IOException {
+        public String parameter(String name) {
             if (boundParameters.containsKey(name)) return boundParameters.get(name);
-            else return super.getParameter(name);
+            else return super.parameter(name);
         }
     }
 }

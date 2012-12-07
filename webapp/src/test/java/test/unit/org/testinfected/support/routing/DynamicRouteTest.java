@@ -6,15 +6,11 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.petstore.ExceptionImposter;
 import org.testinfected.support.Application;
 import org.testinfected.support.HttpMethod;
-import org.testinfected.support.routing.DynamicRoute;
+import org.testinfected.support.Request;
+import org.testinfected.support.Response;
 import org.testinfected.support.routing.Route;
-
-import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -70,11 +66,7 @@ public class DynamicRouteTest {
     private Matcher<Request> hasParameter(final String name, String value) {
         return new FeatureMatcher<Request, String>(equalTo(value), "request with parameter " + name, name) {
             protected String featureValueOf(Request actual) {
-                try {
-                    return actual.getParameter(name);
-                } catch (IOException e) {
-                    throw ExceptionImposter.imposterize(e);
-                }
+                return actual.parameter(name);
             }
         };
     }
