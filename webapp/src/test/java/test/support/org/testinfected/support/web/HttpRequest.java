@@ -46,7 +46,7 @@ public class HttpRequest {
     }
 
     public HttpRequest to(Server server) {
-        onPort(server.getPort());
+        onPort(server.port());
         return this;
     }
 

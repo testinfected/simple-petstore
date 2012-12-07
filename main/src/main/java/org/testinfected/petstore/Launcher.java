@@ -2,13 +2,14 @@ package org.testinfected.petstore;
 
 import org.testinfected.cli.CLI;
 import org.testinfected.petstore.jdbc.support.DriverManagerDataSource;
+import org.testinfected.support.Server;
 import org.testinfected.support.util.ConsoleErrorReporter;
 import org.testinfected.support.util.ConsoleHandler;
-import org.testinfected.support.Server;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 
 public class Launcher {
 
@@ -71,9 +72,9 @@ public class Launcher {
 
         out.println("Starting http://localhost:" + port(cli));
         server = new Server(port(cli));
+        server.defaultCharset(encoding(cli));
 
         PetStore petStore = new PetStore(new File(webRoot), new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
-        petStore.encodeOutputAs(encoding(cli));
 
         if (!quiet(cli)) {
             petStore.reportErrorsTo(ConsoleErrorReporter.toStandardError());
@@ -88,8 +89,8 @@ public class Launcher {
         return (Integer) cli.getOption("port");
     }
 
-    private String encoding(CLI cli) {
-        return (String) cli.getOption("encoding");
+    private Charset encoding(CLI cli) {
+        return Charset.forName((String) cli.getOption("encoding"));
     }
 
     private String env(CLI cli) {

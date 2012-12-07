@@ -12,6 +12,10 @@ public class StaticResponse implements Application {
     private String page;
     private String encoding = "iso-8859-1";
 
+    public static StaticResponse emptyResponse() {
+        return respondWith(HttpStatus.OK);
+    }
+
     public static StaticResponse respondWith(HttpStatus status) {
         return respondWithCode(status.code);
     }

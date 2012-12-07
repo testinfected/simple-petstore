@@ -2,14 +2,13 @@ package org.testinfected.petstore;
 
 import org.testinfected.petstore.util.MustacheRendering;
 import org.testinfected.support.FailureReporter;
+import org.testinfected.support.MiddlewareStack;
 import org.testinfected.support.Server;
 import org.testinfected.support.middlewares.ApacheCommonLogger;
 import org.testinfected.support.middlewares.ConnectionScope;
-import org.testinfected.support.middlewares.ContentTypeFallback;
 import org.testinfected.support.middlewares.Failsafe;
 import org.testinfected.support.middlewares.FileServer;
 import org.testinfected.support.middlewares.HttpMethodOverride;
-import org.testinfected.support.MiddlewareStack;
 import org.testinfected.support.middlewares.ServerHeaders;
 import org.testinfected.support.middlewares.StaticAssets;
 import org.testinfected.support.util.PlainFormatter;
@@ -18,7 +17,6 @@ import org.testinfected.time.lib.SystemClock;
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.logging.Handler;
 import java.util.logging.Logger;
 
@@ -35,20 +33,11 @@ public class PetStore {
     private final Logger logger = makeLogger();
     private final SystemClock clock = new SystemClock();
 
-    private Charset outputEncoding = Charset.defaultCharset();
     private FailureReporter failureReporter = FailureReporter.IGNORE;
 
     public PetStore(File context, DataSource dataSource) {
         this.context = context;
         this.dataSource = dataSource;
-    }
-
-    public void encodeOutputAs(String charsetName) {
-        encodeOutputAs(Charset.forName(charsetName));
-    }
-
-    public void encodeOutputAs(Charset encoding) {
-        this.outputEncoding = encoding;
     }
 
     public void reportErrorsTo(FailureReporter failureReporter) {
@@ -69,8 +58,6 @@ public class PetStore {
             use(staticAssets());
             use(new SiteLayout(new MustacheRendering(new File(context, LAYOUT_DIR))));
             use(new ConnectionScope(dataSource));
-            // todo would probably be better to have separate media type and encoding fallbacks
-            use(new ContentTypeFallback("text/html; charset=" + outputEncoding.name().toLowerCase()));
             run(new Routing(new MustacheRendering(new File(context, PAGES_DIR))));
         }});
     }

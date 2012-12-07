@@ -2,13 +2,11 @@ package org.testinfected.support;
 
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
-import org.testinfected.support.Application;
-import org.testinfected.support.ApplicationContainer;
-import org.testinfected.support.FailureReporter;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.charset.Charset;
 
 public class Server {
 
@@ -18,6 +16,7 @@ public class Server {
     private final FailureReporter monitor;
 
     private Connection connection;
+    private Charset defaultCharset = Charset.defaultCharset();
 
     public Server(int port) {
         this(port, FailureReporter.IGNORE);
@@ -28,12 +27,16 @@ public class Server {
         this.monitor = monitor;
     }
 
-    public int getPort() {
+    public void defaultCharset(Charset charset) {
+       defaultCharset = charset;
+    }
+
+    public int port() {
         return port;
     }
 
     public void run(final Application app) throws IOException {
-        connection = new SocketConnection(new ApplicationContainer(app, monitor));
+        connection = new SocketConnection(new ApplicationContainer(app, monitor, defaultCharset));
         SocketAddress address = new InetSocketAddress(port);
         connection.connect(address);
     }

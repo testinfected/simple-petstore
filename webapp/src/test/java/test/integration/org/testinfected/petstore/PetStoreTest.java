@@ -1,7 +1,5 @@
 package test.integration.org.testinfected.petstore;
 
-import org.testinfected.petstore.product.Product;
-import org.testinfected.petstore.product.ProductCatalog;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -12,22 +10,25 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.support.FailureReporter;
 import org.testinfected.petstore.PetStore;
-import org.testinfected.support.Server;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
+import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.product.ProductCatalog;
+import org.testinfected.support.FailureReporter;
+import org.testinfected.support.Server;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
-import test.support.org.testinfected.support.web.HttpRequest;
-import test.support.org.testinfected.support.web.HttpResponse;
 import test.support.org.testinfected.petstore.web.LogFile;
 import test.support.org.testinfected.petstore.web.WebRoot;
+import test.support.org.testinfected.support.web.HttpRequest;
+import test.support.org.testinfected.support.web.HttpResponse;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.FileHandler;
@@ -66,10 +67,10 @@ public class PetStoreTest {
         }});
         database.clean();
 
+        server.defaultCharset(Charset.forName(encoding));
         logFile = LogFile.create();
         petstore.logTo(new FileHandler(logFile.path()));
         petstore.reportErrorsTo(failureReporter);
-        petstore.encodeOutputAs(encoding);
         petstore.start(server);
     }
 

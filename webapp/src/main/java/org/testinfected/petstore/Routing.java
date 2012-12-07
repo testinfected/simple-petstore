@@ -93,7 +93,7 @@ public class Routing implements Application {
                                 return req.parameter(name);
                             }
                         }),
-                        new SimpleResponse(resp.unwrap(org.simpleframework.http.Response.class), renderer) {
+                        new SimpleResponse(resp.unwrap(org.simpleframework.http.Response.class), renderer, resp.charset()) {
 
                             public String contentType() {
                                 return resp.contentType();
