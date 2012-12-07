@@ -9,13 +9,9 @@ import org.jmock.internal.State;
 import org.jmock.internal.StateMachine;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-import org.testinfected.support.Application;
-import org.testinfected.support.Middleware;
-import org.testinfected.support.MiddlewareStack;
-import test.support.org.testinfected.support.web.MockSimpleRequest;
-import test.support.org.testinfected.support.web.MockSimpleResponse;
+import org.testinfected.support.*;
+import test.support.org.testinfected.support.web.MockRequest;
+import test.support.org.testinfected.support.web.MockResponse;
 
 @RunWith(JMock.class)
 public class MiddlewareStackTest {
@@ -28,8 +24,8 @@ public class MiddlewareStackTest {
     Middleware inTheMiddle = context.mock(Middleware.class, "in the middle");
     Middleware atBottom = context.mock(Middleware.class, "at bottom");
 
-    Request request = new MockSimpleRequest();
-    Response response = new MockSimpleResponse();
+    Request request = new MockRequest();
+    Response response = new MockResponse();
     final States chain = new StateMachine("chain");
 
     @Test public void

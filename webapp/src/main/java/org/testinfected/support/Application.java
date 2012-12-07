@@ -1,9 +1,8 @@
 package org.testinfected.support;
 
-import org.simpleframework.http.Request;
-import org.simpleframework.http.Response;
-
 public interface Application {
 
     void handle(Request request, Response response) throws Exception;
+
+    void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception;
 }

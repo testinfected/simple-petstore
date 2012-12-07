@@ -1,5 +1,7 @@
 package test.unit.org.testinfected.support;
 
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -13,6 +15,8 @@ import org.testinfected.support.ApplicationContainer;
 import org.testinfected.support.FailureReporter;
 
 import java.io.IOException;
+
+import static org.hamcrest.Matchers.sameInstance;
 
 @RunWith(JMock.class)
 public class ApplicationContainerTest {
@@ -39,10 +43,10 @@ public class ApplicationContainerTest {
 
     @Test public void
     reportsCommunicationErrors() throws Exception {
+        applicationSucceeds();
         IOException error = new IOException("Communication error");
+        communicationFailsWith(error);
 
-        applicationWillSucceed();
-        communicationWillFailWith(error);
         expectCommunicationFailureReport(error);
 
         handleRequest();
@@ -50,8 +54,24 @@ public class ApplicationContainerTest {
 
     private void applicationWillFailWith(final Exception failure) throws Exception {
         context.checking(new Expectations() {{
-            allowing(app).handle(with(same(request)), with(same(response))); will(throwException(failure));
+            allowing(app).handle(with(aRequestWrapping(request)), with(aResponseWrapping(response))); will(throwException(failure));
         }});
+    }
+
+    private Matcher<org.testinfected.support.Request> aRequestWrapping(Request request) {
+        return new FeatureMatcher<org.testinfected.support.Request, Request>(sameInstance(request), "request wrapping", "wrapped request") {
+            protected Request featureValueOf(org.testinfected.support.Request actual) {
+                return actual.unwrap(Request.class);
+            }
+        };
+    }
+
+    private Matcher<org.testinfected.support.Response> aResponseWrapping(Response response) {
+        return new FeatureMatcher<org.testinfected.support.Response, Response>(sameInstance(response), "response wrapping", "wrapped response") {
+            protected Response featureValueOf(org.testinfected.support.Response actual) {
+                return actual.unwrap(Response.class);
+            }
+        };
     }
 
     private void expectInternalErrorReport(final Exception failure) {
@@ -66,13 +86,13 @@ public class ApplicationContainerTest {
         }});
     }
 
-    private void applicationWillSucceed() throws Exception {
+    private void applicationSucceeds() throws Exception {
         context.checking(new Expectations() {{
-            allowing(app).handle(with(same(request)), with(same(response)));
+            allowing(app).handle(with(aRequestWrapping(request)), with(aResponseWrapping(response)));
         }});
     }
 
-    private void communicationWillFailWith(final IOException failure) throws IOException {
+    private void communicationFailsWith(final IOException failure) throws IOException {
         context.checking(new Expectations() {{
             allowing(response).close(); will(throwException(failure));
         }});
