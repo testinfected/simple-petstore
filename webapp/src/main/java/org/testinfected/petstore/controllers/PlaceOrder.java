@@ -1,16 +1,16 @@
 package org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
+import org.testinfected.support.Application;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
 
 import static org.testinfected.petstore.billing.CreditCardType.valueOf;
 
-public class PlaceOrder implements Controller {
+public class PlaceOrder implements Application {
     private final SalesAssistant salesAssistant;
 
     public PlaceOrder(SalesAssistant salesAssistant) {

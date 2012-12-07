@@ -24,9 +24,6 @@ public class MockResponse implements Response {
     public MockResponse() {
     }
 
-    public void render(String view, Object context) throws IOException {
-    }
-
     public void redirectTo(String location) {
         this.location = location;
     }
@@ -39,6 +36,10 @@ public class MockResponse implements Response {
     }
 
     public void headerDate(String name, long date) {
+    }
+
+    public String header(String name) {
+        return null;
     }
 
     public void removeHeader(String name) {

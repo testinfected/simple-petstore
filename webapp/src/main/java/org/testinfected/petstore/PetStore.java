@@ -56,9 +56,9 @@ public class PetStore {
             use(new ServerHeaders(clock));
             use(new HttpMethodOverride());
             use(staticAssets());
-            use(new SiteLayout(new MustacheRendering(new File(context, LAYOUT_DIR))));
+            use(new SiteLayout(rendererFrom(LAYOUT_DIR)));
             use(new ConnectionScope(dataSource));
-            run(new Routing(new MustacheRendering(new File(context, PAGES_DIR))));
+            run(new Routing(Pages.using(rendererFrom(PAGES_DIR))));
         }});
     }
 
@@ -72,5 +72,9 @@ public class PetStore {
         final StaticAssets assets = new StaticAssets(new FileServer(new File(context, PUBLIC_DIR)));
         assets.serve("/favicon.ico", "/images", "/stylesheets", "/photos");
         return assets;
+    }
+
+    private MustacheRendering rendererFrom(final String dir) {
+        return new MustacheRendering(new File(context, dir));
     }
 }

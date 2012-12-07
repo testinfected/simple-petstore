@@ -1,14 +1,14 @@
 package org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.order.SalesAssistant;
+import org.testinfected.support.Application;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
 
 import static org.testinfected.petstore.util.Context.context;
 
-public class ShowCart implements Controller {
+public class ShowCart implements Application {
     private final SalesAssistant salesAssistant;
     private final Page cartPage;
 

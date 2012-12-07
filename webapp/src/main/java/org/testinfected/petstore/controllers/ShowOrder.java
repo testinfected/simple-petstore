@@ -1,16 +1,16 @@
 package org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumber;
+import org.testinfected.support.Application;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
 
 import static org.testinfected.petstore.util.Context.context;
 
-public class ShowOrder implements Controller {
+public class ShowOrder implements Application {
     private final OrderBook orderBook;
     private final Page orderPage;
 

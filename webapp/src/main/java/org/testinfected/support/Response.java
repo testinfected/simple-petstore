@@ -7,8 +7,6 @@ import java.nio.charset.Charset;
 
 public interface Response {
 
-    void render(String view, Object context) throws IOException;
-
     void redirectTo(String location);
 
     void header(String name, String value);
@@ -44,4 +42,6 @@ public interface Response {
     void reset() throws IOException;
 
     <T> T unwrap(Class<T> type);
+
+    String header(String name);
 }

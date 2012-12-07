@@ -30,7 +30,7 @@ public class ApplicationContainer implements Container {
     }
 
     private void run(Request request, Response response) throws Exception {
-        app.handle(new SimpleRequest(request), new SimpleResponse(response, null, defaultCharset));
+        app.handle(new SimpleRequest(request), new SimpleResponse(response, defaultCharset));
     }
 
     private void close(Response response) {

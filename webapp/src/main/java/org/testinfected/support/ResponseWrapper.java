@@ -13,12 +13,12 @@ public class ResponseWrapper implements Response {
         this.response = response;
     }
 
-    public void render(String view, Object context) throws IOException {
-        response.render(view, context);
-    }
-
     public void redirectTo(String location) {
         response.redirectTo(location);
+    }
+
+    public String header(String name) {
+        return response.header(name);
     }
 
     public void header(String name, String value) {

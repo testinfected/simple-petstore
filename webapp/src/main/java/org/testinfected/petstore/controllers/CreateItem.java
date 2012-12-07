@@ -1,15 +1,15 @@
 package org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateItemException;
+import org.testinfected.support.Application;
 import org.testinfected.support.HttpStatus;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
 
 import java.math.BigDecimal;
 
-public class CreateItem implements Controller {
+public class CreateItem implements Application {
 
     private final ProcurementRequestHandler requestHandler;
 

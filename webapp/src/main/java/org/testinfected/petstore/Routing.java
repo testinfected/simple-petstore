@@ -27,15 +27,11 @@ import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
 import org.testinfected.support.Application;
-import org.testinfected.support.RenderingEngine;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
-import org.testinfected.support.SimpleRequest;
-import org.testinfected.support.SimpleResponse;
 import org.testinfected.support.middlewares.Routes;
 import org.testinfected.support.routing.Router;
 
-import java.io.IOException;
 import java.sql.Connection;
 
 import static org.testinfected.petstore.util.SessionScope.sessionScopeOf;
@@ -43,12 +39,10 @@ import static org.testinfected.support.middlewares.ConnectionScope.ConnectionRef
 
 public class Routing implements Application {
 
-    private final RenderingEngine renderer;
     private final Pages pages;
 
-    public Routing(final RenderingEngine renderer) {
-        this.renderer = renderer;
-        this.pages = Pages.using(renderer);
+    public Routing(final Pages pages) {
+        this.pages = pages;
     }
 
     public void handle(final Request request, final Response response) throws Exception {
@@ -66,43 +60,19 @@ public class Routing implements Application {
         final Cashier cashier = new Cashier(orderNumberSequence, orderBook, itemInventory, cart, transactor);
 
         Routes routes = Routes.draw(new Router() {{
-            get("/products").to(controller(new ListProducts(productCatalog, attachmentStorage, pages.products())));
-            post("/products").to(controller(new CreateProduct(requestHandler)));
-            get("/products/:product/items").to(controller(new ListItems(itemInventory, pages.items())));
-            post("/products/:product/items").to(controller(new CreateItem(requestHandler)));
-            get("/cart").to(controller(new ShowCart(cashier, pages.cart())));
-            post("/cart").to(controller(new CreateCartItem(cashier)));
-            get("/orders/new").to(controller(new Checkout(cashier, pages.checkout())));
-            get("/orders/:number").to(controller(new ShowOrder(orderBook, pages.order())));
-            post("/orders").to(controller(new PlaceOrder(cashier)));
-            delete("/logout").to(controller(new Logout()));
-            map("/").to(controller(new StaticPage(pages.home())));
+            get("/products").to(new ListProducts(productCatalog, attachmentStorage, pages.products()));
+            post("/products").to(new CreateProduct(requestHandler));
+            get("/products/:product/items").to(new ListItems(itemInventory, pages.items()));
+            post("/products/:product/items").to(new CreateItem(requestHandler));
+            get("/cart").to(new ShowCart(cashier, pages.cart()));
+            post("/cart").to(new CreateCartItem(cashier));
+            get("/orders/new").to(new Checkout(cashier, pages.checkout()));
+            get("/orders/:number").to(new ShowOrder(orderBook, pages.order()));
+            post("/orders").to(new PlaceOrder(cashier));
+            delete("/logout").to(new Logout());
+            map("/").to(new StaticPage(pages.home()));
         }});
 
         routes.handle(request, response);
-    }
-
-    private Application controller(final Controller controller) {
-        return new Application() {
-            public void handle(final Request req, final Response resp) throws Exception {
-                controller.handle(
-                        new SimpleRequest(new org.simpleframework.http.RequestWrapper(req.unwrap(org.simpleframework.http.Request.class)) {
-                            public String getMethod() {
-                                return req.method();
-                            }
-
-                            public String getParameter(String name) throws IOException {
-                                return req.parameter(name);
-                            }
-                        }),
-                        new SimpleResponse(resp.unwrap(org.simpleframework.http.Response.class), renderer, resp.charset()) {
-
-                            public String contentType() {
-                                return resp.contentType();
-                            }
-                        }
-                );
-            }
-        };
     }
 }

@@ -14,25 +14,16 @@ import java.nio.charset.Charset;
 public class SimpleResponse implements org.testinfected.support.Response {
 
     private final Response response;
-    private final RenderingEngine renderer;
     private final Charset defaultCharset;
 
-    public SimpleResponse(Response response, RenderingEngine renderer, Charset defaultCharset) {
+    public SimpleResponse(Response response, Charset defaultCharset) {
         this.response = response;
-        this.renderer = renderer;
         this.defaultCharset = defaultCharset;
-    }
-
-    public void render(String view, Object context) throws IOException {
-        contentType("text/html; charset=" + charset().name().toLowerCase());
-        Writer out = writer();
-        renderer.render(out, view, context);
-        out.flush();
     }
 
     public void redirectTo(String location) {
         status(HttpStatus.SEE_OTHER);
-        response.set("Location", location);
+        header("Location", location);
     }
 
     public void header(String name, String value) {
@@ -52,7 +43,11 @@ public class SimpleResponse implements org.testinfected.support.Response {
     }
 
     public String contentType() {
-        return response.getValue("Content-Type");
+        return header("Content-Type");
+    }
+
+    public String header(String name) {
+        return response.getValue(name);
     }
 
     public int contentLength() {

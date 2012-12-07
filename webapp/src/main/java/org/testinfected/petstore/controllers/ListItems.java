@@ -1,9 +1,9 @@
 package org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.support.Application;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.testinfected.petstore.util.Context.context;
 
-public class ListItems implements Controller {
+public class ListItems implements Application {
 
     private final ItemInventory itemInventory;
     private final Page itemsPage;
