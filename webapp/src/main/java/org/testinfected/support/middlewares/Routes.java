@@ -52,8 +52,12 @@ public class Routes extends AbstractMiddleware implements RouteSet {
     public void handle(Request request, Response response) throws Exception {
         Route route = routeFor(request);
         if (route != null)
-            route.handle(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
+            route.handle(request, response);
         else
             forward(request, response);
+    }
+
+    protected void forward(Request request, Response response) throws Exception {
+        successor.handle(request, response);
     }
 }

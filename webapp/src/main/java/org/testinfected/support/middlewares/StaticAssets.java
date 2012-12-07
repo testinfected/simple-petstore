@@ -34,7 +34,7 @@ public class StaticAssets extends AbstractMiddleware {
     }
 
     private void serve(Request request, Response response) throws Exception {
-        fileServer.handle(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
+        fileServer.handle(request, response);
     }
 
     private boolean assetRequested(String path) throws Exception {

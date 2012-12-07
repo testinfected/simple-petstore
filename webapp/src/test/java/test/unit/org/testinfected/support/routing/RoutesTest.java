@@ -11,20 +11,20 @@ import org.testinfected.support.matchers.Nothing;
 import org.testinfected.support.middlewares.NotFound;
 import org.testinfected.support.middlewares.Routes;
 import org.testinfected.support.routing.Route;
-import test.support.org.testinfected.support.web.MockSimpleRequest;
-import test.support.org.testinfected.support.web.MockSimpleResponse;
+import test.support.org.testinfected.support.web.MockRequest;
+import test.support.org.testinfected.support.web.MockResponse;
 
 import static org.testinfected.support.matchers.Matchers.anyRequest;
-import static test.support.org.testinfected.support.web.MockSimpleRequest.aRequest;
-import static test.support.org.testinfected.support.web.MockSimpleResponse.aResponse;
+import static test.support.org.testinfected.support.web.MockRequest.aRequest;
+import static test.support.org.testinfected.support.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class RoutesTest {
 
     Routes routes = new Routes(NotFound.notFound());
 
-    MockSimpleRequest request = aRequest();
-    MockSimpleResponse response = aResponse();
+    MockRequest request = aRequest();
+    MockResponse response = aResponse();
 
     Mockery context = new JUnit4Mockery();
     Application wrongApp = context.mock(Application.class, "wrong app");
@@ -70,10 +70,11 @@ public class RoutesTest {
         }
 
         public void handle(Request request, Response response) throws Exception {
+            app.handle(request, response);
         }
 
         public boolean matches(Request actual) {
-            return matches(actual.unwrap(org.simpleframework.http.Request.class));
+            return requestMatcher.matches(actual);
         }
 
         public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {

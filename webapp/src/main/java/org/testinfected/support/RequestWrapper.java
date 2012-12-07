@@ -1,7 +1,5 @@
 package org.testinfected.support;
 
-import org.simpleframework.util.lease.LeaseException;
-
 public class RequestWrapper implements Request {
     protected final Request request;
 
@@ -49,7 +47,7 @@ public class RequestWrapper implements Request {
         request.removeAttribute(key);
     }
 
-    public Session session() throws LeaseException {
+    public Session session() {
         return request.session();
     }
 }

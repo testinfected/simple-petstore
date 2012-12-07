@@ -43,7 +43,7 @@ public class FileServer implements Application {
     }
 
     private void renderNotFound(Request request, Response response) throws Exception {
-        notFound.handle(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
+        notFound.handle(request, response);
     }
 
     private String fileName(Request request) {

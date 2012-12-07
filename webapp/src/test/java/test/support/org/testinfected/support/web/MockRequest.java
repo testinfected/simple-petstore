@@ -1,6 +1,5 @@
 package test.support.org.testinfected.support.web;
 
-import org.simpleframework.util.lease.LeaseException;
 import org.testinfected.support.HttpMethod;
 import org.testinfected.support.Request;
 import org.testinfected.support.Session;
@@ -85,7 +84,7 @@ public class MockRequest implements Request {
     public void removeAttribute(Object key) {
     }
 
-    public Session session() throws LeaseException {
+    public Session session() {
         return null;
     }
 }

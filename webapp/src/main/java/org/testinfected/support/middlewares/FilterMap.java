@@ -20,7 +20,7 @@ public class FilterMap extends AbstractMiddleware {
     public void handle(Request request, Response response) throws Exception {
         Middleware filter = filterMappedTo(request);
         filter.connectTo(successor);
-        filter.handle(request.unwrap(org.simpleframework.http.Request.class), response.unwrap(org.simpleframework.http.Response.class));
+        filter.handle(request, response);
     }
 
     private Middleware filterMappedTo(Request request) {
@@ -41,7 +41,7 @@ public class FilterMap extends AbstractMiddleware {
 
     private static class PassThrough extends AbstractMiddleware {
         public void handle(Request request, Response response) throws Exception {
-            forward(request, response);
+            successor.handle(request, response);
         }
 
         public void handle(org.simpleframework.http.Request request, org.simpleframework.http.Response response) throws Exception {
