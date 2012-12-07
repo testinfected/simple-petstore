@@ -105,7 +105,7 @@ public class PetStoreTest {
 
         response.assertOK();
         response.assertHasContent(productsList());
-        response.assertHasHeader("Content-Type", "text/html; charset=" + encoding);
+        response.assertHasContentType("text/html; charset=" + encoding);
         response.assertContentIsEncodedAs(encoding);
         response.assertChunked();
     }
@@ -124,7 +124,7 @@ public class PetStoreTest {
         HttpResponse response = request.get("/images/logo.png");
 
         response.assertOK();
-        response.assertHasHeader("Content-Type", "image/png");
+        response.assertHasContentType("image/png");
         response.assertNotChunked();
     }
 

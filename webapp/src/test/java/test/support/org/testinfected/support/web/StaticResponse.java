@@ -5,6 +5,7 @@ import org.testinfected.support.HttpStatus;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
 
+// todo provide better defaults
 public class StaticResponse implements Application {
 
     private int code;

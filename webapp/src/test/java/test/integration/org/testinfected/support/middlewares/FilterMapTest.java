@@ -20,6 +20,7 @@ import test.support.org.testinfected.support.web.MockResponse;
 import static test.support.org.testinfected.support.web.MockRequest.aRequest;
 import static test.support.org.testinfected.support.web.MockResponse.aResponse;
 
+// todo make that an integration test
 @RunWith(JMock.class)
 public class FilterMapTest {
 

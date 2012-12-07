@@ -63,7 +63,7 @@ public class FileServerTest {
     @Test public void
     guessesMimeTypeFromExtension() throws IOException {
         HttpResponse response = request.get("/assets/image.png");
-        response.assertHasHeader("Content-Type", "image/png");
+        response.assertHasContentType("image/png");
     }
 
     @Test public void

@@ -12,12 +12,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.support.util.Streams.toBytes;
-import static test.support.org.testinfected.support.web.CharsetDetector.detectedCharset;
-import static test.support.org.testinfected.support.web.HasContent.hasContent;
-import static test.support.org.testinfected.support.web.HasHeaderWithValue.hasHeader;
-import static test.support.org.testinfected.support.web.HasHeaderWithValue.hasNoHeader;
-import static test.support.org.testinfected.support.web.HasStatusCode.hasStatusCode;
-import static test.support.org.testinfected.support.web.HasStatusMessage.hasStatusMessage;
 
 public class HttpResponse {
 
@@ -73,6 +67,10 @@ public class HttpResponse {
 
     public void assertHasContentSize(int size) throws IOException {
         assertThat("response size", content().length, equalTo(size));
+    }
+
+    public void assertHasContentType(String contentType) {
+        assertHasHeader("Content-Type", contentType);
     }
 
     private byte[] content() throws IOException {
