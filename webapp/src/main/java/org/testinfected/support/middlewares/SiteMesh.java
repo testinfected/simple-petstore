@@ -2,24 +2,23 @@ package org.testinfected.support.middlewares;
 
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
-import org.testinfected.support.View;
 import org.testinfected.support.decoration.BufferedResponse;
 import org.testinfected.support.decoration.Decorator;
 import org.testinfected.support.decoration.HtmlDocumentProcessor;
 import org.testinfected.support.decoration.HtmlPageSelector;
+import org.testinfected.support.decoration.Layout;
 import org.testinfected.support.decoration.PageCompositor;
 import org.testinfected.support.decoration.Selector;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Map;
 
 public class SiteMesh extends AbstractMiddleware {
 
     private final Selector selector;
     private final Decorator decorator;
 
-    public static SiteMesh html(View<Map<String, Object>> layout) {
+    public static SiteMesh html(Layout layout) {
         return new SiteMesh(new HtmlPageSelector(), new PageCompositor(new HtmlDocumentProcessor(), layout));
     }
 

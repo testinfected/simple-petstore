@@ -9,9 +9,9 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.testinfected.support.decoration.Layout;
 import org.testinfected.support.decoration.ContentProcessor;
 import org.testinfected.support.decoration.Decorator;
-import org.testinfected.support.View;
 import org.testinfected.support.decoration.PageCompositor;
 
 import java.io.IOException;
@@ -29,9 +29,9 @@ public class PageCompositorTest {
     Mockery context = new JUnit4Mockery();
     ContentProcessor contentProcessor = context.mock(ContentProcessor.class);
     @SuppressWarnings("unchecked")
-    View<Map<String, Object>> view = context.mock(View.class);
+    Layout layout = context.mock(Layout.class);
 
-    Decorator compositor = new PageCompositor(contentProcessor, view);
+    Decorator compositor = new PageCompositor(contentProcessor, layout);
 
     String originalPage = "<original page>";
     String decoratedPage = "<decorated page>";
@@ -41,7 +41,7 @@ public class PageCompositorTest {
     processesContentAndRendersLayout() throws Exception {
         context.checking(new Expectations() {{
             oneOf(contentProcessor).process(with(originalPage)); will(returnValue(data));
-            oneOf(view).render(with(any(Writer.class)), with(same(data))); will(write(decoratedPage));
+            oneOf(layout).render(with(any(Writer.class)), with(same(data))); will(write(decoratedPage));
         }});
 
         assertThat("decorated page", decorate(originalPage), equalTo(decoratedPage));

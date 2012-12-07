@@ -1,10 +1,10 @@
 package org.testinfected.petstore;
 
 import org.testinfected.petstore.order.Cart;
+import org.testinfected.support.decoration.Layout;
 import org.testinfected.support.RenderingEngine;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
-import org.testinfected.support.Template;
 import org.testinfected.support.middlewares.AbstractMiddleware;
 import org.testinfected.support.middlewares.FilterMap;
 import org.testinfected.support.middlewares.SiteMesh;
@@ -31,17 +31,20 @@ public class SiteLayout extends AbstractMiddleware {
         filtering.handle(request, response);
     }
 
-    public static class MainLayout extends Template<Map<String, Object>> {
+    public static class MainLayout implements Layout {
+        private final String template;
+        private final RenderingEngine renderer;
         private final Cart cart;
 
         public MainLayout(String template, RenderingEngine renderer, Cart cart) {
-            super(template, renderer);
+            this.template = template;
+            this.renderer = renderer;
             this.cart = cart;
         }
 
-        public void render(Writer out, Map<String, Object> context) throws IOException {
-            context.put("cart", cart);
-            super.render(out, context);
+        public void render(Writer out, Map<String, Object> fragments) throws IOException {
+            fragments.put("cart", cart);
+            renderer.render(out, template, fragments);
         }
     }
 }
