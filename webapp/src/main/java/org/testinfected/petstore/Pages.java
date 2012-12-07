@@ -25,4 +25,16 @@ public class Pages {
     public Page products() {
         return PageTemplate.html(engine, "products");
     }
+
+    public Page cart() {
+        return PageTemplate.html(engine, "cart");
+    }
+
+    public Page home() {
+        return PageTemplate.html(engine, "home");
+    }
+
+    public Page order() {
+        return PageTemplate.html(engine, "order");
+    }
 }
