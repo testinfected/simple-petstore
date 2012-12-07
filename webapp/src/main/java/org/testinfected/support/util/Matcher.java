@@ -1,4 +1,4 @@
-package org.testinfected.support;
+package org.testinfected.support.util;
 
 public interface Matcher<T> {
 

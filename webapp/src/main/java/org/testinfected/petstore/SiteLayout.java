@@ -2,7 +2,6 @@ package org.testinfected.petstore;
 
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.support.decoration.Layout;
-import org.testinfected.support.RenderingEngine;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
 import org.testinfected.support.middlewares.AbstractMiddleware;

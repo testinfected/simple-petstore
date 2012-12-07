@@ -2,7 +2,7 @@ package org.testinfected.support.routing;
 
 import org.simpleframework.http.Path;
 import org.simpleframework.http.parse.PathParser;
-import org.testinfected.support.Matcher;
+import org.testinfected.support.util.Matcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;

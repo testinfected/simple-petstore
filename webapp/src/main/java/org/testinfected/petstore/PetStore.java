@@ -1,16 +1,16 @@
 package org.testinfected.petstore;
 
 import org.testinfected.petstore.util.MustacheRendering;
-import org.testinfected.support.FailureReporter;
 import org.testinfected.support.MiddlewareStack;
 import org.testinfected.support.Server;
 import org.testinfected.support.middlewares.ApacheCommonLogger;
 import org.testinfected.support.middlewares.ConnectionScope;
 import org.testinfected.support.middlewares.Failsafe;
+import org.testinfected.support.middlewares.FailureMonitor;
 import org.testinfected.support.middlewares.FileServer;
 import org.testinfected.support.middlewares.HttpMethodOverride;
-import org.testinfected.support.middlewares.ServerHeaders;
 import org.testinfected.support.middlewares.StaticAssets;
+import org.testinfected.support.util.FailureReporter;
 import org.testinfected.support.util.PlainFormatter;
 import org.testinfected.time.lib.SystemClock;
 
@@ -31,7 +31,6 @@ public class PetStore {
     private final File context;
     private final DataSource dataSource;
     private final Logger logger = makeLogger();
-    private final SystemClock clock = new SystemClock();
 
     private FailureReporter failureReporter = FailureReporter.IGNORE;
 
@@ -51,14 +50,14 @@ public class PetStore {
 
     public void start(Server server) throws IOException {
         server.run(new MiddlewareStack() {{
-            use(new ApacheCommonLogger(logger, clock));
-            use(new Failsafe(failureReporter));
-            use(new ServerHeaders(clock));
+            use(new ApacheCommonLogger(logger, new SystemClock()));
+            use(new Failsafe());
+            use(new FailureMonitor(failureReporter));
             use(new HttpMethodOverride());
             use(staticAssets());
-            use(new SiteLayout(rendererFrom(LAYOUT_DIR)));
+            use(new SiteLayout(templatesIn(LAYOUT_DIR)));
             use(new ConnectionScope(dataSource));
-            run(new Routing(Pages.using(rendererFrom(PAGES_DIR))));
+            run(new Routing(Pages.using(templatesIn(PAGES_DIR))));
         }});
     }
 
@@ -74,7 +73,7 @@ public class PetStore {
         return assets;
     }
 
-    private MustacheRendering rendererFrom(final String dir) {
+    private MustacheRendering templatesIn(final String dir) {
         return new MustacheRendering(new File(context, dir));
     }
 }

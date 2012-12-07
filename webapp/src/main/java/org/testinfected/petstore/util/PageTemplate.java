@@ -1,6 +1,7 @@
-package org.testinfected.petstore;
+package org.testinfected.petstore.util;
 
-import org.testinfected.support.RenderingEngine;
+import org.testinfected.petstore.Page;
+import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.support.Response;
 import org.testinfected.support.util.MimeTypes;
 

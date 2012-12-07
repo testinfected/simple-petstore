@@ -1,4 +1,7 @@
-package org.testinfected.support;
+package org.testinfected.support.util;
+
+import org.testinfected.support.Request;
+import org.testinfected.support.Session;
 
 public class RequestWrapper implements Request {
     protected final Request request;

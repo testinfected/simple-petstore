@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.support.Server;
+import org.testinfected.support.simple.SimpleServer;
 import org.testinfected.support.middlewares.NotFound;
 import test.support.org.testinfected.support.web.HttpRequest;
 import test.support.org.testinfected.support.web.HttpResponse;
@@ -13,9 +14,10 @@ import java.io.IOException;
 import static org.hamcrest.CoreMatchers.containsString;
 import static test.support.org.testinfected.support.web.HttpRequest.aRequest;
 
+// todo Consider rewriting as unit test now that we can mock requests and responses
 public class NotFoundTest {
 
-    Server server = new Server(9999);
+    Server server = new SimpleServer(9999);
     HttpRequest request = aRequest().withPath("/resource").to(server);
     HttpResponse response;
     String content = "Not found: /resource";

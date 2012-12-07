@@ -1,6 +1,6 @@
 package org.testinfected.support.matchers;
 
-import org.testinfected.support.Matcher;
+import org.testinfected.support.util.Matcher;
 
 public class IsEqual<T> implements Matcher<T> {
     private final T other;

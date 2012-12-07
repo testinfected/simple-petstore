@@ -4,7 +4,7 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
 import org.testinfected.support.util.Charsets;
-import org.testinfected.support.RenderingEngine;
+import org.testinfected.petstore.RenderingEngine;
 
 import java.io.File;
 import java.io.FileInputStream;

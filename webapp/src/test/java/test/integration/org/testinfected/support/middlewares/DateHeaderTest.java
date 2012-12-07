@@ -3,33 +3,36 @@ package test.integration.org.testinfected.support.middlewares;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.testinfected.support.HttpStatus;
 import org.testinfected.support.MiddlewareStack;
 import org.testinfected.support.Server;
-import org.testinfected.support.middlewares.ServerHeaders;
+import org.testinfected.support.middlewares.DateHeader;
+import org.testinfected.support.simple.SimpleServer;
 import org.testinfected.time.lib.BrokenClock;
 import test.support.org.testinfected.support.web.HttpRequest;
 import test.support.org.testinfected.support.web.HttpResponse;
 
 import java.io.IOException;
+import java.util.Date;
 
-import static org.simpleframework.http.Status.SEE_OTHER;
+import static org.testinfected.support.HttpStatus.SEE_OTHER;
 import static org.testinfected.time.lib.DateBuilder.aDate;
 import static test.support.org.testinfected.support.web.HttpRequest.aRequest;
 import static test.support.org.testinfected.support.web.StaticResponse.respondWith;
 
-public class ServerHeadersTest {
+// todo Consider rewriting as unit test now that we can mock requests and responses
+public class DateHeaderTest {
 
-    ServerHeaders serverHeaders = new ServerHeaders(BrokenClock.stoppedAt(aDate().onCalendar(2012, 6, 8).atMidnight().build()));
+    Date now = aDate().onCalendar(2012, 6, 8).atMidnight().build();
+    DateHeader dateHeader = new DateHeader(BrokenClock.stoppedAt(now));
 
-    Server server = new Server(9999);
+    Server server = new SimpleServer(9999);
     HttpRequest request = aRequest().to(server);
 
     @Before public void
     startServer() throws IOException {
         server.run(new MiddlewareStack() {{
-            use(serverHeaders);
-            run(respondWith(HttpStatus.SEE_OTHER));
+            use(dateHeader);
+            run(respondWith(SEE_OTHER));
         }});
     }
 
@@ -39,15 +42,13 @@ public class ServerHeadersTest {
     }
 
     @Test public void
-    setsResponseHeaders() throws IOException {
+    setsDateHeaderFromClockTime() throws IOException {
         HttpResponse response = request.get("/");
-
-        response.assertHasHeader("Server", Server.NAME);
         response.assertHasHeader("Date", "Fri, 08 Jun 2012 04:00:00 GMT");
     }
 
     @Test public void
     forwardsToNextApplication() throws IOException {
-        request.send().assertHasStatusCode(SEE_OTHER.getCode());
+        request.send().assertHasStatusCode(SEE_OTHER.code);
     }
 }

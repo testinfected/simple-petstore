@@ -1,6 +1,6 @@
 package org.testinfected.support.matchers;
 
-import org.testinfected.support.Matcher;
+import org.testinfected.support.util.Matcher;
 import org.testinfected.support.Request;
 
 import static org.testinfected.support.matchers.IsEqual.equalTo;

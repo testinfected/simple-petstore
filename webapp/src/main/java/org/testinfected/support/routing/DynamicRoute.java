@@ -1,9 +1,9 @@
 package org.testinfected.support.routing;
 
 import org.testinfected.support.Application;
-import org.testinfected.support.Matcher;
+import org.testinfected.support.util.Matcher;
 import org.testinfected.support.Request;
-import org.testinfected.support.RequestWrapper;
+import org.testinfected.support.util.RequestWrapper;
 import org.testinfected.support.Response;
 import org.testinfected.support.matchers.Combination;
 

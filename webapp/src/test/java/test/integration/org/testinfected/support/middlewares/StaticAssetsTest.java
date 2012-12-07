@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.simpleframework.http.Status;
 import org.testinfected.support.Server;
+import org.testinfected.support.simple.SimpleServer;
 import org.testinfected.support.MiddlewareStack;
 import org.testinfected.support.middlewares.StaticAssets;
 import test.support.org.testinfected.support.web.HttpRequest;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import static test.support.org.testinfected.support.web.HttpRequest.aRequest;
 import static test.support.org.testinfected.support.web.StaticResponse.respondWithCode;
 
+// todo Consider rewriting as unit test now that we can mock requests and responses
 public class StaticAssetsTest {
 
     int ASSET_SERVED = Status.FOUND.getCode();
@@ -21,7 +23,7 @@ public class StaticAssetsTest {
 
     StaticAssets assets = new StaticAssets(respondWithCode(ASSET_SERVED), "/favicon.ico", "/static");
 
-    Server server = new Server(9999);
+    Server server = new SimpleServer(9999);
     HttpRequest request = aRequest().to(server);
 
     @Before public void

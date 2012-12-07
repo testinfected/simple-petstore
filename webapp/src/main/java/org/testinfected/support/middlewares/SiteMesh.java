@@ -2,7 +2,7 @@ package org.testinfected.support.middlewares;
 
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
-import org.testinfected.support.decoration.BufferedResponse;
+import org.testinfected.support.util.BufferedResponse;
 import org.testinfected.support.decoration.Decorator;
 import org.testinfected.support.decoration.HtmlDocumentProcessor;
 import org.testinfected.support.decoration.HtmlPageSelector;

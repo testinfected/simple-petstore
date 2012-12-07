@@ -17,8 +17,8 @@ import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
-import org.testinfected.support.FailureReporter;
-import org.testinfected.support.Server;
+import org.testinfected.support.simple.SimpleServer;
+import org.testinfected.support.util.FailureReporter;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import test.support.org.testinfected.petstore.web.LogFile;
@@ -54,7 +54,7 @@ public class PetStoreTest {
 
     LogFile logFile;
     int serverPort = 9999;
-    Server server = new Server(serverPort);
+    SimpleServer server = new SimpleServer(serverPort);
     HttpRequest request = aRequest().onPort(serverPort);
 
     String encoding = "utf-16";
@@ -78,14 +78,6 @@ public class PetStoreTest {
     stopServer() throws Exception {
         server.shutdown();
         logFile.clear();
-    }
-
-    @Test public void
-    setsServerHeaders() throws IOException {
-        HttpResponse response = request.get("/");
-
-        response.assertOK();
-        response.assertHasHeader("Server", containsString(Server.NAME));
     }
 
     @Test public void
@@ -147,7 +139,7 @@ public class PetStoreTest {
     renders500ErrorsAndReportsFailureWhenSomethingGoesWrong() throws Exception {
         databaseStatus.become("down");
         context.checking(new Expectations() {{
-            oneOf(failureReporter).internalErrorOccurred(with(isA(SQLException.class)));
+            oneOf(failureReporter).errorOccurred(with(isA(SQLException.class)));
         }});
 
         HttpResponse response = request.get("/products");

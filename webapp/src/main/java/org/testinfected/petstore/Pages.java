@@ -1,6 +1,6 @@
 package org.testinfected.petstore;
 
-import org.testinfected.support.RenderingEngine;
+import org.testinfected.petstore.util.PageTemplate;
 
 public class Pages {
 

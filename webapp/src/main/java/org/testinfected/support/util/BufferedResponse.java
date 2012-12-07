@@ -1,7 +1,6 @@
-package org.testinfected.support.decoration;
+package org.testinfected.support.util;
 
 import org.testinfected.support.Response;
-import org.testinfected.support.ResponseWrapper;
 
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;

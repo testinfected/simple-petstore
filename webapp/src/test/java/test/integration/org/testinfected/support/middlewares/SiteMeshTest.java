@@ -13,6 +13,7 @@ import org.testinfected.support.HttpStatus;
 import org.testinfected.support.MiddlewareStack;
 import org.testinfected.support.Response;
 import org.testinfected.support.Server;
+import org.testinfected.support.simple.SimpleServer;
 import org.testinfected.support.decoration.Decorator;
 import org.testinfected.support.decoration.Selector;
 import org.testinfected.support.middlewares.SiteMesh;
@@ -26,6 +27,7 @@ import java.io.Writer;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static test.support.org.testinfected.support.web.StaticResponse.respondWith;
 
+// todo Consider rewriting as unit test now that we can mock requests and responses
 @RunWith(JMock.class)
 public class SiteMeshTest {
     Mockery context = new JUnit4Mockery();
@@ -36,7 +38,7 @@ public class SiteMeshTest {
     String decoratedPage = "<decorated page>";
     SiteMesh siteMesh = new SiteMesh(selector, new FakeDecorator());
 
-    Server server = new Server(9999);
+    Server server = new SimpleServer(9999);
     StaticResponse app = respondWith(HttpStatus.OK.code, originalPage);
     HttpRequest request = HttpRequest.aRequest().to(server);
 

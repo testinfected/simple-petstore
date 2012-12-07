@@ -1,6 +1,6 @@
 package org.testinfected.support.middlewares;
 
-import org.testinfected.support.Matcher;
+import org.testinfected.support.util.Matcher;
 import org.testinfected.support.Middleware;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;

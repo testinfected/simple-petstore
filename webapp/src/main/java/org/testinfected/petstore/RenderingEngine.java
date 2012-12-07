@@ -1,4 +1,4 @@
-package org.testinfected.support;
+package org.testinfected.petstore;
 
 import java.io.Writer;
 

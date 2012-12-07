@@ -1,4 +1,4 @@
-package test.integration.org.testinfected.support.middlewares;
+package test.unit.org.testinfected.support.middlewares;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.support.Application;
-import org.testinfected.support.Matcher;
+import org.testinfected.support.util.Matcher;
 import org.testinfected.support.Middleware;
 import org.testinfected.support.Request;
 import org.testinfected.support.matchers.Matchers;
@@ -20,7 +20,6 @@ import test.support.org.testinfected.support.web.MockResponse;
 import static test.support.org.testinfected.support.web.MockRequest.aRequest;
 import static test.support.org.testinfected.support.web.MockResponse.aResponse;
 
-// todo make that an integration test
 @RunWith(JMock.class)
 public class FilterMapTest {
 

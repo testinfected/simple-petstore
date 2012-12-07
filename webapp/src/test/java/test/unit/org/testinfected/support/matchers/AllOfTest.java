@@ -2,7 +2,7 @@ package test.unit.org.testinfected.support.matchers;
 
 import org.junit.Test;
 import org.testinfected.support.matchers.Anything;
-import org.testinfected.support.Matcher;
+import org.testinfected.support.util.Matcher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.support.matchers.AllOf.allOf;

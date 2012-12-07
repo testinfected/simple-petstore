@@ -11,6 +11,7 @@ import org.testinfected.support.matchers.Nothing;
 import org.testinfected.support.middlewares.NotFound;
 import org.testinfected.support.middlewares.Routes;
 import org.testinfected.support.routing.Route;
+import org.testinfected.support.util.Matcher;
 import test.support.org.testinfected.support.web.MockRequest;
 import test.support.org.testinfected.support.web.MockResponse;
 

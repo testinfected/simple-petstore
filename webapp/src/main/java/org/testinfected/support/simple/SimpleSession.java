@@ -1,4 +1,6 @@
-package org.testinfected.support;
+package org.testinfected.support.simple;
+
+import org.testinfected.support.Session;
 
 public class SimpleSession implements Session {
 

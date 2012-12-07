@@ -1,8 +1,10 @@
-package org.testinfected.support;
+package org.testinfected.support.simple;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.util.lease.LeaseException;
 import org.testinfected.petstore.ExceptionImposter;
+import org.testinfected.support.HttpException;
+import org.testinfected.support.Session;
 
 import java.io.IOException;
 

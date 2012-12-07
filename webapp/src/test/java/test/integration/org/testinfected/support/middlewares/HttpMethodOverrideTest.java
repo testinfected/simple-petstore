@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.support.*;
 import org.testinfected.support.middlewares.HttpMethodOverride;
+import org.testinfected.support.simple.SimpleServer;
 import test.support.org.testinfected.support.web.HttpRequest;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static test.support.org.testinfected.support.web.HttpRequest.aRequest;
 
+// todo Consider rewriting as unit test now that we can mock requests and responses
 @RunWith(JMock.class)
 public class HttpMethodOverrideTest {
     Mockery context = new JUnit4Mockery();
@@ -27,7 +29,7 @@ public class HttpMethodOverrideTest {
 
     HttpMethodOverride methodOverride = new HttpMethodOverride();
 
-    Server server = new Server(9999);
+    Server server = new SimpleServer(9999);
     HttpRequest request = aRequest().to(server);
 
     @Before public void

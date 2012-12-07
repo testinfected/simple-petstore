@@ -1,6 +1,6 @@
 package org.testinfected.support.matchers;
 
-import org.testinfected.support.Matcher;
+import org.testinfected.support.util.Matcher;
 
 public class StartingWith implements Matcher<String> {
     private final String prefix;

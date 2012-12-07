@@ -2,7 +2,7 @@ package org.testinfected.petstore;
 
 import org.testinfected.cli.CLI;
 import org.testinfected.petstore.jdbc.support.DriverManagerDataSource;
-import org.testinfected.support.Server;
+import org.testinfected.support.simple.SimpleServer;
 import org.testinfected.support.util.ConsoleErrorReporter;
 import org.testinfected.support.util.ConsoleHandler;
 
@@ -46,7 +46,7 @@ public class Launcher {
     private final PrintStream out;
     private final CLI cli;
 
-    private Server server;
+    private SimpleServer server;
 
     public Launcher(PrintStream out) {
         this.out = out;
@@ -71,7 +71,7 @@ public class Launcher {
         Environment env = Environment.load(env(cli));
 
         out.println("Starting http://localhost:" + port(cli));
-        server = new Server(port(cli));
+        server = new SimpleServer(port(cli));
         server.defaultCharset(encoding(cli));
 
         PetStore petStore = new PetStore(new File(webRoot), new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));

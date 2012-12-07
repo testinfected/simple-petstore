@@ -1,7 +1,7 @@
 package test.support.org.testinfected.petstore.web;
 
 import org.testinfected.petstore.util.MustacheRendering;
-import org.testinfected.support.RenderingEngine;
+import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.petstore.util.Context;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.Builder;

@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.testinfected.support.util.ConsoleErrorReporter;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -22,18 +21,8 @@ public class ConsoleErrorReporterTest {
         Exception failure = new Exception("Bad!");
         failure.fillInStackTrace();
 
-        consoleReporter.internalErrorOccurred(failure);
+        consoleReporter.errorOccurred(failure);
         assertThat("output", output.toString(), containsString("[ERROR] Internal error"));
-        assertThat("output", output.toString(), containsString(stackTraceOf(failure)));
-    }
-
-    @Test public void
-    writesCommunicationErrorsToOutput() {
-        IOException failure = new IOException("Bad!");
-        failure.fillInStackTrace();
-
-        consoleReporter.communicationFailed(failure);
-        assertThat("output", output.toString(), containsString("[ERROR] Communication failure"));
         assertThat("output", output.toString(), containsString(stackTraceOf(failure)));
     }
 

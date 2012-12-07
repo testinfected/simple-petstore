@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.support.*;
 import org.testinfected.support.middlewares.ConnectionScope;
+import org.testinfected.support.simple.SimpleServer;
 import test.support.org.testinfected.support.web.HttpRequest;
 
 import javax.sql.DataSource;
@@ -21,6 +22,7 @@ import java.sql.Connection;
 import static org.jmock.Expectations.same;
 import static test.support.org.testinfected.support.web.HttpRequest.aRequest;
 
+// todo Consider rewriting as unit test now that we can mock requests and responses
 @RunWith(JMock.class)
 public class ConnectionScopeTest {
 
@@ -33,7 +35,7 @@ public class ConnectionScopeTest {
 
     ConnectionScope connectionScope = new ConnectionScope(dataSource);
 
-    Server server = new Server(9999);
+    Server server = new SimpleServer(9999);
     HttpRequest request = aRequest().to(server);
 
     @Before public void

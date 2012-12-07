@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.support.Server;
+import org.testinfected.support.simple.SimpleServer;
 import org.testinfected.support.middlewares.FileServer;
 import org.testinfected.support.util.Streams;
 import test.support.org.testinfected.support.web.HttpRequest;
@@ -21,12 +22,13 @@ import java.util.TimeZone;
 import static java.lang.String.valueOf;
 import static test.support.org.testinfected.support.web.HttpRequest.aRequest;
 
+// todo Consider rewriting as unit test now that we can mock requests and responses
 public class FileServerTest {
 
     File base = locateBase();
     FileServer fileServer = new FileServer(base);
 
-    Server server = new Server(9999);
+    Server server = new SimpleServer(9999);
     HttpRequest request = aRequest().to(server);
     File file = new File(base, "assets/image.png");
 

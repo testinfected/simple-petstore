@@ -1,6 +1,5 @@
 package org.testinfected.support.middlewares;
 
-import org.testinfected.support.FailureReporter;
 import org.testinfected.support.HttpStatus;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
@@ -12,31 +11,14 @@ import java.io.StringWriter;
 
 public class Failsafe extends AbstractMiddleware {
 
-    private FailureReporter failureReporter;
-
-    public Failsafe() {
-        this(FailureReporter.IGNORE);
-    }
-
-    public Failsafe(FailureReporter failureReporter) {
-        this.failureReporter = failureReporter;
-    }
-
-    public void reportErrorsTo(FailureReporter failureReporter) {
-        this.failureReporter = failureReporter;
-    }
+    public Failsafe() {}
 
     public void handle(Request request, Response response) throws Exception {
         try {
             forward(request, response);
         } catch (Exception internalError) {
-            reportInternalError(internalError);
             failsafeResponse(internalError, response);
         }
-    }
-
-    private void reportInternalError(Exception error) {
-        failureReporter.internalErrorOccurred(error);
     }
 
     private void failsafeResponse(Exception error, Response response) throws IOException {

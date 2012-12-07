@@ -7,12 +7,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class MockResponse implements Response {
 
+    private final Map<String, String> headers = new HashMap<String, String>();
     private String contentType;
     private HttpStatus status;
     private String location;
@@ -33,16 +36,21 @@ public class MockResponse implements Response {
     }
 
     public void header(String name, String value) {
+        headers.put(name, value);
     }
 
     public void headerDate(String name, long date) {
     }
 
     public String header(String name) {
-        return null;
+        return headers.get(name);
     }
 
     public void removeHeader(String name) {
+    }
+
+    public void assertHasHeader(String name, String value) {
+        assertThat("header[" + name + "]" , header(name), equalTo(value));
     }
 
     public void contentType(String contentType) {

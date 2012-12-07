@@ -1,8 +1,10 @@
-package org.testinfected.support;
+package org.testinfected.support.simple;
 
 import org.simpleframework.http.ContentType;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.parse.ContentParser;
+import org.testinfected.support.HttpException;
+import org.testinfected.support.HttpStatus;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

@@ -1,4 +1,7 @@
-package org.testinfected.support;
+package org.testinfected.support.util;
+
+import org.testinfected.support.HttpStatus;
+import org.testinfected.support.Response;
 
 import java.io.IOException;
 import java.io.OutputStream;

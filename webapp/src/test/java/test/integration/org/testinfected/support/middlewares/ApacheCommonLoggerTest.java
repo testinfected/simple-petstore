@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.testinfected.support.Application;
 import org.testinfected.support.MiddlewareStack;
 import org.testinfected.support.Server;
+import org.testinfected.support.simple.SimpleServer;
 import org.testinfected.support.middlewares.ApacheCommonLogger;
 import org.testinfected.time.Clock;
 import test.support.org.testinfected.support.web.HttpRequest;
@@ -25,6 +26,7 @@ import static test.support.org.testinfected.support.web.HttpRequest.aRequest;
 import static test.support.org.testinfected.support.web.StaticResponse.respondWith;
 import static test.support.org.testinfected.support.web.StaticResponse.respondWithCode;
 
+// todo Consider rewriting as unit test now that we can mock requests and responses
 @RunWith(JMock.class)
 public class ApacheCommonLoggerTest {
 
@@ -36,7 +38,7 @@ public class ApacheCommonLoggerTest {
 
     ApacheCommonLogger apacheCommonLogger = new ApacheCommonLogger(logger, clock);
 
-    Server server = new Server(9999);
+    Server server = new SimpleServer(9999);
     HttpRequest request = aRequest().to(server);
 
     Date currentTime = aDate().onCalendar(2012, 6, 27).atTime(18, 4, 0).inZone("EDT").build();

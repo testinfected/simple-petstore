@@ -2,7 +2,7 @@ package org.testinfected.support.middlewares;
 
 import org.testinfected.support.HttpMethod;
 import org.testinfected.support.Request;
-import org.testinfected.support.RequestWrapper;
+import org.testinfected.support.util.RequestWrapper;
 import org.testinfected.support.Response;
 
 import java.io.IOException;
