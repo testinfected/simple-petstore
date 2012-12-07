@@ -11,8 +11,6 @@ public interface Response {
 
     void redirectTo(String location);
 
-    void renderHead(int statusCode);
-
     void header(String name, String value);
 
     void headerDate(String name, long date);

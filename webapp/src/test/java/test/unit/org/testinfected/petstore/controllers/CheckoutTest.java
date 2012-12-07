@@ -13,8 +13,8 @@ import org.testinfected.petstore.Page;
 import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.controllers.Checkout;
 import org.testinfected.petstore.order.SalesAssistant;
-import org.testinfected.support.Request;
-import org.testinfected.support.Response;
+import test.support.org.testinfected.support.web.MockRequest;
+import test.support.org.testinfected.support.web.MockResponse;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -29,8 +29,8 @@ public class CheckoutTest {
     Page page = context.mock(Page.class);
     Checkout checkout = new Checkout(salesAssistant, page);
 
-    Request request = aRequest();
-    Response response = aResponse();
+    MockRequest request = aRequest();
+    MockResponse response = aResponse();
 
     @SuppressWarnings("unchecked")
     @Test public void

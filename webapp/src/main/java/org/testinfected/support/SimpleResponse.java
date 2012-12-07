@@ -2,7 +2,6 @@ package org.testinfected.support;
 
 import org.simpleframework.http.ContentType;
 import org.simpleframework.http.Response;
-import org.simpleframework.http.Status;
 import org.simpleframework.http.parse.ContentParser;
 
 import java.io.BufferedWriter;
@@ -11,8 +10,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
-
-import static org.simpleframework.http.Status.SEE_OTHER;
 
 public class SimpleResponse implements org.testinfected.support.Response {
 
@@ -33,13 +30,8 @@ public class SimpleResponse implements org.testinfected.support.Response {
         out.flush();
     }
 
-    public void renderHead(int statusCode) {
-        response.setCode(statusCode);
-        response.setText(Status.getDescription(statusCode));
-    }
-
     public void redirectTo(String location) {
-        renderHead(SEE_OTHER.getCode());
+        status(HttpStatus.SEE_OTHER);
         response.set("Location", location);
     }
 

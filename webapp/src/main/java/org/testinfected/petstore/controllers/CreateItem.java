@@ -3,6 +3,7 @@ package org.testinfected.petstore.controllers;
 import org.testinfected.petstore.Controller;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateItemException;
+import org.testinfected.support.HttpStatus;
 import org.testinfected.support.Request;
 import org.testinfected.support.Response;
 
@@ -23,9 +24,9 @@ public class CreateItem implements Controller {
                     request.parameter("number"),
                     request.parameter("description"),
                     new BigDecimal(request.parameter("price")));
-            response.renderHead(HttpCodes.CREATED);
+            response.status(HttpStatus.CREATED);
         } catch (DuplicateItemException e) {
-            response.renderHead(HttpCodes.CONFLICT);
+            response.status(HttpStatus.CONFLICT);
         }
     }
 }

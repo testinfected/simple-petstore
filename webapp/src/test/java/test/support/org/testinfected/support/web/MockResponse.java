@@ -8,6 +8,9 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 public class MockResponse implements Response {
 
     private String contentType;
@@ -24,9 +27,6 @@ public class MockResponse implements Response {
     }
 
     public void redirectTo(String location) {
-    }
-
-    public void renderHead(int statusCode) {
     }
 
     public void header(String name, String value) {
@@ -56,6 +56,10 @@ public class MockResponse implements Response {
 
     public void statusCode(int code) {
         status(HttpStatus.forCode(code));
+    }
+
+    public void assertStatus(HttpStatus expected) {
+        assertThat("response status", status, equalTo(expected));
     }
 
     public int contentLength() {

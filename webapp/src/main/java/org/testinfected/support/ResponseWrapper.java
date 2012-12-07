@@ -21,10 +21,6 @@ public class ResponseWrapper implements Response {
         response.redirectTo(location);
     }
 
-    public void renderHead(int statusCode) {
-        response.renderHead(statusCode);
-    }
-
     public void header(String name, String value) {
         response.header(name, value);
     }

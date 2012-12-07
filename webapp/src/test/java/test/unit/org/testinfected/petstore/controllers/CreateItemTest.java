@@ -8,15 +8,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.petstore.controllers.CreateItem;
-import org.testinfected.petstore.controllers.HttpCodes;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateItemException;
-import org.testinfected.support.Request;
-import org.testinfected.support.Response;
+import org.testinfected.support.HttpStatus;
+import test.support.org.testinfected.support.web.MockRequest;
+import test.support.org.testinfected.support.web.MockResponse;
 
 import java.math.BigDecimal;
 
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.support.web.MockRequest.aRequest;
+import static test.support.org.testinfected.support.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class CreateItemTest {
@@ -25,40 +27,36 @@ public class CreateItemTest {
     ProcurementRequestHandler requestHandler = context.mock(ProcurementRequestHandler.class);
     CreateItem createItem = new CreateItem(requestHandler);
 
-    Request request = context.mock(Request.class);
-    Response response = context.mock(Response.class);
+    MockRequest request = aRequest();
+    MockResponse response = aResponse();
 
-    @Before public void prepareRequest() {
-        setRequestParametersTo("LAB-1234", "12345678", "Chocolate Male", "599.00");
+    @Before public void
+    prepareRequest() {
+        request.addParameter("product", "LAB-1234");
+        request.addParameter("number", "12345678");
+        request.addParameter("description", "Chocolate Male");
+        request.addParameter("price", "599.00");
     }
 
     @Test public void
     makesItemProcurementRequestAndRespondsWithCreated() throws Exception {
         context.checking(new Expectations() {{
             oneOf(requestHandler).addToInventory(with("LAB-1234"), with("12345678"), with("Chocolate Male"), with(new BigDecimal("599.00")));
-            oneOf(response).renderHead(HttpCodes.CREATED);
         }});
 
         createItem.handle(request, response);
+
+        response.assertStatus(HttpStatus.CREATED);
     }
 
     @Test public void
     respondsWithForbiddenWhenItemAlreadyExists() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(requestHandler).addToInventory(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(BigDecimal.class)));
-                will(throwException(new DuplicateItemException(anItem().build())));
-            oneOf(response).renderHead(HttpCodes.CONFLICT);
+            oneOf(requestHandler).addToInventory(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(BigDecimal.class))); will(throwException(new DuplicateItemException(anItem().build())));
         }});
 
         createItem.handle(request, response);
-    }
 
-    private void setRequestParametersTo(final String productNumber, final String itemNumber, final String description, final String price) {
-        context.checking(new Expectations() {{
-            allowing(request).parameter("product"); will(returnValue(productNumber));
-            allowing(request).parameter("number"); will(returnValue(itemNumber));
-            allowing(request).parameter("description"); will(returnValue(description));
-            allowing(request).parameter("price"); will(returnValue(price));
-        }});
+        response.assertStatus(HttpStatus.CONFLICT);
     }
 }
