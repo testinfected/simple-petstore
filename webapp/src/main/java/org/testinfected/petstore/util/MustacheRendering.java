@@ -3,7 +3,7 @@ package org.testinfected.petstore.util;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheException;
-import org.testinfected.support.util.Charsets;
+import org.testinfected.molecule.util.Charsets;
 import org.testinfected.petstore.RenderingEngine;
 
 import java.io.File;

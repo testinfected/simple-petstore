@@ -12,13 +12,13 @@ import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
-import test.support.org.testinfected.support.web.MockRequest;
-import test.support.org.testinfected.support.web.MockResponse;
+import test.support.org.testinfected.molecule.web.MockRequest;
+import test.support.org.testinfected.molecule.web.MockResponse;
 
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
-import static test.support.org.testinfected.support.web.MockRequest.aRequest;
-import static test.support.org.testinfected.support.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class PlaceOrderTest {

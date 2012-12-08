@@ -13,8 +13,8 @@ import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.CartItem;
 import org.testinfected.petstore.order.SalesAssistant;
-import test.support.org.testinfected.support.web.MockRequest;
-import test.support.org.testinfected.support.web.MockResponse;
+import test.support.org.testinfected.molecule.web.MockRequest;
+import test.support.org.testinfected.molecule.web.MockResponse;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -22,8 +22,8 @@ import java.util.Map;
 import static org.hamcrest.Matchers.allOf;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
-import static test.support.org.testinfected.support.web.MockRequest.aRequest;
-import static test.support.org.testinfected.support.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class ShowCartTest {

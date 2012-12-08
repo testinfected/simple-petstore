@@ -20,8 +20,8 @@ import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
 import test.support.org.testinfected.petstore.builders.Builder;
-import test.support.org.testinfected.support.web.MockRequest;
-import test.support.org.testinfected.support.web.MockResponse;
+import test.support.org.testinfected.molecule.web.MockRequest;
+import test.support.org.testinfected.molecule.web.MockResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +32,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.any;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
-import static test.support.org.testinfected.support.web.MockRequest.aRequest;
-import static test.support.org.testinfected.support.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class ListProductsTest {

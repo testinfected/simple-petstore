@@ -13,14 +13,14 @@ import org.testinfected.petstore.Page;
 import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.controllers.Checkout;
 import org.testinfected.petstore.order.SalesAssistant;
-import test.support.org.testinfected.support.web.MockRequest;
-import test.support.org.testinfected.support.web.MockResponse;
+import test.support.org.testinfected.molecule.web.MockRequest;
+import test.support.org.testinfected.molecule.web.MockResponse;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
-import static test.support.org.testinfected.support.web.MockRequest.aRequest;
-import static test.support.org.testinfected.support.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class CheckoutTest {

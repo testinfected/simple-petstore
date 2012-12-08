@@ -2,8 +2,8 @@ package org.testinfected.petstore.util;
 
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.RenderingEngine;
-import org.testinfected.support.Response;
-import org.testinfected.support.util.MimeTypes;
+import org.testinfected.molecule.Response;
+import org.testinfected.molecule.util.MimeTypes;
 
 import java.io.IOException;
 import java.io.Writer;

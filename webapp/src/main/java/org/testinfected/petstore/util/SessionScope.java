@@ -1,8 +1,8 @@
 package org.testinfected.petstore.util;
 
 import org.testinfected.petstore.order.Cart;
-import org.testinfected.support.Request;
-import org.testinfected.support.Session;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Session;
 
 public class SessionScope {
 

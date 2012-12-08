@@ -26,16 +26,16 @@ import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
-import org.testinfected.support.Application;
-import org.testinfected.support.Request;
-import org.testinfected.support.Response;
-import org.testinfected.support.middlewares.Routes;
-import org.testinfected.support.routing.Router;
+import org.testinfected.molecule.Application;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
+import org.testinfected.molecule.middlewares.Routes;
+import org.testinfected.molecule.routing.Router;
 
 import java.sql.Connection;
 
 import static org.testinfected.petstore.util.SessionScope.sessionScopeOf;
-import static org.testinfected.support.middlewares.ConnectionScope.ConnectionReference;
+import static org.testinfected.molecule.middlewares.ConnectionScope.ConnectionReference;
 
 public class Routing implements Application {
 

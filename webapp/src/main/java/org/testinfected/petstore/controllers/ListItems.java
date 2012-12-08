@@ -3,9 +3,9 @@ package org.testinfected.petstore.controllers;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
-import org.testinfected.support.Application;
-import org.testinfected.support.Request;
-import org.testinfected.support.Response;
+import org.testinfected.molecule.Application;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
 
 import java.util.List;
 

@@ -9,11 +9,11 @@ import org.junit.runner.RunWith;
 import org.testinfected.petstore.controllers.CreateCartItem;
 import org.testinfected.petstore.order.SalesAssistant;
 import org.testinfected.petstore.product.ItemNumber;
-import test.support.org.testinfected.support.web.MockRequest;
-import test.support.org.testinfected.support.web.MockResponse;
+import test.support.org.testinfected.molecule.web.MockRequest;
+import test.support.org.testinfected.molecule.web.MockResponse;
 
-import static test.support.org.testinfected.support.web.MockRequest.aRequest;
-import static test.support.org.testinfected.support.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class CreateCartItemTest {

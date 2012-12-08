@@ -1,17 +1,17 @@
 package org.testinfected.petstore;
 
 import org.testinfected.petstore.util.MustacheRendering;
-import org.testinfected.support.MiddlewareStack;
-import org.testinfected.support.Server;
-import org.testinfected.support.middlewares.ApacheCommonLogger;
-import org.testinfected.support.middlewares.ConnectionScope;
-import org.testinfected.support.middlewares.Failsafe;
-import org.testinfected.support.middlewares.FailureMonitor;
-import org.testinfected.support.middlewares.FileServer;
-import org.testinfected.support.middlewares.HttpMethodOverride;
-import org.testinfected.support.middlewares.StaticAssets;
-import org.testinfected.support.util.FailureReporter;
-import org.testinfected.support.util.PlainFormatter;
+import org.testinfected.molecule.MiddlewareStack;
+import org.testinfected.molecule.Server;
+import org.testinfected.molecule.middlewares.ApacheCommonLogger;
+import org.testinfected.molecule.middlewares.ConnectionScope;
+import org.testinfected.molecule.middlewares.Failsafe;
+import org.testinfected.molecule.middlewares.FailureMonitor;
+import org.testinfected.molecule.middlewares.FileServer;
+import org.testinfected.molecule.middlewares.HttpMethodOverride;
+import org.testinfected.molecule.middlewares.StaticAssets;
+import org.testinfected.molecule.util.FailureReporter;
+import org.testinfected.molecule.util.PlainFormatter;
 import org.testinfected.time.lib.SystemClock;
 
 import javax.sql.DataSource;

@@ -1,12 +1,12 @@
 package org.testinfected.petstore;
 
 import org.testinfected.petstore.order.Cart;
-import org.testinfected.support.decoration.Layout;
-import org.testinfected.support.Request;
-import org.testinfected.support.Response;
-import org.testinfected.support.middlewares.AbstractMiddleware;
-import org.testinfected.support.middlewares.FilterMap;
-import org.testinfected.support.middlewares.SiteMesh;
+import org.testinfected.molecule.decoration.Layout;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
+import org.testinfected.molecule.middlewares.AbstractMiddleware;
+import org.testinfected.molecule.middlewares.FilterMap;
+import org.testinfected.molecule.middlewares.SiteMesh;
 
 import java.io.IOException;
 import java.io.Writer;
