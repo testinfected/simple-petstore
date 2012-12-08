@@ -36,6 +36,6 @@ public class ServerHeaderTest {
         }});
 
         serverHeader.handle(request, response);
-        response.assertHasHeader("Server", serverName);
+        response.assertHeader("Server", serverName);
     }
 }

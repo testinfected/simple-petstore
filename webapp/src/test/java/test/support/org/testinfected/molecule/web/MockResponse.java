@@ -1,10 +1,13 @@
 package test.support.org.testinfected.molecule.web;
 
+import org.hamcrest.Matcher;
 import org.testinfected.molecule.HttpStatus;
 import org.testinfected.molecule.Response;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -16,9 +19,8 @@ import static org.junit.Assert.assertThat;
 public class MockResponse implements Response {
 
     private final Map<String, String> headers = new HashMap<String, String>();
-    private String contentType;
+    private final ByteArrayOutputStream output = new ByteArrayOutputStream();
     private HttpStatus status;
-    private String location;
 
     public static MockResponse aResponse() {
         return new MockResponse();
@@ -28,11 +30,11 @@ public class MockResponse implements Response {
     }
 
     public void redirectTo(String location) {
-        this.location = location;
+        header("Location", location);
     }
 
     public void assertRedirectedTo(String expectedLocation) {
-        assertThat("redirection", location, equalTo(expectedLocation));
+        assertThat("redirection", header("Location"), equalTo(expectedLocation));
     }
 
     public void header(String name, String value) {
@@ -49,16 +51,20 @@ public class MockResponse implements Response {
     public void removeHeader(String name) {
     }
 
-    public void assertHasHeader(String name, String value) {
-        assertThat("header[" + name + "]" , header(name), equalTo(value));
+    public void assertHeader(String name, String value) {
+        assertHeader(name, equalTo(value));
+    }
+
+    public void assertHeader(String name, Matcher<? super String> valueMatcher) {
+        assertThat("header[" + name + "]" , header(name), valueMatcher);
     }
 
     public void contentType(String contentType) {
-        this.contentType = contentType;
+        header("Content-Type", contentType);
     }
 
     public String contentType() {
-        return contentType;
+        return header("Content-Type");
     }
 
     public int statusCode() {
@@ -78,29 +84,41 @@ public class MockResponse implements Response {
     }
 
     public int contentLength() {
-        return 0;
+        return Integer.parseInt(header("Content-Length"));
     }
 
     public void contentLength(int length) {
+        header("Content-Length", String.valueOf(length));
     }
 
     public Charset charset() {
-        return null;
+        return Charset.defaultCharset();
     }
 
     public OutputStream outputStream() throws IOException {
-        return null;
+        return output;
     }
 
     public OutputStream outputStream(int bufferSize) throws IOException {
-        return null;
+        return output;
     }
 
     public Writer writer() throws IOException {
-        return null;
+        return new OutputStreamWriter(output);
     }
 
     public void body(String body) throws IOException {
+        Writer writer = writer();
+        writer.write(body);
+        writer.flush();
+    }
+
+    public void assertContent(String content) {
+        assertContent(equalTo(content));
+    }
+
+    public void assertContent(Matcher<? super String> contentMatcher) {
+        assertThat("content", new String(output.toByteArray(), charset()), contentMatcher);
     }
 
     public void reset() throws IOException {
