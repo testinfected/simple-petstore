@@ -2,6 +2,7 @@ package org.testinfected.molecule.simple;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.util.lease.LeaseException;
+import org.testinfected.molecule.HttpMethod;
 import org.testinfected.petstore.ExceptionImposter;
 import org.testinfected.molecule.HttpException;
 import org.testinfected.molecule.Session;
@@ -28,8 +29,8 @@ public class SimpleRequest implements org.testinfected.molecule.Request {
         return request.getPath().getPath();
     }
 
-    public String method() {
-        return request.getMethod();
+    public HttpMethod method() {
+        return HttpMethod.valueOf(request.getMethod());
     }
 
     public String parameter(String name) {

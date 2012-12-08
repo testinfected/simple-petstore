@@ -2,6 +2,7 @@ package test.integration.org.testinfected.molecule.middlewares;
 
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -10,15 +11,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.molecule.*;
+import org.testinfected.molecule.Application;
+import org.testinfected.molecule.HttpMethod;
+import org.testinfected.molecule.MiddlewareStack;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
+import org.testinfected.molecule.Server;
 import org.testinfected.molecule.middlewares.HttpMethodOverride;
 import org.testinfected.molecule.simple.SimpleServer;
 import test.support.org.testinfected.molecule.web.HttpRequest;
 
 import java.io.IOException;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.equalToIgnoringCase;
+import static org.testinfected.molecule.HttpMethod.DELETE;
+import static org.testinfected.molecule.HttpMethod.GET;
+import static org.testinfected.molecule.HttpMethod.POST;
 import static test.support.org.testinfected.molecule.web.HttpRequest.aRequest;
 
 // todo Consider rewriting as unit test now that we can mock requests and responses
@@ -48,7 +55,7 @@ public class HttpMethodOverrideTest {
     @Test public void
     doesNotAffectGetMethods() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(runner).handle(with(aRequestWithMethod("GET")), with(any(Response.class)));
+            oneOf(runner).handle(with(aRequestWithMethod(GET)), with(any(Response.class)));
         }});
         request.withParameter("_method", "delete").get("/");
     }
@@ -56,7 +63,7 @@ public class HttpMethodOverrideTest {
     @Test public void
     doesNotAffectPostMethodsWhenOverrideParameterIsNotSet() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(runner).handle(with(aRequestWithMethod("POST")), with(any(Response.class)));
+            oneOf(runner).handle(with(aRequestWithMethod(POST)), with(any(Response.class)));
         }});
         request.post("/item");
     }
@@ -64,28 +71,23 @@ public class HttpMethodOverrideTest {
     @Test public void
     changesPostMethodsAccordingToOverrideParameter() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(runner).handle(with(aRequestWithMethod(equalToIgnoringCase("DELETE"))), with(any(Response.class)));
+            oneOf(runner).handle(with(aRequestWithMethod(DELETE)), with(any(Response.class)));
         }});
 
-        HttpMethodOverride.METHOD_OVERRIDE_PARAMETER = "override";
-        request.withParameter("override", "delete").post("/item");
+        request.withParameter("_method", "delete").post("/item");
     }
 
     @Test public void
     doesNotChangeMethodIfOverriddenMethodIsUnknown() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(runner).handle(with(aRequestWithMethod(equalToIgnoringCase("POST"))), with(any(Response.class)));
+            oneOf(runner).handle(with(aRequestWithMethod(POST)), with(any(Response.class)));
         }});
         request.withParameter("_method", "foo").post("/item");
     }
 
-    private Matcher<Request> aRequestWithMethod(String method) {
-        return aRequestWithMethod(equalTo(method));
-    }
-
-    private Matcher<Request> aRequestWithMethod(Matcher<? super String> methodMatcher) {
-        return new FeatureMatcher<Request, String>(methodMatcher, "a request with method", "method") {
-            protected String featureValueOf(Request request) {
+    private Matcher<Request> aRequestWithMethod(HttpMethod method) {
+        return new FeatureMatcher<Request, HttpMethod>(Matchers.equalTo(method), "a request with method", "method") {
+            protected HttpMethod featureValueOf(Request request) {
                 return request.method();
             }
         };

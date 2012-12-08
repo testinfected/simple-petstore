@@ -4,7 +4,7 @@ public interface Request {
 
     String protocol();
 
-    String method();
+    HttpMethod method();
 
     String uri();
 

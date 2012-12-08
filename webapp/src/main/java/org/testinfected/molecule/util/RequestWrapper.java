@@ -1,5 +1,6 @@
 package org.testinfected.molecule.util;
 
+import org.testinfected.molecule.HttpMethod;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Session;
 
@@ -14,7 +15,7 @@ public class RequestWrapper implements Request {
         return request.protocol();
     }
 
-    public String method() {
+    public HttpMethod method() {
         return request.method();
     }
 

@@ -10,7 +10,7 @@ import java.util.Map;
 public class MockRequest implements Request {
 
     private final Map<String, String> params = new HashMap<String, String>();
-    private String method;
+    private HttpMethod method;
     private String path;
 
     public static MockRequest aRequest() {
@@ -33,15 +33,11 @@ public class MockRequest implements Request {
     }
 
     public MockRequest withMethod(HttpMethod method) {
-        return withMethod(method.name());
-    }
-
-    public MockRequest withMethod(String method) {
         this.method = method;
         return this;
     }
 
-    public String method() {
+    public HttpMethod method() {
         return method;
     }
 
