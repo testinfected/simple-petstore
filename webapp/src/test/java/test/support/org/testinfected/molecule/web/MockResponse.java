@@ -137,4 +137,8 @@ public class MockResponse implements Response {
         status(status);
         return this;
     }
+
+    public String toString() {
+        return output.toString();
+    }
 }

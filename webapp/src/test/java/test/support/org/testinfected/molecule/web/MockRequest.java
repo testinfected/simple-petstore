@@ -10,8 +10,8 @@ import java.util.Map;
 public class MockRequest implements Request {
 
     private final Map<String, String> params = new HashMap<String, String>();
-    private HttpMethod method;
-    private String path;
+    private HttpMethod method = HttpMethod.GET;
+    private String path = "/";
 
     public static MockRequest aRequest() {
         return new MockRequest();
@@ -49,6 +49,11 @@ public class MockRequest implements Request {
         params.put(name, value);
     }
 
+    public MockRequest withParameter(String name, String value) {
+        addParameter(name, value);
+        return this;
+    }
+
     public String parameter(String name) {
         return params.get(name);
     }
@@ -81,5 +86,9 @@ public class MockRequest implements Request {
 
     public Session session() {
         return null;
+    }
+
+    public String toString() {
+        return String.format("%s %s", method(), pathInfo());
     }
 }
