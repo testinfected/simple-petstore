@@ -9,11 +9,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
-import org.testinfected.molecule.util.Matcher;
 import org.testinfected.molecule.Middleware;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.matchers.Matchers;
 import org.testinfected.molecule.middlewares.FilterMap;
+import org.testinfected.molecule.util.Matcher;
 import test.support.org.testinfected.molecule.web.MockRequest;
 import test.support.org.testinfected.molecule.web.MockResponse;
 
@@ -83,7 +83,7 @@ public class FilterMapTest {
     }
 
     @Test public void
-    lastRegisteredOfMatchingFiltersWins() throws Exception {
+    appliesLastRegisteredOfMatchingFilters() throws Exception {
         final Middleware ignored = context.mock(Middleware.class, "ignored");
         filters.map(anyRequest(), ignored);
         final Middleware applies = context.mock(Middleware.class, "applies");

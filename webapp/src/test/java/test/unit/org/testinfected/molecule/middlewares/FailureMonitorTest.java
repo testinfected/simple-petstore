@@ -33,7 +33,7 @@ public class FailureMonitorTest {
     MockResponse response = aResponse();
 
     @Before public void
-    chainMiddlewares() {
+    chainToSuccessor() {
         monitor.connectTo(successor);
     }
 

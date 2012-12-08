@@ -16,16 +16,16 @@ import test.support.org.testinfected.molecule.web.MockResponse;
 public class ServerHeaderTest {
 
     Mockery context = new JUnit4Mockery();
+    Application successor = context.mock(Application.class);
 
     String serverName = "server/version";
-    Application successor = context.mock(Application.class);
     ServerHeader serverHeader = new ServerHeader(serverName);
 
     MockRequest request = MockRequest.aRequest();
     MockResponse response = MockResponse.aResponse();
 
     @Before public void
-    chainMiddlewares() {
+    chainWithSuccessor() {
         serverHeader.connectTo(successor);
     }
 
