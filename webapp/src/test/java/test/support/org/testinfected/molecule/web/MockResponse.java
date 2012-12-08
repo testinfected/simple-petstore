@@ -10,8 +10,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -42,6 +45,7 @@ public class MockResponse implements Response {
     }
 
     public void headerDate(String name, long date) {
+        header(name, formatDate(date));
     }
 
     public String header(String name) {
@@ -140,5 +144,13 @@ public class MockResponse implements Response {
 
     public String toString() {
         return output.toString();
+    }
+
+    private static final String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+
+    private String formatDate(long date) {
+        SimpleDateFormat httpDate = new SimpleDateFormat(RFC_1123_DATE_FORMAT);
+        httpDate.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return httpDate.format(new Date(date));
     }
 }
