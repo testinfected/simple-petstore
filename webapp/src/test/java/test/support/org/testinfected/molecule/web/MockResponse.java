@@ -16,7 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+import static java.lang.String.valueOf;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 
 public class MockResponse implements Response {
@@ -60,7 +63,11 @@ public class MockResponse implements Response {
     }
 
     public void assertHeader(String name, Matcher<? super String> valueMatcher) {
-        assertThat("header[" + name + "]" , header(name), valueMatcher);
+        assertThat("header[" + name + "]", header(name), valueMatcher);
+    }
+
+    public void assertHeader(String name, long date) {
+        assertHeader(name, formatDate(date));
     }
 
     public void contentType(String contentType) {
@@ -69,6 +76,10 @@ public class MockResponse implements Response {
 
     public String contentType() {
         return header("Content-Type");
+    }
+
+    public void assertContentType(String contentType) {
+        assertHeader("Content-Type", equalTo(contentType));
     }
 
     public int statusCode() {
@@ -92,7 +103,7 @@ public class MockResponse implements Response {
     }
 
     public void contentLength(int length) {
-        header("Content-Length", String.valueOf(length));
+        header("Content-Length", valueOf(length));
     }
 
     public Charset charset() {
@@ -117,12 +128,20 @@ public class MockResponse implements Response {
         writer.flush();
     }
 
-    public void assertContent(String content) {
-        assertContent(equalTo(content));
+    public void assertBody(String body) {
+        assertBody(equalTo(body));
     }
 
-    public void assertContent(Matcher<? super String> contentMatcher) {
-        assertThat("content", new String(output.toByteArray(), charset()), contentMatcher);
+    public void assertBody(Matcher<? super String> bodyMatcher) {
+        assertThat("content", new String(content(), charset()), bodyMatcher);
+    }
+
+    public void assertContent(byte[] content) {
+        assertArrayEquals("content", content, content());
+    }
+
+    public void assertContentSize(long size) {
+        assertThat("content size", output.toByteArray().length, is((int) size));
     }
 
     public void reset() throws IOException {
@@ -147,6 +166,10 @@ public class MockResponse implements Response {
     }
 
     private static final String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+
+    private byte[] content() {
+        return output.toByteArray();
+    }
 
     private String formatDate(long date) {
         SimpleDateFormat httpDate = new SimpleDateFormat(RFC_1123_DATE_FORMAT);

@@ -6,7 +6,6 @@ import org.junit.Assert;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -46,7 +45,7 @@ public class HttpResponse {
     }
 
     public void assertHasContent(byte[] content) throws IOException, URISyntaxException {
-        Assert.assertTrue("content mismatch", Arrays.equals(content, content()));
+        Assert.assertArrayEquals("content", content, content());
     }
 
     public void assertHasContent(String content) {

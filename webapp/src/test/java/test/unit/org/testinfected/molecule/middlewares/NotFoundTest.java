@@ -33,7 +33,7 @@ public class NotFoundTest {
 
     @Test public void
     rendersPageNotFound() {
-        response.assertContent(content);
+        response.assertBody(content);
     }
 
     @Test public void

@@ -57,9 +57,9 @@ public class FailsafeTest {
 
     @Test public void
     rendersErrorTemplate() {
-        response.assertContent(containsString(errorMessage));
-        response.assertContent(containsString("stack.trace(line:1)"));
-        response.assertContent(containsString("stack.trace(line:2)"));
+        response.assertBody(containsString(errorMessage));
+        response.assertBody(containsString("stack.trace(line:1)"));
+        response.assertBody(containsString("stack.trace(line:2)"));
     }
 
     @Test public void

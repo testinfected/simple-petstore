@@ -17,11 +17,11 @@ public class MockRequest implements Request {
         return new MockRequest();
     }
 
-    public static Request POST(String path) {
+    public static MockRequest POST(String path) {
         return aRequest().withPath(path).withMethod(HttpMethod.POST);
     }
 
-    public static Request GET(String path) {
+    public static MockRequest GET(String path) {
         return aRequest().withPath(path).withMethod(HttpMethod.GET);
     }
 
