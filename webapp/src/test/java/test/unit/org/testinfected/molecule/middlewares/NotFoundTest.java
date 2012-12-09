@@ -10,13 +10,15 @@ import test.support.org.testinfected.molecule.web.MockResponse;
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 
 public class NotFoundTest {
 
     NotFound notFound = new NotFound();
 
-    MockRequest request = MockRequest.aRequest().withPath("/resource");
-    MockResponse response = MockResponse.aResponse();
+    MockRequest request = aRequest().withPath("/resource");
+    MockResponse response = aResponse();
 
     String content = "Not found: /resource";
     int contentLength = content.getBytes().length;

@@ -19,6 +19,7 @@ import test.support.org.testinfected.molecule.web.MockRequest;
 import test.support.org.testinfected.molecule.web.MockResponse;
 
 import static org.testinfected.molecule.HttpMethod.*;
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
@@ -28,7 +29,7 @@ public class HttpMethodOverrideTest {
 
     HttpMethodOverride methodOverride = new HttpMethodOverride();
 
-    MockRequest request = MockRequest.aRequest();
+    MockRequest request = aRequest();
     MockResponse response = aResponse();
 
     @Before public void

@@ -16,6 +16,7 @@ import test.support.org.testinfected.molecule.web.MockRequest;
 import test.support.org.testinfected.molecule.web.MockResponse;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
@@ -28,7 +29,7 @@ public class FailsafeTest {
     String errorMessage = "An internal error occurred!";
     Exception error = new Exception(errorMessage);
 
-    MockRequest request = MockRequest.aRequest();
+    MockRequest request = aRequest();
     MockResponse response = aResponse();
 
     @Before public void

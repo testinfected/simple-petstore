@@ -28,7 +28,6 @@ public class ConnectionScope extends AbstractMiddleware {
     }
 
     public static class ConnectionReference {
-
         private final Request request;
 
         public ConnectionReference(Request request) {

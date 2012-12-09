@@ -12,6 +12,9 @@ import org.testinfected.molecule.middlewares.ServerHeader;
 import test.support.org.testinfected.molecule.web.MockRequest;
 import test.support.org.testinfected.molecule.web.MockResponse;
 
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
+
 @RunWith(JMock.class)
 public class ServerHeaderTest {
 
@@ -21,8 +24,8 @@ public class ServerHeaderTest {
     String serverName = "server/version";
     ServerHeader serverHeader = new ServerHeader(serverName);
 
-    MockRequest request = MockRequest.aRequest();
-    MockResponse response = MockResponse.aResponse();
+    MockRequest request = aRequest();
+    MockResponse response = aResponse();
 
     @Before public void
     chainWithSuccessor() {

@@ -12,6 +12,9 @@ import org.testinfected.molecule.middlewares.StaticAssets;
 import test.support.org.testinfected.molecule.web.MockRequest;
 import test.support.org.testinfected.molecule.web.MockResponse;
 
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
+
 @RunWith(JMock.class)
 public class StaticAssetsTest {
 
@@ -20,8 +23,8 @@ public class StaticAssetsTest {
     Application fileServer = context.mock(Application.class, "file server");
     StaticAssets assets = new StaticAssets(fileServer, "/favicon.ico");
 
-    MockRequest request = MockRequest.aRequest();
-    MockResponse response = MockResponse.aResponse();
+    MockRequest request = aRequest();
+    MockResponse response = aResponse();
 
     @Before public void
     chainWithSuccessor() {

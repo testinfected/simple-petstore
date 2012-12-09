@@ -16,6 +16,7 @@ import test.support.org.testinfected.molecule.web.MockResponse;
 import java.util.Date;
 
 import static org.testinfected.time.lib.DateBuilder.aDate;
+import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 
 @RunWith(JMock.class)
@@ -26,7 +27,7 @@ public class DateHeaderTest {
     DateHeader dateHeader = new DateHeader(BrokenClock.stoppedAt(now));
     Application successor = context.mock(Application.class);
 
-    MockRequest request = MockRequest.aRequest();
+    MockRequest request = aRequest();
     MockResponse response = aResponse();
 
     @Before public void
