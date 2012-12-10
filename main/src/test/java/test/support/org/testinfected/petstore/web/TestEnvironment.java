@@ -10,7 +10,7 @@ import test.support.org.testinfected.petstore.web.browser.BrowserControl;
 import test.support.org.testinfected.petstore.web.browser.LastingBrowser;
 import test.support.org.testinfected.petstore.web.browser.PassingBrowser;
 import test.support.org.testinfected.petstore.web.browser.RemoteBrowser;
-import test.support.org.testinfected.molecule.web.HttpRequest;
+import test.support.org.testinfected.molecule.integration.HttpRequest;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import static java.lang.Integer.parseInt;
-import static test.support.org.testinfected.molecule.web.HttpRequest.aRequest;
+import static test.support.org.testinfected.molecule.integration.HttpRequest.aRequest;
 
 public class TestEnvironment {
 

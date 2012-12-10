@@ -14,8 +14,8 @@ import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
 import test.support.org.testinfected.petstore.builders.Builder;
-import test.support.org.testinfected.molecule.web.MockRequest;
-import test.support.org.testinfected.molecule.web.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockRequest;
+import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,8 @@ import static org.hamcrest.Matchers.allOf;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
-import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class ListItemsTest {

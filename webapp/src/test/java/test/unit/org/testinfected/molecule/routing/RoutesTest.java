@@ -12,12 +12,12 @@ import org.testinfected.molecule.middlewares.NotFound;
 import org.testinfected.molecule.middlewares.Routes;
 import org.testinfected.molecule.routing.Route;
 import org.testinfected.molecule.util.Matcher;
-import test.support.org.testinfected.molecule.web.MockRequest;
-import test.support.org.testinfected.molecule.web.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockRequest;
+import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import static org.testinfected.molecule.matchers.Matchers.anyRequest;
-import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class RoutesTest {

@@ -15,12 +15,12 @@ import org.testinfected.molecule.HttpMethod;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.molecule.middlewares.HttpMethodOverride;
-import test.support.org.testinfected.molecule.web.MockRequest;
-import test.support.org.testinfected.molecule.web.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockRequest;
+import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import static org.testinfected.molecule.HttpMethod.*;
-import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class HttpMethodOverrideTest {

@@ -15,8 +15,8 @@ import org.testinfected.molecule.routing.Route;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.testinfected.molecule.routing.DynamicRouteDefinition.route;
-import static test.support.org.testinfected.molecule.web.MockRequest.*;
-import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.unit.MockRequest.*;
+import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 public class DynamicRouteTest {
 

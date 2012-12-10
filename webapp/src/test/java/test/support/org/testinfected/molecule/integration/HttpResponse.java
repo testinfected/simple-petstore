@@ -1,8 +1,9 @@
-package test.support.org.testinfected.molecule.web;
+package test.support.org.testinfected.molecule.integration;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
+import test.support.org.testinfected.molecule.unit.CharsetDetector;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

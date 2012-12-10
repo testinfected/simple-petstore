@@ -20,8 +20,8 @@ import org.testinfected.molecule.simple.SimpleServer;
 import org.testinfected.molecule.util.Charsets;
 import org.testinfected.molecule.util.FailureReporter;
 import org.testinfected.time.lib.BrokenClock;
-import test.support.org.testinfected.molecule.web.HttpRequest;
-import test.support.org.testinfected.molecule.web.HttpResponse;
+import test.support.org.testinfected.molecule.integration.HttpRequest;
+import test.support.org.testinfected.molecule.integration.HttpResponse;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -30,7 +30,7 @@ import java.util.Date;
 import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.equalTo;
 import static org.testinfected.time.lib.DateBuilder.aDate;
-import static test.support.org.testinfected.molecule.web.HttpRequest.aRequest;
+import static test.support.org.testinfected.molecule.integration.HttpRequest.aRequest;
 
 @RunWith(JMock.class)
 public class SimpleServerTest {

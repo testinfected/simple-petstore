@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.middlewares.FileServer;
 import org.testinfected.molecule.util.Streams;
-import test.support.org.testinfected.molecule.web.MockRequest;
-import test.support.org.testinfected.molecule.web.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockRequest;
+import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,8 +19,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static org.testinfected.molecule.HttpStatus.OK;
-import static test.support.org.testinfected.molecule.web.MockRequest.GET;
-import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.unit.MockRequest.GET;
+import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class FileServerTest {

@@ -11,14 +11,14 @@ import org.testinfected.petstore.controllers.CreateItem;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateItemException;
 import org.testinfected.molecule.HttpStatus;
-import test.support.org.testinfected.molecule.web.MockRequest;
-import test.support.org.testinfected.molecule.web.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockRequest;
+import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import java.math.BigDecimal;
 
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
-import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class CreateItemTest {

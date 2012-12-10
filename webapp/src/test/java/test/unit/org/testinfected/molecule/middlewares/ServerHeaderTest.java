@@ -9,11 +9,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.middlewares.ServerHeader;
-import test.support.org.testinfected.molecule.web.MockRequest;
-import test.support.org.testinfected.molecule.web.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockRequest;
+import test.support.org.testinfected.molecule.unit.MockResponse;
 
-import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class ServerHeaderTest {

@@ -11,8 +11,8 @@ import org.testinfected.petstore.controllers.ShowOrder;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumber;
-import test.support.org.testinfected.molecule.web.MockRequest;
-import test.support.org.testinfected.molecule.web.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockRequest;
+import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import static org.hamcrest.Matchers.hasEntry;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;

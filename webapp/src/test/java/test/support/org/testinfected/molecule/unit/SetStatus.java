@@ -1,4 +1,4 @@
-package test.support.org.testinfected.molecule.web;
+package test.support.org.testinfected.molecule.unit;
 
 import org.hamcrest.Description;
 import org.jmock.api.Action;

@@ -1,4 +1,4 @@
-package test.support.org.testinfected.molecule.web;
+package test.support.org.testinfected.molecule.unit;
 
 import org.hamcrest.Matcher;
 import org.testinfected.molecule.HttpStatus;

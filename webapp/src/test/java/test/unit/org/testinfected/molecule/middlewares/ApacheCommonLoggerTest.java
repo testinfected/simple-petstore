@@ -2,7 +2,6 @@ package test.unit.org.testinfected.molecule.middlewares;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.Sequence;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
@@ -10,11 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
-import org.testinfected.molecule.HttpMethod;
 import org.testinfected.molecule.middlewares.ApacheCommonLogger;
 import org.testinfected.time.Clock;
-import test.support.org.testinfected.molecule.web.MockRequest;
-import test.support.org.testinfected.molecule.web.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockRequest;
+import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import java.util.Date;
 import java.util.logging.Logger;
@@ -25,11 +23,11 @@ import static org.testinfected.molecule.HttpMethod.GET;
 import static org.testinfected.molecule.HttpStatus.NO_CONTENT;
 import static org.testinfected.molecule.HttpStatus.OK;
 import static org.testinfected.time.lib.DateBuilder.aDate;
-import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
-import static test.support.org.testinfected.molecule.web.SetHeader.setHeader;
-import static test.support.org.testinfected.molecule.web.SetStatus.setStatus;
-import static test.support.org.testinfected.molecule.web.WriteBody.writeBody;
+import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.unit.SetHeader.setHeader;
+import static test.support.org.testinfected.molecule.unit.SetStatus.setStatus;
+import static test.support.org.testinfected.molecule.unit.WriteBody.writeBody;
 
 @RunWith(JMock.class)
 public class ApacheCommonLoggerTest {

@@ -13,17 +13,17 @@ import org.testinfected.molecule.Response;
 import org.testinfected.molecule.decoration.Decorator;
 import org.testinfected.molecule.decoration.Selector;
 import org.testinfected.molecule.middlewares.SiteMesh;
-import test.support.org.testinfected.molecule.web.MockRequest;
-import test.support.org.testinfected.molecule.web.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockRequest;
+import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import java.io.IOException;
 import java.io.Writer;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static test.support.org.testinfected.molecule.web.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
-import static test.support.org.testinfected.molecule.web.WriteBody.writeBody;
+import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
+import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
+import static test.support.org.testinfected.molecule.unit.WriteBody.writeBody;
 
 @RunWith(JMock.class)
 public class SiteMeshTest {

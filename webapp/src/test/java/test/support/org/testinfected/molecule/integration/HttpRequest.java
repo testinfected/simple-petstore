@@ -1,4 +1,4 @@
-package test.support.org.testinfected.molecule.web;
+package test.support.org.testinfected.molecule.integration;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebClient;

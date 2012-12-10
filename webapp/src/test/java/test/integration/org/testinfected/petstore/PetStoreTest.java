@@ -23,8 +23,8 @@ import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import test.support.org.testinfected.petstore.web.LogFile;
 import test.support.org.testinfected.petstore.web.WebRoot;
-import test.support.org.testinfected.molecule.web.HttpRequest;
-import test.support.org.testinfected.molecule.web.HttpResponse;
+import test.support.org.testinfected.molecule.integration.HttpRequest;
+import test.support.org.testinfected.molecule.integration.HttpResponse;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -36,7 +36,7 @@ import java.util.logging.FileHandler;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.isA;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
-import static test.support.org.testinfected.molecule.web.HttpRequest.aRequest;
+import static test.support.org.testinfected.molecule.integration.HttpRequest.aRequest;
 
 @RunWith(JMock.class)
 public class PetStoreTest {

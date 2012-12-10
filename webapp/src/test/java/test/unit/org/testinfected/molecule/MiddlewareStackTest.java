@@ -10,8 +10,8 @@ import org.jmock.internal.StateMachine;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.*;
-import test.support.org.testinfected.molecule.web.MockRequest;
-import test.support.org.testinfected.molecule.web.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockRequest;
+import test.support.org.testinfected.molecule.unit.MockResponse;
 
 @RunWith(JMock.class)
 public class MiddlewareStackTest {

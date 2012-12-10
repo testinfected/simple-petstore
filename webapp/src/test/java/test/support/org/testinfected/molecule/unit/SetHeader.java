@@ -1,9 +1,8 @@
-package test.support.org.testinfected.molecule.web;
+package test.support.org.testinfected.molecule.unit;
 
 import org.hamcrest.Description;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
-import org.testinfected.molecule.HttpStatus;
 import org.testinfected.molecule.Response;
 
 public class SetHeader implements Action {

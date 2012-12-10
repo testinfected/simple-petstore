@@ -1,4 +1,4 @@
-package test.support.org.testinfected.molecule.web;
+package test.support.org.testinfected.molecule.integration;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
 import org.hamcrest.FeatureMatcher;
