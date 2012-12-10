@@ -24,7 +24,7 @@ import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 public class FilterMapTest {
 
     Mockery context = new JUnit4Mockery();
-    Application successor = context.mock(Application.class);
+    Application successor = context.mock(Application.class, "successor");
     Sequence filtering = context.sequence("filtering");
 
     FilterMap filters = new FilterMap();

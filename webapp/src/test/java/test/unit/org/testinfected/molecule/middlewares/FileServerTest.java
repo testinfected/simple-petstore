@@ -17,11 +17,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
-import static java.lang.String.valueOf;
 import static org.testinfected.molecule.HttpStatus.OK;
 import static test.support.org.testinfected.molecule.web.MockRequest.GET;
 import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
@@ -30,7 +26,7 @@ import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 public class FileServerTest {
 
     Mockery context = new JUnit4Mockery();
-    Application notFound = context.mock(Application.class);
+    Application notFound = context.mock(Application.class, "notFound");
 
     File base = locateBase();
     FileServer fileServer = new FileServer(base, notFound);

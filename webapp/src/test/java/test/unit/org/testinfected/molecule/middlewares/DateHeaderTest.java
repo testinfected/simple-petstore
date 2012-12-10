@@ -25,7 +25,7 @@ public class DateHeaderTest {
 
     Date now = aDate().onCalendar(2012, 6, 8).atMidnight().build();
     DateHeader dateHeader = new DateHeader(BrokenClock.stoppedAt(now));
-    Application successor = context.mock(Application.class);
+    Application successor = context.mock(Application.class, "successor");
 
     MockRequest request = aRequest();
     MockResponse response = aResponse();

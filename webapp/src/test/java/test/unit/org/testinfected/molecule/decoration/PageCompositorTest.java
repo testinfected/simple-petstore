@@ -9,9 +9,9 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.molecule.decoration.Layout;
 import org.testinfected.molecule.decoration.ContentProcessor;
 import org.testinfected.molecule.decoration.Decorator;
+import org.testinfected.molecule.decoration.Layout;
 import org.testinfected.molecule.decoration.PageCompositor;
 
 import java.io.IOException;
@@ -74,6 +74,5 @@ public class PageCompositorTest {
         public void describeTo(Description description) {
             description.appendText("writes to output <").appendText(content.toString()).appendText(">");
         }
-
     }
 }

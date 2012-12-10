@@ -31,7 +31,7 @@ public class ConnectionScopeTest {
 
     Mockery context = new JUnit4Mockery();
     DataSource dataSource = context.mock(DataSource.class);
-    Application successor = context.mock(Application.class);
+    Application successor = context.mock(Application.class, "successor");
     ConnectionScope connectionScope = new ConnectionScope(dataSource);
 
     Connection connection = context.mock(Connection.class);

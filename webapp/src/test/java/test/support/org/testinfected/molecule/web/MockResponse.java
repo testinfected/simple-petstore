@@ -3,6 +3,7 @@ package test.support.org.testinfected.molecule.web;
 import org.hamcrest.Matcher;
 import org.testinfected.molecule.HttpStatus;
 import org.testinfected.molecule.Response;
+import org.testinfected.molecule.util.Charsets;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,8 +16,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 import static java.lang.String.valueOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertArrayEquals;
@@ -56,6 +59,7 @@ public class MockResponse implements Response {
     }
 
     public void removeHeader(String name) {
+        headers.remove(name);
     }
 
     public void assertHeader(String name, String value) {
@@ -79,7 +83,11 @@ public class MockResponse implements Response {
     }
 
     public void assertContentType(String contentType) {
-        assertHeader("Content-Type", equalTo(contentType));
+        assertContentType(equalTo(contentType));
+    }
+
+    public void assertContentType(Matcher<? super String> contentTypeMatcher) {
+        assertHeader("Content-Type", contentTypeMatcher);
     }
 
     public int statusCode() {
@@ -107,7 +115,9 @@ public class MockResponse implements Response {
     }
 
     public Charset charset() {
-        return Charset.defaultCharset();
+        if (contentType() == null) return Charsets.ISO_8859_1;
+        Charset charset = parseCharset(contentType());
+        return charset != null ? charset : Charsets.ISO_8859_1;
     }
 
     public OutputStream outputStream() throws IOException {
@@ -119,7 +129,7 @@ public class MockResponse implements Response {
     }
 
     public Writer writer() throws IOException {
-        return new OutputStreamWriter(output);
+        return new OutputStreamWriter(output, charset());
     }
 
     public void body(String body) throws IOException {
@@ -144,11 +154,16 @@ public class MockResponse implements Response {
         assertThat("content size", output.toByteArray().length, is((int) size));
     }
 
+    public void assertContentEncodedAs(String encoding) throws IOException {
+        assertThat("content encoding", CharsetDetector.detectedCharset(content()).toLowerCase(), containsString(encoding.toLowerCase()));
+    }
+
     public void reset() throws IOException {
+        output.reset();
     }
 
     public <T> T unwrap(Class<T> type) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public MockResponse withContentType(String contentType) {
@@ -166,9 +181,20 @@ public class MockResponse implements Response {
     }
 
     private static final String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
+    private static final String TYPE = "[^/]+";
+    private static final String SUBTYPE = "[^;]+";
+    private static final String CHARSET = "charset=([^;]+)";
+    private static final Pattern CONTENT_TYPE_FORMAT = Pattern.compile(String.format("%s/%s(?:;\\s*%s)+", TYPE, SUBTYPE, CHARSET));
+    private static final int ENCODING = 1;
 
     private byte[] content() {
         return output.toByteArray();
+    }
+
+    private static Charset parseCharset(String contentType) {
+        java.util.regex.Matcher matcher = CONTENT_TYPE_FORMAT.matcher(contentType);
+        if (!matcher.matches()) return null;
+        return Charset.forName(matcher.group(ENCODING));
     }
 
     private String formatDate(long date) {

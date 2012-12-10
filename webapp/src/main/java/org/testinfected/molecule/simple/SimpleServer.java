@@ -10,6 +10,7 @@ import org.testinfected.molecule.MiddlewareStack;
 import org.testinfected.molecule.Server;
 import org.testinfected.molecule.middlewares.DateHeader;
 import org.testinfected.molecule.middlewares.ServerHeader;
+import org.testinfected.molecule.util.Charsets;
 import org.testinfected.molecule.util.FailureReporter;
 import org.testinfected.time.Clock;
 import org.testinfected.time.lib.SystemClock;
@@ -27,7 +28,7 @@ public class SimpleServer implements Server {
 
     private String name = NAME;
     private FailureReporter failureReporter = FailureReporter.IGNORE;
-    private Charset defaultCharset = Charset.defaultCharset();
+    private Charset defaultCharset = Charsets.ISO_8859_1;
     private Clock clock = new SystemClock();
 
     private Connection connection;

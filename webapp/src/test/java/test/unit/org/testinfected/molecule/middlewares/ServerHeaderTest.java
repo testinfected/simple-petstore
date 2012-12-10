@@ -19,7 +19,7 @@ import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 public class ServerHeaderTest {
 
     Mockery context = new JUnit4Mockery();
-    Application successor = context.mock(Application.class);
+    Application successor = context.mock(Application.class, "successor");
 
     String serverName = "server/version";
     ServerHeader serverHeader = new ServerHeader(serverName);

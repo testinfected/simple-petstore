@@ -23,7 +23,7 @@ import static test.support.org.testinfected.molecule.web.MockResponse.aResponse;
 public class FailsafeTest {
     Mockery context = new JUnit4Mockery();
 
-    Application successor = context.mock(Application.class);
+    Application successor = context.mock(Application.class, "successor");
     Failsafe failsafe = new Failsafe();
 
     String errorMessage = "An internal error occurred!";
