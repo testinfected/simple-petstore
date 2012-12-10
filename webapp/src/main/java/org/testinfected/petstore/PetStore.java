@@ -1,6 +1,5 @@
 package org.testinfected.petstore;
 
-import org.testinfected.petstore.util.MustacheRendering;
 import org.testinfected.molecule.MiddlewareStack;
 import org.testinfected.molecule.Server;
 import org.testinfected.molecule.middlewares.ApacheCommonLogger;
@@ -12,7 +11,8 @@ import org.testinfected.molecule.middlewares.HttpMethodOverride;
 import org.testinfected.molecule.middlewares.StaticAssets;
 import org.testinfected.molecule.util.FailureReporter;
 import org.testinfected.molecule.util.PlainFormatter;
-import org.testinfected.time.lib.SystemClock;
+import org.testinfected.molecule.util.SystemClock;
+import org.testinfected.petstore.util.MustacheRendering;
 
 import javax.sql.DataSource;
 import java.io.File;

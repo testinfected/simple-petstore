@@ -26,11 +26,11 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
 
   define 'webapp' do
-    compile.with :simpleframework, MUSTACHE, :time
+    compile.with :simpleframework, MUSTACHE
     compile.with project(:domain), project(:persistence)
 
     test.with project(:domain).test.compile.target, project(:persistence).test.compile.target, project(:persistence).test.resources.target
-    test.with HAMCREST, :antlr_runtime, :cssselectors, :hamcrest_dom, :flyway, NO_LOG, :mysql, :juniversalchardet
+    test.with HAMCREST, :time, :antlr_runtime, :cssselectors, :hamcrest_dom, :flyway, NO_LOG, :mysql, :juniversalchardet
     test.with transitive(artifacts(:nekohtml, :htmlunit, :jmock_legacy))
     test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
 

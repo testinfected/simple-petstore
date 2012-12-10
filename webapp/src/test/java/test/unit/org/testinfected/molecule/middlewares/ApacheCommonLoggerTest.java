@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.middlewares.ApacheCommonLogger;
-import org.testinfected.time.Clock;
+import org.testinfected.molecule.util.Clock;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 
@@ -48,8 +48,7 @@ public class ApacheCommonLoggerTest {
     @Before public void
     stopClock() {
         context.checking(new Expectations() {{
-            allowing(clock).now();
-            will(returnValue(currentTime));
+            allowing(clock).now(); will(returnValue(currentTime));
         }});
     }
 

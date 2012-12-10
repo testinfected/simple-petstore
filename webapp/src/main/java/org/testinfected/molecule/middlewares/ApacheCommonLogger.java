@@ -2,7 +2,7 @@ package org.testinfected.molecule.middlewares;
 
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
-import org.testinfected.time.Clock;
+import org.testinfected.molecule.util.Clock;
 
 import java.io.Serializable;
 import java.text.DateFormat;

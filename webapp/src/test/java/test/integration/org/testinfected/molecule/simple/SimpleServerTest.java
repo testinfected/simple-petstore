@@ -19,9 +19,9 @@ import org.testinfected.molecule.Response;
 import org.testinfected.molecule.simple.SimpleServer;
 import org.testinfected.molecule.util.Charsets;
 import org.testinfected.molecule.util.FailureReporter;
-import org.testinfected.time.lib.BrokenClock;
 import test.support.org.testinfected.molecule.integration.HttpRequest;
 import test.support.org.testinfected.molecule.integration.HttpResponse;
+import test.support.org.testinfected.molecule.unit.BrokenClock;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

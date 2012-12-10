@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.middlewares.DateHeader;
-import org.testinfected.time.lib.BrokenClock;
+import test.support.org.testinfected.molecule.unit.BrokenClock;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 

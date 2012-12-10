@@ -11,9 +11,9 @@ import org.testinfected.molecule.Server;
 import org.testinfected.molecule.middlewares.DateHeader;
 import org.testinfected.molecule.middlewares.ServerHeader;
 import org.testinfected.molecule.util.Charsets;
+import org.testinfected.molecule.util.Clock;
 import org.testinfected.molecule.util.FailureReporter;
-import org.testinfected.time.Clock;
-import org.testinfected.time.lib.SystemClock;
+import org.testinfected.molecule.util.SystemClock;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
