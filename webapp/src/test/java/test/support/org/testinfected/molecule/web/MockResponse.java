@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.String.valueOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -107,7 +108,7 @@ public class MockResponse implements Response {
     }
 
     public int contentLength() {
-        return Integer.parseInt(header("Content-Length"));
+        return header("Content-Length") != null ? parseInt(header("Content-Length")) : 0;
     }
 
     public void contentLength(int length) {

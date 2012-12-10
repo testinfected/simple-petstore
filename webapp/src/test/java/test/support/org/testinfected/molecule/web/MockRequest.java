@@ -16,6 +16,8 @@ public class MockRequest implements Request {
     private final Map<Object, Object> attributes = new HashMap<Object, Object>();
     private HttpMethod method = HttpMethod.GET;
     private String path = "/";
+    private String ip = "127.0.0.1";
+    private String protocol = "HTTP/1.1";
 
     public static MockRequest aRequest() {
         return new MockRequest();
@@ -41,6 +43,16 @@ public class MockRequest implements Request {
         return this;
     }
 
+    public MockRequest withIp(String address) {
+        this.ip = address;
+        return this;
+    }
+
+    public MockRequest withProtocol(String protocol) {
+        this.protocol = protocol;
+        return this;
+    }
+
     public HttpMethod method() {
         return method;
     }
@@ -63,19 +75,19 @@ public class MockRequest implements Request {
     }
 
     public String protocol() {
-        return null;
+        return protocol;
     }
 
     public String uri() {
-        return null;
+        return pathInfo();
     }
 
     public <T> T unwrap(Class<T> type) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public String ip() {
-        return null;
+        return ip;
     }
 
     public Object attribute(Object key) {
