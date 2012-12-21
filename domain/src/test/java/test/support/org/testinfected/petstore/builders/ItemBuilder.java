@@ -10,10 +10,10 @@ import static test.support.org.testinfected.petstore.builders.ProductBuilder.aPr
 
 public class ItemBuilder implements Builder<Item> {
 
-    private ItemNumber number = ItemNumberFaker.aNumber();
+    private ItemNumber number = FakeItemNumber.anItemNumber();
     private Product product = aProduct().build();
     private String description;
-    private BigDecimal price = PriceFaker.aPrice();
+    private BigDecimal price = FakePrice.aPrice();
 
     public static ItemBuilder anItem() {
 		return new ItemBuilder();

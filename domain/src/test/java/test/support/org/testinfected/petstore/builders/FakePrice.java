@@ -2,20 +2,16 @@ package test.support.org.testinfected.petstore.builders;
 
 import java.math.BigDecimal;
 
-public class PriceFaker {
+public class FakePrice {
 
     private static final BigDecimal DOLLAR_IN_CENTS = new BigDecimal(100);
-    private final RandomNumberGenerator generator;
+    private final RandomNumber generator = new RandomNumber(100000);
 
     public static BigDecimal aPrice() {
-        return new PriceFaker().fakePrice();
+        return new FakePrice().generate();
     }
 
-    public PriceFaker() {
-        generator = new RandomNumberGenerator(100000);
-    }
-
-    public BigDecimal fakePrice() {
+    public BigDecimal generate() {
         BigDecimal cents = new BigDecimal(random());
         return dollars(cents);
     }
@@ -25,6 +21,6 @@ public class PriceFaker {
     }
 
     private String random() {
-        return generator.generateNumber();
+        return generator.generate();
     }
 }

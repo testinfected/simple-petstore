@@ -3,7 +3,7 @@ package test.support.org.testinfected.petstore.jdbc;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.testinfected.petstore.ExceptionImposter;
+import org.testinfected.petstore.jdbc.FieldAccessor;
 
 import java.lang.reflect.Field;
 
@@ -19,34 +19,19 @@ public class HasFieldWithValue<T, U> extends TypeSafeDiagnosingMatcher<T> {
 
     @Override
     protected boolean matchesSafely(T argument, Description mismatchDescription) {
-        Field field = getField(argument, mismatchDescription);
-        if (field == null) return false;
+        Field field = FieldAccessor.lookupField(argument, fieldName);
+        if (field == null) {
+            mismatchDescription.appendText("no field \"" + fieldName + "\"");
+            return false;
+        }
 
-        Object fieldValue = readField(argument, field);
+        Object fieldValue = new FieldAccessor<Object>(argument, field).get();
         boolean valueMatches = valueMatcher.matches(fieldValue);
         if (!valueMatches) {
             mismatchDescription.appendText("\"" + fieldName + "\" ");
             valueMatcher.describeMismatch(fieldValue, mismatchDescription);
         }
         return valueMatches;
-    }
-
-    private Object readField(T instance, Field field) {
-        field.setAccessible(true);
-        try {
-            return field.get(instance);
-        } catch (IllegalAccessException e) {
-            throw ExceptionImposter.imposterize(e);
-        }
-    }
-
-    private Field getField(T argument, Description mismatchDescription) {
-        try {
-            return argument.getClass().getDeclaredField(fieldName);
-        } catch (NoSuchFieldException e) {
-            mismatchDescription.appendText("no field \"" + fieldName + "\"");
-            return null;
-        }
     }
 
     public void describeTo(Description description) {

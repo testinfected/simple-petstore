@@ -4,9 +4,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Iterator;
 
-public final class Sql {
-
-    private Sql() {}
+public final class JDBC {
 
     public static void close(Statement statement) {
         if (statement == null) return;
@@ -24,4 +22,6 @@ public final class Sql {
         }
         return builder.toString();
     }
+
+    private JDBC() {}
 }

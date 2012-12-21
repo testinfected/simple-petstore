@@ -3,7 +3,7 @@ package test.support.org.testinfected.petstore.builders;
 import org.testinfected.petstore.product.Attachment;
 import org.testinfected.petstore.product.Product;
 
-import static test.support.org.testinfected.petstore.builders.ProductNumberFaker.aProductNumber;
+import static test.support.org.testinfected.petstore.builders.FakeProductNumber.aProductNumber;
 
 public class ProductBuilder implements Builder<Product> {
 

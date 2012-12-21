@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import static org.testinfected.petstore.jdbc.Properties.idOf;
+import static org.testinfected.petstore.jdbc.Access.idOf;
 
 public class OrderRecord extends AbstractRecord<Order> {
 

@@ -6,11 +6,11 @@ import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderNumber;
 
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
-import static test.support.org.testinfected.petstore.builders.OrderNumberFaker.aNumber;
+import static test.support.org.testinfected.petstore.builders.FakeOrderNumber.anOrderNumber;
 
 public class OrderBuilder implements Builder<Order> {
 
-    private OrderNumber orderNumber = aNumber();
+    private OrderNumber orderNumber = anOrderNumber();
     private Cart cart = aCart().build();
     private PaymentMethod paymentMethod;
 

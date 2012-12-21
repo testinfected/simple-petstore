@@ -11,8 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static org.testinfected.petstore.jdbc.Properties.idOf;
-import static org.testinfected.petstore.jdbc.Properties.productOf;
+import static org.testinfected.petstore.jdbc.Access.idOf;
+import static org.testinfected.petstore.jdbc.Access.productOf;
 
 public class ItemRecord extends AbstractRecord<Item> {
 

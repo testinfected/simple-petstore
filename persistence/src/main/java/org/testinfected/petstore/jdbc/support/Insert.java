@@ -31,15 +31,15 @@ public class Insert<T> {
         } catch (SQLException e) {
             throw new JDBCException("Could not insert entity " + entity, e);
         } finally {
-            Sql.close(insert);
+            JDBC.close(insert);
         }
     }
 
     private String buildInsertStatement() {
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ").append(into.name());
-        sql.append("(").append(Sql.asString(into.columnNames())).append(")");
-        sql.append(" values(").append(Sql.asString(parametersFor(into.columnNames()))).append(")");
+        sql.append("(").append(JDBC.asString(into.columnNames())).append(")");
+        sql.append(" values(").append(JDBC.asString(parametersFor(into.columnNames()))).append(")");
         return sql.toString();
     }
 

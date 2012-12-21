@@ -15,8 +15,8 @@ import org.testinfected.petstore.order.OrderNumber;
 import java.sql.Connection;
 import java.util.List;
 
-import static org.testinfected.petstore.jdbc.Properties.idOf;
-import static org.testinfected.petstore.jdbc.Properties.orderOf;
+import static org.testinfected.petstore.jdbc.Access.idOf;
+import static org.testinfected.petstore.jdbc.Access.orderOf;
 
 public class OrdersDatabase implements OrderBook {
 

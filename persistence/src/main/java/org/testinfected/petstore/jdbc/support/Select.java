@@ -81,7 +81,7 @@ public class Select<T> {
         } catch (SQLException e) {
             throw new JDBCException("Could not execute query", e);
         } finally {
-            Sql.close(query);
+            JDBC.close(query);
         }
         return entities;
     }
@@ -101,7 +101,7 @@ public class Select<T> {
     }
 
     private String selectClause() {
-        return "select " + Sql.asString(listColumns());
+        return "select " + JDBC.asString(listColumns());
     }
 
     private Collection<String> listColumns() {
