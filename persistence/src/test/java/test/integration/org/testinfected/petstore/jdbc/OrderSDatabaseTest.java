@@ -1,9 +1,5 @@
 package test.integration.org.testinfected.petstore.jdbc;
 
-import org.testinfected.petstore.billing.PaymentMethod;
-import org.testinfected.petstore.order.LineItem;
-import org.testinfected.petstore.order.Order;
-import org.testinfected.petstore.order.OrderNumber;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.junit.After;
@@ -11,8 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
+import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.OrdersDatabase;
+import org.testinfected.petstore.order.LineItem;
+import org.testinfected.petstore.order.Order;
+import org.testinfected.petstore.order.OrderNumber;
 import test.support.org.testinfected.petstore.builders.OrderBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
@@ -39,7 +39,7 @@ import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
 
-public class OrderDatabaseTest {
+public class OrdersDatabaseTest {
 
     Database database = Database.in(TestDatabaseEnvironment.load());
     Connection connection = database.connect();
