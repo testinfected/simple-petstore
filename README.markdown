@@ -1,6 +1,6 @@
 # About
 
-A fork of my [petstore](https://github.com/testinfected/petstore) repository, but built with simple tools and no IoC container.
+A fork of my [petstore](https://github.com/testinfected/petstore) repository, but re-built with simple tools and no IoC container.
 
 It uses the following tools:
 
@@ -8,20 +8,20 @@ It uses the following tools:
 - [mustache](http://mustache.github.com) for logic-less templating
 - Plain JDBC to replace Hibernate
 - No IoC container instead of Spring
-- [Buildr](http://buildr.apache.org) for replacing Maven
-
-This is a work in progress.
+- [Buildr](http://buildr.apache.org) to replace Maven
 
 ## Preparing
 
 To prepare the development and test databases in MySQL:
 
-`create database petstore_dev;`
-`create user 'petstore'@'localhost' identified by 'petstore';`
-`grant all on petstore_dev.* to 'petstore'@'localhost';`
-`create database petstore_test;`
-`create user 'testbot'@'localhost' identified by 'petstore';`
-`grant all on petstore_test.* to 'testbot'@'localhost';`
+```sql
+create database petstore_dev;
+create user 'petstore'@'localhost' identified by 'petstore';
+grant all on petstore_dev.* to 'petstore'@'localhost';
+create database petstore_test;
+create user 'testbot'@'localhost' identified by 'petstore';
+grant all on petstore_test.* to 'testbot'@'localhost';
+```
 
 ## Building
 
@@ -31,9 +31,13 @@ Buildr 1.4.8 supports Java 7.
 
 To install Buildr, follow Buildr installation [instructions](http://buildr.apache.org/installing.html).
 
-To build and run all tests, ue:
+To build and run all tests, use:
 
-`buildr package`
+`buildr install`
+
+You need to have either PhantomJS or Firefox installed to run the end-to-end tests.
+
+Modify the [test configuration file](https://github.com/testinfected/simple-petstore/blob/master/main/src/test/resources/test.properties) according to your settings.
 
 ## Running
 
