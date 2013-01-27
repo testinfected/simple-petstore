@@ -7,7 +7,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
 
-public class RemoteBrowser implements BrowserControl {
+public class RemoteBrowser implements Browser {
 
     private final URL url;
     private final DesiredCapabilities capabilities = new DesiredCapabilities();

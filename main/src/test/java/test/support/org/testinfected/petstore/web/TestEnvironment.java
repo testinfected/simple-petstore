@@ -6,11 +6,11 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testinfected.petstore.Migrations;
 import org.testinfected.petstore.util.PropertyFile;
-import test.support.org.testinfected.petstore.web.browser.BrowserControl;
-import test.support.org.testinfected.petstore.web.browser.LastingBrowser;
-import test.support.org.testinfected.petstore.web.browser.PassingBrowser;
-import test.support.org.testinfected.petstore.web.browser.RemoteBrowser;
 import test.support.org.testinfected.molecule.integration.HttpRequest;
+import test.support.org.testinfected.petstore.web.browser.Browser;
+import test.support.org.testinfected.petstore.web.browser.Firefox;
+import test.support.org.testinfected.petstore.web.browser.PhantomJS;
+import test.support.org.testinfected.petstore.web.browser.RemoteBrowser;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -26,9 +26,9 @@ public class TestEnvironment {
 
     public static final String SERVER_PORT = "server.port";
 
-    public static final String BROWSER_LIFECYCLE = "browser.lifecycle";
+    public static final String BROWSER_DRIVER = "browser.driver";
     public static final String BROWSER_REMOTE_URL = "browser.remote.url";
-    public static final String BROWSER_REMOTE_CAPABILITY = "browser.remote.capability.";
+    public static final String BROWSER_REMOTE_CAPABILITY = "browser.capability.";
 
     private static final String TEST_PROPERTIES = "test.properties";
     private static final int HTTP_TIMEOUT_IN_MILLIS = 5000;
@@ -47,11 +47,11 @@ public class TestEnvironment {
     }
 
     private final Properties properties;
-    private final BrowserControl browserControl;
+    private final Browser browser;
 
     public TestEnvironment(Properties properties) {
         this.properties = configure(properties);
-        this.browserControl = selectBrowser();
+        this.browser = selectBrowser();
     }
 
     private Properties configure(Properties defaults) {
@@ -61,12 +61,12 @@ public class TestEnvironment {
         return props;
     }
 
-    private BrowserControl selectBrowser() {
-        String lifeCycle = asString(BROWSER_LIFECYCLE);
-        if (lifeCycle.equals("lasting")) return new LastingBrowser();
-        if (lifeCycle.equals("passing")) return new PassingBrowser();
-        if (lifeCycle.equals("remote")) return new RemoteBrowser(asUrl(BROWSER_REMOTE_URL), browserCapabilities());
-        throw new IllegalArgumentException(BROWSER_LIFECYCLE + " should be one of lasting, passing, remote: " + lifeCycle);
+    private Browser selectBrowser() {
+        String driver = asString(BROWSER_DRIVER);
+        if (driver.equals("firefox")) return new Firefox(browserCapabilities());
+        if (driver.equals("phantomjs")) return new PhantomJS(browserCapabilities());
+        if (driver.equals("remote")) return new RemoteBrowser(asUrl(BROWSER_REMOTE_URL), browserCapabilities());
+        throw new IllegalArgumentException(BROWSER_DRIVER + " should be one of firefox, phantomjs or remote, not: " + driver);
     }
 
     private Capabilities browserCapabilities() {
@@ -88,7 +88,7 @@ public class TestEnvironment {
     }
 
     public AsyncWebDriver openBrowser() {
-        AsyncWebDriver browser = new AsyncWebDriver(new UnsynchronizedProber(), browserControl.launch());
+        AsyncWebDriver browser = new AsyncWebDriver(new UnsynchronizedProber(), this.browser.launch());
         browser.navigate().to("http://localhost:" + serverPort());
         return browser;
     }
@@ -109,17 +109,14 @@ public class TestEnvironment {
         return WebRoot.locate();
     }
 
-    // todo move to PropertyFile
     private String asString(final String key) {
         return properties.getProperty(key);
     }
 
-    // todo move to PropertyFile
     private int asInt(final String key) {
         return parseInt(asString(key));
     }
 
-    // todo move to PropertyFile
     private URL asUrl(String key) {
         String url = asString(key);
         try {

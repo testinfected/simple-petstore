@@ -22,7 +22,8 @@ artifacts:
   antlr_runtime: org.antlr:antlr-runtime:jar:3.0.1
   cssselectors: com.3levers.cssselectors:cssselectors:jar:1.0
   hamcrest_dom: org.testinfected.hamcrest-matchers:dom-matchers:jar:1.5
-  selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.26.0
+  selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.28.0
+  selenium_ghost_driver: com.github.detro.ghostdriver:phantomjsdriver:jar:1.0.1
   windowlicker_web: com.googlecode.windowlicker:windowlicker-web:jar:r268
   juniversalchardet: com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3
   nekohtml: net.sourceforge.nekohtml:nekohtml:jar:1.9.15
@@ -36,7 +37,7 @@ junit: 4.11
 jmock: 2.5.1
 
 selenium:
-  version: 2.26.0
+  version: 2.28.0
   silent: true
   server:
     url: http://localhost:4444/wd/hub

@@ -1,13 +1,17 @@
 package test.support.org.testinfected.petstore.web.browser;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class LastingBrowser implements BrowserControl {
+public class Firefox implements Browser {
 
+    private final Capabilities capabilities;
     private WebDriver browser;
 
-    public LastingBrowser() {}
+    public Firefox(Capabilities capabilities) {
+        this.capabilities = capabilities;
+    }
 
     public WebDriver launch() {
         if (!launched()) {
@@ -17,7 +21,7 @@ public class LastingBrowser implements BrowserControl {
     }
 
     private WebDriver launchBrowser() {
-        LastingFirefox browser = new LastingFirefox();
+        LastingFirefox browser = new LastingFirefox(capabilities);
         Runtime.getRuntime().addShutdownHook(new ShutdownHook(browser));
         return browser;
     }
@@ -27,11 +31,10 @@ public class LastingBrowser implements BrowserControl {
     }
 
     private static class LastingFirefox extends FirefoxDriver {
-        public void shutdown() { super.quit(); }
-
+        private LastingFirefox(Capabilities desiredCapabilities) { super(desiredCapabilities); }
         public void close() {}
-
         public void quit() {}
+        public void shutdown() { super.quit(); }
     }
 
     private class ShutdownHook extends Thread {

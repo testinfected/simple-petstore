@@ -41,14 +41,14 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     compile.with project(:domain), project(:persistence), project(:webapp), :cli, :flyway
     test.with project(:webapp).test.compile.target
     test.with :simpleframework, MUSTACHE, :time, HAMCREST, :flyway, :mysql, NO_LOG
-    test.with transitive(artifacts(:selenium_firefox_driver, :windowlicker_web, :htmlunit))
+    test.with transitive(artifacts(:selenium_firefox_driver, :selenium_ghost_driver, :windowlicker_web, :htmlunit))
 
     test.using :integration, :properties => { 
       'web.root' => project(:webapp).path_to(:src, :main, :webapp),
-      'browser.lifecycle' => 'remote',
+      'browser.driver' => 'remote',
       'browser.remote.url' => Buildr.settings.build['selenium']['server']['url'],
-      'browser.remote.capability.browserName' => Buildr.settings.build['selenium']['server']['browser']['name'],
-      'browser.remote.capability.name' => 'PetStore System Tests'
+      'browser.capability.browserName' => Buildr.settings.build['selenium']['server']['browser']['name'],
+      'browser.capability.name' => 'PetStore System Tests'
     }
 
     integration.setup do
