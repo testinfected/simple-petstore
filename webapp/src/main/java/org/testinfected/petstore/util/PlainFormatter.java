@@ -1,4 +1,4 @@
-package org.testinfected.molecule.util;
+package org.testinfected.petstore.util;
 
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;

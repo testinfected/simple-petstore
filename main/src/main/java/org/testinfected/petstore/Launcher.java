@@ -1,10 +1,10 @@
 package org.testinfected.petstore;
 
 import org.testinfected.cli.CLI;
-import org.testinfected.petstore.jdbc.support.DriverManagerDataSource;
 import org.testinfected.molecule.simple.SimpleServer;
 import org.testinfected.molecule.util.ConsoleErrorReporter;
-import org.testinfected.molecule.util.ConsoleHandler;
+import org.testinfected.petstore.jdbc.support.DriverManagerDataSource;
+import org.testinfected.petstore.util.ConsoleHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,6 +77,7 @@ public class Launcher {
         PetStore petStore = new PetStore(new File(webRoot), new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
 
         if (!quiet(cli)) {
+            server.reportErrorsTo(ConsoleErrorReporter.toStandardError());
             petStore.reportErrorsTo(ConsoleErrorReporter.toStandardError());
             petStore.logTo(ConsoleHandler.toStandardOutput());
         }
