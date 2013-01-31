@@ -10,6 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.testinfected.molecule.simple.SimpleServer;
+import org.testinfected.molecule.util.FailureReporter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
@@ -17,26 +19,27 @@ import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
-import org.testinfected.molecule.simple.SimpleServer;
-import org.testinfected.molecule.util.FailureReporter;
+import test.support.org.testinfected.molecule.integration.HttpRequest;
+import test.support.org.testinfected.molecule.integration.HttpResponse;
+import test.support.org.testinfected.molecule.unit.BrokenClock;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import test.support.org.testinfected.petstore.web.LogFile;
 import test.support.org.testinfected.petstore.web.WebRoot;
-import test.support.org.testinfected.molecule.integration.HttpRequest;
-import test.support.org.testinfected.molecule.integration.HttpResponse;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.logging.FileHandler;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.isA;
-import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
+import static org.testinfected.time.lib.DateBuilder.aDate;
 import static test.support.org.testinfected.molecule.integration.HttpRequest.aRequest;
+import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
 @RunWith(JMock.class)
 public class PetStoreTest {
@@ -56,8 +59,10 @@ public class PetStoreTest {
     int serverPort = 9999;
     SimpleServer server = new SimpleServer(serverPort);
     HttpRequest request = aRequest().onPort(serverPort);
+    HttpResponse response;
 
     String encoding = "utf-16";
+    Date now = aDate().onCalendar(2012, 6, 8).atMidnight().build();
 
     @Before public void
     startServer() throws Exception {
@@ -68,6 +73,7 @@ public class PetStoreTest {
         database.clean();
 
         server.defaultCharset(Charset.forName(encoding));
+        petstore.setClock(BrokenClock.stoppedAt(now));
         logFile = LogFile.create();
         petstore.logTo(new FileHandler(logFile.path()));
         petstore.reportErrorsTo(failureReporter);
@@ -78,6 +84,18 @@ public class PetStoreTest {
     stopServer() throws Exception {
         server.shutdown();
         logFile.clear();
+    }
+
+    @Test public void
+    setsServerHeader() throws Exception {
+        response = request.get("/");
+        response.assertHasHeader("Server", PetStore.NAME);
+    }
+
+    @Test public void
+    setsDateHeader() throws Exception {
+        response = request.get("/");
+        response.assertHasHeader("Date", "Fri, 08 Jun 2012 04:00:00 GMT");
     }
 
     @Test public void
@@ -94,7 +112,7 @@ public class PetStoreTest {
     @Test public void
     rendersDynamicContentAsHtmlProperlyEncoded() throws Exception {
         addProducts(aProduct().named("French Bouledogue (Bouledogue français)").build());
-        HttpResponse response = request.get("/products?keyword=bouledogue");
+        response = request.get("/products?keyword=bouledogue");
 
         response.assertOK();
         response.assertHasContent(productsList());
@@ -105,7 +123,7 @@ public class PetStoreTest {
 
     @Test public void
     appliesLayoutToHtmlPages() throws IOException {
-        HttpResponse response = request.get("/");
+        response = request.get("/");
 
         response.assertOK();
         response.assertHasContent(layoutHeader());
@@ -114,7 +132,7 @@ public class PetStoreTest {
 
     @Test public void
     rendersStaticAssetsAsFiles() throws IOException {
-        HttpResponse response = request.get("/images/logo.png");
+        response = request.get("/images/logo.png");
 
         response.assertOK();
         response.assertHasContentType("image/png");
@@ -123,14 +141,14 @@ public class PetStoreTest {
 
     @Test public void
     renders404WhenAssetIsNotFound() throws IOException {
-        HttpResponse response = request.get("/images/missing.png");
+        response = request.get("/images/missing.png");
 
         response.assertHasStatusCode(404);
     }
 
     @Test public void
     renders404WhenNoRouteDefined() throws IOException {
-        HttpResponse response = request.get("/unrecognized/route");
+        response = request.get("/unrecognized/route");
 
         response.assertHasStatusCode(404);
     }
@@ -142,7 +160,7 @@ public class PetStoreTest {
             oneOf(failureReporter).errorOccurred(with(isA(SQLException.class)));
         }});
 
-        HttpResponse response = request.get("/products");
+        response = request.get("/products");
         response.assertHasStatusCode(500);
         response.assertHasContent(containsString("Database is down"));
     }

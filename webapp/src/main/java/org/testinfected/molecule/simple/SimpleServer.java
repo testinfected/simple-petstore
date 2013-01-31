@@ -6,14 +6,9 @@ import org.simpleframework.http.core.Container;
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
 import org.testinfected.molecule.Application;
-import org.testinfected.molecule.MiddlewareStack;
 import org.testinfected.molecule.Server;
-import org.testinfected.molecule.middlewares.DateHeader;
-import org.testinfected.molecule.middlewares.ServerHeader;
 import org.testinfected.molecule.util.Charsets;
-import org.testinfected.molecule.util.Clock;
 import org.testinfected.molecule.util.FailureReporter;
-import org.testinfected.molecule.util.SystemClock;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -22,14 +17,10 @@ import java.nio.charset.Charset;
 
 public class SimpleServer implements Server {
 
-    private static final String NAME = "Simple/4.1.21";
-
     private final int port;
 
-    private String name = NAME;
     private FailureReporter failureReporter = FailureReporter.IGNORE;
     private Charset defaultCharset = Charsets.ISO_8859_1;
-    private Clock clock = new SystemClock();
 
     private Connection connection;
 
@@ -37,20 +28,12 @@ public class SimpleServer implements Server {
         this.port = port;
     }
 
-    public void name(String name) {
-        this.name = name;
-    }
-
     public void reportErrorsTo(FailureReporter reporter) {
         this.failureReporter = reporter;
     }
 
-    public void timeSource(Clock clock) {
-        this.clock = clock;
-    }
-
     public void defaultCharset(Charset charset) {
-       defaultCharset = charset;
+        defaultCharset = charset;
     }
 
     public int port() {
@@ -58,11 +41,7 @@ public class SimpleServer implements Server {
     }
 
     public void run(final Application app) throws IOException {
-        connection = new SocketConnection(new ApplicationContainer(new MiddlewareStack() {{
-            use(new ServerHeader(name));
-            use(new DateHeader(clock));
-            run(app);
-        }}));
+        connection = new SocketConnection(new ApplicationContainer(app));
         SocketAddress address = new InetSocketAddress(port);
         connection.connect(address);
     }
@@ -72,7 +51,6 @@ public class SimpleServer implements Server {
     }
 
     public class ApplicationContainer implements Container {
-
         private final Application app;
 
         public ApplicationContainer(Application app) {
