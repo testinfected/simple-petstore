@@ -32,16 +32,16 @@ public class FileServerTest {
     FileServer fileServer = new FileServer(base, notFound);
     File file = new File(base, "assets/image.png");
 
-    MockRequest request = GET("/assets/image.png");
+    MockRequest request = GET("assets/image.png");
     MockResponse response = aResponse();
 
     private static File locateBase() {
-        URL fileLocation = FileServerTest.class.getClassLoader().getResource("assets/image.png");
+        URL fileLocation = FileServerTest.class.getClassLoader().getResource("test/assets/image.png");
         File asset;
         try {
             asset = new File(fileLocation.toURI());
         } catch (Exception e) {
-            throw new AssertionError("Unable to locate assets/image.png");
+            throw new AssertionError("Unable to locate test/assets/image.png");
         }
         return asset.getParentFile().getParentFile();
     }
