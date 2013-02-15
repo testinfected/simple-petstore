@@ -1,7 +1,7 @@
 package org.testinfected.molecule.matchers;
 
-import org.testinfected.molecule.util.Matcher;
 import org.testinfected.molecule.Request;
+import org.testinfected.molecule.util.Matcher;
 
 public final class Matchers {
 
@@ -42,7 +42,7 @@ public final class Matchers {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Matcher<T> allOf(Matcher<T>... matchers) {
+    public static <T> Matcher<T> allOf(Matcher<? super T>... matchers) {
         return AllOf.allOf(matchers);
     }
 

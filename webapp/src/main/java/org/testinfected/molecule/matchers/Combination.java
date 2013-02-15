@@ -2,9 +2,6 @@ package org.testinfected.molecule.matchers;
 
 import org.testinfected.molecule.util.Matcher;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class Combination<T> implements Matcher<T> {
 
     private final Matcher<? super T> matcher;
@@ -21,12 +18,8 @@ public class Combination<T> implements Matcher<T> {
         return new Combination<LHS>(matcher);
     }
 
-    public Combination<T> and(Matcher<? super T> other) {
-        return new Combination<T>(new AllOf<T>(asList(other)));
-    }
-
     @SuppressWarnings("unchecked")
-    private List<Matcher<? super T>> asList(Matcher<? super T> other) {
-        return Arrays.<Matcher<? super T>>asList(matcher, other);
+    public Combination<T> and(Matcher<? super T> other) {
+        return new Combination<T>(Matchers.allOf(matcher, other));
     }
 }
