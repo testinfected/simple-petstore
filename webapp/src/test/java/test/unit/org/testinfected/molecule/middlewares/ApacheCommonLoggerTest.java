@@ -22,7 +22,7 @@ import static org.testinfected.molecule.HttpMethod.DELETE;
 import static org.testinfected.molecule.HttpMethod.GET;
 import static org.testinfected.molecule.HttpStatus.NO_CONTENT;
 import static org.testinfected.molecule.HttpStatus.OK;
-import static org.testinfected.time.lib.DateBuilder.aDate;
+import static test.support.org.testinfected.molecule.unit.DateBuilder.calendarDate;
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 import static test.support.org.testinfected.molecule.unit.SetHeader.setHeader;
@@ -40,7 +40,7 @@ public class ApacheCommonLoggerTest {
     Application successor = context.mock(Application.class, "successor");
     ApacheCommonLogger apacheCommonLogger = new ApacheCommonLogger(logger, clock);
 
-    Date currentTime = aDate().onCalendar(2012, 6, 27).atTime(18, 4, 0).inZone("EDT").build();
+    Date currentTime = calendarDate(2012, 6, 27).atTime(18, 4, 0).inZone("EDT").build();
 
     MockRequest request = aRequest().withIp("192.168.0.1");
     MockResponse response = aResponse();

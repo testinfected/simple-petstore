@@ -37,8 +37,8 @@ import java.util.logging.FileHandler;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.isA;
-import static org.testinfected.time.lib.DateBuilder.aDate;
 import static test.support.org.testinfected.molecule.integration.HttpRequest.aRequest;
+import static test.support.org.testinfected.molecule.unit.DateBuilder.calendarDate;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
 @RunWith(JMock.class)
@@ -62,7 +62,7 @@ public class PetStoreTest {
     HttpResponse response;
 
     String encoding = "utf-16";
-    Date now = aDate().onCalendar(2012, 6, 8).atMidnight().build();
+    Date now = calendarDate(2012, 6, 8).atMidnight().build();
 
     @Before public void
     startServer() throws Exception {

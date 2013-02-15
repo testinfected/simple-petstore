@@ -15,7 +15,6 @@ artifacts:
   mysql: mysql:mysql-connector-java:jar:5.1.21
 
   # -- Scope test
-  time: org.testinfected.time:time:jar:1.0
   hamcrest_core: org.hamcrest:hamcrest-core:jar:1.3
   hamcrest_library: org.hamcrest:hamcrest-library:jar:1.3
   hamcrest_extra: org.testinfected.hamcrest-matchers:core-matchers:jar:1.5

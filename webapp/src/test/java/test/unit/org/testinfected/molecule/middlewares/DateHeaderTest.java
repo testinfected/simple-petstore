@@ -15,7 +15,7 @@ import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import java.util.Date;
 
-import static org.testinfected.time.lib.DateBuilder.aDate;
+import static test.support.org.testinfected.molecule.unit.DateBuilder.calendarDate;
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
@@ -23,7 +23,7 @@ import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse
 public class DateHeaderTest {
     Mockery context = new JUnit4Mockery();
 
-    Date now = aDate().onCalendar(2012, 6, 8).atMidnight().build();
+    Date now = calendarDate(2012, 6, 8).atMidnight().build();
     DateHeader dateHeader = new DateHeader(BrokenClock.stoppedAt(now));
     Application successor = context.mock(Application.class, "successor");
 
