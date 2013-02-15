@@ -12,7 +12,7 @@ public class AllOfTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    evaluatesToLogicialConjunctionOfMultipleMatchers() {
+    evaluatesToLogicalConjunctionOfMultipleMatchers() {
         Matcher<String> allOf = allOf(startingWith("one"), startingWith("one two"), startingWith("one two three"));
 
         assertThat("no match but all matchers match", allOf.matches("one two three"));
