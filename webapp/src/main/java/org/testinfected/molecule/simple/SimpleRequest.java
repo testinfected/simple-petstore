@@ -2,9 +2,8 @@ package org.testinfected.molecule.simple;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.util.lease.LeaseException;
-import org.testinfected.molecule.HttpMethod;
-import org.testinfected.petstore.ExceptionImposter;
 import org.testinfected.molecule.HttpException;
+import org.testinfected.molecule.HttpMethod;
 import org.testinfected.molecule.Session;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class SimpleRequest implements org.testinfected.molecule.Request {
         try {
             return request.getParameter(name);
         } catch (IOException e) {
-            throw ExceptionImposter.imposterize(e);
+            throw new HttpException("Cannot read request parameter", e);
         }
     }
 

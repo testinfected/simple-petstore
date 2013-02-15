@@ -1,7 +1,6 @@
 package test.support.org.testinfected.petstore.web;
 
 import org.cyberneko.html.parsers.DOMParser;
-import org.testinfected.petstore.ExceptionImposter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -18,7 +17,7 @@ public final class HTMLDocument {
             parser.parse(new InputSource(new StringReader(dom)));
             return parser.getDocument();
         } catch (Exception e) {
-            throw ExceptionImposter.imposterize(e);
+            throw new RuntimeException("Cannot parse HTML document", e);
         }
     }
 
