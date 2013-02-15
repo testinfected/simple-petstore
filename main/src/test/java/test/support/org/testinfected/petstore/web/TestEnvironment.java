@@ -5,7 +5,6 @@ import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testinfected.petstore.Migrations;
-import org.testinfected.petstore.util.PropertyFile;
 import test.support.org.testinfected.molecule.integration.HttpRequest;
 import test.support.org.testinfected.petstore.web.browser.Browser;
 import test.support.org.testinfected.petstore.web.browser.Firefox;
@@ -13,6 +12,8 @@ import test.support.org.testinfected.petstore.web.browser.PhantomJS;
 import test.support.org.testinfected.petstore.web.browser.RemoteBrowser;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -43,7 +44,15 @@ public class TestEnvironment {
     }
 
     public static TestEnvironment load(String resource) {
-        return new TestEnvironment(PropertyFile.load(resource));
+        try {
+            InputStream config = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+            if (config == null) throw new IOException("Test propertieds not found: " + resource);
+            Properties props = new Properties();
+            props.load(config);
+            return new TestEnvironment(props);
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 
     private final Properties properties;

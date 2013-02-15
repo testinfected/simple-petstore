@@ -1,7 +1,7 @@
 package test.support.org.testinfected.petstore.jdbc;
 
-import org.testinfected.petstore.util.PropertyFile;
-
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class TestDatabaseEnvironment {
@@ -17,7 +17,15 @@ public class TestDatabaseEnvironment {
     public final String password;
 
     public static TestDatabaseEnvironment load() {
-        return new TestDatabaseEnvironment(PropertyFile.load(DATABASE_PROPERTIES));
+        try {
+            InputStream config = Thread.currentThread().getContextClassLoader().getResourceAsStream(DATABASE_PROPERTIES);
+            if (config == null) throw new IOException("Database properties not found: " + DATABASE_PROPERTIES);
+            Properties props = new Properties();
+            props.load(config);
+            return new TestDatabaseEnvironment(props);
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 
     public TestDatabaseEnvironment(Properties properties) {

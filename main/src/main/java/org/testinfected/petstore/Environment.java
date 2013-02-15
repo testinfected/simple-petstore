@@ -1,7 +1,7 @@
 package org.testinfected.petstore;
 
-import org.testinfected.petstore.util.PropertyFile;
-
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public final class Environment {
@@ -12,8 +12,13 @@ public final class Environment {
 
     private static final String FILE_LOCATION = "etc/%s.properties";
 
-    public static Environment load(String name) {
-        return new Environment(overrideWithSystemProperties(PropertyFile.load(fileLocation(name))));
+    public static Environment load(String name) throws IOException {
+        String resource = fileLocation(name);
+        InputStream config = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
+        if (config == null) throw new IOException("Environment file not found: " + resource);
+        Properties props = new Properties();
+        props.load(config);
+        return new Environment(overrideWithSystemProperties(props));
     }
 
     private static String fileLocation(String name) {
