@@ -1,23 +1,30 @@
 package test.support.org.testinfected.petstore.web.page;
 
 import com.objogate.wl.web.AsyncWebDriver;
+import com.objogate.wl.web.ElementAction;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
-import java.math.BigDecimal;
-
-import static org.testinfected.hamcrest.core.StringMatchers.being;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
+import static org.testinfected.hamcrest.core.StringMatchers.being;
 
-public class OrderPage extends Page {
+public class ReceiptPage extends Page {
 
-    public OrderPage(AsyncWebDriver browser) {
+    public ReceiptPage(AsyncWebDriver browser) {
         super(browser);
     }
 
-    public void showsTotalPaid(BigDecimal total) {
-        browser.element(id("order-total")).assertText((being(total)));
+    public String getOrderNumber() {
+        GetText getText = new GetText();
+        browser.element(id("order-number")).apply(getText);
+        return getText.value;
+    }
+
+    public void showsTotalPaid(String total) {
+        browser.element(id("order-total")).assertText((equalTo(total)));
     }
 
     public void showsLineItem(String itemNumber, String itemDescription, String totalPrice) {
@@ -37,12 +44,8 @@ public class OrderPage extends Page {
         browser.element(cssSelector("#email span")).assertText(being(emailAddress));
     }
 
-    public void returnShopping() {
+    public void continueShopping() {
         browser.element(id("continue-shopping")).click();
-    }
-
-    public void displays() {
-        browser.assertTitle(containsString("Order Details"));
     }
 
     private By cellDisplayingNameOfItem(String itemNumber) {
@@ -55,5 +58,13 @@ public class OrderPage extends Page {
 
     private String domIdOf(String itemNumber) {
         return "#line-item-" + itemNumber;
+    }
+
+    private static class GetText implements ElementAction {
+        public String value;
+
+        @Override public void performOn(WebElement element) {
+            value = element.getText();
+        }
     }
 }

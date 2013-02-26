@@ -6,13 +6,13 @@ import test.support.org.testinfected.molecule.integration.HttpResponse;
 
 import java.io.IOException;
 
-public class RestDriver {
+public class AdministrationAPI {
 
     public static final String CREATED = "Created";
 
     private final HttpRequest request;
 
-    public RestDriver(HttpRequest request) {
+    public AdministrationAPI(HttpRequest request) {
         this.request = request;
     }
 

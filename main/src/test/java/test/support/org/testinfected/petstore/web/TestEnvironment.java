@@ -4,7 +4,6 @@ import com.objogate.wl.UnsynchronizedProber;
 import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testinfected.petstore.Migrations;
 import test.support.org.testinfected.molecule.integration.HttpRequest;
 import test.support.org.testinfected.petstore.web.browser.Browser;
 import test.support.org.testinfected.petstore.web.browser.Firefox;
@@ -96,18 +95,12 @@ public class TestEnvironment {
         return property.startsWith(BROWSER_REMOTE_CAPABILITY);
     }
 
-    public AsyncWebDriver openBrowser() {
-        AsyncWebDriver browser = new AsyncWebDriver(new UnsynchronizedProber(), this.browser.launch());
-        browser.navigate().to("http://localhost:" + serverPort());
-        return browser;
+    public AsyncWebDriver fireBrowser() {
+        return new AsyncWebDriver(new UnsynchronizedProber(), this.browser.launch());
     }
 
-    public HttpRequest webClient() {
+    public HttpRequest api() {
         return aRequest().onPort(serverPort()).withTimeOut(HTTP_TIMEOUT_IN_MILLIS);
-    }
-
-    public void clean() throws Exception {
-        Migrations.main("-e", "test", "clean");
     }
 
     public int serverPort() {

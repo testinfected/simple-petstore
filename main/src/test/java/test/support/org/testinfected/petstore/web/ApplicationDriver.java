@@ -1,208 +1,111 @@
 package test.support.org.testinfected.petstore.web;
 
-import com.objogate.wl.web.AsyncWebDriver;
-import test.support.org.testinfected.petstore.web.page.*;
-import test.support.org.testinfected.petstore.web.page.OrderPage;
+import test.support.org.testinfected.petstore.web.activities.User;
+import test.support.org.testinfected.petstore.web.page.PetStore;
+import test.system.org.testinfected.petstore.features.Item;
+import test.system.org.testinfected.petstore.features.Product;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
 public class ApplicationDriver {
 
-    private final WebServer server;
-    private final ConsoleDriver console = new ConsoleDriver();
+    private final PetStore petstore;
 
-    private TestEnvironment environment;
-    private RestDriver rest;
-    private AsyncWebDriver browser;
-    private HomePage homePage;
-    private ProductsPage productsPage;
-    private ItemsPage itemsPage;
-    private CartPage cartPage;
-    private CheckoutPage checkoutPage;
-    private OrderPage orderPage;
-    private Menu menu;
+    private String admin = "admin";
+    private String customer = "customer";
+
+    private User user;
 
     public ApplicationDriver(TestEnvironment environment) {
-        this.environment = environment;
-        this.server = new WebServer(environment.serverPort(), environment.webRoot());
-        this.rest = new RestDriver(environment.webClient());
+        this(PetStore.in(environment));
+    }
+
+    public ApplicationDriver(PetStore petstore) {
+        this.petstore = petstore;
+        this.user = new User(petstore);
     }
 
     public void start() throws Exception {
-        suppressConsoleOutput();
-        cleanupEnvironment();
-        startServer();
-        openBrowser();
-        makeDrivers();
-    }
-
-    private void suppressConsoleOutput() {
-        console.capture();
-    }
-
-    private void cleanupEnvironment() throws Exception {
-        environment.clean();
-    }
-
-    private void startServer() throws Exception {
-        server.start();
-    }
-
-    private void openBrowser() {
-        browser = environment.openBrowser();
-    }
-
-    private void makeDrivers() {
-        menu = new Menu(browser);
-        homePage = new HomePage(browser);
-        productsPage = new ProductsPage(browser);
-        itemsPage = new ItemsPage(browser);
-        cartPage = new CartPage(browser);
-        checkoutPage = new CheckoutPage(browser);
-        orderPage = new OrderPage(browser);
+        petstore.start();
     }
 
     public void stop() throws Exception {
-        logout();
-        stopServer();
-        stopBrowser();
-        restoreConsoleOutput();
+        petstore.stop();
     }
 
-    private void restoreConsoleOutput() {
-        console.release();
+    public void addProductToCatalog(String number, String name, String description, String photo) throws IOException {
+        user.loginAs(admin).manageStore().addProduct(number, name, description, photo);
     }
 
-    private void stopBrowser() {
-        browser.quit();
+    public void showsProductInCatalog(String number, String name) {
+        user.loginAs(customer).catalog().containsProduct(number, name);
     }
 
-    private void stopServer() throws Exception {
-        server.stop();
+    public void showsNoItemAvailableFor(String product) {
+        user.loginAs(customer).forProduct(product).noItemIsAvailable();
     }
 
-    public void logout() {
-        menu.logout();
-        homePage.displays();
+    public void addItemToInventory(String productNumber, String itemNumber, String itemDescription, String itemPrice) throws IOException {
+        user.loginAs(admin).manageStore().addItem(productNumber, itemNumber, itemDescription, itemPrice);
     }
 
-    public void searchFor(String keyword) {
-        menu.search(keyword);
-        productsPage.displays();
+    public void showsAvailableItem(String product, String number, String description, String price) {
+        user.loginAs(customer).forProduct(product).itemIsInStock(number, description, price);
     }
 
-    public void showsNoResult() {
-        productsPage.showsNoResult();
+    public void havingProductInCatalog(String number, String name, String description, String photo) throws IOException {
+        addProductToCatalog(number, name, description, photo);
     }
 
-    public void displaysNumberOfResults(int matchCount) {
-        productsPage.displaysNumberOfResults(matchCount);
+    public void havingItemInStore(String productNumber, String itemNumber, String itemDescription, String itemPrice) throws IOException {
+        addItemToInventory(productNumber, itemNumber, itemDescription, itemPrice);
     }
 
-    public void displaysProduct(String number, String name) {
-        productsPage.displaysProduct(number, name);
+    public void searchShowsNoResult(String term) {
+        user.loginAs(customer).catalog().containsNoProductNamed(term);
     }
 
-    public void addProduct(String number, String name, String description, String photo) throws IOException {
-        rest.addProduct(number, name, description, photo);
-    }
-
-    public void consultInventoryOf(String product) {
-        searchFor(product);
-        browseInventory(product);
-    }
-
-    public void browseInventory(String product) {
-        productsPage.browseItemsOf(product);
-        itemsPage.displays();
-    }
-
-    public void showsNoItemAvailable() {
-        itemsPage.showsNoItemAvailable();
-    }
-
-    public void addItem(String productNumber, String itemNumber, String itemDescription, String itemPrice) throws IOException {
-        rest.addItem(productNumber, itemNumber, itemDescription, itemPrice);
-    }
-
-    public void displaysItem(String number, String description, String price) {
-        itemsPage.displaysItem(number, description, price);
-    }
-
-    public void returnToCatalog() {
-        itemsPage.returnToCatalog();
+    public void searchDisplaysResults(String term, Product... products) {
+        user.loginAs(customer).catalog().matchesProducts(term, products);
     }
 
     public void showsCartIsEmpty() {
-        menu.showsCartIsEmpty();
+        user.loginAs(customer).cartIsEmpty();
+    }
+
+    public void buyItem(String product, String itemNumber) {
+        user.loginAs(customer).forProduct(product).addItemToCart(itemNumber);
     }
 
     public void showsCartTotalQuantity(int quantity) {
-        menu.showsCartTotalQuantity(quantity);
+        user.loginAs(customer).cartItemCountIs(quantity);
     }
 
-    public void showsItemInCart(String itemNumber, String itemDescription, String totalPrice) {
-        cartPage.showsItemInCart(itemNumber, itemDescription, totalPrice);
+    public void showsCartContent(String totalPrice, Item... items) {
+        user.loginAs(customer).cart().hasContent(totalPrice, items);
     }
 
-    public void showsGrandTotal(String price) {
-        cartPage.showsGrandTotal(price);
-    }
-
-    public void buy(String product, String itemNumber) {
-        consultInventoryOf(product);
-        buy(itemNumber);
-    }
-
-    public void buy(String itemNumber) {
-        itemsPage.addToCart(itemNumber);
-        cartPage.displays();
-    }
-
-    public void continueShopping() {
-        cartPage.continueShopping();
-        homePage.displays();
-    }
-
-    public void showsItemQuantity(String itemNumber, int quantity) {
-        cartPage.showsItemQuantity(itemNumber, quantity);
-    }
-
-    public void checkout() {
-        cartPage.checkout();
-        checkoutPage.displays();
-    }
-
-    public void showsTotalToPay(String total) {
-        checkoutPage.showsTotalToPay(new BigDecimal(total));
+    public void showsTotalToPay(String amount) {
+        user.loginAs(customer).order().amountsTo(amount);
     }
 
     public void pay(String firstName, String lastName, String email, String cardType, String cardNumber, String cardExpiryDate) {
-        checkoutPage.willBillTo(firstName, lastName, email);
-        checkoutPage.willPayUsingCreditCard(cardType, cardNumber, cardExpiryDate);
-        checkoutPage.confirmOrder();
-        orderPage.displays();
+        user.loginAs(customer).order().confirm(firstName, lastName, email, cardType, cardNumber, cardExpiryDate);
     }
 
-    public void showsTotalPaid(String total) {
-        orderPage.showsTotalPaid(new BigDecimal(total));
+    public void showsOrderTotal(String total) {
+        user.loginAs(customer).order().hasReceiptTotal(total);
     }
 
-    public void showsLineItem(String itemNumber, String itemDescription, String totalPrice) {
-        orderPage.showsLineItem(itemNumber, itemDescription, totalPrice);
+    public void showsOrderedItems(Item... items) {
+        user.loginAs(customer).order().containsItems(items);
     }
 
     public void showsCreditCardDetails(String cardType, String cardNumber, String cardExpiryDate) {
-        orderPage.showsCreditCardDetails(cardType, cardNumber, cardExpiryDate);
+        user.loginAs(customer).order().wasPaidUsing(cardType, cardNumber, cardExpiryDate);
     }
 
     public void showsBillingInformation(String firstName, String lastName, String emailAddress) {
-        orderPage.showsBillingInformation(firstName, lastName, emailAddress);
-    }
-
-    public void returnShopping() {
-        orderPage.returnShopping();
-        homePage.displays();
+        user.loginAs(customer).order().isBilledTo(firstName, lastName, emailAddress);
     }
 }

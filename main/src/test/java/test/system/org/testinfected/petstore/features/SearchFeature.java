@@ -6,6 +6,8 @@ import org.junit.Test;
 import test.support.org.testinfected.petstore.web.ApplicationDriver;
 import test.support.org.testinfected.petstore.web.TestEnvironment;
 
+import static test.system.org.testinfected.petstore.features.Product.product;
+
 public class SearchFeature {
 
     ApplicationDriver application = new ApplicationDriver(TestEnvironment.load());
@@ -21,22 +23,16 @@ public class SearchFeature {
     }
 
     @Test public void
-    searchesForAProductNotAvailableInStore() throws Exception {
-        application.addProduct("LAB-1234", "Labrador Retriever", "Friendly dog", "labrador.jpg");
-
-        application.searchFor("Dalmatian");
-        application.showsNoResult();
+    searchingForAProductNotAvailableInStore() throws Exception {
+        application.havingProductInCatalog("LAB-1234", "Labrador Retriever", "Friendly dog", "labrador.jpg");
+        application.searchShowsNoResult("Dalmatian");
     }
 
     @Test public void
-    searchesAndFindsProductsInCatalog() throws Exception {
-        application.addProduct("LAB-1234", "Labrador Retriever", "Friendly dog", "labrador.jpg");
-        application.addProduct("CHE-5678", "Golden", "Golden retriever", "golden.jpg");
-        application.addProduct("DAL-6666", "Dalmatian", "A very tall dog", "dalmatian.jpg");
-
-        application.searchFor("retriever");
-        application.displaysNumberOfResults(2);
-        application.displaysProduct("LAB-1234", "Labrador Retriever");
-        application.displaysProduct("CHE-5678", "Golden");
+    searchingAndFindingProductsInCatalog() throws Exception {
+        application.havingProductInCatalog("LAB-1234", "Labrador Retriever", "Friendly dog", "labrador.jpg");
+        application.havingProductInCatalog("CHE-5678", "Golden", "Golden retriever", "golden.jpg");
+        application.havingProductInCatalog("DAL-6666", "Dalmatian", "A very tall dog", "dalmatian.jpg");
+        application.searchDisplaysResults("retriever", product("LAB-1234", "Labrador Retriever"), product("CHE-5678", "Golden"));
     }
 }
