@@ -1,12 +1,13 @@
 package test.support.org.testinfected.petstore.web;
 
-import org.testinfected.petstore.util.MustacheRendering;
 import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.petstore.util.Context;
+import org.testinfected.petstore.util.JMustacheRendering;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.Builder;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -28,7 +29,7 @@ public class OfflineRenderer {
     }
 
     public OfflineRenderer from(File location) {
-        return using(new MustacheRendering(location));
+        return using(new JMustacheRendering(location));
     }
 
     public OfflineRenderer using(RenderingEngine renderer) {
@@ -60,7 +61,11 @@ public class OfflineRenderer {
     }
 
     private void render(final Writer writer) {
-        renderer.render(writer, template, context.asMap());
+        try {
+            renderer.render(writer, template, context.asMap());
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }
 

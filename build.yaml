@@ -8,10 +8,9 @@ repositories:
 artifacts:
   cli: org.testinfected:cli:jar:1.0
   simpleframework: org.simpleframework:simple:jar:4.1.21
-  guava: com.google.guava:guava:jar:12.0
-  mustache: com.github.spullara.mustache.java:compiler:jar:0.8.3
-  flyway: com.googlecode.flyway:flyway-core:jar:2.0
+  jmustache: com.samskivert:jmustache:jar:1.7
 
+  flyway: com.googlecode.flyway:flyway-core:jar:2.0
   mysql: mysql:mysql-connector-java:jar:5.1.21
 
   # -- Scope test

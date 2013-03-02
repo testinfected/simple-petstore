@@ -1,14 +1,11 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.google.common.base.Function;
-import org.hamcrest.Description;
+import com.samskivert.mustache.Mustache;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.collection.IsMapContaining;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
@@ -19,9 +16,9 @@ import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
-import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
+import test.support.org.testinfected.petstore.builders.Builder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +27,10 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.any;
-import static test.support.org.testinfected.petstore.builders.Builders.build;
-import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
+import static test.support.org.testinfected.petstore.builders.Builders.build;
+import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
 @RunWith(JMock.class)
 public class ListProductsTest {
@@ -118,8 +115,7 @@ public class ListProductsTest {
         searchYields(aProduct().withPhoto("photo.png"));
 
         context.checking(new Expectations() {{
-            oneOf(productsPage).render(with(response), with(hasLambda("photo"))); will(call("photo", "photo.png"));
-            oneOf(attachmentStorage).getLocation(with("photo.png"));
+            oneOf(productsPage).render(with(response), with(lambda("path")));
         }});
 
         listProducts.handle(request, response);
@@ -142,32 +138,7 @@ public class ListProductsTest {
         }});
     }
 
-    private Matcher<Map<? extends String, ? extends Function>> hasLambda(String name) {
-        return new IsMapContaining<String, Function>(equalTo(name), any(Function.class));
-    }
-
-    private Action call(String key, String input) {
-        return new CallLambda(key, input);
-    }
-
-    public class CallLambda implements Action {
-        private final String lambda;
-        private String input;
-
-        public CallLambda(String lambda, String input) {
-            this.lambda = lambda;
-            this.input = input;
-        }
-
-        public void describeTo(Description description) {
-            description.appendText("calls " + lambda + " with ").appendText(input);
-        }
-
-        @SuppressWarnings("unchecked")
-        public Object invoke(Invocation invocation) throws Throwable {
-            Map<String, ?> context = ((Map<String, ?>) invocation.getParameter(1));
-            ((Function) context.get(lambda)).apply(input);
-            return null;
-        }
+    private IsMapContaining<String, Mustache.Lambda> lambda(String name) {
+        return new IsMapContaining<String, Mustache.Lambda>(equalTo(name), any(Mustache.Lambda.class));
     }
 }

@@ -5,7 +5,6 @@ VERSION_NUMBER = '0.1-SNAPSHOT'
 
 HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]
 NO_LOG = [:jcl_over_slf4j, :slf4j_api, :slf4j_silent]
-MUSTACHE = [:guava, :mustache]
 
 ['db-migrate', 'db-clean', 'db-reset', 'db-drop', 'db-init'].each { |t| Project.local_task t }
 
@@ -26,7 +25,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
 
   define 'webapp' do
-    compile.with :simpleframework, MUSTACHE
+    compile.with :simpleframework, :jmustache
     compile.with project(:domain), project(:persistence)
 
     test.with project(:domain).test.compile.target, project(:persistence).test.compile.target, project(:persistence).test.resources.target
@@ -40,7 +39,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   define 'main' do
     compile.with project(:domain), project(:persistence), project(:webapp), :cli, :flyway
     test.with project(:webapp).test.compile.target
-    test.with :simpleframework, MUSTACHE, HAMCREST, :flyway, :mysql, NO_LOG
+    test.with :simpleframework, :jmustache, HAMCREST, :flyway, :mysql, NO_LOG
     test.with transitive(artifacts(:selenium_firefox_driver, :selenium_ghost_driver, :windowlicker_web, :htmlunit))
 
     test.using :integration, :properties => { 

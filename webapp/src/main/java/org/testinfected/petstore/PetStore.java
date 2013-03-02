@@ -14,7 +14,7 @@ import org.testinfected.molecule.middlewares.StaticAssets;
 import org.testinfected.molecule.util.Clock;
 import org.testinfected.molecule.util.FailureReporter;
 import org.testinfected.molecule.util.SystemClock;
-import org.testinfected.petstore.util.MustacheRendering;
+import org.testinfected.petstore.util.JMustacheRendering;
 import org.testinfected.petstore.util.PlainFormatter;
 
 import javax.sql.DataSource;
@@ -84,7 +84,7 @@ public class PetStore {
         return assets;
     }
 
-    private MustacheRendering templatesIn(final String dir) {
-        return new MustacheRendering(new File(context, dir));
+    private RenderingEngine templatesIn(final String dir) {
+        return new JMustacheRendering(new File(context, dir));
     }
 }

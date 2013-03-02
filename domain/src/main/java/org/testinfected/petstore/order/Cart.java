@@ -12,7 +12,7 @@ public class Cart implements Serializable {
 
     private final List<CartItem> cartItems = new ArrayList<CartItem>();
 
-    public boolean isEmpty() {
+    public boolean empty() {
         return cartItems.isEmpty();
     }
 

@@ -19,7 +19,7 @@ public class CartTest {
 
     @Test public void
     isEmptyByDefault() {
-        assertThat("contains item(s)", cart.isEmpty());
+        assertThat("contains item(s)", cart.empty());
         assertThat("grand total", cart.getGrandTotal(), equalTo(BigDecimal.ZERO));
         assertThat("total quantity", cart.getTotalQuantity(), equalTo(0));
     }
@@ -31,7 +31,7 @@ public class CartTest {
         for (String itemNumber : itemNumbers) {
             cart.add(anItem().withNumber(itemNumber).build());
         }
-        assertThat("empty cart", !cart.isEmpty());
+        assertThat("empty cart", !cart.empty());
         assertThat("cart", cart, aCartContaining(
                 itemWith(number("11111111")),
                 itemWith(number("22222222")),
@@ -74,7 +74,7 @@ public class CartTest {
         havingAddedItemsToCart();
 
         cart.clear();
-        assertThat("contains item(s)", cart.isEmpty());
+        assertThat("contains item(s)", cart.empty());
     }
 
     @SuppressWarnings("unchecked")

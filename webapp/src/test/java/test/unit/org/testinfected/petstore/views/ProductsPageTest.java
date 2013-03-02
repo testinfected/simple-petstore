@@ -1,14 +1,17 @@
 package test.unit.org.testinfected.petstore.views;
 
-import com.github.mustachejava.TemplateFunction;
-import org.testinfected.petstore.product.Product;
+import com.samskivert.mustache.Mustache;
+import com.samskivert.mustache.Template;
 import org.hamcrest.Matcher;
 import org.junit.Test;
+import org.testinfected.petstore.product.Product;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,9 +57,9 @@ public class ProductsPageTest {
     displaysProductDetails() throws Exception {
         addToProducts(aProduct().withNumber("LAB-1234").named("Labrador").describedAs("Friendly").withPhoto("labrador.png"));
 
-        productsPage = renderProductsPage().with("photo", new TemplateFunction() {
-            public String apply(String fileName) {
-                return "/photos/" + fileName;
+        productsPage = renderProductsPage().with("path", new Mustache.Lambda() {
+            public void execute(Template.Fragment frag, Writer out) throws IOException {
+                out.write("/photos/" + frag.execute());
             }
         }).asDom();
 
