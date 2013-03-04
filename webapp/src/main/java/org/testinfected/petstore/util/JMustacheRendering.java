@@ -20,13 +20,11 @@ public class JMustacheRendering implements RenderingEngine {
     private static final Charset DEFAULT_TEMPLATE_ENCODING = Charsets.UTF_8;
 
     private final File base;
-    private final Mustache.TemplateLoader loader;
     private final Mustache.Compiler mustache;
 
     public JMustacheRendering(File base) {
         this.base = base;
-        this.loader = new TemplateLoader();
-        this.mustache = Mustache.compiler().defaultValue("").withLoader(loader);
+        this.mustache = Mustache.compiler().defaultValue("").withLoader(new TemplateLoader());
     }
 
     public void render(Writer out, String view, Object context) throws IOException {
