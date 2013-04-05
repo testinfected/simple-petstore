@@ -12,7 +12,9 @@ import java.util.List;
 
 import static org.testinfected.molecule.middlewares.NotFound.notFound;
 
-public class Routes extends AbstractMiddleware implements RouteSet {
+public class Routes implements Application, RouteSet {
+
+    private Application defaultApp;
 
     public static Routes draw(RouteBuilder routeBuilder) {
         Routes routes = new Routes();
@@ -27,11 +29,11 @@ public class Routes extends AbstractMiddleware implements RouteSet {
     }
 
     public Routes(final Application fallback) {
-        connectTo(fallback);
+        this.defaultApp = fallback;
     }
 
     public Routes defaultsTo(Application app) {
-        connectTo(app);
+        this.defaultApp = app;
         return this;
     }
 
@@ -51,6 +53,6 @@ public class Routes extends AbstractMiddleware implements RouteSet {
         if (route != null)
             route.handle(request, response);
         else
-            forward(request, response);
+            defaultApp.handle(request, response);
     }
 }
