@@ -1,11 +1,10 @@
 package org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.Page;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
-
-import static org.testinfected.petstore.util.Context.emptyContext;
+import org.testinfected.petstore.Page;
+import org.testinfected.petstore.util.Context;
 
 public class StaticPage implements Application {
     private final Page page;
@@ -15,6 +14,6 @@ public class StaticPage implements Application {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        page.render(response, emptyContext());
+        page.render(response, Context.empty());
     }
 }

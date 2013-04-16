@@ -36,7 +36,7 @@ public class Cashier implements SalesAssistant {
     }
 
     public OrderNumber placeOrder(final PaymentMethod paymentMethod) throws Exception {
-        QueryUnitOfWork<OrderNumber> transaction = new QueryUnitOfWork<OrderNumber>() {
+        QueryUnitOfWork<OrderNumber> confirmation = new QueryUnitOfWork<OrderNumber>() {
             public OrderNumber query() throws Exception {
                 OrderNumber nextNumber = orderNumberSequence.nextOrderNumber();
                 final Order order = new Order(nextNumber);
@@ -47,6 +47,6 @@ public class Cashier implements SalesAssistant {
                 return nextNumber;
             }
         };
-        return transactor.performQuery(transaction);
+        return transactor.performQuery(confirmation);
     }
 }

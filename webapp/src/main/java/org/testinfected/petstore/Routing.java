@@ -31,10 +31,10 @@ import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.molecule.middlewares.Routes;
 import org.testinfected.molecule.routing.Router;
+import org.testinfected.petstore.util.SessionScope;
 
 import java.sql.Connection;
 
-import static org.testinfected.petstore.util.SessionScope.sessionScopeOf;
 import static org.testinfected.molecule.middlewares.ConnectionScope.ConnectionReference;
 
 public class Routing implements Application {
@@ -47,9 +47,7 @@ public class Routing implements Application {
 
     public void handle(final Request request, final Response response) throws Exception {
         final AttachmentStorage attachmentStorage = new FileSystemPhotoStore("/photos");
-
-        final Cart cart = sessionScopeOf(request).cart();
-
+        final Cart cart = new SessionScope(request.session()).cart();
         final Connection connection = new ConnectionReference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);
         final ProductCatalog productCatalog = new ProductsDatabase(connection);

@@ -1,8 +1,7 @@
 package org.testinfected.petstore.util;
 
-import org.testinfected.petstore.order.Cart;
-import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Session;
+import org.testinfected.petstore.order.Cart;
 
 public class SessionScope {
 
@@ -10,10 +9,6 @@ public class SessionScope {
 
     public SessionScope(Session session) {
         this.session = session;
-    }
-
-    public static SessionScope sessionScopeOf(Request request) throws Exception {
-        return new SessionScope(request.session());
     }
 
     @SuppressWarnings("unchecked")

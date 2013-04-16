@@ -1,4 +1,3 @@
-#require 'buildr/java/cobertura'
 require 'buildr/jetty'
 
 VERSION_NUMBER = '0.1-SNAPSHOT'
@@ -21,7 +20,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   define 'persistence' do
     compile.with project(:domain)
     test.with project(:domain).test.compile.target, HAMCREST, :flyway, :mysql, NO_LOG
-    package(:jar)
+    package :jar
   end
 
   define 'webapp' do
@@ -74,7 +73,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
 
   task :run => project(:main) do
     cp = [project(:main).compile.target, project(:main).resources.target, project(:main).compile.dependencies,
-          :mysql, :simpleframework, MUSTACHE]
+          :mysql, :simpleframework, :jmustache]
     Java::Commands.java("org.testinfected.petstore.Launcher", "-p", Buildr.settings.profile['server.port'], "-e", Buildr.environment, project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
   end
 
