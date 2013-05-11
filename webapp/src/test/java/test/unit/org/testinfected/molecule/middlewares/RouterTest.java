@@ -1,4 +1,4 @@
-package test.unit.org.testinfected.molecule.routing;
+package test.unit.org.testinfected.molecule.middlewares;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.testinfected.molecule.*;
 import org.testinfected.molecule.matchers.Nothing;
 import org.testinfected.molecule.middlewares.NotFound;
-import org.testinfected.molecule.middlewares.Routes;
+import org.testinfected.molecule.middlewares.Router;
 import org.testinfected.molecule.routing.Route;
 import org.testinfected.molecule.util.Matcher;
 import test.support.org.testinfected.molecule.unit.MockRequest;
@@ -20,9 +20,9 @@ import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 @RunWith(JMock.class)
-public class RoutesTest {
+public class RouterTest {
 
-    Routes routes = new Routes(NotFound.notFound());
+    Router router = new Router(NotFound.notFound());
 
     MockRequest request = aRequest();
     MockResponse response = aResponse();
@@ -35,14 +35,14 @@ public class RoutesTest {
 
     @Test public void
     routesToDefaultApplicationWhenNoRouteMatches() throws Exception {
-        routes.defaultsTo(fallbackApp).add(new StaticRoute(noRequest(), wrongApp));
+        router.defaultsTo(fallbackApp).add(new StaticRoute(noRequest(), wrongApp));
 
         context.checking(new Expectations() {{
             never(wrongApp);
             oneOf(fallbackApp).handle(with(same(request)), with(same(response)));
         }});
 
-        routes.handle(request, response);
+        router.handle(request, response);
     }
 
     @Test public void
@@ -51,10 +51,10 @@ public class RoutesTest {
             oneOf(preferredApp).handle(with(same(request)), with(same(response)));
             never(alternateApp);
         }});
-        routes.add(new StaticRoute(anyRequest(), preferredApp));
-        routes.add(new StaticRoute(anyRequest(), alternateApp));
+        router.add(new StaticRoute(anyRequest(), preferredApp));
+        router.add(new StaticRoute(anyRequest(), alternateApp));
 
-        routes.handle(request, response);
+        router.handle(request, response);
     }
 
     private Matcher<Request> noRequest() {

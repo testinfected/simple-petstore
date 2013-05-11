@@ -1,5 +1,6 @@
 package org.testinfected.petstore;
 
+import org.testinfected.molecule.routing.DynamicRoutes;
 import org.testinfected.petstore.controllers.Checkout;
 import org.testinfected.petstore.controllers.CreateCartItem;
 import org.testinfected.petstore.controllers.CreateItem;
@@ -29,8 +30,7 @@ import org.testinfected.petstore.util.FileSystemPhotoStore;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
-import org.testinfected.molecule.middlewares.Routes;
-import org.testinfected.molecule.routing.Router;
+import org.testinfected.molecule.middlewares.Router;
 import org.testinfected.petstore.util.SessionScope;
 
 import java.sql.Connection;
@@ -57,7 +57,7 @@ public class Routing implements Application {
         final OrderBook orderBook = new OrdersDatabase(connection);
         final Cashier cashier = new Cashier(orderNumberSequence, orderBook, itemInventory, cart, transactor);
 
-        Routes routes = Routes.draw(new Router() {{
+        Router router = Router.draw(new DynamicRoutes() {{
             get("/products").to(new ListProducts(productCatalog, attachmentStorage, pages.products()));
             post("/products").to(new CreateProduct(requestHandler));
             get("/products/:product/items").to(new ListItems(itemInventory, pages.items()));
@@ -71,6 +71,6 @@ public class Routing implements Application {
             map("/").to(new StaticPage(pages.home()));
         }});
 
-        routes.handle(request, response);
+        router.handle(request, response);
     }
 }

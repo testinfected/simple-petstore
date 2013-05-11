@@ -5,13 +5,13 @@ import org.testinfected.molecule.HttpMethod;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Router implements RouteBuilder {
+public class DynamicRoutes implements RouteBuilder {
 
     private final Collection<DynamicRouteDefinition> routes = new ArrayList<DynamicRouteDefinition>();
 
     public void build(RouteSet routeSet) {
         for (DynamicRouteDefinition route : this.routes) {
-            routeSet.add(route.draw());
+            routeSet.add(route.toRoute());
         }
     }
 
@@ -32,7 +32,7 @@ public class Router implements RouteBuilder {
     }
 
     private RouteDefinition openRoute() {
-        DynamicRouteDefinition definition = DynamicRouteDefinition.route();
+        DynamicRouteDefinition definition = new DynamicRouteDefinition();
         routes.add(definition);
         return definition;
     }

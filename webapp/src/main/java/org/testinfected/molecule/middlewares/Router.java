@@ -12,27 +12,27 @@ import java.util.List;
 
 import static org.testinfected.molecule.middlewares.NotFound.notFound;
 
-public class Routes implements Application, RouteSet {
+public class Router implements Application, RouteSet {
 
     private Application defaultApp;
 
-    public static Routes draw(RouteBuilder routeBuilder) {
-        Routes routes = new Routes();
-        routeBuilder.build(routes);
-        return routes;
+    public static Router draw(RouteBuilder routeBuilder) {
+        Router router = new Router();
+        routeBuilder.build(router);
+        return router;
     }
 
     private final List<Route> routingTable = new ArrayList<Route>();
 
-    public Routes() {
+    public Router() {
         this(notFound());
     }
 
-    public Routes(final Application fallback) {
+    public Router(final Application fallback) {
         this.defaultApp = fallback;
     }
 
-    public Routes defaultsTo(Application app) {
+    public Router defaultsTo(Application app) {
         this.defaultApp = app;
         return this;
     }

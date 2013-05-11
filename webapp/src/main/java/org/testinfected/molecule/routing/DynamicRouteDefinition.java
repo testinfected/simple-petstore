@@ -9,10 +9,6 @@ import static org.testinfected.molecule.matchers.Matchers.equalTo;
 
 public class DynamicRouteDefinition implements RouteDefinition {
 
-    public static DynamicRouteDefinition route() {
-        return new DynamicRouteDefinition();
-    }
-
     private String path;
     private Matcher<? super String> method = anyMethod();
     private Application app;
@@ -36,7 +32,7 @@ public class DynamicRouteDefinition implements RouteDefinition {
         return this;
     }
 
-    public DynamicRoute draw() {
+    public DynamicRoute toRoute() {
         checkValidity();
         return new DynamicRoute(path, method, app);
     }
