@@ -2,15 +2,15 @@ package org.testinfected.molecule.routing;
 
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.HttpMethod;
+import org.testinfected.molecule.matchers.Matchers;
 import org.testinfected.molecule.util.Matcher;
 
-import static org.testinfected.molecule.matchers.Matchers.anyMethod;
 import static org.testinfected.molecule.matchers.Matchers.equalTo;
 
 public class DynamicRouteDefinition implements RouteDefinition {
 
     private String path;
-    private Matcher<? super String> method = anyMethod();
+    private Matcher<? super String> method = Matchers.<String>anything();
     private Application app;
 
     public DynamicRouteDefinition map(String path) {

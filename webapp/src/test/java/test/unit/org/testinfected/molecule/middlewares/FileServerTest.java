@@ -73,7 +73,7 @@ public class FileServerTest {
     @Test public void
     rendersNotFoundWhenFileIsNotFound() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(notFound).handle(with(request), with(response));
+            oneOf(notFound).handle(request, response);
         }});
 
         fileServer.handle(request.withPath("/images/missing.png"), response);

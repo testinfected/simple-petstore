@@ -13,14 +13,6 @@ public final class Matchers {
         return Anything.anything();
     }
 
-    public static Matcher<Request> anyRequest() {
-        return anything();
-    }
-
-    public static Matcher<String> anyMethod() {
-        return anything();
-    }
-
     public static <T> Matcher<T> nothing() {
         return Nothing.nothing();
     }

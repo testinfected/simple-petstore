@@ -35,7 +35,7 @@ public class ServerHeaderTest {
     @Test public void
     setsServerHeaderAndForwardsRequest() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(successor).handle(with(request), with(response));
+            oneOf(successor).handle(request, response);
         }});
 
         serverHeader.handle(request, response);

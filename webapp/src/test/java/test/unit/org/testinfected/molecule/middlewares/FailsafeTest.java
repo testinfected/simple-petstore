@@ -1,16 +1,11 @@
 package test.unit.org.testinfected.molecule.middlewares;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.api.Invocation;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.action.CustomAction;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.HttpStatus;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
 import org.testinfected.molecule.middlewares.Failsafe;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
@@ -19,11 +14,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
-@RunWith(JMock.class)
 public class FailsafeTest {
-    Mockery context = new JUnit4Mockery();
-
-    Application successor = context.mock(Application.class, "successor");
     Failsafe failsafe = new Failsafe();
 
     String errorMessage = "An internal error occurred!";
@@ -34,20 +25,15 @@ public class FailsafeTest {
 
     @Before public void
     handleRequest() throws Exception {
-        error.setStackTrace(new StackTraceElement[] {
-                new StackTraceElement("stack", "trace", "line", 1),
-                new StackTraceElement("stack", "trace", "line", 2)
+        failsafe.connectTo(new Application() {
+            public void handle(Request request, Response response) throws Exception {
+                error.setStackTrace(new StackTraceElement[] {
+                        new StackTraceElement("stack", "trace", "line", 1),
+                        new StackTraceElement("stack", "trace", "line", 2)
+                });
+                throw error;
+            }
         });
-
-        context.checking(new Expectations() {{
-            allowing(successor).handle(with(request), with(response)); will(new CustomAction("throw exception") {
-                public Object invoke(Invocation invocation) throws Throwable {
-                    throw error;
-                }
-            });
-        }});
-
-        failsafe.connectTo(successor);
         failsafe.handle(request, response);
     }
 

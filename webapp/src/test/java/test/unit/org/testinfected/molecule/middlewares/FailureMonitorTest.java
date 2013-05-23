@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
 import org.testinfected.molecule.middlewares.FailureMonitor;
 import org.testinfected.molecule.util.FailureReporter;
 import test.support.org.testinfected.molecule.unit.MockRequest;
@@ -24,7 +26,6 @@ public class FailureMonitorTest {
 
     Mockery context = new JUnit4Mockery();
     FailureReporter failureReporter = context.mock(FailureReporter.class);
-    Application successor = context.mock(Application.class, "successor");
     FailureMonitor monitor = new FailureMonitor(failureReporter);
 
     Exception error = new Exception("An internal error occurred!");
@@ -34,13 +35,17 @@ public class FailureMonitorTest {
 
     @Before public void
     chainToSuccessor() {
-        monitor.connectTo(successor);
     }
 
     @Test public void
     notifiesFailureReporterAndRethrowsExceptionInCaseOfError() throws Exception {
+        monitor.connectTo(new Application() {
+            public void handle(Request request, Response response) throws Exception {
+                throw error;
+            }
+        });
+
         context.checking(new Expectations() {{
-            allowing(successor).handle(with(request), with(response)); will(throwException(error));
             oneOf(failureReporter).errorOccurred(with(same(error)));
         }});
 

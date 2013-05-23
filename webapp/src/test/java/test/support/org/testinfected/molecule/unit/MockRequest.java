@@ -33,6 +33,10 @@ public class MockRequest implements Request {
 
     public MockRequest() {}
 
+    public void setPath(String path) {
+        withPath(path);
+    }
+
     public MockRequest withPath(String path) {
         this.path = path;
         return this;

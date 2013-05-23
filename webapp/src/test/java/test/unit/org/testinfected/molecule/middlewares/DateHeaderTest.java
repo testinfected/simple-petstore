@@ -38,7 +38,7 @@ public class DateHeaderTest {
     @Test public void
     setsDateHeaderFromClockTime() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(successor).handle(with(request), with(response));
+            oneOf(successor).handle(request, response);
         }});
 
         dateHeader.handle(request, response);

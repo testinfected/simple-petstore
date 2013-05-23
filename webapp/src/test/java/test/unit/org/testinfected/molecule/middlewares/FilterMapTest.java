@@ -39,20 +39,23 @@ public class FilterMapTest {
 
     @Test public void
     immediatelyForwardsRequestWhenNoFilterIsRegistered() throws Exception {
-        expectForward();
+        context.checking(new Expectations() {{
+            oneOf(successor).handle(request, response);
+        }});
+
         filters.handle(request, response);
     }
 
     @Test public void
-    runsRequestThroughFilterThatMatches() throws Exception {
-        final Middleware ignored = context.mock(Middleware.class, "ignored");
-        filters.map(noRequest(), ignored);
-        final Middleware applies = context.mock(Middleware.class, "applies");
-        filters.map(anyRequest(), applies);
+    runsRequestThroughMatchingFilter() throws Exception {
+        final Middleware ignoredFilter = context.mock(Middleware.class, "ignored");
+        filters.map(none(), ignoredFilter);
+        final Middleware matchingFilter = context.mock(Middleware.class, "matching");
+        filters.map(all(), matchingFilter);
 
         context.checking(new Expectations() {{
-            oneOf(applies).connectTo(successor); inSequence(filtering);
-            oneOf(applies).handle(request, response); inSequence(filtering);
+            oneOf(matchingFilter).connectTo(successor); inSequence(filtering);
+            oneOf(matchingFilter).handle(request, response); inSequence(filtering);
         }});
 
         filters.handle(request, response);
@@ -60,16 +63,18 @@ public class FilterMapTest {
 
     @Test public void
     forwardsRequestIfNoFilterMatches() throws Exception {
-        final Middleware filter = context.mock(Middleware.class);
-        filters.map(noRequest(), filter);
+        final Middleware ignoredFilter = context.mock(Middleware.class, "ignored");
+        filters.map(none(), ignoredFilter);
 
-        expectForward();
+        context.checking(new Expectations() {{
+            oneOf(successor).handle(request, response);
+        }});
         filters.handle(request, response);
     }
 
     @Test public void
-    runsRequestThroughFilterMappedToPrefixOfRequestPath() throws Exception {
-        request.withPath("/filtered/path");
+    matchesOnPathPrefix() throws Exception {
+        request.setPath("/filtered/path");
 
         final Middleware filter = context.mock(Middleware.class);
         filters.map("/filtered", filter);
@@ -85,9 +90,9 @@ public class FilterMapTest {
     @Test public void
     appliesLastRegisteredOfMatchingFilters() throws Exception {
         final Middleware ignored = context.mock(Middleware.class, "ignored");
-        filters.map(anyRequest(), ignored);
+        filters.map(all(), ignored);
         final Middleware applies = context.mock(Middleware.class, "applies");
-        filters.map(anyRequest(), applies);
+        filters.map(all(), applies);
 
         context.checking(new Expectations() {{
             allowing(applies).connectTo(successor);
@@ -97,17 +102,11 @@ public class FilterMapTest {
         filters.handle(request, response);
     }
 
-    private void expectForward() throws Exception {
-        context.checking(new Expectations() {{
-            oneOf(successor).handle(with(same(request)), with(same(response)));
-        }});
-    }
-
-    private Matcher<Request> anyRequest() {
+    private Matcher<Request> all() {
         return Matchers.anything();
     }
 
-    private Matcher<Request> noRequest() {
+    private Matcher<Request> none() {
         return Matchers.nothing();
     }
 }

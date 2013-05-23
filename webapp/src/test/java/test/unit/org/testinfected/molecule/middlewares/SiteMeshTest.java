@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
+import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.molecule.decoration.Decorator;
 import org.testinfected.molecule.decoration.Selector;
@@ -23,13 +24,11 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
-import static test.support.org.testinfected.molecule.unit.WriteBody.writeBody;
 
 @RunWith(JMock.class)
 public class SiteMeshTest {
     Mockery context = new JUnit4Mockery();
     Selector selector = context.mock(Selector.class);
-    Application successor = context.mock(Application.class, "successor");
     SiteMesh siteMesh = new SiteMesh(selector, new FakeDecorator());
 
     String originalPage = "<plain page>";
@@ -40,14 +39,21 @@ public class SiteMeshTest {
     MockResponse response = aResponse();
 
     @Before public void
-    chainWithSuccessor() throws Exception {
+    selectPage() throws Exception {
         context.checking(new Expectations() {{
             allowing(selector).select(with(any(Response.class))); will(returnValue(true)); when(page.is("selected"));
             allowing(selector).select(with(any(Response.class))); will(returnValue(false)); when(page.isNot("selected"));
-            allowing(successor).handle(with(request), with(any(Response.class))); will(writeBody(originalPage));
         }});
 
-        siteMesh.connectTo(successor);
+    }
+
+    @Before public void
+    connectToSuccessor() {
+        siteMesh.connectTo(new Application() {
+            public void handle(Request request, Response response) throws Exception {
+                response.body(originalPage);
+            }
+        });
     }
 
     @Test public void
@@ -67,7 +73,7 @@ public class SiteMeshTest {
     }
 
     @Test public void
-    doesNotDecorateContentWhenPageIsNotSelected() throws Exception {
+    leavesContentUntouchedWhenPageIsNotSelected() throws Exception {
         page.become("unselected");
 
         siteMesh.handle(request, response);

@@ -33,25 +33,20 @@ public class StaticAssetsTest {
 
     @Test public void
     routesToFileServerWhenPathIsMatched() throws Exception {
-        context.checking(new Expectations() {{
-            oneOf(fileServer).handle(with(request), with(response));
-        }});
-        assets.handle(request.withPath("/favicon.ico"), response);
-    }
-
-    @Test public void
-    supportsMappingMultiplePaths() throws Exception {
-        context.checking(new Expectations() {{
-            oneOf(fileServer).handle(with(request), with(response));
-        }});
         assets.serve("/static");
+
+        context.checking(new Expectations() {{
+            exactly(2).of(fileServer).handle(request, response);
+        }});
+
+        assets.handle(request.withPath("/favicon.ico"), response);
         assets.handle(request.withPath("/static"), response);
     }
 
     @Test public void
     forwardsToNextApplicationWhenPathIsNotMatched() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(successor).handle(with(request), with(response));
+            oneOf(successor).handle(request, response);
         }});
         assets.handle(request.withPath("/home"), response);
     }

@@ -5,6 +5,7 @@ import org.testinfected.molecule.Response;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class ConnectionScope extends AbstractMiddleware {
 
@@ -23,8 +24,12 @@ public class ConnectionScope extends AbstractMiddleware {
             forward(request, response);
         } finally {
             ref.unset();
-            connection.close();
+            close(connection);
         }
+    }
+
+    private void close(Connection connection) {
+        try { connection.close(); } catch (SQLException ignored) {}
     }
 
     public static class ConnectionReference {
