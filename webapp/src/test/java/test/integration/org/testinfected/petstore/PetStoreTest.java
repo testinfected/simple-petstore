@@ -15,13 +15,17 @@ import org.testinfected.molecule.util.FailureReporter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
+import org.testinfected.petstore.jdbc.ItemsDatabase;
 import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
+import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
 import test.support.org.testinfected.molecule.integration.HttpRequest;
 import test.support.org.testinfected.molecule.integration.HttpResponse;
 import test.support.org.testinfected.molecule.unit.BrokenClock;
+import test.support.org.testinfected.petstore.builders.ItemBuilder;
+import test.support.org.testinfected.petstore.builders.ProductBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import test.support.org.testinfected.petstore.web.LogFile;
@@ -39,6 +43,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.isA;
 import static test.support.org.testinfected.molecule.integration.HttpRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.DateBuilder.calendarDate;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
 @RunWith(JMock.class)
@@ -54,6 +59,7 @@ public class PetStoreTest {
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
     ProductCatalog productCatalog = new ProductsDatabase(connection);
+    ItemInventory itemInventory = new ItemsDatabase(connection);
 
     LogFile logFile;
     int serverPort = 9999;
@@ -111,7 +117,7 @@ public class PetStoreTest {
 
     @Test public void
     rendersDynamicContentAsHtmlProperlyEncoded() throws Exception {
-        addProducts(aProduct().named("French Bouledogue (Bouledogue français)").build());
+        makeProducts(aProduct().named("French Bouledogue (Bouledogue français)"));
         response = request.get("/products?keyword=bouledogue");
 
         response.assertOK();
@@ -154,7 +160,7 @@ public class PetStoreTest {
     }
 
     @Test public void
-    renders500ErrorsAndReportsFailureWhenSomethingGoesWrong() throws Exception {
+    renders500AndReportsFailureWhenSomethingGoesWrong() throws Exception {
         databaseStatus.become("down");
         context.checking(new Expectations() {{
             oneOf(failureReporter).errorOccurred(with(isA(SQLException.class)));
@@ -165,6 +171,18 @@ public class PetStoreTest {
         response.assertHasContent(containsString("Database is down"));
     }
 
+    @Test public void
+    tracksHttpSessionsUsingCookies() throws Exception {
+        makeItems(anItem().of(make(aProduct().named("Gecko"))).withNumber("12345678"));
+
+        response = request.withParameter("item-number", "12345678").followRedirects(false).post("/cart");
+        response.assertHasCookie("JSESSIONID");
+
+        response = request.get("/cart");
+        response.assertHasContent(containsString("cart-item-12345678"));
+        response.assertHasNoCookie("JSESSIONID");
+    }
+
     private Matcher<String> productsList() {
         return containsString("<div id=\"products\">");
     }
@@ -173,11 +191,31 @@ public class PetStoreTest {
         return containsString("<div id=\"header\">");
     }
 
-    private void addProducts(final Product... products) throws Exception {
+    private Product make(final ProductBuilder builder) throws Exception {
+        final Product product = builder.build();
         transactor.perform(new UnitOfWork() {
             public void execute() throws Exception {
-                for (Product product : products) {
-                    productCatalog.add(product);
+                productCatalog.add(product);
+            }
+        });
+        return product;
+    }
+
+    private void makeProducts(final ProductBuilder... products) throws Exception {
+        transactor.perform(new UnitOfWork() {
+            public void execute() throws Exception {
+                for (ProductBuilder each : products) {
+                    productCatalog.add(each.build());
+                }
+            }
+        });
+    }
+
+    private void makeItems(final ItemBuilder... items) throws Exception {
+        transactor.perform(new UnitOfWork() {
+            public void execute() throws Exception {
+                for (ItemBuilder each : items) {
+                    itemInventory.add(each.build());
                 }
             }
         });

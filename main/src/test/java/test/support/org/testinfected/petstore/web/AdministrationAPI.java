@@ -18,8 +18,8 @@ public class AdministrationAPI {
 
     public void addProduct(String number, String name, String description, String photo) throws IOException {
         HttpRequest post = request.but()
-                .withMethod(HttpMethod.POST)
-                .withPath("/products")
+                .usingMethod(HttpMethod.POST)
+                .on("/products")
                 .withParameter("number", number)
                 .withParameter("name", name)
                 .withParameter("description", description)
@@ -31,8 +31,8 @@ public class AdministrationAPI {
 
     public void addItem(String productNumber, String itemNumber, String itemDescription, String itemPrice) throws IOException {
         HttpRequest post = request.but()
-                .withMethod(HttpMethod.POST)
-                .withPath("/products/" + productNumber + "/items")
+                .usingMethod(HttpMethod.POST)
+                .on("/products/" + productNumber + "/items")
                 .withParameter("number", itemNumber)
                 .withParameter("description", itemDescription)
                 .withParameter("price", itemPrice);
