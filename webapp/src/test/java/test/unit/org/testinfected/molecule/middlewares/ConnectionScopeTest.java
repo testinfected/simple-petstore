@@ -1,7 +1,5 @@
 package test.unit.org.testinfected.molecule.middlewares;
 
-import org.hamcrest.FeatureMatcher;
-import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.States;
@@ -13,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.HttpException;
 import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
 import org.testinfected.molecule.middlewares.ConnectionScope;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
@@ -20,7 +19,6 @@ import test.support.org.testinfected.molecule.unit.MockResponse;
 import javax.sql.DataSource;
 import java.sql.Connection;
 
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
@@ -31,7 +29,6 @@ public class ConnectionScopeTest {
 
     Mockery context = new JUnit4Mockery();
     DataSource dataSource = context.mock(DataSource.class);
-    Application successor = context.mock(Application.class, "successor");
     ConnectionScope connectionScope = new ConnectionScope(dataSource);
 
     Connection connection = context.mock(Connection.class);
@@ -50,25 +47,25 @@ public class ConnectionScopeTest {
         }});
     }
 
-    @Before public void
-    connectToSuccessor() {
-        connectionScope.connectTo(successor);
-    }
-
     @Test public void
     opensConnectionAndMakesAvailableAsRequestAttribute() throws Exception {
-        context.checking(new Expectations() {{
-            oneOf(successor).handle(with(requestWithAttribute(Connection.class, sameAs(connection))), with(response));
-        }});
+        connectionScope.connectTo(new Application() {
+            public void handle(Request request, Response response) throws Exception {
+                response.body("Connection scoping " + (request.attribute(Connection.class) == connection ? "on" : "off"));
+            }
+        });
 
         connectionScope.handle(request, response);
+        response.assertBody("Connection scoping on");
     }
 
     @Test public void
     gracefullyClosesConnectionAndRemovesFromScopeWhenAnErrorOccurs() throws Exception {
-        context.checking(new Expectations() {{
-            allowing(successor).handle(request, response); will(throwException(new HttpException("error")));
-        }});
+        connectionScope.connectTo(new Application() {
+            public void handle(Request request, Response response) throws Exception {
+                throw new HttpException("Boom!");
+            }
+        });
 
         try {
             connectionScope.handle(request, response);
@@ -77,17 +74,5 @@ public class ConnectionScopeTest {
         }
 
         request.assertAttribute(Connection.class, nullValue());
-    }
-
-    private Matcher<Object> sameAs(final Object connection) {
-        return sameInstance(connection);
-    }
-
-    private Matcher<Request> requestWithAttribute(final Object key, Matcher<Object> valueMatcher) {
-        return new FeatureMatcher<Request, Object>(valueMatcher, "a request with attribute " + key, key.toString()) {
-            protected Object featureValueOf(Request actual) {
-                return actual.attribute(key);
-            }
-        };
     }
 }
