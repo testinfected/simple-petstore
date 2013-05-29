@@ -11,7 +11,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.action.CustomAction;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.simple.SimpleServer;
@@ -184,14 +183,12 @@ public class PetStoreTest {
         response.assertHasContent(containsString("Database is down"));
     }
 
-    @Ignore("In progress")
     @Test public void
     createsSessionsOnDemandAndMaintainSessionsAcrossRequestsUsingCookies() throws Exception {
         makeItems(anItem().of(make(aProduct().named("Gecko"))).withNumber("12345678"));
 
         response = request.get("/");
-        assertOK();
-        // FIX ME: session gets created even when cart content is not modified
+        response.assertOK();
         response.assertHasNoCookie(SESSION_COOKIE);
 
         response = request.withParameter("item-number", "12345678").followRedirects(false).post("/cart");

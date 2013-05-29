@@ -24,14 +24,14 @@ public class SiteLayout extends AbstractMiddleware {
 
     public void handle(Request request, Response response) throws Exception {
         FilterMap filtering = new FilterMap();
-        filtering.map("/", SiteMesh.html(new MainLayout("main", renderer, cart(request))));
+        filtering.map("/", SiteMesh.html(new MainLayout("main", renderer, cartFor(request))));
         filtering.connectTo(successor);
         filtering.handle(request, response);
     }
 
-    private Cart cart(Request request) {
-        Session session = request.session(false);
-        return session != null ? new SessionScope(session).cart() : new Cart();
+    private Cart cartFor(Request client) {
+        Session session = client.session(false);
+        return session != null ? SessionScope.cartFor(client) : new Cart();
     }
 
     public static class MainLayout implements Layout {
