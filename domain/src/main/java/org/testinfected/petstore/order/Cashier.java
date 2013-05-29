@@ -1,30 +1,22 @@
 package org.testinfected.petstore.order;
 
-import org.testinfected.petstore.billing.PaymentMethod;
-import org.testinfected.petstore.product.ItemInventory;
-import org.testinfected.petstore.product.ItemNumber;
 import org.testinfected.petstore.QueryUnitOfWork;
 import org.testinfected.petstore.Transactor;
+import org.testinfected.petstore.billing.PaymentMethod;
 
 import java.math.BigDecimal;
 
 public class Cashier implements SalesAssistant {
     private final OrderNumberSequence orderNumberSequence;
     private final OrderBook orderBook;
-    private final ItemInventory inventory;
     private final Cart cart;
     private final Transactor transactor;
 
-    public Cashier(OrderNumberSequence orderNumberSequence, OrderBook orderBook, ItemInventory inventory, Cart cart, Transactor transactor) {
+    public Cashier(OrderNumberSequence orderNumberSequence, OrderBook orderBook, Cart cart, Transactor transactor) {
         this.orderNumberSequence = orderNumberSequence;
         this.orderBook = orderBook;
-        this.inventory = inventory;
         this.cart = cart;
         this.transactor = transactor;
-    }
-
-    public void addToCart(ItemNumber itemNumber) {
-        cart.add(inventory.find(itemNumber));
     }
 
     public BigDecimal orderTotal() {

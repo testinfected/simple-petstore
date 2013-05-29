@@ -1,17 +1,5 @@
 package test.unit.org.testinfected.petstore.order;
 
-import org.testinfected.petstore.QueryUnitOfWork;
-import org.testinfected.petstore.billing.PaymentMethod;
-import org.testinfected.petstore.order.Cart;
-import org.testinfected.petstore.order.CartItem;
-import org.testinfected.petstore.order.Cashier;
-import org.testinfected.petstore.order.Order;
-import org.testinfected.petstore.order.OrderBook;
-import org.testinfected.petstore.order.OrderNumber;
-import org.testinfected.petstore.order.OrderNumberSequence;
-import org.testinfected.petstore.product.Item;
-import org.testinfected.petstore.product.ItemInventory;
-import org.testinfected.petstore.product.ItemNumber;
 import org.hamcrest.Description;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
@@ -24,7 +12,17 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.testinfected.petstore.QueryUnitOfWork;
 import org.testinfected.petstore.Transactor;
+import org.testinfected.petstore.billing.PaymentMethod;
+import org.testinfected.petstore.order.Cart;
+import org.testinfected.petstore.order.CartItem;
+import org.testinfected.petstore.order.Cashier;
+import org.testinfected.petstore.order.Order;
+import org.testinfected.petstore.order.OrderBook;
+import org.testinfected.petstore.order.OrderNumber;
+import org.testinfected.petstore.order.OrderNumberSequence;
+import org.testinfected.petstore.product.ItemInventory;
 
 import java.math.BigDecimal;
 
@@ -48,23 +46,9 @@ public class CashierTest {
     Cart cart = new Cart();
     Transactor transactor = context.mock(Transactor.class);
 
-    Cashier cashier = new Cashier(sequence, orderBook, inventory, cart, transactor);
+    Cashier cashier = new Cashier(sequence, orderBook, cart, transactor);
 
     States transaction = context.states("transaction").startsAs("not started");
-
-    @SuppressWarnings("unchecked")
-    @Test public void
-    findsItemInInventoryAndAddToCart() {
-        final Item itemAlreadyInCart = anItem().withNumber("12345678").build();
-        cart.add(itemAlreadyInCart);
-
-        context.checking(new Expectations() {{
-            allowing(inventory).find(with(equal(new ItemNumber("12345678")))); will(returnValue(itemAlreadyInCart));
-        }});
-
-        cashier.addToCart(new ItemNumber("12345678"));
-        assertThat("order content", cashier.orderContent(), containsItems(itemWith(number("12345678"), quantity(2))));
-    }
 
     @SuppressWarnings("unchecked")
     @Test public void

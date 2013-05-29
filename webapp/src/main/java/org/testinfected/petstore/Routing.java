@@ -55,7 +55,7 @@ public class Routing implements Application {
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
         final OrderNumberSequence orderNumberSequence = new OrderNumberDatabaseSequence(connection);
         final OrderBook orderBook = new OrdersDatabase(connection);
-        final Cashier cashier = new Cashier(orderNumberSequence, orderBook, itemInventory, cart, transactor);
+        final Cashier cashier = new Cashier(orderNumberSequence, orderBook, cart, transactor);
 
         Router router = Router.draw(new DynamicRoutes() {{
             get("/products").to(new ListProducts(productCatalog, attachmentStorage, pages.products()));
@@ -63,7 +63,7 @@ public class Routing implements Application {
             get("/products/:product/items").to(new ListItems(itemInventory, pages.items()));
             post("/products/:product/items").to(new CreateItem(requestHandler));
             get("/cart").to(new ShowCart(pages.cart()));
-            post("/cart").to(new CreateCartItem(cashier));
+            post("/cart").to(new CreateCartItem(itemInventory));
             get("/orders/new").to(new Checkout(cashier, pages.checkout()));
             get("/orders/:number").to(new ShowOrder(orderBook, pages.order()));
             post("/orders").to(new PlaceOrder(cashier));
