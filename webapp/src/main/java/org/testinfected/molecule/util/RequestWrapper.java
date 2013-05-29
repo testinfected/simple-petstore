@@ -54,4 +54,8 @@ public class RequestWrapper implements Request {
     public Session session() {
         return request.session();
     }
+
+    public Session session(boolean create) {
+        return request.session(create);
+    }
 }

@@ -90,7 +90,6 @@ public class HttpResponse {
         assertHasHeader("Set-Cookie", containsString(name + "="));
     }
 
-
     public void assertHasNoCookie(String name) {
         assertHasHeader("Set-Cookie", not(containsString(name)));
     }

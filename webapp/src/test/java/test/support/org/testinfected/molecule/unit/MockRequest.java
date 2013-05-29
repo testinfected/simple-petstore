@@ -114,6 +114,10 @@ public class MockRequest implements Request {
         return null;
     }
 
+    public Session session(boolean create) {
+        return null;
+    }
+
     public String toString() {
         return String.format("%s %s", method(), pathInfo());
     }

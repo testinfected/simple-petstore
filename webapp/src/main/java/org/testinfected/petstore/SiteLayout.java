@@ -1,5 +1,6 @@
 package org.testinfected.petstore;
 
+import org.testinfected.molecule.Session;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.molecule.decoration.Layout;
 import org.testinfected.molecule.Request;
@@ -22,11 +23,15 @@ public class SiteLayout extends AbstractMiddleware {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        Cart cart = new SessionScope(request.session()).cart();
         FilterMap filtering = new FilterMap();
-        filtering.map("/", SiteMesh.html(new MainLayout("main", renderer, cart)));
+        filtering.map("/", SiteMesh.html(new MainLayout("main", renderer, cart(request))));
         filtering.connectTo(successor);
         filtering.handle(request, response);
+    }
+
+    private Cart cart(Request request) {
+        Session session = request.session(false);
+        return session != null ? new SessionScope(session).cart() : new Cart();
     }
 
     public static class MainLayout implements Layout {

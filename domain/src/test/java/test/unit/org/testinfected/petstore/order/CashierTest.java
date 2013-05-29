@@ -25,7 +25,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.petstore.Transactor;
-import org.testinfected.petstore.UnitOfWork;
 
 import java.math.BigDecimal;
 

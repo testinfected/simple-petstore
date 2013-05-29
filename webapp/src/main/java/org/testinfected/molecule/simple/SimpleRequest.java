@@ -58,11 +58,18 @@ public class SimpleRequest implements org.testinfected.molecule.Request {
     }
 
     public Session session() {
+        return session(true);
+    }
+
+    public Session session(boolean create) {
+        final org.simpleframework.http.session.Session session;
         try {
-            return new SimpleSession(request.getSession());
+            session = request.getSession(create);
         } catch (LeaseException e) {
             throw new HttpException("Cannot acquire session", e);
         }
+
+         return session != null ? new SimpleSession(session) : null;
     }
 
     public <T> T unwrap(Class<T> type) {
