@@ -16,23 +16,18 @@ import org.testinfected.petstore.QueryUnitOfWork;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.order.Cart;
-import org.testinfected.petstore.order.CartItem;
 import org.testinfected.petstore.order.Cashier;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.OrderNumberSequence;
-import org.testinfected.petstore.product.ItemInventory;
 
 import java.math.BigDecimal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.any;
-import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.iterableWithSize;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
@@ -42,11 +37,10 @@ public class CashierTest {
     Mockery context = new JUnit4Mockery();
     OrderNumberSequence sequence = context.mock(OrderNumberSequence.class);
     OrderBook orderBook = context.mock(OrderBook.class);
-    ItemInventory inventory = context.mock(ItemInventory.class);
     Cart cart = new Cart();
     Transactor transactor = context.mock(Transactor.class);
 
-    Cashier cashier = new Cashier(sequence, orderBook, cart, transactor);
+    Cashier cashier = new Cashier(sequence, orderBook, transactor);
 
     States transaction = context.states("transaction").startsAs("not started");
 
@@ -70,12 +64,8 @@ public class CashierTest {
                     paid()))); when(transaction.is("started"));
         }});
 
-        assertThat("order number", cashier.placeOrder(paymentMethod), equalTo(nextNumber));
+        assertThat("order number", cashier.placeOrder(cart, paymentMethod), equalTo(nextNumber));
         assertThat("cart not emptied", cart.empty());
-    }
-
-    private Matcher<Iterable<? extends CartItem>> isEmpty() {
-        return emptyIterable();
     }
 
     private Matcher<Order> anOrder(Matcher<? super Order>... matchers) {
@@ -110,34 +100,6 @@ public class CashierTest {
         return new FeatureMatcher<Order, String>(equalTo(number), "order with number", "number") {
             protected String featureValueOf(Order actual) {
                 return actual.getNumber();
-            }
-        };
-    }
-
-    private Matcher<Iterable<CartItem>> hasItemCount(final int count) {
-        return iterableWithSize(count);
-    }
-
-    private Matcher<Iterable<CartItem>> containsItems(Matcher<? super CartItem>... cartItemMatchers) {
-        return hasItems(cartItemMatchers);
-    }
-
-    private Matcher<CartItem> itemWith(Matcher<CartItem>... itemMatchers) {
-        return allOf(itemMatchers);
-    }
-
-    private Matcher<CartItem> quantity(int count) {
-        return new FeatureMatcher<CartItem, Integer>(equalTo(count), "an item with quantity", "item quantity") {
-            @Override protected Integer featureValueOf(CartItem actual) {
-                return actual.getQuantity();
-            }
-        };
-    }
-
-    private Matcher<CartItem> number(String number) {
-        return new FeatureMatcher<CartItem, String>(equalTo(number), "an item with number", "item number") {
-            @Override protected String featureValueOf(CartItem actual) {
-                return actual.getItemNumber();
             }
         };
     }

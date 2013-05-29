@@ -31,12 +31,16 @@ public class ShowCartTest {
     @Test public void
     makesCartAvailableToView() throws Exception {
         final Cart cart = aCart().containing(anItem()).build();
-        request.session().put(Cart.class, cart);
+        storeInSession(cart);
 
         context.checking(new Expectations() {{
             oneOf(cartPage).render(with(response), with(hasEntry("cart", cart)));
         }});
 
         showCart.handle(request, response);
+    }
+
+    private void storeInSession(Cart cart) {
+        request.session().put(Cart.class, cart);
     }
 }

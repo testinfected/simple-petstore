@@ -10,15 +10,18 @@ import org.junit.runner.RunWith;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
+import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
+import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
+import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 @RunWith(JMock.class)
 public class PlaceOrderTest {
@@ -36,12 +39,19 @@ public class PlaceOrderTest {
     placesOrderAndRedirectsToReceiptPage() throws Exception {
         final CreditCardDetails validPaymentDetails = validVisaDetails().build();
         requestSubmits(validPaymentDetails);
+        final Cart cart = aCart().containing(anItem()).build();
+        storeInSession(cart);
+
         context.checking(new Expectations() {{
-            oneOf(salesAssistant).placeOrder(with(samePaymentMethodAs(validPaymentDetails))); will(returnValue(new OrderNumber(orderNumber)));
+            oneOf(salesAssistant).placeOrder(with(same(cart)), with(samePaymentMethodAs(validPaymentDetails))); will(returnValue(new OrderNumber(orderNumber)));
         }});
 
         placeOrder.handle(request, response);
         response.assertRedirectedTo("/orders/" + orderNumber);
+    }
+
+    private void storeInSession(Cart cart) {
+        request.session().put(Cart.class, cart);
     }
 
     private void requestSubmits(final CreditCardDetails paymentDetails) {

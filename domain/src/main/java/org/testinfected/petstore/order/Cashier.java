@@ -7,17 +7,15 @@ import org.testinfected.petstore.billing.PaymentMethod;
 public class Cashier implements SalesAssistant {
     private final OrderNumberSequence orderNumberSequence;
     private final OrderBook orderBook;
-    private final Cart cart;
     private final Transactor transactor;
 
-    public Cashier(OrderNumberSequence orderNumberSequence, OrderBook orderBook, Cart cart, Transactor transactor) {
+    public Cashier(OrderNumberSequence orderNumberSequence, OrderBook orderBook, Transactor transactor) {
         this.orderNumberSequence = orderNumberSequence;
         this.orderBook = orderBook;
-        this.cart = cart;
         this.transactor = transactor;
     }
 
-    public OrderNumber placeOrder(final PaymentMethod paymentMethod) throws Exception {
+    public OrderNumber placeOrder(final Cart cart, final PaymentMethod paymentMethod) throws Exception {
         QueryUnitOfWork<OrderNumber> confirmation = new QueryUnitOfWork<OrderNumber>() {
             public OrderNumber query() throws Exception {
                 OrderNumber nextNumber = orderNumberSequence.nextOrderNumber();

@@ -1,5 +1,9 @@
 package org.testinfected.petstore;
 
+import org.testinfected.molecule.Application;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
+import org.testinfected.molecule.middlewares.Router;
 import org.testinfected.molecule.routing.DynamicRoutes;
 import org.testinfected.petstore.controllers.Checkout;
 import org.testinfected.petstore.controllers.CreateCartItem;
@@ -17,7 +21,6 @@ import org.testinfected.petstore.jdbc.JDBCTransactor;
 import org.testinfected.petstore.jdbc.OrderNumberDatabaseSequence;
 import org.testinfected.petstore.jdbc.OrdersDatabase;
 import org.testinfected.petstore.jdbc.ProductsDatabase;
-import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.Cashier;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumberSequence;
@@ -27,11 +30,6 @@ import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
-import org.testinfected.molecule.Application;
-import org.testinfected.molecule.Request;
-import org.testinfected.molecule.Response;
-import org.testinfected.molecule.middlewares.Router;
-import org.testinfected.petstore.util.SessionScope;
 
 import java.sql.Connection;
 
@@ -47,7 +45,6 @@ public class Routing implements Application {
 
     public void handle(final Request request, final Response response) throws Exception {
         final AttachmentStorage attachmentStorage = new FileSystemPhotoStore("/photos");
-        final Cart cart = new SessionScope(request.session()).cart();
         final Connection connection = new ConnectionReference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);
         final ProductCatalog productCatalog = new ProductsDatabase(connection);
@@ -55,7 +52,7 @@ public class Routing implements Application {
         final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
         final OrderNumberSequence orderNumberSequence = new OrderNumberDatabaseSequence(connection);
         final OrderBook orderBook = new OrdersDatabase(connection);
-        final Cashier cashier = new Cashier(orderNumberSequence, orderBook, cart, transactor);
+        final Cashier cashier = new Cashier(orderNumberSequence, orderBook, transactor);
 
         Router router = Router.draw(new DynamicRoutes() {{
             get("/products").to(new ListProducts(productCatalog, attachmentStorage, pages.products()));

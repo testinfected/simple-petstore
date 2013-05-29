@@ -15,6 +15,7 @@ import org.testinfected.petstore.controllers.Checkout;
 import org.testinfected.petstore.order.Cart;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
+import test.support.org.testinfected.petstore.builders.CartBuilder;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class CheckoutTest {
     @SuppressWarnings("unchecked") @Test public void
     makesCartAndSupportedCardTypesAvailableToView() throws Exception {
         final BigDecimal total = new BigDecimal("324.98");
-        request.session().put(Cart.class, aCart().containing(anItem().priced(total)).build());
+        storeInSession(aCart().containing(anItem().priced(total)));
         final Map<CreditCardType, String> cardTypes = CreditCardType.options();
 
         context.checking(new Expectations() {{
@@ -44,6 +45,10 @@ public class CheckoutTest {
         }});
 
         checkout.handle(request, response);
+    }
+
+    private void storeInSession(CartBuilder cart) {
+        request.session().put(Cart.class, cart.build());
     }
 
     private Matcher<Map<String, Object>> allOf(final Matcher<? super Map<String, Object>>... matchers) {
