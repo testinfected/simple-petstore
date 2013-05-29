@@ -6,6 +6,7 @@
 <body>
 <div id="cart">
 
+  {{#cart}}
   Your cart contains the following items:
   <table id="cart-content">
     <tr>
@@ -27,7 +28,7 @@
       <td></td>
       <td></td>
       <td class="price">Grand total:</td>
-      <td class="total" id="cart-grand-total">{{total}}</td>
+      <td class="total" id="cart-grand-total">{{grandTotal}}</td>
       <td></td>
     </tr>
   </table>
@@ -36,6 +37,7 @@
     <a id="continue-shopping" class="continue" href="/">&laquo; continue shopping</a>
     <div id="checkout"><a href="/orders/new">Checkout</a></div>
   </div>
+  {{/cart}}
 </div>
 </body>
 </html>

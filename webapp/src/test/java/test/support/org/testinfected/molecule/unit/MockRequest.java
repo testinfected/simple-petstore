@@ -18,6 +18,7 @@ public class MockRequest implements Request {
     private String path = "/";
     private String ip = "127.0.0.1";
     private String protocol = "HTTP/1.1";
+    private Session session;
 
     public static MockRequest aRequest() {
         return new MockRequest();
@@ -111,11 +112,14 @@ public class MockRequest implements Request {
     }
 
     public Session session() {
-        return null;
+        return session(true);
     }
 
     public Session session(boolean create) {
-        return null;
+        if (session == null && create) {
+            session = new MockSession();
+        }
+        return session;
     }
 
     public String toString() {

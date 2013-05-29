@@ -92,6 +92,6 @@ public class CartPageTest {
     }
 
     private OfflineRenderer renderCartPage() {
-        return OfflineRenderer.render(CART_TEMPLATE).from(WebRoot.pages()).with("items", cart.getItems()).and("total", cart.getGrandTotal());
+        return OfflineRenderer.render(CART_TEMPLATE).from(WebRoot.pages()).with("cart", cart);
     }
 }
