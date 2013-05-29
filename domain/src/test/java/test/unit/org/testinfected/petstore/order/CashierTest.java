@@ -52,17 +52,6 @@ public class CashierTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    knowsCurrentOrderDetails() {
-        cart.add(anItem().withNumber("12345678").priced("100.00").build());
-        cart.add(anItem().withNumber("87654321").priced("150.00").build());
-
-        assertThat("order total", cashier.orderTotal(), equalTo(new BigDecimal("250.00")));
-        assertThat("order content", cashier.orderContent(), hasItemCount(2));
-        assertThat("order content", cashier.orderContent(), containsItems(itemWith(number("12345678")), itemWith(number("87654321"))));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test public void
     acceptsPaymentAndRecordsOrder() throws Exception {
         cart.add(anItem().withNumber("00000100").priced("100.00").build());
         cart.add(anItem().withNumber("00000100").priced("100.00").build());
@@ -82,7 +71,7 @@ public class CashierTest {
         }});
 
         assertThat("order number", cashier.placeOrder(paymentMethod), equalTo(nextNumber));
-        assertThat("next order", cashier.orderContent(), isEmpty());
+        assertThat("cart not emptied", cart.empty());
     }
 
     private Matcher<Iterable<? extends CartItem>> isEmpty() {

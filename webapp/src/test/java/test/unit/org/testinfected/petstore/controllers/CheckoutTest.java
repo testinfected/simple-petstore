@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.controllers.Checkout;
-import org.testinfected.petstore.order.SalesAssistant;
+import org.testinfected.petstore.order.Cart;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 
@@ -21,25 +21,25 @@ import java.util.Map;
 
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
+import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 @RunWith(JMock.class)
 public class CheckoutTest {
     Mockery context = new JUnit4Mockery();
-    SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
     Page checkoutPage = context.mock(Page.class);
-    Checkout checkout = new Checkout(salesAssistant, checkoutPage);
+    Checkout checkout = new Checkout(checkoutPage);
 
     MockRequest request = aRequest();
     MockResponse response = aResponse();
 
-    @SuppressWarnings("unchecked")
-    @Test public void
-    makesOrderTotalAndCartTypesAvailableToView() throws Exception {
+    @SuppressWarnings("unchecked") @Test public void
+    makesCartAndSupportedCardTypesAvailableToView() throws Exception {
         final BigDecimal total = new BigDecimal("324.98");
+        request.session().put(Cart.class, aCart().containing(anItem().priced(total)).build());
         final Map<CreditCardType, String> cardTypes = CreditCardType.options();
 
         context.checking(new Expectations() {{
-            allowing(salesAssistant).orderTotal(); will(returnValue(total));
             oneOf(checkoutPage).render(with(response), with(allOf(hasEntry("total", total), hasEntry("cardTypes", cardTypes.entrySet()))));
         }});
 

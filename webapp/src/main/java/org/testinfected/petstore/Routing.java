@@ -64,7 +64,7 @@ public class Routing implements Application {
             post("/products/:product/items").to(new CreateItem(requestHandler));
             get("/cart").to(new ShowCart(pages.cart()));
             post("/cart").to(new CreateCartItem(itemInventory));
-            get("/orders/new").to(new Checkout(cashier, pages.checkout()));
+            get("/orders/new").to(new Checkout(pages.checkout()));
             get("/orders/:number").to(new ShowOrder(orderBook, pages.order()));
             post("/orders").to(new PlaceOrder(cashier));
             delete("/logout").to(new Logout());

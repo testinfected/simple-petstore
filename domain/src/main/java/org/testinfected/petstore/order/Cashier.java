@@ -4,8 +4,6 @@ import org.testinfected.petstore.QueryUnitOfWork;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.billing.PaymentMethod;
 
-import java.math.BigDecimal;
-
 public class Cashier implements SalesAssistant {
     private final OrderNumberSequence orderNumberSequence;
     private final OrderBook orderBook;
@@ -17,14 +15,6 @@ public class Cashier implements SalesAssistant {
         this.orderBook = orderBook;
         this.cart = cart;
         this.transactor = transactor;
-    }
-
-    public BigDecimal orderTotal() {
-        return cart.getGrandTotal();
-    }
-
-    public Iterable<CartItem> orderContent() {
-        return cart.getItems();
     }
 
     public OrderNumber placeOrder(final PaymentMethod paymentMethod) throws Exception {
