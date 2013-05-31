@@ -1,12 +1,10 @@
 package test.unit.org.testinfected.molecule.middlewares;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.HttpStatus;
 import org.testinfected.molecule.Request;
@@ -24,12 +22,11 @@ import static test.support.org.testinfected.molecule.unit.DateBuilder.calendarDa
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
-@RunWith(JMock.class)
 public class ApacheCommonLoggerTest {
-
-    Mockery context = new JUnit4Mockery() {{
+    @Rule public JUnitRuleMockery context = new JUnitRuleMockery() {{
         setImposteriser(ClassImposteriser.INSTANCE);
     }};
+
     Logger logger = context.mock(Logger.class);
     Date now = calendarDate(2012, 6, 27).atTime(18, 4, 0).inZone("EDT").build();
     ApacheCommonLogger apacheCommonLogger = new ApacheCommonLogger(logger, BrokenClock.stoppedAt(now));

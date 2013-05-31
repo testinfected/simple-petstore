@@ -26,14 +26,14 @@ artifacts:
   windowlicker_web: com.googlecode.windowlicker:windowlicker-web:jar:r268
   juniversalchardet: com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3
   nekohtml: net.sourceforge.nekohtml:nekohtml:jar:1.9.15
-  jmock_legacy: org.jmock:jmock-legacy:jar:2.5.1
+  jmock_legacy: org.jmock:jmock-legacy:jar:2.6.0
   jcl_over_slf4j: org.slf4j:jcl-over-slf4j:jar:1.5.6
   slf4j_api: org.slf4j:slf4j-api:jar:1.5.6
   slf4j_silent: org.slf4j:slf4j-nop:jar:1.5.6
   htmlunit: net.sourceforge.htmlunit:htmlunit:jar:2.9
 
 junit: 4.11
-jmock: 2.5.1
+jmock: 2.6.0
 
 selenium:
   version: 2.28.0

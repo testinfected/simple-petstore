@@ -1,16 +1,14 @@
 package test.unit.org.testinfected.petstore.controllers;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.testinfected.molecule.HttpStatus;
 import org.testinfected.petstore.controllers.CreateItem;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateItemException;
-import org.testinfected.molecule.HttpStatus;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 
@@ -18,10 +16,9 @@ import java.math.BigDecimal;
 
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
-@RunWith(JMock.class)
 public class CreateItemTest {
+    @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
-    Mockery context = new JUnit4Mockery();
     ProcurementRequestHandler requestHandler = context.mock(ProcurementRequestHandler.class);
     CreateItem createItem = new CreateItem(requestHandler);
 

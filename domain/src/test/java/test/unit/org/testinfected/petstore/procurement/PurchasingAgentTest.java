@@ -1,12 +1,10 @@
 package test.unit.org.testinfected.petstore.procurement;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
 import org.jmock.States;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.testinfected.petstore.AbstractTransactor;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.procurement.PurchasingAgent;
@@ -20,10 +18,9 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
-@RunWith(JMock.class)
 public class PurchasingAgentTest {
+    @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
-    Mockery context = new JUnit4Mockery();
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
     ItemInventory itemInventory = context.mock(ItemInventory.class);
 

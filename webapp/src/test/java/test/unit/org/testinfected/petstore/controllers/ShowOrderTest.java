@@ -1,11 +1,9 @@
 package test.unit.org.testinfected.petstore.controllers;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.testinfected.petstore.controllers.ShowOrder;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderBook;
@@ -16,10 +14,9 @@ import test.support.org.testinfected.petstore.web.MockPage;
 
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 
-@RunWith(JMock.class)
 public class ShowOrderTest {
+    @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
-    Mockery context = new JUnit4Mockery();
     OrderBook orderBook = context.mock(OrderBook.class);
     MockPage orderPage = new MockPage();
     ShowOrder showOrder = new ShowOrder(orderBook, orderPage);

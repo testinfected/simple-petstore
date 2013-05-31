@@ -1,13 +1,11 @@
 package test.unit.org.testinfected.petstore.controllers;
 
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
@@ -23,10 +21,9 @@ import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
-@RunWith(JMock.class)
 public class ListItemsTest {
+    @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
-    Mockery context = new JUnit4Mockery();
     ItemInventory itemInventory = context.mock(ItemInventory.class);
     MockPage itemsPage = new MockPage();
     ListItems listItems = new ListItems(itemInventory, itemsPage);

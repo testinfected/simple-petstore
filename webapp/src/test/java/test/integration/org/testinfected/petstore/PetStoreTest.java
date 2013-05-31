@@ -6,13 +6,13 @@ import org.jmock.Mockery;
 import org.jmock.States;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.jmock.lib.action.CustomAction;
+import org.jmock.lib.concurrent.Synchroniser;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.testinfected.molecule.simple.SimpleServer;
 import org.testinfected.molecule.util.FailureReporter;
 import org.testinfected.petstore.PetStore;
@@ -49,12 +49,14 @@ import static test.support.org.testinfected.molecule.unit.DateBuilder.calendarDa
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
-@RunWith(JMock.class)
 public class PetStoreTest {
 
     static final String SESSION_COOKIE = "JSESSIONID";
 
-    Mockery context = new JUnit4Mockery();
+    @Rule public JUnitRuleMockery context = new JUnitRuleMockery() {{
+        setThreadingPolicy(new Synchroniser());
+    }};
+
     FailureReporter failureReporter = context.mock(FailureReporter.class);
     DataSource dataSource = context.mock(DataSource.class);
     PetStore petstore = new PetStore(WebRoot.locate(), dataSource);

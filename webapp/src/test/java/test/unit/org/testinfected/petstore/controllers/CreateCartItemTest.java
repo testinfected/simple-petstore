@@ -3,11 +3,9 @@ package test.unit.org.testinfected.petstore.controllers;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.testinfected.molecule.Session;
 import org.testinfected.petstore.controllers.CreateCartItem;
 import org.testinfected.petstore.order.Cart;
@@ -25,10 +23,9 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.notNullValue;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
-@RunWith(JMock.class)
 public class CreateCartItemTest {
+    @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
-    Mockery context = new JUnit4Mockery();
     ItemInventory inventory = context.mock(ItemInventory.class);
     CreateCartItem createCartItem = new CreateCartItem(inventory);
 
