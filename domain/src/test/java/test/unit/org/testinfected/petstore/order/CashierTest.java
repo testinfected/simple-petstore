@@ -1,19 +1,16 @@
 package test.unit.org.testinfected.petstore.order;
 
-import org.hamcrest.Description;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.States;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.petstore.QueryUnitOfWork;
-import org.testinfected.petstore.Transactor;
+import org.testinfected.petstore.AbstractTransactor;
+import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.Cashier;
@@ -26,7 +23,6 @@ import java.math.BigDecimal;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.equalTo;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
@@ -38,11 +34,9 @@ public class CashierTest {
     OrderNumberSequence sequence = context.mock(OrderNumberSequence.class);
     OrderBook orderBook = context.mock(OrderBook.class);
     Cart cart = new Cart();
-    Transactor transactor = context.mock(Transactor.class);
-
-    Cashier cashier = new Cashier(sequence, orderBook, transactor);
 
     States transaction = context.states("transaction").startsAs("not started");
+    Cashier cashier = new Cashier(sequence, orderBook, new StubTransactor(transaction));
 
     @SuppressWarnings("unchecked")
     @Test public void
@@ -55,7 +49,6 @@ public class CashierTest {
         PaymentMethod paymentMethod = validVisaDetails().build();
 
         context.checking(new Expectations() {{
-            oneOf(transactor).performQuery(with(aQuery())); will(performUnitOfWork());
             allowing(sequence).nextOrderNumber(); will(returnValue(nextNumber)); when(transaction.is("started"));
             oneOf(orderBook).record(with(anOrder(
                     withNumber(nextNumber.getNumber()),
@@ -104,32 +97,17 @@ public class CashierTest {
         };
     }
 
-    private Matcher<QueryUnitOfWork> aQuery() {
-        return any(QueryUnitOfWork.class);
-    }
-
-    private PerformQuery performUnitOfWork() {
-        return new PerformQuery(transaction);
-    }
-
-    private static class PerformQuery implements Action {
+    private class StubTransactor extends AbstractTransactor {
         private final States transaction;
 
-        public PerformQuery(States transaction) {
+        public StubTransactor(States transaction) {
             this.transaction = transaction;
         }
 
-        public Object invoke(Invocation invocation) throws Throwable {
-            QueryUnitOfWork work = (QueryUnitOfWork) invocation.getParameter(0);
+        public void perform(UnitOfWork work) throws Exception {
             transaction.become("started");
             work.execute();
             transaction.become("committed");
-            return work.result;
-        }
-
-        public void describeTo(Description description) {
-            description.appendText("performs query");
         }
     }
-
 }
