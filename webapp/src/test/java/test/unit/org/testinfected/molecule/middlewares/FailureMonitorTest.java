@@ -4,7 +4,6 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
@@ -33,17 +32,9 @@ public class FailureMonitorTest {
     MockRequest request = aRequest();
     MockResponse response = aResponse();
 
-    @Before public void
-    chainToSuccessor() {
-    }
-
     @Test public void
     notifiesFailureReporterAndRethrowsExceptionInCaseOfError() throws Exception {
-        monitor.connectTo(new Application() {
-            public void handle(Request request, Response response) throws Exception {
-                throw error;
-            }
-        });
+        monitor.connectTo(crashWith(error));
 
         context.checking(new Expectations() {{
             oneOf(failureReporter).errorOccurred(with(same(error)));
@@ -55,5 +46,13 @@ public class FailureMonitorTest {
         } catch (Exception e) {
             assertThat("error", e, sameInstance(error));
         }
+    }
+
+    private Application crashWith(final Exception error) {
+        return new Application() {
+            public void handle(Request request, Response response) throws Exception {
+                throw error;
+            }
+        };
     }
 }

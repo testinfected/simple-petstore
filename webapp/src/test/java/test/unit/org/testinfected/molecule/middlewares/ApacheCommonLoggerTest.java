@@ -5,7 +5,6 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
@@ -13,7 +12,7 @@ import org.testinfected.molecule.HttpStatus;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.molecule.middlewares.ApacheCommonLogger;
-import org.testinfected.molecule.util.Clock;
+import test.support.org.testinfected.molecule.unit.BrokenClock;
 
 import java.util.Date;
 import java.util.logging.Logger;
@@ -32,17 +31,8 @@ public class ApacheCommonLoggerTest {
         setImposteriser(ClassImposteriser.INSTANCE);
     }};
     Logger logger = context.mock(Logger.class);
-    Clock clock = context.mock(Clock.class);
-    ApacheCommonLogger apacheCommonLogger = new ApacheCommonLogger(logger, clock);
-
     Date now = calendarDate(2012, 6, 27).atTime(18, 4, 0).inZone("EDT").build();
-
-    @Before public void
-    stopClock() {
-        context.checking(new Expectations() {{
-            allowing(clock).now(); will(returnValue(now));
-        }});
-    }
+    ApacheCommonLogger apacheCommonLogger = new ApacheCommonLogger(logger, BrokenClock.stoppedAt(now));
 
     @Test public void
     logsRequestsServedInApacheCommonLogFormat() throws Exception {

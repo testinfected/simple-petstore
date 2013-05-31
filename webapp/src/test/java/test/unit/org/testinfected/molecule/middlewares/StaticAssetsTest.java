@@ -4,14 +4,17 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.testinfected.molecule.Application;
+import org.testinfected.molecule.HttpStatus;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
 import org.testinfected.molecule.middlewares.StaticAssets;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 
+import static org.testinfected.molecule.HttpStatus.OK;
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
@@ -19,17 +22,11 @@ import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse
 public class StaticAssetsTest {
 
     Mockery context = new JUnit4Mockery();
-    Application successor = context.mock(Application.class, "successor");
     Application fileServer = context.mock(Application.class, "file server");
     StaticAssets assets = new StaticAssets(fileServer, "/favicon.ico");
 
     MockRequest request = aRequest();
     MockResponse response = aResponse();
-
-    @Before public void
-    chainWithSuccessor() {
-        assets.connectTo(successor);
-    }
 
     @Test public void
     routesToFileServerWhenPathIsMatched() throws Exception {
@@ -44,10 +41,17 @@ public class StaticAssetsTest {
     }
 
     @Test public void
-    forwardsToNextApplicationWhenPathIsNotMatched() throws Exception {
-        context.checking(new Expectations() {{
-            oneOf(successor).handle(request, response);
-        }});
+    forwardsWhenPathIsNotMatched() throws Exception {
+        assets.connectTo(respondWith(OK));
         assets.handle(request.withPath("/home"), response);
+        response.assertStatus(OK);
+    }
+
+    private Application respondWith(final HttpStatus status) {
+        return new Application() {
+            public void handle(Request request, Response response) throws Exception {
+                response.status(status);
+            }
+        };
     }
 }

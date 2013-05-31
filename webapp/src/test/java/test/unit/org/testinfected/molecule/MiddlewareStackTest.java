@@ -1,57 +1,54 @@
 package test.unit.org.testinfected.molecule;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.States;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.internal.State;
-import org.jmock.internal.StateMachine;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.testinfected.molecule.*;
+import org.testinfected.molecule.Application;
+import org.testinfected.molecule.Middleware;
+import org.testinfected.molecule.MiddlewareStack;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
+import org.testinfected.molecule.middlewares.AbstractMiddleware;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 
-@RunWith(JMock.class)
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 public class MiddlewareStackTest {
 
     MiddlewareStack stack = new MiddlewareStack();
 
-    Mockery context = new JUnit4Mockery();
-    Application application = context.mock(Application.class);
-    Middleware onTop = context.mock(Middleware.class, "on top");
-    Middleware inTheMiddle = context.mock(Middleware.class, "in the middle");
-    Middleware atBottom = context.mock(Middleware.class, "at bottom");
-
-    Request request = new MockRequest();
-    Response response = new MockResponse();
-    final States chain = new StateMachine("chain");
+    MockRequest request = new MockRequest();
+    MockResponse response = new MockResponse();
 
     @Test public void
     assemblesChainInOrderOfAddition() throws Exception {
-        expectMiddlewaresToBeChainedFromTopToBottomThen(chain.is("assembled"));
-        expectChainToHandleRequestWhen(chain.is("assembled"));
-
-        stack.use(onTop);
-        stack.use(inTheMiddle);
-        stack.use(atBottom);
-        stack.run(application);
+        stack.use(middleware("top"));
+        stack.use(middleware("middle"));
+        stack.use(middleware("bottom"));
+        stack.run(application("app"));
 
         stack.handle(request, response);
+        assertChain("top -> middle -> bottom -> app");
     }
 
-    private void expectMiddlewaresToBeChainedFromTopToBottomThen(final State state) {
-        context.checking(new Expectations() {{
-            oneOf(onTop).connectTo(inTheMiddle);
-            oneOf(inTheMiddle).connectTo(atBottom);
-            oneOf(atBottom).connectTo(application); then(state);
-        }});
+    private Middleware middleware(final String order) {
+        return new AbstractMiddleware() {
+            public void handle(Request request, Response response) throws Exception {
+                response.body(order + " -> ");
+                forward(request, response);
+            }
+        };
     }
 
-    private void expectChainToHandleRequestWhen(final State state) throws Exception {
-        context.checking(new Expectations() {{
-            oneOf(onTop).handle(with(same(request)), with(same(response))); when(state);
-        }});
+    private Application application(final String app) {
+        return new Application() {
+            public void handle(Request request, Response response) throws Exception {
+                response.body(app);
+            }
+        };
+    }
+
+    private void assertChain(String chaining) {
+        assertThat("chaining", response.body(), equalTo(chaining));
     }
 }

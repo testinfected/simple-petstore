@@ -1,14 +1,6 @@
 package test.unit.org.testinfected.molecule.decoration;
 
-import org.hamcrest.Description;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.api.Action;
-import org.jmock.api.Invocation;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.testinfected.molecule.decoration.ContentProcessor;
 import org.testinfected.molecule.decoration.Decorator;
 import org.testinfected.molecule.decoration.Layout;
@@ -23,32 +15,13 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(JMock.class)
 public class PageCompositorTest {
 
-    Mockery context = new JUnit4Mockery();
-    ContentProcessor contentProcessor = context.mock(ContentProcessor.class);
-    @SuppressWarnings("unchecked")
-    Layout layout = context.mock(Layout.class);
-
-    Decorator compositor = new PageCompositor(contentProcessor, layout);
-
-    String originalPage = "<original page>";
-    String decoratedPage = "<decorated page>";
-    Map<String, Object> data = new HashMap<String, Object>();
+    Decorator compositor = new PageCompositor(new StubProcessor(), new StubLayout());
 
     @Test public void
     processesContentAndRendersLayout() throws Exception {
-        context.checking(new Expectations() {{
-            oneOf(contentProcessor).process(with(originalPage)); will(returnValue(data));
-            oneOf(layout).render(with(any(Writer.class)), with(same(data))); will(write(decoratedPage));
-        }});
-
-        assertThat("decorated page", decorate(originalPage), equalTo(decoratedPage));
-    }
-
-    private Action write(String output) {
-        return new Write(output);
+        assertThat("decorated content", decorate("content"), equalTo("<decorated>content</decorated>"));
     }
 
     private String decorate(final String page) throws IOException {
@@ -57,22 +30,19 @@ public class PageCompositorTest {
         return out.toString();
     }
 
-    public static class Write implements Action {
+    private class StubProcessor implements ContentProcessor {
 
-        private Object content;
-
-        public Write(Object content) {
-            this.content = content;
+        public Map<String, Object> process(String content) {
+            Map<String, Object> fragments = new HashMap<String, Object>();
+            fragments.put("content", "content");
+            return fragments;
         }
+    }
 
-        public Object invoke(Invocation invocation) throws Throwable {
-            Writer writer = (Writer) invocation.getParameter(0);
-            writer.write(content.toString());
-            return null;
-        }
+    private class StubLayout implements Layout {
 
-        public void describeTo(Description description) {
-            description.appendText("writes to output <").appendText(content.toString()).appendText(">");
+        public void render(Writer out, Map<String, Object> fragments) throws IOException {
+            out.write("<decorated>" + fragments.get("content") + "</decorated>");
         }
     }
 }

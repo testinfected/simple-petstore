@@ -18,22 +18,19 @@ public class FailsafeTest {
     Failsafe failsafe = new Failsafe();
 
     String errorMessage = "An internal error occurred!";
-    Exception error = new Exception(errorMessage);
+    Exception error = new Exception(errorMessage) {{
+        setStackTrace(new StackTraceElement[]{
+                new StackTraceElement("stack", "trace", "line", 1),
+                new StackTraceElement("stack", "trace", "line", 2)
+        });
+    }};
 
     MockRequest request = aRequest();
     MockResponse response = aResponse();
 
     @Before public void
     handleRequest() throws Exception {
-        failsafe.connectTo(new Application() {
-            public void handle(Request request, Response response) throws Exception {
-                error.setStackTrace(new StackTraceElement[] {
-                        new StackTraceElement("stack", "trace", "line", 1),
-                        new StackTraceElement("stack", "trace", "line", 2)
-                });
-                throw error;
-            }
-        });
+        failsafe.connectTo(crashWith(error));
         failsafe.handle(request, response);
     }
 
@@ -52,5 +49,13 @@ public class FailsafeTest {
     @Test public void
     setsResponseContentTypeToHtml() {
         response.assertHeader("Content-Type", containsString("text/html"));
+    }
+
+    private Application crashWith(final Exception error) {
+        return new Application() {
+            public void handle(Request request, Response response) throws Exception {
+                throw error;
+            }
+        };
     }
 }

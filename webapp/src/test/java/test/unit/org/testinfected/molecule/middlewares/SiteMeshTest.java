@@ -44,40 +44,30 @@ public class SiteMeshTest {
             allowing(selector).select(with(any(Response.class))); will(returnValue(true)); when(page.is("selected"));
             allowing(selector).select(with(any(Response.class))); will(returnValue(false)); when(page.isNot("selected"));
         }});
-
     }
 
     @Before public void
-    connectToSuccessor() {
-        siteMesh.connectTo(new Application() {
-            public void handle(Request request, Response response) throws Exception {
-                response.body(originalPage);
-            }
-        });
+    stubApplication() {
+        siteMesh.connectTo(write(originalPage));
     }
 
     @Test public void
     runsContentThroughDecoratorWhenPageIsSelected() throws Exception {
         siteMesh.handle(request, response);
-
         response.assertBody(decoratedPage);
     }
-
 
     @Test public void
     removesContentLengthHeaderWhenPageIsSelected() throws Exception {
         response.header("Content-Length", String.valueOf(140));
         siteMesh.handle(request, response);
-
         response.assertHeader("Content-Length", nullValue());
     }
 
     @Test public void
     leavesContentUntouchedWhenPageIsNotSelected() throws Exception {
         page.become("unselected");
-
         siteMesh.handle(request, response);
-
         response.assertBody(originalPage);
     }
 
@@ -90,6 +80,14 @@ public class SiteMeshTest {
 
         response.assertContentType(containsString("UTF-16"));
         response.assertContentEncodedAs("UTF-16");
+    }
+
+    private Application write(final String text) {
+        return new Application() {
+            public void handle(Request request, Response response) throws Exception {
+                response.body(text);
+            }
+        };
     }
 
     private class FakeDecorator implements Decorator {

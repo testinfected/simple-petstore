@@ -1,13 +1,8 @@
 package test.unit.org.testinfected.molecule.middlewares;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.testinfected.molecule.Application;
 import org.testinfected.molecule.middlewares.FileServer;
+import org.testinfected.molecule.middlewares.NotFound;
 import org.testinfected.molecule.util.Streams;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
@@ -18,18 +13,15 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import static org.testinfected.molecule.HttpStatus.NOT_FOUND;
 import static org.testinfected.molecule.HttpStatus.OK;
 import static test.support.org.testinfected.molecule.unit.MockRequest.GET;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
-@RunWith(JMock.class)
 public class FileServerTest {
 
-    Mockery context = new JUnit4Mockery();
-    Application notFound = context.mock(Application.class, "notFound");
-
     File base = locateBase();
-    FileServer fileServer = new FileServer(base, notFound);
+    FileServer fileServer = new FileServer(base, new NotFound());
     File file = new File(base, "assets/image.png");
 
     MockRequest request = GET("assets/image.png");
@@ -72,11 +64,8 @@ public class FileServerTest {
 
     @Test public void
     rendersNotFoundWhenFileIsNotFound() throws Exception {
-        context.checking(new Expectations() {{
-            oneOf(notFound).handle(request, response);
-        }});
-
         fileServer.handle(request.withPath("/images/missing.png"), response);
+        response.assertStatus(NOT_FOUND);
     }
 
     private byte[] contentOf(final File file) throws IOException, URISyntaxException {

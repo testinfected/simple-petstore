@@ -144,7 +144,7 @@ public class MockResponse implements Response {
     }
 
     public void assertBody(Matcher<? super String> bodyMatcher) {
-        assertThat("content", new String(content(), charset()), bodyMatcher);
+        assertThat("body", new String(content(), charset()), bodyMatcher);
     }
 
     public void assertContent(byte[] content) {
@@ -177,6 +177,14 @@ public class MockResponse implements Response {
         return this;
     }
 
+    public String body() {
+        return new String(content(), charset());
+    }
+
+    public byte[] content() {
+        return output.toByteArray();
+    }
+
     public String toString() {
         return output.toString();
     }
@@ -187,10 +195,6 @@ public class MockResponse implements Response {
     private static final String CHARSET = "charset=([^;]+)";
     private static final Pattern CONTENT_TYPE_FORMAT = Pattern.compile(String.format("%s/%s(?:;\\s*%s)+", TYPE, SUBTYPE, CHARSET));
     private static final int ENCODING = 1;
-
-    private byte[] content() {
-        return output.toByteArray();
-    }
 
     private static Charset parseCharset(String contentType) {
         java.util.regex.Matcher matcher = CONTENT_TYPE_FORMAT.matcher(contentType);
