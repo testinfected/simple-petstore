@@ -59,7 +59,7 @@ public class PetStoreTest {
     DataSource dataSource = context.mock(DataSource.class);
     PetStore petstore = new PetStore(WebRoot.locate(), dataSource);
 
-    States databaseStatus = context.states("database").startsAs("up");
+    States system = context.states("system").startsAs("up");
     Database database = Database.in(TestDatabaseEnvironment.load());
     Connection connection = database.connect();
 
@@ -77,8 +77,8 @@ public class PetStoreTest {
     @Before public void
     startServer() throws Exception {
         context.checking(new Expectations() {{
-            allowing(dataSource).getConnection(); will(openConnection()); when(databaseStatus.is("up"));
-            allowing(dataSource).getConnection(); will(throwException(new SQLException("Database is down"))); when(databaseStatus.isNot("up"));
+            allowing(dataSource).getConnection(); will(openConnection()); when(system.is("up"));
+            allowing(dataSource).getConnection(); will(throwException(new SQLException("Database is down"))); when(system.isNot("up"));
         }});
         database.clean();
 
@@ -88,7 +88,7 @@ public class PetStoreTest {
         petstore.logTo(new FileHandler(logFile.path()));
 
         context.checking(new Expectations() {{
-            allowing(failureReporter).errorOccurred(with(any(Exception.class))); will(captureInternalError()); when(databaseStatus.is("up"));
+            allowing(failureReporter).errorOccurred(with(any(Exception.class))); will(captureInternalError()); when(system.is("up"));
         }});
 
         petstore.reportErrorsTo(failureReporter);
@@ -173,9 +173,9 @@ public class PetStoreTest {
 
     @Test public void
     renders500AndReportsFailureWhenSomethingGoesWrong() throws Exception {
-        databaseStatus.become("down");
+        system.become("down");
         context.checking(new Expectations() {{
-            oneOf(failureReporter).errorOccurred(with(isA(SQLException.class))); when(databaseStatus.isNot("up"));
+            oneOf(failureReporter).errorOccurred(with(isA(SQLException.class))); when(system.isNot("up"));
         }});
 
         response = request.get("/products");
