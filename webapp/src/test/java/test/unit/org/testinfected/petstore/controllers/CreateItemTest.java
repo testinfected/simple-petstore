@@ -17,8 +17,6 @@ import test.support.org.testinfected.molecule.unit.MockResponse;
 import java.math.BigDecimal;
 
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
-import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class CreateItemTest {
@@ -27,11 +25,11 @@ public class CreateItemTest {
     ProcurementRequestHandler requestHandler = context.mock(ProcurementRequestHandler.class);
     CreateItem createItem = new CreateItem(requestHandler);
 
-    MockRequest request = aRequest();
-    MockResponse response = aResponse();
+    MockRequest request = new MockRequest();
+    MockResponse response = new MockResponse();
 
     @Before public void
-    prepareRequest() {
+    addItemDetailsToRequest() {
         request.addParameter("product", "LAB-1234");
         request.addParameter("number", "12345678");
         request.addParameter("description", "Chocolate Male");
@@ -45,18 +43,16 @@ public class CreateItemTest {
         }});
 
         createItem.handle(request, response);
-
         response.assertStatus(HttpStatus.CREATED);
     }
 
     @Test public void
-    respondsWithForbiddenWhenItemAlreadyExists() throws Exception {
+    reportsResourceConflictItemAlreadyExists() throws Exception {
         context.checking(new Expectations() {{
             oneOf(requestHandler).addToInventory(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(BigDecimal.class))); will(throwException(new DuplicateItemException(anItem().build())));
         }});
 
         createItem.handle(request, response);
-
         response.assertStatus(HttpStatus.CONFLICT);
     }
 }

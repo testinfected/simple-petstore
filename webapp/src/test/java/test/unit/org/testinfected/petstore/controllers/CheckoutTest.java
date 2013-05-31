@@ -1,38 +1,26 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.hamcrest.core.AllOf;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.testinfected.petstore.Page;
 import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.controllers.Checkout;
 import org.testinfected.petstore.order.Cart;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.CartBuilder;
+import test.support.org.testinfected.petstore.web.MockPage;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
-import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
-@RunWith(JMock.class)
 public class CheckoutTest {
-    Mockery context = new JUnit4Mockery();
-    Page checkoutPage = context.mock(Page.class);
+    MockPage checkoutPage = new MockPage();
     Checkout checkout = new Checkout(checkoutPage);
 
-    MockRequest request = aRequest();
-    MockResponse response = aResponse();
+    MockRequest request = new MockRequest();
+    MockResponse response = new MockResponse();
 
     @SuppressWarnings("unchecked") @Test public void
     makesCartAndSupportedCardTypesAvailableToView() throws Exception {
@@ -40,22 +28,14 @@ public class CheckoutTest {
         storeInSession(aCart().containing(anItem().priced(total)));
         final Map<CreditCardType, String> cardTypes = CreditCardType.options();
 
-        context.checking(new Expectations() {{
-            oneOf(checkoutPage).render(with(response), with(allOf(hasEntry("total", total), hasEntry("cardTypes", cardTypes.entrySet()))));
-        }});
-
         checkout.handle(request, response);
+
+        checkoutPage.assertRenderedTo(response);
+        checkoutPage.assertRenderedWith("total", total);
+        checkoutPage.assertRenderedWith("cardTypes", cardTypes.entrySet());
     }
 
     private void storeInSession(CartBuilder cart) {
         request.session().put(Cart.class, cart.build());
-    }
-
-    private Matcher<Map<String, Object>> allOf(final Matcher<? super Map<String, Object>>... matchers) {
-        return AllOf.allOf(matchers);
-    }
-
-    private Matcher<Map<? extends String, ?>> hasEntry(String key, Object value) {
-        return Matchers.hasEntry(key, value);
     }
 }

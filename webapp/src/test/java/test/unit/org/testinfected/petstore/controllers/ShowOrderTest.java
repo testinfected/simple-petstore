@@ -6,15 +6,14 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.testinfected.petstore.Page;
 import org.testinfected.petstore.controllers.ShowOrder;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumber;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
+import test.support.org.testinfected.petstore.web.MockPage;
 
-import static org.hamcrest.Matchers.hasEntry;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 
 @RunWith(JMock.class)
@@ -22,24 +21,29 @@ public class ShowOrderTest {
 
     Mockery context = new JUnit4Mockery();
     OrderBook orderBook = context.mock(OrderBook.class);
-    Page orderPage = context.mock(Page.class);
+    MockPage orderPage = new MockPage();
     ShowOrder showOrder = new ShowOrder(orderBook, orderPage);
 
-    MockRequest request = MockRequest.aRequest();
-    MockResponse response = MockResponse.aResponse();
+    MockRequest request = new MockRequest();
+    MockResponse response = new MockResponse();
 
     String orderNumber = "00000100";
 
     @Test public void
     fetchesOrderByNumberAndDisplaysReceipt() throws Exception {
-        final Order order = anOrder().build();
+        final Order order = anOrder().withNumber(orderNumber).build();
         request.addParameter("number", orderNumber);
 
-        context.checking(new Expectations() {{
-            allowing(orderBook).find(new OrderNumber(orderNumber)); will(returnValue(order));
-            oneOf(orderPage).render(with(response), with(hasEntry("order", order)));
-        }});
+        orderBookContains(order);
 
         showOrder.handle(request, response);
+        orderPage.assertRenderedTo(response);
+        orderPage.assertRenderedWith("order", order);
+    }
+
+    private void orderBookContains(final Order order) {
+        context.checking(new Expectations() {{
+            allowing(orderBook).find(new OrderNumber(order.getNumber())); will(returnValue(order));
+        }});
     }
 }

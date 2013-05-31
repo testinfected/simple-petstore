@@ -23,8 +23,6 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.notNullValue;
-import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 @RunWith(JMock.class)
@@ -34,8 +32,8 @@ public class CreateCartItemTest {
     ItemInventory inventory = context.mock(ItemInventory.class);
     CreateCartItem createCartItem = new CreateCartItem(inventory);
 
-    MockRequest request = aRequest();
-    MockResponse response = aResponse();
+    MockRequest request = new MockRequest();
+    MockResponse response = new MockResponse();
 
     String itemNumber = "12345678";
 
@@ -43,16 +41,19 @@ public class CreateCartItemTest {
     createsCartAndAddsItemToCartBeforeRedirectingToCartPage() throws Exception {
         request.addParameter("item-number", itemNumber);
         final Item item = anItem().withNumber(itemNumber).build();
-
-        context.checking(new Expectations() {{
-            allowing(inventory).find(new ItemNumber(itemNumber)); will(returnValue(item));
-        }});
+        inventoryContains(item);
 
         createCartItem.handle(request, response);
 
         response.assertRedirectedTo("/cart");
         assertThat("session", session(), notNullValue());
         assertThat("cart content", cart().getItems(), containsItems(itemWith(number(itemNumber), quantity(1))));
+    }
+
+    private void inventoryContains(final Item item) {
+        context.checking(new Expectations() {{
+            allowing(inventory).find(new ItemNumber(item.getNumber())); will(returnValue(item));
+        }});
     }
 
     private Session session() {

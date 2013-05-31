@@ -186,7 +186,7 @@ public class MockResponse implements Response {
     }
 
     public String toString() {
-        return output.toString();
+        return "mock response (" + output + ")";
     }
 
     private static final String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";

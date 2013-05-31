@@ -15,8 +15,6 @@ import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
-import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 @RunWith(JMock.class)
 public class CreateProductTest {
@@ -25,11 +23,11 @@ public class CreateProductTest {
     ProcurementRequestHandler requestHandler = context.mock(ProcurementRequestHandler.class);
     CreateProduct createProduct = new CreateProduct(requestHandler);
 
-    MockRequest request = aRequest();
-    MockResponse response = aResponse();
+    MockRequest request = new MockRequest();
+    MockResponse response = new MockResponse();
 
     @Before public void
-    prepareRequest() {
+    addProductDetailsToRequest() {
         request.addParameter("number", "LAB-1234");
         request.addParameter("name", "Labrador");
         request.addParameter("description", "Friendly Dog");
@@ -43,18 +41,16 @@ public class CreateProductTest {
         }});
 
         createProduct.handle(request, response);
-
         response.assertStatus(HttpStatus.CREATED);
     }
 
     @Test public void
-    respondsWithConflictWhenProductAlreadyExists() throws Exception {
+    reportsResourceConflictWhenProductAlreadyExists() throws Exception {
         context.checking(new Expectations() {{
             oneOf(requestHandler).addProductToCatalog(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(String.class))); will(throwException(new DuplicateProductException(aProduct().build())));
         }});
 
         createProduct.handle(request, response);
-
         response.assertStatus(HttpStatus.CONFLICT);
     }
 }

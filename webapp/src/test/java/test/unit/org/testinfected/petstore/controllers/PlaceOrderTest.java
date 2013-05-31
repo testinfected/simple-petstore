@@ -17,8 +17,6 @@ import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
-import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
@@ -30,15 +28,15 @@ public class PlaceOrderTest {
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
     PlaceOrder placeOrder = new PlaceOrder(salesAssistant);
 
-    MockRequest request = aRequest();
-    MockResponse response = aResponse();
+    MockRequest request = new MockRequest();
+    MockResponse response = new MockResponse();
 
     String orderNumber = "12345678";
 
     @Test public void
     placesOrderAndRedirectsToReceiptPage() throws Exception {
         final CreditCardDetails validPaymentDetails = validVisaDetails().build();
-        requestSubmits(validPaymentDetails);
+        addToRequest(validPaymentDetails);
         final Cart cart = aCart().containing(anItem()).build();
         storeInSession(cart);
 
@@ -54,7 +52,7 @@ public class PlaceOrderTest {
         request.session().put(Cart.class, cart);
     }
 
-    private void requestSubmits(final CreditCardDetails paymentDetails) {
+    private void addToRequest(final CreditCardDetails paymentDetails) {
         request.addParameter("first-name", paymentDetails.getFirstName());
         request.addParameter("last-name", paymentDetails.getLastName());
         request.addParameter("email", paymentDetails.getEmail());
