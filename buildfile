@@ -1,5 +1,3 @@
-require 'buildr/jetty'
-
 VERSION_NUMBER = '0.1-SNAPSHOT'
 
 HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]

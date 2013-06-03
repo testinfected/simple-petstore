@@ -1,4 +1,5 @@
 require 'uri'
+require 'thread'
 
 module Buildr
   class SeleniumServer
@@ -126,8 +127,7 @@ module Buildr
   # :call-seq:
   #   selenium() => SeleniumServer
   #
-  # Returns a SeleniumServer. You can use this to discover the Jetty#use task,
-  # configure the Jetty#setup and Jetty#teardown tasks, deploy and undeploy to Jetty.
+  # Returns a SeleniumServer.
   def selenium
     @selenium ||= SeleniumServer.instance
   end
