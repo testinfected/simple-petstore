@@ -3,7 +3,7 @@ package test.support.org.testinfected.petstore.jdbc;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.testinfected.petstore.jdbc.FieldAccessor;
+import org.testinfected.petstore.db.FieldAccessor;
 
 import java.lang.reflect.Field;
 

@@ -22,7 +22,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
 
   define 'webapp' do
-    compile.with :simpleframework, :jmustache
+    compile.with :simpleweb, :jmustache
     compile.with project(:domain), project(:persistence)
 
     test.with project(:domain).test.compile.target, project(:persistence).test.compile.target, project(:persistence).test.resources.target
@@ -33,50 +33,54 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     package :jar
   end
   
-  define 'main' do
+  define 'server' do
     compile.with project(:domain), project(:persistence), project(:webapp), :cli, :flyway
-    test.with project(:webapp).test.compile.target
-    test.with :simpleframework, :jmustache, HAMCREST, :flyway, :mysql, NO_LOG
-    test.with transitive(artifacts(:selenium_firefox_driver, :selenium_ghost_driver, :windowlicker_web, :htmlunit))
 
-    test.using :integration, :properties => { 
+    test.using :integration, :properties => {
       'web.root' => project(:webapp).path_to(:src, :main, :webapp),
       'browser.driver' => 'remote',
       'browser.remote.url' => Buildr.settings.build['selenium']['server']['url'],
       'browser.capability.browserName' => Buildr.settings.build['selenium']['server']['browser']['name'],
       'browser.capability.name' => 'PetStore System Tests'
     }
+    test.with project(:webapp).test.compile.target
+    test.with :simpleweb, :jmustache, HAMCREST, :flyway, :mysql, NO_LOG
+    test.with transitive(artifacts(:selenium_firefox_driver, :selenium_ghost_driver, :windowlicker_web, :htmlunit))
+    integration.setup { selenium.run }
+    integration.teardown { selenium.stop }
 
-    integration.setup do
-      selenium.run
+    package(:jar).tap do |jar|
+      jar.merge artifacts(:cli, :simpleweb, :jmustache, :mysql, :flyway)
+      jar.merge artifacts(project(:domain), project(:persistence), project(:webapp))
+      jar.with :manifest => manifest.merge( 'Main-Class' => 'org.testinfected.petstore.Launcher' )
     end
-    
-    integration.teardown do
-      selenium.stop
-    end
-
-    def migrations(action)
-      Java::Commands.java("org.testinfected.petstore.Migrations", "-e", Buildr.environment, action.to_s,
-        :classpath => [project.compile.target, project.resources.target, :mysql] + project.compile.dependencies) do
-          exit
-        end
-    end
-
-    task 'db-init' => :compile do migrations :init; end
-    task 'db-migrate' => :compile do migrations :migrate; end
-    task 'db-clean' => :compile do migrations :clean; end
-    task 'db-drop' => :compile do migrations :drop; end
-    task 'db-reset' => :compile do migrations :reset; end
   end
 
-  task :run => project(:main) do
-    cp = [project(:main).compile.target, project(:main).resources.target, project(:main).compile.dependencies,
-          :mysql, :simpleframework, :jmustache]
-    Java::Commands.java("org.testinfected.petstore.Launcher", "-p", Buildr.settings.profile['server.port'], "-e", Buildr.environment, project(:webapp).path_to(:src, :main, :webapp), :classpath => cp) { exit }
+  task :run do
+    Java::Commands.java("-jar", project(:server).package.to_s,
+      "-p", Buildr.settings.profile['server.port'],
+      "-e", Buildr.environment,
+      project(:webapp).path_to(:src, :main, :webapp)) { exit }
   end
 
-  task 'db-migrate' => project(:main).task('db-migrate')
-  task 'db-clean' => project(:main).task('db-clean')
-  task 'db-reset' => project(:main).task('db-reset')
-  task 'db-init' => project(:main).task('db-init')
+  def migrations(action)
+    Java::Commands.java("org.testinfected.petstore.Migrations", "-e", Buildr.environment, action.to_s,
+      :classpath => project(:server).package.to_s) { exit }
+  end
+
+  task 'db-init' do
+    migrations :init
+  end
+  task 'db-migrate' do
+    migrations :migrate
+  end
+  task 'db-clean' do
+    migrations :clean
+  end
+  task 'db-drop' do
+    migrations :drop
+  end
+  task 'db-reset' do
+    migrations :reset
+  end
 end

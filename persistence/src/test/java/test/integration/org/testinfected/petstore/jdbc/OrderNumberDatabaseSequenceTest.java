@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.UnitOfWork;
-import org.testinfected.petstore.jdbc.JDBCTransactor;
-import org.testinfected.petstore.jdbc.OrderNumberDatabaseSequence;
+import org.testinfected.petstore.db.JDBCTransactor;
+import org.testinfected.petstore.db.OrderNumberDatabaseSequence;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 

@@ -1,8 +1,8 @@
 package test.support.org.testinfected.petstore.jdbc;
 
-import org.testinfected.petstore.jdbc.DatabaseCleaner;
-import org.testinfected.petstore.jdbc.support.DriverManagerDataSource;
-import org.testinfected.petstore.jdbc.support.JDBCException;
+import org.testinfected.petstore.db.DatabaseCleaner;
+import org.testinfected.petstore.db.support.DriverManagerDataSource;
+import org.testinfected.petstore.db.support.JDBCException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
