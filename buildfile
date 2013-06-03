@@ -1,4 +1,4 @@
-VERSION_NUMBER = '0.1'
+VERSION_NUMBER = '0.2-SNAPSHOT'
 
 HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]
 NO_LOG = [:jcl_over_slf4j, :slf4j_api, :slf4j_silent]
