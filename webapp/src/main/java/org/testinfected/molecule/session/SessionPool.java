@@ -2,12 +2,12 @@ package org.testinfected.molecule.session;
 
 import org.testinfected.molecule.Session;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionPool implements SessionStore {
 
-    private final Map<String, Session> sessions = new HashMap<String, Session>();
+    private final Map<String, Session> sessions = new ConcurrentHashMap<String, Session>();
 
     public Session load(String key, boolean create) {
         if (hasSession(key)) return locateSession(key);
