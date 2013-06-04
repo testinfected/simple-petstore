@@ -37,10 +37,13 @@ public class Launcher {
         }
     }
 
-    private static final int PORT_8080 = 8080;
+    private static final String ENV = "env";
+    private static final String ENCODING = "encoding";
+    private static final String QUIET = "quiet";
+    private static final String PORT = "port";
     private static final String UTF_8 = "utf-8";
     private static final String DEVELOPMENT_ENV = "development";
-
+    private static final int PORT_8080 = 8080;
     private static final int WEB_ROOT = 0;
 
     private final PrintStream out;
@@ -56,16 +59,16 @@ public class Launcher {
     private static CLI defineCommandLine() {
         return new CLI() {{
             withBanner("petstore [options] webroot");
-            define(option("env", "-e", "--environment ENV", "Specifies the environment to run this server under (development, production, etc.)").defaultingTo(DEVELOPMENT_ENV));
-            define(option("port", "-p", "--port PORT", "Runs the server on the specified port").asType(int.class).defaultingTo(PORT_8080));
-            define(option("encoding", "--encoding ENCODING", "Specifies the server output encoding").defaultingTo(UTF_8));
-            define(option("quiet", "-q", "--quiet", "Operates quietly").defaultingTo(false));
+            define(option(ENV, "-e", "--environment ENV", "Specifies the environment to run this server under (development, production, etc.)").defaultingTo(DEVELOPMENT_ENV));
+            define(option(PORT, "-p", "--port PORT", "Runs the server on the specified port").asType(int.class).defaultingTo(PORT_8080));
+            define(option(ENCODING, "--encoding ENCODING", "Specifies the server output encoding").defaultingTo(UTF_8));
+            define(option(QUIET, "-q", "--quiet", "Operates quietly").defaultingTo(false));
         }};
     }
 
     public void launch(String... args) throws Exception {
         String[] operands = cli.parse(args);
-        if (cli.getOperandCount() == 0) throw new IllegalArgumentException("Must specify web root location");
+        if (operands.length == 0) throw new IllegalArgumentException("Must specify web root location");
 
         String webRoot = operands[WEB_ROOT];
         Environment env = Environment.load(env(cli));
@@ -87,19 +90,19 @@ public class Launcher {
     }
 
     private int port(CLI cli) {
-        return (Integer) cli.getOption("port");
+        return (Integer) cli.getOption(PORT);
     }
 
     private Charset encoding(CLI cli) {
-        return Charset.forName((String) cli.getOption("encoding"));
+        return Charset.forName((String) cli.getOption(ENCODING));
     }
 
     private String env(CLI cli) {
-        return (String) cli.getOption("env");
+        return (String) cli.getOption(ENV);
     }
 
     private static Boolean quiet(CLI cli) {
-        return (Boolean) cli.getOption("quiet");
+        return (Boolean) cli.getOption(QUIET);
     }
 
     public void stop() throws Exception {
