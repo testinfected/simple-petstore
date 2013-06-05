@@ -23,8 +23,8 @@ public class SessionPoolStressTest {
         blitzer.blitz(new Runnable() {
             public void run() {
                 String id = UUID.randomUUID().toString();
-                Session session = pool.load(id, true);
-                if (pool.load(id, false) != session) errorCount.incrementAndGet();
+                Session session = pool.create(id);
+                if (pool.load(id) != session) errorCount.incrementAndGet();
             }
         });
         blitzer.shutdown();

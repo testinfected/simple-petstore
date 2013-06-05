@@ -4,5 +4,7 @@ import org.testinfected.molecule.Session;
 
 public interface SessionStore {
 
-    Session load(String key, boolean create);
+    Session create(String key);
+
+    Session load(String key);
 }
