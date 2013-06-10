@@ -6,15 +6,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.testinfected.molecule.session.HouseKeeping;
-import org.testinfected.molecule.session.PeriodicHouseKeeper;
+import org.testinfected.molecule.session.SessionHouse;
+import org.testinfected.molecule.session.PeriodicChores;
 
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class PeriodicHouseKeeperTest {
+public class PeriodicChoresTest {
 
     static final int CHORES_INTERVAL = 50;
 
@@ -23,15 +23,16 @@ public class PeriodicHouseKeeperTest {
     CountChores count = new CountChores();
     DeterministicScheduler scheduler = new DeterministicScheduler();
 
-    PeriodicHouseKeeper houseKeeper = new PeriodicHouseKeeper(scheduler, count, CHORES_INTERVAL, TimeUnit.MILLISECONDS);
+    SessionHouse.Work chores = context.mock(SessionHouse.Work.class);
+    PeriodicChores houseKeeper = new PeriodicChores(scheduler, count, chores, CHORES_INTERVAL, TimeUnit.MILLISECONDS);
 
     @Before public void
-    startScavenger() {
+    start() {
         houseKeeper.start();
     }
 
     @After public void
-    stopScavenger() {
+    stop() {
         houseKeeper.stop();
     }
 
@@ -56,10 +57,10 @@ public class PeriodicHouseKeeperTest {
         assertThat("housekeeping chores", count.chores, equalTo(operand));
     }
 
-    private class CountChores implements HouseKeeping {
+    private class CountChores implements SessionHouse {
         private int chores;
 
-        public void perform() {
+        public void houseKeeping(SessionHouse.Work work) {
             chores++;
         }
     }

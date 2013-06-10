@@ -1,8 +1,10 @@
 package test.support.org.testinfected.molecule.unit;
 
 import org.testinfected.molecule.Session;
+import org.testinfected.molecule.util.Clock;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +34,34 @@ public class MockSession implements Session {
     }
 
     public Collection<?> values() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void timeout(int inSeconds) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public boolean expired(Clock clock) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void touch(Clock clock) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void invalidate() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public boolean invalid() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public Date createdAt() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public Date lastAccessedAt() {
         throw new UnsupportedOperationException("Not implemented");
     }
 }

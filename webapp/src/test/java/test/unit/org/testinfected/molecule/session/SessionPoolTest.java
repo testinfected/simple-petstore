@@ -70,9 +70,11 @@ public class SessionPoolTest {
         assertThat("session 3", pool.load("session3"), equalTo(session3));
     }
 
-    private void addToPool(String key) {
+    private void addToPool(String... keys) {
         ignoreCreation();
-        pool.create(key);
+        for (String key : keys) {
+            pool.create(key);
+        }
     }
 
     private void ignoreCreation() {

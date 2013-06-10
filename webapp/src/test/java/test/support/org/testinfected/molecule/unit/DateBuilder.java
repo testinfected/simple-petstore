@@ -18,8 +18,7 @@ public class DateBuilder {
     private int millisecond;
 
     public static DateBuilder aDate() {
-        DateBuilder builder = new DateBuilder();
-        return builder.inMillis(System.currentTimeMillis());
+        return new DateBuilder().inMillis(System.currentTimeMillis());
     }
 
     public static DateBuilder calendarDate(int year, int month, int day) {
@@ -70,6 +69,10 @@ public class DateBuilder {
         second = calendar.get(Calendar.SECOND);
         millisecond = calendar.get(Calendar.MILLISECOND);
         return this;
+    }
+
+    public DateBuilder but() {
+        return new DateBuilder().inMillis(build().getTime());
     }
 
     public Date build() {
