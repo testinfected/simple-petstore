@@ -15,25 +15,26 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
+import static test.support.org.testinfected.molecule.unit.DateBuilder.namedDate;
 
 public class SessionHashTest {
 
     static final int TIMEOUT = 120;
 
-    Date creationTime = namedDate("creation time");
+    Date creationTime = namedDate("creation time").build();
 
     Session session = new SessionHash("session-id", creationTime);
 
     @Test public void
-    isInitiallyEmptyAndValid() {
-        assertThat("attribute keys", session.keys(), emptyIterable());
-        assertThat("attribute values", session.values(), emptyIterable());
+    isInitiallyValid() {
+        assertThat("id", session.id(), equalTo("session-id"));
         assertThat("invalid", session.invalid(), equalTo(false));
     }
 
     @Test public void
-    knowsItsIdentifier() {
-        assertThat("id", session.id(), equalTo("session-id"));
+    isInitiallyEmpty() {
+        assertThat("attribute keys", session.keys(), emptyIterable());
+        assertThat("attribute values", session.values(), emptyIterable());
     }
 
     @Test public void
@@ -74,6 +75,7 @@ public class SessionHashTest {
 
     @Test public void
     isInitiallySetToNeverExpire() {
+        assertThat("timeout", session.timeout(), equalTo(0L));
         assertThat("expired after 1 day", session.expired(clockSet(aDayAfter(creationTime))), equalTo(false));
         assertThat("expired after 1 year", session.expired(clockSet(aYearAfter(creationTime))), equalTo(false));
     }
@@ -100,8 +102,8 @@ public class SessionHashTest {
 
     @Test public void
     informsOfCreationAndAccessTime() {
-        Date lastAccessTime = namedDate("last access time");
-        session.touch(BrokenClock.stoppedAt(lastAccessTime));
+        Date lastAccessTime = namedDate("last access time").build();
+        session.touch(clockSet(lastAccessTime));
 
         assertThat("creation time", session.createdAt(), equalTo(creationTime));
         assertThat("last access time", session.lastAccessedAt(), equalTo(lastAccessTime));
@@ -154,9 +156,5 @@ public class SessionHashTest {
 
     private Matcher<Iterable<? extends Object>> containsItems(Object... items) {
         return containsInAnyOrder(items);
-    }
-
-    private Date namedDate(final String name) {
-        return new Date() { public String toString() { return name; } };
     }
 }

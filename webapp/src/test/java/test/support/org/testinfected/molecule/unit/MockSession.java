@@ -37,7 +37,11 @@ public class MockSession implements Session {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void timeout(int inSeconds) {
+    public long timeout() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public void timeout(long inSeconds) {
         throw new UnsupportedOperationException("Not implemented");
     }
 

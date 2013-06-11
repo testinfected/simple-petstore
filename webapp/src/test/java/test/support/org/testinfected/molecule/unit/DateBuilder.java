@@ -16,9 +16,14 @@ public class DateBuilder {
     private int minute;
     private int second;
     private int millisecond;
+    private String name;
 
     public static DateBuilder aDate() {
         return new DateBuilder().inMillis(System.currentTimeMillis());
+    }
+
+    public static DateBuilder namedDate(String name) {
+        return aDate().named(name);
     }
 
     public static DateBuilder calendarDate(int year, int month, int day) {
@@ -71,8 +76,13 @@ public class DateBuilder {
         return this;
     }
 
+    public DateBuilder named(String name) {
+        this.name = name;
+        return this;
+    }
+
     public DateBuilder but() {
-        return new DateBuilder().inMillis(build().getTime());
+        return new DateBuilder().inMillis(build().getTime()).named(name);
     }
 
     public Date build() {
@@ -84,6 +94,10 @@ public class DateBuilder {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, second);
         calendar.set(Calendar.MILLISECOND, millisecond);
-        return calendar.getTime();
+        return name != null ? new Date(calendar.getTime().getTime()) {
+            public String toString() {
+                return name;
+            }
+        } : calendar.getTime();
     }
 }

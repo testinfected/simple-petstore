@@ -6,15 +6,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.testinfected.molecule.session.PeriodicSessionHouseKeeping;
 import org.testinfected.molecule.session.SessionHouse;
-import org.testinfected.molecule.session.PeriodicChores;
 
 import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class PeriodicChoresTest {
+public class PeriodicSessionHouseKeepingTest {
 
     static final int CHORES_INTERVAL = 50;
 
@@ -23,8 +23,7 @@ public class PeriodicChoresTest {
     CountChores count = new CountChores();
     DeterministicScheduler scheduler = new DeterministicScheduler();
 
-    SessionHouse.Work chores = context.mock(SessionHouse.Work.class);
-    PeriodicChores houseKeeper = new PeriodicChores(scheduler, count, chores, CHORES_INTERVAL, TimeUnit.MILLISECONDS);
+    PeriodicSessionHouseKeeping houseKeeper = new PeriodicSessionHouseKeeping(scheduler, count, CHORES_INTERVAL, TimeUnit.MILLISECONDS);
 
     @Before public void
     start() {
@@ -60,7 +59,7 @@ public class PeriodicChoresTest {
     private class CountChores implements SessionHouse {
         private int chores;
 
-        public void houseKeeping(SessionHouse.Work work) {
+        public void houseKeeping() {
             chores++;
         }
     }

@@ -55,7 +55,11 @@ public class SessionHash implements Session {
         return Collections.unmodifiableCollection(attributes.values());
     }
 
-    public void timeout(int inSeconds) {
+    public long timeout() {
+        return TimeUnit.MILLISECONDS.toSeconds(timeoutInMillis);
+    }
+
+    public void timeout(long inSeconds) {
         this.timeoutInMillis = TimeUnit.SECONDS.toMillis(inSeconds);
     }
 

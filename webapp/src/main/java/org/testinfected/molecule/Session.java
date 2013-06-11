@@ -20,7 +20,9 @@ public interface Session {
 
     Collection<?> values();
 
-    void timeout(int inSeconds);
+    long timeout();
+
+    void timeout(long inSeconds);
 
     boolean expired(Clock clock);
 

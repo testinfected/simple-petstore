@@ -40,7 +40,11 @@ public class SimpleSession implements Session {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void timeout(int inSeconds) {
+    public long timeout() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void timeout(long inSeconds) {
         throw new UnsupportedOperationException();
     }
 
