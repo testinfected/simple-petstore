@@ -1,6 +1,7 @@
 package test.support.org.testinfected.molecule.unit;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.testinfected.molecule.HttpStatus;
 import org.testinfected.molecule.Response;
 import org.testinfected.molecule.util.Charsets;
@@ -30,13 +31,11 @@ public class MockResponse implements Response {
 
     private final Map<String, String> headers = new HashMap<String, String>();
     private final ByteArrayOutputStream output = new ByteArrayOutputStream();
+    private final Map<String, String> cookies = new HashMap<String, String>();
     private HttpStatus status;
 
     public static MockResponse aResponse() {
         return new MockResponse();
-    }
-
-    public MockResponse() {
     }
 
     public void redirectTo(String location) {
@@ -61,6 +60,10 @@ public class MockResponse implements Response {
 
     public void removeHeader(String name) {
         headers.remove(name);
+    }
+
+    public void cookie(String name, String value) {
+        cookies.put(name, value);
     }
 
     public void assertHeader(String name, String value) {
@@ -181,6 +184,10 @@ public class MockResponse implements Response {
         return new String(content(), charset());
     }
 
+    public void assertCookie(String name, String value) {
+        assertThat("cookies", cookies, Matchers.hasEntry(name, value));
+    }
+
     public byte[] content() {
         return output.toByteArray();
     }
@@ -188,7 +195,6 @@ public class MockResponse implements Response {
     public String toString() {
         return "mock response (" + output + ")";
     }
-
     private static final String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
     private static final String TYPE = "[^/]+";
     private static final String SUBTYPE = "[^;]+";

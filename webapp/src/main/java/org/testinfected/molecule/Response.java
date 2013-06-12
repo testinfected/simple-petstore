@@ -15,6 +15,8 @@ public interface Response {
 
     void removeHeader(String name);
 
+    void cookie(String name, String value);
+
     void contentType(String contentType);
 
     String contentType();

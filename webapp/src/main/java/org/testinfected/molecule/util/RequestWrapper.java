@@ -51,6 +51,10 @@ public class RequestWrapper implements Request {
         request.removeAttribute(key);
     }
 
+    public String cookie(String name) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
     public Session session() {
         return request.session();
     }

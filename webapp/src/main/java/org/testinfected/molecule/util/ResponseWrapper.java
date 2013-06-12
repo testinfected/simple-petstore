@@ -36,6 +36,10 @@ public class ResponseWrapper implements Response {
         response.removeHeader(name);
     }
 
+    public void cookie(String name, String value) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
     public void contentType(String contentType) {
         response.contentType(contentType);
     }

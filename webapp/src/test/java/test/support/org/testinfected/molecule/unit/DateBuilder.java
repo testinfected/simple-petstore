@@ -19,7 +19,11 @@ public class DateBuilder {
     private String name;
 
     public static DateBuilder aDate() {
-        return new DateBuilder().inMillis(System.currentTimeMillis());
+        return aDate(System.currentTimeMillis());
+    }
+
+    public static DateBuilder aDate(long time) {
+        return new DateBuilder().fromMillis(time);
     }
 
     public static DateBuilder namedDate(String name) {
@@ -62,7 +66,7 @@ public class DateBuilder {
         return atTime(0, 0, 0);
     }
 
-    public DateBuilder inMillis(long millis) {
+    public DateBuilder fromMillis(long millis) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(millis);
         timeZone = calendar.getTimeZone();
@@ -82,10 +86,18 @@ public class DateBuilder {
     }
 
     public DateBuilder but() {
-        return new DateBuilder().inMillis(build().getTime()).named(name);
+        return aDate(toMillis()).named(name);
     }
 
     public Date build() {
+        return name != null ? new Date(toMillis()) {
+            public String toString() {
+                return name;
+            }
+        } : new Date(toMillis());
+    }
+
+    private long toMillis() {
         Calendar calendar = Calendar.getInstance(timeZone);
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month - 1);
@@ -94,10 +106,6 @@ public class DateBuilder {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, second);
         calendar.set(Calendar.MILLISECOND, millisecond);
-        return name != null ? new Date(calendar.getTime().getTime()) {
-            public String toString() {
-                return name;
-            }
-        } : calendar.getTime();
+        return calendar.getTimeInMillis();
     }
 }

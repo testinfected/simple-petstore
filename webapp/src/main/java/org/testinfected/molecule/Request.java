@@ -22,6 +22,8 @@ public interface Request {
 
     void removeAttribute(Object key);
 
+    String cookie(String name);
+
     Session session();
 
     Session session(boolean create);

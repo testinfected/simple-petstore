@@ -57,6 +57,10 @@ public class SimpleRequest implements org.testinfected.molecule.Request {
         request.getAttributes().remove(key);
     }
 
+    public String cookie(String name) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
     public Session session() {
         return session(true);
     }
@@ -71,6 +75,17 @@ public class SimpleRequest implements org.testinfected.molecule.Request {
 
          return session != null ? new SimpleSession(session) : null;
     }
+
+//  something like:
+//  public Session session(boolean create) {
+//        if (session != null) return session;
+//        Session session = tracker.acquireSession(this);
+//        if (!create) return session;
+//        if (session == null) {
+//            session = tracker.openSession(response);
+//        }
+//        return session;
+//    }
 
     public <T> T unwrap(Class<T> type) {
         if (!type.isAssignableFrom(request.getClass())) throw new IllegalArgumentException("Unsupported type: " + type.getName());

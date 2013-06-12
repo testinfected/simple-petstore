@@ -19,10 +19,8 @@ import static test.support.org.testinfected.molecule.unit.DateBuilder.namedDate;
 
 public class SessionHashTest {
 
-    static final int TIMEOUT = 120;
-
+    long TIMEOUT = TimeUnit.MINUTES.toSeconds(30);
     Date creationTime = namedDate("creation time").build();
-
     Session session = new SessionHash("session-id", creationTime);
 
     @Test public void
@@ -126,10 +124,6 @@ public class SessionHashTest {
         return BrokenClock.stoppedAt(pointInTime);
     }
 
-    private long seconds(long timeoutInSeconds) {
-        return TimeUnit.SECONDS.toMillis(timeoutInSeconds);
-    }
-
     private Date justBefore(Date pointInTime) {
         return at(pointInTime, -1);
     }
@@ -139,7 +133,7 @@ public class SessionHashTest {
     }
 
     private Date whenTimeoutOccurs(Date pointInTime) {
-        return at(pointInTime, seconds(TIMEOUT));
+        return at(pointInTime, TimeUnit.SECONDS.toMillis(TIMEOUT));
     }
 
     private Date aDayAfter(Date pointInTime) {

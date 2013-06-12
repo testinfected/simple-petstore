@@ -14,6 +14,7 @@ public class MockRequest implements Request {
 
     private final Map<String, String> params = new HashMap<String, String>();
     private final Map<Object, Object> attributes = new HashMap<Object, Object>();
+    private final Map<String, String> cookies = new HashMap<String, String>();
     private HttpMethod method = HttpMethod.GET;
     private String path = "/";
     private String ip = "127.0.0.1";
@@ -109,6 +110,14 @@ public class MockRequest implements Request {
 
     public void assertAttribute(Object key, Matcher<Object> attributeMatcher) {
         assertThat("attribute["  + key.toString() + "]", attribute(key), attributeMatcher);
+    }
+
+    public void withCookie(String name, String value) {
+        cookies.put(name, value);
+    }
+
+    public String cookie(String name) {
+        return cookies.get(name);
     }
 
     public Session session() {

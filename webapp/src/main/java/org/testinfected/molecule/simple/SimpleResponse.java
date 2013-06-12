@@ -40,6 +40,10 @@ public class SimpleResponse implements org.testinfected.molecule.Response {
         response.remove(name);
     }
 
+    public void cookie(String name, String value) {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
     public void contentType(String mediaType) {
         header("Content-Type", mediaType);
     }
