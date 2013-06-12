@@ -37,7 +37,7 @@ public class ResponseWrapper implements Response {
     }
 
     public void cookie(String name, String value) {
-        throw new UnsupportedOperationException("Not implemented");
+        response.cookie(name, value);
     }
 
     public void contentType(String contentType) {

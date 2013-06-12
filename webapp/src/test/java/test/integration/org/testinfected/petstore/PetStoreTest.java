@@ -12,7 +12,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.testinfected.molecule.session.CookieTracker;
+import org.testinfected.molecule.session.SessionPool;
 import org.testinfected.molecule.simple.SimpleServer;
+import org.testinfected.molecule.util.Clock;
 import org.testinfected.molecule.util.FailureReporter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.UnitOfWork;
@@ -23,6 +26,7 @@ import org.testinfected.petstore.product.Product;
 import test.support.org.testinfected.molecule.integration.HttpRequest;
 import test.support.org.testinfected.molecule.integration.HttpResponse;
 import test.support.org.testinfected.molecule.unit.BrokenClock;
+import test.support.org.testinfected.petstore.StackTrace;
 import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.builders.ProductBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
@@ -38,11 +42,12 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.FileHandler;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.isA;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.DescribedAs.describedAs;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.fail;
 import static test.support.org.testinfected.molecule.integration.HttpRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.DateBuilder.calendarDate;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
@@ -51,6 +56,7 @@ import static test.support.org.testinfected.petstore.builders.ProductBuilder.aPr
 public class PetStoreTest {
 
     static final String SESSION_COOKIE = "JSESSIONID";
+    static final long SESSION_TIMEOUT = MINUTES.toSeconds(30);
 
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery() {{
         setThreadingPolicy(new Synchroniser());
@@ -58,6 +64,7 @@ public class PetStoreTest {
 
     FailureReporter failureReporter = context.mock(FailureReporter.class);
     DataSource dataSource = context.mock(DataSource.class);
+    Delorean delorean = new Delorean();
     PetStore petstore = new PetStore(WebRoot.locate(), dataSource);
 
     States system = context.states("system").startsAs("up");
@@ -83,6 +90,7 @@ public class PetStoreTest {
         }});
         database.clean();
 
+        server.enableSessions(new CookieTracker(new SessionPool(delorean, SESSION_TIMEOUT)));
         server.defaultCharset(Charset.forName(encoding));
         petstore.setClock(BrokenClock.stoppedAt(now));
         logFile = LogFile.create();
@@ -98,6 +106,7 @@ public class PetStoreTest {
 
     @After public void
     stopServer() throws Exception {
+        delorean.back();
         connection.close();
         server.shutdown();
         logFile.clear();
@@ -189,7 +198,7 @@ public class PetStoreTest {
         makeItems(anItem().of(make(aProduct().named("Gecko"))).withNumber("12345678"));
 
         response = request.get("/");
-        response.assertOK();
+        assertOK();
         response.assertHasNoCookie(SESSION_COOKIE);
 
         response = request.withParameter("item-number", "12345678").followRedirects(false).post("/cart");
@@ -200,6 +209,20 @@ public class PetStoreTest {
         assertOK();
         response.assertHasContent(containsString("cart-item-12345678"));
         response.assertHasNoCookie(SESSION_COOKIE);
+    }
+
+    @Test public void
+    sessionsExpireAfterTimeout() throws Exception {
+        makeItems(anItem().of(make(aProduct().named("Gecko"))).withNumber("12345678"));
+
+        response = request.withParameter("item-number", "12345678").post("/cart");
+        assertOK();
+
+        delorean.travel(SECONDS.toMillis(SESSION_TIMEOUT));
+        response = request.get("/cart");
+        assertOK();
+        response.assertHasContent(not(containsString("cart-item-12345678")));
+        response.assertHasCookie(SESSION_COOKIE);
     }
 
     private void assertOK() {
@@ -218,7 +241,7 @@ public class PetStoreTest {
     }
 
     private void assertNoError() {
-        assertThat("error", error, describedAs("none", nullValue()));
+        if (error != null) fail(StackTrace.of(error));
     }
 
     private Matcher<String> productsList() {
@@ -274,5 +297,22 @@ public class PetStoreTest {
                 return null;
             }
         };
+    }
+
+    private static class Delorean implements Clock {
+
+        private long timeTravel = 0;
+
+        public Date now() {
+            return new Date(System.currentTimeMillis() + timeTravel);
+        }
+
+        public void travel(long offsetInMillis) {
+            this.timeTravel = offsetInMillis;
+        }
+
+        public void back() {
+            travel(0);
+        }
     }
 }

@@ -135,6 +135,17 @@ public class SessionPoolTest {
         assertInvalid(expiredSessions);
     }
 
+    @Test public void
+    notifiesWhenSessionsAreDropped() {
+        ignoreCreation();
+
+        expire(addToPool("invalid"));
+        context.checking(new Expectations() {{
+            oneOf(listener).sessionDropped(with(sessionWithId("invalid")));
+        }});
+        pool.load("invalid");
+    }
+
     private Clock clockSetAt(DateBuilder date) {
         return BrokenClock.stoppedAt(date.build());
     }

@@ -6,18 +6,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.testinfected.molecule.Session;
 import org.testinfected.molecule.session.CookieTracker;
-import org.testinfected.molecule.session.SessionHash;
 import org.testinfected.molecule.session.SessionIdentifierPolicy;
 import org.testinfected.molecule.session.SessionStore;
 import org.testinfected.molecule.session.SessionTracker;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
+import test.support.org.testinfected.molecule.unit.MockSession;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static test.support.org.testinfected.molecule.unit.DateBuilder.aDate;
 
 public class CookieTrackerTest {
 
@@ -41,7 +40,7 @@ public class CookieTrackerTest {
     usesACookieToIdentifyClients() throws Exception {
         request.withCookie(SESSION_COOKIE, "client-session");
 
-        final Session clientSession = sessionNamed("client-session");
+        final Session clientSession = new MockSession("client-session");
         context.checking(new Expectations() {{
             allowing(store).load("client-session"); will(returnValue(clientSession));
         }});
@@ -53,7 +52,8 @@ public class CookieTrackerTest {
     @Test public void
     generatesIdsForNewSessions() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(store).create("new-session"); will(returnValue(sessionNamed("new-session")));
+            oneOf(store).create("new-session");
+            will(returnValue(new MockSession("new-session")));
         }});
 
         Session newSession = tracker.openSession(request, response);
@@ -64,15 +64,12 @@ public class CookieTrackerTest {
     @Test public void
     tracksClientAcrossRequestsWithASessionCookie() throws Exception {
         context.checking(new Expectations() {{
-            allowing(store).create("new-session"); will(returnValue(sessionNamed("new-session")));
+            allowing(store).create("new-session");
+            will(returnValue(new MockSession("new-session")));
         }});
 
         tracker.openSession(request, response);
         response.assertCookie(SESSION_COOKIE, "new-session");
-    }
-
-    private SessionHash sessionNamed(String id) {
-        return new SessionHash(id, aDate().build());
     }
 
     private class StubPolicy implements SessionIdentifierPolicy {

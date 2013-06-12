@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-public class SessionPool implements SessionStore {
+public class SessionPool implements SessionStore, SessionHouse {
 
     private static final long HALF_AN_HOUR = TimeUnit.MINUTES.toSeconds(30);
 
@@ -22,17 +22,17 @@ public class SessionPool implements SessionStore {
         this(HALF_AN_HOUR);
     }
 
-    public SessionPool(long timeout) {
-        this(new SystemClock(), timeout);
+    public SessionPool(long timeoutInSeconds) {
+        this(new SystemClock(), timeoutInSeconds);
     }
 
-    public SessionPool(Clock clock, long timeout) {
-        this(clock, timeout, SessionListener.NONE);
+    public SessionPool(Clock clock, long timeoutInSeconds) {
+        this(clock, timeoutInSeconds, SessionListener.NONE);
     }
 
-    public SessionPool(Clock clock, long timeout, SessionListener listener) {
+    public SessionPool(Clock clock, long timeoutInSeconds, SessionListener listener) {
         this.clock = clock;
-        this.timeout = timeout;
+        this.timeout = timeoutInSeconds;
         this.listener = listener;
     }
 
@@ -75,5 +75,6 @@ public class SessionPool implements SessionStore {
 
     private void remove(Session session) {
         sessions.remove(session.id());
+        listener.sessionDropped(session);
     }
 }

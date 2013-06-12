@@ -41,7 +41,7 @@ public class SimpleResponse implements org.testinfected.molecule.Response {
     }
 
     public void cookie(String name, String value) {
-        throw new UnsupportedOperationException("Not implemented");
+        response.setCookie(name, value);
     }
 
     public void contentType(String mediaType) {

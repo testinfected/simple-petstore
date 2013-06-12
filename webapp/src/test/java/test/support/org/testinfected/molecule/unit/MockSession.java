@@ -12,9 +12,18 @@ import java.util.Set;
 public class MockSession implements Session {
 
     private final Map<Object, Object> attributes = new HashMap<Object, Object>();
+    private final String id;
+
+    public MockSession() {
+        this("mock session");
+    }
+
+    public MockSession(String id) {
+        this.id = id;
+    }
 
     public String id() {
-        throw new UnsupportedOperationException("Not implemented");
+        return id;
     }
 
     public boolean contains(Object key) {
@@ -67,5 +76,9 @@ public class MockSession implements Session {
 
     public Date lastAccessedAt() {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    public String toString() {
+        return id() + ": " + attributes.toString();
     }
 }

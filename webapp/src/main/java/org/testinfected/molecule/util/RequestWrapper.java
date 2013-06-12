@@ -52,7 +52,7 @@ public class RequestWrapper implements Request {
     }
 
     public String cookie(String name) {
-        throw new UnsupportedOperationException("Not implemented");
+        return request.cookie(name);
     }
 
     public Session session() {

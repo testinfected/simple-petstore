@@ -1,19 +1,22 @@
 package org.testinfected.molecule.simple;
 
+import org.simpleframework.http.Cookie;
 import org.simpleframework.http.Request;
-import org.simpleframework.util.lease.LeaseException;
 import org.testinfected.molecule.HttpException;
 import org.testinfected.molecule.HttpMethod;
 import org.testinfected.molecule.Session;
+import org.testinfected.molecule.session.SessionTracking;
 
 import java.io.IOException;
 
 public class SimpleRequest implements org.testinfected.molecule.Request {
 
     private final Request request;
+    private final SessionTracking sessionTracking;
 
-    public SimpleRequest(Request request) {
+    public SimpleRequest(Request request, SessionTracking sessionTracking) {
         this.request = request;
+        this.sessionTracking = sessionTracking;
     }
 
     public String protocol() {
@@ -58,7 +61,8 @@ public class SimpleRequest implements org.testinfected.molecule.Request {
     }
 
     public String cookie(String name) {
-        throw new UnsupportedOperationException("Not implemented");
+        Cookie cookie = request.getCookie(name);
+        return cookie != null ? cookie.getValue() : null;
     }
 
     public Session session() {
@@ -66,26 +70,8 @@ public class SimpleRequest implements org.testinfected.molecule.Request {
     }
 
     public Session session(boolean create) {
-        final org.simpleframework.http.session.Session session;
-        try {
-            session = request.getSession(create);
-        } catch (LeaseException e) {
-            throw new HttpException("Cannot acquire session", e);
-        }
-
-         return session != null ? new SimpleSession(session) : null;
+        return sessionTracking.openSession(this, create);
     }
-
-//  something like:
-//  public Session session(boolean create) {
-//        if (session != null) return session;
-//        Session session = tracker.acquireSession(this);
-//        if (!create) return session;
-//        if (session == null) {
-//            session = tracker.openSession(response);
-//        }
-//        return session;
-//    }
 
     public <T> T unwrap(Class<T> type) {
         if (!type.isAssignableFrom(request.getClass())) throw new IllegalArgumentException("Unsupported type: " + type.getName());

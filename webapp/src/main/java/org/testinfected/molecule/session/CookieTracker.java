@@ -12,6 +12,10 @@ public class CookieTracker implements SessionTracker {
     private final SessionIdentifierPolicy policy;
     private final String cookieName;
 
+    public CookieTracker(SessionStore store) {
+        this(store, new SecureIdentifierPolicy());
+    }
+
     public CookieTracker(SessionStore store, SessionIdentifierPolicy policy) {
         this(store, policy, STANDARD_SERVLET_SESSION_COOKIE);
     }

@@ -8,6 +8,8 @@ public interface SessionListener {
 
     void sessionAccessed(Session session);
 
+    void sessionDropped(Session session);
+
     public static final SessionListener NONE = new None();
 
     public static final class None implements SessionListener {
@@ -16,6 +18,9 @@ public interface SessionListener {
         }
 
         public void sessionAccessed(Session session) {
+        }
+
+        public void sessionDropped(Session session) {
         }
     }
 }
