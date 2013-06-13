@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
-import static java.lang.Integer.parseInt;
+import static java.lang.Long.parseLong;
 import static java.lang.String.valueOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -110,11 +110,11 @@ public class MockResponse implements Response {
         assertThat("response status", status, equalTo(expected));
     }
 
-    public int contentLength() {
-        return header("Content-Length") != null ? parseInt(header("Content-Length")) : 0;
+    public long contentLength() {
+        return header("Content-Length") != null ? parseLong(header("Content-Length")) : 0;
     }
 
-    public void contentLength(int length) {
+    public void contentLength(long length) {
         header("Content-Length", valueOf(length));
     }
 

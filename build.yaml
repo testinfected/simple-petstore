@@ -7,7 +7,7 @@ repositories:
 
 artifacts:
   cli: org.testinfected:cli:jar:1.0
-  simpleweb: org.simpleframework:simple:jar:4.1.21
+  simpleweb: org.simpleframework:simple:jar:5.1.4
   jmustache: com.samskivert:jmustache:jar:1.7
 
   flyway: com.googlecode.flyway:flyway-core:jar:2.0

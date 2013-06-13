@@ -60,11 +60,11 @@ public class ResponseWrapper implements Response {
         response.statusCode(code);
     }
 
-    public int contentLength() {
+    public long contentLength() {
         return response.contentLength();
     }
 
-    public void contentLength(int length) {
+    public void contentLength(long length) {
         response.contentLength(length);
     }
 

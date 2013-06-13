@@ -2,12 +2,9 @@ package org.testinfected.molecule.simple;
 
 import org.simpleframework.http.Cookie;
 import org.simpleframework.http.Request;
-import org.testinfected.molecule.HttpException;
 import org.testinfected.molecule.HttpMethod;
 import org.testinfected.molecule.Session;
 import org.testinfected.molecule.session.SessionTracking;
-
-import java.io.IOException;
 
 public class SimpleRequest implements org.testinfected.molecule.Request {
 
@@ -36,11 +33,7 @@ public class SimpleRequest implements org.testinfected.molecule.Request {
     }
 
     public String parameter(String name) {
-        try {
-            return request.getParameter(name);
-        } catch (IOException e) {
-            throw new HttpException("Cannot read request parameter", e);
-        }
+        return request.getParameter(name);
     }
 
     public String ip() {

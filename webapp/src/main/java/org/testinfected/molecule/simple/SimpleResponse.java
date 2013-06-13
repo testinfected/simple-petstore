@@ -1,8 +1,9 @@
 package org.testinfected.molecule.simple;
 
 import org.simpleframework.http.ContentType;
+import org.simpleframework.http.Protocol;
 import org.simpleframework.http.Response;
-import org.simpleframework.http.parse.ContentParser;
+import org.simpleframework.http.parse.ContentTypeParser;
 import org.testinfected.molecule.HttpException;
 import org.testinfected.molecule.HttpStatus;
 
@@ -25,11 +26,11 @@ public class SimpleResponse implements org.testinfected.molecule.Response {
 
     public void redirectTo(String location) {
         status(HttpStatus.SEE_OTHER);
-        header("Location", location);
+        header(Protocol.LOCATION, location);
     }
 
     public void header(String name, String value) {
-        response.set(name, value);
+        response.setValue(name, value);
     }
 
     public void headerDate(String name, long date) {
@@ -37,7 +38,7 @@ public class SimpleResponse implements org.testinfected.molecule.Response {
     }
 
     public void removeHeader(String name) {
-        response.remove(name);
+        response.setValue(name, null);
     }
 
     public void cookie(String name, String value) {
@@ -45,22 +46,22 @@ public class SimpleResponse implements org.testinfected.molecule.Response {
     }
 
     public void contentType(String mediaType) {
-        header("Content-Type", mediaType);
+        header(Protocol.CONTENT_TYPE, mediaType);
     }
 
     public String contentType() {
-        return header("Content-Type");
+        return header(Protocol.CONTENT_TYPE);
     }
 
     public String header(String name) {
         return response.getValue(name);
     }
 
-    public int contentLength() {
+    public long contentLength() {
         return response.getContentLength();
     }
 
-    public void contentLength(int length) {
+    public void contentLength(long length) {
         response.setContentLength(length);
     }
 
@@ -78,7 +79,7 @@ public class SimpleResponse implements org.testinfected.molecule.Response {
     }
 
     public void statusText(String reason) {
-        response.setText(reason);
+        response.setDescription(reason);
     }
 
     public Writer writer() throws IOException {
@@ -92,7 +93,7 @@ public class SimpleResponse implements org.testinfected.molecule.Response {
     }
 
     public Charset charset() {
-        ContentType type = contentType() != null ? new ContentParser(contentType()) : null;
+        ContentType type = contentType() != null ? new ContentTypeParser(contentType()) : null;
 
         if (type == null || type.getCharset() == null) {
             return defaultCharset;

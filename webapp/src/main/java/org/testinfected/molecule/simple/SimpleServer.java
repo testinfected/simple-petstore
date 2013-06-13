@@ -3,6 +3,7 @@ package org.testinfected.molecule.simple;
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
 import org.simpleframework.http.core.Container;
+import org.simpleframework.http.core.ContainerServer;
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
 import org.testinfected.molecule.Application;
@@ -58,7 +59,7 @@ public class SimpleServer implements Server {
     }
 
     public void run(final Application app) throws IOException {
-        connection = new SocketConnection(new ApplicationContainer(app));
+        connection = new SocketConnection(new ContainerServer(new ApplicationContainer(app)));
         SocketAddress address = new InetSocketAddress(port);
         connection.connect(address);
     }

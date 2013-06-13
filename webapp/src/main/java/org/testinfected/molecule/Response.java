@@ -27,9 +27,9 @@ public interface Response {
 
     void statusCode(int code);
 
-    int contentLength();
+    long contentLength();
 
-    void contentLength(int length);
+    void contentLength(long length);
 
     Charset charset();
 
