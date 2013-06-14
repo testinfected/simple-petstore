@@ -5,8 +5,6 @@ import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.testinfected.petstore.Transactor;
-import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.OrderNumberDatabaseSequence;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.OrderNumberSequence;
@@ -23,7 +21,6 @@ public class OrderNumberDatabaseSequenceTest {
 
     Database database = Database.in(TestDatabaseEnvironment.load());
     Connection connection = database.connect();
-    Transactor transactor = new JDBCTransactor(connection);
 
     OrderNumberSequence orderNumberSequence = new OrderNumberDatabaseSequence(connection);
 

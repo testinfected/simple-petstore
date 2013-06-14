@@ -37,7 +37,15 @@ To build and run all tests, use:
 
 You need to have either PhantomJS or Firefox installed to run the end-to-end tests.
 
-Modify the [test configuration file](https://github.com/testinfected/simple-petstore/blob/master/main/src/test/resources/test.properties) according to your settings.
+Modify the [test configuration file](https://github.com/testinfected/simple-petstore/blob/master/server/src/test/resources/test.properties) according to your settings. Note that you have to specify the path of the phantomjs executable.
+
+## Migrating the database
+
+To migrate your database, from the top-level directory use:
+
+`buildr db-migrate`
+
+Use the [seeds](https://github.com/testinfected/simple-petstore/blob/master/server/src/main/scripts/seeds/items.sql) to populate your MySQL database with sample data.
 
 ## Running
 
@@ -45,13 +53,8 @@ To run the application, from the top-level directory use:
 
 `buildr run`
 
-## Migrating
-
-To migrate your database, from the top-level directory use:
-
-`buildr db-migrate`
-
 ## IntelliJ
+
 If you use IntelliJ, you can generate your project using:
 
 `buildr idea`
