@@ -29,7 +29,7 @@ public class DatabaseCleaner {
             new JDBCTransactor(connection).perform(new UnitOfWork() {
                 public void execute() throws Exception {
                     for (String table : TABLES) {
-                        truncate(connection, table);
+                        delete(connection, table);
                     }
                 }
             });
@@ -38,8 +38,8 @@ public class DatabaseCleaner {
         }
     }
 
-    private void truncate(Connection connection, String table) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("truncate table " + table);
+    private void delete(Connection connection, String table) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("delete from " + table);
         statement.executeUpdate();
         statement.close();
     }

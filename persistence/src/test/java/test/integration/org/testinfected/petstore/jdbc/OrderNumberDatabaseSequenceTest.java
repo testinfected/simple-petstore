@@ -1,26 +1,23 @@
 package test.integration.org.testinfected.petstore.jdbc;
 
-import org.testinfected.petstore.order.OrderNumber;
-import org.testinfected.petstore.order.OrderNumberSequence;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.Transactor;
-import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.OrderNumberDatabaseSequence;
+import org.testinfected.petstore.order.OrderNumber;
+import org.testinfected.petstore.order.OrderNumberSequence;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 
 public class OrderNumberDatabaseSequenceTest {
 
@@ -42,30 +39,24 @@ public class OrderNumberDatabaseSequenceTest {
 
     @Test public void
     incrementsSequenceNumber() throws Exception {
-        seedSequenceNumberWith(100);
+        OrderNumber currentNumber = nextOrderNumber();
 
-        assertThat("next order number", nextOrderNumber(), orderNumber("00000101"));
-        assertThat("next order number", nextOrderNumber(), orderNumber("00000102"));
+        assertThat("next in sequence after " + currentNumber, nextOrderNumber(), orderNumber(parse(currentNumber) + 1));
+        assertThat("next in sequence after " + currentNumber, nextOrderNumber(), orderNumber(parse(currentNumber) + 2));
     }
 
-    private void seedSequenceNumberWith(final long seed) throws Exception {
-        transactor.perform(new UnitOfWork() {
-            public void execute() throws Exception {
-                PreparedStatement statement = connection.prepareStatement("insert into order_numbers values (?)");
-                statement.setLong(1, seed);
-                assertThat("update count", statement.executeUpdate(), is(1));
-            }
-        });
+    private int parse(OrderNumber number) {
+        return Integer.parseInt(number.getNumber());
     }
 
     private OrderNumber nextOrderNumber() {
         return orderNumberSequence.nextOrderNumber();
     }
 
-    private Matcher<OrderNumber> orderNumber(final String number) {
-        return new FeatureMatcher<OrderNumber, String>(equalTo(number), "an order number", "order number") {
-            @Override protected String featureValueOf(OrderNumber actual) {
-                return actual.getNumber();
+    private Matcher<OrderNumber> orderNumber(final int number) {
+        return new FeatureMatcher<OrderNumber, Integer>(equalTo(number), "an order number", "order number") {
+            @Override protected Integer featureValueOf(OrderNumber actual) {
+                return parse(actual);
             }
         };
     }
