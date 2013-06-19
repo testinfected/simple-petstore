@@ -1,6 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.samskivert.mustache.Mustache;
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.After;
@@ -11,6 +12,7 @@ import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
+import org.testinfected.petstore.views.PathToAttachment;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.Builder;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
@@ -28,9 +30,9 @@ public class ListProductsTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
-    AttachmentStorage attachmentStorage = context.mock(AttachmentStorage.class);
+    AttachmentStorage images = context.mock(AttachmentStorage.class);
     MockPage productsPage = new MockPage();
-    ListProducts listProducts = new ListProducts(productCatalog, attachmentStorage, productsPage);
+    ListProducts listProducts = new ListProducts(productCatalog, images, productsPage);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
@@ -90,7 +92,15 @@ public class ListProductsTest {
     makesImageResolverAvailableToView() throws Exception {
         searchYields(aProduct().withPhoto("photo.png"));
         listProducts.handle(request, response);
-        productsPage.assertRenderedWith(equalTo("path"), instanceOf(Mustache.Lambda.class));
+        productsPage.assertRenderedWith(equalTo("path"), pathTo(images));
+    }
+
+    private Matcher<? super PathToAttachment> pathTo(AttachmentStorage attachments) {
+        return new FeatureMatcher<PathToAttachment, AttachmentStorage>(sameInstance(attachments), "path to attachments", "attachments") {
+            protected AttachmentStorage featureValueOf(PathToAttachment path) {
+                return path.attachments();
+            }
+        };
     }
 
     @SuppressWarnings("unchecked")

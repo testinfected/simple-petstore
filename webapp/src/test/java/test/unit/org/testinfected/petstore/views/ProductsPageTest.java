@@ -1,17 +1,15 @@
 package test.unit.org.testinfected.petstore.views;
 
-import com.samskivert.mustache.Mustache;
-import com.samskivert.mustache.Template;
 import org.hamcrest.Matcher;
 import org.junit.Test;
+import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.views.PathToAttachment;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,11 +55,11 @@ public class ProductsPageTest {
     displaysProductDetails() throws Exception {
         addToProducts(aProduct().withNumber("LAB-1234").named("Labrador").describedAs("Friendly").withPhoto("labrador.png"));
 
-        productsPage = renderProductsPage().with("path", new Mustache.Lambda() {
-            public void execute(Template.Fragment frag, Writer out) throws IOException {
-                out.write("/photos/" + frag.execute());
+        productsPage = renderProductsPage().with("path", PathToAttachment.in(new AttachmentStorage() {
+            public String getLocation(String fileName) {
+                return "/photos/" + fileName;
             }
-        }).asDom();
+        })).asDom();
 
         assertThat("products page", productsPage, hasUniqueSelector("li[id='product-LAB-1234']", anElement(
                 hasUniqueSelector(".product-image", hasImage("/photos/labrador.png"))),
