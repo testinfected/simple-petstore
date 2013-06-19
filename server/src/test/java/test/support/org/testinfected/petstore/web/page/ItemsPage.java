@@ -51,6 +51,6 @@ public class ItemsPage extends Page {
     }
 
     public void returnToCatalog() {
-        browser.element(id("continue-shopping")).click();
+        browser.element(cssSelector(".actions .cancel")).click();
     }
 }

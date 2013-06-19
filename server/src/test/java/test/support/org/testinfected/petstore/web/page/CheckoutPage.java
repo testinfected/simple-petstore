@@ -4,6 +4,7 @@ import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.By;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
 
 public class CheckoutPage extends Page {
@@ -36,11 +37,11 @@ public class CheckoutPage extends Page {
     }
 
     public ReceiptPage confirm() {
-        browser.element(id("order")).click();
+        browser.element(id("order")).submit();
         return new ReceiptPage(browser);
     }
 
     public void continueShopping() {
-        browser.element(id("continue-shopping")).click();
+        browser.element(cssSelector(".actions .cancel")).click();
     }
 }

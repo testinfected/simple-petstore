@@ -27,7 +27,7 @@ public class CartPage extends Page {
     }
 
     public void continueShopping() {
-        browser.element(id("continue-shopping")).click();
+        browser.element(cssSelector(".actions .cancel")).click();
     }
 
     private By cellShowingNameOf(String itemNumber) {
@@ -51,7 +51,7 @@ public class CartPage extends Page {
     }
 
     public CheckoutPage checkout() {
-        browser.element(cssSelector("#checkout a")).click();
+        browser.element(cssSelector(".actions .confirm a")).click();
         return new CheckoutPage(browser);
     }
 }

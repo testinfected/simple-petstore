@@ -45,7 +45,7 @@ public class ReceiptPage extends Page {
     }
 
     public void continueShopping() {
-        browser.element(id("continue-shopping")).click();
+        browser.element(cssSelector(".actions .cancel")).click();
     }
 
     private By cellDisplayingNameOfItem(String itemNumber) {

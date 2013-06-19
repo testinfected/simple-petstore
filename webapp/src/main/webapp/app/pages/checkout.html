@@ -4,10 +4,11 @@
   <meta name="section" content="cart">
 </head>
 <body>
-<div id="purchase">
+<div id="checkout">
   <span>Billing information - Cart total: <span id="cart-grand-total">{{total}}</span></span>
 
-  <form action="/orders" method="post">
+  {{#errors}}order{{/errors}}
+  <form id="order" action="/orders" method="post">
     <fieldset id="billing-address">
     <ol>
       <li>
@@ -37,6 +38,7 @@
       <li>
         <label for="card-number">Card number:</label>
         <input id="card-number" type="text" name="card-number" value="" size="33"/>
+        {{#errors}}order.cardNumber{{/errors}}
       </li>
       <li>
         <label for="expiry-date">Expiration date:</label>
@@ -44,10 +46,10 @@
       </li>
     </ol>
     </fieldset>
-    <fieldset id="purchase-actions">
+    <fieldset class="actions">
       <ol>
-        <li><a id="continue-shopping" class="continue" href="/">&laquo; continue shopping</a></li>
-        <li><button id="order">Submit order</button></li>
+        <li><a class="cancel" href="/">&laquo; continue shopping</a></li>
+        <li><button class="confirm">Submit order</button></li>
       </ol>
     </fieldset>
   </form>

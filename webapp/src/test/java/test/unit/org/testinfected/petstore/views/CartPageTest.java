@@ -41,7 +41,7 @@ public class CartPageTest {
     @Test public void
     letsReturnToHomePageToContinueShopping() {
         cartPage = renderCartPage().asDom();
-        assertThat("cart page", cartPage, hasUniqueSelector("a#continue-shopping", hasAttribute("href", "/")));
+        assertThat("cart page", cartPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
 
     @Test public void
@@ -82,7 +82,7 @@ public class CartPageTest {
     @Test public void
     rendersPaymentFormToCheckout() {
         cartPage = renderCartPage().asDom();
-        assertThat("cart page", cartPage, hasUniqueSelector("#checkout a", hasAttribute("href", "/orders/new")));
+        assertThat("cart page", cartPage, hasUniqueSelector(".confirm a", hasAttribute("href", "/orders/new")));
     }
 
     private void addToCart(final ItemBuilder... items) {

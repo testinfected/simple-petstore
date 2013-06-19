@@ -92,7 +92,7 @@ public class OrderPageTest {
     @Test public void
     returnsToHomePageToContinueShopping() {
         orderPage = renderOrderPage().asDom();
-        assertThat("order page", orderPage, hasUniqueSelector("a#continue-shopping", hasAttribute("href", "/")));
+        assertThat("order page", orderPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
 
     private Matcher<Element> hasOrderNumber(final String orderNumber) {

@@ -221,7 +221,7 @@ body.petstore {
 	padding-bottom: 10px;
 }
 
-#items-actions {
+#items .actions {
 	margin-top: 45px;
 	margin-left: 638px;
 	margin-bottom: 40px;
@@ -245,20 +245,20 @@ body.petstore {
 	height: 35px;
 }
 
-#cart-actions {
+#cart .actions {
 	height: 40px;
 	margin-top: 45px;
 	margin-left: 550px;
 }
 
-.continue {
+.actions .cancel {
 	padding-top: 15px;
 	font-size: 14px;
 	color: #696969;
 	text-decoration: underline;
 }
 
-#checkout, #order {
+.actions .confirm {
 	display: inline;
 	font: 14px "Georgia", "Arial", serif;
 	padding: 5px 10px;
@@ -268,25 +268,39 @@ body.petstore {
 	background-color: #c6ee22;
 	border: solid #6a6a6a 2px;
 	-moz-border-radius: 4px 4px 4px 4px;
+    cursor: pointer;
 }
 
-#checkout a {
-	color: black;
-	cursor: pointer;
+.actions .confirm a {
+    color: black;
+    cursor: pointer;
 }
 
-#purchase {
-	margin-top: 80px;
-	min-height: 390px;
-	color: #333333;
+.errors li {
+	list-style-type: none;
+	color: red;
 }
 
-#purchase p, #purchase span {
+form .errors {
+	display: inline;
+}
+
+form .errors li {
+	display: inline;
+}
+
+#checkout {
+    margin-top: 80px;
+    min-height: 390px;
+    color: #333333;
+}
+
+#checkout p, #checkout span {
 	margin-left: 40px;
 	font-size: 20px;
 }
 
-#purchase fieldset {
+#checkout fieldset {
     margin-top: 10px;
 }
 
@@ -294,42 +308,42 @@ fieldset#billing-address {
 	margin-top: 30px;
 }
 
-#purchase li {
+#checkout li {
 	list-style-type: none;
 	padding-left: 0;
 	margin-top: 10px;
 }
 
-#purchase input, select {
+#checkout input, select {
 	margin-left: 140px;
 	border: solid gray 1px;
 	-moz-border-radius: 4px 4px 4px 4px;
 	height: 23px;
 }
 
-#purchase input {
+#checkout input {
     padding-left: 7px;
     width: 293px;
 }
 
-#purchase select {
+#checkout select {
 	width: 302px;
 	padding: 5px;
 	height: 30px;
 }
 
-#purchase label {
+#checkout label {
 	position: absolute;
 	line-height: 23px;
 }
 
-fieldset#purchase-actions {
+#checkout .actions {
 	margin-top: 45px;
 	margin-left: 150px;
 	margin-bottom: 40px;
 }
 
-#purchase-actions li {
+#checkout .actions li {
   display: inline;
 }
 
@@ -364,7 +378,7 @@ fieldset#purchase-actions {
 	margin-left: 550px;
 }
 
-#receipt-actions {
+#receipt .actions {
 	margin-top: 45px;
 	margin-left: 0;
 }

@@ -106,7 +106,7 @@ public class ItemsPageTest {
 
         itemsPage = renderItemsPage().asDom();
 
-        assertThat("items page", itemsPage, hasUniqueSelector("a#continue-shopping", hasAttribute("href", "/")));
+        assertThat("items page", itemsPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
 
     private void addAsAvailable(Builder<Item>... items) {
