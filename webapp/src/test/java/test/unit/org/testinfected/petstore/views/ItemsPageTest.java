@@ -30,7 +30,7 @@ public class ItemsPageTest {
     String ITEMS_TEMPLATE = "items";
 
     Element itemsPage;
-    List<Item> itemAvailable = new ArrayList<Item>();
+    List<Item> availableItems = new ArrayList<Item>();
 
     @Test public void
     indicatesWhenNoItemIsAvailable() {
@@ -103,17 +103,14 @@ public class ItemsPageTest {
     @Test public void
     returnsToHomePageToContinueShopping() {
         addAsAvailable(anItem());
-
         itemsPage = renderItemsPage().asDom();
-
         assertThat("items page", itemsPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
 
     private void addAsAvailable(Builder<Item>... items) {
-        this.itemAvailable.addAll(build(items));
-    }
+        this.availableItems.addAll(build(items));    }
 
     private OfflineRenderer renderItemsPage() {
-        return render(ITEMS_TEMPLATE).with("items", itemAvailable).and("in-stock", !itemAvailable.isEmpty()).from(WebRoot.pages());
+        return render(ITEMS_TEMPLATE).with("items", availableItems).and("in-stock", !availableItems.isEmpty()).from(WebRoot.pages());
     }
 }

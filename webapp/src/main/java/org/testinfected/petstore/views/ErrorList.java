@@ -17,14 +17,25 @@ public class ErrorList implements Mustache.Lambda {
     }
 
     public void execute(Template.Fragment frag, Writer out) throws IOException {
-        String path = frag.execute();
-        if (!errors.containsKey(path)) return;
+        String error = trim(frag);
+        if (!errors.containsKey(error)) return;
+        out.write(indent(frag));
         out.write("<ol class=\"errors\">\n");
-        for (String message : errors.get(path)) {
-            out.write("<li>");
+        for (String message : errors.get(error)) {
+            out.write(indent(frag));
+            out.write("  <li>");
             out.write(message);
-            out.write("</li>");
+            out.write("</li>\n");
         }
-        out.write("\n</ol>");
+        out.write(indent(frag));
+        out.write("</ol>\n");
+    }
+
+    private String trim(Template.Fragment frag) {
+        return frag.execute().trim();
+    }
+
+    private String indent(Template.Fragment frag) {
+        return frag.execute().substring(0, frag.execute().indexOf(trim(frag)));
     }
 }
