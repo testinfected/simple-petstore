@@ -1,5 +1,6 @@
 package org.testinfected.petstore.order;
 
+import org.testinfected.petstore.Ensure;
 import org.testinfected.petstore.QueryUnitOfWork;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.billing.PaymentMethod;
@@ -16,6 +17,7 @@ public class Cashier implements SalesAssistant {
     }
 
     public OrderNumber placeOrder(final Cart cart, final PaymentMethod paymentMethod) throws Exception {
+        Ensure.valid(paymentMethod);
         QueryUnitOfWork<OrderNumber> confirmation = new QueryUnitOfWork<OrderNumber>() {
             public OrderNumber query() throws Exception {
                 OrderNumber nextNumber = orderNumberSequence.nextOrderNumber();

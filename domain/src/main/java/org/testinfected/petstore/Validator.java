@@ -5,8 +5,6 @@ import java.util.Set;
 
 public class Validator {
 
-    public Validator() {}
-
     public Set<ConstraintViolation<?>> validate(Object target) {
         Problems problems = new Problems();
         for (Field field : declaredFieldsOf(target)) {

@@ -8,6 +8,7 @@ import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
 import org.testinfected.petstore.AbstractTransactor;
+import org.testinfected.petstore.ConstraintViolationException;
 import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.order.Cart;
@@ -22,21 +23,26 @@ import java.math.BigDecimal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.fail;
+import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class CashierTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
-
     OrderNumberSequence sequence = context.mock(OrderNumberSequence.class);
+
     OrderBook orderBook = context.mock(OrderBook.class);
     Cart cart = new Cart();
-
     States transaction = context.states("transaction").startsAs("not started");
+
     Cashier cashier = new Cashier(sequence, orderBook, new StubTransactor(transaction));
 
-    @SuppressWarnings("unchecked")
-    @Test public void
+    String BLANK = "";
+    String NULL = null;
+
+    @SuppressWarnings("unchecked") @Test public void
     acceptsPaymentAndRecordsOrder() throws Exception {
         cart.add(anItem().withNumber("00000100").priced("100.00").build());
         cart.add(anItem().withNumber("00000100").priced("100.00").build());
@@ -55,7 +61,18 @@ public class CashierTest {
         }});
 
         assertThat("order number", cashier.placeOrder(cart, paymentMethod), equalTo(nextNumber));
-        assertThat("cart not emptied", cart.empty());
+        assertThat("cart not empty", cart.empty());
+    }
+
+    @SuppressWarnings("unchecked") @Test public void
+    rejectsInvalidPaymentDetails() throws Exception {
+        PaymentMethod paymentMethod = aVisa().withNumber(BLANK).withExpiryDate(NULL).build();
+        try {
+            cashier.placeOrder(cart, paymentMethod);
+            fail("Expected exception: " + ConstraintViolationException.class);
+        } catch (ConstraintViolationException expected) {
+            assertThat("violations", expected.violations(), hasSize(2));
+        }
     }
 
     private Matcher<Order> anOrder(Matcher<? super Order>... matchers) {
