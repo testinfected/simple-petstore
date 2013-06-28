@@ -45,8 +45,21 @@ public class CreditCardBuilder implements Builder<CreditCardDetails> {
     }
 
     public CreditCardBuilder billedTo(AddressBuilder addressBuilder) {
-        this.billingAddress = addressBuilder.build();
+        return billedTo(addressBuilder.build());
+    }
+
+    public CreditCardBuilder billedTo(Address billingAddress) {
+        this.billingAddress = billingAddress;
         return this;
+    }
+
+    public CreditCardBuilder but() {
+        CreditCardBuilder but = new CreditCardBuilder();
+        but.ofType(this.cardType);
+        but.withNumber(this.cardNumber);
+        but.withExpiryDate(this.cardExpiryDate);
+        but.billedTo(this.billingAddress);
+        return but;
     }
 
     public CreditCardDetails build() {

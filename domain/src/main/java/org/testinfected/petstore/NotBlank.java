@@ -13,6 +13,7 @@ public class NotBlank implements Serializable, Constraint {
     }
 
     public String get() {
+        if (!satisfied()) throw new IllegalArgumentException(BLANK);
         return value;
     }
 

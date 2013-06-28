@@ -13,6 +13,7 @@ public class NotNull<T> implements Serializable, Constraint {
     }
 
     public T get() {
+        if (!satisfied()) throw new IllegalArgumentException(MISSING);
         return value;
     }
 

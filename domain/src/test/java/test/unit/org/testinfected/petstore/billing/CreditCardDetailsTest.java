@@ -49,6 +49,16 @@ public class CreditCardDetailsTest {
         assertThat("validation of valid card", validationOf(validCard()), succeeds());
     }
 
+    @Test(expected = IllegalArgumentException.class) public void
+    throwsIllegalArgumentExceptionWhenUsedWithInvalidCreditCardNumber() {
+        cardWithNumber(BLANK).getCardNumber();
+    }
+
+    @Test(expected = IllegalArgumentException.class) public void
+    throwsIllegalArgumentExceptionWhenUsedWithInvalidExpiryDate() {
+        cardWithExpiryDate(MISSING).getCardExpiryDate();
+    }
+
     private Matcher<Iterable<?>> succeeds() {
         return Matchers.describedAs("succeeds", emptyIterable());
     }
