@@ -19,7 +19,6 @@ import static org.testinfected.hamcrest.dom.DomMatchers.matches;
 import static org.testinfected.hamcrest.dom.DomMatchers.matchesInAnyOrder;
 import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
-import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
@@ -86,7 +85,7 @@ public class OrderPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysPaymentDetails() {
-        order.paidWith(aVisa().withNumber("9999 9999 9999").withExpiryDate("12/12"));
+        order.paidWith(validVisaDetails().but().withNumber("9999 9999 9999").withExpiryDate("12/12"));
         orderPage = renderOrderPage().asDom();
         assertThat("order page", orderPage, hasSelector("#payment-details span", matchesInAnyOrder(
                 hasText("Visa"),

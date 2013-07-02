@@ -14,7 +14,6 @@ import static org.hamcrest.CoreMatchers.describedAs;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.emptyIterable;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.org.testinfected.petstore.matchers.SerializedForm.serializedForm;
@@ -76,11 +75,11 @@ public class CreditCardDetailsTest {
     }
 
     private CreditCardDetails cardWithNumber(String cardNumber) {
-        return validVisaDetails().withNumber(cardNumber).build();
+        return validVisaDetails().but().withNumber(cardNumber).build();
     }
 
     private CreditCardDetails cardWithExpiryDate(String date) {
-        return validVisaDetails().withExpiryDate(date).build();
+        return validVisaDetails().but().withExpiryDate(date).build();
     }
 
     private CreditCardDetails validCard() {
@@ -96,7 +95,7 @@ public class CreditCardDetailsTest {
     }
 
     public static Matcher<ConstraintViolation<?>> withMessage(String message) {
-        return new FeatureMatcher<ConstraintViolation<?>, String>(containsString(message), "with message", "message") {
+        return new FeatureMatcher<ConstraintViolation<?>, String>(equalTo(message), "with message", "message") {
             @Override protected String featureValueOf(ConstraintViolation<?> actual) {
                 return actual.message();
             }

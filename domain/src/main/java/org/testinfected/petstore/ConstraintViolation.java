@@ -23,4 +23,8 @@ public class ConstraintViolation<T> {
     public T value() {
         return offendingValue;
     }
+
+    public String toString() {
+        return String.format("%s is %s: %s", path, message, offendingValue);
+    }
 }

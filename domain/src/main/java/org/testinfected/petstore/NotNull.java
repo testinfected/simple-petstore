@@ -24,4 +24,19 @@ public class NotNull<T> implements Serializable, Constraint {
     private boolean satisfied() {
         return value != null;
     }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NotNull notNull = (NotNull) o;
+
+        if (value != null ? !value.equals(notNull.value) : notNull.value != null) return false;
+
+        return true;
+    }
+
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
+    }
 }

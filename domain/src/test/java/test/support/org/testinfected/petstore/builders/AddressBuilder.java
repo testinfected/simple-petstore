@@ -12,15 +12,11 @@ public class AddressBuilder implements Builder<Address> {
         return new AddressBuilder();
     }
 
-    static AddressBuilder aValidAddress() {
+    public static AddressBuilder aValidAddress() {
         return anAddress().
                     withFirstName("John").
                     withLastName("Leclair").
                     withEmail("jleclair@gmail.com");
-    }
-
-    public Address build() {
-        return new Address(firstName, lastName, emailAddress);
     }
 
     public AddressBuilder withFirstName(String firstName) {
@@ -36,5 +32,17 @@ public class AddressBuilder implements Builder<Address> {
     public AddressBuilder withEmail(String emailAddress) {
         this.emailAddress = emailAddress;
         return this;
+    }
+
+    public AddressBuilder but() {
+        AddressBuilder but = new AddressBuilder();
+        but.withFirstName(firstName);
+        but.withLastName(lastName);
+        but.withEmail(emailAddress);
+        return but;
+    }
+
+    public Address build() {
+        return new Address(firstName, lastName, emailAddress);
     }
 }
