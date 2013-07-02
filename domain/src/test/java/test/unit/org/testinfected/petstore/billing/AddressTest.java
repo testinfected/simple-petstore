@@ -45,12 +45,12 @@ public class AddressTest {
 
     @Test public void
     isInvalidWithoutAFirstName() {
-        assertThat("validation of address with missing first name", validationOf(aValidAddress().but().withFirstName(MISSING)), violates(on("firstName"), withMessage("missing")));
+        assertThat("validation of address with missing first name", validationOf(anAddress().withFirstName(MISSING)), violates(on("firstName"), withMessage("missing")));
     }
 
     @Test public void
     isInvalidWithoutALastName() {
-        assertThat("validation of address with missing last name", validationOf(aValidAddress().but().withLastName(MISSING)), violates(on("lastName"), withMessage("missing")));
+        assertThat("validation of address with missing last name", validationOf(anAddress().withLastName(MISSING)), violates(on("lastName"), withMessage("missing")));
     }
 
     @Test public void
@@ -66,8 +66,8 @@ public class AddressTest {
         return validator.validate(builder.build());
     }
 
-    private Matcher<Iterable<? extends ConstraintViolation<?>>> violates(Matcher<ConstraintViolation<?>> pathMatcher, Matcher<ConstraintViolation<?>> messageMatcher) {
-        return Matchers.contains(violation(pathMatcher, messageMatcher));
+    private Matcher<Iterable<? super ConstraintViolation<?>>> violates(Matcher<ConstraintViolation<?>> pathMatcher, Matcher<ConstraintViolation<?>> messageMatcher) {
+        return Matchers.hasItem(violation(pathMatcher, messageMatcher));
     }
 
     private Matcher<ConstraintViolation<?>> violation(Matcher<ConstraintViolation<?>> pathMatcher, Matcher<ConstraintViolation<?>> messageMatcher) {

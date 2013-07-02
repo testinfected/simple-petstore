@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.testinfected.petstore.ConstraintViolation;
 import org.testinfected.petstore.Validator;
 import org.testinfected.petstore.billing.CreditCardDetails;
+import test.support.org.testinfected.petstore.builders.AddressBuilder;
 
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyIterable;
+import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.org.testinfected.petstore.matchers.SerializedForm.serializedForm;
 
@@ -44,6 +46,12 @@ public class CreditCardDetailsTest {
     }
 
     @Test public void
+    areInvalidWithAnInvalidAddress() {
+        assertThat("validation of card with missing first name", validationOf(cardWithAddress(anAddress().withFirstName(MISSING))), violates(on("billingAddress.firstName"), withMessage("missing")));
+        assertThat("validation of card with missing last name", validationOf(cardWithAddress(anAddress().withLastName(MISSING))), violates(on("billingAddress.lastName"), withMessage("missing")));
+    }
+
+    @Test public void
     areValidWithAllRequiredDetails() {
         assertThat("validation of valid card", validationOf(validCard()), succeeds());
     }
@@ -58,6 +66,11 @@ public class CreditCardDetailsTest {
         cardWithExpiryDate(MISSING).getCardExpiryDate();
     }
 
+    @Test(expected = IllegalArgumentException.class) public void
+    throwsIllegalArgumentExceptionWhenUsedWithInvalidAddress() {
+        cardWithAddress(anAddress().withFirstName(MISSING)).getFirstName();
+    }
+
     private Matcher<Iterable<?>> succeeds() {
         return Matchers.describedAs("succeeds", emptyIterable());
     }
@@ -66,8 +79,8 @@ public class CreditCardDetailsTest {
         return validator.validate(details);
     }
 
-    private Matcher<Iterable<? extends ConstraintViolation<?>>> violates(Matcher<ConstraintViolation<?>> pathMatcher, Matcher<ConstraintViolation<?>> messageMatcher) {
-        return Matchers.contains(violation(pathMatcher, messageMatcher));
+    private Matcher<Iterable<? super ConstraintViolation<?>>> violates(Matcher<ConstraintViolation<?>> pathMatcher, Matcher<ConstraintViolation<?>> messageMatcher) {
+        return Matchers.hasItem(violation(pathMatcher, messageMatcher));
     }
 
     private Matcher<ConstraintViolation<?>> violation(Matcher<ConstraintViolation<?>> pathMatcher, Matcher<ConstraintViolation<?>> messageMatcher) {
@@ -84,6 +97,10 @@ public class CreditCardDetailsTest {
 
     private CreditCardDetails validCard() {
         return validVisaDetails().build();
+    }
+
+    private CreditCardDetails cardWithAddress(AddressBuilder address) {
+        return validVisaDetails().but().billedTo(address).build();
     }
 
     public static Matcher<ConstraintViolation<?>> on(String path) {

@@ -10,5 +10,9 @@ public final class Check {
         return new NotBlank(value);
     }
 
+    public static <T> Valid<T> valid(T value) {
+        return new Valid<T>(value);
+    }
+
     private Check() {}
 }

@@ -8,7 +8,6 @@ public final class Ensure {
         Validator validator = new Validator();
         Set<ConstraintViolation<?>> violations = validator.validate(target);
         if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
-
     }
 
     private Ensure() {}

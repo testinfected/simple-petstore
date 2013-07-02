@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.fail;
+import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
@@ -40,7 +41,7 @@ public class CashierTest {
     Cashier cashier = new Cashier(sequence, orderBook, new StubTransactor(transaction));
 
     String BLANK = "";
-    String NULL = null;
+    String MISSING = null;
 
     @SuppressWarnings("unchecked") @Test public void
     acceptsPaymentAndRecordsOrder() throws Exception {
@@ -66,12 +67,14 @@ public class CashierTest {
 
     @SuppressWarnings("unchecked") @Test public void
     rejectsInvalidPaymentDetails() throws Exception {
-        PaymentMethod paymentMethod = aVisa().withNumber(BLANK).withExpiryDate(NULL).build();
+        PaymentMethod paymentMethod = aVisa().withNumber(BLANK).withExpiryDate(MISSING).billedTo(
+                anAddress().withFirstName(MISSING).withLastName(MISSING))
+                .build();
         try {
             cashier.placeOrder(cart, paymentMethod);
             fail("Expected exception: " + ConstraintViolationException.class);
         } catch (ConstraintViolationException expected) {
-            assertThat("violations", expected.violations(), hasSize(2));
+            assertThat("violations", expected.violations(), hasSize(4));
         }
     }
 

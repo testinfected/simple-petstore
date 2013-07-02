@@ -15,4 +15,8 @@ public class Problems implements Validation {
     public Set<ConstraintViolation<?>> violations() {
         return Collections.unmodifiableSet(violations);
     }
+
+    public boolean isEmpty() {
+        return violations.isEmpty();
+    }
 }
