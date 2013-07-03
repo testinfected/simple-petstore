@@ -23,8 +23,6 @@ import java.math.BigDecimal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.fail;
 import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
@@ -65,17 +63,12 @@ public class CashierTest {
         assertThat("cart not empty", cart.empty());
     }
 
-    @SuppressWarnings("unchecked") @Test public void
+    @SuppressWarnings("unchecked") @Test(expected = ConstraintViolationException.class) public void
     rejectsInvalidPaymentDetails() throws Exception {
         PaymentMethod paymentMethod = aVisa().withNumber(BLANK).withExpiryDate(MISSING).billedTo(
                 anAddress().withFirstName(MISSING).withLastName(MISSING))
                 .build();
-        try {
-            cashier.placeOrder(cart, paymentMethod);
-            fail("Expected exception: " + ConstraintViolationException.class);
-        } catch (ConstraintViolationException expected) {
-            assertThat("violations", expected.violations(), hasSize(4));
-        }
+        cashier.placeOrder(cart, paymentMethod);
     }
 
     private Matcher<Order> anOrder(Matcher<? super Order>... matchers) {

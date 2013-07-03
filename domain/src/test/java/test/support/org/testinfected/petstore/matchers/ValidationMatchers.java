@@ -27,12 +27,24 @@ public class ValidationMatchers {
         return Matchers.describedAs("succeeds", emptyIterable());
     }
 
+    public static Matcher<Iterable<? super ConstraintViolation<?>>> violates(Matcher<ConstraintViolation<?>> pathMatcher) {
+        return Matchers.hasItem(pathMatcher);
+    }
+
     public static Matcher<Iterable<? super ConstraintViolation<?>>> violates(Matcher<ConstraintViolation<?>> pathMatcher, Matcher<ConstraintViolation<?>> messageMatcher) {
         return Matchers.hasItem(violation(pathMatcher, messageMatcher));
     }
 
+    public static Matcher<Iterable<? super ConstraintViolation<?>>> violates(Matcher<ConstraintViolation<?>> pathMatcher, Matcher<ConstraintViolation<?>> messageMatcher, Matcher<ConstraintViolation<?>> valueMatcher) {
+        return Matchers.hasItem(violation(pathMatcher, messageMatcher, valueMatcher));
+    }
+
     private static Matcher<ConstraintViolation<?>> violation(Matcher<ConstraintViolation<?>> pathMatcher, Matcher<ConstraintViolation<?>> messageMatcher) {
         return Matchers.allOf(pathMatcher, messageMatcher);
+    }
+
+    private static Matcher<ConstraintViolation<?>> violation(Matcher<ConstraintViolation<?>> pathMatcher, Matcher<ConstraintViolation<?>> messageMatcher, Matcher<ConstraintViolation<?>> valueMatcher) {
+        return Matchers.allOf(pathMatcher, messageMatcher, valueMatcher);
     }
 
     public static Matcher<ConstraintViolation<?>> on(String path) {
@@ -47,6 +59,14 @@ public class ValidationMatchers {
         return new FeatureMatcher<ConstraintViolation<?>, String>(equalTo(message), "with message", "message") {
             @Override protected String featureValueOf(ConstraintViolation<?> actual) {
                 return actual.message();
+            }
+        };
+    }
+
+    public static Matcher<ConstraintViolation<?>> withValue(Object value) {
+        return new FeatureMatcher<ConstraintViolation<?>, Object>(equalTo(value), "with value", "value") {
+            @Override protected Object featureValueOf(ConstraintViolation<?> actual) {
+                return actual.value();
             }
         };
     }

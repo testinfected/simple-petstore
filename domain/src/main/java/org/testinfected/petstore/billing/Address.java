@@ -1,7 +1,7 @@
 package org.testinfected.petstore.billing;
 
-import org.testinfected.petstore.Check;
 import org.testinfected.petstore.NotNull;
+import org.testinfected.petstore.Validate;
 
 import java.io.Serializable;
 
@@ -11,8 +11,8 @@ public class Address implements Serializable {
     private final String emailAddress;
 
     public Address(String firstName, String lastName, String emailAddress) {
-        this.firstName = Check.notNull(firstName);
-        this.lastName = Check.notNull(lastName);
+        this.firstName = Validate.notNull(firstName);
+        this.lastName = Validate.notNull(lastName);
         this.emailAddress = emailAddress;
     }
 

@@ -6,7 +6,7 @@ public class Validator {
 
     public Set<ConstraintViolation<?>> validate(Object target) {
         Problems problems = new Problems();
-        Check.valid(target).check(null, problems);
+        Validate.valid(target).check(null, problems);
         return problems.violations();
     }
 }

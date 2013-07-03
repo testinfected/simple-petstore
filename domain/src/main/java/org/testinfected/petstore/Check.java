@@ -2,16 +2,14 @@ package org.testinfected.petstore;
 
 public final class Check {
 
-    public static <T> NotNull<T> notNull(T value) {
-        return new NotNull<T>(value);
+    public static void valid(Object target) {
+        Check.satisfied(Validate.valid(target));
     }
 
-    public static NotBlank notBlank(String value) {
-        return new NotBlank(value);
-    }
-
-    public static <T> Valid<T> valid(T value) {
-        return new Valid<T>(value);
+    public static void satisfied(Constraint constraint) {
+        Problems problems = new Problems();
+        constraint.check(null, problems);
+        if (!problems.isEmpty()) throw new ConstraintViolationException(problems.violations());
     }
 
     private Check() {}

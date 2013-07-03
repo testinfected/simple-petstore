@@ -48,22 +48,4 @@ public class CreditCardDetailsTest {
     areValidWithAllRequiredDetails() {
         assertThat("validation of valid card", validationOf(validVisaDetails()), succeeds());
     }
-
-    // TODO Move to various constraint unit tests
-    @Test(expected = IllegalArgumentException.class) public void
-    throwsIllegalArgumentExceptionWhenUsedWithInvalidCreditCardNumber() {
-        aVisa().withNumber(BLANK).build().getCardNumber();
-    }
-
-    // TODO Move to various constraint unit tests
-    @Test(expected = IllegalArgumentException.class) public void
-    throwsIllegalArgumentExceptionWhenUsedWithInvalidExpiryDate() {
-        aVisa().withExpiryDate(MISSING).build().getCardExpiryDate();
-    }
-
-    // TODO Move to various constraint unit tests
-    @Test(expected = IllegalArgumentException.class) public void
-    throwsIllegalArgumentExceptionWhenUsedWithInvalidAddress() {
-        aVisa().billedTo(anAddress().withFirstName(MISSING)).build().getFirstName();
-    }
 }

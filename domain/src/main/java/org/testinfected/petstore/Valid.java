@@ -5,8 +5,6 @@ import java.lang.reflect.Field;
 
 public class Valid<T> implements Serializable, Constraint {
 
-    private static final String INVALID = "invalid";
-
     private T value;
 
     public Valid(T value) {
@@ -14,7 +12,7 @@ public class Valid<T> implements Serializable, Constraint {
     }
 
     public T get() {
-        if (!satisfied()) throw new IllegalArgumentException(INVALID);
+        Check.satisfied(this);
         return value;
     }
 
@@ -28,12 +26,6 @@ public class Valid<T> implements Serializable, Constraint {
     // TODO We might need better than a string for representing the path in the object graph
     private String node(String path, String name) {
         return path != null ? path + "." + name : name;
-    }
-
-    private boolean satisfied() {
-        Problems problems = new Problems();
-        check(null, problems);
-        return problems.isEmpty();
     }
 
     public boolean equals(Object o) {
