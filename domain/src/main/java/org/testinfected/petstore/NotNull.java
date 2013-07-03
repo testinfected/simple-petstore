@@ -13,12 +13,16 @@ public class NotNull<T> implements Serializable, Constraint {
     }
 
     public T get() {
-        Check.satisfied(this);
+        Ensure.satisfied(this);
         return value;
     }
 
     public void check(String path, Validation validation) {
-        if (!satisfied()) validation.report(new ConstraintViolation<T>(path, MISSING, value));
+        if (!satisfied()) validation.report(missingValueAt(path));
+    }
+
+    private ConstraintViolation<T> missingValueAt(String path) {
+        return new ConstraintViolation<T>(path, MISSING, value);
     }
 
     private boolean satisfied() {

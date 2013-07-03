@@ -13,12 +13,16 @@ public class NotBlank implements Serializable, Constraint {
     }
 
     public String get() {
-        Check.satisfied(this);
+        Ensure.satisfied(this);
         return value;
     }
 
     public void check(String path, Validation validation) {
-        if (!satisfied()) validation.report(new ConstraintViolation<String>(path, BLANK, value));
+        if (!satisfied()) validation.report(blankTextAt(path));
+    }
+
+    private ConstraintViolation<String> blankTextAt(String path) {
+        return new ConstraintViolation<String>(path, BLANK, value);
     }
 
     private boolean satisfied() {
