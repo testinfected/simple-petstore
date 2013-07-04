@@ -8,11 +8,14 @@ import org.junit.Test;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
+import org.testinfected.petstore.helpers.FormErrors;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
+import org.testinfected.petstore.helpers.ErrorList;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
+import test.support.org.testinfected.petstore.web.MockPage;
 
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
@@ -23,15 +26,17 @@ public class PlaceOrderTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
-    PlaceOrder placeOrder = new PlaceOrder(salesAssistant);
+    MockPage checkoutPage = new MockPage();
+    PlaceOrder placeOrder = new PlaceOrder(salesAssistant, checkoutPage);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
 
+    String BLANK = "    ";
     String orderNumber = "12345678";
 
     @Test public void
-    placesOrderAndRedirectsToReceiptPage() throws Exception {
+    placesOrderWhenPaymentDetailsAreValidAndRedirectsToReceiptPage() throws Exception {
         final CreditCardDetails validPaymentDetails = validVisaDetails().build();
         addToRequest(validPaymentDetails);
         final Cart cart = aCart().containing(anItem()).build();
@@ -43,6 +48,28 @@ public class PlaceOrderTest {
 
         placeOrder.handle(request, response);
         response.assertRedirectedTo("/orders/" + orderNumber);
+    }
+
+    @Test public void
+    rejectsInvalidPaymentDetailsAndRendersCheckoutPageWithValidationErrors() throws Exception {
+        addToRequest(validVisaDetails().build());
+        request.addParameter("card-number", BLANK);
+
+        context.checking(new Expectations() {{
+            never(salesAssistant).placeOrder(with(any(Cart.class)), with(any(PaymentMethod.class)));
+        }});
+
+        placeOrder.handle(request, response);
+
+        checkoutPage.assertRenderedTo(response);
+        checkoutPage.assertRenderedWith("errors", new ErrorList(formErrorsForBlankCardNumber()));
+    }
+
+    private FormErrors formErrorsForBlankCardNumber() {
+        FormErrors errors = new FormErrors("payment");
+        errors.reject("invalid");
+        errors.rejectValue("cardNumber", "blank");
+        return errors;
     }
 
     private void storeInSession(Cart cart) {

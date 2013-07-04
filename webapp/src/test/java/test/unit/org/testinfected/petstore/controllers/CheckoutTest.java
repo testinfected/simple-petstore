@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.controllers.Checkout;
 import org.testinfected.petstore.order.Cart;
-import org.testinfected.petstore.views.ChoiceOfCreditCards;
+import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.CartBuilder;

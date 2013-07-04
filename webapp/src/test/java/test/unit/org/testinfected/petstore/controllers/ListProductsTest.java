@@ -9,10 +9,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.testinfected.petstore.controllers.ListProducts;
+import org.testinfected.petstore.helpers.PathToAttachment;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
-import org.testinfected.petstore.views.PathToAttachment;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.Builder;
@@ -84,7 +84,6 @@ public class ListProductsTest {
         searchYields(aProduct());
         listProducts.handle(request, response);
         productsPage.assertRenderedWith("keyword", keyword);
-
     }
 
     @SuppressWarnings("unchecked")

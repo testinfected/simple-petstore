@@ -4,8 +4,9 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;
-import org.testinfected.petstore.views.ChoiceOfCreditCards;
-import org.testinfected.petstore.views.ErrorList;
+import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
+import org.testinfected.petstore.helpers.ErrorList;
+import org.testinfected.petstore.helpers.FormErrors;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.AddressBuilder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
@@ -13,11 +14,8 @@ import test.support.org.testinfected.petstore.web.WebRoot;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
@@ -37,7 +35,7 @@ public class CheckoutPageTest {
 
     String CHECKOUT_TEMPLATE = "checkout";
     Element checkoutPage;
-    Map<String, List<String>> errors = new HashMap<String, List<String>>();
+    FormErrors errors = new FormErrors("payment");
 
     @Test public void
     displaysOrderSummary() {
@@ -73,8 +71,9 @@ public class CheckoutPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     rendersErrorsWhenPaymentDetailsAreInvalid() throws Exception {
-        errors.put("payment", asList("invalid.payment", "incomplete.payment"));
-        errors.put("payment.cardNumber", asList("empty.payment.cardNumber"));
+        errors.reject("invalid");
+        errors.reject("incomplete");
+        errors.rejectValue("cardNumber", "blank");
 
         checkoutPage = renderCheckoutPage().with("errors", new ErrorList(errors)).asDom();
 
@@ -83,7 +82,7 @@ public class CheckoutPageTest {
                 hasText("incomplete.payment")
         )));
         assertThat("card number errors", checkoutPage, hasSelector(".errors", hasChild(
-                hasText("empty.payment.cardNumber")
+                hasText("blank.payment.cardNumber")
         )));
     }
 

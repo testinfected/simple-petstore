@@ -4,7 +4,7 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
-import org.testinfected.petstore.views.PathToAttachment;
+import org.testinfected.petstore.helpers.PathToAttachment;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;

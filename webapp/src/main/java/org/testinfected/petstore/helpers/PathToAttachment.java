@@ -1,4 +1,4 @@
-package org.testinfected.petstore.views;
+package org.testinfected.petstore.helpers;
 
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
@@ -27,7 +27,7 @@ public class PathToAttachment implements Mustache.Lambda {
         out.write(locationOf(frag.execute()));
     }
 
-    public String locationOf(String fileName) {
+    private String locationOf(String fileName) {
         return attachments.getLocation(fileName);
     }
 }

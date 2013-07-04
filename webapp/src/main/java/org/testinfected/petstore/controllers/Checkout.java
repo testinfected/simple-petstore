@@ -6,7 +6,7 @@ import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.util.SessionScope;
-import org.testinfected.petstore.views.ChoiceOfCreditCards;
+import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
 
 import static org.testinfected.petstore.util.Context.context;
 

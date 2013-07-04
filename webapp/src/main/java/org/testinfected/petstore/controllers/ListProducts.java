@@ -8,7 +8,7 @@ import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.util.Context;
-import org.testinfected.petstore.views.PathToAttachment;
+import org.testinfected.petstore.helpers.PathToAttachment;
 
 import java.util.List;
 
