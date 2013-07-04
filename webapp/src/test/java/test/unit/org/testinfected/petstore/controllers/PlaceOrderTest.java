@@ -8,11 +8,11 @@ import org.junit.Test;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
+import org.testinfected.petstore.helpers.ErrorList;
 import org.testinfected.petstore.helpers.FormErrors;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
-import org.testinfected.petstore.helpers.ErrorList;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.web.MockPage;
@@ -52,8 +52,10 @@ public class PlaceOrderTest {
 
     @Test public void
     rejectsInvalidPaymentDetailsAndRendersCheckoutPageWithValidationErrors() throws Exception {
-        addToRequest(validVisaDetails().build());
-        request.addParameter("card-number", BLANK);
+        addToRequest(validVisaDetails().but().withNumber(BLANK).build());
+        FormErrors errors = new FormErrors("payment");
+        errors.reject("invalid");
+        errors.rejectValue("cardNumber", "blank");
 
         context.checking(new Expectations() {{
             never(salesAssistant).placeOrder(with(any(Cart.class)), with(any(PaymentMethod.class)));
@@ -62,14 +64,7 @@ public class PlaceOrderTest {
         placeOrder.handle(request, response);
 
         checkoutPage.assertRenderedTo(response);
-        checkoutPage.assertRenderedWith("errors", new ErrorList(formErrorsForBlankCardNumber()));
-    }
-
-    private FormErrors formErrorsForBlankCardNumber() {
-        FormErrors errors = new FormErrors("payment");
-        errors.reject("invalid");
-        errors.rejectValue("cardNumber", "blank");
-        return errors;
+        checkoutPage.assertRenderedWith("errors", new ErrorList(errors));
     }
 
     private void storeInSession(Cart cart) {

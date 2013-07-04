@@ -12,7 +12,6 @@ public class Valid<T> implements Serializable, Constraint {
     }
 
     public T get() {
-        Ensure.satisfied(this);
         return value;
     }
 

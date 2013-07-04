@@ -13,7 +13,6 @@ public class NotNull<T> implements Serializable, Constraint {
     }
 
     public T get() {
-        Ensure.satisfied(this);
         return value;
     }
 

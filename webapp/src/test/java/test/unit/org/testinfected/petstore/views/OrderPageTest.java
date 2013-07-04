@@ -19,7 +19,7 @@ import static org.testinfected.hamcrest.dom.DomMatchers.matches;
 import static org.testinfected.hamcrest.dom.DomMatchers.matchesInAnyOrder;
 import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
-import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
+import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
@@ -74,7 +74,7 @@ public class OrderPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysBillingInformation() {
-        order.paidWith(validVisaDetails().but().billedTo(anAddress().withFirstName("John").withLastName("Doe").withEmail("jdoe@gmail.com")));
+        order.paidWith(aVisa().billedTo(anAddress().withFirstName("John").withLastName("Doe").withEmail("jdoe@gmail.com")));
         orderPage = renderOrderPage().asDom();
         assertThat("order page", orderPage, hasSelector("#billing-address span", matchesInAnyOrder(
                 hasText("John"),
@@ -85,7 +85,7 @@ public class OrderPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysPaymentDetails() {
-        order.paidWith(validVisaDetails().but().withNumber("9999 9999 9999").withExpiryDate("12/12"));
+        order.paidWith(aVisa().withNumber("9999 9999 9999").withExpiryDate("12/12"));
         orderPage = renderOrderPage().asDom();
         assertThat("order page", orderPage, hasSelector("#payment-details span", matchesInAnyOrder(
                 hasText("Visa"),

@@ -13,7 +13,6 @@ public class NotBlank implements Serializable, Constraint {
     }
 
     public String get() {
-        Ensure.satisfied(this);
         return value;
     }
 

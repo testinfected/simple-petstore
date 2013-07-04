@@ -34,14 +34,6 @@ public class AddressBuilder implements Builder<Address> {
         return this;
     }
 
-    public AddressBuilder but() {
-        AddressBuilder but = new AddressBuilder();
-        but.withFirstName(firstName);
-        but.withLastName(lastName);
-        but.withEmail(emailAddress);
-        return but;
-    }
-
     public Address build() {
         return new Address(firstName, lastName, emailAddress);
     }
