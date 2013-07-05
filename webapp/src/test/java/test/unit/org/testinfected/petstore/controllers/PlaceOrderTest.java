@@ -11,7 +11,7 @@ import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
 import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
-import org.testinfected.petstore.helpers.ErrorList;
+import org.testinfected.petstore.helpers.Errors;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
@@ -78,14 +78,14 @@ public class PlaceOrderTest {
                 withMessage("payment.cardNumber", "blank.payment.cardNumber")));
     }
 
-    private Matcher<ErrorList> errors(Matcher<? super ErrorList>... errorMatchers) {
+    private Matcher<Errors> errors(Matcher<? super Errors>... errorMatchers) {
         return CoreMatchers.allOf(errorMatchers);
     }
 
-    private Matcher<? super ErrorList> withMessage(final String path, String error) {
-        return new FeatureMatcher<ErrorList, Iterable<String>>(hasItem(error), "errors with messages for " + path, "messages for " + path) {
-            protected Iterable<String> featureValueOf(ErrorList actual) {
-                return actual.messageFor(path);
+    private Matcher<? super Errors> withMessage(final String path, String error) {
+        return new FeatureMatcher<Errors, Iterable<String>>(hasItem(error), "form with errors['" + path + "']", "errors['" + path + "']") {
+            protected Iterable<String> featureValueOf(Errors actual) {
+                return actual.errorMessages(path);
             }
         };
     }

@@ -6,20 +6,20 @@ import com.samskivert.mustache.Template;
 import java.io.IOException;
 import java.io.Writer;
 
-public class ErrorList implements Mustache.Lambda {
+public class Errors implements Mustache.Lambda {
 
-    private final FormErrors errors;
+    private final Form<?> form;
 
-    public ErrorList(FormErrors errors) {
-        this.errors = errors;
+    public Errors(Form<?> form) {
+        this.form = form;
     }
 
     public void execute(Template.Fragment frag, Writer out) throws IOException {
         String key = trim(frag);
-        if (!errors.hasError(key)) return;
+        if (!form.hasError(key)) return;
         out.write(indent(frag));
         out.write("<ol class=\"errors\">\n");
-        for (String message : messageFor(key)) {
+        for (String message : errorMessages(key)) {
             out.write(indent(frag));
             out.write("  <li>");
             out.write(message);
@@ -29,8 +29,8 @@ public class ErrorList implements Mustache.Lambda {
         out.write("</ol>\n");
     }
 
-    public Iterable<String> messageFor(String key) {
-        return errors.messagesFor(key);
+    public Iterable<String> errorMessages(String key) {
+        return form.errorMessages(key);
     }
 
     private String trim(Template.Fragment frag) {
@@ -39,5 +39,9 @@ public class ErrorList implements Mustache.Lambda {
 
     private String indent(Template.Fragment frag) {
         return frag.execute().substring(0, frag.execute().indexOf(trim(frag)));
+    }
+
+    public String toString() {
+        return form.toString();
     }
 }

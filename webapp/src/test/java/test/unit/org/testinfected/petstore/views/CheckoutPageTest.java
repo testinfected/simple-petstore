@@ -5,10 +5,11 @@ import org.junit.Test;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
-import org.testinfected.petstore.helpers.ErrorList;
-import org.testinfected.petstore.helpers.FormErrors;
+import org.testinfected.petstore.helpers.Errors;
+import org.testinfected.petstore.helpers.Form;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.AddressBuilder;
+import test.support.org.testinfected.petstore.web.MockForm;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -35,7 +36,7 @@ public class CheckoutPageTest {
 
     String CHECKOUT_TEMPLATE = "checkout";
     Element checkoutPage;
-    FormErrors errors = new FormErrors("payment");
+    Form<?> form = MockForm.named("payment");
 
     @Test public void
     displaysOrderSummary() {
@@ -71,11 +72,11 @@ public class CheckoutPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     rendersErrorsWhenPaymentDetailsAreInvalid() throws Exception {
-        errors.reject("invalid");
-        errors.reject("incomplete");
-        errors.rejectValue("cardNumber", "blank");
+        form.reject("invalid");
+        form.reject("incomplete");
+        form.rejectField("cardNumber", "blank");
 
-        checkoutPage = renderCheckoutPage().with("errors", new ErrorList(errors)).asDom();
+        checkoutPage = renderCheckoutPage().with("errors", new Errors(form)).asDom();
 
         assertThat("payment errors", checkoutPage, hasSelector(".errors", allOf(hasChild(
                 hasText("invalid.payment")), hasChild(hasText("incomplete.payment"))
