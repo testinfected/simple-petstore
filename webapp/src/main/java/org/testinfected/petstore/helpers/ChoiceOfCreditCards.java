@@ -10,6 +10,10 @@ public class ChoiceOfCreditCards implements Iterable<ChoiceOfCreditCards.Option>
 
     private final Map<String, Option> options = new HashMap<String, Option>();
 
+    public static ChoiceOfCreditCards all() {
+        return from(CreditCardType.values());
+    }
+
     public static ChoiceOfCreditCards from(CreditCardType[] cardTypes) {
         ChoiceOfCreditCards choice = new ChoiceOfCreditCards();
         for (CreditCardType cardType : cardTypes) {
@@ -18,18 +22,13 @@ public class ChoiceOfCreditCards implements Iterable<ChoiceOfCreditCards.Option>
         return choice;
     }
 
-    public static ChoiceOfCreditCards from(CreditCardType[] cardTypes, CreditCardType selected) {
-        ChoiceOfCreditCards choice = from(cardTypes);
-        choice.select(selected);
-        return choice;
+    public ChoiceOfCreditCards select(CreditCardType cardType) {
+        options.get(cardType.name()).select();
+        return this;
     }
 
     private void add(CreditCardType cardType) {
         options.put(cardType.name(), new Option(cardType));
-    }
-
-    public void select(CreditCardType cardType) {
-        options.get(cardType.name()).select();
     }
 
     public Iterator<Option> iterator() {

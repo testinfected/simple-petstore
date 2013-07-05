@@ -5,7 +5,6 @@ import org.testinfected.petstore.ConstraintViolation;
 import org.testinfected.petstore.Validator;
 import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
-import org.testinfected.petstore.billing.PaymentMethod;
 
 import java.util.Set;
 
@@ -13,6 +12,7 @@ import static org.testinfected.petstore.billing.CreditCardType.valueOf;
 
 public class PaymentDetailsForm {
     private final CreditCardDetails cardDetails;
+    private final FormErrors errors = new FormErrors("payment");
 
     public PaymentDetailsForm(Request request) {
         this.cardDetails = new CreditCardDetails(
@@ -25,19 +25,22 @@ public class PaymentDetailsForm {
                                 request.parameter("email")));
     }
 
-    public FormErrors validate(Validator validator) {
-        Set<ConstraintViolation<?>> violations = validator.validate(paymentMethod());
-        FormErrors errors = new FormErrors("payment");
+    public boolean validate(Validator validator) {
+        Set<ConstraintViolation<?>> violations = validator.validate(value());
         if (!violations.isEmpty()) {
             errors.reject("invalid");
             for (ConstraintViolation<?> violation : violations) {
                 errors.rejectValue(violation.path(), violation.message());
             }
         }
+        return errors.empty();
+    }
+
+    public FormErrors errors() {
         return errors;
     }
 
-    public PaymentMethod paymentMethod() {
+    public CreditCardDetails value() {
         return cardDetails;
     }
 }

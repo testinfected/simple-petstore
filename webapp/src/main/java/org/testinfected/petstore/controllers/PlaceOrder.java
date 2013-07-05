@@ -5,8 +5,8 @@ import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.Validator;
+import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
 import org.testinfected.petstore.helpers.ErrorList;
-import org.testinfected.petstore.helpers.FormErrors;
 import org.testinfected.petstore.helpers.PaymentDetailsForm;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
@@ -26,12 +26,15 @@ public class PlaceOrder implements Application {
 
     public void handle(Request request, Response response) throws Exception {
         PaymentDetailsForm paymentForm = new PaymentDetailsForm(request);
-        FormErrors errors = paymentForm.validate(validator);
-        if (errors.empty()) {
-            OrderNumber orderNumber = salesAssistant.placeOrder(SessionScope.cartFor(request), paymentForm.paymentMethod());
+        if (paymentForm.validate(validator)) {
+            OrderNumber orderNumber = salesAssistant.placeOrder(SessionScope.cartFor(request), paymentForm.value());
             response.redirectTo("/orders/" + orderNumber.getNumber());
         } else {
-            checkoutPage.render(response, context().with("errors", new ErrorList(errors)).asMap());
+            checkoutPage.render(response, context().
+                    with("total", SessionScope.cartFor(request).getGrandTotal()).
+                    and("cardTypes", ChoiceOfCreditCards.all().select(paymentForm.value().getCardType())).
+                    and("payment", paymentForm.value()).
+                    and("errors", new ErrorList(paymentForm.errors())).asMap());
         }
     }
 }

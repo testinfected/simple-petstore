@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasChildren;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasName;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
@@ -77,9 +77,8 @@ public class CheckoutPageTest {
 
         checkoutPage = renderCheckoutPage().with("errors", new ErrorList(errors)).asDom();
 
-        assertThat("payment errors", checkoutPage, hasSelector(".errors", hasChildren(
-                hasText("invalid.payment"),
-                hasText("incomplete.payment")
+        assertThat("payment errors", checkoutPage, hasSelector(".errors", allOf(hasChild(
+                hasText("invalid.payment")), hasChild(hasText("incomplete.payment"))
         )));
         assertThat("card number errors", checkoutPage, hasSelector(".errors", hasChild(
                 hasText("blank.payment.cardNumber")
@@ -97,7 +96,7 @@ public class CheckoutPageTest {
                 billedTo(billingAddress).build();
 
         checkoutPage = renderCheckoutPage().with("payment", payment).
-                with("cardTypes", ChoiceOfCreditCards.from(CreditCardType.values(), payment.getCardType())).asDom();
+                with("cardTypes", ChoiceOfCreditCards.all().select(payment.getCardType())).asDom();
 
         assertThat("billing information", checkoutPage, hasCheckoutForm(hasBillingInformation("Jack", "Johnson", "jack@gmail.com")));
         assertThat("payment information", checkoutPage, hasCheckoutForm(hasCreditCardDetails(CreditCardType.visa, "4111111111111111", "2015-10-10")));

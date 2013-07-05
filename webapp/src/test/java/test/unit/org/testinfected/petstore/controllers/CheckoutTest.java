@@ -1,10 +1,9 @@
 package test.unit.org.testinfected.petstore.controllers;
 
 import org.junit.Test;
-import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.controllers.Checkout;
-import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
+import org.testinfected.petstore.order.Cart;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.CartBuilder;
@@ -26,13 +25,12 @@ public class CheckoutTest {
     makesCartAndSupportedCardTypesAvailableToView() throws Exception {
         final BigDecimal total = new BigDecimal("324.98");
         storeInSession(aCart().containing(anItem().priced(total)));
-        final ChoiceOfCreditCards cardTypes = ChoiceOfCreditCards.from(CreditCardType.values());
 
         checkout.handle(request, response);
 
         checkoutPage.assertRenderedTo(response);
         checkoutPage.assertRenderedWith("total", total);
-        checkoutPage.assertRenderedWith("cardTypes", cardTypes);
+        checkoutPage.assertRenderedWith("cardTypes", ChoiceOfCreditCards.all());
     }
 
     private void storeInSession(CartBuilder cart) {

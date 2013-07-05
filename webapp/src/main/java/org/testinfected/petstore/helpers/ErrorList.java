@@ -15,11 +15,11 @@ public class ErrorList implements Mustache.Lambda {
     }
 
     public void execute(Template.Fragment frag, Writer out) throws IOException {
-        String path = trim(frag);
-        if (!errors.inError(path)) return;
+        String key = trim(frag);
+        if (!errors.hasError(key)) return;
         out.write(indent(frag));
         out.write("<ol class=\"errors\">\n");
-        for (String message : errors.messagesFor(path)) {
+        for (String message : messageFor(key)) {
             out.write(indent(frag));
             out.write("  <li>");
             out.write(message);
@@ -29,30 +29,15 @@ public class ErrorList implements Mustache.Lambda {
         out.write("</ol>\n");
     }
 
+    public Iterable<String> messageFor(String key) {
+        return errors.messagesFor(key);
+    }
+
     private String trim(Template.Fragment frag) {
         return frag.execute().trim();
     }
 
     private String indent(Template.Fragment frag) {
         return frag.execute().substring(0, frag.execute().indexOf(trim(frag)));
-    }
-
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ErrorList errorList = (ErrorList) o;
-
-        if (!errors.equals(errorList.errors)) return false;
-
-        return true;
-    }
-
-    public int hashCode() {
-        return errors.hashCode();
-    }
-
-    public String toString() {
-        return errors.toString();
     }
 }
