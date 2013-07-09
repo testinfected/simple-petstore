@@ -30,6 +30,7 @@ import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ProductCatalog;
+import org.testinfected.petstore.transaction.Transactor;
 import org.testinfected.petstore.util.BundledMessages;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
 

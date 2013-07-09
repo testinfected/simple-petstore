@@ -1,6 +1,6 @@
 package org.testinfected.petstore.db;
 
-import org.testinfected.petstore.UnitOfWork;
+import org.testinfected.petstore.transaction.UnitOfWork;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

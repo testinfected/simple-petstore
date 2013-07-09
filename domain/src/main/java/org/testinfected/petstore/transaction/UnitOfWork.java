@@ -1,4 +1,4 @@
-package org.testinfected.petstore;
+package org.testinfected.petstore.transaction;
 
 public interface UnitOfWork {
 

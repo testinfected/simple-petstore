@@ -6,8 +6,8 @@ import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ItemNumber;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
-import org.testinfected.petstore.Transactor;
-import org.testinfected.petstore.UnitOfWork;
+import org.testinfected.petstore.transaction.Transactor;
+import org.testinfected.petstore.transaction.UnitOfWork;
 
 import java.math.BigDecimal;
 

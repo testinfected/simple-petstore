@@ -5,12 +5,12 @@ import org.jmock.States;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
-import org.testinfected.petstore.AbstractTransactor;
-import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
+import org.testinfected.petstore.transaction.AbstractTransactor;
+import org.testinfected.petstore.transaction.UnitOfWork;
 
 import java.math.BigDecimal;
 

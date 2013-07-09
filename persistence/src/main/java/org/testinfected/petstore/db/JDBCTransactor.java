@@ -1,8 +1,8 @@
 package org.testinfected.petstore.db;
 
-import org.testinfected.petstore.AbstractTransactor;
-import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.db.support.JDBCException;
+import org.testinfected.petstore.transaction.AbstractTransactor;
+import org.testinfected.petstore.transaction.UnitOfWork;
 
 import java.sql.Connection;
 import java.sql.SQLException;

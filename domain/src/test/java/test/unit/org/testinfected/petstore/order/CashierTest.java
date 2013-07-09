@@ -7,8 +7,6 @@ import org.jmock.States;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
-import org.testinfected.petstore.AbstractTransactor;
-import org.testinfected.petstore.UnitOfWork;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.Cashier;
@@ -16,6 +14,8 @@ import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.OrderNumberSequence;
+import org.testinfected.petstore.transaction.AbstractTransactor;
+import org.testinfected.petstore.transaction.UnitOfWork;
 import org.testinfected.petstore.validation.ConstraintViolationException;
 
 import java.math.BigDecimal;
