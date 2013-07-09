@@ -4,16 +4,16 @@ import org.testinfected.molecule.Application;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
-import org.testinfected.petstore.helpers.Messages;
-import org.testinfected.petstore.Validator;
 import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
 import org.testinfected.petstore.helpers.Errors;
 import org.testinfected.petstore.helpers.Form;
+import org.testinfected.petstore.helpers.Messages;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
 import org.testinfected.petstore.util.SessionScope;
+import org.testinfected.petstore.validation.Validator;
 
 import static org.testinfected.petstore.billing.CreditCardType.valueOf;
 import static org.testinfected.petstore.util.Context.context;

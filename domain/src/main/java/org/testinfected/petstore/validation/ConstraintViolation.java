@@ -1,4 +1,4 @@
-package org.testinfected.petstore;
+package org.testinfected.petstore.validation;
 
 public class ConstraintViolation<T> {
 

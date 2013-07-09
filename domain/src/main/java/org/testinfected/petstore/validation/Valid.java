@@ -1,4 +1,4 @@
-package org.testinfected.petstore;
+package org.testinfected.petstore.validation;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;

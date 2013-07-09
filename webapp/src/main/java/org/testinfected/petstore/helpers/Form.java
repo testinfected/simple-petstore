@@ -1,8 +1,8 @@
 package org.testinfected.petstore.helpers;
 
 import org.testinfected.molecule.Request;
-import org.testinfected.petstore.ConstraintViolation;
-import org.testinfected.petstore.Validator;
+import org.testinfected.petstore.validation.ConstraintViolation;
+import org.testinfected.petstore.validation.Validator;
 
 import java.util.HashMap;
 import java.util.HashSet;

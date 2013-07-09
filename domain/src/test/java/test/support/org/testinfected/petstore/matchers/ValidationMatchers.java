@@ -3,8 +3,8 @@ package test.support.org.testinfected.petstore.matchers;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.testinfected.petstore.ConstraintViolation;
-import org.testinfected.petstore.Validator;
+import org.testinfected.petstore.validation.ConstraintViolation;
+import org.testinfected.petstore.validation.Validator;
 import test.support.org.testinfected.petstore.builders.Builder;
 
 import java.util.Set;

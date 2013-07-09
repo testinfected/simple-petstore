@@ -1,9 +1,9 @@
 package org.testinfected.petstore.order;
 
-import org.testinfected.petstore.Ensure;
 import org.testinfected.petstore.QueryUnitOfWork;
 import org.testinfected.petstore.Transactor;
 import org.testinfected.petstore.billing.PaymentMethod;
+import org.testinfected.petstore.validation.Ensure;
 
 public class Cashier implements SalesAssistant {
     private final OrderNumberSequence orderNumberSequence;

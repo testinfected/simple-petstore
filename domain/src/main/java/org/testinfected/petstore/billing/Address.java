@@ -1,7 +1,7 @@
 package org.testinfected.petstore.billing;
 
-import org.testinfected.petstore.NotNull;
-import org.testinfected.petstore.Validate;
+import org.testinfected.petstore.validation.NotNull;
+import org.testinfected.petstore.validation.Validate;
 
 import java.io.Serializable;
 
