@@ -3,12 +3,12 @@ package org.testinfected.petstore;
 public class ConstraintViolation<T> {
 
     private final String path;
-    private final String message;
+    private final String error;
     private final T offendingValue;
 
-    public ConstraintViolation(String path, String message, T offendingValue) {
+    public ConstraintViolation(String path, String error, T offendingValue) {
         this.path = path;
-        this.message = message;
+        this.error = error;
         this.offendingValue = offendingValue;
     }
 
@@ -16,8 +16,8 @@ public class ConstraintViolation<T> {
         return path;
     }
 
-    public String message() {
-        return message;
+    public String error() {
+        return error;
     }
 
     public T value() {
@@ -25,6 +25,6 @@ public class ConstraintViolation<T> {
     }
 
     public String toString() {
-        return String.format("%s is %s: %s", path, message, offendingValue);
+        return String.format("%s is %s: %s", path, error, offendingValue);
     }
 }

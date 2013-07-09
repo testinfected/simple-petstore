@@ -2,7 +2,7 @@ package org.testinfected.petstore;
 
 import java.io.Serializable;
 
-public class NotNull<T> implements Serializable, Constraint {
+public class NotNull<T> implements Serializable, Constraint<T> {
 
     private static final String MISSING = "missing";
 
@@ -17,11 +17,7 @@ public class NotNull<T> implements Serializable, Constraint {
     }
 
     public void check(String path, Validation validation) {
-        if (!satisfied()) validation.report(missingValueAt(path));
-    }
-
-    private ConstraintViolation<T> missingValueAt(String path) {
-        return new ConstraintViolation<T>(path, MISSING, value);
+        if (!satisfied()) validation.report(path, MISSING, value);
     }
 
     private boolean satisfied() {

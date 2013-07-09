@@ -36,7 +36,7 @@ public class CheckoutPageTest {
 
     String CHECKOUT_TEMPLATE = "checkout";
     Element checkoutPage;
-    Form<?> form = MockForm.named("payment");
+    Form<?> form = MockForm.named("paymentDetails");
 
     @Test public void
     displaysOrderSummary() {
@@ -79,10 +79,10 @@ public class CheckoutPageTest {
         checkoutPage = renderCheckoutPage().with("errors", new Errors(form)).asDom();
 
         assertThat("payment errors", checkoutPage, hasSelector(".errors", allOf(hasChild(
-                hasText("invalid.payment")), hasChild(hasText("incomplete.payment"))
+                hasText("invalid.paymentDetails")), hasChild(hasText("incomplete.paymentDetails"))
         )));
         assertThat("card number errors", checkoutPage, hasSelector(".errors", hasChild(
-                hasText("blank.payment.cardNumber")
+                hasText("blank.paymentDetails.cardNumber")
         )));
     }
 

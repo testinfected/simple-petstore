@@ -3,7 +3,7 @@ package org.testinfected.petstore;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-public class Valid<T> implements Serializable, Constraint {
+public class Valid<T> implements Serializable, Constraint<T> {
 
     private T value;
 

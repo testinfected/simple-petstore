@@ -21,6 +21,7 @@ import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.OrderNumberDatabaseSequence;
 import org.testinfected.petstore.db.OrdersDatabase;
 import org.testinfected.petstore.db.ProductsDatabase;
+import org.testinfected.petstore.helpers.Messages;
 import org.testinfected.petstore.order.Cashier;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumberSequence;
@@ -63,7 +64,11 @@ public class Routing implements Application {
             post("/cart").to(new CreateCartItem(itemInventory));
             get("/orders/new").to(new Checkout(pages.checkout()));
             get("/orders/:number").to(new ShowOrder(orderBook, pages.order()));
-            post("/orders").to(new PlaceOrder(cashier, pages.checkout()));
+            post("/orders").to(new PlaceOrder(cashier, pages.checkout(), new Messages() {
+                public String interpolate(String error, Object... parameters) {
+                    return error;
+                }
+            }));
             delete("/logout").to(new Logout());
             map("/").to(new StaticPage(pages.home()));
         }});

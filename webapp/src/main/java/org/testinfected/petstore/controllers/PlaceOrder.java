@@ -4,6 +4,7 @@ import org.testinfected.molecule.Application;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
+import org.testinfected.petstore.helpers.Messages;
 import org.testinfected.petstore.Validator;
 import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
@@ -23,9 +24,10 @@ public class PlaceOrder implements Application {
     private final Form<CreditCardDetails> paymentForm = new PaymentForm();
     private final Validator validator = new Validator();
 
-    public PlaceOrder(SalesAssistant salesAssistant, Page checkoutPage) {
+    public PlaceOrder(SalesAssistant salesAssistant, Page checkoutPage, Messages messages) {
         this.salesAssistant = salesAssistant;
         this.checkoutPage = checkoutPage;
+        this.paymentForm.use(messages);
     }
 
     public void handle(Request request, Response response) throws Exception {
@@ -45,7 +47,7 @@ public class PlaceOrder implements Application {
 
     private class PaymentForm extends Form<CreditCardDetails> {
         private PaymentForm() {
-            super("payment");
+            super("paymentDetails");
         }
 
         protected CreditCardDetails parse(Request request) {

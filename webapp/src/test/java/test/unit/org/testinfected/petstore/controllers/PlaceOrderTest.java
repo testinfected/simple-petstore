@@ -7,6 +7,7 @@ import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
+import org.testinfected.petstore.helpers.Messages;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
@@ -15,11 +16,14 @@ import org.testinfected.petstore.helpers.Errors;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
+import org.testinfected.petstore.util.BundledMessages;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.web.MockPage;
 
 import java.math.BigDecimal;
+import java.util.ListResourceBundle;
+import java.util.Locale;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -33,7 +37,18 @@ public class PlaceOrderTest {
 
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
     MockPage checkoutPage = new MockPage();
-    PlaceOrder placeOrder = new PlaceOrder(salesAssistant, checkoutPage);
+    Messages messages = new BundledMessages(new ListResourceBundle() {
+        public Locale getLocale() { return Locale.US; }
+
+        protected Object[][] getContents() {
+            return new Object[][] {
+                    { "invalid.paymentDetails", "payment details are invalid" },
+                    { "blank.paymentDetails.cardNumber", "card number may not be blank"}
+            };
+        }
+    });
+
+    PlaceOrder placeOrder = new PlaceOrder(salesAssistant, checkoutPage, messages);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
@@ -74,8 +89,8 @@ public class PlaceOrderTest {
         checkoutPage.assertRenderedWith("cardTypes", ChoiceOfCreditCards.all().select(incompletePaymentDetails.getCardType()));
         checkoutPage.assertRenderedWith(equalTo("payment"), samePaymentMethodAs(incompletePaymentDetails));
         checkoutPage.assertRenderedWith(equalTo("errors"), errors(
-                withMessage("payment", "invalid.payment"),
-                withMessage("payment.cardNumber", "blank.payment.cardNumber")));
+                withMessage("paymentDetails", "payment details are invalid"),
+                withMessage("paymentDetails.cardNumber", "card number may not be blank")));
     }
 
     private Matcher<Errors> errors(Matcher<? super Errors>... errorMatchers) {

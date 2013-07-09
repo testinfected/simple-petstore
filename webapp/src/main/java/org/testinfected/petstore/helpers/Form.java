@@ -13,10 +13,20 @@ public abstract class Form<T> {
 
     private final String name;
     private final Map<String, Set<String>> errors = new HashMap<String, Set<String>>();
+    private Messages messages = new Messages() {
+        public String interpolate(String error, Object... parameters) {
+            return error;
+        }
+    };
     private T value;
 
     public Form(String name) {
         this.name = name;
+    }
+
+    public Form<T> use(Messages messages) {
+        this.messages = messages;
+        return this;
     }
 
     protected abstract T parse(Request request);
@@ -32,7 +42,7 @@ public abstract class Form<T> {
     public boolean validate(Validator validator) {
         Set<ConstraintViolation<?>> violations = validator.validate(value());
         for (ConstraintViolation<?> violation : violations) {
-            rejectField(violation.path(), violation.message());
+            rejectField(violation.path(), violation.error());
         }
         return valid();
     }
@@ -42,15 +52,23 @@ public abstract class Form<T> {
     }
 
     public void rejectField(String field, String errorCode) {
-        addError(keyFor(field), errorCode);
+        addError(errorKey(field), errorCode);
     }
 
-    private void addError(String key, String code) {
-        errorsFor(key).add(composeMessage(key, code));
+    private String errorKey(String field) {
+        return name + "." + field;
     }
 
-    private String composeMessage(String errorKey, String errorCode) {
-        return errorCode + "." + errorKey;
+    private void addError(String errorKey, String errorCode) {
+        addErrorMessage(errorKey, message(errorKey, errorCode));
+    }
+
+    private void addErrorMessage(String errorKey, String message) {
+        errorsFor(errorKey).add(message);
+    }
+
+    private String message(String errorKey, String errorCode) {
+        return messages.interpolate(errorCode + "." + errorKey);
     }
 
     public boolean hasError(String key) {
@@ -68,10 +86,6 @@ public abstract class Form<T> {
     private Set<String> errorsFor(String key) {
         if (!errors.containsKey(key)) errors.put(key, new HashSet<String>());
         return errors.get(key);
-    }
-
-    private String keyFor(String field) {
-        return name + "." + field;
     }
 
     public String toString() {

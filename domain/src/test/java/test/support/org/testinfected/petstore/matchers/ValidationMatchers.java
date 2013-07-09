@@ -58,7 +58,7 @@ public class ValidationMatchers {
     public static Matcher<ConstraintViolation<?>> withMessage(String message) {
         return new FeatureMatcher<ConstraintViolation<?>, String>(equalTo(message), "with message", "message") {
             @Override protected String featureValueOf(ConstraintViolation<?> actual) {
-                return actual.message();
+                return actual.error();
             }
         };
     }

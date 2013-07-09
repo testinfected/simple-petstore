@@ -2,7 +2,7 @@ package org.testinfected.petstore;
 
 import java.io.Serializable;
 
-public class NotBlank implements Serializable, Constraint {
+public class NotBlank implements Serializable, Constraint<String> {
 
     private static final String BLANK = "blank";
 
@@ -17,11 +17,7 @@ public class NotBlank implements Serializable, Constraint {
     }
 
     public void check(String path, Validation validation) {
-        if (!satisfied()) validation.report(blankTextAt(path));
-    }
-
-    private ConstraintViolation<String> blankTextAt(String path) {
-        return new ConstraintViolation<String>(path, BLANK, value);
+        if (!satisfied()) validation.report(path, BLANK, value);
     }
 
     private boolean satisfied() {

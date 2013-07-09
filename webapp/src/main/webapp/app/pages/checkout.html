@@ -7,7 +7,7 @@
 <div id="checkout">
   <span>Billing information - Cart total: <span id="cart-grand-total">{{total}}</span></span>
 {{#errors}}
-  payment
+  paymentDetails
 {{/errors}}
   <form id="order" action="/orders" method="post">
     <fieldset id="billing-address">
@@ -40,7 +40,7 @@
         <label for="card-number">Card number:</label>
         <input id="card-number" type="text" name="card-number" value="{{payment.cardNumber}}" size="33"/>
 {{#errors}}
-        payment.cardNumber
+        paymentDetails.cardNumber
 {{/errors}}
       </li>
       <li>

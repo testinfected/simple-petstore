@@ -19,8 +19,8 @@ public class Validator {
 
         final Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
 
-        public <T> void report(ConstraintViolation<T> violation) {
-            violations.add(violation);
+        public <T> void report(String path, String error, T offendingValue) {
+            violations.add(new ConstraintViolation<Object>(path, error, offendingValue));
         }
     }
 }
