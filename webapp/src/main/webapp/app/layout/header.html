@@ -17,16 +17,16 @@
       <li id="home" class="overline {{meta[section]}}">
         <a href="/">Home</a>
       </li>
-      {{#cart}}
+{{#cart}}
       <li id="shopping-cart" class="overline {{meta[section]}}">
-        {{#empty}}
+{{#empty}}
         Cart (0)
-        {{/empty}}
-        {{^empty}}
+{{/empty}}
+{{^empty}}
         <a href="/cart">Cart ({{totalQuantity}})</a>
-        {{/empty}}
+{{/empty}}
       </li>
-      {{/cart}}
+{{/cart}}
     </ul>
     <div id="tab" class="{{meta[section]}}">
       <img src="/images/tab.png"/>

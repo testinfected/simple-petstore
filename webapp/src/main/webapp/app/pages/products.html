@@ -4,11 +4,11 @@
 </head>
 <body>
 <div id="products">
-  {{#match-found}}
+{{#match-found}}
   <div id="match-found"><span id="match-count">{{match-count}}</span> result(s)</div>
 
   <ul id="catalog">
-    {{#products}}
+{{#products}}
     <li id="product-{{number}}">
       <a class="product-image" href="/products/{{number}}/items">
         <img src="{{#path}}{{photoFileName}}{{/path}}"/>
@@ -20,12 +20,12 @@
         <span class="product-description">{{description}}</span>
       </div>
     </li>
-    {{/products}}
+{{/products}}
   </ul>
-  {{/match-found}}
-  {{^match-found}}
+{{/match-found}}
+{{^match-found}}
   <div id="no-match">Your search for "<em>{{keyword}}</em>" did not match any products.</div>
-  {{/match-found}}
+{{/match-found}}
 </div>
 </body>
 </html>

@@ -13,14 +13,14 @@
       <th>Price</th>
       <th>Total</th>
     </tr>
-    {{#order.lineItems}}
+{{#order.lineItems}}
     <tr id="line-item-{{itemNumber}}">
       <td class="count">{{quantity}}</td>
       <td class="text">{{itemDescription}}</td>
       <td class="price">{{itemUnitPrice}}</td>
       <td class="total">{{totalPrice}}</td>
     </tr>
-    {{/order.lineItems}}
+{{/order.lineItems}}
     <tr id="order-summary">
       <td colspan="2"></td>
       <td class="price">Grand total:</td>

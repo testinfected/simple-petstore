@@ -5,8 +5,7 @@
 </head>
 <body>
 <div id="cart">
-
-  {{#cart}}
+{{#cart}}
   Your cart contains the following items:
   <table id="cart-content">
     <tr>
@@ -15,7 +14,7 @@
       <th>Price</th>
       <th>Total</th>
     </tr>
-    {{#items}}
+{{#items}}
     <tr id="cart-item-{{itemNumber}}">
       <td class="count">{{quantity}}</td>
       <td class="text">{{itemDescription}}</td>
@@ -23,7 +22,7 @@
       <td class="total">{{totalPrice}}</td>
       <td></td>
     </tr>
-    {{/items}}
+{{/items}}
     <tr id="cart-summary">
       <td></td>
       <td></td>
@@ -37,7 +36,7 @@
     <a class="cancel" href="/">&laquo; continue shopping</a>
     <div class="confirm"><a href="/orders/new">Checkout</a></div>
   </div>
-  {{/cart}}
+{{/cart}}
 </div>
 </body>
 </html>
