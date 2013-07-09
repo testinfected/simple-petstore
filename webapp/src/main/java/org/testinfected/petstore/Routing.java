@@ -30,9 +30,11 @@ import org.testinfected.petstore.procurement.PurchasingAgent;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ProductCatalog;
+import org.testinfected.petstore.util.BundledMessages;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
 
 import java.sql.Connection;
+import java.util.ResourceBundle;
 
 import static org.testinfected.molecule.middlewares.ConnectionScope.ConnectionReference;
 
@@ -54,6 +56,7 @@ public class Routing implements Application {
         final OrderNumberSequence orderNumberSequence = new OrderNumberDatabaseSequence(connection);
         final OrderBook orderBook = new OrdersDatabase(connection);
         final Cashier cashier = new Cashier(orderNumberSequence, orderBook, transactor);
+        final Messages messages = new BundledMessages(ResourceBundle.getBundle("ValidationMessages"));
 
         Router router = Router.draw(new DynamicRoutes() {{
             get("/products").to(new ListProducts(productCatalog, attachmentStorage, pages.products()));
@@ -64,11 +67,7 @@ public class Routing implements Application {
             post("/cart").to(new CreateCartItem(itemInventory));
             get("/orders/new").to(new Checkout(pages.checkout()));
             get("/orders/:number").to(new ShowOrder(orderBook, pages.order()));
-            post("/orders").to(new PlaceOrder(cashier, pages.checkout(), new Messages() {
-                public String interpolate(String error, Object... parameters) {
-                    return error;
-                }
-            }));
+            post("/orders").to(new PlaceOrder(cashier, pages.checkout(), messages));
             delete("/logout").to(new Logout());
             map("/").to(new StaticPage(pages.home()));
         }});
