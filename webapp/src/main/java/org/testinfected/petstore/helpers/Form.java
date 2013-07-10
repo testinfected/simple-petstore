@@ -2,6 +2,7 @@ package org.testinfected.petstore.helpers;
 
 import org.testinfected.molecule.Request;
 import org.testinfected.petstore.validation.ConstraintViolation;
+import org.testinfected.petstore.validation.Path;
 import org.testinfected.petstore.validation.Validator;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.Set;
 
 public abstract class Form<T> {
 
-    private final String name;
+    private final Path root;
     private final Map<String, Set<String>> errors = new HashMap<String, Set<String>>();
     private Messages messages = new Messages() {
         public String interpolate(String error, Object... parameters) {
@@ -21,7 +22,7 @@ public abstract class Form<T> {
     private T value;
 
     public Form(String name) {
-        this.name = name;
+        this.root = Path.root(this).node(name);
     }
 
     public Form<T> use(Messages messages) {
@@ -47,28 +48,24 @@ public abstract class Form<T> {
         return valid();
     }
 
-    public void reject(String errorCode) {
-        addError(name, errorCode);
+    public void reject(String error) {
+        addError(root, error);
     }
 
-    public void rejectField(String field, String errorCode) {
-        addError(errorKey(field), errorCode);
+    public void rejectField(String field, String error) {
+        addError(root.node(field), error);
     }
 
-    private String errorKey(String field) {
-        return name + "." + field;
+    private void addError(Path path, String error) {
+        addErrorMessage(path.value(), translate(path.value(), error));
     }
 
-    private void addError(String errorKey, String errorCode) {
-        addErrorMessage(errorKey, message(errorKey, errorCode));
+    private void addErrorMessage(String path, String message) {
+        errorsOn(path).add(message);
     }
 
-    private void addErrorMessage(String errorKey, String message) {
-        errorsFor(errorKey).add(message);
-    }
-
-    private String message(String errorKey, String errorCode) {
-        return messages.interpolate(errorCode + "." + errorKey);
+    private String translate(String path, String error) {
+        return messages.interpolate(error + "." + path);
     }
 
     public boolean hasError(String key) {
@@ -76,19 +73,19 @@ public abstract class Form<T> {
     }
 
     public Iterable<String> errorMessages(String key) {
-        return errorsFor(key);
+        return errorsOn(key);
     }
 
     public boolean valid() {
         return errors.isEmpty();
     }
 
-    private Set<String> errorsFor(String key) {
+    private Set<String> errorsOn(String key) {
         if (!errors.containsKey(key)) errors.put(key, new HashSet<String>());
         return errors.get(key);
     }
 
     public String toString() {
-        return "Form[name=" + name + ", value=" + value + ", errors=" + errors + "]";
+        return "Form[name=" + root.name() + ", value=" + value + ", errors=" + errors + "]";
     }
 }

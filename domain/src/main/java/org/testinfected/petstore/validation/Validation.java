@@ -2,5 +2,5 @@ package org.testinfected.petstore.validation;
 
 public interface Validation {
 
-    <T> void report(String path, String error, T offendingValue);
+    <T> void report(Path path, String error, T offendingValue);
 }

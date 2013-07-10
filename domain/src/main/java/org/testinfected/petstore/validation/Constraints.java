@@ -1,11 +1,10 @@
 package org.testinfected.petstore.validation;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Constraints implements Serializable {
+public final class Constraints {
 
     public static Iterable<Field> of(Object target) {
         List<Field> constraints = new ArrayList<Field>();

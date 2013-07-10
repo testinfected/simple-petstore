@@ -15,16 +15,11 @@ public class Valid<T> implements Serializable, Constraint<T> {
         return value;
     }
 
-    public void check(String path, Validation validation) {
+    public void check(Path path, Validation validation) {
         for (Field field : Constraints.of(value)) {
             Constraint constraint = Constraints.valueOf(value, field);
-            constraint.check(node(path, field.getName()), validation);
+            constraint.check(path.node(field.getName()), validation);
         }
-    }
-
-    // TODO We might need better than a string for representing the path in the object graph
-    private String node(String path, String name) {
-        return path != null ? path + "." + name : name;
     }
 
     public boolean equals(Object o) {

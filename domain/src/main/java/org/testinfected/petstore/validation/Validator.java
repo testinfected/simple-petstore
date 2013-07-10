@@ -5,13 +5,10 @@ import java.util.Set;
 
 public class Validator {
 
-    public Set<ConstraintViolation<?>> validate(Object target) {
-        return check(Validate.valid(target));
-    }
-
-    public Set<ConstraintViolation<?>> check(Constraint constraint) {
+    public <T> Set<ConstraintViolation<?>> validate(T target) {
+        Valid<T> constraint = Validate.valid(target);
         Problems problems = new Problems();
-        constraint.check(null, problems);
+        constraint.check(Path.root(target), problems);
         return problems.violations;
     }
 
@@ -19,8 +16,8 @@ public class Validator {
 
         final Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
 
-        public <T> void report(String path, String error, T offendingValue) {
-            violations.add(new ConstraintViolation<Object>(path, error, offendingValue));
+        public <T> void report(Path path, String error, T offendingValue) {
+            violations.add(new ConstraintViolation<T>(path, error, offendingValue));
         }
     }
 }

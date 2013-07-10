@@ -2,18 +2,22 @@ package org.testinfected.petstore.validation;
 
 public class ConstraintViolation<T> {
 
-    private final String path;
+    private final Path path;
     private final String error;
     private final T offendingValue;
 
-    public ConstraintViolation(String path, String error, T offendingValue) {
+    public ConstraintViolation(Path path, String error, T offendingValue) {
         this.path = path;
         this.error = error;
         this.offendingValue = offendingValue;
     }
 
     public String path() {
-        return path;
+        return path.value();
+    }
+
+    public Object target() {
+        return path.target();
     }
 
     public String error() {
@@ -25,6 +29,6 @@ public class ConstraintViolation<T> {
     }
 
     public String toString() {
-        return String.format("%s is %s: %s", path, error, offendingValue);
+        return String.format("ConstraintViolation[target=%s, path=%s, value=%s, error=%s]", target(), path(), error(), value());
     }
 }
