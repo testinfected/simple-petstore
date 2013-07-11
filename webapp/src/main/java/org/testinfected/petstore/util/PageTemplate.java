@@ -1,9 +1,9 @@
 package org.testinfected.petstore.util;
 
-import org.testinfected.petstore.Page;
-import org.testinfected.petstore.RenderingEngine;
 import org.testinfected.molecule.Response;
 import org.testinfected.molecule.util.MimeTypes;
+import org.testinfected.petstore.Page;
+import org.testinfected.petstore.RenderingEngine;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -24,10 +24,10 @@ public class PageTemplate implements Page {
         this.mediaType = mediaType;
     }
 
-    public void render(Response response, Object context) throws IOException {
+    public void render(Response response, Context context) throws IOException {
         response.contentType(mediaType + "; charset=" + response.charset().name().toLowerCase());
         Writer out = response.writer();
-        renderer.render(out, template, context);
+        renderer.render(out, template, context.asMap());
         out.flush();
     }
 }

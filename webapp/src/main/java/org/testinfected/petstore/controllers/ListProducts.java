@@ -4,11 +4,11 @@ import org.testinfected.molecule.Application;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
+import org.testinfected.petstore.helpers.PathToAttachment;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.util.Context;
-import org.testinfected.petstore.helpers.PathToAttachment;
 
 import java.util.List;
 
@@ -36,6 +36,6 @@ public class ListProducts implements Application {
                 and("products", products).
                 and("match-count", products.size()).
                 and("path", PathToAttachment.in(attachmentStorage));
-        productsPage.render(response, context.asMap());
+        productsPage.render(response, context);
     }
 }

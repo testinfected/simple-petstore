@@ -1,12 +1,12 @@
 package org.testinfected.petstore.controllers;
 
+import org.testinfected.molecule.Application;
+import org.testinfected.molecule.Request;
+import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumber;
-import org.testinfected.molecule.Application;
-import org.testinfected.molecule.Request;
-import org.testinfected.molecule.Response;
 
 import static org.testinfected.petstore.util.Context.context;
 
@@ -22,6 +22,6 @@ public class ShowOrder implements Application {
     public void handle(Request request, Response response) throws Exception {
         String number = request.parameter("number");
         Order order = orderBook.find(new OrderNumber(number));
-        orderPage.render(response, context().with("order", order).asMap());
+        orderPage.render(response, context().with("order", order));
     }
 }

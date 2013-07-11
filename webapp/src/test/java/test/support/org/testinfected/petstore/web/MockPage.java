@@ -3,8 +3,10 @@ package test.support.org.testinfected.petstore.web;
 import org.hamcrest.Matcher;
 import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
+import org.testinfected.petstore.util.Context;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.sameInstance;
@@ -14,11 +16,11 @@ import static org.hamcrest.Matchers.hasEntry;
 public class MockPage implements Page {
 
     private Response response;
-    private Object context;
+    private Map<String, Object> context;
 
-    public void render(Response response, Object context) throws IOException {
+    public void render(Response response, Context context) throws IOException {
         this.response = response;
-        this.context = context;
+        this.context = context.asMap();
     }
 
     public void assertRenderedTo(Response to) {

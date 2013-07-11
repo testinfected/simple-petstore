@@ -1,11 +1,11 @@
 package org.testinfected.petstore.controllers;
 
-import org.testinfected.petstore.Page;
-import org.testinfected.petstore.product.Item;
-import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
+import org.testinfected.petstore.Page;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.product.ItemInventory;
 
 import java.util.List;
 
@@ -27,6 +27,6 @@ public class ListItems implements Application {
         itemsPage.render(response, context().
                 with("in-stock", !items.isEmpty()).
                 and("item-count", items.size()).
-                and("items", items).asMap());
+                and("items", items));
     }
 }
