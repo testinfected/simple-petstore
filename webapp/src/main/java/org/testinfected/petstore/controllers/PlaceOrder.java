@@ -31,11 +31,15 @@ public class PlaceOrder implements Application {
 
     public void handle(Request request, Response response) throws Exception {
         PaymentForm form = PaymentForm.parse(request);
-        if (form.validate(validator)) {
+        if (valid(form)) {
             processOrder(request, response, form);
         } else {
             rejectOrder(request, response, form);
         }
+    }
+
+    private boolean valid(PaymentForm form) {
+        return form.validate(validator);
     }
 
     private void processOrder(Request request, Response response, PaymentForm form) throws Exception {

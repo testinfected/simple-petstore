@@ -22,7 +22,11 @@ public class Valid<T> implements Serializable, Constraint<T> {
         for (Constraints.Property property : Constraints.of(value)) {
             property.check(path, problems);
         }
-        if (problems.found && !rootViolationDisabled) validation.reportViolation(path, INVALID, value);
+        if (reportViolationOnRoot(problems)) validation.reportViolation(path, INVALID, value);
+    }
+
+    private boolean reportViolationOnRoot(Problems problems) {
+        return problems.found && !rootViolationDisabled;
     }
 
     public void disableRootViolation() {
