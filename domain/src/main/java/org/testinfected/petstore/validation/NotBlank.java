@@ -17,7 +17,7 @@ public class NotBlank implements Serializable, Constraint<String> {
     }
 
     public void check(Path path, Validation validation) {
-        if (!satisfied()) validation.report(path, BLANK, value);
+        if (!satisfied()) validation.reportViolation(path, BLANK, value);
     }
 
     private boolean satisfied() {

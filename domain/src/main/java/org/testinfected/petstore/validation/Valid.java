@@ -22,7 +22,7 @@ public class Valid<T> implements Serializable, Constraint<T> {
         for (Constraints.Property property : Constraints.of(value)) {
             property.check(path, problems);
         }
-        if (problems.found && !rootViolationDisabled) validation.report(path, INVALID, value);
+        if (problems.found && !rootViolationDisabled) validation.reportViolation(path, INVALID, value);
     }
 
     public void disableRootViolation() {
@@ -55,9 +55,9 @@ public class Valid<T> implements Serializable, Constraint<T> {
             this.validation = validation;
         }
 
-        public <T> void report(Path path, String error, T offendingValue) {
+        public <T> void reportViolation(Path path, String error, T offendingValue) {
             this.found = true;
-            validation.report(path, error, offendingValue);
+            validation.reportViolation(path, error, offendingValue);
         }
     }
 }
