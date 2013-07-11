@@ -2,6 +2,8 @@ package org.testinfected.petstore.validation;
 
 public abstract class Path {
 
+    public static final String ROOT = ".";
+
     public static Path root(Object target) {
         return new Root(target);
     }
@@ -14,7 +16,7 @@ public abstract class Path {
         }
 
         public String name() {
-            return null;
+            return ROOT;
         }
 
         public String value() {

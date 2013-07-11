@@ -29,6 +29,6 @@ public class ConstraintViolation<T> {
     }
 
     public String toString() {
-        return String.format("ConstraintViolation[target=%s, path=%s, value=%s, error=%s]", target(), path(), error(), value());
+        return String.format("ConstraintViolation[target=%s, path=%s, value=%s, error=%s]", target(), path(), value(), error());
     }
 }

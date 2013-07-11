@@ -14,4 +14,8 @@ public class ConstraintViolationException extends IllegalArgumentException {
     public Set<ConstraintViolation<?>> violations() {
         return Collections.unmodifiableSet(violations);
     }
+
+    public String getMessage() {
+        return violations.toString();
+    }
 }
