@@ -44,12 +44,12 @@ public class CreateCartItemTest {
 
         response.assertRedirectedTo("/cart");
         assertThat("session", session(), notNullValue());
-        assertThat("cart content", cart().getItems(), containsItems(itemWith(number(itemNumber), quantity(1))));
+        assertThat("cart content", cart().items(), containsItems(itemWith(number(itemNumber), quantity(1))));
     }
 
     private void inventoryContains(final Item item) {
         context.checking(new Expectations() {{
-            allowing(inventory).find(new ItemNumber(item.getNumber())); will(returnValue(item));
+            allowing(inventory).find(new ItemNumber(item.number())); will(returnValue(item));
         }});
     }
 
@@ -72,7 +72,7 @@ public class CreateCartItemTest {
     private Matcher<CartItem> quantity(int count) {
         return new FeatureMatcher<CartItem, Integer>(equalTo(count), "an item with quantity", "item quantity") {
             @Override protected Integer featureValueOf(CartItem actual) {
-                return actual.getQuantity();
+                return actual.quantity();
             }
         };
     }
@@ -80,7 +80,7 @@ public class CreateCartItemTest {
     private Matcher<CartItem> number(String number) {
         return new FeatureMatcher<CartItem, String>(equalTo(number), "an item with number", "item number") {
             @Override protected String featureValueOf(CartItem actual) {
-                return actual.getItemNumber();
+                return actual.itemNumber();
             }
         };
     }

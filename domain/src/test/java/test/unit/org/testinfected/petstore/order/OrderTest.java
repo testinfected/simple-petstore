@@ -1,14 +1,14 @@
 package test.unit.org.testinfected.petstore.order;
 
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.CartItem;
 import org.testinfected.petstore.order.LineItem;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.product.Item;
-import org.hamcrest.FeatureMatcher;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,13 +31,13 @@ public class OrderTest {
 
     @Test public void
     consistsOfNoItemByDefault() {
-        assertThat("line items", order.getLineItems(), Matchers.<LineItem>empty());
+        assertThat("line items", order.lineItems(), Matchers.<LineItem>empty());
     }
 
     @Test public void
     consistsOfNoItemIfCartIsEmpty() {
         order.addItemsFrom(anEmptyCart().build());
-        assertThat("line items", order.getLineItems(), Matchers.<LineItem>empty());
+        assertThat("line items", order.lineItems(), Matchers.<LineItem>empty());
     }
 
     @Test public void
@@ -45,8 +45,8 @@ public class OrderTest {
         Cart cart = aCartWithSomeItemsAddedMultipleTimes();
         order.addItemsFrom(cart);
 
-        assertThat("line items", order.getLineItems(), containsLineItems(matchingItemsOf(cart)));
-        assertThat("total quantity", order.getTotalQuantity(), equalTo(cart.getTotalQuantity()));
+        assertThat("line items", order.lineItems(), containsLineItems(matchingItemsOf(cart)));
+        assertThat("total quantity", order.totalQuantity(), equalTo(cart.totalQuantity()));
     }
 
     @Test public void
@@ -57,20 +57,20 @@ public class OrderTest {
         order.addItemsFrom(cart);
 
         BigDecimal updatedPrice = new BigDecimal("84.99");
-        anItemWhosePriceWillChange.setPrice(updatedPrice);
-        assertThat("total price", order.getTotalPrice(), equalTo(originalPrice));
+        anItemWhosePriceWillChange.price(updatedPrice);
+        assertThat("total price", order.totalPrice(), equalTo(originalPrice));
     }
 
     @Test(expected = UnsupportedOperationException.class) public void
     cannotBeModified() {
-        order.getLineItems().clear();
+        order.lineItems().clear();
     }
 
     @Test public void
     calculatesGrandTotal() {
         Cart cart = aCartWithManyItems();
         order.addItemsFrom(cart);
-        assertThat("total price", order.getTotalPrice(), equalTo(cart.getGrandTotal()));
+        assertThat("total price", order.totalPrice(), equalTo(cart.grandTotal()));
     }
     
     @Test public void
@@ -102,7 +102,7 @@ public class OrderTest {
 
     private List<Matcher<? super LineItem>> matchingItemsOf(Cart cart) {
         List<Matcher<? super LineItem>> all = new ArrayList<Matcher<? super LineItem>>();
-        for (CartItem cartItem : cart.getItems()) {
+        for (CartItem cartItem : cart.items()) {
             all.add(matchingCartItem(cartItem));
         }
         return all;
@@ -110,7 +110,7 @@ public class OrderTest {
 
     @SuppressWarnings("unchecked")
     private Matcher<LineItem> matchingCartItem(CartItem cartItem) {
-        return with(number(cartItem.getItemNumber()), quantity(cartItem.getQuantity()), totalPrice(cartItem.getTotalPrice()));
+        return with(number(cartItem.itemNumber()), quantity(cartItem.quantity()), totalPrice(cartItem.totalPrice()));
     }
 
     private Matcher<LineItem> with(Matcher<LineItem>... lineItemMatchers) {
@@ -120,7 +120,7 @@ public class OrderTest {
     private Matcher<LineItem> quantity(int count) {
         return new FeatureMatcher<LineItem, Integer>(equalTo(count), " a line item with quantity", "quantity") {
             @Override protected Integer featureValueOf(LineItem actual) {
-                return actual.getQuantity();
+                return actual.quantity();
             }
         };
     }
@@ -128,7 +128,7 @@ public class OrderTest {
     private Matcher<LineItem> number(String number) {
         return new FeatureMatcher<LineItem, String>(equalTo(number), "a line item with number", "item number") {
             @Override protected String featureValueOf(LineItem actual) {
-                return actual.getItemNumber();
+                return actual.itemNumber();
             }
         };
     }
@@ -136,7 +136,7 @@ public class OrderTest {
     private Matcher<LineItem> totalPrice(BigDecimal price) {
         return new FeatureMatcher<LineItem, BigDecimal>(equalTo(price), "a line item with total", "total") {
             @Override protected BigDecimal featureValueOf(LineItem actual) {
-                return actual.getTotalPrice();
+                return actual.totalPrice();
             }
         };
     }

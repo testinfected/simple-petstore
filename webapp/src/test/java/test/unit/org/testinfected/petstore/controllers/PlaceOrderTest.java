@@ -86,7 +86,7 @@ public class PlaceOrderTest {
 
         checkoutPage.assertRenderedTo(response);
         checkoutPage.assertRenderedWith("total", total);
-        checkoutPage.assertRenderedWith("cardTypes", ChoiceOfCreditCards.all().select(incompletePaymentDetails.getCardType()));
+        checkoutPage.assertRenderedWith("cardTypes", ChoiceOfCreditCards.all().select(incompletePaymentDetails.cardType()));
         checkoutPage.assertRenderedWith(equalTo("payment"), samePaymentMethodAs(incompletePaymentDetails));
         checkoutPage.assertRenderedWith(equalTo("errors"), errors(
                 withMessage("paymentDetails", "payment details are invalid"),
@@ -110,12 +110,12 @@ public class PlaceOrderTest {
     }
 
     private void captureInForm(final CreditCardDetails paymentDetails) {
-        request.addParameter("first-name", paymentDetails.getFirstName());
-        request.addParameter("last-name", paymentDetails.getLastName());
-        request.addParameter("email", paymentDetails.getEmail());
-        request.addParameter("card-number", paymentDetails.getCardNumber());
-        request.addParameter("card-type", paymentDetails.getCardType().toString());
-        request.addParameter("expiry-date", paymentDetails.getCardExpiryDate());
+        request.addParameter("first-name", paymentDetails.firstName());
+        request.addParameter("last-name", paymentDetails.lastName());
+        request.addParameter("email", paymentDetails.email());
+        request.addParameter("card-number", paymentDetails.cardNumber());
+        request.addParameter("card-type", paymentDetails.cardType().toString());
+        request.addParameter("expiry-date", paymentDetails.cardExpiryDate());
     }
 
     private Matcher<CreditCardDetails> samePaymentMethodAs(CreditCardDetails paymentMethod) {

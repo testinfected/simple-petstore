@@ -10,7 +10,7 @@ public class ItemNumber implements Serializable {
         this.number = number;
     }
 
-    public String getNumber() {
+    public String number() {
         return number;
     }
 

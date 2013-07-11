@@ -18,7 +18,7 @@ public class Checkout implements Application {
 
     public void handle(Request request, Response response) throws Exception {
         checkoutPage.render(response, context().
-                with("total", SessionScope.cartFor(request).getGrandTotal()).
+                with("total", SessionScope.cartFor(request).grandTotal()).
                 and("cardTypes", ChoiceOfCreditCards.all()).
                 asMap());
     }

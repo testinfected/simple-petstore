@@ -16,23 +16,23 @@ public class Cart implements Serializable {
         return cartItems.isEmpty();
     }
 
-    public BigDecimal getGrandTotal() {
+    public BigDecimal grandTotal() {
         BigDecimal grandTotal = BigDecimal.ZERO;
         for (CartItem cartItem : cartItems) {
-            grandTotal = grandTotal.add(cartItem.getTotalPrice());
+            grandTotal = grandTotal.add(cartItem.totalPrice());
         }
         return grandTotal;
     }
 
-    public int getTotalQuantity() {
+    public int totalQuantity() {
         int total = 0;
         for (CartItem cartItem : cartItems) {
-            total += cartItem.getQuantity();
+            total += cartItem.quantity();
         }
         return total;
     }
 
-    public List<CartItem> getItems() {
+    public List<CartItem> items() {
         return Collections.unmodifiableList(cartItems);
     }
 

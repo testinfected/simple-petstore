@@ -21,31 +21,31 @@ public class CreditCardDetails extends PaymentMethod implements Serializable {
         this.billingAddress = Validate.valid(billingAddress);
     }
 
-    public CreditCardType getCardType() {
+    public CreditCardType cardType() {
         return cardType;
     }
 
-    public String getCardCommonName() {
+    public String cardCommonName() {
         return cardType.commonName();
     }
 
-    public String getCardNumber() {
+    public String cardNumber() {
         return cardNumber.get();
     }
 
-    public String getCardExpiryDate() {
+    public String cardExpiryDate() {
         return cardExpiryDate.get();
     }
 
-    public String getFirstName() {
-        return billingAddress.get().getFirstName();
+    public String firstName() {
+        return billingAddress.get().firstName();
     }
 
-    public String getLastName() {
-        return billingAddress.get().getLastName();
+    public String lastName() {
+        return billingAddress.get().lastName();
     }
 
-    public String getEmail() {
-        return billingAddress.get().getEmailAddress();
+    public String email() {
+        return billingAddress.get().emailAddress();
     }
 }

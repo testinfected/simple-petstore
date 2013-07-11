@@ -25,6 +25,10 @@ public class Valid<T> implements Serializable, Constraint<T> {
         if (problems.found && !rootViolationDisabled) validation.report(path, INVALID, value);
     }
 
+    public void disableRootViolation() {
+        this.rootViolationDisabled = true;
+    }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -36,10 +40,6 @@ public class Valid<T> implements Serializable, Constraint<T> {
 
     public int hashCode() {
         return value != null ? value.hashCode() : 0;
-    }
-
-    public void disableRootViolation() {
-        this.rootViolationDisabled = true;
     }
 
     public static class Problems implements Validation {

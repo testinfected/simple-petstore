@@ -40,7 +40,7 @@ public class ShowOrderTest {
 
     private void orderBookContains(final Order order) {
         context.checking(new Expectations() {{
-            allowing(orderBook).find(new OrderNumber(order.getNumber())); will(returnValue(order));
+            allowing(orderBook).find(new OrderNumber(order.number())); will(returnValue(order));
         }});
     }
 }

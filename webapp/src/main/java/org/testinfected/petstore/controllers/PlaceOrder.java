@@ -40,12 +40,12 @@ public class PlaceOrder implements Application {
 
     private void processOrder(Request request, Response response, PaymentForm form) throws Exception {
         OrderNumber orderNumber = salesAssistant.placeOrder(SessionScope.cartFor(request), form.paymentDetails());
-        response.redirectTo("/orders/" + orderNumber.getNumber());
+        response.redirectTo("/orders/" + orderNumber.number());
     }
 
     private void rejectOrder(Request request, Response response, PaymentForm form) throws IOException {
         checkoutPage.render(response, context().
-                with("total", SessionScope.cartFor(request).getGrandTotal()).
+                with("total", SessionScope.cartFor(request).grandTotal()).
                 and("cardTypes", ChoiceOfCreditCards.all().select(form.cardType())).
                 and("payment", form.paymentDetails()).
                 and("errors", new ListOfErrors(form.errors(messages))).asMap());

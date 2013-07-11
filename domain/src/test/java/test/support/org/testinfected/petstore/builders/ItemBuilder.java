@@ -21,7 +21,7 @@ public class ItemBuilder implements Builder<Item> {
 	
 	public Item build() {
 		Item item = new Item(number, product, price);
-        item.setDescription(description);
+        item.description(description);
 		return item;
 	}
 

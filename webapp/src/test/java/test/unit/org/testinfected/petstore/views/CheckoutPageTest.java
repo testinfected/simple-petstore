@@ -96,7 +96,7 @@ public class CheckoutPageTest {
                 billedTo(billingAddress).build();
 
         checkoutPage = renderCheckoutPage().with("payment", payment).
-                with("cardTypes", ChoiceOfCreditCards.all().select(payment.getCardType())).asDom();
+                with("cardTypes", ChoiceOfCreditCards.all().select(payment.cardType())).asDom();
 
         assertThat("billing information", checkoutPage, hasCheckoutForm(hasBillingInformation("Jack", "Johnson", "jack@gmail.com")));
         assertThat("payment information", checkoutPage, hasCheckoutForm(hasCreditCardDetails(CreditCardType.visa, "4111111111111111", "2015-10-10")));

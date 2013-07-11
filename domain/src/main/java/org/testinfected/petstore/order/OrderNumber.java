@@ -24,7 +24,7 @@ public class OrderNumber {
         return new String(buf) + text;
     }
 
-    public String getNumber() {
+    public String number() {
         return number;
     }
 

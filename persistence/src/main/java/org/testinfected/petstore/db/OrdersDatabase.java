@@ -63,7 +63,7 @@ public class OrdersDatabase implements OrderBook {
 
     private void recordPayment(Order order) {
         if (!order.isPaid()) return;
-        Insert.into(payments, order.getPaymentMethod()).execute(connection);
+        Insert.into(payments, order.paymentMethod()).execute(connection);
     }
 
     private void recordOrder(Order order) {
@@ -71,7 +71,7 @@ public class OrdersDatabase implements OrderBook {
     }
 
     private void recordLineItems(Order order) {
-        for (LineItem lineItem : order.getLineItems()) {
+        for (LineItem lineItem : order.lineItems()) {
             associate(order, lineItem);
             insertLineItem(lineItem);
         }

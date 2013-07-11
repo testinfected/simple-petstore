@@ -1,8 +1,8 @@
 package test.unit.org.testinfected.petstore.order;
 
-import org.testinfected.petstore.order.OrderNumber;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.testinfected.petstore.order.OrderNumber;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -29,6 +29,6 @@ public class OrderNumberTest {
     }
 
     private String numberFor(final long number) {
-        return new OrderNumber(number).getNumber();
+        return new OrderNumber(number).number();
     }
 }

@@ -16,15 +16,15 @@ public class Address implements Serializable {
         this.emailAddress = emailAddress;
     }
 
-    public String getFirstName() {
+    public String firstName() {
         return firstName.get();
     }
 
-    public String getLastName() {
+    public String lastName() {
         return lastName.get();
     }
 
-    public String getEmailAddress() {
+    public String emailAddress() {
         return emailAddress;
     }
 

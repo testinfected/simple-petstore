@@ -6,7 +6,11 @@ import org.testinfected.petstore.db.support.Insert;
 import org.testinfected.petstore.db.support.JDBCException;
 import org.testinfected.petstore.db.support.Select;
 import org.testinfected.petstore.db.support.Table;
-import org.testinfected.petstore.product.*;
+import org.testinfected.petstore.product.DuplicateItemException;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.petstore.product.ItemNumber;
+import org.testinfected.petstore.product.Product;
 
 import java.sql.Connection;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -32,7 +36,7 @@ public class ItemsDatabase implements ItemInventory {
     public Item find(ItemNumber itemNumber) {
         return Select.from(items, "item").
                 join(products, "product", "item.product_id = product.id").
-                where("item.number = ?", itemNumber.getNumber()).
+                where("item.number = ?", itemNumber.number()).
                 first(connection);
     }
 

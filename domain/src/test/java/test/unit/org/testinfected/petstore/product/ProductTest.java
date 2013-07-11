@@ -1,9 +1,9 @@
 package test.unit.org.testinfected.petstore.product;
 
-import org.testinfected.petstore.product.Product;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.junit.Test;
+import org.testinfected.petstore.product.Product;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -34,7 +34,7 @@ public class ProductTest {
     private Matcher<? super Product> productWithPhoto(String fileName) {
         return new FeatureMatcher<Product, String>(equalTo(fileName), "a product with photo", "photo") {
             protected String featureValueOf(Product actual) {
-                return actual.getPhotoFileName();
+                return actual.photoFileName();
             }
         };
     }

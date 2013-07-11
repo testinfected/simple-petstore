@@ -24,7 +24,7 @@ public class PurchasingAgent implements ProcurementRequestHandler {
 
     public void addProductToCatalog(String number, String name, String description, String photoFileName) throws Exception {
         final Product product = new Product(number, name);
-        product.setDescription(description);
+        product.description(description);
         product.attachPhoto(new Attachment(photoFileName));
 
         transactor.perform(new UnitOfWork() {
@@ -37,7 +37,7 @@ public class PurchasingAgent implements ProcurementRequestHandler {
     public void addToInventory(String productNumber, String itemNumber, String description, BigDecimal price) throws Exception {
         final Product product = productCatalog.findByNumber(productNumber);
         final Item item = new Item(new ItemNumber(itemNumber), product, price);
-        item.setDescription(description);
+        item.description(description);
 
         transactor.perform(new UnitOfWork() {
             public void execute() throws Exception {
