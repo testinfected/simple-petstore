@@ -29,6 +29,6 @@ public class OrderNumberTest {
     }
 
     private String numberFor(final long number) {
-        return new OrderNumber(number).number();
+        return new OrderNumber(number).getNumber();
     }
 }

@@ -31,13 +31,13 @@ public class OrderTest {
 
     @Test public void
     consistsOfNoItemByDefault() {
-        assertThat("line items", order.lineItems(), Matchers.<LineItem>empty());
+        assertThat("line items", order.getLineItems(), Matchers.<LineItem>empty());
     }
 
     @Test public void
     consistsOfNoItemIfCartIsEmpty() {
         order.addItemsFrom(anEmptyCart().build());
-        assertThat("line items", order.lineItems(), Matchers.<LineItem>empty());
+        assertThat("line items", order.getLineItems(), Matchers.<LineItem>empty());
     }
 
     @Test public void
@@ -45,8 +45,8 @@ public class OrderTest {
         Cart cart = aCartWithSomeItemsAddedMultipleTimes();
         order.addItemsFrom(cart);
 
-        assertThat("line items", order.lineItems(), containsLineItems(matchingItemsOf(cart)));
-        assertThat("total quantity", order.totalQuantity(), equalTo(cart.totalQuantity()));
+        assertThat("line items", order.getLineItems(), containsLineItems(matchingItemsOf(cart)));
+        assertThat("total quantity", order.getTotalQuantity(), equalTo(cart.getTotalQuantity()));
     }
 
     @Test public void
@@ -57,20 +57,20 @@ public class OrderTest {
         order.addItemsFrom(cart);
 
         BigDecimal updatedPrice = new BigDecimal("84.99");
-        anItemWhosePriceWillChange.price(updatedPrice);
-        assertThat("total price", order.totalPrice(), equalTo(originalPrice));
+        anItemWhosePriceWillChange.setPrice(updatedPrice);
+        assertThat("total price", order.getTotalPrice(), equalTo(originalPrice));
     }
 
     @Test(expected = UnsupportedOperationException.class) public void
     cannotBeModified() {
-        order.lineItems().clear();
+        order.getLineItems().clear();
     }
 
     @Test public void
     calculatesGrandTotal() {
         Cart cart = aCartWithManyItems();
         order.addItemsFrom(cart);
-        assertThat("total price", order.totalPrice(), equalTo(cart.grandTotal()));
+        assertThat("total price", order.getTotalPrice(), equalTo(cart.getGrandTotal()));
     }
     
     @Test public void
@@ -102,7 +102,7 @@ public class OrderTest {
 
     private List<Matcher<? super LineItem>> matchingItemsOf(Cart cart) {
         List<Matcher<? super LineItem>> all = new ArrayList<Matcher<? super LineItem>>();
-        for (CartItem cartItem : cart.items()) {
+        for (CartItem cartItem : cart.getItems()) {
             all.add(matchingCartItem(cartItem));
         }
         return all;
@@ -110,7 +110,7 @@ public class OrderTest {
 
     @SuppressWarnings("unchecked")
     private Matcher<LineItem> matchingCartItem(CartItem cartItem) {
-        return with(number(cartItem.itemNumber()), quantity(cartItem.quantity()), totalPrice(cartItem.totalPrice()));
+        return with(number(cartItem.getItemNumber()), quantity(cartItem.getQuantity()), totalPrice(cartItem.getTotalPrice()));
     }
 
     private Matcher<LineItem> with(Matcher<LineItem>... lineItemMatchers) {
@@ -120,7 +120,7 @@ public class OrderTest {
     private Matcher<LineItem> quantity(int count) {
         return new FeatureMatcher<LineItem, Integer>(equalTo(count), " a line item with quantity", "quantity") {
             @Override protected Integer featureValueOf(LineItem actual) {
-                return actual.quantity();
+                return actual.getQuantity();
             }
         };
     }
@@ -128,7 +128,7 @@ public class OrderTest {
     private Matcher<LineItem> number(String number) {
         return new FeatureMatcher<LineItem, String>(equalTo(number), "a line item with number", "item number") {
             @Override protected String featureValueOf(LineItem actual) {
-                return actual.itemNumber();
+                return actual.getItemNumber();
             }
         };
     }
@@ -136,7 +136,7 @@ public class OrderTest {
     private Matcher<LineItem> totalPrice(BigDecimal price) {
         return new FeatureMatcher<LineItem, BigDecimal>(equalTo(price), "a line item with total", "total") {
             @Override protected BigDecimal featureValueOf(LineItem actual) {
-                return actual.totalPrice();
+                return actual.getTotalPrice();
             }
         };
     }

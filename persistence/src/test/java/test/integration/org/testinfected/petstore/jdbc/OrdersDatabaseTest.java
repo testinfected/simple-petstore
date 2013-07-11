@@ -2,7 +2,6 @@ package test.integration.org.testinfected.petstore.jdbc;
 
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +27,9 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
@@ -84,59 +85,35 @@ public class OrdersDatabaseTest {
     private Matcher<? super Order> orderWithNumber(String orderNumber) {
         return new FeatureMatcher<Order, String>(equalTo(orderNumber), "an order with number", "order number") {
             @Override protected String featureValueOf(Order order) {
-                return order.number();
+                return order.getNumber();
             }
         };
     }
 
     private void assertCanSaveAndFindByNumberWithSameState(Order sample) throws Exception {
         save(sample);
-        Order found = orderDatabase.find(new OrderNumber(sample.number()));
+        Order found = orderDatabase.find(new OrderNumber(sample.getNumber()));
         assertThat("found by number", found, sameOrderAs(sample));
     }
 
     private Matcher<Order> sameOrderAs(Order original) {
         return allOf(hasField("id", equalTo(idOf(original).get())),
-                hasNumber(equalTo(original.number())),
-                hasPaymentMethod(samePaymentMethod(original)),
-                hasLineItems(sameLineItemsAs(original)));
+                hasProperty("number", equalTo(original.getNumber())),
+                hasProperty("paymentMethod", samePaymentMethod(original)),
+                hasProperty("lineItems", sameLineItemsAs(original)));
     }
 
-    private Matcher<? super Order> hasNumber(Matcher<String> numberMatcher) {
-        return new FeatureMatcher<Order, String>(numberMatcher, "has number", "number") {
-            protected String featureValueOf(Order actual) {
-                return actual.number();
-            }
-        };
-    }
-
-    private Matcher<? super Order> hasPaymentMethod(Matcher<PaymentMethod> paymentMethodMatcher) {
-        return new FeatureMatcher<Order, PaymentMethod>(paymentMethodMatcher, "has payment method", "payment method") {
-            protected PaymentMethod featureValueOf(Order actual) {
-                return actual.paymentMethod();
-            }
-        };
-    }
-
-    private Matcher<? super Order> hasLineItems(Matcher<Iterable<? extends LineItem>> lineItemsMatcher) {
-        return new FeatureMatcher<Order, List<LineItem>>(lineItemsMatcher, "has line items", "line items") {
-            protected List<LineItem> featureValueOf(Order actual) {
-                return actual.lineItems();
-            }
-        };
-    }
-
-    private Matcher<Iterable<? extends LineItem>> sameLineItemsAs(Order original) {
-        return original.lineItems().isEmpty() ? Matchers.<LineItem>emptyIterable() : contains(linesWithSameStateAs(original));
+    private Matcher<?> sameLineItemsAs(Order original) {
+        return original.getLineItems().isEmpty() ? emptyIterable() : contains(linesWithSameStateAs(original));
     }
 
     private Matcher<PaymentMethod> samePaymentMethod(Order original) {
-        return original.isPaid() ? samePropertyValuesAs(original.paymentMethod()) : nullValue(PaymentMethod.class);
+        return original.isPaid() ? samePropertyValuesAs(original.getPaymentMethod()) : nullValue(PaymentMethod.class);
     }
 
     private List<Matcher<? super LineItem>> linesWithSameStateAs(Order original) {
         List<Matcher<? super LineItem>> all = new ArrayList<Matcher<? super LineItem>>();
-        for (LineItem lineItem : original.lineItems()) {
+        for (LineItem lineItem : original.getLineItems()) {
             all.add(sameLineItemAs(lineItem));
         }
         return all;

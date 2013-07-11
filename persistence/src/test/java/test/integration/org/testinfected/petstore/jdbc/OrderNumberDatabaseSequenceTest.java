@@ -43,7 +43,7 @@ public class OrderNumberDatabaseSequenceTest {
     }
 
     private int parse(OrderNumber number) {
-        return Integer.parseInt(number.number());
+        return Integer.parseInt(number.getNumber());
     }
 
     private OrderNumber nextOrderNumber() {

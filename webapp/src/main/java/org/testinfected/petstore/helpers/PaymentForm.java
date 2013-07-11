@@ -29,7 +29,7 @@ public class PaymentForm extends Form {
     }
 
     public CreditCardType cardType() {
-        return paymentDetails().cardType();
+        return paymentDetails().getCardType();
     }
 
     public CreditCardDetails paymentDetails() {

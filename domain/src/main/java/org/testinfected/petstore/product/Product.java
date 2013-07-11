@@ -20,24 +20,24 @@ public class Product implements Serializable {
 		this.name = name;
 	}
 
-    public String number() {
+    public String getNumber() {
 		return number;
 	}
 
-	public String name() {
+	public String getName() {
 		return name;
 	}
 
-    public String description() {
+    public String getDescription() {
 		return description;
 	}
 
-    public void description(String description) {
+    public void setDescription(String description) {
 		this.description = description;
 	}
 
-    public String photoFileName() {
-        return hasPhoto() ? photo.fileName() : MISSING_PHOTO;
+    public String getPhotoFileName() {
+        return hasPhoto() ? photo.getFileName() : MISSING_PHOTO;
     }
 
     public void attachPhoto(Attachment photo) {
@@ -45,7 +45,7 @@ public class Product implements Serializable {
 	}
 
     public boolean hasPhoto() {
-        return photo != null && photo.fileName() != null;
+        return photo != null && photo.getFileName() != null;
     }
 
     @Override

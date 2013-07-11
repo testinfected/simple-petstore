@@ -48,7 +48,7 @@ public class ProductBuilder implements Builder<Product> {
 
     public Product build() {
         Product product = new Product(number, name);
-        product.description(description);
+        product.setDescription(description);
         product.attachPhoto(photo);
         return product;
     }

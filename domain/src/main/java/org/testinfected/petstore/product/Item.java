@@ -21,27 +21,27 @@ public class Item implements Serializable {
         this.price = price;
     }
 
-    public String number() {
-        return number.number();
+    public String getNumber() {
+        return number.getNumber();
     }
 
-    public String productNumber() {
-        return product.number();
+    public String getProductNumber() {
+        return product.getNumber();
     }
 
-    public BigDecimal price() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void price(BigDecimal price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    public String description() {
+    public String getDescription() {
         return description;
     }
 
-    public void description(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -64,6 +64,6 @@ public class Item implements Serializable {
     }
 
     public String toString() {
-        return number + " (" + product.number() + ")";
+        return number + " (" + product.getNumber() + ")";
     }
 }

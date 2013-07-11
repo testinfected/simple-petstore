@@ -85,7 +85,7 @@ public class ItemsDatabaseTest {
     findsNothingIfProductHasNoAssociatedItemInInventory() throws Exception {
         given(anItem().of(inCatalog(aProduct().withNumber("DAL-5432"))));
 
-        List<Item> availableItems = itemsDatabase.findByProductNumber(inCatalog(aProduct().withNumber("BOU-6789")).number());
+        List<Item> availableItems = itemsDatabase.findByProductNumber(inCatalog(aProduct().withNumber("BOU-6789")).getNumber());
         assertThat("available items", availableItems, Matchers.<Item>empty());
     }
 
@@ -114,12 +114,12 @@ public class ItemsDatabaseTest {
     }
 
     private void assertCanBeFoundByNumberWithSameState(Item sample) {
-        Item found = itemsDatabase.find(new ItemNumber(sample.number()));
+        Item found = itemsDatabase.find(new ItemNumber(sample.getNumber()));
         assertThat("found by number", found, sameItemAs(sample));
     }
 
     private void assertCanBeFoundByProductNumberWithSameState(Item sample) {
-        List<Item> found = itemsDatabase.findByProductNumber(sample.productNumber());
+        List<Item> found = itemsDatabase.findByProductNumber(sample.getProductNumber());
         assertThat("found by product number", uniqueElement(found), sameItemAs(sample));
     }
 
@@ -143,7 +143,7 @@ public class ItemsDatabaseTest {
     private Matcher<Item> hasProductNumber(final String number) {
         return new FeatureMatcher<Item, String>(equalTo(number), "has product number", "product number") {
             @Override protected String featureValueOf(Item actual) {
-                return actual.productNumber();
+                return actual.getProductNumber();
             }
         };
     }
@@ -181,7 +181,7 @@ public class ItemsDatabaseTest {
     private Matcher<Item> hasNumber(final String number) {
         return new FeatureMatcher<Item, String>(equalTo(number), "has number", "number") {
             @Override protected String featureValueOf(Item actual) {
-                return actual.number();
+                return actual.getNumber();
             }
         };
     }

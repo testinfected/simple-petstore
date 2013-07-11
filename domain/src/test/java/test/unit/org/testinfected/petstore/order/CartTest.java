@@ -22,8 +22,8 @@ public class CartTest {
     @Test public void
     isEmptyByDefault() {
         assertThat("contains item(s)", cart.empty());
-        assertThat("grand total", cart.grandTotal(), equalTo(BigDecimal.ZERO));
-        assertThat("total quantity", cart.totalQuantity(), equalTo(0));
+        assertThat("grand total", cart.getGrandTotal(), equalTo(BigDecimal.ZERO));
+        assertThat("total quantity", cart.getTotalQuantity(), equalTo(0));
     }
 
     @SuppressWarnings("unchecked")
@@ -38,12 +38,12 @@ public class CartTest {
                 itemWith(number("11111111")),
                 itemWith(number("22222222")),
                 itemWith(number("33333333"))));
-        assertThat("total quantity", cart.totalQuantity(), equalTo(3));
+        assertThat("total quantity", cart.getTotalQuantity(), equalTo(3));
     }
 
     @Test(expected = UnsupportedOperationException.class) public void
     listOfItemsCannotBeModified() {
-        cart.items().clear();
+        cart.getItems().clear();
     }
 
     @Test public void
@@ -54,7 +54,7 @@ public class CartTest {
         for (String price : prices) {
             cart.add(anItem().priced(price).build());
         }
-        assertThat("grand total", cart.grandTotal(), equalTo(expectedTotal));
+        assertThat("grand total", cart.getGrandTotal(), equalTo(expectedTotal));
     }
 
     @SuppressWarnings("unchecked")
@@ -68,7 +68,7 @@ public class CartTest {
         assertThat("cart", cart, aCartContaining(
                 itemWith(number("11111111"), quantity(2)),
                 itemWith(number("22222222"), quantity(1))));
-        assertThat("total quantity", cart.totalQuantity(), equalTo(3));
+        assertThat("total quantity", cart.getTotalQuantity(), equalTo(3));
     }
     
     @Test public void
@@ -95,7 +95,7 @@ public class CartTest {
     private Matcher<Cart> aCartContaining(Matcher<CartItem>... cartItemMatchers) {
         return new FeatureMatcher<Cart, Iterable<CartItem>>(containsItems(cartItemMatchers), "a cart with items", "cart content") {
             @Override protected List<CartItem> featureValueOf(Cart actual) {
-                return cart.items();
+                return cart.getItems();
             }
         };
     }
@@ -111,7 +111,7 @@ public class CartTest {
     private Matcher<CartItem> quantity(int count) {
         return new FeatureMatcher<CartItem, Integer>(equalTo(count), "an item with quantity", "item quantity") {
             @Override protected Integer featureValueOf(CartItem actual) {
-                return actual.quantity();
+                return actual.getQuantity();
             }
         };
     }
@@ -119,7 +119,7 @@ public class CartTest {
     private Matcher<CartItem> number(String number) {
         return new FeatureMatcher<CartItem, String>(equalTo(number), "an item with number", "item number") {
             @Override protected String featureValueOf(CartItem actual) {
-                return actual.itemNumber();
+                return actual.getItemNumber();
             }
         };
     }

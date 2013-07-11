@@ -53,7 +53,7 @@ public class CashierTest {
         context.checking(new Expectations() {{
             allowing(sequence).nextOrderNumber(); will(returnValue(nextNumber)); when(transaction.is("started"));
             oneOf(orderBook).record(with(anOrder(
-                    withNumber(nextNumber.number()),
+                    withNumber(nextNumber.getNumber()),
                     withSameItemCountAs(cart),
                     withSameTotalAs(cart),
                     paid()))); when(transaction.is("started"));
@@ -76,17 +76,17 @@ public class CashierTest {
     }
 
     private Matcher<? super Order> withSameItemCountAs(Cart cart) {
-        return new FeatureMatcher<Order, Integer>(equalTo(cart.items().size()), "an order with line item count", "line item count") {
+        return new FeatureMatcher<Order, Integer>(equalTo(cart.getItems().size()), "an order with line item count", "line item count") {
             @Override protected Integer featureValueOf(Order actual) {
-                return actual.lineItemCount();
+                return actual.getLineItemCount();
             }
         };
     }
 
     private Matcher<? super Order> withSameTotalAs(Cart cart) {
-        return new FeatureMatcher<Order, BigDecimal>(equalTo(cart.grandTotal()), "an order with line item count", "line item count") {
+        return new FeatureMatcher<Order, BigDecimal>(equalTo(cart.getGrandTotal()), "an order with line item count", "line item count") {
             @Override protected BigDecimal featureValueOf(Order actual) {
-                return actual.totalPrice();
+                return actual.getTotalPrice();
             }
         };
     }
@@ -102,7 +102,7 @@ public class CashierTest {
     private Matcher<? super Order> withNumber(String number) {
         return new FeatureMatcher<Order, String>(equalTo(number), "order with number", "number") {
             protected String featureValueOf(Order actual) {
-                return actual.number();
+                return actual.getNumber();
             }
         };
     }

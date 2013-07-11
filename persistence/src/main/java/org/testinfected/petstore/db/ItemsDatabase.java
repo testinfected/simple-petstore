@@ -36,7 +36,7 @@ public class ItemsDatabase implements ItemInventory {
     public Item find(ItemNumber itemNumber) {
         return Select.from(items, "item").
                 join(products, "product", "item.product_id = product.id").
-                where("item.number = ?", itemNumber.number()).
+                where("item.number = ?", itemNumber.getNumber()).
                 first(connection);
     }
 

@@ -34,7 +34,7 @@ public class ProductTest {
     private Matcher<? super Product> productWithPhoto(String fileName) {
         return new FeatureMatcher<Product, String>(equalTo(fileName), "a product with photo", "photo") {
             protected String featureValueOf(Product actual) {
-                return actual.photoFileName();
+                return actual.getPhotoFileName();
             }
         };
     }

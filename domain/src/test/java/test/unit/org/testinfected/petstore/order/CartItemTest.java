@@ -20,7 +20,7 @@ public class CartItemTest {
     @Test public void
     quantityIsOneByDefault() {
         int expectedQuantity = 1;
-        assertThat("quantity", cartItem.quantity(), equalTo(expectedQuantity));
+        assertThat("quantity", cartItem.getQuantity(), equalTo(expectedQuantity));
     }
 
     @Test public void
@@ -28,25 +28,25 @@ public class CartItemTest {
         int quantity = 5;
         BigDecimal expectedPrice = unitPrice.multiply(new BigDecimal(quantity));
         increaseQuantityTo(quantity);
-        assertThat("total price", cartItem.totalPrice(), equalTo(expectedPrice));
+        assertThat("total price", cartItem.getTotalPrice(), equalTo(expectedPrice));
     }
 
     @Test public void
     providesDetailsOnItem() {
-        assertThat("unit price", cartItem.unitPrice(), equalTo(unitPrice));
-        assertThat("item description", cartItem.itemDescription(), equalTo(itemDescription));
-        assertThat("item number", cartItem.itemNumber(), equalTo(itemNumber));
+        assertThat("unit price", cartItem.getUnitPrice(), equalTo(unitPrice));
+        assertThat("item description", cartItem.getItemDescription(), equalTo(itemDescription));
+        assertThat("item number", cartItem.getItemNumber(), equalTo(itemNumber));
     }
     
     @Test public void
     isInsensitiveToChangeInItemPrice() {
-        BigDecimal originalPrice = cartItem.totalPrice();
+        BigDecimal originalPrice = cartItem.getTotalPrice();
         BigDecimal updatedPrice = new BigDecimal("84.99");
-        item.price(updatedPrice);
-        assertThat("total price", cartItem.totalPrice(), equalTo(originalPrice));
+        item.setPrice(updatedPrice);
+        assertThat("total price", cartItem.getTotalPrice(), equalTo(originalPrice));
     }
 
     private void increaseQuantityTo(int quantity) {
-        for (int i = cartItem.quantity(); i < quantity; i++) cartItem.incrementQuantity();
+        for (int i = cartItem.getQuantity(); i < quantity; i++) cartItem.incrementQuantity();
     }
 }

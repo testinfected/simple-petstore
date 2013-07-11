@@ -16,11 +16,11 @@ public class LineItem {
 
     public static LineItem from(CartItem cartItem) {
         return new LineItem(
-                cartItem.itemNumber(),
-                cartItem.itemDescription(),
-                cartItem.unitPrice(),
-                cartItem.quantity(),
-                cartItem.totalPrice());
+                cartItem.getItemNumber(),
+                cartItem.getItemDescription(),
+                cartItem.getUnitPrice(),
+                cartItem.getQuantity(),
+                cartItem.getTotalPrice());
     }
 
     public LineItem(String itemNumber, String itemDescription, BigDecimal itemUnitPrice, int quantity, BigDecimal totalPrice) {
@@ -31,23 +31,23 @@ public class LineItem {
         this.totalPrice = totalPrice;
     }
 
-    public BigDecimal totalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public BigDecimal itemUnitPrice() {
+    public BigDecimal getItemUnitPrice() {
         return itemUnitPrice;
     }
 
-    public String itemNumber() {
+    public String getItemNumber() {
         return itemNumber;
     }
 
-    public String itemDescription() {
+    public String getItemDescription() {
         return itemDescription;
     }
 
-    public int quantity() {
+    public int getQuantity() {
         return quantity;
     }
 

@@ -120,12 +120,12 @@ public class ProductsDatabaseTest {
     }
 
     private void assertCanBeFoundByNumberWithSameState(Product sample) {
-        Product found = productsDatabase.findByNumber(sample.number());
+        Product found = productsDatabase.findByNumber(sample.getNumber());
         assertThat("found by number", found, sameProductAs(sample));
     }
 
     private void assertCanBeFoundByKeywordWithSameState(Product sample) {
-        List<Product> found = productsDatabase.findByKeyword(sample.name());
+        List<Product> found = productsDatabase.findByKeyword(sample.getName());
         assertThat("found by keyword", uniqueElement(found), sameProductAs(sample));
     }
 
@@ -173,7 +173,7 @@ public class ProductsDatabaseTest {
     private Matcher<? super Product> productNamed(String name) {
         return new FeatureMatcher<Product, String>(equalTo(name), "a product with name", "name") {
             @Override protected String featureValueOf(Product actual) {
-                return actual.name();
+                return actual.getName();
             }
         };
     }
@@ -181,7 +181,7 @@ public class ProductsDatabaseTest {
     private Matcher<? super Product> productWithNumber(String number) {
         return new FeatureMatcher<Product, String>(equalTo(number), "a product with number", "product number") {
             @Override protected String featureValueOf(Product actual) {
-                return actual.number();
+                return actual.getNumber();
             }
         };
     }

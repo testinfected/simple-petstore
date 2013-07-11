@@ -8,7 +8,7 @@ public class Attachment {
         this.fileName = fileName;
     }
 
-    public String fileName() {
+    public String getFileName() {
         return fileName;
     }
 

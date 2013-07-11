@@ -14,27 +14,27 @@ public class CartItem implements Serializable {
     public CartItem(Item item) {
         this.item = item;
         this.quantity = 1;
-        this.unitPrice = item.price();
+        this.unitPrice = item.getPrice();
     }
 
-    public BigDecimal totalPrice() {
-        return unitPrice().multiply(new BigDecimal(quantity));
+    public BigDecimal getTotalPrice() {
+        return getUnitPrice().multiply(new BigDecimal(quantity));
     }
 
-    public int quantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public BigDecimal unitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public String itemDescription() {
-        return item.description();
+    public String getItemDescription() {
+        return item.getDescription();
     }
 
-    public String itemNumber() {
-        return item.number();
+    public String getItemNumber() {
+        return item.getNumber();
     }
 
     public void incrementQuantity() {

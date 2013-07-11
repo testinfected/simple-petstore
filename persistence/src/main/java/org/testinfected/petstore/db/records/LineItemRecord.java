@@ -39,11 +39,11 @@ public class LineItemRecord extends AbstractRecord<LineItem> {
     @Override
     public void dehydrate(PreparedStatement st, LineItem lineItem) throws SQLException {
         id.set(st, idOf(lineItem).get());
-        number.set(st, lineItem.itemNumber());
-        unitPrice.set(st, lineItem.itemUnitPrice());
-        description.set(st, lineItem.itemDescription());
-        quantity.set(st, lineItem.quantity());
-        totalPrice.set(st, lineItem.totalPrice());
+        number.set(st, lineItem.getItemNumber());
+        unitPrice.set(st, lineItem.getItemUnitPrice());
+        description.set(st, lineItem.getItemDescription());
+        quantity.set(st, lineItem.getQuantity());
+        totalPrice.set(st, lineItem.getTotalPrice());
         order.set(st, idOf(orderOf(lineItem).get()).get());
         line.set(st, orderOf(lineItem).get().lineOf(lineItem));
     }

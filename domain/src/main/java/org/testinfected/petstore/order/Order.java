@@ -23,12 +23,12 @@ public class Order {
         this.number = number;
     }
 
-    public String number() {
-        return number.number();
+    public String getNumber() {
+        return number.getNumber();
     }
 
     public void addItemsFrom(Cart cart) {
-        for (CartItem cartItem : cart.items()) {
+        for (CartItem cartItem : cart.getItems()) {
             addLineItem(from(cartItem));
         }
     }
@@ -37,23 +37,23 @@ public class Order {
         lines.add(lineItem);
     }
 
-    public BigDecimal totalPrice() {
+    public BigDecimal getTotalPrice() {
         BigDecimal total = BigDecimal.ZERO;
         for (LineItem lineItem : lines) {
-            total = total.add(lineItem.totalPrice());
+            total = total.add(lineItem.getTotalPrice());
         }
         return total;
     }
 
-    public int totalQuantity() {
+    public int getTotalQuantity() {
         int totalQuantity = 0;
         for (LineItem lineItem : lines) {
-            totalQuantity += lineItem.quantity();
+            totalQuantity += lineItem.getQuantity();
         }
         return totalQuantity;
     }
 
-    public List<LineItem> lineItems() {
+    public List<LineItem> getLineItems() {
         return Collections.unmodifiableList(lines);
     }
 
@@ -61,7 +61,7 @@ public class Order {
         this.paymentMethod = paymentMethod;
     }
 
-    public PaymentMethod paymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
@@ -69,7 +69,7 @@ public class Order {
         return paymentMethod != null;
     }
 
-    public int lineItemCount() {
+    public int getLineItemCount() {
         return lines.size();
     }
 
