@@ -6,13 +6,14 @@ import java.util.Set;
 public class Validator {
 
     public <T> Set<ConstraintViolation<?>> validate(T target) {
-        Valid<T> constraint = Validate.valid(target);
-        Problems problems = new Problems();
-        constraint.check(Path.root(target), problems);
-        return problems.violations;
+        Valid<T> valid = Validate.valid(target);
+        valid.disableRootViolation();
+        Report report = new Report();
+        valid.check(Path.root(target), report);
+        return report.violations;
     }
 
-    class Problems implements Validation {
+    public static class Report implements Validation {
 
         final Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
 

@@ -42,6 +42,7 @@ public class CreditCardDetailsTest {
     areInvalidWithAnInvalidAddress() {
         assertThat("validation of card with missing first name", validationOf(aVisa().billedTo(anAddress().withFirstName(MISSING))), violates(on("billingAddress.firstName"), withMessage("missing")));
         assertThat("validation of card with missing last name", validationOf(aVisa().billedTo(anAddress().withLastName(MISSING))), violates(on("billingAddress.lastName"), withMessage("missing")));
+        assertThat("validation of card with invalid address", validationOf(aVisa().billedTo(anAddress().withFirstName(MISSING))), violates(on("billingAddress"), withMessage("invalid")));
     }
 
     @Test public void

@@ -6,17 +6,17 @@ import com.samskivert.mustache.Template;
 import java.io.IOException;
 import java.io.Writer;
 
-public class Errors implements Mustache.Lambda {
+public class ListOfErrors implements Mustache.Lambda {
 
-    private final Form<?> form;
+    private final Form.Errors errors;
 
-    public Errors(Form<?> form) {
-        this.form = form;
+    public ListOfErrors(Form.Errors errors) {
+        this.errors = errors;
     }
 
     public void execute(Template.Fragment frag, Writer out) throws IOException {
         String key = trim(frag);
-        if (!form.hasError(key)) return;
+        if (!errors.contains(key)) return;
         out.write(indent(frag));
         out.write("<ol class=\"errors\">\n");
         for (String message : errorMessages(key)) {
@@ -30,7 +30,7 @@ public class Errors implements Mustache.Lambda {
     }
 
     public Iterable<String> errorMessages(String key) {
-        return form.errorMessages(key);
+        return errors.messages(key);
     }
 
     private String trim(Template.Fragment frag) {
@@ -42,6 +42,6 @@ public class Errors implements Mustache.Lambda {
     }
 
     public String toString() {
-        return form.toString();
+        return errors.toString();
     }
 }

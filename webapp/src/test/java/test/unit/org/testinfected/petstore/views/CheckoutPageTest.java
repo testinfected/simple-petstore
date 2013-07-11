@@ -5,11 +5,10 @@ import org.junit.Test;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
-import org.testinfected.petstore.helpers.Errors;
 import org.testinfected.petstore.helpers.Form;
+import org.testinfected.petstore.helpers.ListOfErrors;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.AddressBuilder;
-import test.support.org.testinfected.petstore.web.MockForm;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.Matchers.allOf;
 import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
@@ -36,7 +35,7 @@ public class CheckoutPageTest {
 
     String CHECKOUT_TEMPLATE = "checkout";
     Element checkoutPage;
-    Form<?> form = MockForm.named("paymentDetails");
+    Form.Errors errors = new Form.Errors();
 
     @Test public void
     displaysOrderSummary() {
@@ -72,11 +71,11 @@ public class CheckoutPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     rendersErrorsWhenPaymentDetailsAreInvalid() throws Exception {
-        form.reject("invalid");
-        form.reject("incomplete");
-        form.rejectField("cardNumber", "blank");
+        errors.add("paymentDetails", "invalid.paymentDetails");
+        errors.add("paymentDetails", "incomplete.paymentDetails");
+        errors.add("paymentDetails.cardNumber", "blank.paymentDetails.cardNumber");
 
-        checkoutPage = renderCheckoutPage().with("errors", new Errors(form)).asDom();
+        checkoutPage = renderCheckoutPage().with("errors", new ListOfErrors(errors)).asDom();
 
         assertThat("payment errors", checkoutPage, hasSelector(".errors", allOf(hasChild(
                 hasText("invalid.paymentDetails")), hasChild(hasText("incomplete.paymentDetails"))

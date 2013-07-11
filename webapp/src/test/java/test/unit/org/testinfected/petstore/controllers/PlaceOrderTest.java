@@ -7,12 +7,12 @@ import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
-import org.testinfected.petstore.helpers.Messages;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
 import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
-import org.testinfected.petstore.helpers.Errors;
+import org.testinfected.petstore.helpers.ListOfErrors;
+import org.testinfected.petstore.helpers.Messages;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
@@ -93,13 +93,13 @@ public class PlaceOrderTest {
                 withMessage("paymentDetails.cardNumber", "card number may not be blank")));
     }
 
-    private Matcher<Errors> errors(Matcher<? super Errors>... errorMatchers) {
+    private Matcher<ListOfErrors> errors(Matcher<? super ListOfErrors>... errorMatchers) {
         return CoreMatchers.allOf(errorMatchers);
     }
 
-    private Matcher<? super Errors> withMessage(final String path, String error) {
-        return new FeatureMatcher<Errors, Iterable<String>>(hasItem(error), "form with errors['" + path + "']", "errors['" + path + "']") {
-            protected Iterable<String> featureValueOf(Errors actual) {
+    private Matcher<? super ListOfErrors> withMessage(final String path, String error) {
+        return new FeatureMatcher<ListOfErrors, Iterable<String>>(hasItem(error), "form with errors['" + path + "']", "errors['" + path + "']") {
+            protected Iterable<String> featureValueOf(ListOfErrors actual) {
                 return actual.errorMessages(path);
             }
         };

@@ -1,8 +1,6 @@
 package org.testinfected.petstore.helpers;
 
-import org.testinfected.molecule.Request;
 import org.testinfected.petstore.validation.ConstraintViolation;
-import org.testinfected.petstore.validation.Path;
 import org.testinfected.petstore.validation.Validator;
 
 import java.util.HashMap;
@@ -10,82 +8,54 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Form<T> {
+public abstract class Form {
 
-    private final Path root;
-    private final Map<String, Set<String>> errors = new HashMap<String, Set<String>>();
-    private Messages messages = new Messages() {
-        public String interpolate(String error, Object... parameters) {
-            return error;
-        }
-    };
-    private T value;
-
-    public Form(String name) {
-        this.root = Path.root(this).node(name);
-    }
-
-    public Form<T> use(Messages messages) {
-        this.messages = messages;
-        return this;
-    }
-
-    protected abstract T parse(Request request);
-
-    public T value() {
-        return value;
-    }
-
-    public void load(Request request) {
-        this.value = parse(request);
-    }
+    private final Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
 
     public boolean validate(Validator validator) {
-        Set<ConstraintViolation<?>> violations = validator.validate(value());
+        violations.addAll(validator.validate(this));
+        return violations.isEmpty();
+    }
+
+    public Form.Errors errors(Messages messages) {
+        Form.Errors errors = new Form.Errors();
         for (ConstraintViolation<?> violation : violations) {
-            rejectField(violation.path(), violation.error());
+            errors.add(violation.path(), translate(messages, violation.path(), violation.error()));
         }
-        return valid();
+        return errors;
     }
 
-    public void reject(String error) {
-        addError(root, error);
-    }
-
-    public void rejectField(String field, String error) {
-        addError(root.node(field), error);
-    }
-
-    private void addError(Path path, String error) {
-        addErrorMessage(path.value(), translate(path.value(), error));
-    }
-
-    private void addErrorMessage(String path, String message) {
-        errorsOn(path).add(message);
-    }
-
-    private String translate(String path, String error) {
+    private String translate(Messages messages, String path, String error) {
         return messages.interpolate(error + "." + path);
     }
 
-    public boolean hasError(String key) {
-        return errors.containsKey(key);
-    }
+    public static class Errors {
 
-    public Iterable<String> errorMessages(String key) {
-        return errorsOn(key);
-    }
+        private final Map<String, Set<String>> messages = new HashMap<String, Set<String>>();
 
-    public boolean valid() {
-        return errors.isEmpty();
-    }
+        public void add(String path, String message) {
+            errorsOn(path).add(message);
+        }
 
-    private Set<String> errorsOn(String key) {
-        if (!errors.containsKey(key)) errors.put(key, new HashSet<String>());
-        return errors.get(key);
-    }
+        public boolean contains(String key) {
+            return messages.containsKey(key);
+        }
 
-    public String toString() {
-        return "Form[name=" + root.name() + ", value=" + value + ", errors=" + errors + "]";
+        public Iterable<String> messages(String path) {
+            return errorsOn(path);
+        }
+
+        public boolean empty() {
+            return messages.isEmpty();
+        }
+
+        private Set<String> errorsOn(String path) {
+            if (!messages.containsKey(path)) messages.put(path, new HashSet<String>());
+            return messages.get(path);
+        }
+
+        public String toString() {
+            return messages.toString();
+        }
     }
 }
