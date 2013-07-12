@@ -27,9 +27,9 @@ grant all on petstore_test.* to 'testbot'@'localhost';
 
 ## Building
 
-To build the application, I use rvm with ruby-1.8.7-p334 with Buildr 1.4.8. I guess it should work fine with ruby 1.9.2 as well, though you won't get growl notifications on OSX (RubyCocoa does not support ruby-1.9).
+To build the application, I use rvm with ruby-1.8.7-p334 and Buildr 1.4.12. Build on Travis runs on both ruby-1.9.3 and JRuby (1.9) with latest Buildr (1.4.12 at the time of writing).
 
-Buildr 1.4.8 supports Java 7.
+Buildr 1.4.8+ supports Java 7.
 
 To install Buildr, follow Buildr installation [instructions](http://buildr.apache.org/installing.html).
 
