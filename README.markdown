@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/testinfected/simple-petstore.png)](https://travis-ci.org/testinfected/simple-petstore)
+
 # About
 
 A fork of my [petstore](https://github.com/testinfected/petstore) repository, but re-built with simple tools and no IoC container.
