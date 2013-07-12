@@ -18,7 +18,7 @@ import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 public class DateHeaderTest {
-    Date now = calendarDate(2012, 6, 8).atMidnight().build();
+    Date now = calendarDate(2012, 6, 8).atMidnight().inZone("GMT-04:00").build();
     DateHeader dateHeader = new DateHeader(BrokenClock.stoppedAt(now));
 
     MockRequest request = aRequest();

@@ -13,6 +13,7 @@ import org.testinfected.molecule.middlewares.ApacheCommonLogger;
 import test.support.org.testinfected.molecule.unit.BrokenClock;
 
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -28,8 +29,8 @@ public class ApacheCommonLoggerTest {
     }};
 
     Logger logger = context.mock(Logger.class);
-    Date now = calendarDate(2012, 6, 27).atTime(18, 4, 0).inZone("EDT").build();
-    ApacheCommonLogger apacheCommonLogger = new ApacheCommonLogger(logger, BrokenClock.stoppedAt(now));
+    Date now = calendarDate(2012, 6, 27).atTime(18, 4, 0).inZone("GMT").build();
+    ApacheCommonLogger apacheCommonLogger = new ApacheCommonLogger(logger, BrokenClock.stoppedAt(now), TimeZone.getTimeZone("GMT+01:00"));
 
     @Test public void
     logsRequestsServedInApacheCommonLogFormat() throws Exception {
@@ -43,7 +44,7 @@ public class ApacheCommonLoggerTest {
         });
 
         context.checking(new Expectations() {{
-            oneOf(logger).info("192.168.0.1 - - [27/Jun/2012:14:04:00 -0400] \"GET /products?keyword=dogs HTTP/1.1\" 200 28");
+            oneOf(logger).info("192.168.0.1 - - [27/Jun/2012:19:04:00 +0100] \"GET /products?keyword=dogs HTTP/1.1\" 200 28");
         }});
 
         apacheCommonLogger.handle(request, aResponse());

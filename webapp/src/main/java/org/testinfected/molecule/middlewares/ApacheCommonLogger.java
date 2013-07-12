@@ -17,10 +17,16 @@ public class ApacheCommonLogger extends AbstractMiddleware {
 
     private final Logger logger;
     private final Clock clock;
+    private final TimeZone timeZone;
 
     public ApacheCommonLogger(Logger logger, Clock clock) {
+        this(logger, clock, TimeZone.getDefault());
+    }
+
+    public ApacheCommonLogger(Logger logger, Clock clock, TimeZone timeZone) {
         this.logger = logger;
         this.clock = clock;
+        this.timeZone = timeZone;
     }
 
     public void handle(Request request, Response response) throws Exception {
@@ -38,7 +44,7 @@ public class ApacheCommonLogger extends AbstractMiddleware {
     }
 
     private String currentTime() {
-        DATE_FORMAT.setTimeZone(TimeZone.getDefault());
+        DATE_FORMAT.setTimeZone(timeZone);
         return DATE_FORMAT.format(clock.now());
     }
 

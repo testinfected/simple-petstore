@@ -80,7 +80,7 @@ public class PetStoreTest {
     Exception error;
 
     String encoding = "utf-16";
-    Date now = calendarDate(2012, 6, 8).atMidnight().build();
+    Date now = calendarDate(2012, 6, 8).atMidnight().inZone("GMT-04:00").build();
 
     @Before public void
     startServer() throws Exception {
