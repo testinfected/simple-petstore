@@ -1,0 +1,8 @@
+language: ruby
+rvm:
+  - jruby-18mode
+
+jdK:
+  - oraclejdk7
+
+script: bundle exec buildr clean install
