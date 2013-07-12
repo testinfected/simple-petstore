@@ -5,8 +5,6 @@ rvm:
 jdK:
   - oraclejdk7
 
-services: mysql
-
 before_script:
   - mysql -e 'create database petstore_test;'
 
