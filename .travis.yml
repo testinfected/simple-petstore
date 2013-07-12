@@ -8,6 +8,6 @@ jdK:
 before_script:
   - mysql -e "create database petstore_test;"
   - mysql -e "create user 'testbot'@'localhost' identified by 'petstore'";
-  - mysql -e "grant all on petstore_test.* to 'testbot'@'localhost'";
+  - mysql -u root -e "grant all on petstore_test.* to 'testbot'@'localhost'";
 
 script: bundle exec buildr clean install
