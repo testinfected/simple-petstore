@@ -1,10 +1,6 @@
 syntax: glob
 
 .DS_Store
-.classpath
-.project
-.springBeans
-.settings
 *.iml
 *.ipr
 *.iws
@@ -13,3 +9,4 @@ syntax: glob
 target
 dependency.cache
 reports
+Gemfile.lock
