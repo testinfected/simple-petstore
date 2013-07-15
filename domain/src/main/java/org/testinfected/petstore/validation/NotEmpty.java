@@ -2,13 +2,13 @@ package org.testinfected.petstore.validation;
 
 import java.io.Serializable;
 
-public class NotBlank implements Serializable, Constraint<String> {
+public class NotEmpty implements Serializable, Constraint<String> {
 
-    private static final String BLANK = "blank";
+    private static final String EMPTY = "empty";
 
     private String value;
 
-    public NotBlank(String value) {
+    public NotEmpty(String value) {
         this.value = value;
     }
 
@@ -17,10 +17,10 @@ public class NotBlank implements Serializable, Constraint<String> {
     }
 
     public void check(Path path, Validation validation) {
-        if (!satisfied()) validation.reportViolation(path, BLANK, value);
+        if (!satisfied()) validation.reportViolation(path, EMPTY, value);
     }
 
     private boolean satisfied() {
-        return value != null && !value.trim().isEmpty();
+        return value != null && !value.isEmpty();
     }
 }

@@ -10,6 +10,7 @@ import test.support.org.testinfected.petstore.builders.Builder;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.emptyIterable;
 
 public class ValidationMatchers {
@@ -25,6 +26,10 @@ public class ValidationMatchers {
 
     public static Matcher<Iterable<?>> succeeds() {
         return Matchers.describedAs("succeeds", emptyIterable());
+    }
+
+    public static Matcher<Iterable<?>> fails() {
+        return Matchers.describedAs("fails", not(emptyIterable()));
     }
 
     public static Matcher<Iterable<? super ConstraintViolation<?>>> violates(Matcher<ConstraintViolation<?>> pathMatcher) {

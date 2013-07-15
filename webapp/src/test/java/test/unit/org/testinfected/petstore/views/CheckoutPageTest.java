@@ -72,17 +72,16 @@ public class CheckoutPageTest {
     @Test public void
     rendersErrorsWhenPaymentDetailsAreInvalid() throws Exception {
         errors.add("paymentDetails", "invalid.paymentDetails");
-        errors.add("paymentDetails", "incomplete.paymentDetails");
-        errors.add("paymentDetails.cardNumber", "blank.paymentDetails.cardNumber");
+        errors.add("paymentDetails.cardNumber", "empty.paymentDetails.cardNumber");
+        errors.add("paymentDetails.cardNumber", "incorrect.paymentDetails.cardNumber");
 
         checkoutPage = renderCheckoutPage().with("errors", new ListOfErrors(errors)).asDom();
 
         assertThat("payment errors", checkoutPage, hasSelector(".errors", allOf(hasChild(
-                hasText("invalid.paymentDetails")), hasChild(hasText("incomplete.paymentDetails"))
+                hasText("invalid.paymentDetails"))
         )));
-        assertThat("card number errors", checkoutPage, hasSelector(".errors", hasChild(
-                hasText("blank.paymentDetails.cardNumber")
-        )));
+        assertThat("card number errors", checkoutPage, hasSelector(".errors", allOf(hasChild(
+                hasText("empty.paymentDetails.cardNumber")), hasChild(hasText("incorrect.paymentDetails.cardNumber")))));
     }
 
     @SuppressWarnings("unchecked")

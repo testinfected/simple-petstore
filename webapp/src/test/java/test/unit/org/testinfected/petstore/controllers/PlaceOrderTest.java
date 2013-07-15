@@ -22,14 +22,13 @@ import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.web.MockPage;
 
 import java.math.BigDecimal;
-import java.util.ListResourceBundle;
-import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
-import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
+import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class PlaceOrderTest {
@@ -37,28 +36,19 @@ public class PlaceOrderTest {
 
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
     MockPage checkoutPage = new MockPage();
-    Messages messages = new BundledMessages(new ListResourceBundle() {
-        public Locale getLocale() { return Locale.US; }
-
-        protected Object[][] getContents() {
-            return new Object[][] {
-                    { "invalid.paymentDetails", "payment details are invalid" },
-                    { "blank.paymentDetails.cardNumber", "card number may not be blank"}
-            };
-        }
-    });
+    Messages messages = new BundledMessages(ResourceBundle.getBundle("ValidationMessages"));
 
     PlaceOrder placeOrder = new PlaceOrder(salesAssistant, checkoutPage, messages);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
 
-    String BLANK = "    ";
+    String EMPTY = "";
     String orderNumber = "12345678";
 
     @Test public void
     placesOrderWhenPaymentDetailsAreValidAndRedirectsToReceiptPage() throws Exception {
-        final CreditCardDetails validPaymentDetails = validVisaDetails().build();
+        final CreditCardDetails validPaymentDetails = validCreditCardDetails().build();
         captureInForm(validPaymentDetails);
         final Cart cart = aCart().containing(anItem()).build();
         storeInSession(cart);
@@ -73,7 +63,7 @@ public class PlaceOrderTest {
 
     @SuppressWarnings("unchecked") @Test public void
     rejectsInvalidPaymentDetailsAndRendersCheckoutPageWithValidationErrors() throws Exception {
-        CreditCardDetails incompletePaymentDetails = validVisaDetails().but().withNumber(BLANK).build();
+        CreditCardDetails incompletePaymentDetails = validCreditCardDetails().but().withNumber(EMPTY).build();
         captureInForm(incompletePaymentDetails);
         final BigDecimal total = new BigDecimal("324.98");
         storeInSession(aCart().containing(anItem().priced(total)).build());
@@ -89,16 +79,16 @@ public class PlaceOrderTest {
         checkoutPage.assertRenderedWith("cardTypes", ChoiceOfCreditCards.all().select(incompletePaymentDetails.getCardType()));
         checkoutPage.assertRenderedWith(equalTo("payment"), samePaymentMethodAs(incompletePaymentDetails));
         checkoutPage.assertRenderedWith(equalTo("errors"), errors(
-                withMessage("paymentDetails", "payment details are invalid"),
-                withMessage("paymentDetails.cardNumber", "card number may not be blank")));
+                withMessage("paymentDetails", "Please correct the following errors:"),
+                withMessage("paymentDetails.cardNumber", "may not be empty", "not a valid number")));
     }
 
     private Matcher<ListOfErrors> errors(Matcher<? super ListOfErrors>... errorMatchers) {
         return CoreMatchers.allOf(errorMatchers);
     }
 
-    private Matcher<? super ListOfErrors> withMessage(final String path, String error) {
-        return new FeatureMatcher<ListOfErrors, Iterable<String>>(hasItem(error), "form with errors['" + path + "']", "errors['" + path + "']") {
+    private Matcher<? super ListOfErrors> withMessage(final String path, String... errors) {
+        return new FeatureMatcher<ListOfErrors, Iterable<String>>(hasItems(errors), "form with errors['" + path + "']", "errors['" + path + "']") {
             protected Iterable<String> featureValueOf(ListOfErrors actual) {
                 return actual.errorMessages(path);
             }

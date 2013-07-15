@@ -1,24 +1,29 @@
 package org.testinfected.petstore.billing;
 
-import org.testinfected.petstore.validation.NotBlank;
+import org.testinfected.petstore.validation.Constraint;
 import org.testinfected.petstore.validation.NotNull;
 import org.testinfected.petstore.validation.Valid;
-import org.testinfected.petstore.validation.Validate;
 
 import java.io.Serializable;
+
+import static org.testinfected.petstore.validation.Validate.both;
+import static org.testinfected.petstore.validation.Validate.correct;
+import static org.testinfected.petstore.validation.Validate.notEmpty;
+import static org.testinfected.petstore.validation.Validate.notNull;
+import static org.testinfected.petstore.validation.Validate.valid;
 
 public class CreditCardDetails extends PaymentMethod implements Serializable {
 
     private final CreditCardType cardType;
-    private final NotBlank cardNumber;
+    private final Constraint<String> cardNumber;
     private final NotNull<String> cardExpiryDate;
     private final Valid<Address> billingAddress;
 
     public CreditCardDetails(CreditCardType cardType, String cardNumber, String cardExpiryDate, Address billingAddress) {
         this.cardType = cardType;
-        this.cardNumber = Validate.notBlank(cardNumber);
-        this.cardExpiryDate = Validate.notNull(cardExpiryDate);
-        this.billingAddress = Validate.valid(billingAddress);
+        this.cardNumber = both(notEmpty(cardNumber), correct(cardType, cardNumber));
+        this.cardExpiryDate = notNull(cardExpiryDate);
+        this.billingAddress = valid(billingAddress);
     }
 
     public CreditCardType getCardType() {
