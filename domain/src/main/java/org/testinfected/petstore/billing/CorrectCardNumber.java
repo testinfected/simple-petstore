@@ -32,10 +32,6 @@ public class CorrectCardNumber implements Constraint<String>, Serializable {
     }
 
     private boolean satisfied() {
-        return validVisa();
-    }
-
-    private boolean validVisa() {
         if (cardNumber == null) return false;
         if (cardType.equals(CreditCardType.visa)) return VISA_PATTERN.matcher(cardNumber).matches();
         if (cardType.equals(CreditCardType.mastercard)) return MASTERCARD_PATTERN.matcher(cardNumber).matches();
