@@ -6,7 +6,6 @@ import org.testinfected.petstore.billing.Address;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
-import static test.support.org.testinfected.petstore.builders.AddressBuilder.aValidAddress;
 import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.matchers.ValidationMatchers.on;
 import static test.support.org.testinfected.petstore.matchers.ValidationMatchers.succeeds;
@@ -49,6 +48,6 @@ public class AddressTest {
 
     @Test public void
     isValidWithAFullName() {
-        assertThat("validation of valid address", validationOf(aValidAddress()), succeeds());
+        assertThat("validation of valid address", validationOf(anAddress().withFirstName("Joe").withLastName("Blow")), succeeds());
     }
 }

@@ -4,19 +4,12 @@ import org.testinfected.petstore.billing.Address;
 
 public class AddressBuilder implements Builder<Address> {
 
-    private String firstName;
-    private String lastName;
-    private String emailAddress;
+    private String firstName = "John";
+    private String lastName = "Doe";
+    private String emailAddress = "jdoe@gmail.com";
 
     public static AddressBuilder anAddress() {
         return new AddressBuilder();
-    }
-
-    public static AddressBuilder aValidAddress() {
-        return anAddress().
-                    withFirstName("John").
-                    withLastName("Leclair").
-                    withEmail("jleclair@gmail.com");
     }
 
     public AddressBuilder withFirstName(String firstName) {

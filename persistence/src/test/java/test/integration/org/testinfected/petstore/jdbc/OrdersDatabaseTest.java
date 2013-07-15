@@ -34,7 +34,7 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
-import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
+import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
@@ -74,7 +74,7 @@ public class OrdersDatabaseTest {
                         anItem().withNumber("00000100").priced("100.00"),
                         anItem().withNumber("00000100").priced("100.00"),
                         anItem().withNumber("00000111").describedAs("White lizard"))),
-                anOrder().paidWith(validVisaDetails())
+                anOrder().paidWith(validCreditCardDetails())
         );
 
         for (Order sample : sampleOrders) {

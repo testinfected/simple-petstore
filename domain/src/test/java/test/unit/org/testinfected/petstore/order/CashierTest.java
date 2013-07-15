@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
-import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validVisaDetails;
+import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class CashierTest {
@@ -48,7 +48,7 @@ public class CashierTest {
         cart.add(anItem().withNumber("00000111").describedAs("White lizard").build());
 
         final OrderNumber nextNumber = new OrderNumber("11223344");
-        PaymentMethod paymentMethod = validVisaDetails().build();
+        PaymentMethod paymentMethod = validCreditCardDetails().build();
 
         context.checking(new Expectations() {{
             allowing(sequence).nextOrderNumber(); will(returnValue(nextNumber)); when(transaction.is("started"));
