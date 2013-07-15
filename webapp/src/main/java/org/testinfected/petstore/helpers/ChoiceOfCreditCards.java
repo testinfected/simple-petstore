@@ -2,13 +2,14 @@ package org.testinfected.petstore.helpers;
 
 import org.testinfected.petstore.billing.CreditCardType;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ChoiceOfCreditCards implements Iterable<ChoiceOfCreditCards.Option> {
 
-    private final Map<String, Option> options = new HashMap<String, Option>();
+    // Sort options alphabetically
+    private final Map<String, Option> options = new TreeMap<String, Option>();
 
     public static ChoiceOfCreditCards all() {
         return from(CreditCardType.values());
