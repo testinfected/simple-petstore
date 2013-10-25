@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -70,29 +72,57 @@ public class TestEnvironment {
     }
 
     private Browser selectBrowser() {
-        String driver = asString(BROWSER_DRIVER);
+        String driver = getString(BROWSER_DRIVER);
         if (driver.equals("firefox")) return new Firefox(browserCapabilities());
         if (driver.equals("phantomjs")) return new PhantomJS(browserCapabilities());
-        if (driver.equals("remote")) return new RemoteBrowser(asUrl(BROWSER_REMOTE_URL), browserCapabilities());
+        if (driver.equals("remote")) return new RemoteBrowser(getUrl(BROWSER_REMOTE_URL), browserCapabilities());
         throw new IllegalArgumentException(BROWSER_DRIVER + " should be one of firefox, phantomjs or remote, not: " + driver);
     }
 
     private Capabilities browserCapabilities() {
-        Map<String, String> capabilities = new HashMap<String, String>();
+        Map<String, Object> capabilities = new HashMap<String, Object>();
         for (String property : properties.stringPropertyNames()) {
             if (isCapability(property)) {
-                capabilities.put(capabilityName(property), asString(property));
+                capabilities.put(capabilityName(property), toCapability(getString(property)));
             }
         }
         return new DesiredCapabilities(capabilities);
+    }
+
+    private boolean isCapability(String property) {
+        return property.startsWith(BROWSER_REMOTE_CAPABILITY);
     }
 
     private String capabilityName(String property) {
         return property.substring(BROWSER_REMOTE_CAPABILITY.length());
     }
 
-    private boolean isCapability(String property) {
-        return property.startsWith(BROWSER_REMOTE_CAPABILITY);
+    private Object toCapability(String capability) {
+        if (holdsMultipleValues(capability)) {
+            return toCapabilityArray(capability);
+        } else {
+            return capability;
+        }
+    }
+
+    private boolean holdsMultipleValues(String capability) {
+        return capability.matches("\\[.+\\]");
+    }
+
+    private String[] toCapabilityArray(String capability) {
+        return eliminateBlanks(capability.split("\\[|,\\s*|\\]"));
+    }
+
+    private String[] eliminateBlanks(String... capabilities) {
+        List<String> meaningful = new ArrayList<String>();
+        for (String cap : capabilities) {
+            if (!isBlank(cap)) meaningful.add(cap);
+        }
+        return meaningful.toArray(new String[meaningful.size()]);
+    }
+
+    private boolean isBlank(String value) {
+        return value.trim().isEmpty();
     }
 
     public AsyncWebDriver fireBrowser() {
@@ -104,23 +134,23 @@ public class TestEnvironment {
     }
 
     public int serverPort() {
-        return asInt(SERVER_PORT);
+        return getInt(SERVER_PORT);
     }
 
     public File webRoot() {
         return WebRoot.locate();
     }
 
-    private String asString(final String key) {
+    private String getString(final String key) {
         return properties.getProperty(key);
     }
 
-    private int asInt(final String key) {
-        return parseInt(asString(key));
+    private int getInt(final String key) {
+        return parseInt(getString(key));
     }
 
-    private URL asUrl(String key) {
-        String url = asString(key);
+    private URL getUrl(String key) {
+        String url = getString(key);
         try {
             return new URL(url);
         } catch (MalformedURLException e) {

@@ -40,8 +40,9 @@ public class Launcher {
         try {
             launcher.launch(args);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-            launcher.displayUsage();
+            System.err.println("launcher: " + e.getMessage());
+            System.err.println();
+            launcher.displayUsageTo(System.err);
             System.exit(1);
         }
     }
@@ -137,7 +138,7 @@ public class Launcher {
         out.println("Stopped.");
     }
 
-    public void displayUsage() throws IOException {
+    public void displayUsageTo(PrintStream out) throws IOException {
         cli.writeUsageTo(out);
     }
 }

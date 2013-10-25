@@ -58,7 +58,7 @@ public class ConnectionScopeTest {
 
         try {
             connectionScope.handle(request, response);
-            fail("Exception did not bubble up");
+            fail("HttpException did not bubble up");
         } catch (HttpException expected) {
         }
 

@@ -73,9 +73,9 @@ public class HttpRequest {
     }
 
     public HttpResponse send() throws IOException {
-        client.setTimeout(timeoutInMillis);
+        client.getOptions().setTimeout(timeoutInMillis);
         if (!applyCookies) client.getCookieManager().clearCookies();
-        client.setRedirectEnabled(followRedirects);
+        client.getOptions().setRedirectEnabled(followRedirects);
         WebRequest request = new WebRequest(requestUrl(), method);
         request.setRequestParameters(requestParameters());
 

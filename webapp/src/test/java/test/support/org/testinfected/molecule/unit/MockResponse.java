@@ -98,6 +98,11 @@ public class MockResponse implements Response {
         return status.code;
     }
 
+    public MockResponse withStatus(HttpStatus status) {
+        status(status);
+        return this;
+    }
+
     public void status(HttpStatus status) {
         this.status = status;
     }
@@ -150,8 +155,16 @@ public class MockResponse implements Response {
         assertThat("body", new String(content(), charset()), bodyMatcher);
     }
 
+    public String body() {
+        return new String(content(), charset());
+    }
+
     public void assertContent(byte[] content) {
         assertArrayEquals("content", content, content());
+    }
+
+    public byte[] content() {
+        return output.toByteArray();
     }
 
     public void assertContentSize(long size) {
@@ -175,21 +188,8 @@ public class MockResponse implements Response {
         return this;
     }
 
-    public MockResponse withStatus(HttpStatus status) {
-        status(status);
-        return this;
-    }
-
-    public String body() {
-        return new String(content(), charset());
-    }
-
     public void assertCookie(String name, String value) {
         assertThat("cookies", cookies, Matchers.hasEntry(name, value));
-    }
-
-    public byte[] content() {
-        return output.toByteArray();
     }
 
     public String toString() {

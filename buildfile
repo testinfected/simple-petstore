@@ -45,7 +45,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     }
     test.with project(:webapp).test.compile.target
     test.with :simpleweb, :jmustache, HAMCREST, :flyway, :mysql, NO_LOG
-    test.with transitive(artifacts(:selenium_firefox_driver, :selenium_ghost_driver, :windowlicker_web, :htmlunit))
+    test.with transitive(artifacts(:htmlunit, :selenium_firefox_driver, :selenium_ghost_driver,
+       :windowlicker_web))
     integration.setup { selenium.run }
     integration.teardown { selenium.stop }
 
