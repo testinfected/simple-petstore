@@ -6,24 +6,24 @@ import java.util.List;
 
 public final class Constraints {
 
-    public static Iterable<Property> of(Object target) {
-        List<Property> constraints = new ArrayList<Property>();
+    public static Iterable<Declaration> of(Object target) {
+        List<Declaration> constraints = new ArrayList<Declaration>();
         for (Field property : target.getClass().getDeclaredFields()) {
-            if (Property.isConstraint(property)) constraints.add(new Property(target, property));
+            if (isConstraint(property)) constraints.add(new Declaration(target, property));
         }
         return constraints;
     }
 
-    public static class Property {
+    private static boolean isConstraint(Field field) {
+        return Constraint.class.isAssignableFrom(field.getType());
+    }
+
+    public static class Declaration {
 
         private final Object target;
         private final Field constraint;
 
-        public static boolean isConstraint(Field field) {
-            return Constraint.class.isAssignableFrom(field.getType());
-        }
-
-        public Property(Object target, Field constraint) {
+        public Declaration(Object target, Field constraint) {
             this.target = target;
             this.constraint = constraint;
         }
@@ -41,7 +41,7 @@ public final class Constraints {
             }
         }
 
-        public void check(Path path, Validation validation) {
+        public void check(Path path, Report validation) {
             constraint().check(path.node(name()), validation);
         }
     }

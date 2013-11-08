@@ -7,18 +7,18 @@ import java.util.Set;
 public class Validator {
 
     public <T> Set<ConstraintViolation<?>> validate(T target) {
-        Valid<T> valid = Validate.valid(target);
+        Valid<T> valid = Validates.validityOf(target);
         valid.disableRootViolation();
-        Report report = new Report();
+        ViolationsReport report = new ViolationsReport();
         valid.check(Path.root(target), report);
         return report.violations();
     }
 
-    public static class Report implements Validation {
+    public static class ViolationsReport implements Report {
 
         private final Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
 
-        public <T> void reportViolation(Path path, String error, T offendingValue) {
+        public <T> void violation(Path path, String error, T offendingValue) {
             violations.add(new ConstraintViolation<T>(path, error, offendingValue));
         }
 

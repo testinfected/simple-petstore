@@ -4,8 +4,8 @@ import org.testinfected.molecule.Request;
 import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;
+import org.testinfected.petstore.validation.Validates;
 import org.testinfected.petstore.validation.Valid;
-import org.testinfected.petstore.validation.Validate;
 
 import static org.testinfected.petstore.billing.CreditCardType.valueOf;
 
@@ -25,7 +25,7 @@ public class PaymentForm extends Form {
     private final Valid<CreditCardDetails> paymentDetails;
 
     public PaymentForm(CreditCardDetails paymentDetails) {
-        this.paymentDetails = Validate.valid(paymentDetails);
+        this.paymentDetails = Validates.validityOf(paymentDetails);
     }
 
     public CreditCardType cardType() {

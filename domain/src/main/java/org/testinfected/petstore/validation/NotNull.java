@@ -16,8 +16,8 @@ public class NotNull<T> implements Serializable, Constraint<T> {
         return value;
     }
 
-    public void check(Path path, Validation validation) {
-        if (!satisfied()) validation.reportViolation(path, MISSING, value);
+    public void check(Path path, Report report) {
+        if (!satisfied()) report.violation(path, MISSING, value);
     }
 
     private boolean satisfied() {

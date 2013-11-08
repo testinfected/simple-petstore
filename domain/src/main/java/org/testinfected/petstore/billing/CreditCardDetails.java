@@ -1,16 +1,11 @@
 package org.testinfected.petstore.billing;
 
 import org.testinfected.petstore.validation.Constraint;
+import org.testinfected.petstore.validation.Validates;
 import org.testinfected.petstore.validation.NotNull;
 import org.testinfected.petstore.validation.Valid;
 
 import java.io.Serializable;
-
-import static org.testinfected.petstore.validation.Validate.both;
-import static org.testinfected.petstore.validation.Validate.correct;
-import static org.testinfected.petstore.validation.Validate.notEmpty;
-import static org.testinfected.petstore.validation.Validate.notNull;
-import static org.testinfected.petstore.validation.Validate.valid;
 
 public class CreditCardDetails extends PaymentMethod implements Serializable {
 
@@ -21,9 +16,9 @@ public class CreditCardDetails extends PaymentMethod implements Serializable {
 
     public CreditCardDetails(CreditCardType cardType, String cardNumber, String cardExpiryDate, Address billingAddress) {
         this.cardType = cardType;
-        this.cardNumber = both(notEmpty(cardNumber), correct(cardType, cardNumber));
-        this.cardExpiryDate = notNull(cardExpiryDate);
-        this.billingAddress = valid(billingAddress);
+        this.cardNumber = Validates.both(Validates.notEmpty(cardNumber), Validates.correctnessOf(cardType, cardNumber));
+        this.cardExpiryDate = Validates.notNull(cardExpiryDate);
+        this.billingAddress = Validates.validityOf(billingAddress);
     }
 
     public CreditCardType getCardType() {

@@ -3,7 +3,7 @@ package org.testinfected.petstore.validation;
 import org.testinfected.petstore.billing.CorrectCardNumber;
 import org.testinfected.petstore.billing.CreditCardType;
 
-public final class Validate {
+public final class Validates {
 
     public static <T> NotNull<T> notNull(T value) {
         return new NotNull<T>(value);
@@ -13,11 +13,11 @@ public final class Validate {
         return new NotEmpty(value);
     }
 
-    public static <T> Valid<T> valid(T value) {
+    public static <T> Valid<T> validityOf(T value) {
         return new Valid<T>(value);
     }
 
-    public static CorrectCardNumber correct(CreditCardType cardType, String cardNumber) {
+    public static CorrectCardNumber correctnessOf(CreditCardType cardType, String cardNumber) {
         return new CorrectCardNumber(cardType, cardNumber);
     }
 
@@ -25,5 +25,5 @@ public final class Validate {
         return new Both<T>(left, right);
     }
 
-    private Validate() {}
+    private Validates() {}
 }

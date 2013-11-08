@@ -17,12 +17,12 @@ public class Valid<T> implements Serializable, Constraint<T> {
         return value;
     }
 
-    public void check(Path path, Validation validation) {
-        Problems problems = Problems.track(validation);
-        for (Constraints.Property property : Constraints.of(value)) {
-            property.check(path, problems);
+    public void check(Path path, Report report) {
+        Problems problems = Problems.track(report);
+        for (Constraints.Declaration constraint : Constraints.of(value)) {
+            constraint.check(path, problems);
         }
-        if (reportViolationOnRoot(problems)) validation.reportViolation(path, INVALID, value);
+        if (reportViolationOnRoot(problems)) report.violation(path, INVALID, value);
     }
 
     private boolean reportViolationOnRoot(Problems problems) {
@@ -46,22 +46,22 @@ public class Valid<T> implements Serializable, Constraint<T> {
         this.rootViolationDisabled = true;
     }
 
-    public static class Problems implements Validation {
+    public static class Problems implements Report {
 
-        private final Validation validation;
+        private final Report validation;
         private boolean found;
 
-        public static Problems track(Validation validation) {
+        public static Problems track(Report validation) {
             return new Problems(validation);
         }
 
-        public Problems(Validation validation) {
+        public Problems(Report validation) {
             this.validation = validation;
         }
 
-        public <T> void reportViolation(Path path, String error, T offendingValue) {
+        public <T> void violation(Path path, String error, T offendingValue) {
             this.found = true;
-            validation.reportViolation(path, error, offendingValue);
+            validation.violation(path, error, offendingValue);
         }
     }
 }

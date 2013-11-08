@@ -2,7 +2,7 @@ package org.testinfected.petstore.billing;
 
 import org.testinfected.petstore.validation.Constraint;
 import org.testinfected.petstore.validation.Path;
-import org.testinfected.petstore.validation.Validation;
+import org.testinfected.petstore.validation.Report;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
@@ -27,8 +27,8 @@ public class CorrectCardNumber implements Constraint<String>, Serializable {
         return cardNumber;
     }
 
-    public void check(Path path, Validation validation) {
-        if (!satisfied()) validation.reportViolation(path, INCORRECT, cardNumber);
+    public void check(Path path, Report report) {
+        if (!satisfied()) report.violation(path, INCORRECT, cardNumber);
     }
 
     private boolean satisfied() {

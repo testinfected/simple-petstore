@@ -16,8 +16,8 @@ public class Both<T> implements Constraint<T>, Serializable {
         return left.get();
     }
 
-    public void check(Path path, Validation validation) {
-        left.check(path, validation);
-        right.check(path, validation);
+    public void check(Path path, Report report) {
+        left.check(path, report);
+        right.check(path, report);
     }
 }

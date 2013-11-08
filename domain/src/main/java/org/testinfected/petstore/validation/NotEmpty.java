@@ -16,8 +16,8 @@ public class NotEmpty implements Serializable, Constraint<String> {
         return value;
     }
 
-    public void check(Path path, Validation validation) {
-        if (!satisfied()) validation.reportViolation(path, EMPTY, value);
+    public void check(Path path, Report report) {
+        if (!satisfied()) report.violation(path, EMPTY, value);
     }
 
     private boolean satisfied() {

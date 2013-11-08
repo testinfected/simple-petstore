@@ -4,5 +4,5 @@ public interface Constraint<T> {
 
     T get();
 
-    void check(Path path, Validation validation);
+    void check(Path path, Report report);
 }

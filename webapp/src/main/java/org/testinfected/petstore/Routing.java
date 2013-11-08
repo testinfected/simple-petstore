@@ -48,26 +48,26 @@ public class Routing implements Application {
     }
 
     public void handle(final Request request, final Response response) throws Exception {
-        final AttachmentStorage attachmentStorage = new FileSystemPhotoStore("/photos");
+        final AttachmentStorage attachments = new FileSystemPhotoStore("/photos");
         final Connection connection = new ConnectionReference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);
-        final ProductCatalog productCatalog = new ProductsDatabase(connection);
-        final ItemInventory itemInventory = new ItemsDatabase(connection);
-        final ProcurementRequestHandler requestHandler = new PurchasingAgent(productCatalog, itemInventory, transactor);
-        final OrderNumberSequence orderNumberSequence = new OrderNumberDatabaseSequence(connection);
-        final OrderBook orderBook = new OrdersDatabase(connection);
-        final Cashier cashier = new Cashier(orderNumberSequence, orderBook, transactor);
+        final ProductCatalog products = new ProductsDatabase(connection);
+        final ItemInventory items = new ItemsDatabase(connection);
+        final ProcurementRequestHandler procurement = new PurchasingAgent(products, items, transactor);
+        final OrderNumberSequence orderNumbers = new OrderNumberDatabaseSequence(connection);
+        final OrderBook orders = new OrdersDatabase(connection);
+        final Cashier cashier = new Cashier(orderNumbers, orders, transactor);
         final Messages messages = new BundledMessages(ResourceBundle.getBundle("ValidationMessages"));
 
         Router router = Router.draw(new DynamicRoutes() {{
-            get("/products").to(new ListProducts(productCatalog, attachmentStorage, pages.products()));
-            post("/products").to(new CreateProduct(requestHandler));
-            get("/products/:product/items").to(new ListItems(itemInventory, pages.items()));
-            post("/products/:product/items").to(new CreateItem(requestHandler));
+            get("/products").to(new ListProducts(products, attachments, pages.products()));
+            post("/products").to(new CreateProduct(procurement));
+            get("/products/:product/items").to(new ListItems(items, pages.items()));
+            post("/products/:product/items").to(new CreateItem(procurement));
             get("/cart").to(new ShowCart(pages.cart()));
-            post("/cart").to(new CreateCartItem(itemInventory));
+            post("/cart").to(new CreateCartItem(items));
             get("/orders/new").to(new Checkout(pages.checkout()));
-            get("/orders/:number").to(new ShowOrder(orderBook, pages.order()));
+            get("/orders/:number").to(new ShowOrder(orders, pages.order()));
             post("/orders").to(new PlaceOrder(cashier, pages.checkout(), messages));
             delete("/logout").to(new Logout());
             map("/").to(new StaticPage(pages.home()));
