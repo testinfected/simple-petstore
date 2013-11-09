@@ -16,7 +16,6 @@ import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.transaction.QueryUnitOfWork;
 import org.testinfected.petstore.transaction.Transactor;
-import org.testinfected.petstore.transaction.UnitOfWork;
 import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
@@ -24,6 +23,7 @@ import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,8 +35,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
 import static org.testinfected.petstore.db.Access.productOf;
-import static test.support.org.testinfected.petstore.builders.Builders.build;
-import static test.support.org.testinfected.petstore.builders.ItemBuilder.an;
+import static test.support.org.testinfected.petstore.builders.ItemBuilder.a;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
@@ -63,7 +62,7 @@ public class ItemsDatabaseTest {
     @SuppressWarnings("unchecked")
     @Test public void
     findsItemsByNumber() throws Exception {
-        given(anItem().of(inCatalog(aProduct())).withNumber("12345678"));
+        given(anItem().of(savedProductFrom(aProduct())).withNumber("12345678"));
 
         Item found = itemsDatabase.find(new ItemNumber("12345678"));
         assertThat("item", found, hasNumber("12345678"));
@@ -72,7 +71,7 @@ public class ItemsDatabaseTest {
     @SuppressWarnings("unchecked")
     @Test public void
     findsItemsByProductNumber() throws Exception {
-        Product product = inCatalog(aProduct().withNumber("LAB-1234"));
+        Product product = savedProductFrom(aProduct().withNumber("LAB-1234"));
         given(anItem().of(product), anItem().of(product));
 
         List<Item> availableItems = itemsDatabase.findByProductNumber("LAB-1234");
@@ -83,50 +82,37 @@ public class ItemsDatabaseTest {
     @SuppressWarnings("unchecked")
     @Test public void
     findsNothingIfProductHasNoAssociatedItemInInventory() throws Exception {
-        given(anItem().of(inCatalog(aProduct().withNumber("DAL-5432"))));
+        given(anItem().of(savedProductFrom(aProduct().withNumber("DAL-5432"))));
 
-        List<Item> availableItems = itemsDatabase.findByProductNumber(inCatalog(aProduct().withNumber("BOU-6789")).getNumber());
+        List<Item> availableItems = itemsDatabase.findByProductNumber(savedProductFrom(aProduct().withNumber("BOU-6789")).getNumber());
         assertThat("available items", availableItems, Matchers.<Item>empty());
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     canRoundTripItemsWithCompleteDetails() throws Exception {
-        Collection<Item> sampleItems = build(
-                an(inCatalog(aProduct().named("Labrador").describedAs("A fun and friendly dog").withPhoto("labrador.jpg"))).
+        Collection<ItemBuilder> sampleItems = Arrays.asList(
+                a(savedProductFrom(aProduct().named("Labrador").describedAs("A fun and friendly dog").withPhoto("labrador.jpg"))).
                         withNumber("12345678").describedAs("Chocolate male").priced("58.00"),
-                an(inCatalog(aProduct())).withNumber("87654321"));
+                a(savedProductFrom(aProduct())).withNumber("87654321"));
 
-        for (final Item item : sampleItems) {
-            save(item);
-            assertCanBeFoundByNumberWithSameState(item);
-            assertCanBeFoundByProductNumberWithSameState(item);
+        for (final ItemBuilder item : sampleItems) {
+            assertReloadsWithSameState(savedItemFrom(item));
         }
     }
 
     @SuppressWarnings("unchecked")
     @Test(expected = DuplicateItemException.class) public void
     referenceNumberShouldBeUnique() throws Exception {
-        ItemBuilder existingItem = anItem().of(inCatalog(aProduct().withNumber("LAB-1234")));
+        ItemBuilder existingItem = a(savedProductFrom(aProduct().withNumber("LAB-1234")));
         given(existingItem);
 
-        save(existingItem.build());
+        savedItemFrom(existingItem);
     }
 
-    private void assertCanBeFoundByNumberWithSameState(Item sample) {
+    private void assertReloadsWithSameState(Item sample) {
         Item found = itemsDatabase.find(new ItemNumber(sample.getNumber()));
         assertThat("found by number", found, sameItemAs(sample));
-    }
-
-    private void assertCanBeFoundByProductNumberWithSameState(Item sample) {
-        List<Item> found = itemsDatabase.findByProductNumber(sample.getProductNumber());
-        assertThat("found by product number", uniqueElement(found), sameItemAs(sample));
-    }
-
-    private Item uniqueElement(List<Item> items) {
-        if (items.isEmpty()) throw new AssertionError("No item matches");
-        if (items.size() > 1) throw new AssertionError("Several items match");
-        return items.get(0);
     }
 
     private Matcher<Item> sameItemAs(Item original) {
@@ -148,7 +134,7 @@ public class ItemsDatabaseTest {
         };
     }
 
-    private Product inCatalog(final Builder<Product> builder) throws Exception {
+    private Product savedProductFrom(final Builder<Product> builder) throws Exception {
         return transactor.performQuery(new QueryUnitOfWork<Product>() {
             public Product query() throws Exception {
                 Product product = builder.build();
@@ -159,21 +145,17 @@ public class ItemsDatabaseTest {
     }
 
     private void given(final Builder<Item>... items) throws Exception {
-        given(build(items));
+        for (final Builder<Item> item : items) {
+            savedItemFrom(item);
+        }
     }
 
-    private void given(final List<Item> items) throws Exception {
-        for (final Item item : items) given(item);
-    }
-
-    private void given(final Item item) throws Exception {
-        save(item);
-    }
-
-    private void save(final Item item) throws Exception {
-        transactor.perform(new UnitOfWork() {
-            public void execute() throws Exception {
+    private Item savedItemFrom(final Builder<Item> itemBuilder) throws Exception {
+        return transactor.performQuery(new QueryUnitOfWork<Item>() {
+            public Item query() throws Exception {
+                Item item = itemBuilder.build();
                 itemsDatabase.add(item);
+                return item;
             }
         });
     }

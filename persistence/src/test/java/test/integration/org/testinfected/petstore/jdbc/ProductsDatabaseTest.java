@@ -10,8 +10,8 @@ import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.ProductsDatabase;
 import org.testinfected.petstore.product.DuplicateProductException;
 import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.transaction.QueryUnitOfWork;
 import org.testinfected.petstore.transaction.Transactor;
-import org.testinfected.petstore.transaction.UnitOfWork;
 import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.builders.ProductBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
@@ -19,6 +19,7 @@ import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,7 +33,6 @@ import static org.hamcrest.Matchers.iterableWithSize;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
-import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
 
@@ -67,8 +67,8 @@ public class ProductsDatabaseTest {
     @Test public void
     findsProductsInCatalogWhoseNamesMatchKeywordIgnoringCase() throws Exception {
         given(aProduct().named("English Bulldog"),
-                aProduct().named("French Bulldog"),
-                aProduct().named("Labrador Retriever"));
+              aProduct().named("French Bulldog"),
+              aProduct().named("Labrador Retriever"));
 
         Collection<Product> matches = productsDatabase.findByKeyword("bull");
         assertThat("matching products", matches, hasSize(equalTo(2)));
@@ -79,8 +79,8 @@ public class ProductsDatabaseTest {
     @Test public void
     findsProductsInCatalogWhoseDescriptionsMatchKeywordIgnoringCase() throws Exception {
         given(aProduct().named("Labrador").describedAs("Friendly"),
-                aProduct().named("Golden").describedAs("Kids best friend"),
-                aProduct().named("Poodle").describedAs("Annoying"));
+              aProduct().named("Golden").describedAs("Kids best friend"),
+              aProduct().named("Poodle").describedAs("Annoying"));
 
         List<Product> matches = productsDatabase.findByKeyword("friend");
         assertThat("matching products", matches, hasSize(equalTo(2)));
@@ -98,15 +98,13 @@ public class ProductsDatabaseTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    canRoundTripProductsWithCompleteDetails() throws Exception {
-        final Collection<Product> sampleProducts = build(
+    roundTripsProductsWithCompleteDetails() throws Exception {
+        final Collection<ProductBuilder> sampleProducts = Arrays.asList(
                 aProduct().named("Labrador").describedAs("Labrador Retriever").withPhoto("labrador.png"),
                 aProduct().named("Dalmatian"));
 
-        for (final Product sample : sampleProducts) {
-            save(sample);
-            assertCanBeFoundByNumberWithSameState(sample);
-            assertCanBeFoundByKeywordWithSameState(sample);
+        for (final ProductBuilder product : sampleProducts) {
+            assertReloadsWithWithSameState(savedProductFrom(product));
         }
     }
 
@@ -119,20 +117,9 @@ public class ProductsDatabaseTest {
         productsDatabase.add(anExistingProduct.build());
     }
 
-    private void assertCanBeFoundByNumberWithSameState(Product sample) {
+    private void assertReloadsWithWithSameState(Product sample) {
         Product found = productsDatabase.findByNumber(sample.getNumber());
         assertThat("found by number", found, sameProductAs(sample));
-    }
-
-    private void assertCanBeFoundByKeywordWithSameState(Product sample) {
-        List<Product> found = productsDatabase.findByKeyword(sample.getName());
-        assertThat("found by keyword", uniqueElement(found), sameProductAs(sample));
-    }
-
-    private Product uniqueElement(List<Product> products) {
-        if (products.isEmpty()) throw new AssertionError("No product matches");
-        if (products.size() > 1) throw new AssertionError("Several products match");
-        return products.get(0);
     }
 
     private Matcher<Product> sameProductAs(Product original) {
@@ -141,23 +128,17 @@ public class ProductsDatabaseTest {
     }
 
     private void given(final Builder<Product>... products) throws Exception {
-        given(build(products));
-    }
-
-    private void given(final List<Product> products) throws Exception {
-        for (final Product product : products) {
-            given(product);
+        for (final Builder<Product> product : products) {
+            savedProductFrom(product);
         }
     }
 
-    private void given(final Product product) throws Exception {
-        save(product);
-    }
-
-    private void save(final Product product) throws Exception {
-        transactor.perform(new UnitOfWork() {
-            public void execute() throws Exception {
+    private Product savedProductFrom(final Builder<Product> productBuilder) throws Exception {
+        return transactor.performQuery(new QueryUnitOfWork<Product>() {
+            public Product query() throws Exception {
+                Product product = productBuilder.build();
                 productsDatabase.add(product);
+                return product;
             }
         });
     }

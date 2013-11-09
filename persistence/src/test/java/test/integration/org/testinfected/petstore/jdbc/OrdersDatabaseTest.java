@@ -11,8 +11,8 @@ import org.testinfected.petstore.db.OrdersDatabase;
 import org.testinfected.petstore.order.LineItem;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderNumber;
+import org.testinfected.petstore.transaction.QueryUnitOfWork;
 import org.testinfected.petstore.transaction.Transactor;
-import org.testinfected.petstore.transaction.UnitOfWork;
 import test.support.org.testinfected.petstore.builders.OrderBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
 import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
@@ -20,6 +20,7 @@ import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,7 +33,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
-import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
@@ -68,7 +68,7 @@ public class OrdersDatabaseTest {
     @SuppressWarnings("unchecked")
     @Test public void
     canRoundTripOrdersWillCompleteDetails() throws Exception {
-        final Collection<Order> sampleOrders = build(
+        final Collection<OrderBuilder> sampleOrders = Arrays.asList(
                 anOrder(),
                 anOrder().from(aCart().containing(
                         anItem().withNumber("00000100").priced("100.00"),
@@ -77,8 +77,8 @@ public class OrdersDatabaseTest {
                 anOrder().paidWith(validCreditCardDetails())
         );
 
-        for (Order sample : sampleOrders) {
-            assertCanSaveAndFindByNumberWithSameState(sample);
+        for (OrderBuilder order : sampleOrders) {
+            assertReloadsWithSameState(savedOrderFrom(order));
         }
     }
 
@@ -90,8 +90,7 @@ public class OrdersDatabaseTest {
         };
     }
 
-    private void assertCanSaveAndFindByNumberWithSameState(Order sample) throws Exception {
-        save(sample);
+    private void assertReloadsWithSameState(Order sample) throws Exception {
         Order found = orderDatabase.find(new OrderNumber(sample.getNumber()));
         assertThat("found by number", found, sameOrderAs(sample));
     }
@@ -125,13 +124,15 @@ public class OrdersDatabaseTest {
     }
 
     private void given(OrderBuilder orderBuilder) throws Exception {
-        save(orderBuilder.build());
+        savedOrderFrom(orderBuilder);
     }
 
-    private void save(final Order order) throws Exception {
-        transactor.perform(new UnitOfWork() {
-            public void execute() throws Exception {
+    private Order savedOrderFrom(final OrderBuilder orderBuilder) throws Exception {
+        return transactor.performQuery(new QueryUnitOfWork<Order>() {
+            public Order query() throws Exception {
+                Order order = orderBuilder.build();
                 orderDatabase.record(order);
+                return order;
             }
         });
     }
