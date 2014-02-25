@@ -30,8 +30,6 @@ public class PetStore {
     public static final String LAYOUT_DIR = "app/layout";
     public static final String PUBLIC_DIR = "public";
 
-    private static final String LOGGER_NAME = "access";
-
     private final File context;
     private final DataSource dataSource;
     private final Logger logger = makeLogger();
@@ -73,7 +71,7 @@ public class PetStore {
     }
 
     private static Logger makeLogger() {
-        Logger logger = Logger.getLogger(LOGGER_NAME);
+        Logger logger = Logger.getAnonymousLogger();
         logger.setUseParentHandlers(false);
         return logger;
     }

@@ -39,7 +39,7 @@ public class SessionHashTest {
     storesAndRestoresAttributes() {
         session.put("A1", "V1");
         assertThat("A1?", session.contains("A1"), equalTo(true));
-        assertThat("A1", (String) session.get("A1"), equalTo("V1"));
+        assertThat("A1", session.<String>get("A1"), equalTo("V1"));
     }
 
     @Test public void
@@ -47,16 +47,16 @@ public class SessionHashTest {
         session.put("A1", "V1");
         session.put("A2", "V2");
         session.put("A3", "V3");
-        assertThat("A1", (String) session.get("A1"), equalTo("V1"));
-        assertThat("A2", (String) session.get("A2"), equalTo("V2"));
-        assertThat("A3", (String) session.get("A3"), equalTo("V3"));
+        assertThat("A1", session.<String>get("A1"), equalTo("V1"));
+        assertThat("A2", session.<String>get("A2"), equalTo("V2"));
+        assertThat("A3", session.<String>get("A3"), equalTo("V3"));
     }
 
     @Test public void
     allowsOverridingAttributes() {
         session.put("A1", "V1");
         session.put("A1", "V1.1");
-        assertThat("A1", (String) session.get("A1"), equalTo("V1.1"));
+        assertThat("A1", session.<String>get("A1"), equalTo("V1.1"));
     }
 
     @Test public void
@@ -148,7 +148,7 @@ public class SessionHashTest {
         return new Date(currentTime.getTime() + millis);
     }
 
-    private Matcher<Iterable<? extends Object>> containsItems(Object... items) {
+    private Matcher<Iterable<?>> containsItems(Object... items) {
         return containsInAnyOrder(items);
     }
 }

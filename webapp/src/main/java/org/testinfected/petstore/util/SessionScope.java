@@ -25,6 +25,6 @@ public class SessionScope {
         if (!session.contains(Cart.class)) {
             session.put(Cart.class, new Cart());
         }
-        return (Cart) session.get(Cart.class);
+        return session.get(Cart.class);
     }
 }

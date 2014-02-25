@@ -14,7 +14,7 @@ public interface Session {
 
     void put(Object key, Object value);
 
-    Object get(Object key);
+    <T> T get(Object key);
 
     Set<?> keys();
 

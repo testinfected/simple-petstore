@@ -58,7 +58,7 @@ public class CreateCartItemTest {
     }
 
     private Cart cart() {
-        return (Cart) request.session().get(Cart.class);
+        return request.session().get(Cart.class);
     }
 
     private Matcher<Iterable<CartItem>> containsItems(Matcher<? super CartItem>... cartItemMatchers) {

@@ -194,12 +194,15 @@ public class PetStoreTest {
     }
 
     @Test public void
-    createsSessionsOnDemandAndMaintainSessionsAcrossRequestsUsingCookies() throws Exception {
-        makeItems(anItem().of(make(aProduct().named("Gecko"))).withNumber("12345678"));
-
+    onlyCreatesSessionsOnDemand() throws Exception {
         response = request.get("/");
         assertOK();
         response.assertHasNoCookie(SESSION_COOKIE);
+    }
+
+    @Test public void
+    maintainsSessionsAcrossRequestsUsingCookies() throws Exception {
+        makeItems(anItem().of(make(aProduct().named("Gecko"))).withNumber("12345678"));
 
         response = request.withParameter("item-number", "12345678").followRedirects(false).post("/cart");
         assertRedirected();

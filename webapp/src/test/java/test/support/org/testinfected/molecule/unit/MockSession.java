@@ -30,8 +30,9 @@ public class MockSession implements Session {
         return attributes.containsKey(key);
     }
 
-    public Object get(Object key) {
-        return attributes.get(key);
+    @SuppressWarnings("unchecked")
+    public <T> T get(Object key) {
+        return (T) attributes.get(key);
     }
 
     public void put(Object key, Object value) {

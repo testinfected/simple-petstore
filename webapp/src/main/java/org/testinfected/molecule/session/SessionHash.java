@@ -43,8 +43,9 @@ public class SessionHash implements Session {
         attributes.put(key, value);
     }
 
-    public Object get(Object key) {
-        return attributes.get(key);
+    @SuppressWarnings("unchecked")
+    public <T> T get(Object key) {
+        return (T) attributes.get(key);
     }
 
     public Set<Object> keys() {
@@ -64,8 +65,7 @@ public class SessionHash implements Session {
     }
 
     public boolean expired(Clock clock) {
-        if (timeoutInMillis == 0) return false;
-        return !clock.now().before(expirationTime());
+        return timeoutInMillis != 0 && !clock.now().before(expirationTime());
     }
 
     public void touch(Clock clock) {
