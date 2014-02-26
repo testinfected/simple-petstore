@@ -1,15 +1,20 @@
-language: ruby
-rvm:
-  - 1.9.3
-  - jruby-19mode
+language: java
 
 jdk:
   - oraclejdk7
-  - oraclejdk6
+  - openjdk7
+
+rvm:
+  - 1.9.3
 
 before_script:
   - mysql -e "create database petstore_test;"
   - mysql -e "create user 'testbot'@'localhost' identified by 'petstore'";
   - mysql -u root -e "grant all on petstore_test.* to 'testbot'@'localhost'";
 
-script: bundle exec buildr clean install
+install:
+  - rvm use 1.9.3
+  - gem install bundler
+  - bundle install
+
+script: buildr clean package

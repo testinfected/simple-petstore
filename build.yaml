@@ -13,7 +13,7 @@ artifacts:
   flyway: com.googlecode.flyway:flyway-core:jar:2.0
   mysql: mysql:mysql-connector-java:jar:5.1.21
 
-  # -- Scope test
+  # -- test scope
   hamcrest_core: org.hamcrest:hamcrest-core:jar:1.3
   hamcrest_library: org.hamcrest:hamcrest-library:jar:1.3
   hamcrest_extra: org.testinfected.hamcrest-matchers:core-matchers:jar:1.5
