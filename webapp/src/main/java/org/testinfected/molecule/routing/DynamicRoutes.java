@@ -15,19 +15,19 @@ public class DynamicRoutes implements RouteBuilder {
         }
     }
 
-    public RouteDefinition map(String path) {
+    public ViaClause map(String path) {
         return openRoute().map(path);
     }
 
-    public RouteDefinition post(String path) {
+    public ToClause post(String path) {
         return map(path).via(HttpMethod.POST);
     }
 
-    public RouteDefinition get(String path) {
+    public ToClause get(String path) {
         return map(path).via(HttpMethod.GET);
     }
 
-    public RouteDefinition delete(String path) {
+    public ToClause delete(String path) {
         return map(path).via(HttpMethod.DELETE);
     }
 

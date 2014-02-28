@@ -29,7 +29,7 @@ public class Router implements Application, RouteSet {
     }
 
     public Router(final Application fallback) {
-        this.defaultApp = fallback;
+        defaultsTo(fallback);
     }
 
     public Router defaultsTo(Application app) {

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DynamicPath implements Matcher<String> {
+public class DynamicPath implements Matcher<String>, WithBoundParameters {
 
     private final Path pattern;
 

@@ -15,7 +15,9 @@ import org.testinfected.molecule.routing.Route;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static test.support.org.testinfected.molecule.unit.MockRequest.*;
+import static test.support.org.testinfected.molecule.unit.MockRequest.GET;
+import static test.support.org.testinfected.molecule.unit.MockRequest.POST;
+import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
 public class DynamicRouteDefinitionTest {
@@ -35,14 +37,14 @@ public class DynamicRouteDefinitionTest {
     }
 
     @Test public void
-    routesRequestOnlyWhenPathMatchesGivenPattern() throws Exception {
+    routesRequestWhenPathMatchesGivenPattern() throws Exception {
         Route route = definition.map("/resource/:id").toRoute();
         assertThat("no match", route.matches(GET("/resource/1")));
         assertThat("match", !route.matches(GET("/other/1")));
     }
 
     @Test public void
-    routesRequestOnlyWhenHttpMethodsMatch() throws Exception {
+    routesRequestWhenHttpMethodMatches() throws Exception {
         Route route = definition.map("/resource").via(HttpMethod.POST).toRoute();
         assertThat("no match", route.matches(POST("/resource")));
         assertThat("match", !route.matches(GET("/resource")));
@@ -58,7 +60,7 @@ public class DynamicRouteDefinitionTest {
     }
 
     @Test public void
-    pathParametersWillShadowOriginalRequestParametersWithSameName() throws Exception {
+    pathParametersShadowRequestParametersWithSameName() throws Exception {
         Route route = definition.map("/resource/:id").to(app).toRoute();
         context.checking(new Expectations() {{
             oneOf(app).handle(with(hasParameter("id", "1")), with(any(Response.class)));

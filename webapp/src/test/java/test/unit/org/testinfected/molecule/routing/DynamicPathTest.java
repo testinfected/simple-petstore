@@ -7,7 +7,9 @@ import org.testinfected.molecule.routing.DynamicPath;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasSize;
 
 public class DynamicPathTest {
 
@@ -43,7 +45,7 @@ public class DynamicPathTest {
     }
 
     @Test public void
-    extractBoundParametersFromDynamicSegments() {
+    extractsBoundParametersFromDynamicSegments() {
         DynamicPath dynamicPath = new DynamicPath("/products/:number/items/:id");
         Map<String, String> boundParameters = dynamicPath.boundParameters("/products/LAB-1234/items/12345678");
         assertThat("bound parameters values", boundParameters.values(), hasSize(2));
