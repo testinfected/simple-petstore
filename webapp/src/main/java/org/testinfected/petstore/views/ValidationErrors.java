@@ -1,22 +1,23 @@
-package org.testinfected.petstore.helpers;
+package org.testinfected.petstore.views;
 
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
+import org.testinfected.petstore.helpers.ErrorMessages;
 
 import java.io.IOException;
 import java.io.Writer;
 
-public class ListOfErrors implements Mustache.Lambda {
+public class ValidationErrors implements Mustache.Lambda {
 
-    private final Form.Errors errors;
+    private final ErrorMessages messages;
 
-    public ListOfErrors(Form.Errors errors) {
-        this.errors = errors;
+    public ValidationErrors(ErrorMessages messages) {
+        this.messages = messages;
     }
 
     public void execute(Template.Fragment frag, Writer out) throws IOException {
         String key = trim(frag);
-        if (!errors.contains(key)) return;
+        if (!messages.contains(key)) return;
         out.write(indent(frag));
         out.write("<ol class=\"errors\">\n");
         for (String message : errorMessages(key)) {
@@ -30,7 +31,7 @@ public class ListOfErrors implements Mustache.Lambda {
     }
 
     public Iterable<String> errorMessages(String key) {
-        return errors.messages(key);
+        return messages.at(key);
     }
 
     private String trim(Template.Fragment frag) {
@@ -42,6 +43,6 @@ public class ListOfErrors implements Mustache.Lambda {
     }
 
     public String toString() {
-        return errors.toString();
+        return messages.toString();
     }
 }

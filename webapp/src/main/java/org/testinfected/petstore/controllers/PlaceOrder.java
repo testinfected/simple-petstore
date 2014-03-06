@@ -3,19 +3,17 @@ package org.testinfected.petstore.controllers;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
+import org.testinfected.petstore.Messages;
 import org.testinfected.petstore.Page;
-import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
-import org.testinfected.petstore.helpers.ListOfErrors;
-import org.testinfected.petstore.helpers.Messages;
 import org.testinfected.petstore.helpers.PaymentForm;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
 import org.testinfected.petstore.util.SessionScope;
 import org.testinfected.petstore.validation.Validator;
+import org.testinfected.petstore.views.Bill;
 
 import java.io.IOException;
-
-import static org.testinfected.petstore.util.Context.context;
+import java.math.BigDecimal;
 
 public class PlaceOrder implements Application {
     private final SalesAssistant salesAssistant;
@@ -43,15 +41,18 @@ public class PlaceOrder implements Application {
     }
 
     private void processOrder(Request request, Response response, PaymentForm form) throws Exception {
-        OrderNumber orderNumber = salesAssistant.placeOrder(SessionScope.cartFor(request), form.paymentDetails());
+        OrderNumber orderNumber = salesAssistant.placeOrder(SessionScope.cart(request), form.paymentDetails());
         response.redirectTo("/orders/" + orderNumber.getNumber());
     }
 
     private void rejectOrder(Request request, Response response, PaymentForm form) throws IOException {
-        checkoutPage.render(response, context().
-                with("total", SessionScope.cartFor(request).getGrandTotal()).
-                and("cardTypes", ChoiceOfCreditCards.all().select(form.cardType())).
-                and("payment", form.paymentDetails()).
-                and("errors", new ListOfErrors(form.errors(messages))).asMap());
+        checkoutPage.render(response, new Bill().
+                ofTotal(currentCartTotal(request)).
+                paidWith(form.paymentDetails()).
+                withErrors(form.errors(messages)));
+    }
+
+    private BigDecimal currentCartTotal(Request request) {
+        return SessionScope.cart(request).getGrandTotal();
     }
 }

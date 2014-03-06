@@ -14,15 +14,15 @@
     <ol>
       <li>
         <label for="first-name">First name:</label>
-        <input id="first-name" type="text" name="first-name" value="{{payment.firstName}}" size="33"/>
+        <input id="first-name" type="text" name="first-name" value="{{firstName}}" size="33"/>
       </li>
       <li>
         <label for="last-name">Last name:</label>
-        <input id="last-name" type="text" name="last-name" value="{{payment.lastName}}" size="33"/>
+        <input id="last-name" type="text" name="last-name" value="{{lastName}}" size="33"/>
       </li>
       <li>
         <label for="email">Email:</label>
-        <input id="email" type="text" name="email" value="{{payment.email}}" size="33"/>
+        <input id="email" type="text" name="email" value="{{email}}" size="33"/>
       </li>
     </ol>
     </fieldset>
@@ -31,21 +31,21 @@
       <li>
         <label for="card-type">Card type:</label>
         <select id="card-type" name="card-type">
-{{#cardTypes}}
+{{#acceptedCards}}
             <option value="{{type}}"{{{selected}}}>{{name}}</option>
-{{/cardTypes}}
+{{/acceptedCards}}
         </select>
       </li>
       <li>
         <label for="card-number">Card number:</label>
-        <input id="card-number" type="text" name="card-number" value="{{payment.cardNumber}}" size="33"/>
+        <input id="card-number" type="text" name="card-number" value="{{cardNumber}}" size="33"/>
 {{#errors}}
         paymentDetails.cardNumber
 {{/errors}}
       </li>
       <li>
         <label for="expiry-date">Expiration date:</label>
-        <input id="expiry-date" type="text" name="expiry-date" value="{{payment.cardExpiryDate}}" size="33"/>
+        <input id="expiry-date" type="text" name="expiry-date" value="{{cardExpiryDate}}" size="33"/>
       </li>
     </ol>
     </fieldset>

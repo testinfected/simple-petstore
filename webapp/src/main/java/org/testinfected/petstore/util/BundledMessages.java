@@ -1,6 +1,6 @@
 package org.testinfected.petstore.util;
 
-import org.testinfected.petstore.helpers.Messages;
+import org.testinfected.petstore.Messages;
 
 import java.text.MessageFormat;
 import java.util.ResourceBundle;

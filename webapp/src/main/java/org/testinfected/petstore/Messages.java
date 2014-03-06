@@ -1,4 +1,4 @@
-package org.testinfected.petstore.helpers;
+package org.testinfected.petstore;
 
 public interface Messages {
 

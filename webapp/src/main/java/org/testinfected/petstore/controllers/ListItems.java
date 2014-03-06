@@ -22,7 +22,7 @@ public class ListItems implements Application {
 
     public void handle(Request request, Response response) throws Exception {
         String productNumber = request.parameter("product");
-        List<Item> items = itemInventory.findByProductNumber(productNumber);
-        itemsPage.render(response, new AvailableItems(items));
+        List<Item> found = itemInventory.findByProductNumber(productNumber);
+        itemsPage.render(response, new AvailableItems().add(found));
     }
 }

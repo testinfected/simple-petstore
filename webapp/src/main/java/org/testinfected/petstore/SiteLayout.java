@@ -31,7 +31,7 @@ public class SiteLayout extends AbstractMiddleware {
 
     private Cart cartFor(Request client) {
         Session session = client.session(false);
-        return session != null ? SessionScope.cartFor(client) : new Cart();
+        return session != null ? SessionScope.cart(client) : new Cart();
     }
 
     public static class MainLayout implements Layout {

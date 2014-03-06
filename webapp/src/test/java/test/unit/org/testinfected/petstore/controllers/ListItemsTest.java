@@ -1,6 +1,5 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
@@ -57,12 +57,7 @@ public class ListItemsTest {
     }
 
     private Matcher<AvailableItems> availableItems(Iterable<Item> items) {
-        return new FeatureMatcher<AvailableItems, Iterable<Item>>(equalTo(items),
-                "available items", "items") {
-            protected Iterable<Item> featureValueOf(AvailableItems actual) {
-                return actual.getEach();
-            }
-        };
+        return hasProperty("each", equalTo(items));
     }
 
     private void searchYields(final Builder<Item>... results) {

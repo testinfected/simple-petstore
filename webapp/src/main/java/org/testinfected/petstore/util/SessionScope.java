@@ -6,11 +6,11 @@ import org.testinfected.petstore.order.Cart;
 
 public class SessionScope {
 
-    public static Cart cartFor(Request client) {
-        return sessionFor(client).cart();
+    public static Cart cart(Request client) {
+        return sessionOf(client).cart();
     }
 
-    private static SessionScope sessionFor(Request client) {
+    private static SessionScope sessionOf(Request client) {
         return new SessionScope(client.session());
     }
 

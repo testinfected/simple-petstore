@@ -1,10 +1,8 @@
 package test.unit.org.testinfected.petstore.views;
 
 import org.junit.Test;
-import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.views.AvailableItems;
 import org.w3c.dom.Element;
-import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -28,11 +26,11 @@ public class ItemsPageTest {
     String ITEMS_TEMPLATE = "items";
 
     Element itemsPage;
-    AvailableItems availableItems = new AvailableItems();
+    AvailableItems items = new AvailableItems();
 
     @Test public void
     indicatesWhenNoItemIsAvailable() {
-        itemsPage = renderItemsPage().asDom();
+        itemsPage = renderItemsPage().with(items).asDom();
 
         assertThat("items page", itemsPage, hasUniqueSelector("#out-of-stock"));
         assertThat("items page", itemsPage, hasNoSelector("#inventory"));
@@ -41,8 +39,7 @@ public class ItemsPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysNumberOfAvailableItems() {
-        makeAvailable(anItem(), anItem());
-        itemsPage = renderItemsPage().asDom();
+        itemsPage = renderItemsPage().with(items.add(build(anItem(), anItem()))).asDom();
 
         assertThat("items page", itemsPage, hasUniqueSelector("#item-count", hasText("2")));
         assertThat("items page", itemsPage, hasSelector("#inventory tr[id^='item']", hasSize(2)));
@@ -51,9 +48,7 @@ public class ItemsPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysColumnHeadingsOnItemsTable() {
-        makeAvailable(anItem());
-
-        itemsPage = renderItemsPage().asDom();
+        itemsPage = renderItemsPage().with(items.add(build(anItem()))).asDom();
 
         assertThat("items page", itemsPage,
                 hasSelector("#items th",
@@ -66,9 +61,9 @@ public class ItemsPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysItemDetailsInColumns() throws Exception {
-        makeAvailable(anItem().withNumber("12345678").describedAs("Green Adult").priced("18.50"));
-
-        itemsPage = renderItemsPage().asDom();
+        itemsPage = renderItemsPage().
+                with(items.add(build(anItem().withNumber("12345678").
+                        describedAs("Green Adult").priced("18.50")))).asDom();
 
         assertThat("items page", itemsPage,
                 hasSelector("tr#item-12345678 td",
@@ -81,9 +76,8 @@ public class ItemsPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     addsItemToShoppingCartWhenFormSubmitted() {
-        makeAvailable(anItem().withNumber("12345678"));
-
-        itemsPage = renderItemsPage().asDom();
+        itemsPage = renderItemsPage().
+                with(items.add(build(anItem().withNumber("12345678")))).asDom();
 
         assertThat("items page", itemsPage,
                 hasUniqueSelector("form",
@@ -99,16 +93,11 @@ public class ItemsPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     returnsToHomePageToContinueShopping() {
-        makeAvailable(anItem());
-        itemsPage = renderItemsPage().asDom();
+        itemsPage = renderItemsPage().with(items.add(build(anItem()))).asDom();
         assertThat("items page", itemsPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
 
-    private void makeAvailable(Builder<Item>... items) {
-        this.availableItems.addAll(build(items));
-    }
-
     private OfflineRenderer renderItemsPage() {
-        return render(ITEMS_TEMPLATE).with(availableItems).from(WebRoot.pages());
+        return render(ITEMS_TEMPLATE).from(WebRoot.pages());
     }
 }

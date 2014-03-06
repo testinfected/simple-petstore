@@ -21,7 +21,6 @@ import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.OrderNumberDatabaseSequence;
 import org.testinfected.petstore.db.OrdersDatabase;
 import org.testinfected.petstore.db.ProductsDatabase;
-import org.testinfected.petstore.helpers.Messages;
 import org.testinfected.petstore.order.Cashier;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumberSequence;

@@ -4,12 +4,11 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;
-import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
-import org.testinfected.petstore.helpers.Form;
-import org.testinfected.petstore.helpers.ListOfErrors;
+import org.testinfected.petstore.helpers.ErrorMessages;
+import org.testinfected.petstore.views.Bill;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.AddressBuilder;
-import test.support.org.testinfected.petstore.web.LegacyOfflineRenderer;
+import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import java.math.BigDecimal;
@@ -29,24 +28,24 @@ import static org.testinfected.hamcrest.dom.DomMatchers.matches;
 import static org.testinfected.hamcrest.dom.DomMatchers.matchesInAnyOrder;
 import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
-import static test.support.org.testinfected.petstore.web.LegacyOfflineRenderer.render;
+import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class CheckoutPageTest {
 
     String CHECKOUT_TEMPLATE = "checkout";
     Element checkoutPage;
-    Form.Errors errors = new Form.Errors();
+    Bill bill = new Bill();
 
     @Test public void
     displaysOrderSummary() {
-        checkoutPage = renderCheckoutPage().with("total", new BigDecimal("250.00")).asDom();
+        checkoutPage = renderCheckoutPage().with(bill.ofTotal(new BigDecimal("250.00"))).asDom();
         assertThat("checkout page", checkoutPage, hasUniqueSelector("#cart-grand-total", hasText("250.00")));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     displaysPurchaseForm() {
-        checkoutPage = renderCheckoutPage().asDom();
+        checkoutPage = renderCheckoutPage().with(bill).asDom();
         assertThat("checkout page", checkoutPage, hasCheckoutForm(anElement(
                 hasAttribute("action", "/orders"),
                 hasAttribute("method", "post")
@@ -58,24 +57,25 @@ public class CheckoutPageTest {
 
     @Test public void
     fillsCardTypeSelectionList() {
-        checkoutPage = renderCheckoutPage().with("cardTypes", ChoiceOfCreditCards.from(CreditCardType.values())).asDom();
+        checkoutPage = renderCheckoutPage().with(bill).asDom();
         assertThat("checkout page", checkoutPage, hasSelector("#card-type option", hasCreditCardOptions()));
     }
 
     @Test public void
     returnsToHomePageToContinueShopping() {
-        checkoutPage = renderCheckoutPage().asDom();
+        checkoutPage = renderCheckoutPage().with(bill).asDom();
         assertThat("checkout page", checkoutPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
-    rendersErrorsWhenPaymentDetailsAreInvalid() throws Exception {
+    rendersValidationErrors() throws Exception {
+        ErrorMessages errors = new ErrorMessages();
         errors.add("paymentDetails", "invalid.paymentDetails");
         errors.add("paymentDetails.cardNumber", "empty.paymentDetails.cardNumber");
         errors.add("paymentDetails.cardNumber", "incorrect.paymentDetails.cardNumber");
 
-        checkoutPage = renderCheckoutPage().with("errors", new ListOfErrors(errors)).asDom();
+        checkoutPage = renderCheckoutPage().with(bill.withErrors(errors)).asDom();
 
         assertThat("payment errors", checkoutPage, hasSelector(".errors", allOf(hasChild(
                 hasText("invalid.paymentDetails"))
@@ -86,16 +86,15 @@ public class CheckoutPageTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    restoresFormValuesWhenAValidationErrorOccurs() throws Exception {
+    restoresFormValues() throws Exception {
         AddressBuilder billingAddress = anAddress().
                 withFirstName("Jack").withLastName("Johnson").withEmail("jack@gmail.com");
-        CreditCardDetails payment = aVisa().
+        CreditCardDetails paymentDetails = aVisa().
                 withNumber("4111111111111111").
                 withExpiryDate("2015-10-10").
                 billedTo(billingAddress).build();
 
-        checkoutPage = renderCheckoutPage().with("payment", payment).
-                with("cardTypes", ChoiceOfCreditCards.all().select(payment.getCardType())).asDom();
+        checkoutPage = renderCheckoutPage().with(bill.paidWith(paymentDetails)).asDom();
 
         assertThat("billing information", checkoutPage, hasCheckoutForm(hasBillingInformation("Jack", "Johnson", "jack@gmail.com")));
         assertThat("payment information", checkoutPage, hasCheckoutForm(hasCreditCardDetails(CreditCardType.visa, "4111111111111111", "2015-10-10")));
@@ -176,7 +175,7 @@ public class CheckoutPageTest {
         return anElement(hasAttribute("value", value), hasText(text));
     }
 
-    private LegacyOfflineRenderer renderCheckoutPage() {
+    private OfflineRenderer renderCheckoutPage() {
         return render(CHECKOUT_TEMPLATE).from(WebRoot.pages());
     }
 }

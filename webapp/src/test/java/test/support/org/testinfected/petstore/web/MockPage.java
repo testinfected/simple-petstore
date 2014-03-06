@@ -24,11 +24,12 @@ public class MockPage implements Page {
         assertThat("rendered to", this.response, sameInstance(to));
     }
 
+    // todo get rid and rename assertRenderingContext to assertRenderedWith
     public void assertRenderedWith(Object context) {
         assertRenderingContext(equalTo(context));
     }
 
-    // todo get rid of unchecked suppression once page are generified
+    // todo get rid of unchecked suppression once page is generified
     @SuppressWarnings("unchecked")
     public void assertRenderingContext(Matcher contextMatcher) {
         assertThat("rendering context", context, contextMatcher);

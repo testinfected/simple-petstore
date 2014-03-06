@@ -3,6 +3,7 @@ package org.testinfected.petstore.controllers;
 import org.testinfected.molecule.Application;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
+import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ItemNumber;
 import org.testinfected.petstore.util.SessionScope;
@@ -17,7 +18,11 @@ public class CreateCartItem implements Application {
 
     public void handle(Request request, Response response) throws Exception {
         String number = request.parameter("item-number");
-        SessionScope.cartFor(request).add(inventory.find(new ItemNumber(number)));
+        addToCart(request, inventory.find(new ItemNumber(number)));
         response.redirectTo("/cart");
+    }
+
+    private void addToCart(Request request, Item item) {
+        SessionScope.cart(request).add(item);
     }
 }

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
+// todo we can probably get rid of that and use a mustache Template
 public class ChoiceOfCreditCards implements Iterable<ChoiceOfCreditCards.Option> {
 
     // Sort options alphabetically
