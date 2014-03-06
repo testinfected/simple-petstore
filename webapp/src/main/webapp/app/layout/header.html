@@ -14,21 +14,19 @@
   </div>
   <div id="menu">
     <ul>
-      <li id="home" class="overline {{meta[section]}}">
+      <li id="home" class="overline {{section}}">
         <a href="/">Home</a>
       </li>
+      <li id="shopping-cart" class="overline {{section}}">
 {{#cart}}
-      <li id="shopping-cart" class="overline {{meta[section]}}">
-{{#empty}}
-        Cart (0)
-{{/empty}}
-{{^empty}}
-        <a href="/cart">Cart ({{totalQuantity}})</a>
-{{/empty}}
-      </li>
+      <a href="/cart">Cart ({{cartQuantity}})</a>
 {{/cart}}
+{{^cart}}
+          Cart (0)
+{{/cart}}
+      </li>
     </ul>
-    <div id="tab" class="{{meta[section]}}">
+    <div id="tab" class="{{section}}">
       <img src="/images/tab.png"/>
     </div>
   </div>

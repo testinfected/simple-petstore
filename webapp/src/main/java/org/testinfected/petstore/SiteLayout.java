@@ -1,14 +1,15 @@
 package org.testinfected.petstore;
 
-import org.testinfected.molecule.Session;
-import org.testinfected.petstore.order.Cart;
-import org.testinfected.molecule.decoration.Layout;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
+import org.testinfected.molecule.Session;
+import org.testinfected.molecule.decoration.Layout;
 import org.testinfected.molecule.middlewares.AbstractMiddleware;
 import org.testinfected.molecule.middlewares.FilterMap;
 import org.testinfected.molecule.middlewares.SiteMesh;
+import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.util.SessionScope;
+import org.testinfected.petstore.views.RenderedPage;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -24,7 +25,7 @@ public class SiteLayout extends AbstractMiddleware {
 
     public void handle(Request request, Response response) throws Exception {
         FilterMap filtering = new FilterMap();
-        filtering.map("/", SiteMesh.html(new MainLayout("main", renderer, cartFor(request))));
+        filtering.map("/", SiteMesh.html(new LayoutTemplate("main", renderer, cartFor(request))));
         filtering.connectTo(successor);
         filtering.handle(request, response);
     }
@@ -34,20 +35,19 @@ public class SiteLayout extends AbstractMiddleware {
         return session != null ? SessionScope.cart(client) : new Cart();
     }
 
-    public static class MainLayout implements Layout {
+    public static class LayoutTemplate implements Layout {
         private final String template;
         private final RenderingEngine renderer;
         private final Cart cart;
 
-        public MainLayout(String template, RenderingEngine renderer, Cart cart) {
+        public LayoutTemplate(String template, RenderingEngine renderer, Cart cart) {
             this.template = template;
             this.renderer = renderer;
             this.cart = cart;
         }
 
-        public void render(Writer out, Map<String, Object> fragments) throws IOException {
-            fragments.put("cart", cart);
-            renderer.render(out, template, fragments);
+        public void render(Writer out, Map<String, String> fragments) throws IOException {
+            renderer.render(out, template, new RenderedPage().composedOf(fragments).withCart(cart));
         }
     }
 }

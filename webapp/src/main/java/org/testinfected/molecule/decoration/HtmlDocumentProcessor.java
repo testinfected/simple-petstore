@@ -16,8 +16,8 @@ public class HtmlDocumentProcessor implements ContentProcessor {
     private static final Pattern BODY = Pattern.compile("<body>\n?(.*?)\n?</body>", Pattern.DOTALL);
     private static final Pattern META = Pattern.compile("<meta name=\"([^\"]*)\" content=\"([^\"]*)\"", Pattern.DOTALL);
 
-    public Map<String, Object> process(String html) {
-        Map<String, Object> chunks = new HashMap<String, Object>();
+    public Map<String, String> process(String html) {
+        Map<String, String> chunks = new HashMap<String, String>();
         addHead(chunks, html);
         addTitle(chunks, html);
         addBody(chunks, html);
@@ -25,7 +25,7 @@ public class HtmlDocumentProcessor implements ContentProcessor {
         return chunks;
     }
 
-    private void addHead(Map<String, Object> chunks, String html) {
+    private void addHead(Map<String, String> chunks, String html) {
         String head = extract(html, HEAD);
         if (head == null) return;
         chunks.put("head", stripTitle(head));
@@ -41,7 +41,7 @@ public class HtmlDocumentProcessor implements ContentProcessor {
         return matcher.group(TEXT);
     }
 
-    private void addTitle(Map<String, Object> chunks, String html) {
+    private void addTitle(Map<String, String> chunks, String html) {
         String head = extract(html, HEAD);
         if (head == null) return;
         String title = extract(head, TITLE);
@@ -49,16 +49,16 @@ public class HtmlDocumentProcessor implements ContentProcessor {
         chunks.put("title", title.trim());
     }
 
-    private void addBody(Map<String, Object> chunks, String html) {
+    private void addBody(Map<String, String> chunks, String html) {
         String body = extract(html, BODY);
         if (body == null) return;
         chunks.put("body", body);
     }
 
-    private void addMetaData(Map<String, Object> chunks, String head) {
+    private void addMetaData(Map<String, String> chunks, String head) {
         Matcher matcher = META.matcher(head);
         while (matcher.find()) {
-            chunks.put("meta[" + matcher.group(NAME) + "]", matcher.group(CONTENT));
+            chunks.put(matcher.group(NAME), matcher.group(CONTENT));
         }
     }
 }

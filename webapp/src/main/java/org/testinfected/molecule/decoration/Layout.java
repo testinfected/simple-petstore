@@ -6,5 +6,5 @@ import java.util.Map;
 
 public interface Layout {
 
-    void render(Writer out, Map<String, Object> fragments) throws IOException;
+    void render(Writer out, Map<String, String> fragments) throws IOException;
 }

@@ -2,9 +2,13 @@ package test.unit.org.testinfected.petstore.views;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
+import org.testinfected.petstore.views.RenderedPage;
 import org.w3c.dom.Element;
-import test.support.org.testinfected.petstore.web.LegacyOfflineRenderer;
+import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -21,23 +25,24 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
-import static test.support.org.testinfected.petstore.web.LegacyOfflineRenderer.render;
+import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class HeaderTest {
 
     String HEADER_TEMPLATE = "header";
     Element header;
+    RenderedPage page = new RenderedPage();
 
     @Test public void
     logoReturnsToTheHomePage() {
-        header = renderHeader().asDom();
+        header = renderHeader().with(page).asDom();
         assertThat("content", header, hasUniqueSelector("#logo a", hasAttribute("href", "/")));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     searchBoxQueriesTheProductCatalog() {
-        header = renderHeader().asDom();
+        header = renderHeader().with(page).asDom();
         assertThat("header", header,
                 hasUniqueSelector("#search-box form",
                         hasAttribute("action", "/products"),
@@ -48,7 +53,7 @@ public class HeaderTest {
 
     @Test public void
     cartLinkIsInactiveWhenCartIsEmpty() {
-        header = renderHeader().with("cart", aCart()).asDom();
+        header = renderHeader().with(page.withCart(aCart().build())).asDom();
         assertThat("header", header, hasNoSelector("#shopping-cart a"));
         assertThat("header", header, hasText(containsString("0")));
     }
@@ -56,7 +61,8 @@ public class HeaderTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysTotalItemsInCartAndLinksToCart() throws Exception {
-        header = renderHeader().with("cart", aCart().containing(anItem(), anItem())).asDom();
+        header = renderHeader().with(page.withCart(aCart().containing(anItem(),
+                anItem()).build())).asDom();
         assertThat("header", header, hasUniqueSelector("#shopping-cart a",
                 hasAttribute("href", "/cart"),
                 hasText(containsString("2"))));
@@ -64,13 +70,15 @@ public class HeaderTest {
 
     @Test public void
     linksToHomePage() {
-        header = renderHeader().asDom();
+        header = renderHeader().with(page).asDom();
         assertThat("header", header, hasUniqueSelector("#home a", hasAttribute("href", "/")));
     }
 
     @Test public void
     indicatesWhenDisplayingCartContent() {
-        header = renderHeader().with("cart", aCart()).and("meta[section]", "cart").asDom();
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("section", "cart");
+        header = renderHeader().with(page.composedOf(data).withCart(aCart().build())).asDom();
         assertThat("header", header, allOf(
                 hasUniqueSelector("#home.overline.cart"),
                 hasUniqueSelector("#shopping-cart.overline.cart"),
@@ -87,7 +95,7 @@ public class HeaderTest {
         return anElement(hasTag("button"), hasId("search"));
     }
 
-    private LegacyOfflineRenderer renderHeader() {
+    private OfflineRenderer renderHeader() {
         return render(HEADER_TEMPLATE).from(WebRoot.layouts());
     }
 }
