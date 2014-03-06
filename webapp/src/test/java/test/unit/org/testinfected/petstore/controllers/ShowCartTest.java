@@ -5,14 +5,14 @@ import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.order.Cart;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.LegacyMockPage;
 
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class ShowCartTest {
 
-    MockPage cartPage = new MockPage();
+    LegacyMockPage cartPage = new LegacyMockPage();
     ShowCart showCart = new ShowCart(cartPage);
 
     MockRequest request = new MockRequest();

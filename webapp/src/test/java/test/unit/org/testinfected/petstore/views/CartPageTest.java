@@ -4,7 +4,7 @@ import org.testinfected.petstore.order.Cart;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.ItemBuilder;
-import test.support.org.testinfected.petstore.web.OfflineRenderer;
+import test.support.org.testinfected.petstore.web.LegacyOfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -91,7 +91,7 @@ public class CartPageTest {
         }
     }
 
-    private OfflineRenderer renderCartPage() {
-        return OfflineRenderer.render(CART_TEMPLATE).from(WebRoot.pages()).with("cart", cart);
+    private LegacyOfflineRenderer renderCartPage() {
+        return LegacyOfflineRenderer.render(CART_TEMPLATE).from(WebRoot.pages()).with("cart", cart);
     }
 }

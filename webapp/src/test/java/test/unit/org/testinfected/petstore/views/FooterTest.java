@@ -12,7 +12,7 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChildren;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
-import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
+import static test.support.org.testinfected.petstore.web.LegacyOfflineRenderer.render;
 
 public class FooterTest {
 

@@ -9,8 +9,9 @@ import java.io.IOException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasEntry;
 
-public class MockPage implements Page {
+public class LegacyMockPage implements Page {
 
     private Response response;
     private Object context;
@@ -24,13 +25,17 @@ public class MockPage implements Page {
         assertThat("rendered to", this.response, sameInstance(to));
     }
 
-    public void assertRenderedWith(Object context) {
-        assertRenderingContext(equalTo(context));
+    public <K, V> void assertRenderedWith(K key, V value) {
+        assertRenderedWith(equalTo(key), equalTo(value));
     }
 
-    // todo get rid of unchecked suppression once page are generified
     @SuppressWarnings("unchecked")
-    public void assertRenderingContext(Matcher contextMatcher) {
-        assertThat("rendering context", context, contextMatcher);
+    public <K, V> void assertRenderedWith(Matcher<? super K> keyMatcher, Matcher<? super V> valueMatcher) {
+        assertRenderingContext(hasEntry(keyMatcher, valueMatcher));
+    }
+
+    @SuppressWarnings("unchecked")
+    public void assertRenderingContext(Matcher<?> contextMatcher) {
+        assertThat("rendering context", context, (Matcher<Object>) contextMatcher);
     }
 }

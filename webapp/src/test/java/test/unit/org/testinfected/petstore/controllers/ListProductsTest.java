@@ -16,7 +16,7 @@ import org.testinfected.petstore.product.ProductCatalog;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.Builder;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.LegacyMockPage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class ListProductsTest {
 
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
     AttachmentStorage images = context.mock(AttachmentStorage.class);
-    MockPage productsPage = new MockPage();
+    LegacyMockPage productsPage = new LegacyMockPage();
     ListProducts listProducts = new ListProducts(productCatalog, images, productsPage);
 
     MockRequest request = new MockRequest();

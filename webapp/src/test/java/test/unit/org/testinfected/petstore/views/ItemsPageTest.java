@@ -1,14 +1,12 @@
 package test.unit.org.testinfected.petstore.views;
 
-import org.testinfected.petstore.product.Item;
 import org.junit.Test;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.views.AvailableItems;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
@@ -30,7 +28,7 @@ public class ItemsPageTest {
     String ITEMS_TEMPLATE = "items";
 
     Element itemsPage;
-    List<Item> availableItems = new ArrayList<Item>();
+    AvailableItems availableItems = new AvailableItems();
 
     @Test public void
     indicatesWhenNoItemIsAvailable() {
@@ -42,10 +40,9 @@ public class ItemsPageTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    displaysNumberOfItemsAvailable() {
-        addAsAvailable(anItem(), anItem());
-
-        itemsPage = renderItemsPage().with("item-count", 2).asDom();
+    displaysNumberOfAvailableItems() {
+        makeAvailable(anItem(), anItem());
+        itemsPage = renderItemsPage().asDom();
 
         assertThat("items page", itemsPage, hasUniqueSelector("#item-count", hasText("2")));
         assertThat("items page", itemsPage, hasSelector("#inventory tr[id^='item']", hasSize(2)));
@@ -54,7 +51,7 @@ public class ItemsPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysColumnHeadingsOnItemsTable() {
-        addAsAvailable(anItem());
+        makeAvailable(anItem());
 
         itemsPage = renderItemsPage().asDom();
 
@@ -69,7 +66,7 @@ public class ItemsPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysItemDetailsInColumns() throws Exception {
-        addAsAvailable(anItem().withNumber("12345678").describedAs("Green Adult").priced("18.50"));
+        makeAvailable(anItem().withNumber("12345678").describedAs("Green Adult").priced("18.50"));
 
         itemsPage = renderItemsPage().asDom();
 
@@ -83,8 +80,8 @@ public class ItemsPageTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    addToCartButtonAddsItemToShoppingCart() {
-        addAsAvailable(anItem().withNumber("12345678"));
+    addsItemToShoppingCartWhenFormSubmitted() {
+        makeAvailable(anItem().withNumber("12345678"));
 
         itemsPage = renderItemsPage().asDom();
 
@@ -102,15 +99,16 @@ public class ItemsPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     returnsToHomePageToContinueShopping() {
-        addAsAvailable(anItem());
+        makeAvailable(anItem());
         itemsPage = renderItemsPage().asDom();
         assertThat("items page", itemsPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
 
-    private void addAsAvailable(Builder<Item>... items) {
-        this.availableItems.addAll(build(items));    }
+    private void makeAvailable(Builder<Item>... items) {
+        this.availableItems.addAll(build(items));
+    }
 
     private OfflineRenderer renderItemsPage() {
-        return render(ITEMS_TEMPLATE).with("items", availableItems).and("in-stock", !availableItems.isEmpty()).from(WebRoot.pages());
+        return render(ITEMS_TEMPLATE).with(availableItems).from(WebRoot.pages());
     }
 }

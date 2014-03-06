@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.builders.OrderBuilder;
-import test.support.org.testinfected.petstore.web.OfflineRenderer;
+import test.support.org.testinfected.petstore.web.LegacyOfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,7 +22,7 @@ import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
-import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
+import static test.support.org.testinfected.petstore.web.LegacyOfflineRenderer.render;
 
 public class OrderPageTest {
 
@@ -107,7 +107,7 @@ public class OrderPageTest {
         return hasUniqueSelector("table tr td#order-total", hasText(orderTotal));
     }
 
-    private OfflineRenderer renderOrderPage() {
+    private LegacyOfflineRenderer renderOrderPage() {
         return render(ORDER_TEMPLATE).from(WebRoot.pages()).with("order", order);
     }
 }

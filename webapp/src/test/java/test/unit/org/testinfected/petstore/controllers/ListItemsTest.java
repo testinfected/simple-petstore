@@ -1,5 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
+import org.hamcrest.FeatureMatcher;
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.After;
@@ -9,6 +11,7 @@ import org.junit.Test;
 import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.petstore.views.AvailableItems;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.Builder;
@@ -17,6 +20,7 @@ import test.support.org.testinfected.petstore.web.MockPage;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.equalTo;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
@@ -46,33 +50,19 @@ public class ListItemsTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    rendersItemsInInventoryMatchingProductNumber() throws Exception {
+    rendersAvailableItemsMatchingProductNumber() throws Exception {
         searchYields(anItem().of(aProduct().withNumber(productNumber)));
         listItems.handle(request, response);
-        itemsPage.assertRenderedWith("in-stock", true);
-        itemsPage.assertRenderedWith("items", items);
+        itemsPage.assertRenderingContext(availableItems(items));
     }
 
-    @SuppressWarnings("unchecked")
-    @Test public void
-    indicatesNoMatchWhenNoProductItemIsAvailable() throws Exception {
-        searchYieldsNothing();
-        listItems.handle(request, response);
-        itemsPage.assertRenderedWith("in-stock", false);
-        itemsPage.assertRenderedWith("items", items);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test public void
-    makesMatchCountAvailableToView() throws Exception {
-        searchYields(anItem(), anItem(), anItem());
-        listItems.handle(request, response);
-        itemsPage.assertRenderedWith("item-count", 3);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void searchYieldsNothing() {
-        searchYields();
+    private Matcher<AvailableItems> availableItems(Iterable<Item> items) {
+        return new FeatureMatcher<AvailableItems, Iterable<Item>>(equalTo(items),
+                "available items", "items") {
+            protected Iterable<Item> featureValueOf(AvailableItems actual) {
+                return actual.getEach();
+            }
+        };
     }
 
     private void searchYields(final Builder<Item>... results) {

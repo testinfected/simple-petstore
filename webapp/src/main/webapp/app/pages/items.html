@@ -4,8 +4,11 @@
 </head>
 <body>
 <div id="items">
-{{#in-stock}}
-  <div id="in-stock"><span id="item-count">{{item-count}}</span> item(s) available for purchase</div>
+{{#none}}
+  <span id="out-of-stock">No item left in inventory</span>
+{{/none}}
+{{^none}}
+  <div id="in-stock"><span id="item-count">{{count}}</span> item(s) available for purchase</div>
 
   <table id="inventory">
     <tr>
@@ -14,7 +17,7 @@
       <th>Price</th>
       <th></th>
     </tr>
-{{#items}}
+{{#each}}
     <tr id="item-{{number}}">
       <td class="number">{{number}}</td>
       <td class="description">{{description}}</td>
@@ -26,17 +29,13 @@
         </form>
       </td>
     </tr>
-{{/items}}
+{{/each}}
   </table>
 
   <div class="actions">
     <a class="cancel" href="/">&laquo; continue shopping</a>
   </div>
-
-{{/in-stock}}
-{{^in-stock}}
-  <span id="out-of-stock">No item left in inventory</span>
-{{/in-stock}}
+{{/none}}
 </div>
 </body>
 </html>

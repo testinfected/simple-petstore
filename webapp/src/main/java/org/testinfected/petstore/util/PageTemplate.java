@@ -24,10 +24,10 @@ public class PageTemplate implements Page {
         this.mediaType = mediaType;
     }
 
-    public void render(Response response, Context context) throws IOException {
+    public void render(Response response, Object context) throws IOException {
         response.contentType(mediaType + "; charset=" + response.charset().name().toLowerCase());
         Writer out = response.writer();
-        renderer.render(out, template, context.asMap());
+        renderer.render(out, template, context);
         out.flush();
     }
 }

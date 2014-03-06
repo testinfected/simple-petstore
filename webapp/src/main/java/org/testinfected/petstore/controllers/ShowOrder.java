@@ -22,6 +22,6 @@ public class ShowOrder implements Application {
     public void handle(Request request, Response response) throws Exception {
         String number = request.parameter("number");
         Order order = orderBook.find(new OrderNumber(number));
-        orderPage.render(response, context().with("order", order));
+        orderPage.render(response, context().with("order", order).asMap());
     }
 }

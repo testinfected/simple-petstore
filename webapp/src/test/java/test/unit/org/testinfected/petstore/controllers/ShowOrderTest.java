@@ -10,7 +10,7 @@ import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumber;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.LegacyMockPage;
 
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 
@@ -18,7 +18,7 @@ public class ShowOrderTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     OrderBook orderBook = context.mock(OrderBook.class);
-    MockPage orderPage = new MockPage();
+    LegacyMockPage orderPage = new LegacyMockPage();
     ShowOrder showOrder = new ShowOrder(orderBook, orderPage);
 
     MockRequest request = new MockRequest();

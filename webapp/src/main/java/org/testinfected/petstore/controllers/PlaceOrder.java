@@ -52,6 +52,6 @@ public class PlaceOrder implements Application {
                 with("total", SessionScope.cartFor(request).getGrandTotal()).
                 and("cardTypes", ChoiceOfCreditCards.all().select(form.cardType())).
                 and("payment", form.paymentDetails()).
-                and("errors", new ListOfErrors(form.errors(messages))));
+                and("errors", new ListOfErrors(form.errors(messages))).asMap());
     }
 }

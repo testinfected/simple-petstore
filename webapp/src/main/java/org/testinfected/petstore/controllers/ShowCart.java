@@ -17,6 +17,6 @@ public class ShowCart implements Application {
 
     public void handle(Request request, Response response) throws Exception {
         cartPage.render(response, context().
-                with("cart", SessionScope.cartFor(request)));
+                with("cart", SessionScope.cartFor(request)).asMap());
     }
 }

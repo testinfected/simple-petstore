@@ -36,6 +36,6 @@ public class ListProducts implements Application {
                 and("products", products).
                 and("match-count", products.size()).
                 and("path", PathToAttachment.in(attachmentStorage));
-        productsPage.render(response, context);
+        productsPage.render(response, context.asMap());
     }
 }

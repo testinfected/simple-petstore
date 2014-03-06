@@ -7,7 +7,7 @@ import org.testinfected.petstore.order.Cart;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.CartBuilder;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.LegacyMockPage;
 
 import java.math.BigDecimal;
 
@@ -15,7 +15,7 @@ import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class CheckoutTest {
-    MockPage checkoutPage = new MockPage();
+    LegacyMockPage checkoutPage = new LegacyMockPage();
     Checkout checkout = new Checkout(checkoutPage);
 
     MockRequest request = new MockRequest();

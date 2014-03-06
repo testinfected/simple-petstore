@@ -3,7 +3,7 @@ package test.unit.org.testinfected.petstore.views;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.w3c.dom.Element;
-import test.support.org.testinfected.petstore.web.OfflineRenderer;
+import test.support.org.testinfected.petstore.web.LegacyOfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,7 +21,7 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
-import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
+import static test.support.org.testinfected.petstore.web.LegacyOfflineRenderer.render;
 
 public class HeaderTest {
 
@@ -87,7 +87,7 @@ public class HeaderTest {
         return anElement(hasTag("button"), hasId("search"));
     }
 
-    private OfflineRenderer renderHeader() {
+    private LegacyOfflineRenderer renderHeader() {
         return render(HEADER_TEMPLATE).from(WebRoot.layouts());
     }
 }

@@ -6,10 +6,9 @@ import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.petstore.views.AvailableItems;
 
 import java.util.List;
-
-import static org.testinfected.petstore.util.Context.context;
 
 public class ListItems implements Application {
 
@@ -23,10 +22,7 @@ public class ListItems implements Application {
 
     public void handle(Request request, Response response) throws Exception {
         String productNumber = request.parameter("product");
-        List<Item> items = itemInventory.findByProductNumber (productNumber);
-        itemsPage.render(response, context().
-                with("in-stock", !items.isEmpty()).
-                and("item-count", items.size()).
-                and("items", items));
+        List<Item> items = itemInventory.findByProductNumber(productNumber);
+        itemsPage.render(response, new AvailableItems(items));
     }
 }

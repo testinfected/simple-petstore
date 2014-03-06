@@ -19,7 +19,7 @@ import org.testinfected.petstore.order.SalesAssistant;
 import org.testinfected.petstore.util.BundledMessages;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.LegacyMockPage;
 
 import java.math.BigDecimal;
 import java.util.ResourceBundle;
@@ -35,7 +35,7 @@ public class PlaceOrderTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
-    MockPage checkoutPage = new MockPage();
+    LegacyMockPage checkoutPage = new LegacyMockPage();
     Messages messages = new BundledMessages(ResourceBundle.getBundle("ValidationMessages"));
 
     PlaceOrder placeOrder = new PlaceOrder(salesAssistant, checkoutPage, messages);

@@ -1,6 +1,7 @@
 package test.support.org.testinfected.petstore.web;
 
 import org.testinfected.petstore.RenderingEngine;
+import org.testinfected.petstore.util.Context;
 import org.testinfected.petstore.util.JMustacheRendering;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.Builder;
@@ -12,37 +13,41 @@ import java.io.Writer;
 
 import static test.support.org.testinfected.petstore.web.HTMLDocument.toElement;
 
-public class OfflineRenderer {
+public class LegacyOfflineRenderer {
 
-    public static OfflineRenderer render(String template) {
-        return new OfflineRenderer(template);
+    public static LegacyOfflineRenderer render(String template) {
+        return new LegacyOfflineRenderer(template);
     }
 
     private final String template;
 
     private RenderingEngine renderer;
-    private Object context;
+    private Context context = Context.context();
 
-    private OfflineRenderer(String template) {
+    private LegacyOfflineRenderer(String template) {
         this.template = template;
     }
 
-    public OfflineRenderer from(File location) {
+    public LegacyOfflineRenderer from(File location) {
         return using(new JMustacheRendering(location));
     }
 
-    public OfflineRenderer using(RenderingEngine renderer) {
+    public LegacyOfflineRenderer using(RenderingEngine renderer) {
         this.renderer = renderer;
         return this;
     }
 
-    public OfflineRenderer with(Builder<?> contextBuilder) {
-        return with(contextBuilder.build());
+    public LegacyOfflineRenderer with(String key, Builder<?> valueBuilder) {
+        return with(key, valueBuilder.build());
     }
 
-    public OfflineRenderer with(Object context) {
-        this.context = context;
+    public LegacyOfflineRenderer with(String key, Object value) {
+        context.with(key, value);
         return this;
+    }
+
+    public LegacyOfflineRenderer and(String key, Object value) {
+        return with(key, value);
     }
 
     public String asString() {
@@ -57,12 +62,9 @@ public class OfflineRenderer {
 
     private void render(final Writer writer) {
         try {
-            renderer.render(writer, template, context);
+            renderer.render(writer, template, context.asMap());
         } catch (IOException e) {
             throw new AssertionError(e);
         }
     }
 }
-
-
-

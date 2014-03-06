@@ -4,14 +4,13 @@ import org.junit.Test;
 import org.testinfected.petstore.controllers.StaticPage;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.LegacyMockPage;
 
-import static java.util.Collections.emptyMap;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 public class StaticPageTest {
 
-    MockPage page = new MockPage();
+    LegacyMockPage page = new LegacyMockPage();
     StaticPage staticPage = new StaticPage(page);
 
     MockRequest request = new MockRequest();
@@ -21,7 +20,7 @@ public class StaticPageTest {
     rendersPageWithEmptyContext() throws Exception {
         staticPage.handle(request, response);
         page.assertRenderedTo(response);
-        page.assertRenderingContext(equalTo(emptyMap()));
+        page.assertRenderingContext(nullValue());
     }
 }
 

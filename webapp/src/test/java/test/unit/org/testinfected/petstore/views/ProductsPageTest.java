@@ -7,7 +7,7 @@ import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.helpers.PathToAttachment;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.Builder;
-import test.support.org.testinfected.petstore.web.OfflineRenderer;
+import test.support.org.testinfected.petstore.web.LegacyOfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
-import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
+import static test.support.org.testinfected.petstore.web.LegacyOfflineRenderer.render;
 
 public class ProductsPageTest {
     String PRODUCTS_TEMPLATE = "products";
@@ -85,7 +85,7 @@ public class ProductsPageTest {
         return hasChild(hasAttribute("src", equalTo(imageUrl)));
     }
 
-    private OfflineRenderer renderProductsPage() {
+    private LegacyOfflineRenderer renderProductsPage() {
         return render(PRODUCTS_TEMPLATE).
                 with("products", productList).
                 and("keyword", "dog").
