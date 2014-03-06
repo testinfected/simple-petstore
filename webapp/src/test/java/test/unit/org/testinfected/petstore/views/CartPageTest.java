@@ -1,10 +1,10 @@
 package test.unit.org.testinfected.petstore.views;
 
 import org.junit.Test;
-import org.testinfected.petstore.order.Cart;
 import org.w3c.dom.Element;
+import test.support.org.testinfected.petstore.builders.CartBuilder;
 import test.support.org.testinfected.petstore.builders.ItemBuilder;
-import test.support.org.testinfected.petstore.web.LegacyOfflineRenderer;
+import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,18 +18,19 @@ import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.matches;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
+import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class CartPageTest {
 
     String CART_TEMPLATE = "cart";
 
     Element cartPage;
-    Cart cart = aCart().build();
+    CartBuilder cart = aCart();
 
     @SuppressWarnings("unchecked")
     @Test public void
     displaysColumnHeadings() {
-        cartPage = renderCartPage().asDom();
+        cartPage = renderCartPage().with(cart).asDom();
         assertThat("cart page", cartPage,
                 hasSelector("#cart-content th",
                         matches(hasText("Quantity"),
@@ -40,26 +41,24 @@ public class CartPageTest {
 
     @Test public void
     returnsToHomePageToContinueShopping() {
-        cartPage = renderCartPage().asDom();
+        cartPage = renderCartPage().with(cart).asDom();
         assertThat("cart page", cartPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
 
     @Test public void
     displaysCartGrandTotal() {
-        addToCart(anItem().priced("20.00"), anItem().priced("12.99"), anItem().priced("43.97"));
         String grandTotal = "76.96";
-
-        cartPage = renderCartPage().asDom();
+        cartPage = renderCartPage().with(cart.containing(
+                anItem().priced("20.00"), anItem().priced("12.99"),anItem().priced("43.97"))).
+                asDom();
         assertThat("cart page", cartPage, hasUniqueSelector("#cart-grand-total", hasText(grandTotal)));
     }
 
     @Test public void
     displaysOneCartItemPerLine() {
-        ItemBuilder item = anItem();
-        ItemBuilder otherItem = anItem();
-        addToCart(item, item, otherItem);
-
-        cartPage = renderCartPage().asDom();
+        cartPage = renderCartPage().with(cart.containing(
+                anItem().withNumber("12345678"), anItem().withNumber("12345678"),
+                anItem().withNumber("87654321"))).asDom();
         assertThat("cart page", cartPage, hasSelector("#cart-content tr[id^='cart-item']", hasSize(2)));
     }
 
@@ -67,9 +66,7 @@ public class CartPageTest {
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
         ItemBuilder item = anItem().withNumber("12345678").priced("18.50").describedAs("Green Adult");
-        addToCart(item, item);
-
-        cartPage = renderCartPage().asDom();
+        cartPage = renderCartPage().with(cart.containing(item, item)).asDom();
         assertThat("cart page", cartPage,
                 hasSelector("tr#cart-item-12345678 td",
                         matches(hasText("2"),
@@ -81,17 +78,11 @@ public class CartPageTest {
 
     @Test public void
     rendersPaymentFormToCheckout() {
-        cartPage = renderCartPage().asDom();
+        cartPage = renderCartPage().with(cart).asDom();
         assertThat("cart page", cartPage, hasUniqueSelector(".confirm a", hasAttribute("href", "/orders/new")));
     }
 
-    private void addToCart(final ItemBuilder... items) {
-        for (ItemBuilder item : items) {
-            cart.add(item.build());
-        }
-    }
-
-    private LegacyOfflineRenderer renderCartPage() {
-        return LegacyOfflineRenderer.render(CART_TEMPLATE).from(WebRoot.pages()).with("cart", cart);
+    private OfflineRenderer renderCartPage() {
+        return render(CART_TEMPLATE).from(WebRoot.pages());
     }
 }

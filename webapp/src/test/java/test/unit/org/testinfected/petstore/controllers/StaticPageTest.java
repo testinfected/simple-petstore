@@ -4,13 +4,13 @@ import org.junit.Test;
 import org.testinfected.petstore.controllers.StaticPage;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
-import test.support.org.testinfected.petstore.web.LegacyMockPage;
+import test.support.org.testinfected.petstore.web.MockPage;
 
 import static org.hamcrest.CoreMatchers.nullValue;
 
 public class StaticPageTest {
 
-    LegacyMockPage page = new LegacyMockPage();
+    MockPage page = new MockPage();
     StaticPage staticPage = new StaticPage(page);
 
     MockRequest request = new MockRequest();

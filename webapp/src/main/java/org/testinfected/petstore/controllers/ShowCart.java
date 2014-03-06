@@ -6,8 +6,6 @@ import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.util.SessionScope;
 
-import static org.testinfected.petstore.util.Context.context;
-
 public class ShowCart implements Application {
     private final Page cartPage;
 
@@ -16,7 +14,6 @@ public class ShowCart implements Application {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        cartPage.render(response, context().
-                with("cart", SessionScope.cart(request)).asMap());
+        cartPage.render(response, SessionScope.cart(request));
     }
 }

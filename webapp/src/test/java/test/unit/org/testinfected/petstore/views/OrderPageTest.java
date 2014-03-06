@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.builders.OrderBuilder;
-import test.support.org.testinfected.petstore.web.LegacyOfflineRenderer;
+import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,7 +22,7 @@ import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
-import static test.support.org.testinfected.petstore.web.LegacyOfflineRenderer.render;
+import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class OrderPageTest {
 
@@ -33,8 +33,9 @@ public class OrderPageTest {
 
     @Test public void
     displaysOrderSummary() {
-        order.from(aCart().containing(anItem().priced("110.00"), anItem().priced("140.00")));
-        orderPage = renderOrderPage().asDom();
+        orderPage = renderOrderPage().with(
+            order.from(aCart().containing(anItem().priced("110.00"), anItem().priced("140.00")))).
+                asDom();
         assertThat("order page", orderPage, hasOrderNumber("00000100"));
         assertThat("order page", orderPage, hasOrderTotal("250.00"));
     }
@@ -42,7 +43,7 @@ public class OrderPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysOrderDetailsColumnHeadings() {
-        orderPage = renderOrderPage().asDom();
+        orderPage = renderOrderPage().with(order).asDom();
         assertThat("order page", orderPage,
                 hasSelector("table#order-details tr th",
                         matches(hasText("Quantity"),
@@ -54,9 +55,8 @@ public class OrderPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysLineItemsInColumns() {
-        ItemBuilder anItem = anItem().withNumber("12345678").describedAs("Green Adult").priced("100.00");
-        order.from(aCart().containing(anItem, anItem));
-        orderPage = renderOrderPage().asDom();
+        ItemBuilder item = anItem().withNumber("12345678").describedAs("Green Adult").priced("100.00");
+        orderPage = renderOrderPage().with(order.from(aCart().containing(item, item))).asDom();
         assertThat("order page", orderPage, hasSelector("#order-details tr#line-item-12345678 td",
                 matches(hasText("2"),
                         hasText(containsString("Green Adult")),
@@ -66,16 +66,22 @@ public class OrderPageTest {
 
     @Test public void
     displaysOneLineItemPerRow() {
-        order.from(aCart().containing(anItem().withNumber("12345678"), anItem().withNumber("12345678"), anItem().withNumber("87654321")));
-        orderPage = renderOrderPage().asDom();
+        orderPage = renderOrderPage().with(
+                order.from(aCart().containing(
+                        anItem().withNumber("12345678"),
+                        anItem().withNumber("12345678"),
+                        anItem().withNumber("87654321")))).
+                asDom();
         assertThat("order page", orderPage, hasSelector("#order-details tr[id^='line-item']", hasSize(2)));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     displaysBillingInformation() {
-        order.paidWith(aVisa().billedTo(anAddress().withFirstName("John").withLastName("Doe").withEmail("jdoe@gmail.com")));
-        orderPage = renderOrderPage().asDom();
+        orderPage = renderOrderPage().with(
+                order.paidWith(aVisa().billedTo(anAddress().
+                        withFirstName("John").withLastName("Doe").withEmail("jdoe@gmail.com"))))
+                .asDom();
         assertThat("order page", orderPage, hasSelector("#billing-address span", matchesInAnyOrder(
                 hasText("John"),
                 hasText("Doe"),
@@ -85,8 +91,8 @@ public class OrderPageTest {
     @SuppressWarnings("unchecked")
     @Test public void
     displaysPaymentDetails() {
-        order.paidWith(aVisa().withNumber("9999 9999 9999").withExpiryDate("12/12"));
-        orderPage = renderOrderPage().asDom();
+        orderPage = renderOrderPage().with(order.paidWith(
+                aVisa().withNumber("9999 9999 9999").withExpiryDate("12/12"))).asDom();
         assertThat("order page", orderPage, hasSelector("#payment-details span", matchesInAnyOrder(
                 hasText("Visa"),
                 hasText("9999 9999 9999"),
@@ -95,7 +101,7 @@ public class OrderPageTest {
 
     @Test public void
     returnsToHomePageToContinueShopping() {
-        orderPage = renderOrderPage().asDom();
+        orderPage = renderOrderPage().with(order).asDom();
         assertThat("order page", orderPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
 
@@ -107,7 +113,7 @@ public class OrderPageTest {
         return hasUniqueSelector("table tr td#order-total", hasText(orderTotal));
     }
 
-    private LegacyOfflineRenderer renderOrderPage() {
-        return render(ORDER_TEMPLATE).from(WebRoot.pages()).with("order", order);
+    private OfflineRenderer renderOrderPage() {
+        return render(ORDER_TEMPLATE).from(WebRoot.pages());
     }
 }

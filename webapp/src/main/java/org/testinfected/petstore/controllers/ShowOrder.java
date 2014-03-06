@@ -8,8 +8,6 @@ import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumber;
 
-import static org.testinfected.petstore.util.Context.context;
-
 public class ShowOrder implements Application {
     private final OrderBook orderBook;
     private final Page orderPage;
@@ -22,6 +20,6 @@ public class ShowOrder implements Application {
     public void handle(Request request, Response response) throws Exception {
         String number = request.parameter("number");
         Order order = orderBook.find(new OrderNumber(number));
-        orderPage.render(response, context().with("order", order).asMap());
+        orderPage.render(response, order);
     }
 }

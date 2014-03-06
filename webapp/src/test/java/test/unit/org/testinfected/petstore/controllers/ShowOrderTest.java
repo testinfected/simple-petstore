@@ -10,15 +10,16 @@ import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumber;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
-import test.support.org.testinfected.petstore.web.LegacyMockPage;
+import test.support.org.testinfected.petstore.web.MockPage;
 
+import static org.hamcrest.Matchers.equalTo;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 
 public class ShowOrderTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     OrderBook orderBook = context.mock(OrderBook.class);
-    LegacyMockPage orderPage = new LegacyMockPage();
+    MockPage orderPage = new MockPage();
     ShowOrder showOrder = new ShowOrder(orderBook, orderPage);
 
     MockRequest request = new MockRequest();
@@ -27,7 +28,7 @@ public class ShowOrderTest {
     String orderNumber = "00000100";
 
     @Test public void
-    fetchesOrderByNumberAndDisplaysReceipt() throws Exception {
+    fetchesOrderByNumberAndRendersReceipt() throws Exception {
         final Order order = anOrder().withNumber(orderNumber).build();
         request.addParameter("number", orderNumber);
 
@@ -35,7 +36,7 @@ public class ShowOrderTest {
 
         showOrder.handle(request, response);
         orderPage.assertRenderedTo(response);
-        orderPage.assertRenderedWith("order", order);
+        orderPage.assertRenderingContext(equalTo(order));
     }
 
     private void orderBookContains(final Order order) {
