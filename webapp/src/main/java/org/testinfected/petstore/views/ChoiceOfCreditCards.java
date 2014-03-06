@@ -1,4 +1,4 @@
-package org.testinfected.petstore.helpers;
+package org.testinfected.petstore.views;
 
 import org.testinfected.petstore.billing.CreditCardType;
 

@@ -1,9 +1,9 @@
 package org.testinfected.petstore.views;
 
+import com.samskivert.mustache.Mustache;
 import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;
-import org.testinfected.petstore.helpers.ChoiceOfCreditCards;
 import org.testinfected.petstore.helpers.ErrorMessages;
 
 import java.math.BigDecimal;
@@ -71,7 +71,7 @@ public class Bill {
         return errors;
     }
 
-    public ValidationErrors errors() {
+    public Mustache.Lambda errors() {
         return new ValidationErrors(errors);
     }
 }

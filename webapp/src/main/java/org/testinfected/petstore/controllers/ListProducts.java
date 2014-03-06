@@ -4,15 +4,12 @@ import org.testinfected.molecule.Application;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
-import org.testinfected.petstore.helpers.PathToAttachment;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
-import org.testinfected.petstore.util.Context;
+import org.testinfected.petstore.views.ProductsFound;
 
 import java.util.List;
-
-import static org.testinfected.petstore.util.Context.context;
 
 public class ListProducts implements Application {
 
@@ -28,14 +25,10 @@ public class ListProducts implements Application {
 
     public void handle(Request request, Response response) throws Exception {
         String keyword = request.parameter("keyword");
-        List<Product> products = productCatalog.findByKeyword(keyword);
-
-        Context context = context().
-                with("match-found", !products.isEmpty()).
-                and("keyword", keyword).
-                and("products", products).
-                and("match-count", products.size()).
-                and("path", PathToAttachment.in(attachmentStorage));
-        productsPage.render(response, context.asMap());
+        List<Product> found = productCatalog.findByKeyword(keyword);
+        productsPage.render(response, new ProductsFound().
+                matching(keyword).
+                add(found).
+                usePhotosIn(attachmentStorage));
     }
 }

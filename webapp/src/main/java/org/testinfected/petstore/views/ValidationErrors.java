@@ -20,7 +20,7 @@ public class ValidationErrors implements Mustache.Lambda {
         if (!messages.contains(key)) return;
         out.write(indent(frag));
         out.write("<ol class=\"errors\">\n");
-        for (String message : errorMessages(key)) {
+        for (String message : messages.at(key)) {
             out.write(indent(frag));
             out.write("  <li>");
             out.write(message);
@@ -30,19 +30,11 @@ public class ValidationErrors implements Mustache.Lambda {
         out.write("</ol>\n");
     }
 
-    public Iterable<String> errorMessages(String key) {
-        return messages.at(key);
-    }
-
     private String trim(Template.Fragment frag) {
         return frag.execute().trim();
     }
 
     private String indent(Template.Fragment frag) {
         return frag.execute().substring(0, frag.execute().indexOf(trim(frag)));
-    }
-
-    public String toString() {
-        return messages.toString();
     }
 }

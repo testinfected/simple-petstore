@@ -1,7 +1,7 @@
 package test.unit.org.testinfected.petstore.views;
 
-import org.testinfected.petstore.order.Cart;
 import org.junit.Test;
+import org.testinfected.petstore.order.Cart;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.web.LegacyOfflineRenderer;
@@ -39,7 +39,7 @@ public class CartPageTest {
     }
 
     @Test public void
-    letsReturnToHomePageToContinueShopping() {
+    returnsToHomePageToContinueShopping() {
         cartPage = renderCartPage().asDom();
         assertThat("cart page", cartPage, hasUniqueSelector("a.cancel", hasAttribute("href", "/")));
     }
