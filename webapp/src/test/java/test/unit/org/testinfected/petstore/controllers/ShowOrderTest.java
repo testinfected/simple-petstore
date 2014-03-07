@@ -1,5 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
@@ -12,7 +14,6 @@ import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.web.MockPage;
 
-import static org.hamcrest.Matchers.equalTo;
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 
 public class ShowOrderTest {
@@ -36,7 +37,11 @@ public class ShowOrderTest {
 
         showOrder.handle(request, response);
         orderPage.assertRenderedTo(response);
-        orderPage.assertRenderingContext(equalTo(order));
+        orderPage.assertRenderedWith(sameOrderAs(order));
+    }
+
+    private Matcher<Object> sameOrderAs(Order order) {
+        return Matchers.<Object>sameInstance(order);
     }
 
     private void orderBookContains(final Order order) {

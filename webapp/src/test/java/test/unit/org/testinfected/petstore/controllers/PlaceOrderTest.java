@@ -15,7 +15,6 @@ import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
 import org.testinfected.petstore.util.BundledMessages;
-import org.testinfected.petstore.views.Bill;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.web.MockPage;
@@ -78,18 +77,18 @@ public class PlaceOrderTest {
         placeOrder.handle(request, response);
 
         checkoutPage.assertRenderedTo(response);
-        checkoutPage.assertRenderingContext(billWithTotal(total));
-        checkoutPage.assertRenderingContext(billWithPayment(incompletePaymentDetails));
-        checkoutPage.assertRenderingContext(billWithErrors(
+        checkoutPage.assertRenderedWith(billWithTotal(total));
+        checkoutPage.assertRenderedWith(billWithPayment(incompletePaymentDetails));
+        checkoutPage.assertRenderedWith(billWithErrors(
                 message("paymentDetails", "Please correct the following errors:"),
                 message("paymentDetails.cardNumber", "may not be empty", "not a valid number")));
     }
 
-    private Matcher<Bill> billWithTotal(BigDecimal amount) {
+    private Matcher<Object> billWithTotal(BigDecimal amount) {
         return hasProperty("total", equalTo(amount));
     }
 
-    private Matcher<Bill> billWithPayment(CreditCardDetails payment) {
+    private Matcher<Object> billWithPayment(CreditCardDetails payment) {
         return allOf(
                 hasProperty("cardNumber", equalTo(payment.getCardNumber())),
                 hasProperty("cardName", equalTo(payment.getCardCommonName())),
@@ -99,7 +98,7 @@ public class PlaceOrderTest {
                 hasProperty("email", equalTo(payment.getEmail())));
     }
 
-    private Matcher<ErrorMessages> billWithErrors(Matcher<? super ErrorMessages>... messages) {
+    private Matcher<Object> billWithErrors(Matcher<? super ErrorMessages>... messages) {
         return hasProperty("errorMessages", allOf(messages));
     }
 

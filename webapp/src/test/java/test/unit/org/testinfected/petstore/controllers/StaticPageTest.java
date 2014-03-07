@@ -20,7 +20,7 @@ public class StaticPageTest {
     rendersPageWithEmptyContext() throws Exception {
         staticPage.handle(request, response);
         page.assertRenderedTo(response);
-        page.assertRenderingContext(nullValue());
+        page.assertRenderedWith(nullValue());
     }
 }
 

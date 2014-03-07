@@ -6,7 +6,6 @@ import org.testinfected.petstore.Page;
 
 import java.io.IOException;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -24,14 +23,7 @@ public class MockPage implements Page {
         assertThat("rendered to", this.response, sameInstance(to));
     }
 
-    // todo get rid and rename assertRenderingContext to assertRenderedWith
-    public void assertRenderedWith(Object context) {
-        assertRenderingContext(equalTo(context));
-    }
-
-    // todo get rid of unchecked suppression once page is generified
-    @SuppressWarnings("unchecked")
-    public void assertRenderingContext(Matcher contextMatcher) {
+    public void assertRenderedWith(Matcher<Object> contextMatcher) {
         assertThat("rendering context", context, contextMatcher);
     }
 }

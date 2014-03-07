@@ -11,7 +11,6 @@ import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
-import org.testinfected.petstore.views.ProductsFound;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.Builder;
@@ -57,20 +56,20 @@ public class ListProductsTest {
                 aProduct().describedAs("Guard dog"));
 
         listProducts.handle(request, response);
-        productsPage.assertRenderingContext(productsFound(searchResults));
-        productsPage.assertRenderingContext(searchKeyword(keyword));
-        productsPage.assertRenderingContext(photosIn(photoLibrary));
+        productsPage.assertRenderedWith(productsFound(searchResults));
+        productsPage.assertRenderedWith(searchKeyword(keyword));
+        productsPage.assertRenderedWith(photosIn(photoLibrary));
     }
 
     private Matcher<Object> photosIn(AttachmentStorage photos) {
         return hasProperty("photos", equalTo(photos));
     }
 
-    private Matcher<ProductsFound> searchKeyword(String keyword) {
+    private Matcher<Object> searchKeyword(String keyword) {
         return hasProperty("keyword", equalTo(keyword));
     }
 
-    private Matcher<ProductsFound> productsFound(List<Product> results) {
+    private Matcher<Object> productsFound(List<Product> results) {
         return hasProperty("each", equalTo(results));
     }
 

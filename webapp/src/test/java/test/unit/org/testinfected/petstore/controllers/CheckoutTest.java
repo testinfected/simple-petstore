@@ -4,7 +4,6 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.testinfected.petstore.controllers.Checkout;
 import org.testinfected.petstore.order.Cart;
-import org.testinfected.petstore.views.Bill;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.CartBuilder;
@@ -32,10 +31,10 @@ public class CheckoutTest {
         checkout.handle(request, response);
 
         checkoutPage.assertRenderedTo(response);
-        checkoutPage.assertRenderingContext(billWithTotal(total));
+        checkoutPage.assertRenderedWith(billWithTotal(total));
     }
 
-    private Matcher<Bill> billWithTotal(BigDecimal amount) {
+    private Matcher<Object> billWithTotal(BigDecimal amount) {
         return hasProperty("total", equalTo(amount));
     }
 

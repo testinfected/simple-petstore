@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
-import org.testinfected.petstore.views.AvailableItems;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.Builder;
@@ -53,10 +52,10 @@ public class ListItemsTest {
     rendersAvailableItemsMatchingProductNumber() throws Exception {
         searchYields(anItem().of(aProduct().withNumber(productNumber)));
         listItems.handle(request, response);
-        itemsPage.assertRenderingContext(availableItems(items));
+        itemsPage.assertRenderedWith(availableItems(items));
     }
 
-    private Matcher<AvailableItems> availableItems(Iterable<Item> items) {
+    private Matcher<Object> availableItems(Iterable<Item> items) {
         return hasProperty("each", equalTo(items));
     }
 
