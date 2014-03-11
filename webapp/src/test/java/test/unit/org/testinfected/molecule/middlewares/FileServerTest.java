@@ -20,22 +20,22 @@ import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse
 
 public class FileServerTest {
 
-    File base = locateBase();
-    FileServer fileServer = new FileServer(base, new NotFound());
-    File file = new File(base, "assets/image.png");
+    FileServer fileServer = new FileServer(assetsFolder(), new NotFound());
+    File file = new File(assetsFolder(), "images/image.png");
 
-    MockRequest request = GET("assets/image.png");
+    MockRequest request = GET("/images/image.png");
     MockResponse response = aResponse();
 
-    private static File locateBase() {
-        URL fileLocation = FileServerTest.class.getClassLoader().getResource("test/assets/image.png");
-        File asset;
+    private static File assetsFolder() {
+        URL folder = FileServerTest.class.getClassLoader().getResource("test/assets");
+        if (folder == null) throw new AssertionError("Unable to locate resource folder");
+        File assets;
         try {
-            asset = new File(fileLocation.toURI());
+            assets = new File(folder.toURI());
         } catch (Exception e) {
-            throw new AssertionError("Unable to locate test/assets/image.png");
+            throw new AssertionError(e);
         }
-        return asset.getParentFile().getParentFile();
+        return assets;
     }
 
     @Test public void

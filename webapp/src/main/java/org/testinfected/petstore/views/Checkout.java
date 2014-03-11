@@ -8,7 +8,7 @@ import org.testinfected.petstore.helpers.ErrorMessages;
 
 import java.math.BigDecimal;
 
-public class Bill {
+public class Checkout {
 
     private static final Address UNKNOWN_ADDRESS = new Address("", "", "");
     private static final CreditCardDetails MISSING_CARD_DETAILS =
@@ -18,9 +18,9 @@ public class Bill {
     private CreditCardDetails details = MISSING_CARD_DETAILS;
     private ErrorMessages errors = new ErrorMessages();
 
-    public Bill() {}
+    public Checkout() {}
 
-    public Bill ofTotal(BigDecimal amount) {
+    public Checkout forTotalOf(BigDecimal amount) {
         this.total = amount;
         return this;
     }
@@ -29,7 +29,7 @@ public class Bill {
         return total;
     }
 
-    public Bill paidWith(CreditCardDetails details) {
+    public Checkout withPayment(CreditCardDetails details) {
         this.details = details;
         return this;
     }
@@ -62,7 +62,7 @@ public class Bill {
         return details.getLastName();
     }
 
-    public Bill withErrors(ErrorMessages messages) {
+    public Checkout withErrors(ErrorMessages messages) {
         errors.addAll(messages);
         return this;
     }

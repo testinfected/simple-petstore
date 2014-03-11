@@ -7,7 +7,7 @@ import org.testinfected.petstore.Page;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
-import org.testinfected.petstore.views.ProductsFound;
+import org.testinfected.petstore.views.Products;
 
 import java.util.List;
 
@@ -26,9 +26,9 @@ public class ListProducts implements Application {
     public void handle(Request request, Response response) throws Exception {
         String keyword = request.parameter("keyword");
         List<Product> found = productCatalog.findByKeyword(keyword);
-        productsPage.render(response, new ProductsFound().
+        productsPage.render(response, new Products().
                 matching(keyword).
                 add(found).
-                usePhotosIn(attachmentStorage));
+                withPhotosIn(attachmentStorage));
     }
 }

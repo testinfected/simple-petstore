@@ -9,7 +9,7 @@ import org.testinfected.molecule.middlewares.FilterMap;
 import org.testinfected.molecule.middlewares.SiteMesh;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.util.SessionScope;
-import org.testinfected.petstore.views.RenderedPage;
+import org.testinfected.petstore.views.PlainPage;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -47,7 +47,7 @@ public class SiteLayout extends AbstractMiddleware {
         }
 
         public void render(Writer out, Map<String, String> fragments) throws IOException {
-            renderer.render(out, template, new RenderedPage().composedOf(fragments).withCart(cart));
+            renderer.render(out, template, new PlainPage().composedOf(fragments).withCart(cart));
         }
     }
 }

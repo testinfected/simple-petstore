@@ -2,7 +2,7 @@ package test.unit.org.testinfected.petstore.views;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.testinfected.petstore.views.RenderedPage;
+import org.testinfected.petstore.views.PlainPage;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
@@ -31,7 +31,7 @@ public class HeaderTest {
 
     String HEADER_TEMPLATE = "header";
     Element header;
-    RenderedPage page = new RenderedPage();
+    PlainPage page = new PlainPage();
 
     @Test public void
     logoReturnsToTheHomePage() {

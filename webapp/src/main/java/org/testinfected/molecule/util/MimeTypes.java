@@ -10,8 +10,8 @@ public class MimeTypes {
     public static final String TEXT_CSS = "text/css";
     public static final String IMAGE_PNG = "image/png";
     public static final String IMAGE_X_ICON = "image/x-icon";
+    private static final String BINARY_DATA = "application/octet-stream";
 
-    private static final String FALLBACK = "application/octet-stream";
     private static final Map<String, String> knownTypes = new HashMap<String, String>();
 
     static {
@@ -26,7 +26,7 @@ public class MimeTypes {
         for (String ext : knownTypes.keySet()) {
             if (filename.endsWith(ext)) return knownTypes.get(ext);
         }
-        return FALLBACK;
+        return BINARY_DATA;
     }
 
     private MimeTypes() {}

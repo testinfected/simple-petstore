@@ -5,12 +5,12 @@ import org.testinfected.petstore.order.Cart;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RenderedPage {
+public class PlainPage {
 
     private final Map<String, String> elements = new HashMap<String, String>();
     private Cart cart = new Cart();
 
-    public RenderedPage withCart(Cart cart) {
+    public PlainPage withCart(Cart cart) {
         this.cart = cart;
         return this;
     }
@@ -23,7 +23,7 @@ public class RenderedPage {
         return cart.getTotalQuantity();
     }
 
-    public RenderedPage composedOf(Map<String, String> fragments) {
+    public PlainPage composedOf(Map<String, String> fragments) {
         this.elements.putAll(fragments);
         return this;
     }

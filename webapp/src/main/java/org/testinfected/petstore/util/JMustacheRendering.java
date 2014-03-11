@@ -38,8 +38,8 @@ public class JMustacheRendering implements RenderingEngine {
         }
     }
 
-    private Reader load(String templateName) throws IOException {
-        return new InputStreamReader(new FileInputStream(template(templateName)), DEFAULT_TEMPLATE_ENCODING);
+    private Reader load(String named) throws IOException {
+        return new InputStreamReader(new FileInputStream(template(named)), DEFAULT_TEMPLATE_ENCODING);
     }
 
     private File template(String templateName) {

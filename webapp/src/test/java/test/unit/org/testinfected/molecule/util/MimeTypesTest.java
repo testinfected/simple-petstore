@@ -10,24 +10,24 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class MimeTypeTest {
+public class MimeTypesTest {
 
-    Map<String, String> expectations = new HashMap<String, String>();
+    Map<String, String> knownTypes = new HashMap<String, String>();
 
     @Before public void
     dataSet() {
-        expectations.put("a.txt", "text/plain");
-        expectations.put("b.txt", "text/plain");
-        expectations.put("logo.png", "image/png");
-        expectations.put("application.css", "text/css");
-        expectations.put("fav.ico", "image/x-icon");
-        expectations.put("main.html", "text/html");
+        knownTypes.put("a.txt", "text/plain");
+        knownTypes.put("b.txt", "text/plain");
+        knownTypes.put("logo.png", "image/png");
+        knownTypes.put("application.css", "text/css");
+        knownTypes.put("fav.ico", "image/x-icon");
+        knownTypes.put("main.html", "text/html");
     }
 
     @Test public void
     guessesMimeTypeFromExtension() {
-        for (String url : expectations.keySet()) {
-            assertThat("media type of " + url, MimeTypes.guessFrom(url), equalTo(expectations.get(url)));
+        for (String url : knownTypes.keySet()) {
+            assertThat("media type of " + url, MimeTypes.guessFrom(url), equalTo(knownTypes.get(url)));
         }
     }
 

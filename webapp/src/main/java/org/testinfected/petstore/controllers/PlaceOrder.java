@@ -10,7 +10,7 @@ import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
 import org.testinfected.petstore.util.SessionScope;
 import org.testinfected.petstore.validation.Validator;
-import org.testinfected.petstore.views.Bill;
+import org.testinfected.petstore.views.Checkout;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -46,9 +46,9 @@ public class PlaceOrder implements Application {
     }
 
     private void rejectOrder(Request request, Response response, PaymentForm form) throws IOException {
-        checkoutPage.render(response, new Bill().
-                ofTotal(currentCartTotal(request)).
-                paidWith(form.paymentDetails()).
+        checkoutPage.render(response, new Checkout().
+                forTotalOf(currentCartTotal(request)).
+                withPayment(form.paymentDetails()).
                 withErrors(form.errors(messages)));
     }
 

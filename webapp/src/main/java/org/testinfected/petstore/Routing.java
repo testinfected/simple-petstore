@@ -5,7 +5,7 @@ import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.molecule.middlewares.Router;
 import org.testinfected.molecule.routing.DynamicRoutes;
-import org.testinfected.petstore.controllers.Checkout;
+import org.testinfected.petstore.controllers.ProceedToCheckout;
 import org.testinfected.petstore.controllers.CreateCartItem;
 import org.testinfected.petstore.controllers.CreateItem;
 import org.testinfected.petstore.controllers.CreateProduct;
@@ -65,7 +65,7 @@ public class Routing implements Application {
             post("/products/:product/items").to(new CreateItem(procurement));
             get("/cart").to(new ShowCart(pages.cart()));
             post("/cart").to(new CreateCartItem(items));
-            get("/orders/new").to(new Checkout(pages.checkout()));
+            get("/orders/new").to(new ProceedToCheckout(pages.checkout()));
             get("/orders/:number").to(new ShowOrder(orders, pages.order()));
             post("/orders").to(new PlaceOrder(cashier, pages.checkout(), messages));
             delete("/logout").to(new Logout());

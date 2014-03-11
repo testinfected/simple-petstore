@@ -3,7 +3,7 @@ package test.unit.org.testinfected.petstore.views;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.testinfected.petstore.product.AttachmentStorage;
-import org.testinfected.petstore.views.ProductsFound;
+import org.testinfected.petstore.views.Products;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.ProductBuilder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
@@ -28,7 +28,7 @@ public class ProductsPageTest {
     String PRODUCTS_TEMPLATE = "products";
 
     Element productsPage;
-    ProductsFound products = new ProductsFound().matching("dog").usePhotosIn(photosFolder());
+    Products products = new Products().matching("dog").withPhotosIn(photosFolder());
 
     @Test public void
     indicatesWhenNoMatchWasFound() {

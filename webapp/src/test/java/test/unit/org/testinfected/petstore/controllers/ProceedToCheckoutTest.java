@@ -2,7 +2,7 @@ package test.unit.org.testinfected.petstore.controllers;
 
 import org.hamcrest.Matcher;
 import org.junit.Test;
-import org.testinfected.petstore.controllers.Checkout;
+import org.testinfected.petstore.controllers.ProceedToCheckout;
 import org.testinfected.petstore.order.Cart;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
@@ -16,9 +16,9 @@ import static org.hamcrest.Matchers.hasProperty;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
-public class CheckoutTest {
+public class ProceedToCheckoutTest {
     MockPage checkoutPage = new MockPage();
-    Checkout checkout = new Checkout(checkoutPage);
+    ProceedToCheckout checkout = new ProceedToCheckout(checkoutPage);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();

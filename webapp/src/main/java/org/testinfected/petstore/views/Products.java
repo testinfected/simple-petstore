@@ -10,12 +10,12 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class ProductsFound {
+public class Products {
     private final Collection<Product> products = new ArrayList<Product>();
     private String keyword;
     private AttachmentStorage photos;
 
-    public ProductsFound matching(String keyword) {
+    public Products matching(String keyword) {
         this.keyword = keyword;
         return this;
     }
@@ -24,7 +24,7 @@ public class ProductsFound {
         return keyword;
     }
 
-    public ProductsFound add(Collection<Product> found) {
+    public Products add(Collection<Product> found) {
         products.addAll(found);
         return this;
     }
@@ -41,7 +41,7 @@ public class ProductsFound {
         return products.isEmpty();
     }
 
-    public ProductsFound usePhotosIn(AttachmentStorage storage) {
+    public Products withPhotosIn(AttachmentStorage storage) {
         this.photos = storage;
         return this;
     }
@@ -50,7 +50,7 @@ public class ProductsFound {
         return photos;
     }
 
-    public Mustache.Lambda getLocation() {
+    public Mustache.Lambda getPhotoUrl() {
         return new Mustache.Lambda() {
             public void execute(Template.Fragment frag, Writer out) throws IOException {
                 out.write(photos.getLocation(frag.execute()));
