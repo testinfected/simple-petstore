@@ -2,7 +2,6 @@ package org.testinfected.molecule.util;
 
 import org.testinfected.molecule.Response;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -35,9 +34,8 @@ public class BufferedResponse extends ResponseWrapper {
     }
 
     public void body(String body) throws IOException {
-        Writer writer = new BufferedWriter(writer());
-        writer.write(body);
-        writer.flush();
+        byte[] content = body.getBytes(charset());
+        outputStream(content.length).write(content);
     }
 
     public String body() throws UnsupportedEncodingException {
@@ -46,5 +44,9 @@ public class BufferedResponse extends ResponseWrapper {
 
     public byte[] content() {
         return buffer.toByteArray();
+    }
+
+    public int size() {
+        return buffer.size();
     }
 }

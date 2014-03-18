@@ -2,13 +2,13 @@ package org.testinfected.molecule.middlewares;
 
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
-import org.testinfected.molecule.util.BufferedResponse;
 import org.testinfected.molecule.decoration.Decorator;
 import org.testinfected.molecule.decoration.HtmlDocumentProcessor;
 import org.testinfected.molecule.decoration.HtmlPageSelector;
 import org.testinfected.molecule.decoration.Layout;
 import org.testinfected.molecule.decoration.PageCompositor;
 import org.testinfected.molecule.decoration.Selector;
+import org.testinfected.molecule.util.BufferedResponse;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -44,7 +44,7 @@ public class SiteMesh extends AbstractMiddleware {
     }
 
     private void write(Response response, BufferedResponse buffer) throws IOException {
-        response.outputStream().write(buffer.content());
+        response.body(buffer.body());
     }
 
     private BufferedResponse captureResponse(Request request, Response response) throws Exception {

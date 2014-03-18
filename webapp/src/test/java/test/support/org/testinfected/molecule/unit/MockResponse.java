@@ -32,10 +32,22 @@ public class MockResponse implements Response {
     private final Map<String, String> headers = new HashMap<String, String>();
     private final ByteArrayOutputStream output = new ByteArrayOutputStream();
     private final Map<String, String> cookies = new HashMap<String, String>();
+
     private HttpStatus status;
+    private Charset defaultEncoding = Charsets.ISO_8859_1;
+    int bufferSize = 0;
 
     public static MockResponse aResponse() {
         return new MockResponse();
+    }
+
+    public MockResponse withDefaultCharset(String charsetName) {
+        return withDefaultCharset(Charset.forName(charsetName));
+    }
+
+    public MockResponse withDefaultCharset(Charset charset) {
+        this.defaultEncoding = charset;
+        return this;
     }
 
     public void redirectTo(String location) {
@@ -124,27 +136,28 @@ public class MockResponse implements Response {
     }
 
     public Charset charset() {
-        if (contentType() == null) return Charsets.ISO_8859_1;
+        if (contentType() == null) return defaultEncoding;
         Charset charset = parseCharset(contentType());
-        return charset != null ? charset : Charsets.ISO_8859_1;
+        return charset != null ? charset : defaultEncoding;
     }
 
     public OutputStream outputStream() throws IOException {
+        this.bufferSize = 0;
         return output;
     }
 
     public OutputStream outputStream(int bufferSize) throws IOException {
+        this.bufferSize = bufferSize;
         return output;
     }
 
     public Writer writer() throws IOException {
-        return new OutputStreamWriter(output, charset());
+        return new OutputStreamWriter(outputStream(), charset());
     }
 
     public void body(String body) throws IOException {
-        Writer writer = writer();
-        writer.write(body);
-        writer.flush();
+        byte[] content = body.getBytes(charset());
+        outputStream(content.length).write(content);
     }
 
     public void assertBody(String body) {
@@ -165,6 +178,14 @@ public class MockResponse implements Response {
 
     public byte[] content() {
         return output.toByteArray();
+    }
+
+    public void assertBufferSize(int size) {
+        assertBufferSize(equalTo(size));
+    }
+
+    public void assertBufferSize(Matcher<Integer> sizeMatcher) {
+        assertThat("buffer size", bufferSize, sizeMatcher);
     }
 
     public void assertContentSize(long size) {
@@ -195,11 +216,14 @@ public class MockResponse implements Response {
     public String toString() {
         return "mock response (" + output + ")";
     }
+
     private static final String RFC_1123_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
     private static final String TYPE = "[^/]+";
     private static final String SUBTYPE = "[^;]+";
     private static final String CHARSET = "charset=([^;]+)";
+
     private static final Pattern CONTENT_TYPE_FORMAT = Pattern.compile(String.format("%s/%s(?:;\\s*%s)+", TYPE, SUBTYPE, CHARSET));
+
     private static final int ENCODING = 1;
 
     private static Charset parseCharset(String contentType) {

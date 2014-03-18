@@ -12,6 +12,7 @@ import org.testinfected.molecule.Response;
 import org.testinfected.molecule.decoration.Decorator;
 import org.testinfected.molecule.decoration.Selector;
 import org.testinfected.molecule.middlewares.SiteMesh;
+import org.testinfected.molecule.util.Charsets;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
@@ -34,7 +36,7 @@ public class SiteMeshTest {
     States page = context.states("page").startsAs("selected");
 
     MockRequest request = aRequest();
-    MockResponse response = aResponse();
+    MockResponse response = aResponse().withDefaultCharset("UTF-8");
 
     @Before public void
     selectPage() throws Exception {
@@ -56,21 +58,23 @@ public class SiteMeshTest {
     }
 
     @Test public void
-    removesContentLengthHeaderWhenPageIsSelected() throws Exception {
+    removesContentLengthHeaderWhenDecorating() throws Exception {
         response.header("Content-Length", String.valueOf(140));
         siteMesh.handle(request, response);
         response.assertHeader("Content-Length", nullValue());
     }
 
     @Test public void
-    leavesContentUntouchedWhenPageIsNotSelected() throws Exception {
+    leavesContentUntouchedWhenNotDecorating() throws Exception {
         page.become("unselected");
         siteMesh.handle(request, response);
         response.assertBody(originalPage);
+        int contentSize = originalPage.getBytes(Charsets.UTF_8).length;
+        response.assertBufferSize(equalTo(contentSize));
     }
 
     @Test public void
-    preservesOriginalPageEncodingWhenDecorating() throws Exception {
+    preservesOriginalResponseEncodingWhenDecorating() throws Exception {
         response.withContentType("text/html; charset=UTF-16");
         decoratedPage = "<The following characters require encoding: éçë>";
 

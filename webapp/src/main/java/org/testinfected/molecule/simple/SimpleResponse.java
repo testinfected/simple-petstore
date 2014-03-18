@@ -7,7 +7,6 @@ import org.simpleframework.http.parse.ContentTypeParser;
 import org.testinfected.molecule.HttpException;
 import org.testinfected.molecule.HttpStatus;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -87,9 +86,8 @@ public class SimpleResponse implements org.testinfected.molecule.Response {
     }
 
     public void body(String body) throws IOException {
-        Writer writer = new BufferedWriter(writer());
-        writer.write(body);
-        writer.flush();
+        byte[] content = body.getBytes(charset());
+        outputStream(content.length).write(content);
     }
 
     public Charset charset() {

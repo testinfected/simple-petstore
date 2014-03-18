@@ -173,12 +173,14 @@ public class PetStoreTest {
     renders404WhenAssetIsNotFound() throws IOException {
         response = request.get("/images/missing.png");
         assertNotFound();
+        response.assertNotChunked();
     }
 
     @Test public void
     renders404WhenNoRouteDefined() throws IOException {
         response = request.get("/unrecognized/route");
         assertNotFound();
+        response.assertNotChunked();
     }
 
     @Test public void
