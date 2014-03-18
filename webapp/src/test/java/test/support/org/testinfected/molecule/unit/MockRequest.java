@@ -35,10 +35,6 @@ public class MockRequest implements Request {
 
     public MockRequest() {}
 
-    public void setPath(String path) {
-        withPath(path);
-    }
-
     public MockRequest withPath(String path) {
         this.path = path;
         return this;
@@ -51,11 +47,6 @@ public class MockRequest implements Request {
 
     public MockRequest withIp(String address) {
         this.ip = address;
-        return this;
-    }
-
-    public MockRequest withProtocol(String protocol) {
-        this.protocol = protocol;
         return this;
     }
 

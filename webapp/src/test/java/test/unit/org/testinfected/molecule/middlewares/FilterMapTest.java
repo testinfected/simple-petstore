@@ -51,7 +51,7 @@ public class FilterMapTest {
 
     @Test public void
     matchesOnPathPrefix() throws Exception {
-        request.setPath("/filtered/path");
+        request.withPath("/filtered/path");
         filters.map("/filtered", filter("filtered"));
 
         filters.handle(request, response);
