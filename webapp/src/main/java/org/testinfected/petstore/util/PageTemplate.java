@@ -25,7 +25,7 @@ public class PageTemplate implements Page {
     }
 
     public void render(Response response, Object context) throws IOException {
-        response.contentType(mediaType + "; charset=" + response.charset().name().toLowerCase());
+        response.contentType(mediaType + "; charset=" + response.charsetName());
         Writer out = response.writer();
         renderer.render(out, template, context);
         out.flush();

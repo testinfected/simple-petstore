@@ -13,7 +13,7 @@ public class NotFound implements Application {
 
     public void handle(Request request, Response response) throws Exception {
         response.status(HttpStatus.NOT_FOUND);
-        response.contentType("text/plain; charset=" + response.charset().displayName().toLowerCase());
+        response.contentType("text/plain; charset=" + response.charsetName());
         response.body("Not found: " + request.pathInfo());
     }
 }

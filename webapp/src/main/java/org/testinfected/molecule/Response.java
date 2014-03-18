@@ -33,6 +33,8 @@ public interface Response {
 
     Charset charset();
 
+    String charsetName();
+
     OutputStream outputStream() throws IOException;
 
     OutputStream outputStream(int bufferSize) throws IOException;

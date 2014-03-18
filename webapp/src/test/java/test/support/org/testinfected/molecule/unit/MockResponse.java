@@ -141,6 +141,10 @@ public class MockResponse implements Response {
         return charset != null ? charset : defaultEncoding;
     }
 
+    public String charsetName() {
+        return charset().name().toLowerCase();
+    }
+
     public OutputStream outputStream() throws IOException {
         this.bufferSize = 0;
         return output;

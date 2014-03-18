@@ -100,6 +100,10 @@ public class SimpleResponse implements org.testinfected.molecule.Response {
         return Charset.forName(type.getCharset());
     }
 
+    public String charsetName() {
+        return charset().name().toLowerCase();
+    }
+
     public OutputStream outputStream() throws IOException {
         return response.getOutputStream();
     }

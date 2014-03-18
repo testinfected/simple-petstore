@@ -11,6 +11,7 @@ import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static test.support.org.testinfected.molecule.unit.MockRequest.aRequest;
 import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse;
 
@@ -26,7 +27,7 @@ public class FailsafeTest {
     }};
 
     MockRequest request = aRequest();
-    MockResponse response = aResponse();
+    MockResponse response = aResponse().withDefaultCharset("utf-8");
 
     @Before public void
     handleRequest() throws Exception {
@@ -48,7 +49,7 @@ public class FailsafeTest {
 
     @Test public void
     setsResponseContentTypeToHtml() {
-        response.assertHeader("Content-Type", containsString("text/html"));
+        response.assertHeader("Content-Type", equalTo("text/html; charset=utf-8"));
     }
 
     private Application crashWith(final Exception error) {

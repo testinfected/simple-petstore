@@ -193,6 +193,7 @@ public class PetStoreTest {
         response = request.get("/products");
         response.assertHasStatusCode(500);
         response.assertHasContent(containsString("Database is down"));
+        response.assertNotChunked();
     }
 
     @Test public void

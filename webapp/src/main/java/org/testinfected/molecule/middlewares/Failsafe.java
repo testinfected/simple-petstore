@@ -3,7 +3,6 @@ package org.testinfected.molecule.middlewares;
 import org.testinfected.molecule.HttpStatus;
 import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
-import org.testinfected.molecule.util.Charsets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,7 +35,7 @@ public class Failsafe extends AbstractMiddleware {
     }
 
     private void renderError(Exception error, Response response) throws IOException {
-        response.contentType("text/html; charset=" + Charsets.ISO_8859_1.name().toLowerCase());
+        response.contentType("text/html; charset=" + response.charsetName());
         response.body(formatAsHtml(error));
     }
 

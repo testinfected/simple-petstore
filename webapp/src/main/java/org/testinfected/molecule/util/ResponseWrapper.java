@@ -72,6 +72,10 @@ public class ResponseWrapper implements Response {
         return response.charset();
     }
 
+    public String charsetName() {
+        return response.charsetName();
+    }
+
     public OutputStream outputStream() throws IOException {
         return response.outputStream();
     }
