@@ -6,6 +6,7 @@ import org.testinfected.molecule.HttpStatus;
 import org.testinfected.molecule.Response;
 import org.testinfected.molecule.util.Charsets;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -59,6 +60,8 @@ public class MockResponse implements Response {
     }
 
     public void header(String name, String value) {
+        if (output.size() > 0)
+            throw new IllegalStateException("Cannot set header once response is committed");
         headers.put(name, value);
     }
 
@@ -151,8 +154,9 @@ public class MockResponse implements Response {
     }
 
     public OutputStream outputStream(int bufferSize) throws IOException {
+        if (bufferSize <= 0) return outputStream();
         this.bufferSize = bufferSize;
-        return output;
+        return new BufferedOutputStream(output, bufferSize);
     }
 
     public Writer writer() throws IOException {
