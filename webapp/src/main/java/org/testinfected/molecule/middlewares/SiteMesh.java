@@ -10,6 +10,7 @@ import org.testinfected.molecule.decoration.PageCompositor;
 import org.testinfected.molecule.decoration.Selector;
 import org.testinfected.molecule.util.BufferedResponse;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -38,7 +39,7 @@ public class SiteMesh extends AbstractMiddleware {
 
     private void decorate(Response response, BufferedResponse buffer) throws IOException {
         response.removeHeader("Content-Length");
-        Writer out = response.writer();
+        Writer out = new BufferedWriter(response.writer());
         decorator.decorate(out, buffer.body());
         out.flush();
     }

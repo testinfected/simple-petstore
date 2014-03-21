@@ -4,6 +4,7 @@ import org.testinfected.molecule.Response;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.RenderingEngine;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -21,7 +22,7 @@ public class PageTemplate implements Page {
 
     public void render(Response response, Object context) throws IOException {
         response.contentType(mediaType);
-        Writer out = response.writer();
+        Writer out = new BufferedWriter(response.writer());
         renderer.render(out, template, context);
         out.flush();
     }
