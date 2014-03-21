@@ -25,7 +25,6 @@ public class SimpleServer implements Server {
 
     private int port;
     private FailureReporter failureReporter = FailureReporter.IGNORE;
-    private Charset defaultCharset = Charsets.ISO_8859_1;
     private SessionTracker tracker = new DisableSessions();
 
     private Connection connection;
@@ -40,10 +39,6 @@ public class SimpleServer implements Server {
 
     public void reportErrorsTo(FailureReporter reporter) {
         this.failureReporter = reporter;
-    }
-
-    public void defaultCharset(Charset charset) {
-        defaultCharset = charset;
     }
 
     public void enableSessions(SessionTracker tracker) {
@@ -77,7 +72,7 @@ public class SimpleServer implements Server {
 
         public void handle(Request request, Response response) {
             try {
-                SimpleResponse responseAdapter = new SimpleResponse(response, defaultCharset);
+                SimpleResponse responseAdapter = new SimpleResponse(response);
                 SimpleRequest requestAdapter = new SimpleRequest(request, new SessionTracking(tracker, responseAdapter));
 
                 app.handle(requestAdapter, responseAdapter);

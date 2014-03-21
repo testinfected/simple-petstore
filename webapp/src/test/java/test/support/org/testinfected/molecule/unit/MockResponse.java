@@ -35,20 +35,10 @@ public class MockResponse implements Response {
     private final Map<String, String> cookies = new HashMap<String, String>();
 
     private HttpStatus status;
-    private Charset defaultEncoding = Charsets.ISO_8859_1;
     int bufferSize = 0;
 
     public static MockResponse aResponse() {
         return new MockResponse();
-    }
-
-    public MockResponse withDefaultCharset(String charsetName) {
-        return withDefaultCharset(Charset.forName(charsetName));
-    }
-
-    public MockResponse withDefaultCharset(Charset charset) {
-        this.defaultEncoding = charset;
-        return this;
     }
 
     public void redirectTo(String location) {
@@ -139,9 +129,9 @@ public class MockResponse implements Response {
     }
 
     public Charset charset() {
-        if (contentType() == null) return defaultEncoding;
+        if (contentType() == null) return Charsets.ISO_8859_1;
         Charset charset = parseCharset(contentType());
-        return charset != null ? charset : defaultEncoding;
+        return charset != null ? charset : Charsets.ISO_8859_1;
     }
 
     public String charsetName() {

@@ -6,6 +6,7 @@ import org.simpleframework.http.Response;
 import org.simpleframework.http.parse.ContentTypeParser;
 import org.testinfected.molecule.HttpException;
 import org.testinfected.molecule.HttpStatus;
+import org.testinfected.molecule.util.Charsets;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,11 +17,9 @@ import java.nio.charset.Charset;
 public class SimpleResponse implements org.testinfected.molecule.Response {
 
     private final Response response;
-    private final Charset defaultCharset;
 
-    public SimpleResponse(Response response, Charset defaultCharset) {
+    public SimpleResponse(Response response) {
         this.response = response;
-        this.defaultCharset = defaultCharset;
     }
 
     public void redirectTo(String location) {
@@ -94,7 +93,7 @@ public class SimpleResponse implements org.testinfected.molecule.Response {
         ContentType type = contentType() != null ? new ContentTypeParser(contentType()) : null;
 
         if (type == null || type.getCharset() == null) {
-            return defaultCharset;
+            return Charsets.ISO_8859_1;
         }
 
         return Charset.forName(type.getCharset());

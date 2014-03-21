@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import static java.lang.String.valueOf;
+
 public class WebServer {
 
     private static final PrintStream SILENT = new PrintStream(new OutputStream() {
@@ -49,7 +51,7 @@ public class WebServer {
     }
 
     private void launch() throws Exception {
-        launcher.launch("--environment", "test", "--encoding", "utf-8", "--port", String.valueOf(port), root.getAbsolutePath());
+        launcher.launch("--environment", "test", "--port", valueOf(port), root.getAbsolutePath());
     }
 
     private void shutdown() throws Exception {

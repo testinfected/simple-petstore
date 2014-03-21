@@ -18,7 +18,7 @@ public class NotFoundTest {
     NotFound notFound = new NotFound();
 
     MockRequest request = aRequest().withPath("/resource");
-    MockResponse response = aResponse().withDefaultCharset("utf-8");
+    MockResponse response = aResponse();
 
     String content = "Not found: /resource";
 
@@ -39,11 +39,11 @@ public class NotFoundTest {
 
     @Test public void
     buffersResponse() throws IOException {
-        response.assertBufferSize(content.getBytes(Charsets.UTF_8).length);
+        response.assertBufferSize(content.getBytes(Charsets.ISO_8859_1).length);
     }
 
     @Test public void
     setsContentTypeToPlainText() {
-        response.assertHeader("Content-Type", "text/plain; charset=utf-8");
+        response.assertHeader("Content-Type", "text/plain");
     }
 }

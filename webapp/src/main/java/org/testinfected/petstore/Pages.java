@@ -15,26 +15,30 @@ public class Pages {
     }
 
     public Page checkout() {
-        return PageTemplate.html(engine, "checkout");
+        return page("checkout");
     }
 
     public Page items() {
-        return PageTemplate.html(engine, "items");
+        return page("items");
     }
 
     public Page products() {
-        return PageTemplate.html(engine, "products");
+        return page("products");
     }
 
     public Page cart() {
-        return PageTemplate.html(engine, "cart");
+        return page("cart");
     }
 
     public Page home() {
-        return PageTemplate.html(engine, "home");
+        return page("home");
     }
 
     public Page order() {
-        return PageTemplate.html(engine, "order");
+        return page("order");
+    }
+
+    private Page page(String template) {
+        return new PageTemplate(engine, template, "text/html; charset=utf-8");
     }
 }

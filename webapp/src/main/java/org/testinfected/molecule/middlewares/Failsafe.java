@@ -35,7 +35,7 @@ public class Failsafe extends AbstractMiddleware {
     }
 
     private void renderError(Exception error, Response response) throws IOException {
-        response.contentType("text/html; charset=" + response.charsetName());
+        response.contentType("text/html; charset=utf-8");
         response.body(formatAsHtml(error));
     }
 

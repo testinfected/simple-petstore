@@ -36,7 +36,6 @@ import test.support.org.testinfected.petstore.web.WebRoot;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
@@ -79,7 +78,6 @@ public class PetStoreTest {
 
     Exception error;
 
-    String encoding = "utf-16";
     Date now = calendarDate(2012, 6, 8).atMidnight().inZone("GMT-04:00").build();
 
     @Before public void
@@ -91,7 +89,6 @@ public class PetStoreTest {
         database.clean();
 
         server.enableSessions(new CookieTracker(new SessionPool(delorean, SESSION_TIMEOUT)));
-        server.defaultCharset(Charset.forName(encoding));
         petstore.setClock(BrokenClock.stoppedAt(now));
         logFile = LogFile.create();
         petstore.logTo(new FileHandler(logFile.path()));
@@ -140,14 +137,14 @@ public class PetStoreTest {
     }
 
     @Test public void
-    rendersDynamicContentAsHtmlProperlyEncoded() throws Exception {
+    rendersDynamicContentAsHtmlUtf8Encoded() throws Exception {
         makeProducts(aProduct().named("French Bouledogue (Bouledogue français)"));
         response = request.get("/products?keyword=bouledogue");
 
         assertOK();
         response.assertHasContent(productsList());
-        response.assertHasContentType("text/html; charset=" + encoding);
-        response.assertContentIsEncodedAs(encoding);
+        response.assertHasContentType("text/html; charset=utf-8");
+        response.assertContentIsEncodedAs("utf-8");
         response.assertChunked();
     }
 

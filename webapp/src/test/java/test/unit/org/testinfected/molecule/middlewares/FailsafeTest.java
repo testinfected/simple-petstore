@@ -27,7 +27,7 @@ public class FailsafeTest {
     }};
 
     MockRequest request = aRequest();
-    MockResponse response = aResponse().withDefaultCharset("utf-8");
+    MockResponse response = aResponse();
 
     @Before public void
     handleRequest() throws Exception {

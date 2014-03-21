@@ -13,7 +13,6 @@ import org.testinfected.petstore.util.ConsoleHandler;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.charset.Charset;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -48,11 +47,9 @@ public class Launcher {
     }
 
     private static final String ENV = "env";
-    private static final String ENCODING = "encoding";
     private static final String QUIET = "quiet";
     private static final String PORT = "port";
     private static final String TIMEOUT = "timeout";
-    private static final String UTF_8 = "utf-8";
     private static final String DEVELOPMENT_ENV = "development";
     private static final int PORT_8080 = 8080;
     private static final int WEB_ROOT = 0;
@@ -74,7 +71,6 @@ public class Launcher {
             define(option(ENV, "-e", "--environment ENV", "Specifies the environment to run this server under (development, production, etc.)").defaultingTo(DEVELOPMENT_ENV));
             define(option(PORT, "-p", "--port PORT", "Runs the server on the specified port").asType(int.class).defaultingTo(PORT_8080));
             define(option(TIMEOUT, "--timeout SECONDS", "Expires sessions after the given timeout").asType(int.class).defaultingTo(FIFTEEN_MINUTES));
-            define(option(ENCODING, "--encoding ENCODING", "Specifies the server output encoding").defaultingTo(UTF_8));
             define(option(QUIET, "-q", "--quiet", "Operates quietly").defaultingTo(false));
         }};
     }
@@ -88,7 +84,6 @@ public class Launcher {
 
         out.println("Starting http://localhost:" + port(cli));
         server.port(port(cli));
-        server.defaultCharset(encoding(cli));
 
         PetStore petStore = new PetStore(new File(webRoot), new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
 
@@ -107,10 +102,6 @@ public class Launcher {
 
     private int port(CLI cli) {
         return (Integer) cli.getOption(PORT);
-    }
-
-    private Charset encoding(CLI cli) {
-        return Charset.forName((String) cli.getOption(ENCODING));
     }
 
     private String env(CLI cli) {
