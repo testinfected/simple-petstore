@@ -2,6 +2,7 @@ package test.unit.org.testinfected.molecule.middlewares;
 
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.jmock.lib.concurrent.Synchroniser;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,6 +27,7 @@ import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse
 public class ApacheCommonLoggerTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery() {{
         setImposteriser(ClassImposteriser.INSTANCE);
+        setThreadingPolicy(new Synchroniser());
     }};
 
     Logger logger = context.mock(Logger.class);
