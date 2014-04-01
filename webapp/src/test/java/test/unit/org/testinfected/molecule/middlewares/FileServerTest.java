@@ -2,7 +2,6 @@ package test.unit.org.testinfected.molecule.middlewares;
 
 import org.junit.Test;
 import org.testinfected.molecule.middlewares.FileServer;
-import org.testinfected.molecule.middlewares.NotFound;
 import org.testinfected.molecule.util.Streams;
 import test.support.org.testinfected.molecule.unit.MockRequest;
 import test.support.org.testinfected.molecule.unit.MockResponse;
@@ -20,7 +19,7 @@ import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse
 
 public class FileServerTest {
 
-    FileServer fileServer = new FileServer(assetsFolder(), new NotFound());
+    FileServer fileServer = new FileServer(assetsFolder());
     File file = new File(assetsFolder(), "images/image.png");
 
     MockRequest request = GET("/images/image.png");

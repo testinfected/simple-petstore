@@ -7,8 +7,8 @@ import org.testinfected.molecule.Response;
 
 public class NotFound implements Application {
 
-    public static Application notFound() {
-        return new NotFound();
+    public static void notFound(Request request, Response response) throws Exception {
+        new NotFound().handle(request, response);
     }
 
     public void handle(Request request, Response response) throws Exception {

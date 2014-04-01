@@ -10,8 +10,6 @@ import org.testinfected.molecule.routing.RouteSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testinfected.molecule.middlewares.NotFound.notFound;
-
 public class Router implements Application, RouteSet {
 
     private Application defaultApp;
@@ -25,7 +23,7 @@ public class Router implements Application, RouteSet {
     private final List<Route> routingTable = new ArrayList<Route>();
 
     public Router() {
-        this(notFound());
+        this(new NotFound());
     }
 
     public Router(final Application fallback) {

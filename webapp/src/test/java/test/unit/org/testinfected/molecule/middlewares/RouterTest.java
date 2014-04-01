@@ -6,7 +6,6 @@ import org.testinfected.molecule.Request;
 import org.testinfected.molecule.Response;
 import org.testinfected.molecule.matchers.Anything;
 import org.testinfected.molecule.matchers.Nothing;
-import org.testinfected.molecule.middlewares.NotFound;
 import org.testinfected.molecule.middlewares.Router;
 import org.testinfected.molecule.routing.Route;
 import org.testinfected.molecule.util.Matcher;
@@ -20,7 +19,7 @@ import static test.support.org.testinfected.molecule.unit.MockResponse.aResponse
 
 public class RouterTest {
 
-    Router router = new Router(NotFound.notFound());
+    Router router = new Router();
     MockRequest request = aRequest();
     MockResponse response = aResponse();
 

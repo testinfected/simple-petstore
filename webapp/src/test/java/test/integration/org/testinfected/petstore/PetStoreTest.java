@@ -163,6 +163,7 @@ public class PetStoreTest {
 
         assertOK();
         response.assertHasContentType("image/png");
+        response.assertHasContentSize(26427);
         response.assertNotChunked();
     }
 
