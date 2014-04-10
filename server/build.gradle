@@ -1,0 +1,28 @@
+dependencies {
+  compile project(':domain')
+  compile project(':persistence')
+  compile project(':webapp')
+  compile 'org.testinfected:cli:1.0'
+  compile 'com.googlecode.flyway:flyway-core:2.0'
+
+  runtime 'mysql:mysql-connector-java:5.1.21'
+
+  testCompile project(':webapp').sourceSets.test.output
+  testCompile 'org.simpleframework:simple:5.1.6'
+  testCompile 'com.samskivert:jmustache:1.9'
+  testCompile 'net.sourceforge.htmlunit:htmlunit:2.14'
+  testCompile 'net.sourceforge.nekohtml:nekohtml:1.9.20'
+  testCompile 'org.seleniumhq.selenium:selenium-api:2.37.0'
+  testCompile 'org.seleniumhq.selenium:selenium-remote-driver:2.37.0'
+  testCompile 'org.seleniumhq.selenium:selenium-firefox-driver:2.37.0'
+  testCompile('com.github.detro.ghostdriver:phantomjsdriver:1.0.4') {
+    exclude module: 'selenium-java'
+    exclude module: 'selenium-server'
+  }
+  testCompile 'com.googlecode.windowlicker:windowlicker-web:r268'
+}
+
+test {
+    systemProperties 'web.root': project(':webapp').file('src/main/webapp')
+    systemProperties 'browser.driver': 'phantomjs'
+}

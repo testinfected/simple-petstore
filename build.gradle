@@ -1,0 +1,95 @@
+allprojects {
+  apply plugin: 'java'
+  apply plugin: 'application'
+
+  group = 'org.testinfected.petstore'
+  version = '0.2-SNAPSHOT'
+
+  repositories {
+    mavenCentral()
+  }
+}
+
+subprojects {
+  apply plugin: 'jacoco'
+
+  dependencies {
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.hamcrest:hamcrest-core:1.3'
+    testCompile 'org.hamcrest:hamcrest-library:1.3'
+    testCompile 'org.jmock:jmock:2.6.0'
+    testCompile 'org.jmock:jmock-junit4:2.6.0'
+    testCompile 'org.testinfected.hamcrest-matchers:core-matchers:1.5'
+    testCompile 'org.slf4j:slf4j-api:1.5.6'
+    testCompile 'org.slf4j:slf4j-nop:1.5.6'
+    testCompile 'org.slf4j:jcl-over-slf4j:1.5.6'
+  }
+}
+
+configurations {
+    jacoco
+}
+dependencies {
+    jacoco 'org.jacoco:org.jacoco.ant:0.7.0.201403182114'
+}
+
+task coverage(type: JacocoReport) {
+    jacocoClasspath = configurations.jacoco
+    // Add execution data from all subprojects
+    executionData fileTree(project.rootDir.absolutePath).include("*/build/jacoco/*.exec")
+    // Add source classes from all subprojects
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+    // Make the aggregate report go in a top-level directory somewhere
+    reports {
+        html {
+            enabled true
+            destination "build/reports/jacoco"
+        }
+    }
+}
+
+mainClassName = 'org.testinfected.petstore.Launcher'
+
+run {
+  classpath = project(':server').sourceSets.main.runtimeClasspath
+  def cli = []
+  if (project.hasProperty('port')) {
+    args '-p', port
+  }
+  if (project.hasProperty('env')) {
+    args '-e', env
+  }
+  args project(':webapp').file('src/main/webapp')
+}
+
+task 'db-init'(type: JavaExec) {
+  main = 'org.testinfected.petstore.Migrations'
+  classpath = project(':server').sourceSets.main.runtimeClasspath
+  args = ['-e', env, 'init']
+}
+
+task 'db-clean'(type: JavaExec) {
+  main = 'org.testinfected.petstore.Migrations'
+  classpath = project(':server').sourceSets.main.runtimeClasspath
+  args = ['-e', env, 'clean']
+}
+
+task 'db-migrate'(type: JavaExec) {
+  main = 'org.testinfected.petstore.Migrations'
+  classpath = project(':server').sourceSets.main.runtimeClasspath
+  args = ['-e', env, 'migrate']
+}
+
+task 'db-drop'(type: JavaExec) {
+  main = 'org.testinfected.petstore.Migrations'
+  classpath = project(':server').sourceSets.main.runtimeClasspath
+  args = ['-e', env, 'drop']
+}
+
+task 'db-reset'(type: JavaExec) {
+  main = 'org.testinfected.petstore.Migrations'
+  classpath = project(':server').sourceSets.main.runtimeClasspath
+  args = ['-e', env, 'reset']
+}

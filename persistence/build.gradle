@@ -1,0 +1,9 @@
+dependencies {
+
+  compile project(':domain')
+
+  testCompile project(':domain').sourceSets.test.output
+  testCompile 'com.googlecode.flyway:flyway-core:2.0'
+
+  testRuntime 'mysql:mysql-connector-java:5.1.21'
+}

@@ -1,0 +1,30 @@
+dependencies {
+
+  compile project(':domain')
+  compile project(':persistence')
+  compile 'org.simpleframework:simple:5.1.6'
+  compile 'com.samskivert:jmustache:1.9'
+
+  testCompile project(':domain').sourceSets.test.output
+  testCompile project(':persistence').sourceSets.test.output
+
+  testCompile 'org.jmock:jmock-legacy:2.6.0'
+  testCompile 'com.google.guava:guava:15.0'
+  testCompile 'org.antlr:antlr-runtime:3.0.1'
+  testCompile('com.3levers.cssselectors:cssselectors:1.0') {
+    transitive = false
+  }
+  testCompile('org.testinfected.hamcrest-matchers:dom-matchers:1.5') {
+    transitive = false
+  }
+  testCompile 'com.googlecode.flyway:flyway-core:2.0'
+  testCompile 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3'
+  testCompile 'net.sourceforge.htmlunit:htmlunit:2.14'
+  testCompile 'net.sourceforge.nekohtml:nekohtml:1.9.20'
+
+  testRuntime 'mysql:mysql-connector-java:5.1.21'
+}
+
+test {
+    systemProperties 'web.root': file('src/main/webapp')
+}

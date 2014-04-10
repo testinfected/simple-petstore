@@ -1,0 +1,3 @@
+rootProject.name = 'petstore'
+
+include 'domain', 'persistence', 'webapp', 'server'
