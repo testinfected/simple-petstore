@@ -52,14 +52,15 @@ task coverage(type: JacocoReport) {
 
 mainClassName = 'org.testinfected.petstore.Launcher'
 
+if (!project.hasProperty('env')) {
+  ext.env = 'development'
+}
+
 run {
   classpath = project(':server').sourceSets.main.runtimeClasspath
-  def cli = []
+  args '-e', env
   if (project.hasProperty('port')) {
     args '-p', port
-  }
-  if (project.hasProperty('env')) {
-    args '-e', env
   }
   args project(':webapp').file('src/main/webapp')
 }
