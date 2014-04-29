@@ -2,9 +2,9 @@ package test.support.org.testinfected.petstore.web;
 
 import com.objogate.wl.UnsynchronizedProber;
 import com.objogate.wl.web.AsyncWebDriver;
+import com.vtence.molecule.support.HttpRequest;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import test.support.org.testinfected.molecule.integration.HttpRequest;
 import test.support.org.testinfected.petstore.web.browser.Browser;
 import test.support.org.testinfected.petstore.web.browser.Firefox;
 import test.support.org.testinfected.petstore.web.browser.PhantomJS;
@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import static java.lang.Integer.parseInt;
-import static test.support.org.testinfected.molecule.integration.HttpRequest.aRequest;
 
 public class TestEnvironment {
 
@@ -130,7 +129,7 @@ public class TestEnvironment {
     }
 
     public HttpRequest api() {
-        return aRequest().onPort(serverPort()).withTimeOut(HTTP_TIMEOUT_IN_MILLIS);
+        return new HttpRequest().onPort(serverPort()).withTimeOut(HTTP_TIMEOUT_IN_MILLIS);
     }
 
     public int serverPort() {

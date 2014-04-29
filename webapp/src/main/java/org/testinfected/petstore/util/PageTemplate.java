@@ -1,6 +1,6 @@
 package org.testinfected.petstore.util;
 
-import org.testinfected.molecule.Response;
+import com.vtence.molecule.Response;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.RenderingEngine;
 

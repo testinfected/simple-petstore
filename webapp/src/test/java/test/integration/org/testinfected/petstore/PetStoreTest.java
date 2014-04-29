@@ -1,5 +1,8 @@
 package test.integration.org.testinfected.petstore;
 
+import com.vtence.molecule.support.BrokenClock;
+import com.vtence.molecule.support.HttpRequest;
+import com.vtence.molecule.support.HttpResponse;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.States;
@@ -12,11 +15,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.testinfected.molecule.session.CookieTracker;
-import org.testinfected.molecule.session.SessionPool;
-import org.testinfected.molecule.simple.SimpleServer;
-import org.testinfected.molecule.util.Clock;
-import org.testinfected.molecule.util.FailureReporter;
+import com.vtence.molecule.session.CookieTracker;
+import com.vtence.molecule.session.SessionPool;
+import com.vtence.molecule.simple.SimpleServer;
+import com.vtence.molecule.util.Clock;
+import com.vtence.molecule.util.FailureReporter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.db.ItemsDatabase;
 import org.testinfected.petstore.db.JDBCTransactor;
@@ -24,9 +27,6 @@ import org.testinfected.petstore.db.ProductsDatabase;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.transaction.UnitOfWork;
 import org.testinfected.petstore.util.Logging;
-import test.support.org.testinfected.molecule.integration.HttpRequest;
-import test.support.org.testinfected.molecule.integration.HttpResponse;
-import test.support.org.testinfected.molecule.unit.BrokenClock;
 import test.support.org.testinfected.petstore.StackTrace;
 import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.builders.ProductBuilder;
@@ -41,14 +41,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 
+import static com.vtence.molecule.support.DateBuilder.calendarDate;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.fail;
-import static test.support.org.testinfected.molecule.integration.HttpRequest.aRequest;
-import static test.support.org.testinfected.molecule.unit.DateBuilder.calendarDate;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
@@ -73,7 +72,7 @@ public class PetStoreTest {
     LogFile logFile;
     int serverPort = 9999;
     SimpleServer server = new SimpleServer(serverPort);
-    HttpRequest request = aRequest().onPort(serverPort);
+    HttpRequest request = new HttpRequest().onPort(serverPort);
     HttpResponse response;
 
     Exception error;

@@ -1,7 +1,7 @@
 package test.support.org.testinfected.petstore.web.page;
 
 import com.objogate.wl.web.AsyncWebDriver;
-import test.support.org.testinfected.molecule.integration.HttpRequest;
+import com.vtence.molecule.support.HttpRequest;
 import test.support.org.testinfected.petstore.web.AdministrationAPI;
 import test.support.org.testinfected.petstore.web.TestEnvironment;
 import test.support.org.testinfected.petstore.web.WebServer;

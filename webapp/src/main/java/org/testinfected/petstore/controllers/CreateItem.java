@@ -2,10 +2,10 @@ package org.testinfected.petstore.controllers;
 
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateItemException;
-import org.testinfected.molecule.Application;
-import org.testinfected.molecule.HttpStatus;
-import org.testinfected.molecule.Request;
-import org.testinfected.molecule.Response;
+import com.vtence.molecule.Application;
+import com.vtence.molecule.HttpStatus;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
 
 import java.math.BigDecimal;
 

@@ -1,6 +1,6 @@
 package org.testinfected.petstore.helpers;
 
-import org.testinfected.molecule.Request;
+import com.vtence.molecule.Request;
 import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;

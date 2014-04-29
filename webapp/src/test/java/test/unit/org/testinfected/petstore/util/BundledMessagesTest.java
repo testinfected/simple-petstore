@@ -6,9 +6,9 @@ import org.testinfected.petstore.util.BundledMessages;
 import java.util.ListResourceBundle;
 import java.util.Locale;
 
+import static com.vtence.molecule.support.DateBuilder.calendarDate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static test.support.org.testinfected.molecule.unit.DateBuilder.calendarDate;
 
 public class BundledMessagesTest {
 

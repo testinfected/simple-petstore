@@ -1,6 +1,6 @@
 package org.testinfected.petstore;
 
-import org.testinfected.molecule.Response;
+import com.vtence.molecule.Response;
 
 import java.io.IOException;
 

@@ -1,20 +1,20 @@
 package test.unit.org.testinfected.petstore.controllers;
 
+import com.vtence.molecule.Session;
+import com.vtence.molecule.support.MockRequest;
+import com.vtence.molecule.support.MockResponse;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
-import org.testinfected.molecule.Session;
 import org.testinfected.petstore.controllers.CreateCartItem;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.CartItem;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ItemNumber;
-import test.support.org.testinfected.molecule.unit.MockRequest;
-import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;

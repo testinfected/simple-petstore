@@ -1,12 +1,12 @@
 package org.testinfected.petstore;
 
 import org.testinfected.cli.CLI;
-import org.testinfected.molecule.session.CookieTracker;
-import org.testinfected.molecule.session.PeriodicSessionHouseKeeping;
-import org.testinfected.molecule.session.SessionPool;
-import org.testinfected.molecule.simple.SimpleServer;
-import org.testinfected.molecule.util.ConsoleErrorReporter;
-import org.testinfected.molecule.util.SystemClock;
+import com.vtence.molecule.session.CookieTracker;
+import com.vtence.molecule.session.PeriodicSessionHouseKeeping;
+import com.vtence.molecule.session.SessionPool;
+import com.vtence.molecule.simple.SimpleServer;
+import com.vtence.molecule.util.ConsoleErrorReporter;
+import com.vtence.molecule.util.SystemClock;
 import org.testinfected.petstore.db.support.DriverManagerDataSource;
 import org.testinfected.petstore.util.Logging;
 

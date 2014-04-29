@@ -1,16 +1,16 @@
 package test.unit.org.testinfected.petstore.controllers;
 
+import com.vtence.molecule.support.MockRequest;
+import com.vtence.molecule.support.MockResponse;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.testinfected.molecule.HttpStatus;
+import com.vtence.molecule.HttpStatus;
 import org.testinfected.petstore.controllers.CreateItem;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateItemException;
-import test.support.org.testinfected.molecule.unit.MockRequest;
-import test.support.org.testinfected.molecule.unit.MockResponse;
 
 import java.math.BigDecimal;
 

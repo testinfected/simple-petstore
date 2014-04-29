@@ -1,12 +1,14 @@
 dependencies {
   compile project(':domain')
   compile project(':persistence')
+  compile project(':molecule')
   compile project(':webapp')
   compile libs.cli
   compile libs.flyway
 
   runtime libs.mysql
 
+  testCompile project(':molecule').sourceSets.test.output
   testCompile project(':webapp').sourceSets.test.output
   testCompile libs.simple
   testCompile libs.jmustache

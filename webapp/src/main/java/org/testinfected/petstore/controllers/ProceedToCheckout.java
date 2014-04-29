@@ -1,8 +1,8 @@
 package org.testinfected.petstore.controllers;
 
-import org.testinfected.molecule.Application;
-import org.testinfected.molecule.Request;
-import org.testinfected.molecule.Response;
+import com.vtence.molecule.Application;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
 import org.testinfected.petstore.Page;
 import org.testinfected.petstore.util.SessionScope;
 import org.testinfected.petstore.views.Checkout;

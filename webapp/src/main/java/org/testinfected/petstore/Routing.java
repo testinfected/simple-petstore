@@ -1,10 +1,10 @@
 package org.testinfected.petstore;
 
-import org.testinfected.molecule.Application;
-import org.testinfected.molecule.Request;
-import org.testinfected.molecule.Response;
-import org.testinfected.molecule.middlewares.Router;
-import org.testinfected.molecule.routing.DynamicRoutes;
+import com.vtence.molecule.Application;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
+import com.vtence.molecule.middlewares.Router;
+import com.vtence.molecule.routing.DynamicRoutes;
 import org.testinfected.petstore.controllers.ProceedToCheckout;
 import org.testinfected.petstore.controllers.CreateCartItem;
 import org.testinfected.petstore.controllers.CreateItem;
@@ -36,7 +36,7 @@ import org.testinfected.petstore.util.FileSystemPhotoStore;
 import java.sql.Connection;
 import java.util.ResourceBundle;
 
-import static org.testinfected.molecule.middlewares.ConnectionScope.ConnectionReference;
+import static com.vtence.molecule.middlewares.ConnectionScope.ConnectionReference;
 
 public class Routing implements Application {
 

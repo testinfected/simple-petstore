@@ -1,8 +1,8 @@
 package test.support.org.testinfected.petstore.web;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
-import test.support.org.testinfected.molecule.integration.HttpRequest;
-import test.support.org.testinfected.molecule.integration.HttpResponse;
+import com.vtence.molecule.support.HttpRequest;
+import com.vtence.molecule.support.HttpResponse;
 
 import java.io.IOException;
 

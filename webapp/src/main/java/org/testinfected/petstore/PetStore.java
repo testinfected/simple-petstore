@@ -1,19 +1,19 @@
 package org.testinfected.petstore;
 
-import org.testinfected.molecule.MiddlewareStack;
-import org.testinfected.molecule.Server;
-import org.testinfected.molecule.middlewares.ApacheCommonLogger;
-import org.testinfected.molecule.middlewares.ConnectionScope;
-import org.testinfected.molecule.middlewares.DateHeader;
-import org.testinfected.molecule.middlewares.Failsafe;
-import org.testinfected.molecule.middlewares.FailureMonitor;
-import org.testinfected.molecule.middlewares.FileServer;
-import org.testinfected.molecule.middlewares.HttpMethodOverride;
-import org.testinfected.molecule.middlewares.ServerHeader;
-import org.testinfected.molecule.middlewares.StaticAssets;
-import org.testinfected.molecule.util.Clock;
-import org.testinfected.molecule.util.FailureReporter;
-import org.testinfected.molecule.util.SystemClock;
+import com.vtence.molecule.MiddlewareStack;
+import com.vtence.molecule.Server;
+import com.vtence.molecule.middlewares.ApacheCommonLogger;
+import com.vtence.molecule.middlewares.ConnectionScope;
+import com.vtence.molecule.middlewares.DateHeader;
+import com.vtence.molecule.middlewares.Failsafe;
+import com.vtence.molecule.middlewares.FailureMonitor;
+import com.vtence.molecule.middlewares.FileServer;
+import com.vtence.molecule.middlewares.HttpMethodOverride;
+import com.vtence.molecule.middlewares.ServerHeader;
+import com.vtence.molecule.middlewares.StaticAssets;
+import com.vtence.molecule.util.Clock;
+import com.vtence.molecule.util.FailureReporter;
+import com.vtence.molecule.util.SystemClock;
 import org.testinfected.petstore.util.JMustacheRendering;
 import org.testinfected.petstore.util.Logging;
 

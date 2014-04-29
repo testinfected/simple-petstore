@@ -1,7 +1,7 @@
 package test.support.org.testinfected.petstore.web;
 
 import org.hamcrest.Matcher;
-import org.testinfected.molecule.Response;
+import com.vtence.molecule.Response;
 import org.testinfected.petstore.Page;
 
 import java.io.IOException;

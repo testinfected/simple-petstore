@@ -1,5 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
+import com.vtence.molecule.support.MockRequest;
+import com.vtence.molecule.support.MockResponse;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -10,8 +12,6 @@ import org.junit.Test;
 import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
-import test.support.org.testinfected.molecule.unit.MockRequest;
-import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.web.MockPage;
 

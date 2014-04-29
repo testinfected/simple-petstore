@@ -1,5 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
+import com.vtence.molecule.support.MockRequest;
+import com.vtence.molecule.support.MockResponse;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
@@ -15,8 +17,6 @@ import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
 import org.testinfected.petstore.util.BundledMessages;
-import test.support.org.testinfected.molecule.unit.MockRequest;
-import test.support.org.testinfected.molecule.unit.MockResponse;
 import test.support.org.testinfected.petstore.web.MockPage;
 
 import java.math.BigDecimal;

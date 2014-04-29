@@ -2,11 +2,11 @@ dependencies {
 
   compile project(':domain')
   compile project(':persistence')
-  compile libs.simple
-  compile libs.jmustache
+  compile project(':molecule')
 
   testCompile project(':domain').sourceSets.test.output
   testCompile project(':persistence').sourceSets.test.output
+  testCompile project(':molecule').sourceSets.test.output
 
   testCompile libs.hamcrest_dom
   testCompile libs.flyway

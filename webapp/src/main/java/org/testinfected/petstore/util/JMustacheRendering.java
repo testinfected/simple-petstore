@@ -2,8 +2,8 @@ package org.testinfected.petstore.util;
 
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
-import org.testinfected.molecule.util.Charsets;
-import org.testinfected.molecule.util.Streams;
+import com.vtence.molecule.util.Charsets;
+import com.vtence.molecule.util.Streams;
 import org.testinfected.petstore.RenderingEngine;
 
 import java.io.File;

@@ -1,12 +1,12 @@
 package org.testinfected.petstore;
 
-import org.testinfected.molecule.Request;
-import org.testinfected.molecule.Response;
-import org.testinfected.molecule.Session;
-import org.testinfected.molecule.decoration.Layout;
-import org.testinfected.molecule.middlewares.AbstractMiddleware;
-import org.testinfected.molecule.middlewares.FilterMap;
-import org.testinfected.molecule.middlewares.SiteMesh;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
+import com.vtence.molecule.Session;
+import com.vtence.molecule.decoration.Layout;
+import com.vtence.molecule.middlewares.AbstractMiddleware;
+import com.vtence.molecule.middlewares.FilterMap;
+import com.vtence.molecule.middlewares.SiteMesh;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.util.SessionScope;
 import org.testinfected.petstore.views.PlainPage;
