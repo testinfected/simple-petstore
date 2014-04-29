@@ -41,10 +41,9 @@ public class Launcher {
 
     private static final String ENV = "env";
     private static final String QUIET = "quiet";
+    private static final String HOST = "host";
     private static final String PORT = "port";
     private static final String TIMEOUT = "timeout";
-    private static final String DEVELOPMENT_ENV = "development";
-    private static final int PORT_8080 = 8080;
     private static final int WEB_ROOT = 0;
     private static final int FIFTEEN_MINUTES = (int) MINUTES.toSeconds(15);
 
@@ -62,10 +61,11 @@ public class Launcher {
     private static CLI defineCommandLine() {
         return new CLI() {{
             withBanner("petstore [options] webroot");
-            define(option(ENV, "-e", "--environment ENV", "Specifies the environment to run this server under (development, production, etc.)").defaultingTo(DEVELOPMENT_ENV));
-            define(option(PORT, "-p", "--port PORT", "Runs the server on the specified port").asType(int.class).defaultingTo(PORT_8080));
-            define(option(TIMEOUT, "--timeout SECONDS", "Expires sessions after the given timeout").asType(int.class).defaultingTo(FIFTEEN_MINUTES));
-            define(option(QUIET, "-q", "--quiet", "Operates quietly").defaultingTo(false));
+            define(option(ENV, "-e", "--environment ENV", "Environment to use for configuration (default: development)").defaultingTo("development"));
+            define(option(HOST, "-h", "--host HOST", "Host address to bind to (default: 0.0.0.0)").defaultingTo("0.0.0.0"));
+            define(option(PORT, "-p", "--port PORT", "Port to listen on (default: 8080)").asType(int.class).defaultingTo(8080));
+            define(option(TIMEOUT, "--timeout SECONDS", "Session timeout in seconds (default: 15 min)").asType(int.class).defaultingTo(FIFTEEN_MINUTES));
+            define(option(QUIET, "-q", "--quiet", "Operate quietly").defaultingTo(false));
         }};
     }
 
@@ -76,9 +76,9 @@ public class Launcher {
         String webRoot = operands[WEB_ROOT];
         Environment env = Environment.load(env(cli));
 
-        // todo parametrize the host as well
+        String host = host(cli);
         int port = port(cli);
-        server = new SimpleServer("localhost", port);
+        server = new SimpleServer(host, port);
 
         app = new PetStore(new File(webRoot),
                                 new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
@@ -92,11 +92,15 @@ public class Launcher {
         int timeout = timeout(cli);
         app.sessionTimeout(timeout);
         app.start(server);
-        out.println("Launching http://" + server.host() + (port != 80 ? ":" + port : ""));
-        out.println("-> Serving files from " + webRoot);
+        out.println("Launching http://" + server.host() + (server.port() != 80 ? ":" + server.port() : ""));
+        out.println("-> Serving files under " + webRoot);
         if (timeout > 0) {
             out.println("-> Sessions expire after " + timeout + " seconds");
         }
+    }
+
+    private String host(CLI cli) {
+        return (String) cli.getOption(HOST);
     }
 
     private int port(CLI cli) {
