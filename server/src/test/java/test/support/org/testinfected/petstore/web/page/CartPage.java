@@ -26,6 +26,11 @@ public class CartPage extends Page {
         return this;
     }
 
+    public CheckoutPage checkout() {
+        browser.element(cssSelector(".actions .confirm a")).click();
+        return new CheckoutPage(browser);
+    }
+
     public void continueShopping() {
         browser.element(cssSelector(".actions .cancel")).click();
     }
@@ -48,11 +53,6 @@ public class CartPage extends Page {
 
     private String domIdOf(String itemNumber) {
         return "#cart-item-" + itemNumber;
-    }
-
-    public CheckoutPage checkout() {
-        browser.element(cssSelector(".actions .confirm a")).click();
-        return new CheckoutPage(browser);
     }
 }
 

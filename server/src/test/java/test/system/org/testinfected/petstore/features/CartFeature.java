@@ -33,8 +33,7 @@ public class CartFeature {
 
         application.buyItem("Iguana", "12345678");
         application.showsCartTotalQuantity(1);
-        application.showsCartContent("18.50",
-                item("12345678", "Green Adult", "18.50"));
+        application.showsCartContent("18.50", item("12345678", "Green Adult", "18.50"));
 
         application.buyItem("Iguana", "87654321");
         application.showsCartTotalQuantity(2);
