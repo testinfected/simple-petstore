@@ -44,7 +44,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
       'browser.capability.name' => 'PetStore System Tests'
     }
     test.with project(:webapp).test.compile.target
-    test.with :simpleweb, :jmustache, HAMCREST, :flyway, :mysql, NO_LOG
+    test.with :simpleweb, :jmustache, HAMCREST, :mysql, NO_LOG
     test.with transitive(artifacts(:htmlunit, :selenium_firefox_driver, :selenium_ghost_driver,
        :windowlicker_web))
     integration.setup { selenium.run }
@@ -57,7 +57,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     end
   end
 
-  task :run do
+  task :run => project(:server).package do
     Java::Commands.java("-jar", project(:server).package.to_s,
       "-p", Buildr.settings.profile['server.port'],
       "-e", Buildr.environment,
