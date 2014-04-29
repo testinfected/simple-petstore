@@ -46,7 +46,7 @@ public class TestEnvironment {
     public static TestEnvironment load(String resource) {
         try {
             InputStream config = Thread.currentThread().getContextClassLoader().getResourceAsStream(resource);
-            if (config == null) throw new IOException("Test propertieds not found: " + resource);
+            if (config == null) throw new IOException("Test properties not found: " + resource);
             Properties props = new Properties();
             props.load(config);
             return new TestEnvironment(props);

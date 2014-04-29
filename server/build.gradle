@@ -24,6 +24,6 @@ dependencies {
 }
 
 test {
-    systemProperties 'web.root': project(':webapp').file('src/main/webapp')
+    systemProperties 'web.root': project(':webapp').file('src/main/content')
     systemProperties 'browser.driver': 'phantomjs'
 }

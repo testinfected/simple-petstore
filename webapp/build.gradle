@@ -18,5 +18,5 @@ dependencies {
 }
 
 test {
-    systemProperties 'web.root': file('src/main/webapp')
+    systemProperties 'web.root': file('src/main/content')
 }
