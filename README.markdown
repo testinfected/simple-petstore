@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/testinfected/simple-petstore.png)](https://travis-ci.org/testinfected/simple-petstore)
+[![Coverage Status](https://coveralls.io/repos/testinfected/simple-petstore/badge.png)](https://coveralls.io/r/testinfected/simple-petstore)
 
 # About
 
