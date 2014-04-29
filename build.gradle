@@ -77,12 +77,6 @@ dependencies {
     jacoco 'org.jacoco:org.jacoco.ant:0.7.0.201403182114'
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
-}
 
 task coverage(type: JacocoReport) {
     jacocoClasspath = configurations.jacoco
@@ -94,6 +88,11 @@ task coverage(type: JacocoReport) {
     }
     // Make the aggregate report go in a top-level directory somewhere
     reports {
+        xml {
+            enabled true
+            destination "build/reports/jacoco"
+        }
+
         html {
             enabled true
             destination "build/reports/jacoco"
