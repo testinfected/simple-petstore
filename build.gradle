@@ -90,7 +90,7 @@ task coverage(type: JacocoReport) {
     reports {
         xml {
             enabled true
-            destination "build/reports/jacoco/test"
+            destination "build/reports/jacoco/test/jacocoTestReport.xml"
         }
 
         html {
