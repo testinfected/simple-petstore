@@ -1,6 +1,6 @@
 package com.vtence.molecule.routing;
 
-import com.vtence.molecule.util.Matcher;
+import com.vtence.molecule.lib.Matcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,8 @@ public class DynamicPath implements Matcher<String>, WithBoundParameters {
         if (!pattern.sameLengthAs(path)) return false;
 
         for (int i = 0; i < pattern.segmentCount(); i++) {
-            if (!isDynamic(pattern.segment(i)) && !pattern.segment(i).equals(path.segment(i))) return false;
+            if (!isDynamic(pattern.segment(i)) && !pattern.segment(i).equals(path.segment(i)))
+                return false;
         }
         return true;
     }
@@ -29,7 +30,7 @@ public class DynamicPath implements Matcher<String>, WithBoundParameters {
         return segment.startsWith(":");
     }
 
-    public Map<String, String> boundParameters(String path) {
+    public Map<String, String> parametersBoundTo(String path) {
         Path p = new Path(path);
         Map<String, String> boundParameters = new HashMap<String, String>();
 
@@ -47,7 +48,6 @@ public class DynamicPath implements Matcher<String>, WithBoundParameters {
     }
 
     public static class Path {
-
         private final String path;
 
         public Path(String path) {

@@ -17,6 +17,7 @@ public class HasHeaderWithValue extends FeatureMatcher<WebResponse, String> {
     }
 
     protected String featureValueOf(WebResponse actual) {
+        // todo match against all headers with that name using WebResponse#getResponseHeaders
         return actual.getResponseHeaderValue(name);
     }
 

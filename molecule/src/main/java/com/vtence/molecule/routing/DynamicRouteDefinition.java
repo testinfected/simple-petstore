@@ -1,16 +1,20 @@
 package com.vtence.molecule.routing;
 
 import com.vtence.molecule.Application;
-import com.vtence.molecule.HttpMethod;
-import com.vtence.molecule.matchers.Matchers;
-import com.vtence.molecule.util.Matcher;
+import com.vtence.molecule.http.HttpMethod;
+import com.vtence.molecule.lib.Matcher;
+import com.vtence.molecule.lib.Matchers;
 
-import static com.vtence.molecule.matchers.Matchers.equalTo;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.vtence.molecule.lib.Matchers.anyOf;
+import static com.vtence.molecule.lib.Matchers.equalTo;
 
 public class DynamicRouteDefinition implements RouteDefinition, ViaClause {
 
     private Matcher<? super String> path;
-    private Matcher<? super String> method = Matchers.<String>anything();
+    private Matcher<? super HttpMethod> method = Matchers.<HttpMethod>anything();
     private Application app;
 
     public DynamicRouteDefinition map(String path) {
@@ -22,11 +26,20 @@ public class DynamicRouteDefinition implements RouteDefinition, ViaClause {
         return this;
     }
 
-    public DynamicRouteDefinition via(HttpMethod method) {
-        return via(equalTo(method.name()));
+    public DynamicRouteDefinition via(HttpMethod... methods) {
+        return via(anyOf(equallyMatching(methods)));
     }
 
-    public DynamicRouteDefinition via(Matcher<? super String> method) {
+    private List<Matcher<? super HttpMethod>> equallyMatching(HttpMethod... methods) {
+        List<Matcher<? super HttpMethod>> matchMethods =
+                new ArrayList<Matcher<? super HttpMethod>>();
+        for (HttpMethod httpMethod : methods) {
+            matchMethods.add(equalTo(httpMethod));
+        }
+        return matchMethods;
+    }
+
+    public DynamicRouteDefinition via(Matcher<? super HttpMethod> method) {
         this.method = method;
         return this;
     }

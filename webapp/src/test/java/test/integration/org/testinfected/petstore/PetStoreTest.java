@@ -1,6 +1,9 @@
 package test.integration.org.testinfected.petstore;
 
-import com.vtence.molecule.support.BrokenClock;
+import com.vtence.molecule.FailureReporter;
+import com.vtence.molecule.http.HttpDate;
+import com.vtence.molecule.servers.SimpleServer;
+import com.vtence.molecule.support.Delorean;
 import com.vtence.molecule.support.HttpRequest;
 import com.vtence.molecule.support.HttpResponse;
 import org.hamcrest.Matcher;
@@ -15,11 +18,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import com.vtence.molecule.session.CookieTracker;
-import com.vtence.molecule.session.SessionPool;
-import com.vtence.molecule.simple.SimpleServer;
-import com.vtence.molecule.util.Clock;
-import com.vtence.molecule.util.FailureReporter;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.db.ItemsDatabase;
 import org.testinfected.petstore.db.JDBCTransactor;
@@ -41,7 +39,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 
-import static com.vtence.molecule.support.DateBuilder.calendarDate;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -54,7 +51,7 @@ import static test.support.org.testinfected.petstore.builders.ProductBuilder.aPr
 public class PetStoreTest {
 
     static final String SESSION_COOKIE = "JSESSIONID";
-    static final long SESSION_TIMEOUT = MINUTES.toSeconds(30);
+    static final int SESSION_TIMEOUT = (int) MINUTES.toSeconds(30);
 
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery() {{
         setThreadingPolicy(new Synchroniser());
@@ -70,14 +67,11 @@ public class PetStoreTest {
     Connection connection = database.connect();
 
     LogFile logFile;
-    int serverPort = 9999;
-    SimpleServer server = new SimpleServer(serverPort);
-    HttpRequest request = new HttpRequest().onPort(serverPort);
+    SimpleServer server = new SimpleServer("localhost", 9999);
+    HttpRequest request = new HttpRequest(server.port());
     HttpResponse response;
 
     Exception error;
-
-    Date now = calendarDate(2012, 6, 8).atMidnight().inZone("GMT-04:00").build();
 
     @Before public void
     startServer() throws Exception {
@@ -87,10 +81,10 @@ public class PetStoreTest {
         }});
         database.clean();
 
-        server.enableSessions(new CookieTracker(new SessionPool(delorean, SESSION_TIMEOUT)));
-        petstore.setClock(BrokenClock.stoppedAt(now));
+        petstore.setClock(delorean);
         logFile = LogFile.create();
         petstore.logging(Logging.toFile(logFile.path()));
+        petstore.sessionTimeout(SESSION_TIMEOUT);
 
         context.checking(new Expectations() {{
             allowing(failureReporter).errorOccurred(with(any(Exception.class))); will(captureInternalError()); when(system.is("up"));
@@ -117,9 +111,10 @@ public class PetStoreTest {
 
     @Test public void
     setsDateHeader() throws Exception {
+        Date now = delorean.freeze();
         response = request.get("/");
         assertOK();
-        response.assertHasHeader("Date", "Fri, 08 Jun 2012 04:00:00 GMT");
+        response.assertHasHeader("Date", HttpDate.format(now));
     }
 
     @Test public void
@@ -206,12 +201,12 @@ public class PetStoreTest {
 
         response = request.withParameter("item-number", "12345678").followRedirects(false).post("/cart");
         assertRedirected();
-        response.assertHasCookie(SESSION_COOKIE);
+        response.assertHasCookie(SESSION_COOKIE, containsString("max-age=" + SESSION_TIMEOUT));
 
         response = request.get("/cart");
         assertOK();
         response.assertHasContent(containsString("cart-item-12345678"));
-        response.assertHasNoCookie(SESSION_COOKIE);
+        response.assertHasCookie(SESSION_COOKIE, containsString("max-age=" + SESSION_TIMEOUT));
     }
 
     @Test public void
@@ -221,7 +216,7 @@ public class PetStoreTest {
         response = request.withParameter("item-number", "12345678").post("/cart");
         assertOK();
 
-        delorean.travel(SECONDS.toMillis(SESSION_TIMEOUT));
+        delorean.travelInTime(SECONDS.toMillis(SESSION_TIMEOUT));
         response = request.get("/cart");
         assertOK();
         response.assertHasContent(not(containsString("cart-item-12345678")));
@@ -300,22 +295,5 @@ public class PetStoreTest {
                 return null;
             }
         };
-    }
-
-    private static class Delorean implements Clock {
-
-        private long timeTravel = 0;
-
-        public Date now() {
-            return new Date(System.currentTimeMillis() + timeTravel);
-        }
-
-        public void travel(long offsetInMillis) {
-            this.timeTravel = offsetInMillis;
-        }
-
-        public void back() {
-            travel(0);
-        }
     }
 }

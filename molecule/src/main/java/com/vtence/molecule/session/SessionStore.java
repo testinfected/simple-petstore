@@ -4,7 +4,9 @@ import com.vtence.molecule.Session;
 
 public interface SessionStore {
 
-    Session create(String key);
+    Session load(String id);
 
-    Session load(String key);
+    String save(Session session);
+
+    void destroy(String sid);
 }

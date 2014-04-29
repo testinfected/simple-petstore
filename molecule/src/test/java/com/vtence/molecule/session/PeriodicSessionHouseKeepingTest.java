@@ -16,7 +16,8 @@ public class PeriodicSessionHouseKeepingTest {
 
     static final int CHORES_INTERVAL = 50;
 
-    @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
+    @Rule
+    public JUnitRuleMockery context = new JUnitRuleMockery();
 
     CountChores count = new CountChores();
     DeterministicScheduler scheduler = new DeterministicScheduler();

@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface WithBoundParameters {
 
-    Map<String, String> boundParameters(String path);
+    Map<String, String> parametersBoundTo(String path);
 }

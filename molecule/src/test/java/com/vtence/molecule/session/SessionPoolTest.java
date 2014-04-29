@@ -1,193 +1,229 @@
 package com.vtence.molecule.session;
 
-import com.vtence.molecule.support.BrokenClock;
-import com.vtence.molecule.support.DateBuilder;
+import com.vtence.molecule.Session;
+import com.vtence.molecule.support.Delorean;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
 import org.junit.Test;
-import com.vtence.molecule.Session;
-import com.vtence.molecule.util.Clock;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static com.vtence.molecule.support.DateBuilder.namedDate;
+import static java.lang.String.valueOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.sameInstance;
+import static org.hamcrest.Matchers.*;
 
 public class SessionPoolTest {
 
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
-    long timeout = TimeUnit.MINUTES.toSeconds(30);
-    DateBuilder now = namedDate("now").atTime(11, 00, 00);
-    DateBuilder withinExpirationDelay = namedDate("5 minutes ago").atTime(10, 55, 00);
-    DateBuilder pastExpirationDelay = now.but().atTime(9, 00, 00).named("2 hours ago");
+    SessionIdentifierPolicy counter = new Sequence();
+    Delorean delorean = new Delorean();
+    int maxAge = (int) TimeUnit.MINUTES.toSeconds(30);
 
-    SessionListener listener = context.mock(SessionListener.class);
-    SessionPool pool = new SessionPool(clockSetAt(now), timeout, listener);
+    SessionPool pool = new SessionPool(counter, delorean);
+    SessionPoolListener listener = context.mock(SessionPoolListener.class);
 
     @Test public void
     isInitiallyEmpty() {
-        context.checking(new Expectations() {{
-            never(listener);
-        }});
-        Session session = pool.load("session");
-        assertThat("session", session, nullValue());
+        assertThat("initial pool size", pool.size(), equalTo(0));
+        assertThat("session not in pool", pool.load("not-in-pool"), nullValue());
     }
 
     @Test public void
-    createsEmptySessionHashes() {
-        ignoreNotifications();
-        Session session = pool.create("session");
-        assertThat("session", session, instanceOf(SessionHash.class));
-        assertThat("session creation time", session.createdAt(), equalTo(now.build()));
-        assertThat("session timeout", session.timeout(), equalTo(timeout));
-        assertThat("session keys", session.keys(), emptyIterable());
+    generatesIdsForNewSessions() {
+        Session data = new Session();
+        String id = pool.save(data);
+        Session session = pool.load(id);
+        assertThat("created session", session, notNullValue());
+        assertThat("generated id", id, equalTo("1"));
+    }
+
+    @Test public void
+    preservesExistingSessionsIds() {
+        Session data = new Session();
+        String id = pool.save(data);
+        Session session = pool.load(id);
+        assertThat("original id", pool.save(session), equalTo(id));
+    }
+
+    @Test public void
+    replacesIdsOfSessionsNotInPool() {
+        Session data = new Session();
+        String id = pool.save(data);
+        assertThat("original id", id, equalTo("1"));
+        Session session = pool.load(id);
+        pool.clear();
+        assertThat("replacement id", pool.save(session), equalTo("2"));
+    }
+
+    @Test public void
+    savesSessionContentDefensively() {
+        Session data = new Session();
+        data.put("a", "Alice");
+        data.put("b", "Bob");
+        data.put("c", "Chris");
+        data.maxAge(maxAge);
+
+        Session saved = save(data);
+        data.clear();
+
+        assertThat("saved session", saved, not(Matchers.sameInstance(data)));
+        assertThat("saved session expiration time", saved.maxAge(), equalTo(maxAge));
+        assertThat("saved session keys", saved.keys(), Matchers.<Object>contains("a", "b", "c"));
+        assertThat("saved session values", saved.values(), Matchers.<Object>contains("Alice", "Bob", "Chris"));
+    }
+
+    @Test public void
+    loadsSessionContentDefensively() {
+        Session data = new Session();
+        data.put("a", "Alice");
+        data.put("b", "Bob");
+        data.put("c", "Chris");
+
+        Session loaded = save(data);
+        loaded.clear();
+
+        Session stored = pool.load(loaded.id());
+        assertThat("stored session values", stored.size(), equalTo(data.size()));
+        assertThat("stored session values", stored.values(), Matchers.<Object>contains("Alice", "Bob", "Chris"));
+    }
+
+    @Test public void
+    storesMultipleSessions() {
+        int count = 5;
+        for (int i = 1; i <= count; i++) {
+            String id = pool.save(new Session());
+            assertThat("session #" + id, pool.load(id), sessionWithId(valueOf(i)));
+        }
+        assertThat("pool size", pool.size(), equalTo(count));
+    }
+
+    @Test(expected = IllegalStateException.class) public void
+    forbidsSavingInvalidSessions() {
+        Session data = new Session();
+        data.invalidate();
+        pool.save(data);
+    }
+
+    @Test public void
+    marksSessionUpdateTime() throws InterruptedException {
+        Session data = new Session();
+        Date updateTime = delorean.freeze();
+        Session session = save(data);
+        assertThat("update time", session.updatedAt(), equalTo(updateTime));
+    }
+
+    @Test public void
+    marksSessionCreationTime() throws InterruptedException {
+        Session data = new Session();
+        Date creationTime = delorean.freeze();
+        Session session = save(data);
+        assertThat("creation time", session.createdAt(), equalTo(creationTime));
+
+        delorean.unfreeze();
+        delorean.travelInTime(1000);
+
+        Session laterOn = save(session);
+        assertThat("creation time later on", laterOn.createdAt(), equalTo(creationTime));
+    }
+
+    @Test public void
+    discardsExpiredSessions() {
+        Session data = new Session();
+        data.maxAge(maxAge);
+        String sid = pool.save(data);
+        delorean.travelInTime(timeJump(maxAge));
+        assertThat("expired session", pool.load(sid), nullValue());
+    }
+
+    @Test public void
+    destroysExpiredSessionsDuringHouseKeeping() {
+        Collection<String> persistentSessions = addSessionsToPool(10);
+        Collection<String> expiringSessions = expire(addSessionsToPool(10));
+
+        delorean.travelInTime(timeJump(maxAge));
+        pool.houseKeeping();
+
+        assertThat("cleaned pool size", pool.size(), equalTo(persistentSessions.size()));
+        assertStillInPool(persistentSessions);
+        assertNoLongerInPool(expiringSessions);
+    }
+
+    @Test public void
+    notifiesWhenSessionsAreLoaded() {
+        final String sid = pool.save(new Session());
+        pool.setSessionListener(listener);
+        context.checking(new Expectations() {{
+            oneOf(listener).sessionLoaded(with(sid));
+        }});
+        pool.load(sid);
+    }
+
+    @Test public void
+    notifiesWhenSessionsAreSaved() {
+        final String sid = pool.save(new Session());
+        Session session = pool.load(sid);
+
+        pool.setSessionListener(listener);
+        context.checking(new Expectations() {{
+            oneOf(listener).sessionSaved(with(sid));
+        }});
+        pool.save(session);
     }
 
     @Test public void
     notifiesWhenSessionsAreCreated() {
+        pool.setSessionListener(listener);
         context.checking(new Expectations() {{
-            oneOf(listener).sessionCreated(with(sessionWithId("key")));
+            oneOf(listener).sessionCreated(with("1"));
         }});
-        pool.create("key");
-    }
-
-    @Test public void
-    notifiesWhenSessionsAreAccessed() {
-        addToPool("key");
-        context.checking(new Expectations() {{
-            oneOf(listener).sessionAccessed(with(sessionWithId("key")));
-        }});
-        pool.load("key");
-    }
-
-    @Test public void
-    storesAndRetrievesMultipleSessions() {
-        ignoreNotifications();
-        Session session1 = pool.create("session1");
-        Session session2 = pool.create("session2");
-        Session session3 = pool.create("session3");
-
-        assertThat("session 1", pool.load("session1"), equalTo(session1));
-        assertThat("session 2", pool.load("session2"), equalTo(session2));
-        assertThat("session 3", pool.load("session3"), equalTo(session3));
-    }
-
-    @Test public void
-    touchesSessionsOnAccess() {
-        ignoreNotifications();
-        for (Session session : addToPool("session")) {
-            session.touch(clockSetAt(withinExpirationDelay));
-        }
-        assertThat("session last access", pool.load("session").lastAccessedAt(), equalTo(now.build()));
-    }
-
-    @Test public void
-    removesExpiredSessionOnAccess() {
-        ignoreNotifications();
-        Collection<Session> expiredSessions = expire(addToPool("expired session"));
-        assertNoLongerInPool(expiredSessions);
-    }
-
-    @Test public void
-    removesInvalidSessionOnAccess() {
-        ignoreNotifications();
-        Collection<Session> invalidSessions = invalidate(addToPool("invalid session"));
-        assertNoLongerInPool(invalidSessions);
-    }
-
-    @Test public void
-    removesInvalidSessionsDuringHouseKeeping() {
-        ignoreNotifications();
-        Collection<Session> validSessions = addToPool(sessions("valid", 10));
-        Collection<Session> invalidSessions = invalidate(addToPool(sessions("invalid", 10)));
-
-        pool.houseKeeping();
-
-        assertStillInPool(validSessions);
-        assertNoLongerInPool(invalidSessions);
-    }
-
-    @Test public void
-    invalidatesAndRemovesExpiredSessionsDuringHouseKeeping() {
-        ignoreNotifications();
-        Collection<Session> validSessions = addToPool(sessions("valid", 10));
-        Collection<Session> expiredSessions = expire(addToPool(sessions("expired", 10)));
-
-        pool.houseKeeping();
-
-        assertStillInPool(validSessions);
-        assertNoLongerInPool(expiredSessions);
-        assertInvalid(expiredSessions);
+        pool.save(new Session());
     }
 
     @Test public void
     notifiesWhenSessionsAreDropped() {
-        ignoreCreation();
+        final String sid = pool.save(new Session());
+        pool.setSessionListener(listener);
 
-        expire(addToPool("invalid"));
+        pool.destroy("not-in-pool");
         context.checking(new Expectations() {{
-            oneOf(listener).sessionDropped(with(sessionWithId("invalid")));
+            oneOf(listener).sessionDropped(with(sid));
         }});
-        pool.load("invalid");
+        pool.destroy(sid);
     }
 
-    private Clock clockSetAt(DateBuilder date) {
-        return BrokenClock.stoppedAt(date.build());
+    private long timeJump(int seconds) {
+        return TimeUnit.SECONDS.toMillis(seconds);
     }
 
-    private Collection<Session> invalidate(Collection<Session> sessions) {
-        for (Session session : sessions) {
-            session.invalidate();
+    private Collection<String> expire(Collection<String> sessions) {
+        for (String sid : sessions) {
+            Session session = pool.load(sid);
+            session.maxAge(maxAge);
+            pool.save(session);
         }
         return sessions;
     }
 
-    private Collection<Session> expire(Collection<Session> sessions) {
-        for (Session session : sessions) {
-            session.touch(clockSetAt(pastExpirationDelay));
+    private Collection<String> addSessionsToPool(int count) {
+        Collection<String> sessions = new ArrayList<String>();
+        for (int i = 0; i < count; i++) {
+            Session data = new Session();
+            sessions.add(pool.save(data));
         }
         return sessions;
     }
 
-    private String[] sessions(String name, int count) {
-        List<String> keys = new ArrayList<String>();
-        for (int i = 1; i <= count; i++) {
-            keys.add(name + "-" + i);
-        }
-        return keys.toArray(new String[count]);
-    }
-
-    private Collection<Session> addToPool(String... keys) {
-        ignoreCreation();
-        Collection<Session> sessions = new ArrayList<Session>();
-        for (String key : keys) {
-            sessions.add(pool.create(key));
-        }
-        return sessions;
-    }
-
-    private void ignoreCreation() {
-        context.checking(new Expectations() {{
-            ignoring(listener).sessionCreated(with(any(Session.class)));
-        }});
-    }
-
-    private void ignoreNotifications() {
-        context.checking(new Expectations() {{
-            ignoring(listener);
-        }});
+    private Session save(Session data) {
+        String id = pool.save(data);
+        return pool.load(id);
     }
 
     private Matcher<Session> sessionWithId(final String id) {
@@ -198,21 +234,31 @@ public class SessionPoolTest {
         };
     }
 
-    private void assertInvalid(Iterable<Session> sessions) {
-        for (Session session : sessions) {
-            assertThat(session.id() + " valid?", !session.invalid(), equalTo(false));
+    private void assertStillInPool(Iterable<String> sessions) {
+        for (String sid : sessions) {
+            assertThat("session #" + sid, pool.load(sid), notNullValue());
         }
     }
 
-    private void assertNoLongerInPool(Iterable<Session> sessions) {
-        for (Session session : sessions) {
-            assertThat(session.id(), pool.load(session.id()), nullValue());
+    private void assertNoLongerInPool(Iterable<String> sessions) {
+        for (String sid : sessions) {
+            assertThat("session #" + sid, pool.load(sid), nullValue());
         }
     }
 
-    private void assertStillInPool(Iterable<Session> sessions) {
-        for (Session session : sessions) {
-            assertThat(session.id(), pool.load(session.id()), sameInstance(session));
+    private class Sequence implements SessionIdentifierPolicy {
+        private int nextId;
+
+        private Sequence() {
+            this(1);
+        }
+
+        public Sequence(int seed) {
+            this.nextId = seed;
+        }
+
+        public String generateId() {
+            return valueOf(nextId++);
         }
     }
 }

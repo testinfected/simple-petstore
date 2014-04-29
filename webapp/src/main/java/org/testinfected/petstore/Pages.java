@@ -1,5 +1,6 @@
 package org.testinfected.petstore;
 
+import com.vtence.molecule.templating.RenderingEngine;
 import org.testinfected.petstore.util.PageTemplate;
 
 public class Pages {

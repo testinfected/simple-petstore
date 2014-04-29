@@ -1,5 +1,7 @@
 package com.vtence.molecule.routing;
 
+import com.vtence.molecule.support.MockRequest;
+import com.vtence.molecule.support.MockResponse;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
@@ -7,22 +9,22 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import com.vtence.molecule.Application;
-import com.vtence.molecule.HttpMethod;
+import com.vtence.molecule.http.HttpMethod;
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
 
-import static com.vtence.molecule.support.MockRequest.GET;
-import static com.vtence.molecule.support.MockRequest.POST;
-import static com.vtence.molecule.support.MockRequest.aRequest;
-import static com.vtence.molecule.support.MockResponse.aResponse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static com.vtence.molecule.support.MockRequest.*;
+import static org.hamcrest.Matchers.is;
 
 public class DynamicRouteDefinitionTest {
 
     DynamicRouteDefinition definition = new DynamicRouteDefinition();
     Mockery context = new JUnit4Mockery();
     Application app = context.mock(Application.class);
+    MockRequest request = new MockRequest();
+    MockResponse response = new MockResponse();
 
     @Test(expected = IllegalStateException.class) public void
     isInvalidIfNoPathWasSpecified() throws Exception {
@@ -42,10 +44,11 @@ public class DynamicRouteDefinitionTest {
     }
 
     @Test public void
-    routesRequestWhenHttpMethodMatches() throws Exception {
-        Route route = definition.map("/resource").via(HttpMethod.POST).toRoute();
-        assertThat("no match", route.matches(POST("/resource")));
-        assertThat("match", !route.matches(GET("/resource")));
+    routesRequestWhenHttpMethodMatchesAny() throws Exception {
+        Route route = definition.map("/resource").via(HttpMethod.POST, HttpMethod.PUT).toRoute();
+        assertThat("1st matches", route.matches(POST("/resource")), is(true));
+        assertThat("2nd matches", !route.matches(GET("/resource")), is(true));
+        assertThat("none matches", !route.matches(GET("/resource")), is(true));
     }
 
     @Test public void
@@ -54,7 +57,7 @@ public class DynamicRouteDefinitionTest {
         context.checking(new Expectations() {{
             oneOf(app).handle(with(hasParameter("number", "100")), with(any(Response.class)));
         }});
-        route.handle(aRequest().withPath("/resource").withParameter("number", "100"), aResponse());
+        route.handle(request.path("/resource").addParameter("number", "100"), response);
     }
 
     @Test public void
@@ -63,7 +66,7 @@ public class DynamicRouteDefinitionTest {
         context.checking(new Expectations() {{
             oneOf(app).handle(with(hasParameter("id", "1")), with(any(Response.class)));
         }});
-        route.handle(aRequest().withPath("/resource/1").withParameter("id", "not 1"), aResponse());
+        route.handle(request.path("/resource/1").addParameter("id", "not 1"), response);
     }
 
     private Matcher<Request> hasParameter(final String name, String value) {

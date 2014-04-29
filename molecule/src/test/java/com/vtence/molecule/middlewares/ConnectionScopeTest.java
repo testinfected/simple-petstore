@@ -1,5 +1,9 @@
 package com.vtence.molecule.middlewares;
 
+import com.vtence.molecule.Application;
+import com.vtence.molecule.HttpException;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
 import com.vtence.molecule.support.MockRequest;
 import com.vtence.molecule.support.MockResponse;
 import org.jmock.Expectations;
@@ -8,32 +12,27 @@ import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import com.vtence.molecule.Application;
-import com.vtence.molecule.HttpException;
-import com.vtence.molecule.Request;
-import com.vtence.molecule.Response;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 
-import static com.vtence.molecule.support.MockRequest.aRequest;
-import static com.vtence.molecule.support.MockResponse.aResponse;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class ConnectionScopeTest {
-    @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
+    @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
     DataSource dataSource = context.mock(DataSource.class);
     ConnectionScope connectionScope = new ConnectionScope(dataSource);
 
     Connection connection = context.mock(Connection.class);
     States connectionStatus = context.states("connection").startsAs("closed");
 
-    MockRequest request = aRequest();
-    MockResponse response = aResponse();
+    MockRequest request = new MockRequest();
+    MockResponse response = new MockResponse();
 
     @Before public void
     expectConnectionToBeReleased() throws Exception {
@@ -59,6 +58,7 @@ public class ConnectionScopeTest {
             connectionScope.handle(request, response);
             fail("HttpException did not bubble up");
         } catch (HttpException expected) {
+            assertTrue(true);
         }
 
         request.assertAttribute(Connection.class, nullValue());
@@ -81,6 +81,6 @@ public class ConnectionScopeTest {
     }
 
     private void assertScoping(String state) {
-        assertThat("scoping", response.body(), equalTo(state));
+        assertThat("scoping", response.text(), equalTo(state));
     }
 }

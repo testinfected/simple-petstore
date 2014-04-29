@@ -1,6 +1,6 @@
 package com.vtence.molecule.support;
 
-import com.vtence.molecule.util.Clock;
+import com.vtence.molecule.lib.Clock;
 
 import java.util.Date;
 

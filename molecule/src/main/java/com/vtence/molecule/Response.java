@@ -1,49 +1,166 @@
 package com.vtence.molecule;
 
+import com.vtence.molecule.http.Cookie;
+import com.vtence.molecule.http.HeaderNames;
+import com.vtence.molecule.http.HttpStatus;
+import com.vtence.molecule.helpers.Charsets;
+import com.vtence.molecule.http.ContentType;
+import com.vtence.molecule.helpers.Headers;
+import com.vtence.molecule.http.HttpDate;
+import com.vtence.molecule.lib.BinaryBody;
+
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public interface Response {
+import static com.vtence.molecule.http.HeaderNames.CONTENT_LENGTH;
+import static com.vtence.molecule.http.HeaderNames.CONTENT_TYPE;
+import static com.vtence.molecule.lib.TextBody.text;
+import static java.lang.Long.parseLong;
 
-    void redirectTo(String location);
+public class Response {
+    private final Headers headers = new Headers();
+    private final Map<String, Cookie> cookies = new LinkedHashMap<String, Cookie>();
 
-    void header(String name, String value);
+    private int statusCode = HttpStatus.OK.code;
+    private String statusText = HttpStatus.OK.text;
+    private Body body = BinaryBody.empty();
 
-    void headerDate(String name, long date);
+    public Response() {}
 
-    void removeHeader(String name);
+    public Response status(HttpStatus status) {
+        statusCode(status.code);
+        statusText(status.text);
+        return this;
+    }
 
-    void cookie(String name, String value);
+    public Response statusCode(int code) {
+        statusCode = code;
+        return this;
+    }
 
-    void contentType(String contentType);
+    public int statusCode() {
+        return statusCode;
+    }
 
-    String contentType();
+    public Response statusText(String text) {
+        statusText = text;
+        return this;
+    }
 
-    int statusCode();
+    public String statusText() {
+        return statusText;
+    }
 
-    void status(HttpStatus status);
+    public Response redirectTo(String location) {
+        status(HttpStatus.SEE_OTHER);
+        set(HeaderNames.LOCATION, location);
+        return this;
+    }
 
-    void statusCode(int code);
+    public boolean has(String name) {
+        return headers.has(name);
+    }
 
-    long contentLength();
+    public String get(String name) {
+        return headers.get(name);
+    }
 
-    void contentLength(long length);
+    public long getLong(String name) {
+        String value = get(name);
+        return value != null ? parseLong(value) : -1;
+    }
 
-    Charset charset();
+    public Response set(String name, String value) {
+        headers.put(name, value);
+        return this;
+    }
 
-    OutputStream outputStream() throws IOException;
+    public Response setLong(String name, long value) {
+        return set(name, String.valueOf(value));
+    }
 
-    OutputStream outputStream(int bufferSize) throws IOException;
+    public Response set(String name, Date date) {
+        return set(name, HttpDate.format(date));
+    }
 
-    Writer writer() throws IOException;
+    public Response setDate(String name, long date) {
+        return set(name, new Date(date));
+    }
 
-    void body(String body) throws IOException;
+    public Response remove(String name) {
+        headers.remove(name);
+        return this;
+    }
 
-    void reset() throws IOException;
+    public Iterable<String> names() {
+        return headers.names();
+    }
 
-    <T> T unwrap(Class<T> type);
+    public Map<String, String> headers() {
+        return headers.all();
+    }
 
-    String header(String name);
+    public String contentType() {
+        return get(CONTENT_TYPE);
+    }
+
+    public Response contentType(String mediaType) {
+        set(CONTENT_TYPE, mediaType);
+        return this;
+    }
+
+    public long contentLength() {
+        return getLong(CONTENT_LENGTH);
+    }
+
+    public Response contentLength(long length) {
+        setLong(CONTENT_LENGTH, length);
+        return this;
+    }
+
+    public Response add(Cookie cookie) {
+        cookies.put(cookie.name(), cookie);
+        return this;
+    }
+
+    public Cookie cookie(String name) {
+        return cookies.get(name);
+    }
+
+    public Iterable<Cookie> cookies() {
+        return new ArrayList<Cookie>(cookies.values());
+    }
+
+    public Charset charset() {
+        ContentType contentType = ContentType.of(this);
+        if (contentType == null || contentType.charset() == null) {
+            return Charsets.ISO_8859_1;
+        }
+        return contentType.charset();
+    }
+
+    public Response body(String text) throws IOException {
+        return body(text(text));
+    }
+
+    public Response body(Body body) throws IOException {
+        this.body = body;
+        return this;
+    }
+
+    public Body body() {
+        return body;
+    }
+
+    public long size() {
+        return body.size(charset());
+    }
+
+    public boolean empty() {
+        return size() == 0;
+    }
 }

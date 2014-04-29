@@ -1,22 +1,15 @@
 package org.testinfected.petstore;
 
+import com.vtence.molecule.lib.PlainErrorReporter;
+import com.vtence.molecule.servers.SimpleServer;
 import org.testinfected.cli.CLI;
-import com.vtence.molecule.session.CookieTracker;
-import com.vtence.molecule.session.PeriodicSessionHouseKeeping;
-import com.vtence.molecule.session.SessionPool;
-import com.vtence.molecule.simple.SimpleServer;
-import com.vtence.molecule.util.ConsoleErrorReporter;
-import com.vtence.molecule.util.SystemClock;
 import org.testinfected.petstore.db.support.DriverManagerDataSource;
 import org.testinfected.petstore.util.Logging;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class Launcher {
@@ -57,8 +50,8 @@ public class Launcher {
 
     private final PrintStream out;
     private final CLI cli;
-    private final SimpleServer server = new SimpleServer();
-    private final ScheduledExecutorService scheduler = newSingleThreadScheduledExecutor();
+
+    private SimpleServer server;
 
     public Launcher(PrintStream out) {
         this.out = out;
@@ -82,22 +75,26 @@ public class Launcher {
         String webRoot = operands[WEB_ROOT];
         Environment env = Environment.load(env(cli));
 
-        out.println("Starting http://localhost:" + port(cli));
-        server.port(port(cli));
+        // todo parametrize the host as well
+        int port = port(cli);
+        server = new SimpleServer("localhost", port);
 
         PetStore petStore = new PetStore(new File(webRoot), new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
 
         if (!quiet(cli)) {
-            server.reportErrorsTo(ConsoleErrorReporter.toStandardError());
-            petStore.reportErrorsTo(ConsoleErrorReporter.toStandardError());
+            server.reportErrorsTo(PlainErrorReporter.toStandardError());
+            petStore.reportErrorsTo(PlainErrorReporter.toStandardError());
             petStore.logging(Logging.toConsole());
         }
 
         int timeout = timeout(cli);
-        enableSessions(timeout);
+        petStore.sessionTimeout(timeout);
         petStore.start(server);
-        out.println("Serving files from: " + webRoot);
-        out.println("Sessions expire after " + timeout + " seconds");
+        out.println("Launching http://" + server.host() + (port != 80 ? ":" + port : ""));
+        out.println("-> Serving files from " + webRoot);
+        if (timeout > 0) {
+            out.println("-> Sessions expire after " + timeout + " seconds");
+        }
     }
 
     private int port(CLI cli) {
@@ -116,15 +113,7 @@ public class Launcher {
         return (Integer) cli.getOption(TIMEOUT);
     }
 
-    private void enableSessions(int timeoutInSeconds) {
-        SessionPool sessionPool = new SessionPool(new SystemClock(), timeoutInSeconds);
-        PeriodicSessionHouseKeeping houseKeeping = new PeriodicSessionHouseKeeping(scheduler, sessionPool, timeoutInSeconds, TimeUnit.SECONDS);
-        houseKeeping.start();
-        server.enableSessions(new CookieTracker(sessionPool));
-    }
-
     public void stop() throws Exception {
-        scheduler.shutdownNow();
         server.shutdown();
         out.println("Stopped.");
     }

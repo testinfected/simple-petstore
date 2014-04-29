@@ -2,6 +2,9 @@ package com.vtence.molecule.middlewares;
 
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
+import com.vtence.molecule.lib.AbstractMiddleware;
+
+import static com.vtence.molecule.http.HeaderNames.SERVER;
 
 public class ServerHeader extends AbstractMiddleware {
 
@@ -12,7 +15,7 @@ public class ServerHeader extends AbstractMiddleware {
     }
 
     public void handle(Request request, Response response) throws Exception {
-        response.header("Server", serverName);
+        response.set(SERVER, serverName);
 
         forward(request, response);
     }

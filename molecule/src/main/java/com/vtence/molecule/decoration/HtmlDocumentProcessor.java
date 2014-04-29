@@ -11,13 +11,13 @@ public class HtmlDocumentProcessor implements ContentProcessor {
     private static final int NAME = 1;
     private static final int CONTENT = 2;
 
-    private static final Pattern HEAD = Pattern.compile("<head>\n?(.*?)\n?</head>", Pattern.DOTALL);
-    private static final Pattern TITLE = Pattern.compile("<title>\n?(.*?)\n?</title>\\s*\n?", Pattern.DOTALL);
-    private static final Pattern BODY = Pattern.compile("<body>\n?(.*?)\n?</body>", Pattern.DOTALL);
+    private static final Pattern HEAD = Pattern.compile("<head(?:.*?)>\n?(.*?)\n?</head>", Pattern.DOTALL);
+    private static final Pattern TITLE = Pattern.compile("<title(?:.*?)>\n?(.*?)\n?</title>\\s*\n?", Pattern.DOTALL);
+    private static final Pattern BODY = Pattern.compile("<body(?:.*?)>\n?(.*?)\n?</body>", Pattern.DOTALL);
     private static final Pattern META = Pattern.compile("<meta name=\"([^\"]*)\" content=\"([^\"]*)\"", Pattern.DOTALL);
 
     public Map<String, String> process(String html) {
-        Map<String, String> chunks = new HashMap<String, String>();
+        final Map<String, String> chunks = new HashMap<String, String>();
         addHead(chunks, html);
         addTitle(chunks, html);
         addBody(chunks, html);

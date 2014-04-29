@@ -1,38 +1,142 @@
 package com.vtence.molecule;
 
-import com.vtence.molecule.util.Clock;
-
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
-public interface Session {
+public class Session {
 
-    String id();
+    private final String id;
+    private final Map<Object, Object> attributes = new ConcurrentHashMap<Object, Object>();
 
-    boolean contains(Object key);
+    private Date createdAt;
+    private Date updatedAt;
+    private boolean invalid;
+    private int maxAge = -1;
 
-    void put(Object key, Object value);
+    public Session() {
+        this(null);
+    }
 
-    <T> T get(Object key);
+    public Session(String id) {
+        this.id = id;
+    }
 
-    Set<?> keys();
+    public static Session get(Request request) {
+        return request.attribute(Session.class);
+    }
 
-    Collection<?> values();
+    public static void set(Request request, Session session) {
+        request.attribute(Session.class, session);
+    }
 
-    long timeout();
+    public static void unset(Request request) {
+        request.removeAttribute(Session.class);
+    }
 
-    void timeout(long inSeconds);
+    public String id() {
+        return id;
+    }
 
-    boolean expired(Clock clock);
+    public boolean exists() {
+        return id != null;
+    }
 
-    void touch(Clock clock);
+    public Date createdAt() {
+        return createdAt;
+    }
 
-    void invalidate();
+    public void createdAt(Date time) {
+        createdAt = time;
+    }
 
-    boolean invalid();
+    public Date updatedAt() {
+        return updatedAt;
+    }
 
-    Date createdAt();
+    public void updatedAt(Date time) {
+        updatedAt = time;
+    }
 
-    Date lastAccessedAt();
+    public int maxAge() {
+        return maxAge;
+    }
+
+    public void maxAge(int seconds) {
+        maxAge = seconds;
+    }
+
+    public Date expirationTime() {
+        return expires() ? new Date(updatedAt.getTime() + TimeUnit.SECONDS.toMillis(maxAge)) : null;
+    }
+
+    private boolean expires() {
+        return maxAge >= 0 && updatedAt != null;
+    }
+
+    public int size() {
+        return attributes.size();
+    }
+
+    public boolean isEmpty() {
+        return attributes.isEmpty();
+    }
+
+    public boolean contains(Object key) {
+        return attributes.containsKey(key);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T get(Object key) {
+        return (T) attributes.get(key);
+    }
+
+    public Object put(Object key, Object value) {
+        checkValid();
+        return attributes.put(key, value);
+    }
+
+    public Object remove(Object key) {
+        checkValid();
+        return attributes.remove(key);
+    }
+
+    private void checkValid() {
+        if (invalid) throw new IllegalStateException("Session invalidated");
+    }
+
+    public Set<Object> keys() {
+        return Collections.unmodifiableSet(attributes.keySet());
+    }
+
+    public Collection<Object> values() {
+        return Collections.unmodifiableCollection(attributes.values());
+    }
+
+    public void clear() {
+        this.attributes.clear();
+    }
+
+    public void merge(Session other) {
+        for (Object key : other.keys()) {
+            put(key, other.get(key));
+        }
+    }
+
+    public void invalidate() {
+        clear();
+        invalid = true;
+    }
+
+    public boolean invalid() {
+        return invalid;
+    }
+
+    public String toString() {
+        return id + ": " + attributes.toString();
+    }
 }

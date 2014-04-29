@@ -1,9 +1,12 @@
 package com.vtence.molecule.decoration;
 
+import com.vtence.molecule.Body;
+import com.vtence.molecule.Request;
+
 import java.io.IOException;
-import java.io.Writer;
+import java.util.Map;
 
 public interface Decorator {
 
-    void decorate(Writer out, String content) throws IOException;
+    Body merge(Request request, Map<String, String> content) throws IOException;
 }

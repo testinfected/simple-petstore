@@ -4,5 +4,5 @@ import com.vtence.molecule.Response;
 
 public interface Selector {
 
-    boolean select(Response response);
+    boolean selected(Response response);
 }

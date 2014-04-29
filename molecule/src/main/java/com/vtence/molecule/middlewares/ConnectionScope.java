@@ -2,6 +2,7 @@ package com.vtence.molecule.middlewares;
 
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
+import com.vtence.molecule.lib.AbstractMiddleware;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -17,7 +18,7 @@ public class ConnectionScope extends AbstractMiddleware {
 
     public void handle(Request request, Response response) throws Exception {
         Connection connection = dataSource.getConnection();
-        ConnectionReference ref = new ConnectionReference(request);
+        Reference ref = new Reference(request);
 
         ref.set(connection);
         try {
@@ -28,19 +29,19 @@ public class ConnectionScope extends AbstractMiddleware {
         }
     }
 
-    private void close(Connection connection) {
+    private void close(Connection connection) throws SQLException {
         try { connection.close(); } catch (SQLException ignored) {}
     }
 
-    public static class ConnectionReference {
+    public static class Reference {
         private final Request request;
 
-        public ConnectionReference(Request request) {
+        public Reference(Request request) {
             this.request = request;
         }
 
         public Connection get() {
-            return (Connection) request.attribute(Connection.class);
+            return request.attribute(Connection.class);
         }
 
         private void set(Connection connection) {

@@ -2,9 +2,10 @@ package com.vtence.molecule.middlewares;
 
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
-import com.vtence.molecule.util.Clock;
+import com.vtence.molecule.lib.AbstractMiddleware;
+import com.vtence.molecule.lib.Clock;
+import com.vtence.molecule.lib.SystemClock;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -19,6 +20,10 @@ public class ApacheCommonLogger extends AbstractMiddleware {
     private final Clock clock;
     private final TimeZone timeZone;
 
+    public ApacheCommonLogger(Logger logger) {
+        this(logger, new SystemClock());
+    }
+
     public ApacheCommonLogger(Logger logger, Clock clock) {
         this(logger, clock, TimeZone.getDefault());
     }
@@ -32,7 +37,7 @@ public class ApacheCommonLogger extends AbstractMiddleware {
     public void handle(Request request, Response response) throws Exception {
         forward(request, response);
         String msg = String.format(COMMON_LOG_FORMAT,
-                request.ip(),
+                request.remoteIp(),
                 "-",
                 currentTime(),
                 request.method(),
@@ -48,7 +53,7 @@ public class ApacheCommonLogger extends AbstractMiddleware {
         return DATE_FORMAT.format(clock.now());
     }
 
-    private Serializable contentLengthOrHyphen(Response response) {
-        return response.contentLength() > 0 ? response.contentLength() : "-";
+    private Object contentLengthOrHyphen(Response response) {
+        return response.size() > 0 ? response.size() : "-";
     }
 }

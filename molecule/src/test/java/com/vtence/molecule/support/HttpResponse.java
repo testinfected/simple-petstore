@@ -1,6 +1,8 @@
 package com.vtence.molecule.support;
 
 import com.gargoylesoftware.htmlunit.WebResponse;
+import com.vtence.molecule.http.HttpStatus;
+import com.vtence.molecule.helpers.Streams;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
 
@@ -10,8 +12,10 @@ import java.net.URISyntaxException;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static com.vtence.molecule.util.Streams.toBytes;
+import static org.hamcrest.Matchers.any;
+import static org.hamcrest.Matchers.both;
 
 public class HttpResponse {
 
@@ -31,6 +35,11 @@ public class HttpResponse {
 
     public void assertHasStatusMessage(String message) {
         assertThat("response", response, HasStatusMessage.hasStatusMessage(message));
+    }
+
+    public void assertHasStatus(HttpStatus status) {
+        assertHasStatusCode(status.code);
+        assertHasStatusMessage(status.text);
     }
 
     public void assertHasNoHeader(String name) {
@@ -70,11 +79,15 @@ public class HttpResponse {
     }
 
     public void assertHasContentType(String contentType) {
-        assertHasHeader("Content-Type", contentType);
+        assertHasHeader("Content-Type", equalTo(contentType));
+    }
+
+    public void assertHasContentType(Matcher<? super String> contentTypeMatcher) {
+        assertHasHeader("Content-Type", contentTypeMatcher);
     }
 
     private byte[] content() throws IOException {
-        return toBytes(response.getContentAsStream());
+        return Streams.toBytes(response.getContentAsStream());
     }
 
     public void assertChunked() {
@@ -85,11 +98,20 @@ public class HttpResponse {
         assertHasNoHeader("Transfer-Encoding");
     }
 
+    @SuppressWarnings("unchecked")
     public void assertHasCookie(String name) {
-        assertHasHeader("Set-Cookie", containsString(name + "="));
+        assertHasCookie(name, any(String.class));
     }
 
     public void assertHasNoCookie(String name) {
-        assertHasHeader("Set-Cookie", not(containsString(name)));
+        assertHasCookie(not(startsWith(name)));
+    }
+
+    public void assertHasCookie(Matcher<? super String> matching) {
+        assertHasHeader("Set-Cookie", matching);
+    }
+
+    public void assertHasCookie(String name, Matcher<? super String> matching) {
+        assertHasCookie(both(startsWith(name + "=")).and(matching));
     }
 }

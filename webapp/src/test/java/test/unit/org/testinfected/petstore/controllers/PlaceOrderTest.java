@@ -1,11 +1,13 @@
 package test.unit.org.testinfected.petstore.controllers;
 
+import com.vtence.molecule.Session;
 import com.vtence.molecule.support.MockRequest;
 import com.vtence.molecule.support.MockResponse;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.testinfected.petstore.Messages;
@@ -45,6 +47,12 @@ public class PlaceOrderTest {
 
     String EMPTY = "";
     String orderNumber = "12345678";
+
+    @Before
+    public void
+    createSession() {
+        Session.set(request, new Session());
+    }
 
     @Test public void
     placesOrderAndShowsReceiptWhenPaymentDetailsAreValid() throws Exception {
@@ -112,7 +120,7 @@ public class PlaceOrderTest {
     }
 
     private void storeInSession(Cart cart) {
-        request.session().put(Cart.class, cart);
+        Session.get(request).put(Cart.class, cart);
     }
 
     private void fillOutFormWith(final CreditCardDetails paymentDetails) {

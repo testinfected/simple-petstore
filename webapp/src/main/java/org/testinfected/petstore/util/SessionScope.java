@@ -7,11 +7,11 @@ import org.testinfected.petstore.order.Cart;
 public class SessionScope {
 
     public static Cart cart(Request client) {
-        return sessionOf(client).cart();
+        return get(client).cart();
     }
 
-    private static SessionScope sessionOf(Request client) {
-        return new SessionScope(client.session());
+    public static SessionScope get(Request client) {
+        return new SessionScope(Session.get(client));
     }
 
     private final Session session;
@@ -20,7 +20,6 @@ public class SessionScope {
         this.session = session;
     }
 
-    @SuppressWarnings("unchecked")
     public Cart cart() {
         if (!session.contains(Cart.class)) {
             session.put(Cart.class, new Cart());

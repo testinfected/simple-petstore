@@ -6,7 +6,7 @@ import org.testinfected.petstore.util.BundledMessages;
 import java.util.ListResourceBundle;
 import java.util.Locale;
 
-import static com.vtence.molecule.support.DateBuilder.calendarDate;
+import static com.vtence.molecule.support.Dates.calendarDate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -35,6 +35,6 @@ public class BundledMessagesTest {
 
     @Test public void
     usesBundleLocaleWhenFormattingParameters() {
-        assertThat("formatted message", messages.interpolate("expired", calendarDate(2013, 7, 5).atMidnight().inZone("GMT-04:00").build()), equalTo("must be after 2013-07-05"));
+        assertThat("formatted message", messages.interpolate("expired", calendarDate(2013, 7, 5).atMidnight().inZone("GMT-04:00").toDate()), equalTo("must be after 2013-07-05"));
     }
 }

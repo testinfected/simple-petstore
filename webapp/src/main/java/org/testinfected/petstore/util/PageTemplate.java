@@ -1,12 +1,11 @@
 package org.testinfected.petstore.util;
 
 import com.vtence.molecule.Response;
+import com.vtence.molecule.templating.RenderingEngine;
+import com.vtence.molecule.templating.TemplateBody;
 import org.testinfected.petstore.Page;
-import org.testinfected.petstore.RenderingEngine;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.Writer;
 
 public class PageTemplate implements Page {
 
@@ -22,8 +21,6 @@ public class PageTemplate implements Page {
 
     public void render(Response response, Object context) throws IOException {
         response.contentType(mediaType);
-        Writer out = new BufferedWriter(response.writer());
-        renderer.render(out, template, context);
-        out.flush();
+        response.body(new TemplateBody(renderer, template, context));
     }
 }

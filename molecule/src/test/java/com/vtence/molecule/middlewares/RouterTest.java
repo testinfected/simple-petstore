@@ -1,26 +1,24 @@
 package com.vtence.molecule.middlewares;
 
+import com.vtence.molecule.Application;
+import com.vtence.molecule.lib.Matcher;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
+import com.vtence.molecule.lib.Anything;
+import com.vtence.molecule.lib.Nothing;
+import com.vtence.molecule.routing.Route;
 import com.vtence.molecule.support.MockRequest;
 import com.vtence.molecule.support.MockResponse;
 import org.junit.Test;
-import com.vtence.molecule.Application;
-import com.vtence.molecule.Request;
-import com.vtence.molecule.Response;
-import com.vtence.molecule.matchers.Anything;
-import com.vtence.molecule.matchers.Nothing;
-import com.vtence.molecule.routing.Route;
-import com.vtence.molecule.util.Matcher;
 
-import static com.vtence.molecule.support.MockRequest.aRequest;
-import static com.vtence.molecule.support.MockResponse.aResponse;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RouterTest {
 
-    Router router = new Router();
-    MockRequest request = aRequest();
-    MockResponse response = aResponse();
+    Router router = new Router(new NotFound());
+    MockRequest request = new MockRequest();
+    MockResponse response = new MockResponse();
 
     @Test public void
     routesToDefaultWhenNoRouteMatches() throws Exception {
@@ -38,7 +36,7 @@ public class RouterTest {
     }
 
     private void assertRoutedTo(String route) {
-        assertThat("route", response.body(), equalTo(route));
+        assertThat("route", response.text(), equalTo(route));
     }
 
     private Application route(final String name) {

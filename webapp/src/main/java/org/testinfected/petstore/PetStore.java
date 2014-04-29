@@ -1,9 +1,14 @@
 package org.testinfected.petstore;
 
-import com.vtence.molecule.MiddlewareStack;
+import com.vtence.molecule.FailureReporter;
 import com.vtence.molecule.Server;
+import com.vtence.molecule.lib.Clock;
+import com.vtence.molecule.lib.MiddlewareStack;
+import com.vtence.molecule.lib.SystemClock;
 import com.vtence.molecule.middlewares.ApacheCommonLogger;
 import com.vtence.molecule.middlewares.ConnectionScope;
+import com.vtence.molecule.middlewares.ContentLengthHeader;
+import com.vtence.molecule.middlewares.CookieSessionTracker;
 import com.vtence.molecule.middlewares.DateHeader;
 import com.vtence.molecule.middlewares.Failsafe;
 import com.vtence.molecule.middlewares.FailureMonitor;
@@ -11,16 +16,21 @@ import com.vtence.molecule.middlewares.FileServer;
 import com.vtence.molecule.middlewares.HttpMethodOverride;
 import com.vtence.molecule.middlewares.ServerHeader;
 import com.vtence.molecule.middlewares.StaticAssets;
-import com.vtence.molecule.util.Clock;
-import com.vtence.molecule.util.FailureReporter;
-import com.vtence.molecule.util.SystemClock;
-import org.testinfected.petstore.util.JMustacheRendering;
+import com.vtence.molecule.session.PeriodicSessionHouseKeeping;
+import com.vtence.molecule.session.SecureIdentifierPolicy;
+import com.vtence.molecule.session.SessionPool;
+import com.vtence.molecule.templating.JMustacheRenderer;
+import com.vtence.molecule.templating.RenderingEngine;
 import org.testinfected.petstore.util.Logging;
 
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+
+import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
 public class PetStore {
 
@@ -31,10 +41,12 @@ public class PetStore {
 
     private final File context;
     private final DataSource dataSource;
+    private final ScheduledExecutorService scheduler = newSingleThreadScheduledExecutor();
 
     private FailureReporter failureReporter = FailureReporter.IGNORE;
     private Logger logger = Logging.off();
     private Clock clock = new SystemClock();
+    private int timeout = -1;
 
     public PetStore(File context, DataSource dataSource) {
         this.context = context;
@@ -53,19 +65,39 @@ public class PetStore {
         this.logger = logger;
     }
 
+    public void sessionTimeout(int seconds) {
+        this.timeout = seconds;
+    }
+
     public void start(Server server) throws IOException {
         server.run(new MiddlewareStack() {{
             use(new ServerHeader(NAME));
             use(new DateHeader(clock));
+            use(new ContentLengthHeader());
             use(new ApacheCommonLogger(logger, clock));
             use(new Failsafe());
             use(new FailureMonitor(failureReporter));
             use(new HttpMethodOverride());
             use(staticAssets());
+            use(new CookieSessionTracker(createSessionPool(timeout)).expireAfter(timeout));
             use(new SiteLayout(templatesIn(LAYOUT_DIR)));
             use(new ConnectionScope(dataSource));
             run(new Routing(Pages.using(templatesIn(PAGES_DIR))));
         }});
+    }
+
+    private SessionPool createSessionPool(int timeout) {
+        final SessionPool sessions = new SessionPool(new SecureIdentifierPolicy(), clock);
+        if (sessionsExpire()) {
+            PeriodicSessionHouseKeeping houseKeeping =
+                    new PeriodicSessionHouseKeeping(scheduler, sessions, timeout, TimeUnit.SECONDS);
+            houseKeeping.start();
+        }
+        return sessions;
+    }
+
+    private boolean sessionsExpire() {
+        return this.timeout > 0;
     }
 
     private StaticAssets staticAssets() {
@@ -75,6 +107,7 @@ public class PetStore {
     }
 
     private RenderingEngine templatesIn(final String dir) {
-        return new JMustacheRendering(new File(context, dir));
+        return new JMustacheRenderer().fromDir(new File(context, dir)).extension("html").encoding("utf-8").
+                defaultValue("");
     }
 }

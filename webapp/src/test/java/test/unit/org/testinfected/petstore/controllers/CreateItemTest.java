@@ -7,7 +7,7 @@ import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import com.vtence.molecule.HttpStatus;
+import com.vtence.molecule.http.HttpStatus;
 import org.testinfected.petstore.controllers.CreateItem;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateItemException;

@@ -129,7 +129,7 @@ public class TestEnvironment {
     }
 
     public HttpRequest api() {
-        return new HttpRequest().onPort(serverPort()).withTimeOut(HTTP_TIMEOUT_IN_MILLIS);
+        return new HttpRequest(serverPort()).withTimeout(HTTP_TIMEOUT_IN_MILLIS);
     }
 
     public int serverPort() {

@@ -1,80 +1,103 @@
 package com.vtence.molecule.session;
 
 import com.vtence.molecule.Session;
-import com.vtence.molecule.util.Clock;
-import com.vtence.molecule.util.SystemClock;
+import com.vtence.molecule.lib.Clock;
+import com.vtence.molecule.lib.SystemClock;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 public class SessionPool implements SessionStore, SessionHouse {
 
-    private static final long HALF_AN_HOUR = TimeUnit.MINUTES.toSeconds(30);
-
-    private final Clock clock;
-    private final SessionListener listener;
     private final Map<String, Session> sessions = new ConcurrentHashMap<String, Session>();
+    private final SessionIdentifierPolicy policy;
+    private final Clock clock;
 
-    private long timeout;
+    private SessionPoolListener listener = SessionPoolListener.NONE;
 
     public SessionPool() {
-        this(HALF_AN_HOUR);
+        this(new SecureIdentifierPolicy());
     }
 
-    public SessionPool(long timeoutInSeconds) {
-        this(new SystemClock(), timeoutInSeconds);
+    public SessionPool(SessionIdentifierPolicy policy) {
+        this(policy, new SystemClock());
     }
 
-    public SessionPool(Clock clock, long timeoutInSeconds) {
-        this(clock, timeoutInSeconds, SessionListener.NONE);
-    }
-
-    public SessionPool(Clock clock, long timeoutInSeconds, SessionListener listener) {
+    public SessionPool(SessionIdentifierPolicy policy, Clock clock) {
+        this.policy = policy;
         this.clock = clock;
-        this.timeout = timeoutInSeconds;
+    }
+
+    public void setSessionListener(SessionPoolListener listener) {
         this.listener = listener;
     }
 
-    public Session load(String key) {
-        return locateSession(key);
+    public int size() {
+        return sessions.size();
     }
 
-    public Session create(String key) {
-        return createSession(key);
+    public Session load(String id) {
+        Session session = sessions.get(id);
+        if (session == null || !validate(session)) return null;
+        Session data = makeSession(id, session);
+        listener.sessionLoaded(id);
+        return data;
     }
 
-    private Session locateSession(String key) {
-        Session session = validate(sessions.get(key));
-        if (session == null) return null;
-        session.touch(clock);
-        listener.sessionAccessed(session);
-        return session;
+    public String save(Session data) {
+        if (data.invalid()) throw new IllegalStateException("Session invalidated");
+        String sid = sessionId(data);
+        Session session = makeSession(sid, data);
+        Date now = clock.now();
+        session.updatedAt(now);
+        sessions.put(sid, session);
+        if (sid.equals(data.id())) {
+            listener.sessionSaved(sid);
+        } else {
+            session.createdAt(now);
+            listener.sessionCreated(sid);
+        }
+        return sid;
     }
 
-    private Session createSession(String key) {
-        Session session = new SessionHash(key, clock.now());
-        session.timeout(timeout);
-        sessions.put(key, session);
-        listener.sessionCreated(session);
-        return session;
+    public void destroy(String sid) {
+        if (sessions.remove(sid) != null) listener.sessionDropped(sid);
+    }
+
+    public void clear() {
+        sessions.clear();
     }
 
     public void houseKeeping() {
         for (Session session : sessions.values()) {
-            validate(session);
+            if (!validate(session)) destroy(session.id());
         }
     }
 
-    private Session validate(Session session) {
-        if (session == null) return null;
-        if (session.expired(clock)) session.invalidate();
-        if (session.invalid()) remove(session);
-        return session.invalid() ? null : session;
+    private String sessionId(Session data) {
+        return data.exists() && contains(data.id()) ? data.id() : policy.generateId();
     }
 
-    private void remove(Session session) {
-        sessions.remove(session.id());
-        listener.sessionDropped(session);
+    private Session makeSession(String sid, Session data) {
+        Session session = new Session(sid);
+        session.merge(data);
+        session.maxAge(data.maxAge());
+        session.updatedAt(data.updatedAt());
+        session.createdAt(data.createdAt());
+        return session;
+    }
+
+    private boolean contains(String id) {
+        return sessions.containsKey(id);
+    }
+
+    private boolean validate(Session session) {
+        if (expired(session)) session.invalidate();
+        return !session.invalid();
+    }
+
+    private boolean expired(Session session) {
+        return session.expirationTime() != null && !clock.now().before(session.expirationTime());
     }
 }

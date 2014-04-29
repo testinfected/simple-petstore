@@ -3,6 +3,7 @@ package org.testinfected.petstore;
 import com.vtence.molecule.Application;
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
+import com.vtence.molecule.middlewares.ConnectionScope;
 import com.vtence.molecule.middlewares.Router;
 import com.vtence.molecule.routing.DynamicRoutes;
 import org.testinfected.petstore.controllers.ProceedToCheckout;
@@ -36,8 +37,6 @@ import org.testinfected.petstore.util.FileSystemPhotoStore;
 import java.sql.Connection;
 import java.util.ResourceBundle;
 
-import static com.vtence.molecule.middlewares.ConnectionScope.ConnectionReference;
-
 public class Routing implements Application {
 
     private final Pages pages;
@@ -48,7 +47,7 @@ public class Routing implements Application {
 
     public void handle(final Request request, final Response response) throws Exception {
         final AttachmentStorage attachments = new FileSystemPhotoStore("/photos");
-        final Connection connection = new ConnectionReference(request).get();
+        final Connection connection = new ConnectionScope.Reference(request).get();
         final Transactor transactor = new JDBCTransactor(connection);
         final ProductCatalog products = new ProductsDatabase(connection);
         final ItemInventory items = new ItemsDatabase(connection);

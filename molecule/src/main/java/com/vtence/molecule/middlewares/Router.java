@@ -3,6 +3,7 @@ package com.vtence.molecule.middlewares;
 import com.vtence.molecule.Application;
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
+import com.vtence.molecule.lib.AbstractMiddleware;
 import com.vtence.molecule.routing.Route;
 import com.vtence.molecule.routing.RouteBuilder;
 import com.vtence.molecule.routing.RouteSet;
@@ -10,9 +11,7 @@ import com.vtence.molecule.routing.RouteSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Router implements Application, RouteSet {
-
-    private Application defaultApp;
+public class Router extends AbstractMiddleware implements RouteSet {
 
     public static Router draw(RouteBuilder routeBuilder) {
         Router router = new Router();
@@ -27,11 +26,11 @@ public class Router implements Application, RouteSet {
     }
 
     public Router(final Application fallback) {
-        defaultsTo(fallback);
+        connectTo(fallback);
     }
 
     public Router defaultsTo(Application app) {
-        this.defaultApp = app;
+        connectTo(app);
         return this;
     }
 
@@ -51,6 +50,6 @@ public class Router implements Application, RouteSet {
         if (route != null)
             route.handle(request, response);
         else
-            defaultApp.handle(request, response);
+            forward(request, response);
     }
 }

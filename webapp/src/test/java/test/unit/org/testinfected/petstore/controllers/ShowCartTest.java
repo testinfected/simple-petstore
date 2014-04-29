@@ -1,9 +1,11 @@
 package test.unit.org.testinfected.petstore.controllers;
 
+import com.vtence.molecule.Session;
 import com.vtence.molecule.support.MockRequest;
 import com.vtence.molecule.support.MockResponse;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.order.Cart;
@@ -20,6 +22,12 @@ public class ShowCartTest {
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
 
+    @Before
+    public void
+    createSession() {
+        Session.set(request, new Session());
+    }
+
     @Test public void
     rendersCartContent() throws Exception {
         final Cart cart = aCart().containing(anItem()).build();
@@ -35,6 +43,6 @@ public class ShowCartTest {
     }
 
     private void storeInSession(Cart cart) {
-        request.session().put(Cart.class, cart);
+        Session.get(request).put(Cart.class, cart);
     }
 }
