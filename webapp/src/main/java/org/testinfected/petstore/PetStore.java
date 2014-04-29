@@ -15,12 +15,11 @@ import org.testinfected.molecule.util.Clock;
 import org.testinfected.molecule.util.FailureReporter;
 import org.testinfected.molecule.util.SystemClock;
 import org.testinfected.petstore.util.JMustacheRendering;
-import org.testinfected.petstore.util.PlainFormatter;
+import org.testinfected.petstore.util.Logging;
 
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Handler;
 import java.util.logging.Logger;
 
 public class PetStore {
@@ -32,9 +31,9 @@ public class PetStore {
 
     private final File context;
     private final DataSource dataSource;
-    private final Logger logger = makeLogger();
 
     private FailureReporter failureReporter = FailureReporter.IGNORE;
+    private Logger logger = Logging.off();
     private Clock clock = new SystemClock();
 
     public PetStore(File context, DataSource dataSource) {
@@ -50,9 +49,8 @@ public class PetStore {
         this.clock = clock;
     }
 
-    public void logTo(Handler handler) {
-        handler.setFormatter(new PlainFormatter());
-        logger.addHandler(handler);
+    public void logging(Logger logger) {
+        this.logger = logger;
     }
 
     public void start(Server server) throws IOException {
@@ -68,12 +66,6 @@ public class PetStore {
             use(new ConnectionScope(dataSource));
             run(new Routing(Pages.using(templatesIn(PAGES_DIR))));
         }});
-    }
-
-    private static Logger makeLogger() {
-        Logger logger = Logger.getAnonymousLogger();
-        logger.setUseParentHandlers(false);
-        return logger;
     }
 
     private StaticAssets staticAssets() {

@@ -23,6 +23,7 @@ import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.ProductsDatabase;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.transaction.UnitOfWork;
+import org.testinfected.petstore.util.Logging;
 import test.support.org.testinfected.molecule.integration.HttpRequest;
 import test.support.org.testinfected.molecule.integration.HttpResponse;
 import test.support.org.testinfected.molecule.unit.BrokenClock;
@@ -39,7 +40,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.logging.FileHandler;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -91,7 +91,7 @@ public class PetStoreTest {
         server.enableSessions(new CookieTracker(new SessionPool(delorean, SESSION_TIMEOUT)));
         petstore.setClock(BrokenClock.stoppedAt(now));
         logFile = LogFile.create();
-        petstore.logTo(new FileHandler(logFile.path()));
+        petstore.logging(Logging.toFile(logFile.path()));
 
         context.checking(new Expectations() {{
             allowing(failureReporter).errorOccurred(with(any(Exception.class))); will(captureInternalError()); when(system.is("up"));

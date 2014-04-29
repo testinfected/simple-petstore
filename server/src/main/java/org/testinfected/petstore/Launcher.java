@@ -8,7 +8,7 @@ import org.testinfected.molecule.simple.SimpleServer;
 import org.testinfected.molecule.util.ConsoleErrorReporter;
 import org.testinfected.molecule.util.SystemClock;
 import org.testinfected.petstore.db.support.DriverManagerDataSource;
-import org.testinfected.petstore.util.ConsoleHandler;
+import org.testinfected.petstore.util.Logging;
 
 import java.io.File;
 import java.io.IOException;
@@ -90,7 +90,7 @@ public class Launcher {
         if (!quiet(cli)) {
             server.reportErrorsTo(ConsoleErrorReporter.toStandardError());
             petStore.reportErrorsTo(ConsoleErrorReporter.toStandardError());
-            petStore.logTo(ConsoleHandler.toStandardOutput());
+            petStore.logging(Logging.toConsole());
         }
 
         int timeout = timeout(cli);
