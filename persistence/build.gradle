@@ -3,7 +3,7 @@ dependencies {
   compile project(':domain')
 
   testCompile project(':domain').sourceSets.test.output
-  testCompile 'com.googlecode.flyway:flyway-core:2.0'
+  testCompile libs.flyway
 
-  testRuntime 'mysql:mysql-connector-java:5.1.21'
+  testRuntime libs.mysql
 }
