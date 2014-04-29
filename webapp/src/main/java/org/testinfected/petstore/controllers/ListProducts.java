@@ -3,7 +3,7 @@ package org.testinfected.petstore.controllers;
 import com.vtence.molecule.Application;
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
-import org.testinfected.petstore.Page;
+import org.testinfected.petstore.View;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
@@ -15,20 +15,20 @@ public class ListProducts implements Application {
 
     private final ProductCatalog productCatalog;
     private final AttachmentStorage attachmentStorage;
-    private final Page productsPage;
+    private final View<Products> view;
 
-    public ListProducts(ProductCatalog productCatalog, AttachmentStorage attachmentStorage, Page productsPage) {
+    public ListProducts(ProductCatalog productCatalog, AttachmentStorage attachmentStorage, View<Products> view) {
         this.productCatalog = productCatalog;
         this.attachmentStorage = attachmentStorage;
-        this.productsPage = productsPage;
+        this.view = view;
     }
 
     public void handle(Request request, Response response) throws Exception {
         String keyword = request.parameter("keyword");
         List<Product> found = productCatalog.findByKeyword(keyword);
-        productsPage.render(response, new Products().
-                matching(keyword).
-                add(found).
-                withPhotosIn(attachmentStorage));
+        view.render(response, new Products().matching(keyword)
+                                                    .add(found)
+                                                    .withPhotosIn(attachmentStorage)
+        );
     }
 }

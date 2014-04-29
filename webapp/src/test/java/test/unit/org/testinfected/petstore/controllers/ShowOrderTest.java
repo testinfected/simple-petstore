@@ -12,7 +12,7 @@ import org.testinfected.petstore.controllers.ShowOrder;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumber;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.MockView;
 
 import static test.support.org.testinfected.petstore.builders.OrderBuilder.anOrder;
 
@@ -20,8 +20,8 @@ public class ShowOrderTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     OrderBook orderBook = context.mock(OrderBook.class);
-    MockPage orderPage = new MockPage();
-    ShowOrder showOrder = new ShowOrder(orderBook, orderPage);
+    MockView<Order> view = new MockView<Order>();
+    ShowOrder showOrder = new ShowOrder(orderBook, view);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
@@ -36,8 +36,8 @@ public class ShowOrderTest {
         orderBookContains(order);
 
         showOrder.handle(request, response);
-        orderPage.assertRenderedTo(response);
-        orderPage.assertRenderedWith(sameOrderAs(order));
+        view.assertRenderedTo(response);
+        view.assertRenderedWith(sameOrderAs(order));
     }
 
     private Matcher<Object> sameOrderAs(Order order) {

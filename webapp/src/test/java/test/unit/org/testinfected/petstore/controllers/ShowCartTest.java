@@ -9,15 +9,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.order.Cart;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.MockView;
 
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class ShowCartTest {
 
-    MockPage cartPage = new MockPage();
-    ShowCart showCart = new ShowCart(cartPage);
+    MockView<Cart> view = new MockView<Cart>();
+    ShowCart showCart = new ShowCart(view);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
@@ -34,8 +34,8 @@ public class ShowCartTest {
         storeInSession(cart);
 
         showCart.handle(request, response);
-        cartPage.assertRenderedTo(response);
-        cartPage.assertRenderedWith(sameCartAs(cart));
+        view.assertRenderedTo(response);
+        view.assertRenderedWith(sameCartAs(cart));
     }
 
     private Matcher<Object> sameCartAs(Cart cart) {

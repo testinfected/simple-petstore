@@ -19,7 +19,8 @@ import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
 import org.testinfected.petstore.util.BundledMessages;
-import test.support.org.testinfected.petstore.web.MockPage;
+import org.testinfected.petstore.views.Checkout;
+import test.support.org.testinfected.petstore.web.MockView;
 
 import java.math.BigDecimal;
 import java.util.ResourceBundle;
@@ -37,10 +38,10 @@ public class PlaceOrderTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
-    MockPage checkoutPage = new MockPage();
+    MockView<Checkout> view = new MockView<Checkout>();
     Messages messages = new BundledMessages(ResourceBundle.getBundle("ValidationMessages"));
 
-    PlaceOrder placeOrder = new PlaceOrder(salesAssistant, checkoutPage, messages);
+    PlaceOrder placeOrder = new PlaceOrder(salesAssistant, view, messages);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
@@ -84,10 +85,10 @@ public class PlaceOrderTest {
         fillOutFormWith(incompletePaymentDetails);
         placeOrder.handle(request, response);
 
-        checkoutPage.assertRenderedTo(response);
-        checkoutPage.assertRenderedWith(billWithTotal(total));
-        checkoutPage.assertRenderedWith(billWithPayment(incompletePaymentDetails));
-        checkoutPage.assertRenderedWith(billWithErrors(
+        view.assertRenderedTo(response);
+        view.assertRenderedWith(billWithTotal(total));
+        view.assertRenderedWith(billWithPayment(incompletePaymentDetails));
+        view.assertRenderedWith(billWithErrors(
                 message("paymentDetails", "Please correct the following errors:"),
                 message("paymentDetails.cardNumber", "may not be empty", "not a valid number")));
     }

@@ -12,8 +12,9 @@ import org.junit.Test;
 import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
+import org.testinfected.petstore.views.AvailableItems;
 import test.support.org.testinfected.petstore.builders.Builder;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.MockView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,8 @@ public class ListItemsTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     ItemInventory itemInventory = context.mock(ItemInventory.class);
-    MockPage itemsPage = new MockPage();
-    ListItems listItems = new ListItems(itemInventory, itemsPage);
+    MockView<AvailableItems> view = new MockView<AvailableItems>();
+    ListItems listItems = new ListItems(itemInventory, view);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
@@ -44,7 +45,7 @@ public class ListItemsTest {
 
     @After public void
     assertPageRendered() {
-        itemsPage.assertRenderedTo(response);
+        view.assertRenderedTo(response);
     }
 
     @SuppressWarnings("unchecked")
@@ -52,7 +53,7 @@ public class ListItemsTest {
     rendersAvailableItemsMatchingProductNumber() throws Exception {
         searchYields(anItem().of(aProduct().withNumber(productNumber)));
         listItems.handle(request, response);
-        itemsPage.assertRenderedWith(availableItems(items));
+        view.assertRenderedWith(availableItems(items));
     }
 
     private Matcher<Object> availableItems(Iterable<Item> items) {

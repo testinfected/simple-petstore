@@ -8,8 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testinfected.petstore.controllers.ProceedToCheckout;
 import org.testinfected.petstore.order.Cart;
+import org.testinfected.petstore.views.Checkout;
 import test.support.org.testinfected.petstore.builders.CartBuilder;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.MockView;
 
 import java.math.BigDecimal;
 
@@ -19,8 +20,8 @@ import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class ProceedToCheckoutTest {
-    MockPage checkoutPage = new MockPage();
-    ProceedToCheckout checkout = new ProceedToCheckout(checkoutPage);
+    MockView<Checkout> view = new MockView<Checkout>();
+    ProceedToCheckout checkout = new ProceedToCheckout(view);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
@@ -38,8 +39,8 @@ public class ProceedToCheckoutTest {
 
         checkout.handle(request, response);
 
-        checkoutPage.assertRenderedTo(response);
-        checkoutPage.assertRenderedWith(billWithTotal(total));
+        view.assertRenderedTo(response);
+        view.assertRenderedWith(billWithTotal(total));
     }
 
     private Matcher<Object> billWithTotal(BigDecimal amount) {

@@ -16,7 +16,7 @@ import org.testinfected.petstore.controllers.Logout;
 import org.testinfected.petstore.controllers.PlaceOrder;
 import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.controllers.ShowOrder;
-import org.testinfected.petstore.controllers.StaticPage;
+import org.testinfected.petstore.controllers.StaticView;
 import org.testinfected.petstore.db.ItemsDatabase;
 import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.OrderNumberDatabaseSequence;
@@ -68,7 +68,7 @@ public class Routing implements Application {
             get("/orders/:number").to(new ShowOrder(orders, pages.order()));
             post("/orders").to(new PlaceOrder(cashier, pages.checkout(), messages));
             delete("/logout").to(new Logout());
-            map("/").to(new StaticPage(pages.home()));
+            map("/").to(new StaticView(pages.home()));
         }});
 
         router.handle(request, response);

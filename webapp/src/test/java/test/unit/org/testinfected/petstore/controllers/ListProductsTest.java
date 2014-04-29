@@ -13,8 +13,9 @@ import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;
+import org.testinfected.petstore.views.Products;
 import test.support.org.testinfected.petstore.builders.Builder;
-import test.support.org.testinfected.petstore.web.MockPage;
+import test.support.org.testinfected.petstore.web.MockView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,8 @@ public class ListProductsTest {
 
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
     AttachmentStorage photoLibrary = context.mock(AttachmentStorage.class);
-    MockPage productsPage = new MockPage();
-    ListProducts listProducts = new ListProducts(productCatalog, photoLibrary, productsPage);
+    MockView<Products> view = new MockView<Products>();
+    ListProducts listProducts = new ListProducts(productCatalog, photoLibrary, view);
 
     MockRequest request = new MockRequest();
     MockResponse response = new MockResponse();
@@ -45,7 +46,7 @@ public class ListProductsTest {
 
     @After public void
     assertPageRendered() {
-        productsPage.assertRenderedTo(response);
+        view.assertRenderedTo(response);
     }
 
     @SuppressWarnings("unchecked")
@@ -56,9 +57,9 @@ public class ListProductsTest {
                 aProduct().describedAs("Guard dog"));
 
         listProducts.handle(request, response);
-        productsPage.assertRenderedWith(productsFound(searchResults));
-        productsPage.assertRenderedWith(searchKeyword(keyword));
-        productsPage.assertRenderedWith(photosIn(photoLibrary));
+        view.assertRenderedWith(productsFound(searchResults));
+        view.assertRenderedWith(searchKeyword(keyword));
+        view.assertRenderedWith(photosIn(photoLibrary));
     }
 
     private Matcher<Object> photosIn(AttachmentStorage photos) {

@@ -4,7 +4,7 @@ import com.vtence.molecule.Application;
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
 import org.testinfected.petstore.Messages;
-import org.testinfected.petstore.Page;
+import org.testinfected.petstore.View;
 import org.testinfected.petstore.helpers.PaymentForm;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
@@ -17,13 +17,13 @@ import java.math.BigDecimal;
 
 public class PlaceOrder implements Application {
     private final SalesAssistant salesAssistant;
-    private final Page checkoutPage;
+    private final View<Checkout> checkoutView;
     private final Messages messages;
     private final Validator validator = new Validator();
 
-    public PlaceOrder(SalesAssistant salesAssistant, Page checkoutPage, Messages messages) {
+    public PlaceOrder(SalesAssistant salesAssistant, View<Checkout> checkoutView, Messages messages) {
         this.salesAssistant = salesAssistant;
-        this.checkoutPage = checkoutPage;
+        this.checkoutView = checkoutView;
         this.messages = messages;
     }
 
@@ -46,7 +46,7 @@ public class PlaceOrder implements Application {
     }
 
     private void rejectOrder(Request request, Response response, PaymentForm form) throws IOException {
-        checkoutPage.render(response, new Checkout().
+        checkoutView.render(response, new Checkout().
                 forTotalOf(currentCartTotal(request)).
                 withPayment(form.paymentDetails()).
                 withErrors(form.errors(messages)));

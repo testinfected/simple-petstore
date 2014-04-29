@@ -1,45 +1,58 @@
 package org.testinfected.petstore;
 
+import com.vtence.molecule.Response;
 import com.vtence.molecule.templating.RenderingEngine;
-import org.testinfected.petstore.util.PageTemplate;
+import com.vtence.molecule.templating.Templates;
+import org.testinfected.petstore.order.Cart;
+import org.testinfected.petstore.order.Order;
+import org.testinfected.petstore.views.AvailableItems;
+import org.testinfected.petstore.views.Checkout;
+import org.testinfected.petstore.views.Products;
+
+import java.io.IOException;
 
 public class Pages {
+
+    private final Templates templates;
+
+    protected Pages(RenderingEngine engine) {
+        templates = new Templates(engine);
+    }
 
     public static Pages using(RenderingEngine engine) {
         return new Pages(engine);
     }
 
-    private final RenderingEngine engine;
-
-    protected Pages(RenderingEngine engine) {
-        this.engine = engine;
-    }
-
-    public Page checkout() {
+    public View<Checkout> checkout() {
         return page("checkout");
     }
 
-    public Page items() {
+    public View<AvailableItems> items() {
         return page("items");
     }
 
-    public Page products() {
+    public View<Products> products() {
         return page("products");
     }
 
-    public Page cart() {
+    public View<Cart> cart() {
         return page("cart");
     }
 
-    public Page home() {
+    public View<Void> home() {
         return page("home");
     }
 
-    public Page order() {
+    public View<Order> order() {
         return page("order");
     }
 
-    private Page page(String template) {
-        return new PageTemplate(engine, template, "text/html; charset=utf-8");
+    private <T> View<T> page(final String template) {
+        return new View<T>() {
+            public void render(Response response, T context) throws IOException {
+                response.contentType("text/html; charset=utf-8");
+                response.body(templates.named(template).render(context));
+            }
+        };
     }
 }
