@@ -13,14 +13,17 @@ import com.vtence.molecule.middlewares.DateHeader;
 import com.vtence.molecule.middlewares.Failsafe;
 import com.vtence.molecule.middlewares.FailureMonitor;
 import com.vtence.molecule.middlewares.FileServer;
+import com.vtence.molecule.middlewares.FilterMap;
 import com.vtence.molecule.middlewares.HttpMethodOverride;
+import com.vtence.molecule.middlewares.Layout;
 import com.vtence.molecule.middlewares.ServerHeader;
 import com.vtence.molecule.middlewares.StaticAssets;
 import com.vtence.molecule.session.PeriodicSessionHouseKeeping;
 import com.vtence.molecule.session.SecureIdentifierPolicy;
 import com.vtence.molecule.session.SessionPool;
 import com.vtence.molecule.templating.JMustacheRenderer;
-import com.vtence.molecule.templating.RenderingEngine;
+import com.vtence.molecule.templating.Template;
+import com.vtence.molecule.templating.Templates;
 import org.testinfected.petstore.util.Logging;
 
 import javax.sql.DataSource;
@@ -35,8 +38,8 @@ import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 public class PetStore {
 
     public static final String NAME = "PetStore/0.2";
-    public static final String PAGES_DIR = "app/pages";
-    public static final String LAYOUT_DIR = "app/layout";
+    public static final String PAGES_DIR = "views/pages";
+    public static final String LAYOUT_DIR = "views/layout";
     public static final String PUBLIC_DIR = "public";
 
     private final File context;
@@ -80,24 +83,24 @@ public class PetStore {
             use(new HttpMethodOverride());
             use(staticAssets());
             use(new CookieSessionTracker(createSessionPool(timeout)).expireAfter(timeout));
-            use(new SiteLayout(templatesIn(LAYOUT_DIR)));
+            use(new FilterMap().map("/", Layout.html(new SiteLayout(layoutTemplate()))));
             use(new ConnectionScope(dataSource));
-            run(new Routing(Pages.using(templatesIn(PAGES_DIR))));
+            run(new Routing(new Pages(pageTemplates())));
         }});
     }
 
+    public void stop() {
+        scheduler.shutdownNow();
+    }
+
     private SessionPool createSessionPool(int timeout) {
-        final SessionPool sessions = new SessionPool(new SecureIdentifierPolicy(), clock);
-        if (sessionsExpire()) {
+        SessionPool sessions = new SessionPool(new SecureIdentifierPolicy(), clock);
+        if (this.timeout > 0) {
             PeriodicSessionHouseKeeping houseKeeping =
                     new PeriodicSessionHouseKeeping(scheduler, sessions, timeout, TimeUnit.SECONDS);
             houseKeeping.start();
         }
         return sessions;
-    }
-
-    private boolean sessionsExpire() {
-        return this.timeout > 0;
     }
 
     private StaticAssets staticAssets() {
@@ -106,8 +109,18 @@ public class PetStore {
         return assets;
     }
 
-    private RenderingEngine templatesIn(final String dir) {
-        return new JMustacheRenderer().fromDir(new File(context, dir)).extension("html").encoding("utf-8").
-                defaultValue("");
+    private Template layoutTemplate() {
+        return templatesIn(LAYOUT_DIR).named("main");
+    }
+
+    private Templates pageTemplates() {
+        return templatesIn(PAGES_DIR);
+    }
+
+    private Templates templatesIn(final String dir) {
+        return new Templates(new JMustacheRenderer().fromDir(new File(context, dir))
+                                                    .extension("html")
+                                                    .encoding("utf-8")
+                                                    .defaultValue(""));
     }
 }

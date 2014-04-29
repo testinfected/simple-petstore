@@ -15,12 +15,8 @@ public class Pages {
 
     private final Templates templates;
 
-    protected Pages(RenderingEngine engine) {
-        templates = new Templates(engine);
-    }
-
-    public static Pages using(RenderingEngine engine) {
-        return new Pages(engine);
+    public Pages(Templates templates) {
+        this.templates = templates;
     }
 
     public View<Checkout> checkout() {

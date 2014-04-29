@@ -52,6 +52,7 @@ public class Launcher {
     private final CLI cli;
 
     private SimpleServer server;
+    private PetStore app;
 
     public Launcher(PrintStream out) {
         this.out = out;
@@ -79,17 +80,18 @@ public class Launcher {
         int port = port(cli);
         server = new SimpleServer("localhost", port);
 
-        PetStore petStore = new PetStore(new File(webRoot), new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
+        app = new PetStore(new File(webRoot),
+                                new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
 
         if (!quiet(cli)) {
             server.reportErrorsTo(PlainErrorReporter.toStandardError());
-            petStore.reportErrorsTo(PlainErrorReporter.toStandardError());
-            petStore.logging(Logging.toConsole());
+            app.reportErrorsTo(PlainErrorReporter.toStandardError());
+            app.logging(Logging.toConsole());
         }
 
         int timeout = timeout(cli);
-        petStore.sessionTimeout(timeout);
-        petStore.start(server);
+        app.sessionTimeout(timeout);
+        app.start(server);
         out.println("Launching http://" + server.host() + (port != 80 ? ":" + port : ""));
         out.println("-> Serving files from " + webRoot);
         if (timeout > 0) {
@@ -114,6 +116,7 @@ public class Launcher {
     }
 
     public void stop() throws Exception {
+        app.stop();
         server.shutdown();
         out.println("Stopped.");
     }
