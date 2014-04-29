@@ -96,6 +96,8 @@ public class Launcher {
         out.println("-> Serving files under " + webRoot);
         if (timeout > 0) {
             out.println("-> Sessions expire after " + timeout + " seconds");
+        } else {
+            out.println("-> Sessions are persistent");
         }
     }
 

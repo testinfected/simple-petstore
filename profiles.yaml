@@ -1,5 +1,11 @@
 development:
+  server.host: localhost
   server.port: 8080
-  
+  server.quiet: false
+  sessions.timeout: 1800
+
 test:
+  server.host: localhost
   server.port: 8081
+  server.quiet: true
+  sessions.timeout: -1

@@ -96,10 +96,19 @@ if (!project.hasProperty('env')) {
 run {
   classpath = project(':server').sourceSets.main.runtimeClasspath
   args '-e', env
+  if (project.hasProperty('host')) {
+    args '-h', host
+  }
   if (project.hasProperty('port')) {
     args '-p', port
   }
-  args project(':webapp').file('src/main/webapp')
+    if (project.hasProperty('timeout')) {
+        args '--timeout', timeout
+    }
+  if (project.hasProperty('quiet')) {
+      args '-q'
+  }
+  args project(':webapp').file('src/main/content')
 }
 
 task 'db-init'(type: JavaExec) {

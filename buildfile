@@ -3,7 +3,7 @@ VERSION_NUMBER = '0.2-SNAPSHOT'
 HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]
 NO_LOG = [:jcl_over_slf4j, :slf4j_api, :slf4j_silent]
 
-['db-migrate', 'db-clean', 'db-reset', 'db-drop', 'db-init'].each { |t| Project.local_task t }
+%w(db-migrate db-clean db-reset db-drop db-init).each { |t| Project.local_task t }
 
 define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NUMBER do
   compile.options.source = '1.6'
@@ -41,7 +41,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
 
     test.with HAMCREST, :antlr_runtime, :guava, :cssselectors, :hamcrest_dom, :flyway, NO_LOG, :mysql, :juniversalchardet
     test.with transitive(artifacts(:nekohtml, :htmlunit))
-    test.using :properties => { 'web.root' => _(:src, :main, :webapp) }
+    test.using :properties => { 'web.root' => _(:src, :main, :content) }
 
     package :jar
   end
@@ -50,7 +50,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     compile.with project(:domain), project(:persistence), project(:molecule), project(:webapp), :cli, :flyway
 
     test.using :integration, :properties => {
-      'web.root' => project(:webapp).path_to(:src, :main, :webapp),
+      'web.root' => project(:webapp).path_to(:src, :main, :content),
       'browser.driver' => 'remote',
       'browser.remote.url' => Buildr.settings.build['selenium']['server']['url'],
       'browser.capability.browserName' => Buildr.settings.build['selenium']['server']['browser']['name'],
@@ -70,15 +70,19 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
 
   task :run => project(:server).package do
-    Java::Commands.java("-jar", project(:server).package.to_s,
-      "-p", Buildr.settings.profile['server.port'],
-      "-e", Buildr.environment,
-      "-q",
-      project(:webapp).path_to(:src, :main, :webapp)) { exit }
+    args = []
+    args << '-h' << Buildr.settings.profile['server.host']
+    args << '-p' << Buildr.settings.profile['server.port']
+    args << '-e' << Buildr.environment
+    args << '--timeout' << Buildr.settings.profile['sessions.timeout']
+    args << '-q' if Buildr.settings.profile['server.quiet']
+    args << project(:webapp).path_to(:src, :main, :content)
+
+    Java::Commands.java("-jar", project(:server).package.to_s, *args) { exit }
   end
 
   def migrations(action)
-    Java::Commands.java("org.testinfected.petstore.Migrations", "-e", Buildr.environment, action.to_s,
+    Java::Commands.java('org.testinfected.petstore.Migrations', '-e', Buildr.environment, action.to_s,
       :classpath => project(:server).package.to_s) { exit }
   end
 

@@ -7,7 +7,7 @@ import java.io.File;
 public class WebRoot {
 
     public static final String WEB_ROOT = "web.root";
-    public static final String RELATIVE_WEB_APP_PATH = "webapp/src/main/webapp";
+    public static final String RELATIVE_WEB_APP_PATH = "webapp/src/main/content";
 
     public static File locate() {
         return new File(System.getProperty(WEB_ROOT, RELATIVE_WEB_APP_PATH));
