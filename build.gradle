@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:0.4.0'
+    }
+}
+
 allprojects {
   apply plugin: 'java'
   apply plugin: 'application'
@@ -57,12 +67,21 @@ subprojects {
   }
 }
 
+apply plugin: 'coveralls'
+
 configurations {
     jacoco
 }
 
 dependencies {
     jacoco 'org.jacoco:org.jacoco.ant:0.7.0.201403182114'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
 }
 
 task coverage(type: JacocoReport) {
