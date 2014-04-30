@@ -7,6 +7,9 @@ allprojects {
 
   repositories {
     mavenCentral()
+    maven {
+      url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
   }
 }
 
@@ -14,7 +17,7 @@ ext {
   libs = [
           mysql             : 'mysql:mysql-connector-java:5.1.21',
           flyway            : 'com.googlecode.flyway:flyway-core:2.0',
-          cli               : 'org.testinfected:cli:1.0',
+          cli               : 'com.vtence.cli:cli:1.1-SNAPSHOT',
           simple            : 'org.simpleframework:simple:5.1.6',
           jmustache         : 'com.samskivert:jmustache:1.9',
 

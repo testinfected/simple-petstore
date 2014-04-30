@@ -1,8 +1,8 @@
 package org.testinfected.petstore;
 
+import com.vtence.cli.CLI;
 import com.vtence.molecule.lib.PlainErrorReporter;
 import com.vtence.molecule.servers.SimpleServer;
-import org.testinfected.cli.CLI;
 import org.testinfected.petstore.db.support.DriverManagerDataSource;
 import org.testinfected.petstore.util.Logging;
 
@@ -32,7 +32,7 @@ public class Launcher {
         try {
             launcher.launch(args);
         } catch (Exception e) {
-            System.err.println("launcher: " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
             System.err.println();
             launcher.displayUsageTo(System.err);
             System.exit(1);
@@ -44,7 +44,8 @@ public class Launcher {
     private static final String HOST = "host";
     private static final String PORT = "port";
     private static final String TIMEOUT = "timeout";
-    private static final int WEB_ROOT = 0;
+    private static final String WEBROOT = "webroot";
+
     private static final int FIFTEEN_MINUTES = (int) MINUTES.toSeconds(15);
 
     private final PrintStream out;
@@ -60,37 +61,38 @@ public class Launcher {
 
     private static CLI defineCommandLine() {
         return new CLI() {{
-            withBanner("petstore [options] webroot");
-            define(option(ENV, "-e", "--environment ENV", "Environment to use for configuration (default: development)").defaultingTo("development"));
-            define(option(HOST, "-h", "--host HOST", "Host address to bind to (default: 0.0.0.0)").defaultingTo("0.0.0.0"));
-            define(option(PORT, "-p", "--port PORT", "Port to listen on (default: 8080)").asType(int.class).defaultingTo(8080));
-            define(option(TIMEOUT, "--timeout SECONDS", "Session timeout in seconds (default: 15 min)").asType(int.class).defaultingTo(FIFTEEN_MINUTES));
-            define(option(QUIET, "-q", "--quiet", "Operate quietly").defaultingTo(false));
+            name("petstore"); version("0.2");
+            option(ENV, "-e", "--environment ENV", "Environment to use for configuration (default: development)").defaultingTo("development");
+            option(HOST, "-h", "--host HOST", "Host address to bind to (default: 0.0.0.0)").defaultingTo("0.0.0.0");
+            option(PORT, "-p", "--port PORT", "Port to listen on (default: 8080)").ofType(int.class).defaultingTo(8080);
+            option(TIMEOUT, "--timeout SECONDS", "Session timeout in seconds (default: 15 min)").ofType(int.class).defaultingTo(FIFTEEN_MINUTES);
+            flag(QUIET, "-q", "--quiet", "Operate quietly");
+
+            operand(WEBROOT, "webroot", "Path to web application folder");
         }};
     }
 
     public void launch(String... args) throws Exception {
-        String[] operands = cli.parse(args);
-        if (operands.length == 0) throw new IllegalArgumentException("Must specify web root location");
+        cli.parse(args);
 
-        String webRoot = operands[WEB_ROOT];
-        Environment env = Environment.load(env(cli));
-
-        String host = host(cli);
-        int port = port(cli);
+        String host = cli.get(HOST);
+        int port = cli.get(PORT);
         server = new SimpleServer(host, port);
 
+        String webRoot = cli.get(WEBROOT);
+        Environment env = Environment.load(cli.<String>get(ENV));
         app = new PetStore(new File(webRoot),
                                 new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
 
-        if (!quiet(cli)) {
+        if (!cli.has(QUIET)) {
             server.reportErrorsTo(PlainErrorReporter.toStandardError());
             app.reportErrorsTo(PlainErrorReporter.toStandardError());
             app.logging(Logging.toConsole());
         }
 
-        int timeout = timeout(cli);
+        int timeout = cli.get(TIMEOUT);
         app.sessionTimeout(timeout);
+
         app.start(server);
         out.println("Launching http://" + server.host() + (server.port() != 80 ? ":" + server.port() : ""));
         out.println("-> Serving files under " + webRoot);
@@ -101,26 +103,6 @@ public class Launcher {
         }
     }
 
-    private String host(CLI cli) {
-        return (String) cli.getOption(HOST);
-    }
-
-    private int port(CLI cli) {
-        return (Integer) cli.getOption(PORT);
-    }
-
-    private String env(CLI cli) {
-        return (String) cli.getOption(ENV);
-    }
-
-    private static Boolean quiet(CLI cli) {
-        return (Boolean) cli.getOption(QUIET);
-    }
-
-    private int timeout(CLI cli) {
-        return (Integer) cli.getOption(TIMEOUT);
-    }
-
     public void stop() throws Exception {
         app.stop();
         server.shutdown();
@@ -128,6 +110,6 @@ public class Launcher {
     }
 
     public void displayUsageTo(PrintStream out) throws IOException {
-        cli.writeUsageTo(out);
+        cli.printHelp(out);
     }
 }
