@@ -39,13 +39,6 @@ public class Launcher {
         }
     }
 
-    private static final String ENV = "env";
-    private static final String QUIET = "quiet";
-    private static final String HOST = "host";
-    private static final String PORT = "port";
-    private static final String TIMEOUT = "timeout";
-    private static final String WEBROOT = "webroot";
-
     private static final int FIFTEEN_MINUTES = (int) MINUTES.toSeconds(15);
 
     private final PrintStream out;
@@ -62,35 +55,35 @@ public class Launcher {
     private static CLI defineCommandLine() {
         return new CLI() {{
             name("petstore"); version("0.2");
-            option(ENV, "-e", "--environment ENV", "Environment to use for configuration (default: development)").defaultingTo("development");
-            option(HOST, "-h", "--host HOST", "Host address to bind to (default: 0.0.0.0)").defaultingTo("0.0.0.0");
-            option(PORT, "-p", "--port PORT", "Port to listen on (default: 8080)").ofType(int.class).defaultingTo(8080);
-            option(TIMEOUT, "--timeout SECONDS", "Session timeout in seconds (default: 15 min)").ofType(int.class).defaultingTo(FIFTEEN_MINUTES);
-            flag(QUIET, "-q", "--quiet", "Operate quietly");
+            option("-e", "--environment ENV", "Environment to use for configuration (default: development)").defaultingTo("development");
+            option("-h", "--host HOST", "Host address to bind to (default: 0.0.0.0)").defaultingTo("0.0.0.0");
+            option("-p", "--port PORT", "Port to listen on (default: 8080)").ofType(int.class).defaultingTo(8080);
+            option("--timeout SECONDS", "Session timeout in seconds (default: 15 min)").ofType(int.class).defaultingTo(FIFTEEN_MINUTES);
+            flag("-q", "--quiet", "Operate quietly");
 
-            operand(WEBROOT, "webroot", "Path to web application folder");
+            operand("webroot", "Path to web application folder");
         }};
     }
 
     public void launch(String... args) throws Exception {
         cli.parse(args);
 
-        String host = cli.get(HOST);
-        int port = cli.get(PORT);
+        String host = cli.get("-h");
+        int port = cli.get("-p");
         server = new SimpleServer(host, port);
 
-        String webRoot = cli.get(WEBROOT);
-        Environment env = Environment.load(cli.<String>get(ENV));
+        String webRoot = cli.get("webroot");
+        Environment env = Environment.load(cli.<String>get("-e"));
         app = new PetStore(new File(webRoot),
                                 new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
 
-        if (!cli.has(QUIET)) {
+        if (!cli.has("-q")) {
             server.reportErrorsTo(PlainErrorReporter.toStandardError());
             app.reportErrorsTo(PlainErrorReporter.toStandardError());
             app.logging(Logging.toConsole());
         }
 
-        int timeout = cli.get(TIMEOUT);
+        int timeout = cli.get("--timeout");
         app.sessionTimeout(timeout);
 
         app.start(server);
