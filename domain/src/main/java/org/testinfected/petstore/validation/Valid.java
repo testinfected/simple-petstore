@@ -33,7 +33,7 @@ public class Valid<T> implements Serializable, Constraint<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Valid notNull = (Valid) o;
+		Valid<T> notNull = (Valid<T>) o;
         if (value != null ? !value.equals(notNull.value) : notNull.value != null) return false;
         return true;
     }

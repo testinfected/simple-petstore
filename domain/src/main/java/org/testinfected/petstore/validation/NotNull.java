@@ -24,11 +24,11 @@ public class NotNull<T> implements Serializable, Constraint<T> {
         return value != null;
     }
 
-    public boolean equals(Object o) {
+	public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        NotNull notNull = (NotNull) o;
+        NotNull<T> notNull = (NotNull<T>) o;
 
         if (value != null ? !value.equals(notNull.value) : notNull.value != null) return false;
 

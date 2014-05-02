@@ -32,10 +32,10 @@ public final class Constraints {
             return constraint.getName();
         }
 
-        public Constraint constraint() {
+		public Constraint<?> constraint() {
             try {
                 constraint.setAccessible(true);
-                return (Constraint) constraint.get(target);
+                return (Constraint<?>) constraint.get(target);
             } catch (IllegalAccessException e) {
                 throw new IllegalArgumentException("Constraint " + constraint.getName() + " is not accessible on " + target);
             }

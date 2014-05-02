@@ -63,7 +63,7 @@ public class CashierTest {
         assertThat("cart not empty", cart.empty());
     }
 
-    @SuppressWarnings("unchecked") @Test(expected = ConstraintViolationException.class) public void
+    @Test(expected = ConstraintViolationException.class) public void
     rejectsInvalidPaymentDetails() throws Exception {
         PaymentMethod paymentMethod = aVisa().withNumber(BLANK).withExpiryDate(MISSING).billedTo(
                 anAddress().withFirstName(MISSING).withLastName(MISSING))
