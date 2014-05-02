@@ -21,8 +21,8 @@ artifacts:
   guava: com.google.guava:guava:jar:15.0
   cssselectors: com.3levers.cssselectors:cssselectors:jar:1.0
   hamcrest_dom: org.testinfected.hamcrest-matchers:dom-matchers:jar:1.5
-  selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.37.0
-  selenium_ghost_driver: com.github.detro.ghostdriver:phantomjsdriver:jar:1.0.4
+  selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.41.0
+  selenium_ghost_driver: com.github.detro.ghostdriver:phantomjsdriver:jar:1.1.0
   windowlicker_web: com.googlecode.windowlicker:windowlicker-web:jar:r268
   juniversalchardet: com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3
   nekohtml: net.sourceforge.nekohtml:nekohtml:jar:1.9.20
@@ -36,7 +36,7 @@ junit: 4.11
 jmock: 2.6.0
 
 selenium:
-  version: 2.37.0
+  version: 2.41.0
   silent: true
   server:
     url: http://localhost:4444/wd/hub
