@@ -18,6 +18,7 @@ import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasChildren;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasClassName;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasId;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasNoSelector;
 import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
@@ -74,14 +75,14 @@ public class HeaderTest {
         assertThat("header", header, hasUniqueSelector("#home a", hasAttribute("href", "/")));
     }
 
-    @Test public void
+    @SuppressWarnings("unchecked") @Test public void
     indicatesWhenDisplayingCartContent() {
         Map<String, String> data = new HashMap<String, String>();
         data.put("section", "cart");
         header = renderHeader().with(page.composedOf(data).withCart(aCart().build())).asDom();
         assertThat("header", header, allOf(
-                hasUniqueSelector("#home.overline.cart"),
-                hasUniqueSelector("#shopping-cart.overline.cart"),
+                hasUniqueSelector("#home", hasClassName("overline"), hasClassName("cart")),
+                hasUniqueSelector("#shopping-cart", hasClassName("overline"), hasClassName("cart")),
                 hasUniqueSelector("#tab.cart", hasChild(allOf(hasTag("img"), hasAttribute("src", "/images/tab.png"))))));
     }
 

@@ -67,7 +67,7 @@ public class OrdersDatabaseTest {
 
     @SuppressWarnings("unchecked")
     @Test public void
-    canRoundTripOrdersWillCompleteDetails() throws Exception {
+    canRoundTripOrders() throws Exception {
         final Collection<OrderBuilder> sampleOrders = Arrays.asList(
                 anOrder(),
                 anOrder().from(aCart().containing(
