@@ -27,9 +27,7 @@ grant all on petstore_test.* to 'testbot'@'localhost';
 
 ## Building
 
-You need to have either PhantomJS or Firefox installed (tested on Firefox 24) to run the end-to-end tests.
-
-Modify the [test configuration file](https://github.com/testinfected/simple-petstore/blob/master/server/src/test/resources/test.properties) according to your settings. Note that you have to specify the path of the phantomjs executable.
+You need to install PhantomJS (tested on 1.9.7) to run the end-to-end tests.
 
 To build and run all tests:
 
@@ -37,7 +35,7 @@ To build and run all tests:
 
 or
 
-`gradle build`
+`./gradlew build`
 
 ## Migrating the database
 
@@ -47,11 +45,11 @@ To prepare your database:
 
 or
 
-`gradle db-migrate`
+`./gradlew db-migrate`
 
 Use the [seeds](https://github.com/testinfected/simple-petstore/blob/master/server/src/main/scripts/seeds/items.sql) to populate your MySQL database with sample data:
 
-`mysql -u petstore -p petstore_dev < path/to/items.sql`
+`mysql -u petstore -p petstore_dev < ./server/src/main/scripts/seeds/items.sql`
 
 ## Running
 
@@ -61,10 +59,12 @@ To run the application:
 
 or
 
-`gradle run`
+`./gradlew run`
 
 ## IntelliJ
 
-If you use IntelliJ, you can generate your project using:
+If you use IntelliJ, just import the gradle build.
+
+You can also generate your project using:
 
 `buildr idea`

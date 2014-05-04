@@ -1,15 +1,11 @@
 allprojects {
   apply plugin: 'java'
-  apply plugin: 'application'
 
   group = 'org.testinfected.petstore'
   version = '0.2-SNAPSHOT'
 
   repositories {
     mavenCentral()
-    maven {
-      url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
   }
 }
 
@@ -90,6 +86,7 @@ task coverage(type: JacocoReport) {
     }
 }
 
+apply plugin: 'application'
 mainClassName = 'org.testinfected.petstore.Launcher'
 
 if (!project.hasProperty('env')) {
