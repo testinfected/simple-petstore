@@ -27,7 +27,9 @@ grant all on petstore_test.* to 'testbot'@'localhost';
 
 ## Building
 
-You need to install PhantomJS (tested on 1.9.7) to run the end-to-end tests.
+You need to install [PhantomJS](http://phantomjs.org) to run the end-to-end tests (tested on 1.9.7). Make sure you modify the 
+end-to-end tests [properties](https://github.com/testinfected/simple-petstore/blob/master/server/src/test/resources/test.properties) 
+to indicate the path of the PhantomJS executable. 
 
 To build and run all tests:
 
