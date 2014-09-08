@@ -25,12 +25,10 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.iterableWithSize;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
@@ -58,9 +56,8 @@ public class ProductsDatabaseTest {
     findsProductsByNumber() throws Exception {
         given(aProduct().withNumber("PRD-0001"));
 
-        Product product = productsDatabase.findByNumber("PRD-0001");
-        assertThat("no match", product, not(nullValue()));
-        assertThat("product", product, productWithNumber("PRD-0001"));
+        Product match = productsDatabase.findByNumber("PRD-0001");
+        assertThat("matched product", match, productWithNumber("PRD-0001"));
     }
 
     @SuppressWarnings("unchecked")
@@ -92,8 +89,8 @@ public class ProductsDatabaseTest {
     findsNothingWhenNoProductInCatalogMatchesKeyword() throws Exception {
         given(aProduct().named("Dalmatian").describedAs("A big dog"));
 
-        Collection<Product> matchingProducts = productsDatabase.findByKeyword("bulldog");
-        assertThat("matching products", matchingProducts, is(empty()));
+        Collection<Product> matches = productsDatabase.findByKeyword("bulldog");
+        assertThat("matching products", matches, is(empty()));
     }
 
     @SuppressWarnings("unchecked")

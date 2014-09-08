@@ -62,7 +62,7 @@ public class OrdersDatabaseTest {
         given(anOrder().withNumber("00000101"));
 
         Order match = orderDatabase.find(new OrderNumber("00000100"));
-        assertThat("match", match, orderWithNumber("00000100"));
+        assertThat("matched order", match, orderWithNumber("00000100"));
     }
 
     @SuppressWarnings("unchecked")

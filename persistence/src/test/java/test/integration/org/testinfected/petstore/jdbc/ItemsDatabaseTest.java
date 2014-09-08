@@ -36,7 +36,6 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
 import static org.testinfected.petstore.db.Access.productOf;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.a;
-import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
 
@@ -62,27 +61,29 @@ public class ItemsDatabaseTest {
     @SuppressWarnings("unchecked")
     @Test public void
     findsItemsByNumber() throws Exception {
-        given(anItem().of(savedProductFrom(aProduct())).withNumber("12345678"));
+        Product dog = savedProductFrom(aProduct());
+        given(a(dog).withNumber("12345678"));
 
         Item found = itemsDatabase.find(new ItemNumber("12345678"));
-        assertThat("item", found, hasNumber("12345678"));
+        assertThat("matched item", found, hasNumber("12345678"));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     findsItemsByProductNumber() throws Exception {
-        Product product = savedProductFrom(aProduct().withNumber("LAB-1234"));
-        given(anItem().of(product), anItem().of(product));
+        Product labrador = savedProductFrom(aProduct().withNumber("LAB-1234"));
+        given(a(labrador), a(labrador));
 
         List<Item> availableItems = itemsDatabase.findByProductNumber("LAB-1234");
-        assertThat("available items", availableItems, hasSize(2));
+        assertThat("matching items", availableItems, hasSize(2));
         assertThat("available items", availableItems, everyItem(hasProductNumber("LAB-1234")));
     }
 
     @SuppressWarnings("unchecked")
     @Test public void
     findsNothingIfProductHasNoAssociatedItemInInventory() throws Exception {
-        given(anItem().of(savedProductFrom(aProduct().withNumber("DAL-5432"))));
+        Product dalmatian = savedProductFrom(aProduct().withNumber("DAL-5432"));
+        given(a(dalmatian));
 
         List<Item> availableItems = itemsDatabase.findByProductNumber(savedProductFrom(aProduct().withNumber("BOU-6789")).getNumber());
         assertThat("available items", availableItems, Matchers.<Item>empty());

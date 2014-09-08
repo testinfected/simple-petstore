@@ -19,7 +19,7 @@ public class HasFieldWithValue<T, U> extends TypeSafeDiagnosingMatcher<T> {
 
     @Override
     protected boolean matchesSafely(T argument, Description mismatchDescription) {
-        Field field = FieldAccessor.lookupField(argument, fieldName);
+        Field field = FieldAccessor.findField(argument, fieldName);
         if (field == null) {
             mismatchDescription.appendText("no field \"" + fieldName + "\"");
             return false;

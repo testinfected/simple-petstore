@@ -5,25 +5,25 @@ import java.lang.reflect.Field;
 public class FieldAccessor<T>  {
 
     public static <T> FieldAccessor<T> access(Object entity, String fieldName) {
-        Field field = lookupField(entity, fieldName);
+        Field field = findField(entity, fieldName);
         if (field == null) throw new IllegalArgumentException(entity.getClass().getName() + " has no field '" + fieldName + "'");
         return new FieldAccessor<T>(entity, field);
     }
 
-    public static Field lookupField(Object object, final String name) {
+    public static Field findField(Object object, final String fieldName) {
         Class<?> type = object.getClass();
         while (type != Object.class) {
-            Field f = findField(type, name);
+            Field f = field(type, fieldName);
             if (f != null) return f;
             type = type.getSuperclass();
         }
         return null;
     }
 
-    public static Field findField(Class<?> type, String name) {
+    public static Field field(Class<?> type, String fieldName) {
         Field[] fields = type.getDeclaredFields();
         for (Field field : fields) {
-            if (field.getName().equals(name)) return field;
+            if (field.getName().equals(fieldName)) return field;
         }
         return null;
     }
