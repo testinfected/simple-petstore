@@ -10,7 +10,7 @@ It uses the following tools:
 - [Mustache](http://mustache.github.com) for logic-less templating
 - Plain JDBC
 - No IoC container
-- [Buildr](http://buildr.apache.org) or [Gradle](http://www.gradle.org) for the build system
+- [Gradle](http://www.gradle.org) for the build system 
 
 ## Preparing
 
