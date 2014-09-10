@@ -1,7 +1,6 @@
 package org.testinfected.petstore.db.records;
 
 import org.testinfected.petstore.db.support.Column;
-import org.testinfected.petstore.db.support.Table;
 import org.testinfected.petstore.order.LineItem;
 
 import java.math.BigDecimal;
@@ -14,19 +13,31 @@ import static org.testinfected.petstore.db.Access.orderOf;
 
 public class LineItemRecord extends AbstractRecord<LineItem> {
 
-    private final Table<LineItem> lineItems = new Table<LineItem>("line_items", this);
+    private final Column<Long> id;
+    private final Column<String> number;
+    private final Column<String> description;
+    private final Column<BigDecimal> unitPrice;
+    private final Column<Integer> quantity;
+    private final Column<BigDecimal> totalPrice;
+    private final Column<Long> orderId;
+    private final Column<Integer> line;
 
-    private final Column<Long> id = lineItems.LONG("id");
-    private final Column<String> number = lineItems.STRING("item_number");
-    private final Column<String> description = lineItems.STRING("item_description");
-    private final Column<BigDecimal> unitPrice = lineItems.BIG_DECIMAL("item_unit_price");
-    private final Column<Integer> quantity = lineItems.INT("quantity");
-    private final Column<BigDecimal> totalPrice = lineItems.BIG_DECIMAL("total_price");
-    private final Column<Long> order = lineItems.LONG("order_id");
-    private final Column<Integer> line = lineItems.INT("order_line");
-
-    public static Table<LineItem> buildTable() {
-        return new LineItemRecord().lineItems;
+    public LineItemRecord(Column<Long> id,
+                          Column<String> itemNumber,
+                          Column<String> itemDescription,
+                          Column<BigDecimal> itemUnitPrice,
+                          Column<Integer> quantity,
+                          Column<BigDecimal> totalPrice,
+                          Column<Long> orderId,
+                          Column<Integer> orderLine) {
+        this.id = id;
+        this.number = itemNumber;
+        this.description = itemDescription;
+        this.unitPrice = itemUnitPrice;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+        this.orderId = orderId;
+        this.line = orderLine;
     }
 
     @Override
@@ -44,7 +55,7 @@ public class LineItemRecord extends AbstractRecord<LineItem> {
         description.set(st, lineItem.getItemDescription());
         quantity.set(st, lineItem.getQuantity());
         totalPrice.set(st, lineItem.getTotalPrice());
-        order.set(st, idOf(orderOf(lineItem).get()).get());
+        orderId.set(st, idOf(orderOf(lineItem).get()).get());
         line.set(st, orderOf(lineItem).get().lineOf(lineItem));
     }
 }

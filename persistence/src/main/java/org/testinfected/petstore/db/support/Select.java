@@ -119,7 +119,7 @@ public class Select<T> {
 
     public List<String> columnsFor(Table<?> table) {
         List<String> columns = new ArrayList<String>();
-        for (String column : table.columnNames()) {
+        for (String column : table.columns()) {
             columns.add(aliasOf(table) + "." + column);
         }
         return columns;

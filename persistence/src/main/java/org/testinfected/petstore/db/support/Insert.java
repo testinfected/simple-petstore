@@ -38,8 +38,8 @@ public class Insert<T> {
     private String buildInsertStatement() {
         StringBuilder sql = new StringBuilder();
         sql.append("insert into ").append(into.name());
-        sql.append("(").append(JDBC.asString(into.columnNames())).append(")");
-        sql.append(" values(").append(JDBC.asString(parametersFor(into.columnNames()))).append(")");
+        sql.append("(").append(JDBC.asString(into.columns())).append(")");
+        sql.append(" values(").append(JDBC.asString(parametersFor(into.columns()))).append(")");
         return sql.toString();
     }
 

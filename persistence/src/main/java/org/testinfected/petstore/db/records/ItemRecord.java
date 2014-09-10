@@ -1,7 +1,7 @@
 package org.testinfected.petstore.db.records;
 
 import org.testinfected.petstore.db.support.Column;
-import org.testinfected.petstore.db.support.Table;
+import org.testinfected.petstore.db.support.Record;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemNumber;
 import org.testinfected.petstore.product.Product;
@@ -16,21 +16,25 @@ import static org.testinfected.petstore.db.Access.productOf;
 
 public class ItemRecord extends AbstractRecord<Item> {
 
-    private final Table<Product> products;
+    private final Column<Long> id;
+    private final Column<String> number;
+    private final Column<Long> product;
+    private final Column<BigDecimal> price;
+    private final Column<String> description;
 
-    private final Table<Item> items = new Table<Item>("items", this);
+    private final Record<Product> products;
 
-    private final Column<Long> id = items.LONG("id");
-    private final Column<String> number = items.STRING("number");
-    private final Column<Long> product = items.LONG("product_id");
-    private final Column<BigDecimal> price = items.BIG_DECIMAL("price");
-    private final Column<String> description = items.STRING("description");
-
-    public static Table<Item> buildTable(Table<Product> products) {
-        return new ItemRecord(products).items;
-    }
-
-    public ItemRecord(Table<Product> products) {
+    public ItemRecord(Column<Long> id,
+                      Column<String> number,
+                      Column<Long> product,
+                      Column<BigDecimal> price,
+                      Column<String> description,
+                      Record<Product> products) {
+        this.id = id;
+        this.number = number;
+        this.product = product;
+        this.price = price;
+        this.description = description;
         this.products = products;
     }
 

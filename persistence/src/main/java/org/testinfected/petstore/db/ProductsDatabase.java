@@ -1,6 +1,5 @@
 package org.testinfected.petstore.db;
 
-import org.testinfected.petstore.db.records.ProductRecord;
 import org.testinfected.petstore.db.support.Insert;
 import org.testinfected.petstore.db.support.JDBCException;
 import org.testinfected.petstore.db.support.Select;
@@ -16,7 +15,7 @@ import java.util.List;
 public class ProductsDatabase implements ProductCatalog {
 
     private final Connection connection;
-    private final Table<Product> products = ProductRecord.buildTable();
+    private final Table<Product> products = Schema.products();
 
     public ProductsDatabase(Connection connection) {
         this.connection = connection;

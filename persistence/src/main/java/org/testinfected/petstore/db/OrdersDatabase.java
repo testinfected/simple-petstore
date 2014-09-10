@@ -1,9 +1,6 @@
 package org.testinfected.petstore.db;
 
 import org.testinfected.petstore.billing.PaymentMethod;
-import org.testinfected.petstore.db.records.LineItemRecord;
-import org.testinfected.petstore.db.records.OrderRecord;
-import org.testinfected.petstore.db.records.PaymentRecord;
 import org.testinfected.petstore.db.support.Insert;
 import org.testinfected.petstore.db.support.Select;
 import org.testinfected.petstore.db.support.Table;
@@ -21,9 +18,9 @@ import static org.testinfected.petstore.db.Access.orderOf;
 public class OrdersDatabase implements OrderBook {
 
     private final Connection connection;
-    private final Table<PaymentMethod> payments = PaymentRecord.buildTable();
-    private final Table<Order> orders = OrderRecord.buildTable(payments);
-    private final Table<LineItem> lineItems = LineItemRecord.buildTable();
+    private final Table<LineItem> lineItems = Schema.lineItems();
+    private final Table<PaymentMethod> payments = Schema.payments();
+    private final Table<Order> orders = Schema.orders(payments);
 
     public OrdersDatabase(Connection connection) {
         this.connection = connection;

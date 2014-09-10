@@ -1,7 +1,6 @@
 package org.testinfected.petstore.db.records;
 
 import org.testinfected.petstore.db.support.Column;
-import org.testinfected.petstore.db.support.Table;
 import org.testinfected.petstore.product.Attachment;
 import org.testinfected.petstore.product.Product;
 
@@ -13,16 +12,22 @@ import static org.testinfected.petstore.db.Access.idOf;
 
 public class ProductRecord extends AbstractRecord<Product> {
 
-    private final Table<Product> products = new Table<Product>("products", this);
+    private final Column<Long> id;
+    private final Column<String> number;
+    private final Column<String> name;
+    private final Column<String> description;
+    private final Column<String> photo;
 
-    private final Column<Long> id = products.LONG("id");
-    private final Column<String> number = products.STRING("number");
-    private final Column<String> name = products.STRING("name");
-    private final Column<String> description = products.STRING("description");
-    private final Column<String> photo = products.STRING("photo_file_name");
-
-    public static Table<Product> buildTable() {
-        return new ProductRecord().products;
+    public ProductRecord(Column<Long> id,
+                         Column<String> number,
+                         Column<String> name,
+                         Column<String> description,
+                         Column<String> photo) {
+        this.id = id;
+        this.number = number;
+        this.name = name;
+        this.description = description;
+        this.photo = photo;
     }
 
     @Override
