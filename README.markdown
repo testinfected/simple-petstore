@@ -33,19 +33,11 @@ to indicate the path of the PhantomJS executable.
 
 To build and run all tests:
 
-`buildr package`
-
-or
-
 `./gradlew build`
 
 ## Migrating the database
 
 To prepare your database:
-
-`buildr db-migrate`
-
-or
 
 `./gradlew db-migrate`
 
@@ -57,16 +49,8 @@ Use the [seeds](https://github.com/testinfected/simple-petstore/blob/master/serv
 
 To run the application:
 
-`buildr run`
-
-or
-
 `./gradlew run`
 
 ## IntelliJ
 
 If you use IntelliJ, just import the gradle build.
-
-You can also generate your project using:
-
-`buildr idea`
