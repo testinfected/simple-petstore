@@ -25,10 +25,10 @@ public class CreateProductTest {
 
     @Before public void
     addProductDetailsToRequest() {
-        request.addParameter("number", "LAB-1234");
-        request.addParameter("name", "Labrador");
-        request.addParameter("description", "Friendly Dog");
-        request.addParameter("photo", "labrador.jpg");
+        request.addParameter("number", "LAB-1234")
+               .addParameter("name", "Labrador")
+               .addParameter("description", "Friendly Dog")
+               .addParameter("photo", "labrador.jpg");
     }
 
     @Test public void
@@ -44,7 +44,8 @@ public class CreateProductTest {
     @Test public void
     reportsResourceConflictWhenProductAlreadyExists() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(requestHandler).addProductToCatalog(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(String.class))); will(throwException(new DuplicateProductException(aProduct().build())));
+            oneOf(requestHandler).addProductToCatalog(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(String.class)));
+            will(throwException(new DuplicateProductException(aProduct().build())));
         }});
 
         createProduct.handle(request, response);

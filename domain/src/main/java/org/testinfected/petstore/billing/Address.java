@@ -27,27 +27,4 @@ public class Address implements Serializable {
     public String getEmailAddress() {
         return emailAddress;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Address address = (Address) o;
-
-        if (!firstName.equals(address.firstName)) return false;
-        if (!lastName.equals(address.lastName)) return false;
-        if (emailAddress != null ? !emailAddress.equals(address.emailAddress) : address.emailAddress != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = firstName.hashCode();
-        result = 31 * result + lastName.hashCode();
-        result = 31 * result + (emailAddress != null ? emailAddress.hashCode() : 0);
-        return result;
-    }
 }

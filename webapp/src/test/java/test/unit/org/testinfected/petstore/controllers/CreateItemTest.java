@@ -27,10 +27,10 @@ public class CreateItemTest {
 
     @Before public void
     addItemDetailsToRequest() {
-        request.addParameter("product", "LAB-1234");
-        request.addParameter("number", "12345678");
-        request.addParameter("description", "Chocolate Male");
-        request.addParameter("price", "599.00");
+        request.addParameter("description", "Chocolate Male")
+               .addParameter("product", "LAB-1234")
+               .addParameter("number", "12345678")
+               .addParameter("price", "599.00");
     }
 
     @Test public void
@@ -46,7 +46,8 @@ public class CreateItemTest {
     @Test public void
     reportsResourceConflictItemAlreadyExists() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(requestHandler).addToInventory(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(BigDecimal.class))); will(throwException(new DuplicateItemException(anItem().build())));
+            oneOf(requestHandler).addToInventory(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(BigDecimal.class)));
+            will(throwException(new DuplicateItemException(anItem().build())));
         }});
 
         createItem.handle(request, response);

@@ -22,7 +22,6 @@ public class ItemNumber implements Serializable {
         ItemNumber that = (ItemNumber) o;
 
         return !(number != null ? !number.equals(that.number) : that.number != null);
-
     }
 
     @Override
