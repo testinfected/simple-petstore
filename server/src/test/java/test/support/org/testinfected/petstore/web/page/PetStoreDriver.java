@@ -11,16 +11,16 @@ import static org.hamcrest.Matchers.containsString;
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
 
-public class PetStore {
+public class PetStoreDriver {
     private final AsyncWebDriver browser;
     private final HttpRequest api;
     private final WebServer server;
 
-    public static PetStore in(TestEnvironment environment) {
-        return new PetStore(environment.fireBrowser(), environment.api(), new WebServer(environment.serverPort(), environment.webRoot()));
+    public static PetStoreDriver in(TestEnvironment environment) {
+        return new PetStoreDriver(environment.fireBrowser(), environment.api(), new WebServer(environment.serverPort(), environment.webRoot()));
     }
 
-    public PetStore(AsyncWebDriver browser, HttpRequest api, WebServer webServer) {
+    public PetStoreDriver(AsyncWebDriver browser, HttpRequest api, WebServer webServer) {
         this.browser = browser;
         this.api = api;
         this.server = webServer;
@@ -51,16 +51,16 @@ public class PetStore {
         return false;
     }
 
-    public PetStore loginAs(String username) {
+    public PetStoreDriver loginAs(String username) {
         return this;
     }
 
-    public PetStore logout() {
+    public PetStoreDriver logout() {
         browser.element(id("logout")).click();
         return this;
     }
 
-    public PetStore goToHomePage() {
+    public PetStoreDriver goToHomePage() {
         browser.navigate().to(url("/"));
         return this;
     }

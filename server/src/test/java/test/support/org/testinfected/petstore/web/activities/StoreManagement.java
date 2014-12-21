@@ -1,14 +1,14 @@
 package test.support.org.testinfected.petstore.web.activities;
 
-import test.support.org.testinfected.petstore.web.page.PetStore;
+import test.support.org.testinfected.petstore.web.page.PetStoreDriver;
 
 import java.io.IOException;
 
 public class StoreManagement {
 
-    private final PetStore petstore;
+    private final PetStoreDriver petstore;
 
-    public StoreManagement(PetStore petstore) {
+    public StoreManagement(PetStoreDriver petstore) {
         this.petstore = petstore;
     }
 

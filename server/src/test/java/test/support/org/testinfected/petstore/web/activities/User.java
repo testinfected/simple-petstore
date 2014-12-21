@@ -1,15 +1,15 @@
 package test.support.org.testinfected.petstore.web.activities;
 
-import test.support.org.testinfected.petstore.web.page.PetStore;
+import test.support.org.testinfected.petstore.web.page.PetStoreDriver;
 
 public class User {
-    private final PetStore petstore;
+    private final PetStoreDriver petstore;
     private final CatalogBrowsing catalog;
     private final CartManagement cart;
     private final StoreManagement store;
     private final Ordering order;
 
-    public User(PetStore petstore) {
+    public User(PetStoreDriver petstore) {
         this.petstore = petstore;
         this.catalog = new CatalogBrowsing(petstore);
         this.cart = new CartManagement(petstore);

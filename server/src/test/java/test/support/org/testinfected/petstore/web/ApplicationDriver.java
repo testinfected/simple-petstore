@@ -1,7 +1,7 @@
 package test.support.org.testinfected.petstore.web;
 
 import test.support.org.testinfected.petstore.web.activities.User;
-import test.support.org.testinfected.petstore.web.page.PetStore;
+import test.support.org.testinfected.petstore.web.page.PetStoreDriver;
 import test.system.org.testinfected.petstore.features.Item;
 import test.system.org.testinfected.petstore.features.Product;
 
@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class ApplicationDriver {
 
-    private final PetStore petstore;
+    private final PetStoreDriver petstore;
 
     private String admin = "admin";
     private String customer = "customer";
@@ -17,10 +17,10 @@ public class ApplicationDriver {
     private User user;
 
     public ApplicationDriver(TestEnvironment environment) {
-        this(PetStore.in(environment));
+        this(PetStoreDriver.in(environment));
     }
 
-    public ApplicationDriver(PetStore petstore) {
+    public ApplicationDriver(PetStoreDriver petstore) {
         this.petstore = petstore;
         this.user = new User(petstore);
     }
