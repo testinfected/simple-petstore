@@ -1,7 +1,8 @@
-package test.support.org.testinfected.petstore.web;
+package test.support.org.testinfected.petstore.web.drivers;
 
 import org.testinfected.petstore.Launcher;
 import org.testinfected.petstore.Migrations;
+import test.support.org.testinfected.petstore.web.TestEnvironment;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.io.PrintStream;
 
 import static java.lang.String.valueOf;
 
-public class WebServer {
+public class ServerDriver {
 
     private static final PrintStream SILENT = new PrintStream(new OutputStream() {
         public void write(int b) throws IOException {
@@ -22,7 +23,15 @@ public class WebServer {
     private final Launcher launcher = new Launcher(SILENT);
     private final ConsoleDriver console = new ConsoleDriver();
 
-    public WebServer(int port, File root) {
+    public ServerDriver() {
+        this(TestEnvironment.load());
+    }
+
+    public ServerDriver(TestEnvironment env) {
+        this(env.serverPort(), env.webRoot());
+    }
+
+    public ServerDriver(int port, File root) {
         this.port = port;
         this.root = root;
     }

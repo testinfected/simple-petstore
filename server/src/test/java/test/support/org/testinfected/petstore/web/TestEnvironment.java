@@ -5,10 +5,10 @@ import com.objogate.wl.web.AsyncWebDriver;
 import com.vtence.molecule.support.HttpRequest;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import test.support.org.testinfected.petstore.web.browser.Browser;
-import test.support.org.testinfected.petstore.web.browser.Firefox;
-import test.support.org.testinfected.petstore.web.browser.PhantomJS;
-import test.support.org.testinfected.petstore.web.browser.RemoteBrowser;
+import test.support.org.testinfected.petstore.web.drivers.browsers.Browser;
+import test.support.org.testinfected.petstore.web.drivers.browsers.Firefox;
+import test.support.org.testinfected.petstore.web.drivers.browsers.PhantomJS;
+import test.support.org.testinfected.petstore.web.drivers.browsers.RemoteBrowser;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,13 +34,8 @@ public class TestEnvironment {
     private static final String TEST_PROPERTIES = "test.properties";
     private static final int HTTP_TIMEOUT_IN_MILLIS = 5000;
 
-    private static TestEnvironment environment;
-
     public static TestEnvironment load() {
-        if (environment == null) {
-            environment = load(TEST_PROPERTIES);
-        }
-        return environment;
+        return load(TEST_PROPERTIES);
     }
 
     public static TestEnvironment load(String resource) {
@@ -129,11 +124,19 @@ public class TestEnvironment {
     }
 
     public HttpRequest api() {
-        return new HttpRequest(serverPort()).withTimeout(HTTP_TIMEOUT_IN_MILLIS);
+        return new HttpRequest(serverPort()).withTimeout(timeOut());
+    }
+
+    public int timeOut() {
+        return HTTP_TIMEOUT_IN_MILLIS;
     }
 
     public int serverPort() {
         return getInt(SERVER_PORT);
+    }
+
+    public String serverUrl() {
+        return "http://localhost:" + serverPort();
     }
 
     public File webRoot() {

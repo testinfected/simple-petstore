@@ -1,4 +1,4 @@
-package test.support.org.testinfected.petstore.web.page;
+package test.support.org.testinfected.petstore.web.drivers.pages;
 
 import com.objogate.wl.web.AsyncWebDriver;
 

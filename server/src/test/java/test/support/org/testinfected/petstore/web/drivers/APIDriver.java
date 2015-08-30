@@ -1,4 +1,4 @@
-package test.support.org.testinfected.petstore.web;
+package test.support.org.testinfected.petstore.web.drivers;
 
 import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.vtence.molecule.support.HttpRequest;
@@ -6,13 +6,13 @@ import com.vtence.molecule.support.HttpResponse;
 
 import java.io.IOException;
 
-public class AdministrationAPI {
+public class APIDriver {
 
     public static final String CREATED = "Created";
 
     private final HttpRequest request;
 
-    public AdministrationAPI(HttpRequest request) {
+    public APIDriver(HttpRequest request) {
         this.request = request;
     }
 

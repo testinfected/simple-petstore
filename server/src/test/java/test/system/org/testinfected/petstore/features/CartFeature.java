@@ -3,8 +3,10 @@ package test.system.org.testinfected.petstore.features;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.org.testinfected.petstore.web.ApplicationDriver;
-import test.support.org.testinfected.petstore.web.TestEnvironment;
+import test.support.org.testinfected.petstore.web.Actors;
+import test.support.org.testinfected.petstore.web.actors.Administrator;
+import test.support.org.testinfected.petstore.web.actors.Customer;
+import test.support.org.testinfected.petstore.web.drivers.ServerDriver;
 
 import java.io.IOException;
 
@@ -12,39 +14,52 @@ import static test.system.org.testinfected.petstore.features.Item.item;
 
 public class CartFeature {
 
-    ApplicationDriver application = new ApplicationDriver(TestEnvironment.load());
+    ServerDriver server = new ServerDriver();
+    Actors actors = new Actors();
+    Administrator administrator = actors.administrator();
+    Customer customer = actors.customer();
 
-    @Before public void
-    startApplication() throws Exception {
-        application.start();
+    @Before
+    public void
+    startServer() throws Exception {
+        server.start();
+    }
+
+    @After
+    public void
+    stopServer() throws Exception {
+        server.stop();
     }
 
     @After public void
-    stopApplication() throws Exception {
-        application.stop();
+    stopUsingApplication() {
+        customer.done();
     }
 
-    @Test public void
+    @Test
+    public void
     shoppingForItemsAndAddingThemToOurCart() throws IOException {
-        application.havingProductInCatalog("LIZ-0001", "Iguana", "Big lizard", "iguana.png");
-        application.havingItemInStore("LIZ-0001", "12345678", "Green Adult", "18.50");
-        application.havingItemInStore("LIZ-0001", "87654321", "Blue Female", "58.97");
-        application.showsCartIsEmpty();
+        administrator.addProductToCatalog("LIZ-0001", "Iguana", "Big lizard", "iguana.png");
+        administrator.addItemToInventory("LIZ-0001", "12345678", "Green Adult", "18.50");
+        administrator.addItemToInventory("LIZ-0001", "87654321", "Blue Female", "58.97");
 
-        application.buyItem("Iguana", "12345678");
-        application.showsCartTotalQuantity(1);
-        application.showsCartContent("18.50", item("12345678", "Green Adult", "18.50"));
+        customer.login()
+                .seesCartIsEmpty();
 
-        application.buyItem("Iguana", "87654321");
-        application.showsCartTotalQuantity(2);
-        application.showsCartContent("77.47",
-                item("12345678", "Green Adult", "18.50"),
-                item("87654321", "Blue Female", "58.97"));
+        customer.addToCart("Iguana", "12345678")
+                .seesCartContent("18.50", item("12345678", "Green Adult", "18.50"));
+        customer.seesCartTotalQuantity(1);
 
-        application.buyItem("Iguana", "12345678");
-        application.showsCartTotalQuantity(3);
-        application.showsCartContent("95.97",
-                item("12345678", "Green Adult", "18.50", 2, "37.00"),
-                item("87654321", "Blue Female", "58.97"));
+        customer.addToCart("Iguana", "87654321")
+                .seesCartContent("77.47",
+                        item("12345678", "Green Adult", "18.50"),
+                        item("87654321", "Blue Female", "58.97"));
+        customer.seesCartTotalQuantity(2);
+
+        customer.addToCart("Iguana", "12345678")
+                .seesCartContent("95.97",
+                        item("12345678", "Green Adult", "18.50", 2, "37.00"),
+                        item("87654321", "Blue Female", "58.97"));
+        customer.seesCartTotalQuantity(3);
     }
 }

@@ -3,36 +3,38 @@ package test.system.org.testinfected.petstore.features;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import test.support.org.testinfected.petstore.web.ApplicationDriver;
-import test.support.org.testinfected.petstore.web.TestEnvironment;
-
-import static test.system.org.testinfected.petstore.features.Product.product;
+import test.support.org.testinfected.petstore.web.Actors;
+import test.support.org.testinfected.petstore.web.actors.Administrator;
+import test.support.org.testinfected.petstore.web.actors.Customer;
+import test.support.org.testinfected.petstore.web.drivers.ServerDriver;
 
 public class SearchFeature {
 
-    ApplicationDriver application = new ApplicationDriver(TestEnvironment.load());
+    ServerDriver server = new ServerDriver();
+    Actors actors = new Actors();
+    Administrator administrator = actors.administrator();
+    Customer customer = actors.customer();
 
     @Before public void
-    startApplication() throws Exception {
-        application.start();
+    startServer() throws Exception {
+        server.start();
     }
 
     @After public void
-    stopApplication() throws Exception {
-        application.stop();
+    stopServer() throws Exception {
+        server.stop();
+    }
+
+    @After public void
+    stopUsingApplication() {
+        customer.done();
     }
 
     @Test public void
     searchingForAProductNotAvailableInStore() throws Exception {
-        application.havingProductInCatalog("LAB-1234", "Labrador Retriever", "Friendly dog", "labrador.jpg");
-        application.searchShowsNoResult("Dalmatian");
-    }
+        administrator.addProductToCatalog("LAB-1234", "Labrador Retriever", "Friendly dog", "labrador.jpg");
 
-    @Test public void
-    searchingAndFindingProductsInCatalog() throws Exception {
-        application.havingProductInCatalog("LAB-1234", "Labrador Retriever", "Friendly dog", "labrador.jpg");
-        application.havingProductInCatalog("CHE-5678", "Golden", "Golden retriever", "golden.jpg");
-        application.havingProductInCatalog("DAL-6666", "Dalmatian", "A very tall dog", "dalmatian.jpg");
-        application.searchDisplaysResults("retriever", product("LAB-1234", "Labrador Retriever"), product("CHE-5678", "Golden"));
+        customer.searchFor("Dalmatian")
+                .obtainsNoResult();
     }
 }

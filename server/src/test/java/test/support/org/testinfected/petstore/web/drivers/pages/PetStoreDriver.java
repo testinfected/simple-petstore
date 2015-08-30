@@ -1,10 +1,10 @@
-package test.support.org.testinfected.petstore.web.page;
+package test.support.org.testinfected.petstore.web.drivers.pages;
 
 import com.objogate.wl.web.AsyncWebDriver;
 import com.vtence.molecule.support.HttpRequest;
-import test.support.org.testinfected.petstore.web.AdministrationAPI;
+import test.support.org.testinfected.petstore.web.drivers.APIDriver;
 import test.support.org.testinfected.petstore.web.TestEnvironment;
-import test.support.org.testinfected.petstore.web.WebServer;
+import test.support.org.testinfected.petstore.web.drivers.ServerDriver;
 
 import static java.lang.String.valueOf;
 import static org.hamcrest.Matchers.containsString;
@@ -14,13 +14,13 @@ import static org.openqa.selenium.By.id;
 public class PetStoreDriver {
     private final AsyncWebDriver browser;
     private final HttpRequest api;
-    private final WebServer server;
+    private final ServerDriver server;
 
     public static PetStoreDriver in(TestEnvironment environment) {
-        return new PetStoreDriver(environment.fireBrowser(), environment.api(), new WebServer(environment.serverPort(), environment.webRoot()));
+        return new PetStoreDriver(environment.fireBrowser(), environment.api(), new ServerDriver(environment.serverPort(), environment.webRoot()));
     }
 
-    public PetStoreDriver(AsyncWebDriver browser, HttpRequest api, WebServer webServer) {
+    public PetStoreDriver(AsyncWebDriver browser, HttpRequest api, ServerDriver webServer) {
         this.browser = browser;
         this.api = api;
         this.server = webServer;
@@ -85,8 +85,8 @@ public class PetStoreDriver {
         return new ReceiptPage(browser);
     }
 
-    public AdministrationAPI administrate() {
-        return new AdministrationAPI(api);
+    public APIDriver administrate() {
+        return new APIDriver(api);
     }
 
     private String url(String path) {

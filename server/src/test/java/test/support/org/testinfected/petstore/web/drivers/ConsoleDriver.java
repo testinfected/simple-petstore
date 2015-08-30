@@ -1,4 +1,4 @@
-package test.support.org.testinfected.petstore.web;
+package test.support.org.testinfected.petstore.web.drivers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

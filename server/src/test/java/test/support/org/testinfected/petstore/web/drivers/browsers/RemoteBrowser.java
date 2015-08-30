@@ -1,4 +1,4 @@
-package test.support.org.testinfected.petstore.web.browser;
+package test.support.org.testinfected.petstore.web.drivers.browsers;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
