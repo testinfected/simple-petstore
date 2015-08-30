@@ -8,8 +8,6 @@ import test.support.org.testinfected.petstore.builders.Builder;
 import java.io.File;
 import java.io.IOException;
 
-import static test.support.org.testinfected.petstore.web.HTMLDocument.toElement;
-
 public class OfflineRenderer {
 
     private final JMustacheRenderer renderer =
@@ -47,6 +45,6 @@ public class OfflineRenderer {
     }
 
     public Element asDom() {
-        return toElement(asString());
+        return HTMLDocument.from(asString()).getDocumentElement();
     }
 }

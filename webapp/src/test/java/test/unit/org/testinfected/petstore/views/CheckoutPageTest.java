@@ -148,7 +148,7 @@ public class CheckoutPageTest {
     @SuppressWarnings("unchecked")
     private Matcher<Element> hasSelectedCardType(CreditCardType cardType) {
         return hasSelectionList(
-                hasName("card-type"), hasChild(anElement(hasAttribute("value", cardType.name()), hasAttribute("selected", "selected"))));
+                hasName("card-type"), hasUniqueSelector("option:selected", hasAttribute("value", cardType.name())));
     }
 
     @SuppressWarnings("unchecked")

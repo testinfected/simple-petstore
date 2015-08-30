@@ -70,7 +70,7 @@ public class ChoiceOfCreditCards implements Iterable<ChoiceOfCreditCards.Option>
         }
 
         public String selected() {
-            return selected ? " selected=\"selected\"" : "";
+            return selected ? " selected" : "";
         }
 
         public boolean equals(Object other) {
