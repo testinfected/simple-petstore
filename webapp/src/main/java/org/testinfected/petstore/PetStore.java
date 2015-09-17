@@ -74,10 +74,10 @@ public class PetStore {
 
     public void start(Server server) throws IOException {
         server.run(new MiddlewareStack() {{
+            use(new ApacheCommonLogger(logger, clock));
             use(new ServerHeader(NAME));
             use(new DateHeader(clock));
             use(new ContentLengthHeader());
-            use(new ApacheCommonLogger(logger, clock));
             use(new Failsafe());
             use(new FailureMonitor(failureReporter));
             use(new HttpMethodOverride());

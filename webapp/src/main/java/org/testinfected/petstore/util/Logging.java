@@ -23,7 +23,9 @@ public class Logging {
 
     public static Logger toFile(String path) throws IOException {
         Logger logger = makeAnonymousLogger();
-        logger.addHandler(new FileHandler(path));
+        FileHandler handler = new FileHandler(path);
+        handler.setFormatter(new PlainFormatter());
+        logger.addHandler(handler);
         return logger;
     }
 
