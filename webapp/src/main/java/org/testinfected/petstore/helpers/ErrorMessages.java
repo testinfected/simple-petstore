@@ -10,8 +10,7 @@ public class ErrorMessages {
     private final Map<String, Set<String>> errors = new HashMap<String, Set<String>>();
 
     public void add(String path, String message) {
-        if (!errors.containsKey(path)) errors.put(path, new HashSet<String>());
-        errors.get(path).add(message);
+        at(path).add(message);
     }
 
     public boolean contains(String key) {
@@ -22,7 +21,7 @@ public class ErrorMessages {
         return new HashMap<String, Set<String>>(errors);
     }
 
-    public Iterable<String> at(String path) {
+    public Set<String> at(String path) {
         if (!errors.containsKey(path)) errors.put(path, new HashSet<String>());
         return errors.get(path);
     }

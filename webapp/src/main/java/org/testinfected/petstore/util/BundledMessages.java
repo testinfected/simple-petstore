@@ -5,7 +5,7 @@ import org.testinfected.petstore.Messages;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
-public class BundledMessages implements Messages {
+public class BundledMessages  implements Messages {
 
     private final ResourceBundle bundle;
 
@@ -15,13 +15,11 @@ public class BundledMessages implements Messages {
 
     public String interpolate(String error, Object... parameters) {
         MessageFormat formatter = new MessageFormat(bundle.getString(error), bundle.getLocale());
-        formatter.setLocale(bundle.getLocale());
         return formatMessage(formatter, parameters);
     }
 
     private String formatMessage(MessageFormat formatter, Object[] parameters) {
         StringBuffer result = new StringBuffer();
-        formatter.format(parameters, result, null);
-        return result.toString();
+        return formatter.format(parameters, result, null).toString();
     }
 }

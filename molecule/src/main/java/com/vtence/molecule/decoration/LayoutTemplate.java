@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.Map;
 
 public class LayoutTemplate implements Decorator {
-    private final Template template;
+    private final Template<Map<String, String>> template;
 
-    public LayoutTemplate(Template template) {
+    public LayoutTemplate(Template<Map<String, String>> template) {
         this.template = template;
     }
 
