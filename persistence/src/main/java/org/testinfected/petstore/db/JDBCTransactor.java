@@ -22,6 +22,7 @@ public class JDBCTransactor extends AbstractTransactor {
             unitOfWork.execute();
             connection.commit();
         } catch (SQLException e) {
+            connection.rollback();
             throw new JDBCException("Could not commit transaction", e);
         } catch (Exception e) {
             connection.rollback();
