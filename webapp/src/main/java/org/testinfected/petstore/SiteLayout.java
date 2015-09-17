@@ -13,9 +13,9 @@ import java.util.Map;
 
 public class SiteLayout implements Decorator {
 
-    private final Template layout;
+    private final Template<PlainPage> layout;
 
-    public SiteLayout(Template layout) {
+    public SiteLayout(Template<PlainPage> layout) {
         this.layout = layout;
     }
 

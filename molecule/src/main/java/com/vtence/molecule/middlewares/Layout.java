@@ -25,7 +25,7 @@ public class Layout extends AbstractMiddleware {
     private final ContentProcessor processor;
     private final Decorator decorator;
 
-    public static Layout html(Template layout) {
+    public static Layout html(Template<Map<String, String>> layout) {
         return html(new LayoutTemplate(layout));
     }
 

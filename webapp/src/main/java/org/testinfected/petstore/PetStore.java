@@ -25,6 +25,7 @@ import com.vtence.molecule.templating.JMustacheRenderer;
 import com.vtence.molecule.templating.Template;
 import com.vtence.molecule.templating.Templates;
 import org.testinfected.petstore.util.Logging;
+import org.testinfected.petstore.views.PlainPage;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -109,7 +110,7 @@ public class PetStore {
         return assets;
     }
 
-    private Template layoutTemplate() {
+    private Template<PlainPage> layoutTemplate() {
         return templatesIn(LAYOUT_DIR).named("main");
     }
 
