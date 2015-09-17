@@ -11,9 +11,9 @@ public class Templates {
         this.renderer = renderer;
     }
 
-    public Template named(final String name) {
-        return new Template() {
-            public Body render(Object context) throws IOException {
+    public <T> Template<T> named(final String name) {
+        return new Template<T>() {
+            public Body render(T context) throws IOException {
                 return new TemplateBody(renderer, name, context);
             }
         };

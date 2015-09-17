@@ -4,7 +4,7 @@ import com.vtence.molecule.Body;
 
 import java.io.IOException;
 
-public interface Template {
+public interface Template<T> {
 
-    Body render(Object context) throws IOException;
+    Body render(T context) throws IOException;
 }
