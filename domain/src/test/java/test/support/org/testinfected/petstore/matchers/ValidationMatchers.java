@@ -54,7 +54,7 @@ public class ValidationMatchers {
 
     public static Matcher<ConstraintViolation<?>> on(String path) {
         return new FeatureMatcher<ConstraintViolation<?>, String>(equalTo(path), "on path", "path") {
-            @Override protected String featureValueOf(ConstraintViolation<?> actual) {
+            protected String featureValueOf(ConstraintViolation<?> actual) {
                 return actual.path();
             }
         };
@@ -62,7 +62,7 @@ public class ValidationMatchers {
 
     public static Matcher<ConstraintViolation<?>> withMessage(String message) {
         return new FeatureMatcher<ConstraintViolation<?>, String>(equalTo(message), "with message", "message") {
-            @Override protected String featureValueOf(ConstraintViolation<?> actual) {
+            protected String featureValueOf(ConstraintViolation<?> actual) {
                 return actual.error();
             }
         };
@@ -70,7 +70,7 @@ public class ValidationMatchers {
 
     public static Matcher<ConstraintViolation<?>> withValue(Object value) {
         return new FeatureMatcher<ConstraintViolation<?>, Object>(equalTo(value), "with value", "value") {
-            @Override protected Object featureValueOf(ConstraintViolation<?> actual) {
+            protected Object featureValueOf(ConstraintViolation<?> actual) {
                 return actual.value();
             }
         };

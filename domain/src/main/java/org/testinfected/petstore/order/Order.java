@@ -15,7 +15,7 @@ public class Order {
     private long id;
 
     private final OrderNumber number;
-    private final List<LineItem> lines = new ArrayList<LineItem>();
+    private final List<LineItem> lines = new ArrayList<>();
 
     private PaymentMethod paymentMethod;
 

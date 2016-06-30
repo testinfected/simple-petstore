@@ -45,20 +45,16 @@ public class Item implements Serializable {
         this.description = description;
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         Item item = (Item) o;
 
-        if (number != null ? !number.equals(item.number) : item.number != null)
-            return false;
+        return number != null ? number.equals(item.number) : item.number == null;
 
-        return true;
     }
 
-    @Override
     public int hashCode() {
         return number != null ? number.hashCode() : 0;
     }

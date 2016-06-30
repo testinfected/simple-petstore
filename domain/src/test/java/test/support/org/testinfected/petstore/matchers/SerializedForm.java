@@ -22,7 +22,7 @@ public class SerializedForm<T> extends TypeSafeDiagnosingMatcher<T> {
         this.cloneMatcher = cloneMatcher;
     }
 
-    @Override protected boolean matchesSafely(T original, Description mismatchDescription) {
+    protected boolean matchesSafely(T original, Description mismatchDescription) {
         boolean matches;
         try {
             matches = cloneMatcher.matches(serializedClone(original));
@@ -84,6 +84,6 @@ public class SerializedForm<T> extends TypeSafeDiagnosingMatcher<T> {
     }
 
     public static <T> SerializedForm<T> serializedForm(Matcher<? super T> cloneMatcher) {
-        return new SerializedForm<T>(cloneMatcher);
+        return new SerializedForm<>(cloneMatcher);
     }
 }

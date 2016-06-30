@@ -31,13 +31,13 @@ public class OrderTest {
 
     @Test public void
     consistsOfNoItemByDefault() {
-        assertThat("line items", order.getLineItems(), Matchers.<LineItem>empty());
+        assertThat("line items", order.getLineItems(), Matchers.empty());
     }
 
     @Test public void
     consistsOfNoItemIfCartIsEmpty() {
         order.addItemsFrom(anEmptyCart().build());
-        assertThat("line items", order.getLineItems(), Matchers.<LineItem>empty());
+        assertThat("line items", order.getLineItems(), Matchers.empty());
     }
 
     @Test public void
@@ -108,19 +108,18 @@ public class OrderTest {
         return all;
     }
 
-    @SuppressWarnings("unchecked")
     private Matcher<LineItem> matchingCartItem(CartItem cartItem) {
         return with(number(cartItem.getItemNumber()), quantity(cartItem.getQuantity()), totalPrice(cartItem.getTotalPrice()));
     }
 
-    @SuppressWarnings("unchecked")
-    private Matcher<LineItem> with(Matcher<LineItem>... lineItemMatchers) {
+    @SafeVarargs
+    private final Matcher<LineItem> with(Matcher<LineItem>... lineItemMatchers) {
         return allOf(lineItemMatchers);
     }
 
     private Matcher<LineItem> quantity(int count) {
         return new FeatureMatcher<LineItem, Integer>(equalTo(count), " a line item with quantity", "quantity") {
-            @Override protected Integer featureValueOf(LineItem actual) {
+            protected Integer featureValueOf(LineItem actual) {
                 return actual.getQuantity();
             }
         };
@@ -128,7 +127,7 @@ public class OrderTest {
 
     private Matcher<LineItem> number(String number) {
         return new FeatureMatcher<LineItem, String>(equalTo(number), "a line item with number", "item number") {
-            @Override protected String featureValueOf(LineItem actual) {
+            protected String featureValueOf(LineItem actual) {
                 return actual.getItemNumber();
             }
         };
@@ -136,7 +135,7 @@ public class OrderTest {
 
     private Matcher<LineItem> totalPrice(BigDecimal price) {
         return new FeatureMatcher<LineItem, BigDecimal>(equalTo(price), "a line item with total", "total") {
-            @Override protected BigDecimal featureValueOf(LineItem actual) {
+            protected BigDecimal featureValueOf(LineItem actual) {
                 return actual.getTotalPrice();
             }
         };

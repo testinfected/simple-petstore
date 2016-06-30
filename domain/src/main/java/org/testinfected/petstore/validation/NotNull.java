@@ -28,12 +28,10 @@ public class NotNull<T> implements Serializable, Constraint<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        @SuppressWarnings("unchecked")
-        NotNull<T> notNull = (NotNull<T>) o;
+        NotNull<?> notNull = (NotNull) o;
 
-        if (value != null ? !value.equals(notNull.value) : notNull.value != null) return false;
+        return value != null ? value.equals(notNull.value) : notNull.value == null;
 
-        return true;
     }
 
     public int hashCode() {

@@ -9,10 +9,9 @@ import org.testinfected.petstore.order.CartItem;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.matchers.SerializedForm.serializedForm;
 
@@ -26,7 +25,6 @@ public class CartTest {
         assertThat("total quantity", cart.getTotalQuantity(), equalTo(0));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     containsCartItemsInBuyingOrder() {
         String[] itemNumbers = { "11111111", "22222222", "33333333" };
@@ -57,7 +55,6 @@ public class CartTest {
         assertThat("grand total", cart.getGrandTotal(), equalTo(expectedTotal));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     groupsItemsByNumber() {
         String[] itemNumbers = { "11111111", "11111111", "22222222" };
@@ -79,7 +76,6 @@ public class CartTest {
         assertThat("contains item(s)", cart.empty());
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     isSerializable() {
         cart.add(anItem().withNumber("11111111").build());
@@ -92,28 +88,27 @@ public class CartTest {
         cart.add(anItem().build());
     }
 
-    @SuppressWarnings("unchecked")
-    private Matcher<Cart> aCartContaining(Matcher<CartItem>... cartItemMatchers) {
-        return new FeatureMatcher<Cart, Iterable<CartItem>>(containsItems(cartItemMatchers), "a cart with items", "cart content") {
-            @Override protected List<CartItem> featureValueOf(Cart actual) {
+    @SafeVarargs
+    private final Matcher<Cart> aCartContaining(Matcher<? super CartItem>... cartItemMatchers) {
+        return new FeatureMatcher<Cart, Iterable<CartItem>>(containsItems(asList(cartItemMatchers)), "a cart with items", "cart content") {
+            protected List<CartItem> featureValueOf(Cart actual) {
                 return cart.getItems();
             }
         };
     }
 
-    @SuppressWarnings("unchecked")
-    private Matcher<? super Iterable<CartItem>> containsItems(Matcher<? super CartItem>... cartItemMatchers) {
+    private Matcher<? super Iterable<CartItem>> containsItems(List<Matcher<? super CartItem>> cartItemMatchers) {
         return contains(cartItemMatchers);
     }
 
-    @SuppressWarnings("unchecked")
-    private Matcher<CartItem> itemWith(Matcher<CartItem>... cartItemMatchers) {
+    @SafeVarargs
+    private final Matcher<CartItem> itemWith(Matcher<CartItem>... cartItemMatchers) {
         return allOf(cartItemMatchers);
     }
 
     private Matcher<CartItem> quantity(int count) {
         return new FeatureMatcher<CartItem, Integer>(equalTo(count), "an item with quantity", "item quantity") {
-            @Override protected Integer featureValueOf(CartItem actual) {
+            protected Integer featureValueOf(CartItem actual) {
                 return actual.getQuantity();
             }
         };
@@ -121,7 +116,7 @@ public class CartTest {
 
     private Matcher<CartItem> number(String number) {
         return new FeatureMatcher<CartItem, String>(equalTo(number), "an item with number", "item number") {
-            @Override protected String featureValueOf(CartItem actual) {
+            protected String featureValueOf(CartItem actual) {
                 return actual.getItemNumber();
             }
         };

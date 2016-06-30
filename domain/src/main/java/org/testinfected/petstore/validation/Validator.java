@@ -16,10 +16,10 @@ public class Validator {
 
     public static class ViolationsReport implements Report {
 
-        private final Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
+        private final Set<ConstraintViolation<?>> violations = new HashSet<>();
 
         public <T> void violation(Path path, String error, T offendingValue) {
-            violations.add(new ConstraintViolation<T>(path, error, offendingValue));
+            violations.add(new ConstraintViolation<>(path, error, offendingValue));
         }
 
         public Set<ConstraintViolation<?>> violations() {

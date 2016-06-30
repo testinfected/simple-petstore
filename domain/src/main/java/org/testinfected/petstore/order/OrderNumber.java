@@ -28,22 +28,21 @@ public class OrderNumber {
         return number;
     }
 
-    @Override public String toString() {
+    public String toString() {
         return number;
     }
 
-    @Override public boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         OrderNumber that = (OrderNumber) o;
 
-        if (number != null ? !number.equals(that.number) : that.number != null) return false;
+        return number != null ? number.equals(that.number) : that.number == null;
 
-        return true;
     }
 
-    @Override public int hashCode() {
+    public int hashCode() {
         return number != null ? number.hashCode() : 0;
     }
 }

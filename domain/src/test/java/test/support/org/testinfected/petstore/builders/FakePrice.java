@@ -2,6 +2,8 @@ package test.support.org.testinfected.petstore.builders;
 
 import java.math.BigDecimal;
 
+import static java.math.BigDecimal.ROUND_HALF_EVEN;
+
 public class FakePrice {
 
     private static final BigDecimal DOLLAR_IN_CENTS = new BigDecimal(100);
@@ -17,7 +19,7 @@ public class FakePrice {
     }
 
     private BigDecimal dollars(BigDecimal cents) {
-        return cents.divide(DOLLAR_IN_CENTS).setScale(2);
+        return cents.divide(DOLLAR_IN_CENTS, ROUND_HALF_EVEN).setScale(2, ROUND_HALF_EVEN);
     }
 
     private String random() {

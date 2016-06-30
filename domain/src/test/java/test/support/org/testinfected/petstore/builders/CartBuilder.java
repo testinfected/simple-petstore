@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CartBuilder implements Builder<Cart> {
 
-    private final List<Item> items = new ArrayList<Item>();
+    private final List<Item> items = new ArrayList<>();
 
     public static CartBuilder anEmptyCart() {
         return aCart();
@@ -33,9 +33,7 @@ public class CartBuilder implements Builder<Cart> {
 
     public Cart build() {
         Cart cart = new Cart();
-        for (Item item : items) {
-            cart.add(item);
-        }
+        items.forEach(cart::add);
         return cart;
     }
 }

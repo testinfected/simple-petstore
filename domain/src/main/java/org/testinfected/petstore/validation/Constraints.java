@@ -7,7 +7,7 @@ import java.util.List;
 public final class Constraints {
 
     public static Iterable<Declaration> of(Object target) {
-        List<Declaration> constraints = new ArrayList<Declaration>();
+        List<Declaration> constraints = new ArrayList<>();
         for (Field property : target.getClass().getDeclaredFields()) {
             if (isConstraint(property)) constraints.add(new Declaration(target, property));
         }

@@ -13,7 +13,7 @@ public enum CreditCardType {
         return commonName;
     }
 
-    @Override public String toString() {
+    public String toString() {
         return name();
     }
 }

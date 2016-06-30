@@ -41,7 +41,7 @@ public class CashierTest {
     String BLANK = "";
     String MISSING = null;
 
-    @SuppressWarnings("unchecked") @Test public void
+    @Test public void
     acceptsPaymentAndRecordsOrder() throws Exception {
         cart.add(anItem().withNumber("00000100").priced("100.00").build());
         cart.add(anItem().withNumber("00000100").priced("100.00").build());
@@ -71,14 +71,14 @@ public class CashierTest {
         cashier.placeOrder(cart, paymentMethod);
     }
 
-    @SuppressWarnings("unchecked")
-    private Matcher<Order> anOrder(Matcher<? super Order>... matchers) {
+    @SafeVarargs
+    private final Matcher<Order> anOrder(Matcher<? super Order>... matchers) {
         return allOf(matchers);
     }
 
     private Matcher<? super Order> withSameItemCountAs(Cart cart) {
         return new FeatureMatcher<Order, Integer>(equalTo(cart.getItems().size()), "an order with line item count", "line item count") {
-            @Override protected Integer featureValueOf(Order actual) {
+            protected Integer featureValueOf(Order actual) {
                 return actual.getLineItemCount();
             }
         };
@@ -86,7 +86,7 @@ public class CashierTest {
 
     private Matcher<? super Order> withSameTotalAs(Cart cart) {
         return new FeatureMatcher<Order, BigDecimal>(equalTo(cart.getGrandTotal()), "an order with line item count", "line item count") {
-            @Override protected BigDecimal featureValueOf(Order actual) {
+            protected BigDecimal featureValueOf(Order actual) {
                 return actual.getTotalPrice();
             }
         };

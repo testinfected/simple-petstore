@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Cart implements Serializable {
 
-    private final List<CartItem> cartItems = new ArrayList<CartItem>();
+    private final List<CartItem> cartItems = new ArrayList<>();
 
     public boolean empty() {
         return cartItems.isEmpty();

@@ -55,9 +55,8 @@ public class Product implements Serializable {
 
         Product product = (Product) o;
 
-        if (number != null ? !number.equals(product.number) : product.number != null) return false;
+        return number != null ? number.equals(product.number) : product.number == null;
 
-        return true;
     }
 
     @Override

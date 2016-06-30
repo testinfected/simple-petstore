@@ -6,7 +6,7 @@ import org.testinfected.petstore.billing.CreditCardType;
 public final class Validates {
 
     public static <T> NotNull<T> notNull(T value) {
-        return new NotNull<T>(value);
+        return new NotNull<>(value);
     }
 
     public static NotEmpty notEmpty(String value) {
@@ -14,7 +14,7 @@ public final class Validates {
     }
 
     public static <T> Valid<T> validityOf(T value) {
-        return new Valid<T>(value);
+        return new Valid<>(value);
     }
 
     public static CorrectCardNumber correctnessOf(CreditCardType cardType, String cardNumber) {
@@ -22,7 +22,7 @@ public final class Validates {
     }
 
     public static <T> Both<T> both(Constraint<T> left, Constraint<T> right) {
-        return new Both<T>(left, right);
+        return new Both<>(left, right);
     }
 
     private Validates() {}

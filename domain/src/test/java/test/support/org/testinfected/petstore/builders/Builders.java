@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Builders {
 
-    @SuppressWarnings("unchecked")
+    @SafeVarargs
     public static <T> List<T> build(Builder<T>... builders) {
-        final List<T> result = new ArrayList<T>();
+        final List<T> result = new ArrayList<>();
         for (Builder<T> builder : builders) {
             result.add(builder.build());
         }

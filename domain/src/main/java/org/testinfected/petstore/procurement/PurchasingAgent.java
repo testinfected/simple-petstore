@@ -1,13 +1,7 @@
 package org.testinfected.petstore.procurement;
 
-import org.testinfected.petstore.product.Attachment;
-import org.testinfected.petstore.product.Item;
-import org.testinfected.petstore.product.ItemInventory;
-import org.testinfected.petstore.product.ItemNumber;
-import org.testinfected.petstore.product.Product;
-import org.testinfected.petstore.product.ProductCatalog;
+import org.testinfected.petstore.product.*;
 import org.testinfected.petstore.transaction.Transactor;
-import org.testinfected.petstore.transaction.UnitOfWork;
 
 import java.math.BigDecimal;
 
@@ -27,11 +21,7 @@ public class PurchasingAgent implements ProcurementRequestHandler {
         product.setDescription(description);
         product.attachPhoto(new Attachment(photoFileName));
 
-        transactor.perform(new UnitOfWork() {
-            public void execute() throws Exception {
-                productCatalog.add(product);
-            }
-        });
+        transactor.perform(() -> productCatalog.add(product));
     }
 
     public void addToInventory(String productNumber, String itemNumber, String description, BigDecimal price) throws Exception {
@@ -39,10 +29,6 @@ public class PurchasingAgent implements ProcurementRequestHandler {
         final Item item = new Item(new ItemNumber(itemNumber), product, price);
         item.setDescription(description);
 
-        transactor.perform(new UnitOfWork() {
-            public void execute() throws Exception {
-                itemInventory.add(item);
-            }
-        });
+        transactor.perform(() -> itemInventory.add(item));
     }
 }

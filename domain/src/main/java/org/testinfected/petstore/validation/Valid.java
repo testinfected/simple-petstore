@@ -33,10 +33,8 @@ public class Valid<T> implements Serializable, Constraint<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        @SuppressWarnings("unchecked")
-		Valid<T> notNull = (Valid<T>) o;
-        if (value != null ? !value.equals(notNull.value) : notNull.value != null) return false;
-        return true;
+		Valid<?> notNull = (Valid) o;
+        return value != null ? value.equals(notNull.value) : notNull.value == null;
     }
 
     public int hashCode() {
