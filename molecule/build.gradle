@@ -1,7 +1,0 @@
-dependencies {
-    compile libs.simple
-    compile libs.jmustache
-
-    testCompile libs.juniversal_chardet
-    testCompile libs.htmlunit
-}

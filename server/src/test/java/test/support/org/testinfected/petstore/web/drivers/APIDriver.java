@@ -1,10 +1,12 @@
 package test.support.org.testinfected.petstore.web.drivers;
 
-import com.gargoylesoftware.htmlunit.HttpMethod;
-import com.vtence.molecule.support.HttpRequest;
-import com.vtence.molecule.support.HttpResponse;
+import com.vtence.molecule.testing.http.Form;
+import com.vtence.molecule.testing.http.HttpRequest;
+import com.vtence.molecule.testing.http.HttpResponse;
 
 import java.io.IOException;
+
+import static com.vtence.molecule.testing.http.HttpResponseAssert.assertThat;
 
 public class APIDriver {
 
@@ -18,26 +20,26 @@ public class APIDriver {
 
     public void addProduct(String number, String name, String description, String photo) throws IOException {
         HttpRequest post = request.but()
-                .usingMethod(HttpMethod.POST)
-                .on("/products")
-                .withParameter("number", number)
-                .withParameter("name", name)
-                .withParameter("description", description)
-                .withParameter("photo", photo);
+                                  .method("POST")
+                                  .path("/products")
+                                  .content(Form.urlEncoded().addField("number", number)
+                                               .addField("name", name)
+                                               .addField("description", description)
+                                               .addField("photo", photo));
 
         HttpResponse response = post.send();
-        response.assertHasStatusMessage(CREATED);
+        assertThat(response).hasStatusMessage(CREATED);
     }
 
     public void addItem(String productNumber, String itemNumber, String itemDescription, String itemPrice) throws IOException {
         HttpRequest post = request.but()
-                .usingMethod(HttpMethod.POST)
-                .on("/products/" + productNumber + "/items")
-                .withParameter("number", itemNumber)
-                .withParameter("description", itemDescription)
-                .withParameter("price", itemPrice);
+                                  .method("POST")
+                                  .path("/products/" + productNumber + "/items")
+                                  .content(Form.urlEncoded().addField("number", itemNumber)
+                                               .addField("description", itemDescription)
+                                               .addField("price", itemPrice));
 
         HttpResponse response = post.send();
-        response.assertHasStatusMessage(CREATED);
+        assertThat(response).hasStatusMessage(CREATED);
     }
 }

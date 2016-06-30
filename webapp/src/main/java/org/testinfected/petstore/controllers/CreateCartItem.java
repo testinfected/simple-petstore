@@ -19,7 +19,7 @@ public class CreateCartItem implements Application {
     public void handle(Request request, Response response) throws Exception {
         String number = request.parameter("item-number");
         addToCart(request, inventory.find(new ItemNumber(number)));
-        response.redirectTo("/cart");
+        response.redirectTo("/cart").done();
     }
 
     private void addToCart(Request request, Item item) {

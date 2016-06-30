@@ -113,6 +113,7 @@ public class OrderTest {
         return with(number(cartItem.getItemNumber()), quantity(cartItem.getQuantity()), totalPrice(cartItem.getTotalPrice()));
     }
 
+    @SuppressWarnings("unchecked")
     private Matcher<LineItem> with(Matcher<LineItem>... lineItemMatchers) {
         return allOf(lineItemMatchers);
     }

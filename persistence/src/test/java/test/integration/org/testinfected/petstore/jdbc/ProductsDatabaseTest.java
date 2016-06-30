@@ -124,6 +124,7 @@ public class ProductsDatabaseTest {
                      samePropertyValuesAs(original));
     }
 
+    @SuppressWarnings("unchecked")
     private void given(final Builder<Product>... products) throws Exception {
         for (final Builder<Product> product : products) {
             savedProductFrom(product);

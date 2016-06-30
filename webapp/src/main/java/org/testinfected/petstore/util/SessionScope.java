@@ -1,7 +1,7 @@
 package org.testinfected.petstore.util;
 
 import com.vtence.molecule.Request;
-import com.vtence.molecule.Session;
+import com.vtence.molecule.session.Session;
 import org.testinfected.petstore.order.Cart;
 
 public class SessionScope {

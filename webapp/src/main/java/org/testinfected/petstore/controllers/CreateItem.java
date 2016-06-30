@@ -24,9 +24,9 @@ public class CreateItem implements Application {
                     request.parameter("number"),
                     request.parameter("description"),
                     new BigDecimal(request.parameter("price")));
-            response.status(HttpStatus.CREATED);
+            response.status(HttpStatus.CREATED).done();
         } catch (DuplicateItemException e) {
-            response.status(HttpStatus.CONFLICT);
+            response.status(HttpStatus.CONFLICT).done();
         }
     }
 }

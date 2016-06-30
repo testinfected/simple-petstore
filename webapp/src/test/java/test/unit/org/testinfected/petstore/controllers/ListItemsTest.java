@@ -1,7 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.vtence.molecule.support.MockRequest;
-import com.vtence.molecule.support.MockResponse;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -32,8 +32,8 @@ public class ListItemsTest {
     MockView<AvailableItems> view = new MockView<AvailableItems>();
     ListItems listItems = new ListItems(itemInventory, view);
 
-    MockRequest request = new MockRequest();
-    MockResponse response = new MockResponse();
+    Request request = new Request();
+    Response response = new Response();
 
     List<Item> items = new ArrayList<Item>();
     String productNumber = "LAB-1234";

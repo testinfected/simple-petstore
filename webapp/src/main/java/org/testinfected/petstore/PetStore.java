@@ -1,13 +1,12 @@
 package org.testinfected.petstore;
 
 import com.vtence.molecule.FailureReporter;
+import com.vtence.molecule.MiddlewareStack;
 import com.vtence.molecule.Server;
-import com.vtence.molecule.lib.Clock;
-import com.vtence.molecule.lib.MiddlewareStack;
-import com.vtence.molecule.lib.SystemClock;
 import com.vtence.molecule.middlewares.ApacheCommonLogger;
 import com.vtence.molecule.middlewares.ConnectionScope;
 import com.vtence.molecule.middlewares.ContentLengthHeader;
+import com.vtence.molecule.middlewares.Cookies;
 import com.vtence.molecule.middlewares.CookieSessionTracker;
 import com.vtence.molecule.middlewares.DateHeader;
 import com.vtence.molecule.middlewares.Failsafe;
@@ -49,7 +48,6 @@ public class PetStore {
 
     private FailureReporter failureReporter = FailureReporter.IGNORE;
     private Logger logger = Logging.off();
-    private Clock clock = new SystemClock();
     private int timeout = -1;
 
     public PetStore(File context, DataSource dataSource) {
@@ -59,10 +57,6 @@ public class PetStore {
 
     public void reportErrorsTo(FailureReporter failureReporter) {
         this.failureReporter = failureReporter;
-    }
-
-    public void setClock(Clock clock) {
-        this.clock = clock;
     }
 
     public void logging(Logger logger) {
@@ -75,14 +69,15 @@ public class PetStore {
 
     public void start(Server server) throws IOException {
         server.run(new MiddlewareStack() {{
-            use(new ApacheCommonLogger(logger, clock));
+            use(new ApacheCommonLogger(logger));
             use(new ServerHeader(NAME));
-            use(new DateHeader(clock));
+            use(new DateHeader());
             use(new ContentLengthHeader());
             use(new Failsafe());
             use(new FailureMonitor(failureReporter));
             use(new HttpMethodOverride());
             use(staticAssets());
+            use(new Cookies());
             use(new CookieSessionTracker(createSessionPool(timeout)).expireAfter(timeout));
             use(new FilterMap().map("/", Layout.html(new SiteLayout(layoutTemplate()))));
             use(new ConnectionScope(dataSource));
@@ -95,7 +90,7 @@ public class PetStore {
     }
 
     private SessionPool createSessionPool(int timeout) {
-        SessionPool sessions = new SessionPool(new SecureIdentifierPolicy(), clock);
+        SessionPool sessions = new SessionPool(new SecureIdentifierPolicy());
         if (this.timeout > 0) {
             PeriodicSessionHouseKeeping houseKeeping =
                     new PeriodicSessionHouseKeeping(scheduler, sessions, timeout, TimeUnit.SECONDS);

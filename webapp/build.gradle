@@ -2,18 +2,19 @@ dependencies {
 
   compile project(':domain')
   compile project(':persistence')
-  compile project(':molecule')
+  compile libs.molecule
+  compile libs.jmustache
 
   testCompile project(':domain').sourceSets.test.output
   testCompile project(':persistence').sourceSets.test.output
-  testCompile project(':molecule').sourceSets.test.output
 
+  testCompile libs.molecule_test
   testCompile libs.hamcrest_dom
   testCompile libs.flyway
-  testCompile libs.juniversal_chardet
-  testCompile libs.htmlunit
   testCompile libs.nekohtml
 
+  testRuntime libs.juniversal_chardet
+  testRuntime libs.simple
   testRuntime libs.mysql
 }
 

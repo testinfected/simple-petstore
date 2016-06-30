@@ -1,7 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.vtence.molecule.support.MockRequest;
-import com.vtence.molecule.support.MockResponse;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
@@ -14,6 +14,7 @@ import org.testinfected.petstore.product.DuplicateItemException;
 
 import java.math.BigDecimal;
 
+import static com.vtence.molecule.testing.ResponseAssert.assertThat;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class CreateItemTest {
@@ -22,8 +23,8 @@ public class CreateItemTest {
     ProcurementRequestHandler requestHandler = context.mock(ProcurementRequestHandler.class);
     CreateItem createItem = new CreateItem(requestHandler);
 
-    MockRequest request = new MockRequest();
-    MockResponse response = new MockResponse();
+    Request request = new Request();
+    Response response = new Response();
 
     @Before public void
     addItemDetailsToRequest() {
@@ -40,17 +41,18 @@ public class CreateItemTest {
         }});
 
         createItem.handle(request, response);
-        response.assertStatus(HttpStatus.CREATED);
+        assertThat(response).hasStatus(HttpStatus.CREATED).isDone();
     }
 
     @Test public void
     reportsResourceConflictItemAlreadyExists() throws Exception {
         context.checking(new Expectations() {{
-            oneOf(requestHandler).addToInventory(with(any(String.class)), with(any(String.class)), with(any(String.class)), with(any(BigDecimal.class)));
+            oneOf(requestHandler).addToInventory(with(any(String.class)),
+                    with(any(String.class)), with(any(String.class)), with(any(BigDecimal.class)));
             will(throwException(new DuplicateItemException(anItem().build())));
         }});
 
         createItem.handle(request, response);
-        response.assertStatus(HttpStatus.CONFLICT);
+        assertThat(response).hasStatus(HttpStatus.CONFLICT).isDone();
     }
 }

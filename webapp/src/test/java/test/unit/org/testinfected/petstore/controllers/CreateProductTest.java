@@ -1,17 +1,18 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.vtence.molecule.support.MockRequest;
-import com.vtence.molecule.support.MockResponse;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
+import com.vtence.molecule.http.HttpStatus;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import com.vtence.molecule.http.HttpStatus;
 import org.testinfected.petstore.controllers.CreateProduct;
 import org.testinfected.petstore.procurement.ProcurementRequestHandler;
 import org.testinfected.petstore.product.DuplicateProductException;
 
+import static com.vtence.molecule.testing.ResponseAssert.assertThat;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 
 public class CreateProductTest {
@@ -20,8 +21,8 @@ public class CreateProductTest {
     ProcurementRequestHandler requestHandler = context.mock(ProcurementRequestHandler.class);
     CreateProduct createProduct = new CreateProduct(requestHandler);
 
-    MockRequest request = new MockRequest();
-    MockResponse response = new MockResponse();
+    Request request = new Request();
+    Response response = new Response();
 
     @Before public void
     addProductDetailsToRequest() {
@@ -38,7 +39,7 @@ public class CreateProductTest {
         }});
 
         createProduct.handle(request, response);
-        response.assertStatus(HttpStatus.CREATED);
+        assertThat(response).hasStatus(HttpStatus.CREATED).isDone();
     }
 
     @Test public void
@@ -49,6 +50,6 @@ public class CreateProductTest {
         }});
 
         createProduct.handle(request, response);
-        response.assertStatus(HttpStatus.CONFLICT);
+        assertThat(response).hasStatus(HttpStatus.CONFLICT).isDone();
     }
 }

@@ -42,7 +42,7 @@ public class PlaceOrder implements Application {
 
     private void processOrder(Request request, Response response, PaymentForm form) throws Exception {
         OrderNumber orderNumber = salesAssistant.placeOrder(SessionScope.cart(request), form.paymentDetails());
-        response.redirectTo("/orders/" + orderNumber.getNumber());
+        response.redirectTo("/orders/" + orderNumber.getNumber()).done();
     }
 
     private void rejectOrder(Request request, Response response, PaymentForm form) throws IOException {

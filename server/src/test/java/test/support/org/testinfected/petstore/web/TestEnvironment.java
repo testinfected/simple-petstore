@@ -2,7 +2,7 @@ package test.support.org.testinfected.petstore.web;
 
 import com.objogate.wl.UnsynchronizedProber;
 import com.objogate.wl.web.AsyncWebDriver;
-import com.vtence.molecule.support.HttpRequest;
+import com.vtence.molecule.testing.http.HttpRequest;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import test.support.org.testinfected.petstore.web.drivers.browsers.Browser;
@@ -32,7 +32,6 @@ public class TestEnvironment {
     public static final String BROWSER_REMOTE_CAPABILITY = "browser.capability.";
 
     private static final String TEST_PROPERTIES = "test.properties";
-    private static final int HTTP_TIMEOUT_IN_MILLIS = 5000;
 
     public static TestEnvironment load() {
         return load(TEST_PROPERTIES);
@@ -124,11 +123,7 @@ public class TestEnvironment {
     }
 
     public HttpRequest api() {
-        return new HttpRequest(serverPort()).withTimeout(timeOut());
-    }
-
-    public int timeOut() {
-        return HTTP_TIMEOUT_IN_MILLIS;
+        return new HttpRequest(serverPort());
     }
 
     public int serverPort() {

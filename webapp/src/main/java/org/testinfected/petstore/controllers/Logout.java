@@ -7,6 +7,6 @@ import com.vtence.molecule.Response;
 public class Logout implements Application {
 
     public void handle(Request request, Response response) {
-        response.redirectTo("/");
+        response.redirectTo("/").done();
     }
 }

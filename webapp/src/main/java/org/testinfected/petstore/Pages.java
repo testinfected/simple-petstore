@@ -1,15 +1,12 @@
 package org.testinfected.petstore;
 
-import com.vtence.molecule.Response;
-import com.vtence.molecule.templating.RenderingEngine;
+import com.vtence.molecule.templating.Template;
 import com.vtence.molecule.templating.Templates;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.views.AvailableItems;
 import org.testinfected.petstore.views.Checkout;
 import org.testinfected.petstore.views.Products;
-
-import java.io.IOException;
 
 public class Pages {
 
@@ -43,12 +40,11 @@ public class Pages {
         return page("order");
     }
 
-    private <T> View<T> page(final String template) {
-        return new View<T>() {
-            public void render(Response response, T context) throws IOException {
-                response.contentType("text/html; charset=utf-8");
-                response.body(templates.named(template).render(context));
-            }
+    private <T> View<T> page(final String named) {
+        return (response, context) -> {
+            response.contentType("text/html; charset=utf-8");
+            Template<T> template = templates.named(named);
+            response.done(template.render(context));
         };
     }
 }

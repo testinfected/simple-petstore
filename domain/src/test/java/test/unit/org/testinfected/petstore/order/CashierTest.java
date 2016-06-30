@@ -71,6 +71,7 @@ public class CashierTest {
         cashier.placeOrder(cart, paymentMethod);
     }
 
+    @SuppressWarnings("unchecked")
     private Matcher<Order> anOrder(Matcher<? super Order>... matchers) {
         return allOf(matchers);
     }

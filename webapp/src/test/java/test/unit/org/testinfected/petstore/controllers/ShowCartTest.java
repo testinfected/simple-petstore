@@ -1,8 +1,8 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.vtence.molecule.Session;
-import com.vtence.molecule.support.MockRequest;
-import com.vtence.molecule.support.MockResponse;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
+import com.vtence.molecule.session.Session;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -19,13 +19,13 @@ public class ShowCartTest {
     MockView<Cart> view = new MockView<Cart>();
     ShowCart showCart = new ShowCart(view);
 
-    MockRequest request = new MockRequest();
-    MockResponse response = new MockResponse();
+    Request request = new Request();
+    Response response = new Response();
 
     @Before
     public void
     createSession() {
-        Session.set(request, new Session());
+        new Session().bind(request);
     }
 
     @Test public void

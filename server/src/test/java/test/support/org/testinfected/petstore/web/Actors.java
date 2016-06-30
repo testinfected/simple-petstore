@@ -1,6 +1,6 @@
 package test.support.org.testinfected.petstore.web;
 
-import com.vtence.molecule.support.HttpRequest;
+import com.vtence.molecule.testing.http.HttpRequest;
 import test.support.org.testinfected.petstore.web.actors.Administrator;
 import test.support.org.testinfected.petstore.web.actors.Customer;
 import test.support.org.testinfected.petstore.web.drivers.APIDriver;
@@ -20,8 +20,7 @@ public class Actors {
     }
 
     public Administrator administrator() {
-        return new Administrator(context,
-                new APIDriver(new HttpRequest(env.serverPort()).withTimeout(env.timeOut())));
+        return new Administrator(context, new APIDriver(new HttpRequest(env.serverPort())));
     }
 
     public Customer customer() {

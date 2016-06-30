@@ -22,9 +22,9 @@ public class CreateProduct implements Application {
                     request.parameter("name"),
                     request.parameter("description"),
                     request.parameter("photo"));
-            response.status(HttpStatus.CREATED);
+            response.status(HttpStatus.CREATED).done();
         } catch (DuplicateProductException e) {
-            response.status(HttpStatus.CONFLICT);
+            response.status(HttpStatus.CONFLICT).done();
         }
     }
 }

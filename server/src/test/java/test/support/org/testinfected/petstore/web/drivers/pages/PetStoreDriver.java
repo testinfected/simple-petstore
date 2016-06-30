@@ -1,9 +1,9 @@
 package test.support.org.testinfected.petstore.web.drivers.pages;
 
 import com.objogate.wl.web.AsyncWebDriver;
-import com.vtence.molecule.support.HttpRequest;
-import test.support.org.testinfected.petstore.web.drivers.APIDriver;
+import com.vtence.molecule.testing.http.HttpRequest;
 import test.support.org.testinfected.petstore.web.TestEnvironment;
+import test.support.org.testinfected.petstore.web.drivers.APIDriver;
 import test.support.org.testinfected.petstore.web.drivers.ServerDriver;
 
 import static java.lang.String.valueOf;

@@ -1,8 +1,8 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.vtence.molecule.Session;
-import com.vtence.molecule.support.MockRequest;
-import com.vtence.molecule.support.MockResponse;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
+import com.vtence.molecule.session.Session;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
@@ -17,10 +17,11 @@ import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ItemNumber;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
+import static org.junit.Assert.assertThat;
+import static com.vtence.molecule.testing.ResponseAssert.assertThat;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class CreateCartItemTest {
@@ -29,14 +30,14 @@ public class CreateCartItemTest {
     ItemInventory inventory = context.mock(ItemInventory.class);
     CreateCartItem createCartItem = new CreateCartItem(inventory);
 
-    MockRequest request = new MockRequest();
-    MockResponse response = new MockResponse();
+    Request request = new Request();
+    Response response = new Response();
 
     String itemNumber = "12345678";
 
     @Before public void
     createSession() {
-        Session.set(request, new Session());
+        new Session().bind(request);
     }
 
     @SuppressWarnings("unchecked") @Test public void
@@ -47,7 +48,7 @@ public class CreateCartItemTest {
 
         createCartItem.handle(request, response);
 
-        response.assertRedirectedTo("/cart");
+        assertThat(response).isRedirectedTo("/cart");
         assertThat("cart content", cart().getItems(), containsItems(itemWith(number(itemNumber), quantity(1))));
     }
 

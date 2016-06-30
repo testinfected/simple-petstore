@@ -145,6 +145,7 @@ public class ItemsDatabaseTest {
         });
     }
 
+    @SuppressWarnings("unchecked")
     private void given(final Builder<Item>... items) throws Exception {
         for (final Builder<Item> item : items) {
             savedItemFrom(item);

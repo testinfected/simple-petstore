@@ -1,7 +1,7 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.vtence.molecule.support.MockRequest;
-import com.vtence.molecule.support.MockResponse;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
@@ -23,8 +23,8 @@ public class ShowOrderTest {
     MockView<Order> view = new MockView<Order>();
     ShowOrder showOrder = new ShowOrder(orderBook, view);
 
-    MockRequest request = new MockRequest();
-    MockResponse response = new MockResponse();
+    Request request = new Request();
+    Response response = new Response();
 
     String orderNumber = "00000100";
 
@@ -41,7 +41,7 @@ public class ShowOrderTest {
     }
 
     private Matcher<Object> sameOrderAs(Order order) {
-        return Matchers.<Object>sameInstance(order);
+        return Matchers.sameInstance(order);
     }
 
     private void orderBookContains(final Order order) {

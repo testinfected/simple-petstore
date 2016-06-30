@@ -91,7 +91,8 @@ public class CartTest {
         cart.add(anItem().build());
         cart.add(anItem().build());
     }
-                                                                            
+
+    @SuppressWarnings("unchecked")
     private Matcher<Cart> aCartContaining(Matcher<CartItem>... cartItemMatchers) {
         return new FeatureMatcher<Cart, Iterable<CartItem>>(containsItems(cartItemMatchers), "a cart with items", "cart content") {
             @Override protected List<CartItem> featureValueOf(Cart actual) {
@@ -100,10 +101,12 @@ public class CartTest {
         };
     }
 
+    @SuppressWarnings("unchecked")
     private Matcher<? super Iterable<CartItem>> containsItems(Matcher<? super CartItem>... cartItemMatchers) {
         return contains(cartItemMatchers);
     }
 
+    @SuppressWarnings("unchecked")
     private Matcher<CartItem> itemWith(Matcher<CartItem>... cartItemMatchers) {
         return allOf(cartItemMatchers);
     }

@@ -1,18 +1,16 @@
 dependencies {
   compile project(':domain')
   compile project(':persistence')
-  compile project(':molecule')
   compile project(':webapp')
   compile libs.cli
   compile libs.flyway
 
+  runtime libs.simple
   runtime libs.mysql
 
-  testCompile project(':molecule').sourceSets.test.output
   testCompile project(':webapp').sourceSets.test.output
-  testCompile libs.simple
+  testCompile libs.molecule_test
   testCompile libs.jmustache
-  testCompile libs.htmlunit
   testCompile libs.nekohtml
   testCompile libs.selenium_api
   testCompile libs.selenium_firefox

@@ -1,8 +1,8 @@
 package test.unit.org.testinfected.petstore.controllers;
 
-import com.vtence.molecule.Session;
-import com.vtence.molecule.support.MockRequest;
-import com.vtence.molecule.support.MockResponse;
+import com.vtence.molecule.Request;
+import com.vtence.molecule.Response;
+import com.vtence.molecule.session.Session;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
@@ -30,6 +30,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static com.vtence.molecule.testing.ResponseAssert.assertThat;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
@@ -43,8 +44,8 @@ public class PlaceOrderTest {
 
     PlaceOrder placeOrder = new PlaceOrder(salesAssistant, view, messages);
 
-    MockRequest request = new MockRequest();
-    MockResponse response = new MockResponse();
+    Request request = new Request();
+    Response response = new Response();
 
     String EMPTY = "";
     String orderNumber = "12345678";
@@ -52,7 +53,7 @@ public class PlaceOrderTest {
     @Before
     public void
     createSession() {
-        Session.set(request, new Session());
+        new Session().bind(request);
     }
 
     @Test public void
@@ -68,7 +69,7 @@ public class PlaceOrderTest {
         }});
 
         placeOrder.handle(request, response);
-        response.assertRedirectedTo("/orders/" + orderNumber);
+        assertThat(response).isRedirectedTo("/orders/" + orderNumber).isDone();
     }
 
     @SuppressWarnings("unchecked") @Test public void
