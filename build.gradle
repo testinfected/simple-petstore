@@ -35,7 +35,6 @@ ext {
                                  'cglib:cglib-nodep:2.1_3',
                                  'org.objenesis:objenesis:1.0'],
             juniversal_chardet: 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3',
-            htmlunit          : 'net.sourceforge.htmlunit:htmlunit:2.14',
             nekohtml          : 'net.sourceforge.nekohtml:nekohtml:1.9.20',
             selenium_api      : 'org.seleniumhq.selenium:selenium-api:2.47.1',
             selenium_remote   : 'org.seleniumhq.selenium:selenium-remote-driver:2.47.1',
