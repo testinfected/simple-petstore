@@ -17,7 +17,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
 
   define 'persistence' do
-    compile.with project(:domain)
+    compile.with project(:domain), :tape
     test.with project(:domain).test.compile.target, HAMCREST, :flyway, :mysql, NO_LOG
     package :jar
   end
@@ -31,7 +31,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
               project(:persistence).test.resources.target
 
     test.with HAMCREST, :antlr_runtime, :guava, :cssselectors, :hamcrest_dom, :flyway, NO_LOG, :mysql,
-              :juniversalchardet, :molecule_test, SIMPLE
+              :juniversalchardet, :molecule_test, SIMPLE, :tape
     test.with transitive(artifacts(:nekohtml))
     test.using :properties => { 'web.root' => _(:src, :main, :content) }
 
@@ -39,7 +39,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   end
   
   define 'server' do
-    compile.with project(:domain), project(:persistence), project(:webapp), :cli, :flyway, :molecule, SIMPLE
+    compile.with project(:domain), project(:persistence), project(:webapp), :cli, :flyway, :molecule, SIMPLE, :tape
 
                  test.using :integration, :properties => {
       'web.root' => project(:webapp).path_to(:src, :main, :content),
@@ -56,7 +56,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
     integration.teardown { selenium.stop }
 
     package(:jar).tap do |jar|
-      jar.merge artifacts(:cli, :molecule, :jmustache, SIMPLE, :mysql, :flyway)
+      jar.merge artifacts(:cli, :molecule, :jmustache, SIMPLE, :mysql, :flyway, :tape)
       jar.merge artifacts(project(:domain), project(:persistence), project(:webapp))
       jar.with :manifest => manifest.merge( 'Main-Class' => 'org.testinfected.petstore.Launcher' )
     end

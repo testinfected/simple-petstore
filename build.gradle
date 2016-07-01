@@ -16,6 +16,7 @@ ext {
             cli               : 'com.vtence.cli:cli:1.1',
             molecule          : 'com.vtence.molecule:molecule:0.10',
             molecule_test     : 'com.vtence.molecule:molecule:0.10:tests',
+            tape              : 'com.vtence.tape:tape:0.2',
             jmustache         : 'com.samskivert:jmustache:1.11',
             simple            : ['org.simpleframework:simple-common:6.0.1',
                                  'org.simpleframework:simple-transport:6.0.1',

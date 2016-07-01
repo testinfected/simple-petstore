@@ -1,6 +1,7 @@
 dependencies {
 
   compile project(':domain')
+  compile libs.tape
 
   testCompile project(':domain').sourceSets.test.output
   testCompile libs.flyway

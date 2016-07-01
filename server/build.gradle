@@ -1,24 +1,26 @@
 dependencies {
-  compile project(':domain')
-  compile project(':persistence')
-  compile project(':webapp')
-  compile libs.cli
-  compile libs.flyway
+    compile project(':domain')
+    compile project(':persistence')
+    compile project(':webapp')
+    compile libs.molecule
+    compile libs.cli
+    compile libs.flyway
+    compile libs.tape
 
-  runtime libs.simple
-  runtime libs.mysql
+    runtime libs.simple
+    runtime libs.mysql
 
-  testCompile project(':webapp').sourceSets.test.output
-  testCompile libs.molecule_test
-  testCompile libs.jmustache
-  testCompile libs.nekohtml
-  testCompile libs.selenium_api
-  testCompile libs.selenium_firefox
-  testCompile(libs.selenium_phantom) {
-    exclude module: 'selenium-java'
-    exclude module: 'selenium-server'
-  }
-  testCompile libs.windowlicker
+    testCompile project(':webapp').sourceSets.test.output
+    testCompile libs.molecule_test
+    testCompile libs.jmustache
+    testCompile libs.nekohtml
+    testCompile libs.selenium_api
+    testCompile libs.selenium_firefox
+    testCompile(libs.selenium_phantom) {
+        exclude module: 'selenium-java'
+        exclude module: 'selenium-server'
+    }
+    testCompile libs.windowlicker
 }
 
 test {

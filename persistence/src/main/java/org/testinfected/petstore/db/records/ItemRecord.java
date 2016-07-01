@@ -1,7 +1,7 @@
 package org.testinfected.petstore.db.records;
 
-import org.testinfected.petstore.db.support.Column;
-import org.testinfected.petstore.db.support.Record;
+import com.vtence.tape.Column;
+import com.vtence.tape.Record;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemNumber;
 import org.testinfected.petstore.product.Product;

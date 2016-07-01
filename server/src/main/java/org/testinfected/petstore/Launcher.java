@@ -2,7 +2,7 @@ package org.testinfected.petstore;
 
 import com.vtence.cli.CLI;
 import com.vtence.molecule.servers.SimpleServer;
-import org.testinfected.petstore.db.support.DriverManagerDataSource;
+import com.vtence.tape.DriverManagerDataSource;
 import org.testinfected.petstore.util.Logging;
 
 import java.io.File;

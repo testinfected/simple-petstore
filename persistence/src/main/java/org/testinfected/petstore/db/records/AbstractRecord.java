@@ -1,7 +1,7 @@
 package org.testinfected.petstore.db.records;
 
+import com.vtence.tape.Record;
 import org.testinfected.petstore.db.Access;
-import org.testinfected.petstore.db.support.Record;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,13 +1,9 @@
 package org.testinfected.petstore.db;
 
+import com.vtence.tape.Table;
+import com.vtence.tape.TableSchema;
 import org.testinfected.petstore.billing.PaymentMethod;
-import org.testinfected.petstore.db.records.ItemRecord;
-import org.testinfected.petstore.db.records.LineItemRecord;
-import org.testinfected.petstore.db.records.OrderRecord;
-import org.testinfected.petstore.db.records.PaymentRecord;
-import org.testinfected.petstore.db.records.ProductRecord;
-import org.testinfected.petstore.db.support.Table;
-import org.testinfected.petstore.db.support.TableSchema;
+import org.testinfected.petstore.db.records.*;
 import org.testinfected.petstore.order.LineItem;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.product.Item;
@@ -20,7 +16,7 @@ public final class Schema {
 
     public static Table<Product> products() {
         TableSchema schema = new TableSchema("products");
-        return new Table<Product>(schema, new ProductRecord(
+        return new Table<>(schema, new ProductRecord(
                 schema.LONG("id"),
                 schema.STRING("number"),
                 schema.STRING("name"),
@@ -30,7 +26,7 @@ public final class Schema {
 
     public static Table<Item> items(Table<Product> products) {
         TableSchema schema = new TableSchema("items");
-        return new Table<Item>(schema, new ItemRecord(
+        return new Table<>(schema, new ItemRecord(
                 schema.LONG("id"),
                 schema.STRING("number"),
                 schema.LONG("product_id"),
@@ -41,7 +37,7 @@ public final class Schema {
 
     public static Table<LineItem> lineItems() {
         TableSchema schema = new TableSchema("line_items");
-        return new Table<LineItem>(schema, new LineItemRecord(
+        return new Table<>(schema, new LineItemRecord(
                 schema.LONG("id"),
                 schema.STRING("item_number"),
                 schema.STRING("item_description"),
@@ -54,7 +50,7 @@ public final class Schema {
 
     public static Table<PaymentMethod> payments() {
         TableSchema schema = new TableSchema("payments");
-        return new Table<PaymentMethod>(schema, new PaymentRecord(
+        return new Table<>(schema, new PaymentRecord(
                 schema.LONG("id"),
                 schema.STRING("payment_type"),
                 schema.STRING("card_type"),
@@ -67,7 +63,7 @@ public final class Schema {
 
     public static Table<Order> orders(Table<PaymentMethod> payments) {
         TableSchema schema = new TableSchema("orders");
-        return new Table<Order>(schema, new OrderRecord(
+        return new Table<>(schema, new OrderRecord(
                 schema.LONG("id"),
                 schema.STRING("number"),
                 schema.LONG("payment_id"),

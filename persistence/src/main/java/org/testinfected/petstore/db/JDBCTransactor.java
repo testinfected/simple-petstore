@@ -1,6 +1,7 @@
 package org.testinfected.petstore.db;
 
-import org.testinfected.petstore.db.support.JDBCException;
+import com.vtence.tape.JDBC;
+import com.vtence.tape.JDBCException;
 import org.testinfected.petstore.transaction.AbstractTransactor;
 import org.testinfected.petstore.transaction.UnitOfWork;
 
@@ -22,10 +23,10 @@ public class JDBCTransactor extends AbstractTransactor {
             unitOfWork.execute();
             connection.commit();
         } catch (SQLException e) {
-            connection.rollback();
-            throw new JDBCException("Could not commit transaction", e);
+            JDBC.rollback(connection);
+            throw new JDBCException("Transaction failed", e);
         } catch (Exception e) {
-            connection.rollback();
+            JDBC.rollback(connection);
             throw e;
         } finally {
             resetAutoCommitTo(autoCommit);

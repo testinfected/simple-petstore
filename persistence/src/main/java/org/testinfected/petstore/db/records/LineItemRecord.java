@@ -1,6 +1,6 @@
 package org.testinfected.petstore.db.records;
 
-import org.testinfected.petstore.db.support.Column;
+import com.vtence.tape.Column;
 import org.testinfected.petstore.order.LineItem;
 
 import java.math.BigDecimal;

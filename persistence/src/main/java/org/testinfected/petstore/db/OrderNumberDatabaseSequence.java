@@ -1,8 +1,8 @@
 package org.testinfected.petstore.db;
 
+import com.vtence.tape.JDBCException;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.OrderNumberSequence;
-import org.testinfected.petstore.db.support.JDBCException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

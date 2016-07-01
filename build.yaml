@@ -12,6 +12,7 @@ artifacts:
   simple_http: org.simpleframework:simple-http:jar:6.0.1
   molecule: com.vtence.molecule:molecule:jar:0.10
   jmustache: com.samskivert:jmustache:jar:1.11
+  tape: com.vtence.tape:tape:jar:0.2
 
   flyway: com.googlecode.flyway:flyway-core:jar:2.0
   mysql: mysql:mysql-connector-java:jar:5.1.21

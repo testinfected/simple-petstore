@@ -1,9 +1,9 @@
 package org.testinfected.petstore.db;
 
+import com.vtence.tape.Insert;
+import com.vtence.tape.Select;
+import com.vtence.tape.Table;
 import org.testinfected.petstore.billing.PaymentMethod;
-import org.testinfected.petstore.db.support.Insert;
-import org.testinfected.petstore.db.support.Select;
-import org.testinfected.petstore.db.support.Table;
 import org.testinfected.petstore.order.LineItem;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderBook;

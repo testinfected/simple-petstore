@@ -1,10 +1,10 @@
 package org.testinfected.petstore.db.records;
 
+import com.vtence.tape.Column;
 import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;
 import org.testinfected.petstore.billing.PaymentMethod;
-import org.testinfected.petstore.db.support.Column;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -1,9 +1,9 @@
 package org.testinfected.petstore.db;
 
-import org.testinfected.petstore.db.support.Insert;
-import org.testinfected.petstore.db.support.JDBCException;
-import org.testinfected.petstore.db.support.Select;
-import org.testinfected.petstore.db.support.Table;
+import com.vtence.tape.Insert;
+import com.vtence.tape.JDBCException;
+import com.vtence.tape.Select;
+import com.vtence.tape.Table;
 import org.testinfected.petstore.product.DuplicateProductException;
 import org.testinfected.petstore.product.Product;
 import org.testinfected.petstore.product.ProductCatalog;

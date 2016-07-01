@@ -1,8 +1,8 @@
 package org.testinfected.petstore.db.records;
 
+import com.vtence.tape.Column;
+import com.vtence.tape.Record;
 import org.testinfected.petstore.billing.PaymentMethod;
-import org.testinfected.petstore.db.support.Column;
-import org.testinfected.petstore.db.support.Record;
 import org.testinfected.petstore.order.Order;
 import org.testinfected.petstore.order.OrderNumber;
 

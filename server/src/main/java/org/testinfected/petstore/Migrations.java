@@ -1,8 +1,8 @@
 package org.testinfected.petstore;
 
 import com.googlecode.flyway.core.Flyway;
+import com.vtence.tape.DriverManagerDataSource;
 import org.testinfected.petstore.db.DatabaseCleaner;
-import org.testinfected.petstore.db.support.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
