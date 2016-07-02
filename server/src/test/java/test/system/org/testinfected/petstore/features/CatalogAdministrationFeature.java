@@ -36,10 +36,12 @@ public class CatalogAdministrationFeature {
     addingAProductToTheStore() throws IOException {
         administrator.addProductToCatalog("LIZ-0001", "Iguana", "Big lizard", "iguana.png");
 
-        customer.lookUpProductNamed("Iguana")
+        customer.browseCatalog()
+                .lookUpProductByName("Iguana")
                 .seesAvailableProduct("LIZ-0001");
 
-        customer.checkInventoryOf("Iguana")
+        customer.browseCatalog()
+                .checkAvailabilityOfProduct("Iguana")
                 .seesNoItemAvailable();
     }
 
@@ -49,7 +51,8 @@ public class CatalogAdministrationFeature {
         administrator.addItemToInventory("LIZ-0001", "12345678", "Green Adult", "18.50");
         administrator.addItemToInventory("LIZ-0001", "87654321", "Blue Youngster", "28.50");
 
-        customer.checkInventoryOf("Iguana")
+        customer.browseCatalog()
+                .checkAvailabilityOfProduct("Iguana")
                 .seesAvailableItem("12345678", "Green Adult", "18.50")
                 .seesAvailableItem("87654321", "Blue Youngster", "28.50");
     }

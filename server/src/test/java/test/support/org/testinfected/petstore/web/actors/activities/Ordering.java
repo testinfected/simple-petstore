@@ -21,8 +21,9 @@ public class Ordering {
         return this;
     }
 
-    public void seesTotalToPay(String amount) {
+    public Ordering seesTotalToPay(String amount) {
         application.openCart().checkout().showsTotalToPay(amount).continueShopping();
+        return this;
     }
 
     public void seesCartContent(String totalPrice, Item... items) {
@@ -33,7 +34,7 @@ public class Ordering {
         }
     }
 
-    public Ordering confirm(String firstName, String lastName, String email, String cardType, String cardNumber, String cardExpiryDate) {
+    public Ordering completeOrder(String firstName, String lastName, String email, String cardType, String cardNumber, String cardExpiryDate) {
         CheckoutPage checkoutPage = application.openCart().checkout();
         ReceiptPage receiptPage = checkoutPage.willBillTo(firstName, lastName, email)
                                               .willPayUsingCreditCard(cardType, cardNumber, cardExpiryDate)
@@ -58,7 +59,7 @@ public class Ordering {
         return this;
     }
 
-    public Ordering showsCreditCardDetails(String cardType, String cardNumber, String cardExpiryDate) {
+    public Ordering seesCreditCardDetails(String cardType, String cardNumber, String cardExpiryDate) {
         String orderNumber = context.get("orderNumber");
         application.openReceipt(orderNumber).showsCreditCardDetails(cardType, cardNumber, cardExpiryDate);
         return this;

@@ -42,16 +42,16 @@ public class PurchaseFeature {
     purchasingSeveralItemsUsingACreditCard() throws Exception {
         havingRetrieversInStock();
 
-        customer.addToCart("Labrador Retriever", "11111111")
+        customer.startShopping()
+                .addToCart("Labrador Retriever", "11111111")
                 .addToCart("Golden Retriever", "22222222")
-                .seesTotalToPay(totalPrice);
-
-        customer.pay("John", "Doe", "jdoe@gmail.com", "Visa", "4111111111111111", "12/12")
+                .seesTotalToPay(totalPrice)
+                .completeOrder("John", "Doe", "jdoe@gmail.com", "Visa", "4111111111111111", "12/12")
                 .seesTotalPaid("1248.00")
                 .seesOrderedItems(
                     item("11111111", "Male Adult", "599.00"), item("22222222", "Female Adult", "649.00"))
                 .seesBillingInformation("John", "Doe", "jdoe@gmail.com")
-                .showsCreditCardDetails("Visa", "4111111111111111", "12/12");
+                .seesCreditCardDetails("Visa", "4111111111111111", "12/12");
 
         customer.seesCartIsEmpty();
     }

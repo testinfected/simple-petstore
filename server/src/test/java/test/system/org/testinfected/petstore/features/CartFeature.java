@@ -43,20 +43,23 @@ public class CartFeature {
         administrator.addItemToInventory("LIZ-0001", "12345678", "Green Adult", "18.50");
         administrator.addItemToInventory("LIZ-0001", "87654321", "Blue Female", "58.97");
 
-        customer.login()
+        customer.loginAs("joe")
                 .seesCartIsEmpty();
 
-        customer.addToCart("Iguana", "12345678")
+        customer.startShopping()
+                .addToCart("Iguana", "12345678")
                 .seesCartContent("18.50", item("12345678", "Green Adult", "18.50"));
         customer.seesCartTotalQuantity(1);
 
-        customer.addToCart("Iguana", "87654321")
+        customer.continueShopping()
+                .addToCart("Iguana", "87654321")
                 .seesCartContent("77.47",
                         item("12345678", "Green Adult", "18.50"),
                         item("87654321", "Blue Female", "58.97"));
         customer.seesCartTotalQuantity(2);
 
-        customer.addToCart("Iguana", "12345678")
+        customer.continueShopping()
+                .addToCart("Iguana", "12345678")
                 .seesCartContent("95.97",
                         item("12345678", "Green Adult", "18.50", 2, "37.00"),
                         item("87654321", "Blue Female", "58.97"));

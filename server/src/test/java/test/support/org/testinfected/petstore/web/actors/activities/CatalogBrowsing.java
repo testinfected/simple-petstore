@@ -36,7 +36,7 @@ public class CatalogBrowsing {
         return this;
     }
 
-    public CatalogBrowsing checkProductAvailability(String productName) {
+    public CatalogBrowsing checkAvailabilityOfProduct(String productName) {
         context.set(application.search(productName).selectProduct(productName));
         return this;
     }

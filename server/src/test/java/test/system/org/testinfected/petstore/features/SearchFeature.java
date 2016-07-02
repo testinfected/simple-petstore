@@ -34,7 +34,8 @@ public class SearchFeature {
     searchingForAProductNotAvailableInStore() throws Exception {
         administrator.addProductToCatalog("LAB-1234", "Labrador Retriever", "Friendly dog", "labrador.jpg");
 
-        customer.searchFor("Dalmatian")
+        customer.browseCatalog()
+                .searchFor("Dalmatian")
                 .obtainsNoResult();
     }
 }

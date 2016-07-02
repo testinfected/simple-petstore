@@ -28,11 +28,8 @@ public class ApplicationDriver {
         browser.quit();
     }
 
-    public boolean isLoggedIn(String username) {
-        return false;
-    }
-
     public ApplicationDriver loginAs(String username) {
+        // There's no real login in that app
         return this;
     }
 
