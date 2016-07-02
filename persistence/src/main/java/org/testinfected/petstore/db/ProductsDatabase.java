@@ -25,7 +25,8 @@ public class ProductsDatabase implements ProductCatalog {
         try {
             Insert.into(products, product).execute(connection);
         } catch (JDBCException e) {
-            if (e.causedBy(SQLIntegrityConstraintViolationException.class)) throw new DuplicateProductException(product, e.getCause());
+            if (e.causedBy(SQLIntegrityConstraintViolationException.class))
+                throw new DuplicateProductException(product, e.getCause());
             throw e;
         }
     }

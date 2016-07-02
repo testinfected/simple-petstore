@@ -28,7 +28,6 @@ public class OrderRecord extends AbstractRecord<Order> {
         this.payments = payments;
     }
 
-    @Override
     public Order hydrate(ResultSet rs) throws SQLException {
         Order order = new Order(new OrderNumber(number.get(rs)));
         if (paymentId.get(rs) != Types.NULL)
@@ -37,7 +36,6 @@ public class OrderRecord extends AbstractRecord<Order> {
         return order;
     }
 
-    @Override
     public void dehydrate(PreparedStatement st, Order order) throws SQLException {
         id.set(st, idOf(order).get());
         number.set(st, order.getNumber());

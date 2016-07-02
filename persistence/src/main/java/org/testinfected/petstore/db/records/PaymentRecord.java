@@ -36,7 +36,6 @@ public class PaymentRecord extends AbstractRecord<PaymentMethod> {
         this.billingEmail = billingEmail;
     }
 
-    @Override
     public CreditCardDetails hydrate(ResultSet rs) throws SQLException {
         if (!paymentType.get(rs).equals(CREDIT_CARD)) throw new IllegalArgumentException("payment of type " + paymentType.get(rs));
 
@@ -48,7 +47,6 @@ public class PaymentRecord extends AbstractRecord<PaymentMethod> {
         return creditCard;
     }
 
-    @Override
     public void dehydrate(PreparedStatement st, PaymentMethod payment) throws SQLException {
         CreditCardDetails creditCard = (CreditCardDetails) payment;
         id.set(st, idOf(creditCard).get());

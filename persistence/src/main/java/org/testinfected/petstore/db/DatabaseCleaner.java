@@ -1,7 +1,5 @@
 package org.testinfected.petstore.db;
 
-import org.testinfected.petstore.transaction.UnitOfWork;
-
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,17 +22,12 @@ public class DatabaseCleaner {
     }
 
     public void clean() throws Exception {
-        final Connection connection = dataSource.getConnection();
-        try {
-            new JDBCTransactor(connection).perform(new UnitOfWork() {
-                public void execute() throws Exception {
-                    for (String table : TABLES) {
-                        delete(connection, table);
-                    }
+        try (Connection connection = dataSource.getConnection()) {
+            new JDBCTransactor(connection).perform(() -> {
+                for (String table : TABLES) {
+                    delete(connection, table);
                 }
             });
-        } finally {
-            connection.close();
         }
     }
 

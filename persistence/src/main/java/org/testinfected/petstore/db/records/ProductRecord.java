@@ -30,7 +30,6 @@ public class ProductRecord extends AbstractRecord<Product> {
         this.photo = photo;
     }
 
-    @Override
     public Product hydrate(ResultSet rs) throws SQLException {
         Product product = new Product(number.get(rs), name.get(rs));
         product.setDescription(description.get(rs));
@@ -39,7 +38,6 @@ public class ProductRecord extends AbstractRecord<Product> {
         return product;
     }
 
-    @Override
     public void dehydrate(PreparedStatement st, Product product) throws SQLException {
         id.set(st, idOf(product).get());
         number.set(st, product.getNumber());

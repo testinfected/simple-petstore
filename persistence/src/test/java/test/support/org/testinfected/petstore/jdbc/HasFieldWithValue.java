@@ -25,7 +25,7 @@ public class HasFieldWithValue<T, U> extends TypeSafeDiagnosingMatcher<T> {
             return false;
         }
 
-        Object fieldValue = new FieldAccessor<Object>(argument, field).get();
+        Object fieldValue = new FieldAccessor<>(argument, field).get();
         boolean valueMatches = valueMatcher.matches(fieldValue);
         if (!valueMatches) {
             mismatchDescription.appendText("\"" + fieldName + "\" ");

@@ -52,7 +52,7 @@ public class OrderNumberDatabaseSequenceTest {
 
     private Matcher<OrderNumber> orderNumber(final int number) {
         return new FeatureMatcher<OrderNumber, Integer>(equalTo(number), "an order number", "order number") {
-            @Override protected Integer featureValueOf(OrderNumber actual) {
+            protected Integer featureValueOf(OrderNumber actual) {
                 return parse(actual);
             }
         };

@@ -27,11 +27,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.hamcrest.Matchers.*;
 import static org.testinfected.petstore.db.Access.idOf;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
@@ -65,7 +61,6 @@ public class OrdersDatabaseTest {
         assertThat("matched order", match, orderWithNumber("00000100"));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     canRoundTripOrders() throws Exception {
         final Collection<OrderBuilder> sampleOrders = Arrays.asList(
@@ -84,7 +79,7 @@ public class OrdersDatabaseTest {
 
     private Matcher<? super Order> orderWithNumber(String orderNumber) {
         return new FeatureMatcher<Order, String>(equalTo(orderNumber), "an order with number", "order number") {
-            @Override protected String featureValueOf(Order order) {
+            protected String featureValueOf(Order order) {
                 return order.getNumber();
             }
         };
@@ -111,7 +106,7 @@ public class OrdersDatabaseTest {
     }
 
     private List<Matcher<? super LineItem>> linesWithSameStateAs(Order original) {
-        List<Matcher<? super LineItem>> all = new ArrayList<Matcher<? super LineItem>>();
+        List<Matcher<? super LineItem>> all = new ArrayList<>();
         for (LineItem lineItem : original.getLineItems()) {
             all.add(sameLineItemAs(lineItem));
         }

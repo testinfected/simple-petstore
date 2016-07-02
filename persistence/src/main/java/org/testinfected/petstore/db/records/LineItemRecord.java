@@ -40,14 +40,12 @@ public class LineItemRecord extends AbstractRecord<LineItem> {
         this.line = orderLine;
     }
 
-    @Override
     public LineItem hydrate(ResultSet rs) throws SQLException {
         LineItem lineItem = new LineItem(number.get(rs), description.get(rs), unitPrice.get(rs), quantity.get(rs), totalPrice.get(rs));
         idOf(lineItem).set(id.get(rs));
         return lineItem;
     }
 
-    @Override
     public void dehydrate(PreparedStatement st, LineItem lineItem) throws SQLException {
         id.set(st, idOf(lineItem).get());
         number.set(st, lineItem.getItemNumber());

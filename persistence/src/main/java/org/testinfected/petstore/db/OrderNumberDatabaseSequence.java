@@ -1,5 +1,6 @@
 package org.testinfected.petstore.db;
 
+import com.vtence.tape.JDBC;
 import com.vtence.tape.JDBCException;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.OrderNumberSequence;
@@ -33,15 +34,7 @@ public class OrderNumberDatabaseSequence implements OrderNumberSequence {
         } catch (SQLException e) {
             throw new JDBCException("Could not generate order number", e);
         } finally {
-            close(statement);
-        }
-    }
-
-    private void close(Statement statement) {
-        if (statement == null) return;
-        try {
-            statement.close();
-        } catch (SQLException ignored) {
+            JDBC.close(statement);
         }
     }
 }

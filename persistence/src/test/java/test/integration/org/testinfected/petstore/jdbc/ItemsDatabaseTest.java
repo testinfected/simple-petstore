@@ -9,11 +9,7 @@ import org.junit.Test;
 import org.testinfected.petstore.db.ItemsDatabase;
 import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.ProductsDatabase;
-import org.testinfected.petstore.product.DuplicateItemException;
-import org.testinfected.petstore.product.Item;
-import org.testinfected.petstore.product.ItemNumber;
-import org.testinfected.petstore.product.Product;
-import org.testinfected.petstore.product.ProductCatalog;
+import org.testinfected.petstore.product.*;
 import org.testinfected.petstore.transaction.QueryUnitOfWork;
 import org.testinfected.petstore.transaction.Transactor;
 import test.support.org.testinfected.petstore.builders.Builder;
@@ -29,10 +25,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.hamcrest.Matchers.*;
 import static org.testinfected.petstore.db.Access.idOf;
 import static org.testinfected.petstore.db.Access.productOf;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.a;
@@ -58,7 +51,6 @@ public class ItemsDatabaseTest {
         connection.close();
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     findsItemsByNumber() throws Exception {
         Product dog = savedProductFrom(aProduct());
@@ -68,7 +60,6 @@ public class ItemsDatabaseTest {
         assertThat("matched item", found, hasNumber("12345678"));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     findsItemsByProductNumber() throws Exception {
         Product labrador = savedProductFrom(aProduct().withNumber("LAB-1234"));
@@ -79,17 +70,15 @@ public class ItemsDatabaseTest {
         assertThat("available items", availableItems, everyItem(hasProductNumber("LAB-1234")));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     findsNothingIfProductHasNoAssociatedItemInInventory() throws Exception {
         Product dalmatian = savedProductFrom(aProduct().withNumber("DAL-5432"));
         given(a(dalmatian));
 
         List<Item> availableItems = itemsDatabase.findByProductNumber(savedProductFrom(aProduct().withNumber("BOU-6789")).getNumber());
-        assertThat("available items", availableItems, Matchers.<Item>empty());
+        assertThat("available items", availableItems, Matchers.empty());
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     canRoundTripItemsWithCompleteDetails() throws Exception {
         Collection<ItemBuilder> sampleItems = Arrays.asList(
@@ -102,7 +91,6 @@ public class ItemsDatabaseTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Test(expected = DuplicateItemException.class) public void
     referenceNumberShouldBeUnique() throws Exception {
         ItemBuilder existingItem = a(savedProductFrom(aProduct().withNumber("LAB-1234")));
@@ -129,7 +117,7 @@ public class ItemsDatabaseTest {
 
     private Matcher<Item> hasProductNumber(final String number) {
         return new FeatureMatcher<Item, String>(equalTo(number), "has product number", "product number") {
-            @Override protected String featureValueOf(Item actual) {
+            protected String featureValueOf(Item actual) {
                 return actual.getProductNumber();
             }
         };
@@ -145,8 +133,8 @@ public class ItemsDatabaseTest {
         });
     }
 
-    @SuppressWarnings("unchecked")
-    private void given(final Builder<Item>... items) throws Exception {
+    @SafeVarargs
+    private final void given(final Builder<Item>... items) throws Exception {
         for (final Builder<Item> item : items) {
             savedItemFrom(item);
         }
@@ -164,7 +152,7 @@ public class ItemsDatabaseTest {
 
     private Matcher<Item> hasNumber(final String number) {
         return new FeatureMatcher<Item, String>(equalTo(number), "has number", "number") {
-            @Override protected String featureValueOf(Item actual) {
+            protected String featureValueOf(Item actual) {
                 return actual.getNumber();
             }
         };

@@ -26,10 +26,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.iterableWithSize;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.hamcrest.Matchers.*;
 import static org.testinfected.petstore.db.Access.idOf;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
@@ -51,7 +48,6 @@ public class ProductsDatabaseTest {
         connection.close();
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     findsProductsByNumber() throws Exception {
         given(aProduct().withNumber("PRD-0001"));
@@ -84,7 +80,6 @@ public class ProductsDatabaseTest {
         assertThat("matches", matches, containsInAnyOrder(productNamed("Labrador"), productNamed("Golden")));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     findsNothingWhenNoProductInCatalogMatchesKeyword() throws Exception {
         given(aProduct().named("Dalmatian").describedAs("A big dog"));
@@ -93,7 +88,6 @@ public class ProductsDatabaseTest {
         assertThat("matching products", matches, is(empty()));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     roundTripsProductsWithCompleteDetails() throws Exception {
         final Collection<ProductBuilder> sampleProducts = Arrays.asList(
@@ -105,7 +99,6 @@ public class ProductsDatabaseTest {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Test(expected = DuplicateProductException.class) public void
     productNumbersAreUnique() throws Exception {
         ProductBuilder anExistingProduct = aProduct().withNumber("LAB-1234");
@@ -124,8 +117,8 @@ public class ProductsDatabaseTest {
                      samePropertyValuesAs(original));
     }
 
-    @SuppressWarnings("unchecked")
-    private void given(final Builder<Product>... products) throws Exception {
+    @SafeVarargs
+    private final void given(final Builder<Product>... products) throws Exception {
         for (final Builder<Product> product : products) {
             savedProductFrom(product);
         }

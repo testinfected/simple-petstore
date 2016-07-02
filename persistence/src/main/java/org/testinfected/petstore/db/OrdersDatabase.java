@@ -33,9 +33,7 @@ public class OrdersDatabase implements OrderBook {
     }
 
     private void addLinesToOrder(Order order, List<LineItem> lineItems) {
-        for (LineItem lineItem : lineItems) {
-            order.addLineItem(lineItem);
-        }
+        lineItems.forEach(order::addLineItem);
     }
 
     private Order findOrder(OrderNumber orderNumber) {

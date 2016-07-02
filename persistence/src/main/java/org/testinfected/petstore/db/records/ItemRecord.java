@@ -38,7 +38,6 @@ public class ItemRecord extends AbstractRecord<Item> {
         this.products = products;
     }
 
-    @Override
     public Item hydrate(ResultSet rs) throws SQLException {
         Item item = new Item(new ItemNumber(number.get(rs)), products.hydrate(rs), price.get(rs));
         item.setDescription(description.get(rs));
@@ -46,7 +45,6 @@ public class ItemRecord extends AbstractRecord<Item> {
         return item;
     }
 
-    @Override
     public void dehydrate(PreparedStatement st, Item item) throws SQLException {
         id.set(st, idOf(item).get());
         number.set(st, item.getNumber());

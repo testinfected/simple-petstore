@@ -11,8 +11,7 @@ import org.testinfected.petstore.product.Product;
 
 public final class Schema {
 
-    private Schema() {
-    }
+    private Schema() {}
 
     public static Table<Product> products() {
         TableSchema schema = new TableSchema("products");
