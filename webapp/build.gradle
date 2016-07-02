@@ -16,6 +16,7 @@ dependencies {
   testRuntime libs.juniversal_chardet
   testRuntime libs.simple
   testRuntime libs.mysql
+  testRuntime libs.tape
 }
 
 test {
