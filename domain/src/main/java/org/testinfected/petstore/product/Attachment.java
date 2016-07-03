@@ -1,6 +1,8 @@
 package org.testinfected.petstore.product;
 
-public class Attachment {
+import java.io.Serializable;
+
+public class Attachment implements Serializable {
 
     private final String fileName;
 
