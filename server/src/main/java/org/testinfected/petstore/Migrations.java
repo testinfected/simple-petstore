@@ -43,9 +43,9 @@ public class Migrations {
     }
 
     public static void main(String... args) throws Exception {
-        Environment env = Environment.load(args[ENVIRONMENT]);
+        Settings settings = new Settings(Environment.load(args[ENVIRONMENT]));
 
-        DataSource dataSource = new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword);
+        DataSource dataSource = new DriverManagerDataSource(settings.databaseUrl, settings.databaseUsername, settings.databasePassword);
         Migrations migrations = new Migrations(dataSource);
         String action = args[ACTION];
         if (action.equals("migrate")) migrations.migrate();

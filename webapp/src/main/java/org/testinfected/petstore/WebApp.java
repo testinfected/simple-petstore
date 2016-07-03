@@ -1,12 +1,14 @@
 package org.testinfected.petstore;
 
 import com.vtence.molecule.Application;
+import com.vtence.molecule.MiddlewareStack;
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
 import com.vtence.molecule.middlewares.ConnectionScope;
+import com.vtence.molecule.middlewares.FilterMap;
+import com.vtence.molecule.middlewares.Layout;
 import com.vtence.molecule.middlewares.Router;
 import com.vtence.molecule.routing.DynamicRoutes;
-import org.testinfected.petstore.controllers.ProceedToCheckout;
 import org.testinfected.petstore.controllers.CreateCartItem;
 import org.testinfected.petstore.controllers.CreateItem;
 import org.testinfected.petstore.controllers.CreateProduct;
@@ -14,6 +16,7 @@ import org.testinfected.petstore.controllers.ListItems;
 import org.testinfected.petstore.controllers.ListProducts;
 import org.testinfected.petstore.controllers.Logout;
 import org.testinfected.petstore.controllers.PlaceOrder;
+import org.testinfected.petstore.controllers.ProceedToCheckout;
 import org.testinfected.petstore.controllers.ShowCart;
 import org.testinfected.petstore.controllers.ShowOrder;
 import org.testinfected.petstore.controllers.StaticView;
@@ -34,15 +37,18 @@ import org.testinfected.petstore.transaction.Transactor;
 import org.testinfected.petstore.util.BundledMessages;
 import org.testinfected.petstore.util.FileSystemPhotoStore;
 
+import java.io.File;
 import java.sql.Connection;
 import java.util.ResourceBundle;
 
-public class Routing implements Application {
+public class WebApp implements Application {
 
     private final Pages pages;
+    private final PageStyles styles;
 
-    public Routing(final Pages pages) {
-        this.pages = pages;
+    public WebApp(final File webRoot) {
+        this.pages = new Pages(new File(webRoot, "views/pages"));
+        this.styles = new PageStyles(new File(webRoot, "views/layouts"));
     }
 
     public void handle(final Request request, final Response response) throws Exception {
@@ -71,6 +77,9 @@ public class Routing implements Application {
             map("/").to(new StaticView(pages.home()));
         }});
 
-        router.handle(request, response);
+        new MiddlewareStack() {{
+            use(new FilterMap().map("/", Layout.html(new PageDecorator(styles.main()))));
+            run(router);
+        }}.handle(request, response);
     }
 }

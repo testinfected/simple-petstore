@@ -1,14 +1,11 @@
 package test.integration.org.testinfected.petstore;
 
 import com.vtence.molecule.FailureReporter;
-import com.vtence.molecule.WebServer;
 import com.vtence.molecule.testing.http.Form;
 import com.vtence.molecule.testing.http.HttpRequest;
 import com.vtence.molecule.testing.http.HttpResponse;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
-import org.jmock.States;
-import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.jmock.lib.action.CustomAction;
@@ -17,7 +14,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.testinfected.petstore.Environment;
 import org.testinfected.petstore.PetStore;
+import org.testinfected.petstore.Settings;
 import org.testinfected.petstore.db.ItemsDatabase;
 import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.ProductsDatabase;
@@ -31,14 +30,13 @@ import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import test.support.org.testinfected.petstore.web.LogFile;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import static com.vtence.molecule.testing.http.HttpResponseAssert.assertThat;
 import static java.util.concurrent.TimeUnit.MINUTES;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.fail;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
@@ -54,16 +52,12 @@ public class PetStoreTest {
     }};
 
     FailureReporter failureReporter = context.mock(FailureReporter.class);
-    DataSource dataSource = context.mock(DataSource.class);
-    PetStore petstore = new PetStore(WebRoot.locate(), dataSource);
-
-    States system = context.states("system").startsAs("up");
+    PetStore petstore = new PetStore("localhost", 9999);
     Database database = Database.in(TestDatabaseEnvironment.load());
     Connection connection = database.connect();
 
     LogFile logFile;
-    WebServer server = WebServer.create("localhost", 9999);
-    HttpRequest request = new HttpRequest(server.uri().getPort());
+    HttpRequest request = new HttpRequest(petstore.uri().getPort());
     HttpResponse response;
 
     Exception error;
@@ -71,32 +65,24 @@ public class PetStoreTest {
     @Before
     public void
     startServer() throws Exception {
-        context.checking(new Expectations() {{
-            allowing(dataSource).getConnection(); will(openConnection());
-                when(system.is("up"));
-            allowing(dataSource).getConnection(); will(throwException(new SQLException("Database is down")));
-                when(system.isNot("up"));
-        }});
         database.clean();
-
         logFile = LogFile.create();
-        petstore.logging(Logging.toFile(logFile.path()));
+        petstore.logTo(Logging.toFile(logFile.path()));
         petstore.sessionTimeout(SESSION_TIMEOUT);
 
         context.checking(new Expectations() {{
             allowing(failureReporter).errorOccurred(with(any(Exception.class))); will(captureInternalError());
-                when(system.is("up"));
         }});
 
         petstore.reportErrorsTo(failureReporter);
-        petstore.start(server);
+        petstore.start(WebRoot.locate(), new Settings(Environment.test()));
     }
 
     @After
     public void
     stopServer() throws Exception {
         connection.close();
-        server.stop();
+        petstore.stop();
         logFile.clear();
     }
 
@@ -151,7 +137,7 @@ public class PetStoreTest {
 
         assertOK();
         assertThat(response).hasBodyText(layoutHeader())
-                .isChunked();
+                            .isChunked();
     }
 
     @Test
@@ -179,21 +165,6 @@ public class PetStoreTest {
         response = request.get("/unrecognized/route");
         assertNotFound();
         assertThat(response).isNotChunked();
-    }
-
-    @Test
-    public void
-    renders500AndReportsFailureWhenSomethingGoesWrong() throws Exception {
-        system.become("down");
-        context.checking(new Expectations() {{
-            oneOf(failureReporter).errorOccurred(with(isA(SQLException.class)));
-                when(system.isNot("up"));
-        }});
-
-        response = request.get("/products");
-        assertThat(response).hasStatusCode(500)
-                            .hasBodyText(containsString("Database is down"))
-                            .isNotChunked();
     }
 
     @Test
@@ -260,14 +231,6 @@ public class PetStoreTest {
                 new ItemsDatabase(connection).add(each.build());
             }
         });
-    }
-
-    private Action openConnection() {
-        return new CustomAction("open connection") {
-            public Object invoke(Invocation invocation) throws Throwable {
-                return database.connect();
-            }
-        };
     }
 
     private CustomAction captureInternalError() {

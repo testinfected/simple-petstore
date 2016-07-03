@@ -1,13 +1,12 @@
 package org.testinfected.petstore;
 
 import com.vtence.cli.CLI;
-import com.vtence.molecule.WebServer;
-import com.vtence.tape.DriverManagerDataSource;
 import org.testinfected.petstore.util.Logging;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Properties;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 
@@ -43,8 +42,7 @@ public class Launcher {
     private final PrintStream out;
     private final CLI cli;
 
-    private WebServer server;
-    private PetStore app;
+    private PetStore server;
 
     public Launcher(PrintStream out) {
         this.out = out;
@@ -69,23 +67,19 @@ public class Launcher {
 
         String host = cli.get("-h");
         int port = cli.get("-p");
-        server = WebServer.create(host, port);
-
         String webRoot = cli.get("webroot");
-        Environment env = Environment.load(cli.get("-e"));
-        app = new PetStore(new File(webRoot),
-                                new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
+        Properties env = Environment.load(cli.get("-e"));
 
+        server = new PetStore(host, port);
         if (!cli.has("-q")) {
-            server.failureReporter(PlainErrorReporter.toStandardError());
-            app.reportErrorsTo(PlainErrorReporter.toStandardError());
-            app.logging(Logging.toConsole());
+            server.reportErrorsTo(PlainErrorReporter.toStandardError());
+            server.logTo(Logging.toConsole());
         }
 
         int timeout = cli.get("--timeout");
-        app.sessionTimeout(timeout);
+        server.sessionTimeout(timeout);
 
-        app.start(server);
+        server.start(new File(webRoot), new Settings(env));
         out.println("Launching " + server.uri());
         out.println("-> Serving files under " + webRoot);
         if (timeout > 0) {
@@ -96,7 +90,6 @@ public class Launcher {
     }
 
     public void stop() throws Exception {
-        app.stop();
         server.stop();
         out.println("Stopped.");
     }

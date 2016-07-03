@@ -30,8 +30,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
               project(:persistence).test.compile.target,
               project(:persistence).test.resources.target
 
-    test.with HAMCREST, :antlr_runtime, :guava, :cssselectors, :hamcrest_dom, :flyway, NO_LOG, :mysql,
-              :juniversalchardet, :molecule_test, SIMPLE, :tape
+    test.with HAMCREST, :antlr_runtime, :guava, :cssselectors, :hamcrest_dom, NO_LOG,
+              :molecule_test
     test.with transitive(artifacts(:nekohtml))
     test.using :properties => { 'web.root' => _(:src, :main, :content) }
 
@@ -41,7 +41,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   define 'server' do
     compile.with project(:domain), project(:persistence), project(:webapp), :cli, :flyway, :molecule, SIMPLE, :tape
 
-                 test.using :integration, :properties => {
+    test.using :integration, :properties => {
       'web.root' => project(:webapp).path_to(:src, :main, :content),
       'browser.driver' => 'remote',
       'browser.remote.url' => Buildr.settings.build['selenium']['server']['url'],
@@ -49,8 +49,12 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
       'browser.capability.name' => 'PetStore System Tests'
     }
 
-    test.with project(:webapp).test.compile.target
-    test.with :molecule_test, :jmustache, HAMCREST, :mysql, NO_LOG
+    test.with project(:domain).test.compile.target,
+              project(:persistence).test.compile.target,
+              project(:persistence).test.resources.target,
+              project(:webapp).test.compile.target
+
+    test.with :molecule_test, :jmustache, HAMCREST, :tape, :flyway, :mysql, NO_LOG, :juniversalchardet
     test.with transitive(artifacts(:selenium_firefox_driver, :selenium_ghost_driver, :windowlicker_web))
     integration.setup { selenium.run }
     integration.teardown { selenium.stop }

@@ -1,5 +1,6 @@
 package org.testinfected.petstore;
 
+import com.vtence.molecule.templating.JMustacheRenderer;
 import com.vtence.molecule.templating.Template;
 import com.vtence.molecule.templating.Templates;
 import org.testinfected.petstore.order.Cart;
@@ -8,12 +9,17 @@ import org.testinfected.petstore.views.AvailableItems;
 import org.testinfected.petstore.views.Checkout;
 import org.testinfected.petstore.views.Products;
 
+import java.io.File;
+
 public class Pages {
 
     private final Templates templates;
 
-    public Pages(Templates templates) {
-        this.templates = templates;
+    public Pages(File inDir) {
+        this.templates = new Templates(new JMustacheRenderer().encoding("utf-8")
+                                                              .fromDir(inDir)
+                                                              .defaultValue("")
+                                                              .extension("html"));
     }
 
     public View<Checkout> checkout() {
