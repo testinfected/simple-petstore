@@ -10,7 +10,7 @@ import java.util.TreeMap;
 public class ChoiceOfCreditCards implements Iterable<ChoiceOfCreditCards.Option> {
 
     // Sort options alphabetically
-    private final Map<String, Option> options = new TreeMap<String, Option>();
+    private final Map<String, Option> options = new TreeMap<>();
 
     public static ChoiceOfCreditCards all() {
         return from(CreditCardType.values());

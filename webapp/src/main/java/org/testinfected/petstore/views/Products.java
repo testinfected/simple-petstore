@@ -1,17 +1,14 @@
 package org.testinfected.petstore.views;
 
 import com.samskivert.mustache.Mustache;
-import com.samskivert.mustache.Template;
 import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.Product;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Products {
-    private final Collection<Product> products = new ArrayList<Product>();
+    private final Collection<Product> products = new ArrayList<>();
     private String keyword;
     private AttachmentStorage photos;
 
@@ -51,10 +48,6 @@ public class Products {
     }
 
     public Mustache.Lambda getPhotoUrl() {
-        return new Mustache.Lambda() {
-            public void execute(Template.Fragment frag, Writer out) throws IOException {
-                out.write(photos.getLocation(frag.execute()));
-            }
-        };
+        return (frag, out) -> out.write(photos.getLocation(frag.execute()));
     }
 }

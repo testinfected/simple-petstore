@@ -28,7 +28,6 @@ public class ListProducts implements Application {
         List<Product> found = productCatalog.findByKeyword(keyword);
         view.render(response, new Products().matching(keyword)
                                                     .add(found)
-                                                    .withPhotosIn(attachmentStorage)
-        );
+                                                    .withPhotosIn(attachmentStorage));
     }
 }

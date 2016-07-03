@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ScenarioContext {
 
-    private final Map<Object, Object> values = new HashMap<Object, Object>();
+    private final Map<Object, Object> values = new HashMap<>();
 
     public <T> void set(T value) {
         set(value.getClass(), value);

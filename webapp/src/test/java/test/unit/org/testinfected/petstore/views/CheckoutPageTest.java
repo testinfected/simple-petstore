@@ -17,15 +17,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
-import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasName;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.matches;
-import static org.testinfected.hamcrest.dom.DomMatchers.matchesInAnyOrder;
+import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
@@ -100,7 +92,8 @@ public class CheckoutPageTest {
         assertThat("payment information", checkoutPage, hasCheckoutForm(hasCreditCardDetails(CreditCardType.visa, "4111111111111111", "2015-10-10")));
     }
 
-    private Matcher<? super Element> hasCheckoutForm(Matcher<Element>... formMatchers) {
+    @SafeVarargs
+    private final Matcher<? super Element> hasCheckoutForm(Matcher<Element>... formMatchers) {
         return hasUniqueSelector("form#order", formMatchers);
     }
 
@@ -137,7 +130,8 @@ public class CheckoutPageTest {
         return hasSelectionList(hasName("card-type"));
     }
 
-    private Matcher<Element> hasSelectionList(final Matcher<Element>... dropDownMatchers) {
+    @SafeVarargs
+    private final Matcher<Element> hasSelectionList(final Matcher<Element>... dropDownMatchers) {
         return hasUniqueSelector("select", dropDownMatchers);
     }
 

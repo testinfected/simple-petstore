@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public class AvailableItems {
 
-    private final Collection<Item> items = new ArrayList<Item>();
+    private final Collection<Item> items = new ArrayList<>();
 
     public AvailableItems() {}
 
@@ -20,9 +20,7 @@ public class AvailableItems {
         return items;
     }
 
-    // JMustache does not understand standard bean properties
-    // todo submit a pull request
-    public boolean getNone() {
+    public boolean isNone() {
         return items.isEmpty();
     }
 

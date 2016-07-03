@@ -20,7 +20,7 @@ import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class ProceedToCheckoutTest {
-    MockView<Checkout> view = new MockView<Checkout>();
+    MockView<Checkout> view = new MockView<>();
     ProceedToCheckout checkout = new ProceedToCheckout(view);
 
     Request request = new Request();
@@ -32,7 +32,7 @@ public class ProceedToCheckoutTest {
         new Session().bind(request);
     }
 
-    @SuppressWarnings("unchecked") @Test public void
+    @Test public void
     rendersBillWithAmountOfCartGrandTotal() throws Exception {
         final BigDecimal total = new BigDecimal("324.98");
         storeInSession(aCart().containing(anItem().priced(total)));

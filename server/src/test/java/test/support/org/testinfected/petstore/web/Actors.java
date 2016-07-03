@@ -20,7 +20,7 @@ public class Actors {
     }
 
     public Administrator administrator() {
-        return new Administrator(context, new APIDriver(new HttpRequest(env.serverPort())));
+        return new Administrator(new APIDriver(new HttpRequest(env.serverPort())));
     }
 
     public Customer customer() {

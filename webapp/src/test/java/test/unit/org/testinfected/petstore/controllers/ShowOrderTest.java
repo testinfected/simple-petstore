@@ -20,7 +20,7 @@ public class ShowOrderTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     OrderBook orderBook = context.mock(OrderBook.class);
-    MockView<Order> view = new MockView<Order>();
+    MockView<Order> view = new MockView<>();
     ShowOrder showOrder = new ShowOrder(orderBook, view);
 
     Request request = new Request();

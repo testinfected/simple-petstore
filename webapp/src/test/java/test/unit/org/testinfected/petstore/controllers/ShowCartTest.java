@@ -16,7 +16,7 @@ import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem
 
 public class ShowCartTest {
 
-    MockView<Cart> view = new MockView<Cart>();
+    MockView<Cart> view = new MockView<>();
     ShowCart showCart = new ShowCart(view);
 
     Request request = new Request();
@@ -39,7 +39,7 @@ public class ShowCartTest {
     }
 
     private Matcher<Object> sameCartAs(Cart cart) {
-        return Matchers.<Object>sameInstance(cart);
+        return Matchers.sameInstance(cart);
     }
 
     private void storeInSession(Cart cart) {

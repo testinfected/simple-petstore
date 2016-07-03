@@ -30,14 +30,14 @@ public class ListProductsTest {
 
     ProductCatalog productCatalog = context.mock(ProductCatalog.class);
     AttachmentStorage photoLibrary = context.mock(AttachmentStorage.class);
-    MockView<Products> view = new MockView<Products>();
+    MockView<Products> view = new MockView<>();
     ListProducts listProducts = new ListProducts(productCatalog, photoLibrary, view);
 
     Request request = new Request();
     Response response = new Response();
 
     String keyword = "dogs";
-    List<Product> searchResults = new ArrayList<Product>();
+    List<Product> searchResults = new ArrayList<>();
 
     @Before public void
     addSearchKeywordToRequest() {
@@ -49,7 +49,6 @@ public class ListProductsTest {
         view.assertRenderedTo(response);
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     rendersProductsInCatalogMatchingKeyword() throws Exception {
         searchYields(
@@ -74,7 +73,8 @@ public class ListProductsTest {
         return hasProperty("each", equalTo(results));
     }
 
-    private void searchYields(final Builder<Product>... products) {
+    @SafeVarargs
+    private final void searchYields(final Builder<Product>... products) {
         this.searchResults.addAll(build(products));
 
         context.checking(new Expectations() {{

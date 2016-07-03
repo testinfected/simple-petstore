@@ -9,7 +9,7 @@ import java.util.Set;
 
 public abstract class Form {
 
-    private final Set<ConstraintViolation<?>> violations = new HashSet<ConstraintViolation<?>>();
+    private final Set<ConstraintViolation<?>> violations = new HashSet<>();
 
     public boolean validate(Validator validator) {
         violations.addAll(validator.validate(this));

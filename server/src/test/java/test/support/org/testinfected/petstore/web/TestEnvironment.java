@@ -15,11 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -73,7 +69,7 @@ public class TestEnvironment {
     }
 
     private Capabilities browserCapabilities() {
-        Map<String, Object> capabilities = new HashMap<String, Object>();
+        Map<String, Object> capabilities = new HashMap<>();
         for (String property : properties.stringPropertyNames()) {
             if (isCapability(property)) {
                 capabilities.put(capabilityName(property), toCapability(getString(property)));
@@ -107,7 +103,7 @@ public class TestEnvironment {
     }
 
     private String[] eliminateBlanks(String... capabilities) {
-        List<String> meaningful = new ArrayList<String>();
+        List<String> meaningful = new ArrayList<>();
         for (String cap : capabilities) {
             if (!isBlank(cap)) meaningful.add(cap);
         }

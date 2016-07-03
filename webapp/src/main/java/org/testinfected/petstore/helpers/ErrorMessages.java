@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class ErrorMessages {
 
-    private final Map<String, Set<String>> errors = new HashMap<String, Set<String>>();
+    private final Map<String, Set<String>> errors = new HashMap<>();
 
     public void add(String path, String message) {
         at(path).add(message);
@@ -18,11 +18,11 @@ public class ErrorMessages {
     }
 
     public Map<String, Set<String>> all() {
-        return new HashMap<String, Set<String>>(errors);
+        return new HashMap<>(errors);
     }
 
     public Set<String> at(String path) {
-        if (!errors.containsKey(path)) errors.put(path, new HashSet<String>());
+        if (!errors.containsKey(path)) errors.put(path, new HashSet<>());
         return errors.get(path);
     }
 

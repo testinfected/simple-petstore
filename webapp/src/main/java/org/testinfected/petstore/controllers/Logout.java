@@ -9,7 +9,7 @@ public class Logout implements Application {
 
     public void handle(Request request, Response response) {
         Session session = Session.get(request);
-        if ( session != null) session.invalidate();
+        if (session != null) session.invalidate();
         response.redirectTo("/").done();
     }
 }

@@ -17,11 +17,9 @@ import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ItemNumber;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
-import static org.junit.Assert.assertThat;
 import static com.vtence.molecule.testing.ResponseAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 
 public class CreateCartItemTest {
@@ -40,7 +38,7 @@ public class CreateCartItemTest {
         new Session().bind(request);
     }
 
-    @SuppressWarnings("unchecked") @Test public void
+    @Test public void
     createsCartAndAddsItemToCartBeforeRedirectingToCartPage() throws Exception {
         request.addParameter("item-number", itemNumber);
         final Item item = anItem().withNumber(itemNumber).build();
@@ -66,17 +64,19 @@ public class CreateCartItemTest {
         return session().get(Cart.class);
     }
 
-    private Matcher<Iterable<CartItem>> containsItems(Matcher<? super CartItem>... cartItemMatchers) {
+    @SafeVarargs
+    private final Matcher<Iterable<CartItem>> containsItems(Matcher<? super CartItem>... cartItemMatchers) {
         return hasItems(cartItemMatchers);
     }
 
-    private Matcher<CartItem> itemWith(Matcher<CartItem>... itemMatchers) {
+    @SafeVarargs
+    private final Matcher<CartItem> itemWith(Matcher<CartItem>... itemMatchers) {
         return allOf(itemMatchers);
     }
 
     private Matcher<CartItem> quantity(int count) {
         return new FeatureMatcher<CartItem, Integer>(equalTo(count), "an item with quantity", "item quantity") {
-            @Override protected Integer featureValueOf(CartItem actual) {
+            protected Integer featureValueOf(CartItem actual) {
                 return actual.getQuantity();
             }
         };
@@ -84,7 +84,7 @@ public class CreateCartItemTest {
 
     private Matcher<CartItem> number(String number) {
         return new FeatureMatcher<CartItem, String>(equalTo(number), "an item with number", "item number") {
-            @Override protected String featureValueOf(CartItem actual) {
+            protected String featureValueOf(CartItem actual) {
                 return actual.getItemNumber();
             }
         };

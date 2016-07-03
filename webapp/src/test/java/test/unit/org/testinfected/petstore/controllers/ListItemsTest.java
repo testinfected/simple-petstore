@@ -29,13 +29,13 @@ public class ListItemsTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     ItemInventory itemInventory = context.mock(ItemInventory.class);
-    MockView<AvailableItems> view = new MockView<AvailableItems>();
+    MockView<AvailableItems> view = new MockView<>();
     ListItems listItems = new ListItems(itemInventory, view);
 
     Request request = new Request();
     Response response = new Response();
 
-    List<Item> items = new ArrayList<Item>();
+    List<Item> items = new ArrayList<>();
     String productNumber = "LAB-1234";
 
     @Before public void
@@ -60,7 +60,8 @@ public class ListItemsTest {
         return hasProperty("each", equalTo(items));
     }
 
-    private void searchYields(final Builder<Item>... results) {
+    @SafeVarargs
+    private final void searchYields(final Builder<Item>... results) {
         this.items.addAll(build(results));
 
         context.checking(new Expectations() {{

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class PlainPage {
 
-    private final Map<String, String> elements = new HashMap<String, String>();
+    private final Map<String, String> elements = new HashMap<>();
     private Cart cart = new Cart();
 
     public PlainPage withCart(Cart cart) {

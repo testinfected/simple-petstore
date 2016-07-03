@@ -72,7 +72,7 @@ public class Launcher {
         server = new SimpleServer(host, port);
 
         String webRoot = cli.get("webroot");
-        Environment env = Environment.load(cli.<String>get("-e"));
+        Environment env = Environment.load(cli.get("-e"));
         app = new PetStore(new File(webRoot),
                                 new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
 

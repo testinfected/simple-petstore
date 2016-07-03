@@ -25,12 +25,8 @@ import test.support.org.testinfected.petstore.web.MockView;
 import java.math.BigDecimal;
 import java.util.ResourceBundle;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static com.vtence.molecule.testing.ResponseAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
@@ -39,7 +35,7 @@ public class PlaceOrderTest {
     @Rule public JUnitRuleMockery context = new JUnitRuleMockery();
 
     SalesAssistant salesAssistant = context.mock(SalesAssistant.class);
-    MockView<Checkout> view = new MockView<Checkout>();
+    MockView<Checkout> view = new MockView<>();
     Messages messages = new BundledMessages(ResourceBundle.getBundle("ValidationMessages"));
 
     PlaceOrder placeOrder = new PlaceOrder(salesAssistant, view, messages);
@@ -72,7 +68,7 @@ public class PlaceOrderTest {
         assertThat(response).isRedirectedTo("/orders/" + orderNumber).isDone();
     }
 
-    @SuppressWarnings("unchecked") @Test public void
+    @Test public void
     rejectsOrderAndRendersBillWhenPaymentDetailsAreInvalid() throws Exception {
         final BigDecimal total = new BigDecimal("324.98");
         storeInSession(aCart().containing(anItem().priced(total)).build());
@@ -108,7 +104,8 @@ public class PlaceOrderTest {
                 hasProperty("email", equalTo(payment.getEmail())));
     }
 
-    private Matcher<Object> billWithErrors(Matcher<? super ErrorMessages>... messages) {
+    @SafeVarargs
+    private final Matcher<Object> billWithErrors(Matcher<? super ErrorMessages>... messages) {
         return hasProperty("errorMessages", allOf(messages));
     }
 

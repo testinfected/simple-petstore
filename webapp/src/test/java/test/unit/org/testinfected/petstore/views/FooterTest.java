@@ -7,11 +7,7 @@ import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasChildren;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
+import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class FooterTest {
@@ -32,7 +28,8 @@ public class FooterTest {
                 anElement(hasTag("button")))));
     }
 
-    private Matcher<Element> hasLogoutForm(Matcher<Element>... formMatchers) {
+    @SafeVarargs
+    private final Matcher<Element> hasLogoutForm(Matcher<Element>... formMatchers) {
         return hasSelector("#logout-box form", formMatchers);
     }
 }
