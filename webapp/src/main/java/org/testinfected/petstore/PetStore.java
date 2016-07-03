@@ -1,22 +1,8 @@
 package org.testinfected.petstore;
 
 import com.vtence.molecule.FailureReporter;
-import com.vtence.molecule.MiddlewareStack;
-import com.vtence.molecule.Server;
-import com.vtence.molecule.middlewares.ApacheCommonLogger;
-import com.vtence.molecule.middlewares.ConnectionScope;
-import com.vtence.molecule.middlewares.ContentLengthHeader;
-import com.vtence.molecule.middlewares.Cookies;
-import com.vtence.molecule.middlewares.CookieSessionTracker;
-import com.vtence.molecule.middlewares.DateHeader;
-import com.vtence.molecule.middlewares.Failsafe;
-import com.vtence.molecule.middlewares.FailureMonitor;
-import com.vtence.molecule.middlewares.FileServer;
-import com.vtence.molecule.middlewares.FilterMap;
-import com.vtence.molecule.middlewares.HttpMethodOverride;
-import com.vtence.molecule.middlewares.Layout;
-import com.vtence.molecule.middlewares.ServerHeader;
-import com.vtence.molecule.middlewares.StaticAssets;
+import com.vtence.molecule.WebServer;
+import com.vtence.molecule.middlewares.*;
 import com.vtence.molecule.session.PeriodicSessionHouseKeeping;
 import com.vtence.molecule.session.SecureIdentifierPolicy;
 import com.vtence.molecule.session.SessionPool;
@@ -67,22 +53,20 @@ public class PetStore {
         this.timeout = seconds;
     }
 
-    public void start(Server server) throws IOException {
-        server.run(new MiddlewareStack() {{
-            use(new ApacheCommonLogger(logger));
-            use(new ServerHeader(NAME));
-            use(new DateHeader());
-            use(new ContentLengthHeader());
-            use(new Failsafe());
-            use(new FailureMonitor(failureReporter));
-            use(new HttpMethodOverride());
-            use(staticAssets());
-            use(new Cookies());
-            use(new CookieSessionTracker(createSessionPool(timeout)).expireAfter(timeout));
-            use(new FilterMap().map("/", Layout.html(new SiteLayout(layoutTemplate()))));
-            use(new ConnectionScope(dataSource));
-            run(new Routing(new Pages(pageTemplates())));
-        }});
+    public void start(WebServer server) throws IOException {
+        server.add(new ApacheCommonLogger(logger))
+              .add(new ServerHeader(NAME))
+              .add(new DateHeader())
+              .add(new ContentLengthHeader())
+              .add(new Failsafe())
+              .add(new FailureMonitor(failureReporter))
+              .add(new HttpMethodOverride())
+              .add(staticAssets())
+              .add(new Cookies())
+              .add(new CookieSessionTracker(createSessionPool(timeout)).expireAfter(timeout))
+              .filter("/", Layout.html(new SiteLayout(layoutTemplate())))
+              .add(new ConnectionScope(dataSource))
+              .start(new Routing(new Pages(pageTemplates())));
     }
 
     public void stop() {

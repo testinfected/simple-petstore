@@ -1,7 +1,7 @@
 package test.integration.org.testinfected.petstore;
 
 import com.vtence.molecule.FailureReporter;
-import com.vtence.molecule.servers.SimpleServer;
+import com.vtence.molecule.WebServer;
 import com.vtence.molecule.testing.http.Form;
 import com.vtence.molecule.testing.http.HttpRequest;
 import com.vtence.molecule.testing.http.HttpResponse;
@@ -38,9 +38,7 @@ import java.sql.SQLException;
 
 import static com.vtence.molecule.testing.http.HttpResponseAssert.assertThat;
 import static java.util.concurrent.TimeUnit.MINUTES;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.isA;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.fail;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
@@ -64,8 +62,8 @@ public class PetStoreTest {
     Connection connection = database.connect();
 
     LogFile logFile;
-    SimpleServer server = new SimpleServer("localhost", 9999);
-    HttpRequest request = new HttpRequest(server.port());
+    WebServer server = WebServer.create("localhost", 9999);
+    HttpRequest request = new HttpRequest(server.uri().getPort());
     HttpResponse response;
 
     Exception error;
@@ -98,7 +96,7 @@ public class PetStoreTest {
     public void
     stopServer() throws Exception {
         connection.close();
-        server.shutdown();
+        server.stop();
         logFile.clear();
     }
 

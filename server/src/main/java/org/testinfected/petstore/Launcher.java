@@ -1,7 +1,7 @@
 package org.testinfected.petstore;
 
 import com.vtence.cli.CLI;
-import com.vtence.molecule.servers.SimpleServer;
+import com.vtence.molecule.WebServer;
 import com.vtence.tape.DriverManagerDataSource;
 import org.testinfected.petstore.util.Logging;
 
@@ -43,7 +43,7 @@ public class Launcher {
     private final PrintStream out;
     private final CLI cli;
 
-    private SimpleServer server;
+    private WebServer server;
     private PetStore app;
 
     public Launcher(PrintStream out) {
@@ -69,7 +69,7 @@ public class Launcher {
 
         String host = cli.get("-h");
         int port = cli.get("-p");
-        server = new SimpleServer(host, port);
+        server = WebServer.create(host, port);
 
         String webRoot = cli.get("webroot");
         Environment env = Environment.load(cli.get("-e"));
@@ -77,7 +77,7 @@ public class Launcher {
                                 new DriverManagerDataSource(env.databaseUrl, env.databaseUsername, env.databasePassword));
 
         if (!cli.has("-q")) {
-            server.reportErrorsTo(PlainErrorReporter.toStandardError());
+            server.failureReporter(PlainErrorReporter.toStandardError());
             app.reportErrorsTo(PlainErrorReporter.toStandardError());
             app.logging(Logging.toConsole());
         }
@@ -86,7 +86,7 @@ public class Launcher {
         app.sessionTimeout(timeout);
 
         app.start(server);
-        out.println("Launching http://" + server.host() + (server.port() != 80 ? ":" + server.port() : ""));
+        out.println("Launching " + server.uri());
         out.println("-> Serving files under " + webRoot);
         if (timeout > 0) {
             out.println("-> Sessions expire after " + timeout + " seconds");
@@ -97,7 +97,7 @@ public class Launcher {
 
     public void stop() throws Exception {
         app.stop();
-        server.shutdown();
+        server.stop();
         out.println("Stopped.");
     }
 
