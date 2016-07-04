@@ -17,7 +17,15 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
-import static org.testinfected.hamcrest.dom.DomMatchers.*;
+import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasName;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
+import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
+import static org.testinfected.hamcrest.dom.DomMatchers.matches;
+import static org.testinfected.hamcrest.dom.DomMatchers.matchesInAnyOrder;
 import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
@@ -142,7 +150,7 @@ public class CheckoutPageTest {
     @SuppressWarnings("unchecked")
     private Matcher<Element> hasSelectedCardType(CreditCardType cardType) {
         return hasSelectionList(
-                hasName("card-type"), hasUniqueSelector("option:selected", hasAttribute("value", cardType.name())));
+                hasName("card-type"), hasUniqueSelector("option[selected]", hasAttribute("value", cardType.name())));
     }
 
     @SuppressWarnings("unchecked")
