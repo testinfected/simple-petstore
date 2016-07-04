@@ -30,8 +30,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
               project(:persistence).test.compile.target,
               project(:persistence).test.resources.target
 
-    test.with HAMCREST, :antlr_runtime, :guava, :cssselectors, :hamcrest_dom, NO_LOG,
-              :molecule_test
+    test.with HAMCREST, :cssselectors, :hamcrest_dom, :molecule_test, NO_LOG,
     test.with transitive(artifacts(:nekohtml))
     test.using :properties => { 'web.root' => _(:src, :main, :content) }
 
