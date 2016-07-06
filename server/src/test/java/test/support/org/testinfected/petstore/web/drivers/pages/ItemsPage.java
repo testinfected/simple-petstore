@@ -1,6 +1,6 @@
 package test.support.org.testinfected.petstore.web.drivers.pages;
 
-import com.objogate.wl.web.AsyncWebDriver;
+import com.vtence.mario.BrowserDriver;
 import org.openqa.selenium.By;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -9,14 +9,14 @@ import static org.openqa.selenium.By.id;
 
 public class ItemsPage extends Page {
 
-    public ItemsPage(AsyncWebDriver browser) {
+    public ItemsPage(BrowserDriver browser) {
         super(browser);
     }
 
 	public ItemsPage displaysItem(String number, String description, String price) {
-        browser.element(itemNumber(number)).assertText(equalTo(number));
-        browser.element(itemDescription(number)).assertText(equalTo(description));
-        browser.element(itemPrice(number)).assertText(equalTo(price));
+        browser.element(itemNumber(number)).hasText(equalTo(number));
+        browser.element(itemDescription(number)).hasText(equalTo(description));
+        browser.element(itemPrice(number)).hasText(equalTo(price));
         return this;
 	}
 
@@ -33,7 +33,7 @@ public class ItemsPage extends Page {
     }
 
     public ItemsPage showsNoItemAvailable() {
-        browser.element(id("out-of-stock")).assertExists();
+        browser.element(id("out-of-stock")).exists();
         return this;
     }
 

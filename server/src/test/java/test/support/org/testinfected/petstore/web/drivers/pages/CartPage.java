@@ -1,6 +1,6 @@
 package test.support.org.testinfected.petstore.web.drivers.pages;
 
-import com.objogate.wl.web.AsyncWebDriver;
+import com.vtence.mario.BrowserDriver;
 import org.openqa.selenium.By;
 
 import static java.lang.String.valueOf;
@@ -11,19 +11,19 @@ import static org.openqa.selenium.By.id;
 
 public class CartPage extends Page {
 
-    public CartPage(AsyncWebDriver browser) {
+    public CartPage(BrowserDriver browser) {
         super(browser);
     }
 
     public void showsItem(String itemNumber, String itemDescription, String unitPrice, int quantity, String totalPrice) {
-        browser.element(cellShowingNameOf(itemNumber)).assertText(containsString(itemDescription));
-        browser.element(cellShowingPriceOf(itemNumber)).assertText(equalTo(unitPrice));
-        browser.element(cellShowingQuantityOf(itemNumber)).assertText(equalTo(valueOf(quantity)));
-        browser.element(cellShowingTotalFor(itemNumber)).assertText(equalTo(totalPrice));
+        browser.element(cellShowingNameOf(itemNumber)).hasText(containsString(itemDescription));
+        browser.element(cellShowingPriceOf(itemNumber)).hasText(equalTo(unitPrice));
+        browser.element(cellShowingQuantityOf(itemNumber)).hasText(equalTo(valueOf(quantity)));
+        browser.element(cellShowingTotalFor(itemNumber)).hasText(equalTo(totalPrice));
     }
 
     public CartPage showsGrandTotal(String price) {
-        browser.element(id("cart-grand-total")).assertText(equalTo(price));
+        browser.element(id("cart-grand-total")).hasText(equalTo(price));
         return this;
     }
 

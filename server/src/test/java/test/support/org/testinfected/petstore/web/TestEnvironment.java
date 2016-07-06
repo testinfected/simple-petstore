@@ -1,8 +1,7 @@
 package test.support.org.testinfected.petstore.web;
 
-import com.objogate.wl.UnsynchronizedProber;
-import com.objogate.wl.web.AsyncWebDriver;
-import com.vtence.molecule.testing.http.HttpRequest;
+import com.vtence.mario.BrowserDriver;
+import com.vtence.mario.UnsynchronizedProber;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import test.support.org.testinfected.petstore.web.drivers.browsers.Browser;
@@ -15,7 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import static java.lang.Integer.parseInt;
 
@@ -114,12 +117,8 @@ public class TestEnvironment {
         return value.trim().isEmpty();
     }
 
-    public AsyncWebDriver fireBrowser() {
-        return new AsyncWebDriver(new UnsynchronizedProber(), this.browser.launch());
-    }
-
-    public HttpRequest api() {
-        return new HttpRequest(serverPort());
+    public BrowserDriver fireBrowser() {
+        return new BrowserDriver(new UnsynchronizedProber(2000, 50), this.browser.launch());
     }
 
     public int serverPort() {

@@ -1,12 +1,12 @@
 package test.support.org.testinfected.petstore.web.drivers.pages;
 
-import com.objogate.wl.web.AsyncWebDriver;
+import com.vtence.mario.BrowserDriver;
 
 public abstract class Page {
 
-    protected final AsyncWebDriver browser;
+    protected final BrowserDriver browser;
 
-    protected Page(AsyncWebDriver browser) {
+    protected Page(BrowserDriver browser) {
         this.browser = browser;
     }
 }

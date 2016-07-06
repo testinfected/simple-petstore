@@ -1,6 +1,6 @@
 package test.support.org.testinfected.petstore.web.drivers.pages;
 
-import com.objogate.wl.web.AsyncWebDriver;
+import com.vtence.mario.BrowserDriver;
 import org.openqa.selenium.By;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -9,12 +9,12 @@ import static org.openqa.selenium.By.id;
 
 public class CheckoutPage extends Page {
 
-    public CheckoutPage(AsyncWebDriver browser) {
+    public CheckoutPage(BrowserDriver browser) {
         super(browser);
     }
 
     public CheckoutPage showsTotalToPay(String amount) {
-        browser.element(id("cart-grand-total")).assertText(equalTo(amount));
+        browser.element(id("cart-grand-total")).hasText(equalTo(amount));
         return this;
     }
 
@@ -37,7 +37,7 @@ public class CheckoutPage extends Page {
     }
 
     public ReceiptPage confirm() {
-        browser.element(id("order")).submit();
+        browser.element(cssSelector("#order button[type=submit]")).click();
         return new ReceiptPage(browser);
     }
 

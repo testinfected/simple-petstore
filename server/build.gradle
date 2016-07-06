@@ -23,7 +23,7 @@ dependencies {
         exclude module: 'selenium-java'
         exclude module: 'selenium-server'
     }
-    testCompile libs.windowlicker
+    testCompile libs.mario
 }
 
 test {

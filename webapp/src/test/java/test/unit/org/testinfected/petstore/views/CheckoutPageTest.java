@@ -152,11 +152,11 @@ public class CheckoutPageTest {
     }
 
     private Matcher<Element> hasSubmitButton() {
-        return hasUniqueSelector("button.confirm");
+        return hasUniqueSelector("button[type=submit].confirm");
     }
 
     private Matcher<Iterable<Element>> hasCreditCardOptions() {
-        List<Matcher<? super Element>> matchers = new ArrayList<Matcher<? super Element>>();
+        List<Matcher<? super Element>> matchers = new ArrayList<>();
         for (CreditCardType type : CreditCardType.values()) {
             matchers.add(hasOption(type.name(), type.commonName()));
         }
