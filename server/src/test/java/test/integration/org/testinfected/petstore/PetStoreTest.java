@@ -20,13 +20,12 @@ import org.testinfected.petstore.Settings;
 import org.testinfected.petstore.db.ItemsDatabase;
 import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.ProductsDatabase;
+import org.testinfected.petstore.lib.Logging;
 import org.testinfected.petstore.product.Product;
-import org.testinfected.petstore.util.Logging;
 import test.support.org.testinfected.petstore.StackTrace;
 import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.builders.ProductBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
-import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 import test.support.org.testinfected.petstore.web.LogFile;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
@@ -53,7 +52,7 @@ public class PetStoreTest {
 
     FailureReporter failureReporter = context.mock(FailureReporter.class);
     PetStore petstore = new PetStore("localhost", 9999);
-    Database database = Database.in(TestDatabaseEnvironment.load());
+    Database database = Database.test();
     Connection connection = database.connect();
 
     LogFile logFile;

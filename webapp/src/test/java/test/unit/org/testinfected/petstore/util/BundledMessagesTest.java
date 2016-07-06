@@ -1,7 +1,7 @@
 package test.unit.org.testinfected.petstore.util;
 
 import org.junit.Test;
-import org.testinfected.petstore.util.BundledMessages;
+import org.testinfected.petstore.lib.BundledMessages;
 
 import java.time.Instant;
 import java.util.Date;

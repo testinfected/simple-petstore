@@ -25,6 +25,8 @@ import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.OrderNumberDatabaseSequence;
 import org.testinfected.petstore.db.OrdersDatabase;
 import org.testinfected.petstore.db.ProductsDatabase;
+import org.testinfected.petstore.lib.BundledMessages;
+import org.testinfected.petstore.lib.FileSystemPhotoStore;
 import org.testinfected.petstore.order.Cashier;
 import org.testinfected.petstore.order.OrderBook;
 import org.testinfected.petstore.order.OrderNumberSequence;
@@ -34,8 +36,6 @@ import org.testinfected.petstore.product.AttachmentStorage;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.transaction.Transactor;
-import org.testinfected.petstore.util.BundledMessages;
-import org.testinfected.petstore.util.FileSystemPhotoStore;
 
 import java.io.File;
 import java.sql.Connection;

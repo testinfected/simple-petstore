@@ -1,12 +1,12 @@
 package org.testinfected.petstore;
 
 import com.vtence.cli.CLI;
-import org.testinfected.petstore.util.Logging;
+import org.testinfected.petstore.lib.Configuration;
+import org.testinfected.petstore.lib.Logging;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Properties;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 
@@ -68,7 +68,7 @@ public class Launcher {
         String host = cli.get("-h");
         int port = cli.get("-p");
         String webRoot = cli.get("webroot");
-        Properties env = Environment.load(cli.get("-e"));
+        Configuration config = Environment.load(cli.get("-e"));
 
         server = new PetStore(host, port);
         if (!cli.has("-q")) {
@@ -79,7 +79,7 @@ public class Launcher {
         int timeout = cli.get("--timeout");
         server.sessionTimeout(timeout);
 
-        server.start(new File(webRoot), new Settings(env));
+        server.start(new File(webRoot), new Settings(config));
         out.println("Launching " + server.uri());
         out.println("-> Serving files under " + webRoot);
         if (timeout > 0) {

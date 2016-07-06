@@ -1,6 +1,5 @@
 package test.support.org.testinfected.petstore.jdbc;
 
-import com.vtence.tape.DriverManagerDataSource;
 import com.vtence.tape.JDBCException;
 import org.testinfected.petstore.db.DatabaseCleaner;
 
@@ -14,12 +13,12 @@ public class Database {
     private final DataSource dataSource;
     private final DatabaseCleaner cleaner;
 
-    public static Database in(TestDatabaseEnvironment env) {
-        return new Database(env.url, env.username, env.password);
+    public static Database test() {
+        return new Database(DataSources.local());
     }
 
-    public Database(String url, String username, String password) {
-        this.dataSource = new DriverManagerDataSource(url, username, password);
+    public Database(DataSource dataSource) {
+        this.dataSource = dataSource;
         this.migrator = new DatabaseMigrator(dataSource);
         this.cleaner = new DatabaseCleaner(dataSource);
     }

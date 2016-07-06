@@ -13,11 +13,11 @@ import org.junit.Test;
 import org.testinfected.petstore.Environment;
 import org.testinfected.petstore.PetStore;
 import org.testinfected.petstore.Settings;
+import org.testinfected.petstore.lib.Configuration;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Properties;
 
 import static com.vtence.molecule.testing.http.HttpResponseAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -60,8 +60,8 @@ public class RobustnessTest {
     }
 
     private Settings invalidDatabaseSettings() throws IOException {
-        Properties props = Environment.test();
-        props.setProperty("jdbc.username", "bad username");
-        return new Settings(props);
+        Configuration configuration = Environment.test();
+        configuration.set("jdbc.username", "bad username");
+        return new Settings(configuration);
     }
 }

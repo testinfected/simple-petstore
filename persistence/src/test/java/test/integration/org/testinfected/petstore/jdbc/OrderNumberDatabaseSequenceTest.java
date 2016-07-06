@@ -9,7 +9,6 @@ import org.testinfected.petstore.db.OrderNumberDatabaseSequence;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.OrderNumberSequence;
 import test.support.org.testinfected.petstore.jdbc.Database;
-import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,7 +18,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class OrderNumberDatabaseSequenceTest {
 
-    Database database = Database.in(TestDatabaseEnvironment.load());
+    Database database = Database.test();
     Connection connection = database.connect();
 
     OrderNumberSequence orderNumberSequence = new OrderNumberDatabaseSequence(connection);

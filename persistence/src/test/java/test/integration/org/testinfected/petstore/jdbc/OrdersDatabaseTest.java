@@ -15,7 +15,6 @@ import org.testinfected.petstore.transaction.QueryUnitOfWork;
 import org.testinfected.petstore.transaction.Transactor;
 import test.support.org.testinfected.petstore.builders.OrderBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
-import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -27,7 +26,11 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
@@ -37,7 +40,7 @@ import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasF
 
 public class OrdersDatabaseTest {
 
-    Database database = Database.in(TestDatabaseEnvironment.load());
+    Database database = Database.test();
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
     OrdersDatabase orderDatabase = new OrdersDatabase(connection);

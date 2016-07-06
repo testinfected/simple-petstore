@@ -1,4 +1,4 @@
-package org.testinfected.petstore.helpers;
+package org.testinfected.petstore.lib;
 
 import org.testinfected.petstore.Messages;
 import org.testinfected.petstore.validation.ConstraintViolation;

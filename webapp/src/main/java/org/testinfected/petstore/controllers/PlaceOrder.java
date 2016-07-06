@@ -5,10 +5,10 @@ import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
 import org.testinfected.petstore.Messages;
 import org.testinfected.petstore.View;
-import org.testinfected.petstore.helpers.PaymentForm;
+import org.testinfected.petstore.lib.PaymentForm;
+import org.testinfected.petstore.lib.SessionScope;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
-import org.testinfected.petstore.util.SessionScope;
 import org.testinfected.petstore.validation.Validator;
 import org.testinfected.petstore.views.Checkout;
 

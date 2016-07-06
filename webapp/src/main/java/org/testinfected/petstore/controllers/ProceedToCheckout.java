@@ -4,7 +4,7 @@ import com.vtence.molecule.Application;
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
 import org.testinfected.petstore.View;
-import org.testinfected.petstore.util.SessionScope;
+import org.testinfected.petstore.lib.SessionScope;
 import org.testinfected.petstore.views.Checkout;
 
 import java.math.BigDecimal;

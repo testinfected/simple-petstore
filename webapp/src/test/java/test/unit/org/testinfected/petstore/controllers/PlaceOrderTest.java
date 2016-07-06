@@ -14,11 +14,11 @@ import org.testinfected.petstore.Messages;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.PaymentMethod;
 import org.testinfected.petstore.controllers.PlaceOrder;
-import org.testinfected.petstore.helpers.ErrorMessages;
+import org.testinfected.petstore.lib.BundledMessages;
+import org.testinfected.petstore.lib.ErrorMessages;
 import org.testinfected.petstore.order.Cart;
 import org.testinfected.petstore.order.OrderNumber;
 import org.testinfected.petstore.order.SalesAssistant;
-import org.testinfected.petstore.util.BundledMessages;
 import org.testinfected.petstore.views.Checkout;
 import test.support.org.testinfected.petstore.web.MockView;
 
@@ -26,7 +26,11 @@ import java.math.BigDecimal;
 import java.util.ResourceBundle;
 
 import static com.vtence.molecule.testing.ResponseAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.validCreditCardDetails;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;

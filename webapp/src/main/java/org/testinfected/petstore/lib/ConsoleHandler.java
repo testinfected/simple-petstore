@@ -1,4 +1,4 @@
-package org.testinfected.petstore.util;
+package org.testinfected.petstore.lib;
 
 import java.io.OutputStream;
 import java.util.logging.LogRecord;

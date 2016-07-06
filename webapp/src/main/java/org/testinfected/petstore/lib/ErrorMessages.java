@@ -1,4 +1,4 @@
-package org.testinfected.petstore.helpers;
+package org.testinfected.petstore.lib;
 
 import java.util.HashMap;
 import java.util.HashSet;

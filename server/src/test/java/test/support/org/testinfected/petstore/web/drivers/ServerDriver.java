@@ -2,7 +2,7 @@ package test.support.org.testinfected.petstore.web.drivers;
 
 import org.testinfected.petstore.Launcher;
 import org.testinfected.petstore.Migrations;
-import test.support.org.testinfected.petstore.web.TestEnvironment;
+import test.support.org.testinfected.petstore.web.TestSettings;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,11 +24,11 @@ public class ServerDriver {
     private final ConsoleDriver console = new ConsoleDriver();
 
     public ServerDriver() {
-        this(TestEnvironment.load());
+        this(TestSettings.load());
     }
 
-    public ServerDriver(TestEnvironment env) {
-        this(env.serverPort(), env.webRoot());
+    public ServerDriver(TestSettings settings) {
+        this(settings.serverPort, settings.webRoot);
     }
 
     public ServerDriver(int port, File root) {

@@ -3,10 +3,10 @@ package org.testinfected.petstore.controllers;
 import com.vtence.molecule.Application;
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
+import org.testinfected.petstore.lib.SessionScope;
 import org.testinfected.petstore.product.Item;
 import org.testinfected.petstore.product.ItemInventory;
 import org.testinfected.petstore.product.ItemNumber;
-import org.testinfected.petstore.util.SessionScope;
 
 public class CreateCartItem implements Application {
 

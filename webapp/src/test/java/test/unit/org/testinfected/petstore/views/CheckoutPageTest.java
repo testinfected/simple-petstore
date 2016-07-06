@@ -4,7 +4,7 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;
-import org.testinfected.petstore.helpers.ErrorMessages;
+import org.testinfected.petstore.lib.ErrorMessages;
 import org.testinfected.petstore.views.Checkout;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.builders.AddressBuilder;

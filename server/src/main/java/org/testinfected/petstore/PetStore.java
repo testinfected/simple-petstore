@@ -17,7 +17,7 @@ import com.vtence.molecule.middlewares.ServerHeader;
 import com.vtence.molecule.middlewares.StaticAssets;
 import com.vtence.molecule.session.CookieSessionStore;
 import com.vtence.tape.DriverManagerDataSource;
-import org.testinfected.petstore.util.Logging;
+import org.testinfected.petstore.lib.Logging;
 
 import javax.sql.DataSource;
 import java.io.File;

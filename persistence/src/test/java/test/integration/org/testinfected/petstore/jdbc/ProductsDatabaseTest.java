@@ -15,7 +15,6 @@ import org.testinfected.petstore.transaction.Transactor;
 import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.builders.ProductBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
-import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -26,14 +25,17 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.iterableWithSize;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasField;
 
 public class ProductsDatabaseTest {
 
-    Database database = Database.in(TestDatabaseEnvironment.load());
+    Database database = Database.test();
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
     ProductsDatabase productsDatabase = new ProductsDatabase(connection);

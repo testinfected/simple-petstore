@@ -1,4 +1,4 @@
-package org.testinfected.petstore.util;
+package org.testinfected.petstore.lib;
 
 import com.vtence.molecule.Request;
 import com.vtence.molecule.session.Session;

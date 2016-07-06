@@ -1,11 +1,11 @@
-package org.testinfected.petstore.helpers;
+package org.testinfected.petstore.lib;
 
 import com.vtence.molecule.Request;
 import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;
-import org.testinfected.petstore.validation.Validates;
 import org.testinfected.petstore.validation.Valid;
+import org.testinfected.petstore.validation.Validates;
 
 import static org.testinfected.petstore.billing.CreditCardType.valueOf;
 

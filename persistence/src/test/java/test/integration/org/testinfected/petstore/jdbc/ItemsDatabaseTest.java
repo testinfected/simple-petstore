@@ -9,13 +9,16 @@ import org.junit.Test;
 import org.testinfected.petstore.db.ItemsDatabase;
 import org.testinfected.petstore.db.JDBCTransactor;
 import org.testinfected.petstore.db.ProductsDatabase;
-import org.testinfected.petstore.product.*;
+import org.testinfected.petstore.product.DuplicateItemException;
+import org.testinfected.petstore.product.Item;
+import org.testinfected.petstore.product.ItemNumber;
+import org.testinfected.petstore.product.Product;
+import org.testinfected.petstore.product.ProductCatalog;
 import org.testinfected.petstore.transaction.QueryUnitOfWork;
 import org.testinfected.petstore.transaction.Transactor;
 import test.support.org.testinfected.petstore.builders.Builder;
 import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.jdbc.Database;
-import test.support.org.testinfected.petstore.jdbc.TestDatabaseEnvironment;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -25,7 +28,10 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.testinfected.petstore.db.Access.idOf;
 import static org.testinfected.petstore.db.Access.productOf;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.a;
@@ -34,7 +40,7 @@ import static test.support.org.testinfected.petstore.jdbc.HasFieldWithValue.hasF
 
 public class ItemsDatabaseTest {
 
-    Database database = Database.in(TestDatabaseEnvironment.load());
+    Database database = Database.test();
     Connection connection = database.connect();
     Transactor transactor = new JDBCTransactor(connection);
     ProductCatalog productCatalog = new ProductsDatabase(connection);

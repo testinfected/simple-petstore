@@ -4,7 +4,7 @@ import com.samskivert.mustache.Mustache;
 import org.testinfected.petstore.billing.Address;
 import org.testinfected.petstore.billing.CreditCardDetails;
 import org.testinfected.petstore.billing.CreditCardType;
-import org.testinfected.petstore.helpers.ErrorMessages;
+import org.testinfected.petstore.lib.ErrorMessages;
 
 import java.math.BigDecimal;
 

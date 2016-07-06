@@ -2,7 +2,7 @@ package org.testinfected.petstore.views;
 
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.Template;
-import org.testinfected.petstore.helpers.ErrorMessages;
+import org.testinfected.petstore.lib.ErrorMessages;
 
 import java.io.IOException;
 import java.io.Writer;

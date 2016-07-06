@@ -4,8 +4,8 @@ import com.vtence.molecule.Application;
 import com.vtence.molecule.Request;
 import com.vtence.molecule.Response;
 import org.testinfected.petstore.View;
+import org.testinfected.petstore.lib.SessionScope;
 import org.testinfected.petstore.order.Cart;
-import org.testinfected.petstore.util.SessionScope;
 
 public class ShowCart implements Application {
     private final View<Cart> view;
