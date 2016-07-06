@@ -18,28 +18,25 @@ artifacts:
   mysql: mysql:mysql-connector-java:jar:5.1.21
 
   # -- test scope
-  hamcrest_core: org.hamcrest:hamcrest-core:jar:1.3
-  hamcrest_library: org.hamcrest:hamcrest-library:jar:1.3
-  hamcrest_extra: org.testinfected.hamcrest-matchers:core-matchers:jar:1.5
-  cssselectors: se.fishtank:css-selectors:1.0.5
-  hamcrest_dom: org.testinfected.hamcrest-matchers:dom-matchers:jar:1.8
+  hamcrest: org.hamcrest:java-hamcrest:jar:2.0.0.0
+  cssselectors: se.fishtank:css-selectors:jar:2.0
+  hamcrest_dom: com.vtence.hamcrest:hamcrest-dom:jar:2.0.0
   molecule_test: com.vtence.molecule:molecule:jar:tests:0.10
-  selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.41.0
-  selenium_ghost_driver: com.github.detro.ghostdriver:phantomjsdriver:jar:1.1.0
-  windowlicker_web: com.googlecode.windowlicker:windowlicker-web:jar:r268
+  selenium_firefox_driver: org.seleniumhq.selenium:selenium-firefox-driver:jar:2.53.0
+  selenium_ghost_driver: com.codeborne:phantomjsdriver:jar:1.3.0
+  mario: com.vtence.mario:mario:jar:0.1
   juniversalchardet: com.googlecode.juniversalchardet:juniversalchardet:jar:1.0.3
   nekohtml: net.sourceforge.nekohtml:nekohtml:jar:1.9.20
   jmock_legacy: org.jmock:jmock-legacy:jar:2.6.0
   jcl_over_slf4j: org.slf4j:jcl-over-slf4j:jar:1.5.6
   slf4j_api: org.slf4j:slf4j-api:jar:1.5.6
   slf4j_silent: org.slf4j:slf4j-nop:jar:1.5.6
-  htmlunit: net.sourceforge.htmlunit:htmlunit:jar:2.14
 
 junit: 4.11
 jmock: 2.6.0
 
 selenium:
-  version: 2.41.0
+  version: 2.53.0
   silent: true
   server:
     url: http://localhost:4444/wd/hub

@@ -1,7 +1,6 @@
 VERSION_NUMBER = '0.2-SNAPSHOT'
 
 SIMPLE = [:simple_common, :simple_transport, :simple_http]
-HAMCREST = [:hamcrest_core, :hamcrest_library, :hamcrest_extra]
 NO_LOG = [:jcl_over_slf4j, :slf4j_api, :slf4j_silent]
 
 %w(db-migrate db-clean db-reset db-drop db-init).each { |t| Project.local_task t }
@@ -12,13 +11,13 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
   
   define 'domain' do
     compile.with
-    test.with HAMCREST
+    test.with :hamcrest
     package :jar
   end
 
   define 'persistence' do
     compile.with project(:domain), :tape
-    test.with project(:domain).test.compile.target, HAMCREST, :flyway, :mysql, NO_LOG
+    test.with project(:domain).test.compile.target, :hamcrest, :flyway, :mysql, NO_LOG
     package :jar
   end
 
@@ -30,7 +29,7 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
               project(:persistence).test.compile.target,
               project(:persistence).test.resources.target
 
-    test.with HAMCREST, :cssselectors, :hamcrest_dom, :molecule_test, NO_LOG,
+    test.with :hamcrest, :cssselectors, :hamcrest_dom, :molecule_test, NO_LOG
     test.with transitive(artifacts(:nekohtml))
     test.using :properties => { 'web.root' => _(:src, :main, :content) }
 
@@ -53,8 +52,8 @@ define 'petstore', :group => 'org.testinfected.petstore', :version => VERSION_NU
               project(:persistence).test.resources.target,
               project(:webapp).test.compile.target
 
-    test.with :molecule_test, :jmustache, HAMCREST, :tape, :flyway, :mysql, NO_LOG, :juniversalchardet
-    test.with transitive(artifacts(:selenium_firefox_driver, :selenium_ghost_driver, :windowlicker_web))
+    test.with :molecule_test, :jmustache, :hamcrest, :tape, :flyway, :mysql, NO_LOG, :juniversalchardet, :mario
+    test.with transitive(artifacts(:selenium_firefox_driver, :selenium_ghost_driver))
     integration.setup { selenium.run }
     integration.teardown { selenium.stop }
 
