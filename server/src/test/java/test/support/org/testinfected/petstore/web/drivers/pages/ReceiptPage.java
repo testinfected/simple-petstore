@@ -9,7 +9,6 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
-import static org.testinfected.hamcrest.core.StringMatchers.being;
 
 public class ReceiptPage extends Page {
 
@@ -29,19 +28,19 @@ public class ReceiptPage extends Page {
 
     public void showsLineItem(String itemNumber, String itemDescription, String totalPrice) {
         browser.element(cellDisplayingNameOfItem(itemNumber)).assertText(containsString(itemDescription));
-        browser.element(cellDisplayingTotalForItem(itemNumber)).assertText(being(totalPrice));
+        browser.element(cellDisplayingTotalForItem(itemNumber)).assertText(equalTo(totalPrice));
     }
 
     public void showsCreditCardDetails(String cardType, String cardNumber, String cardExpiryDate) {
-        browser.element(cssSelector("#card-type span")).assertText(being(cardType));
-        browser.element(cssSelector("#card-number span")).assertText(being(cardNumber));
-        browser.element(cssSelector("#card-expiry span")).assertText(being(cardExpiryDate));
+        browser.element(cssSelector("#card-type span")).assertText(equalTo(cardType));
+        browser.element(cssSelector("#card-number span")).assertText(equalTo(cardNumber));
+        browser.element(cssSelector("#card-expiry span")).assertText(equalTo(cardExpiryDate));
     }
 
     public void showsBillingInformation(String firstName, String lastName, String emailAddress) {
-        browser.element(cssSelector("#first-name span")).assertText(being(firstName));
-        browser.element(cssSelector("#last-name span")).assertText(being(lastName));
-        browser.element(cssSelector("#email span")).assertText(being(emailAddress));
+        browser.element(cssSelector("#first-name span")).assertText(equalTo(firstName));
+        browser.element(cssSelector("#last-name span")).assertText(equalTo(lastName));
+        browser.element(cssSelector("#email span")).assertText(equalTo(emailAddress));
     }
 
     public void continueShopping() {

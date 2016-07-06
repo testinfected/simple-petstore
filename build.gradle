@@ -22,12 +22,9 @@ ext {
                                  'org.simpleframework:simple-transport:6.0.1',
                                  'org.simpleframework:simple-http:6.0.1'],
 
-            hamcrest          : ['org.hamcrest:hamcrest-core:1.3@jar',
-                                 'org.hamcrest:hamcrest-library:1.3@jar'],
-            hamcrest_extra    : 'org.testinfected.hamcrest-matchers:core-matchers:1.5@jar',
-            hamcrest_dom      : ['se.fishtank:css-selectors:1.0.5',
-                                 'org.testinfected.hamcrest-matchers:dom-matchers:1.8@jar'],
-            junit             : 'junit:junit:4.11@jar',
+            hamcrest          : 'org.hamcrest:java-hamcrest:2.0.0.0',
+            hamcrest_dom      : 'com.vtence.hamcrest:hamcrest-dom:2.0.0',
+            junit             : 'junit:junit:4.12@jar',
             jmock             : ['org.jmock:jmock:2.6.0@jar',
                                  'org.jmock:jmock-junit4:2.6.0@jar',
                                  'org.jmock:jmock-legacy:2.6.0@jar',
@@ -53,7 +50,6 @@ subprojects {
     dependencies {
         testCompile libs.junit
         testCompile libs.hamcrest
-        testCompile libs.hamcrest_extra
         testCompile libs.jmock
         testCompile libs.nolog
     }

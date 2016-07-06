@@ -6,8 +6,12 @@ import org.junit.Test;
 import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import static com.vtence.hamcrest.dom.DomMatchers.anElement;
+import static com.vtence.hamcrest.dom.DomMatchers.hasAttribute;
+import static com.vtence.hamcrest.dom.DomMatchers.hasChildren;
+import static com.vtence.hamcrest.dom.DomMatchers.hasSelector;
+import static com.vtence.hamcrest.dom.DomMatchers.hasTag;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testinfected.hamcrest.dom.DomMatchers.*;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
 
 public class FooterTest {
@@ -20,7 +24,7 @@ public class FooterTest {
         footer = render(FOOTER_TEMPLATE).from(WebRoot.layouts()).asDom();
     }
 
-    @SuppressWarnings("unchecked") @Test public void
+    @Test public void
     logoutButtonSubmitsADeleteToLogoutPath() {
         assertThat("footer", footer, hasLogoutForm(hasAttribute("action", "/logout"), hasAttribute("method", "post")));
         assertThat("footer", footer, hasLogoutForm(hasChildren(

@@ -9,17 +9,17 @@ import test.support.org.testinfected.petstore.builders.ProductBuilder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import static com.vtence.hamcrest.dom.DomMatchers.anElement;
+import static com.vtence.hamcrest.dom.DomMatchers.everyElement;
+import static com.vtence.hamcrest.dom.DomMatchers.hasAttribute;
+import static com.vtence.hamcrest.dom.DomMatchers.hasChild;
+import static com.vtence.hamcrest.dom.DomMatchers.hasSelector;
+import static com.vtence.hamcrest.dom.DomMatchers.hasSize;
+import static com.vtence.hamcrest.dom.DomMatchers.hasText;
+import static com.vtence.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.everyItem;
-import static org.testinfected.hamcrest.dom.DomMatchers.anElement;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ProductBuilder.aProduct;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
@@ -36,7 +36,6 @@ public class ProductsPageTest {
         assertThat("products page", productsPage, hasUniqueSelector("#no-match", hasText(containsString("dog"))));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysAllProductsFound() {
         productsPage = renderProductsPage().with(products.add(build(aProduct(), aProduct()))).asDom();
@@ -44,7 +43,6 @@ public class ProductsPageTest {
         assertThat("products page", productsPage, hasSelector("#catalog li[id^='product']", hasSize(2)));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysProductDetails() throws Exception {
         ProductBuilder product = aProduct().withNumber("LAB-1234").named("Labrador").
@@ -57,13 +55,12 @@ public class ProductsPageTest {
                 hasUniqueSelector(".product-description", hasText("Friendly"))));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     linksProductNameAndPhotoToItemsPage() {
         productsPage = renderProductsPage().with(products.add(build(aProduct().named("Labrador")
                 .withNumber("LAB-1234")))).asDom();
         assertThat("products page", productsPage, hasSelector("li a", hasSize(2)));
-        assertThat("products page", productsPage, hasSelector("li a", everyItem(hasAttribute("href", equalTo("/products/LAB-1234/items")))));
+        assertThat("products page", productsPage, hasSelector("li a", everyElement(hasAttribute("href", equalTo("/products/LAB-1234/items")))));
     }
 
     private Matcher<Element> hasImage(String imageUrl) {
@@ -75,10 +72,6 @@ public class ProductsPageTest {
     }
 
     private static AttachmentStorage photosFolder() {
-        return new AttachmentStorage() {
-            public String getLocation(String fileName) {
-                return "/photos/" + fileName;
-            }
-        };
+        return fileName -> "/photos/" + fileName;
     }
 }

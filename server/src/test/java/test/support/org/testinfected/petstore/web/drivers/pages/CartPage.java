@@ -3,10 +3,11 @@ package test.support.org.testinfected.petstore.web.drivers.pages;
 import com.objogate.wl.web.AsyncWebDriver;
 import org.openqa.selenium.By;
 
+import static java.lang.String.valueOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
-import static org.testinfected.hamcrest.core.StringMatchers.being;
 
 public class CartPage extends Page {
 
@@ -16,13 +17,13 @@ public class CartPage extends Page {
 
     public void showsItem(String itemNumber, String itemDescription, String unitPrice, int quantity, String totalPrice) {
         browser.element(cellShowingNameOf(itemNumber)).assertText(containsString(itemDescription));
-        browser.element(cellShowingPriceOf(itemNumber)).assertText(being(unitPrice));
-        browser.element(cellShowingQuantityOf(itemNumber)).assertText(being(quantity));
-        browser.element(cellShowingTotalFor(itemNumber)).assertText(being(totalPrice));
+        browser.element(cellShowingPriceOf(itemNumber)).assertText(equalTo(unitPrice));
+        browser.element(cellShowingQuantityOf(itemNumber)).assertText(equalTo(valueOf(quantity)));
+        browser.element(cellShowingTotalFor(itemNumber)).assertText(equalTo(totalPrice));
     }
 
     public CartPage showsGrandTotal(String price) {
-        browser.element(id("cart-grand-total")).assertText(being(price));
+        browser.element(id("cart-grand-total")).assertText(equalTo(price));
         return this;
     }
 

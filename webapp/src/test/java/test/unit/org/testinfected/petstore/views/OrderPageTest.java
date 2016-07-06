@@ -8,15 +8,15 @@ import test.support.org.testinfected.petstore.builders.OrderBuilder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import static com.vtence.hamcrest.dom.DomMatchers.contains;
+import static com.vtence.hamcrest.dom.DomMatchers.containsInAnyOrder;
+import static com.vtence.hamcrest.dom.DomMatchers.hasAttribute;
+import static com.vtence.hamcrest.dom.DomMatchers.hasSelector;
+import static com.vtence.hamcrest.dom.DomMatchers.hasSize;
+import static com.vtence.hamcrest.dom.DomMatchers.hasText;
+import static com.vtence.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.matches;
-import static org.testinfected.hamcrest.dom.DomMatchers.matchesInAnyOrder;
 import static test.support.org.testinfected.petstore.builders.AddressBuilder.anAddress;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.CreditCardBuilder.aVisa;
@@ -40,25 +40,23 @@ public class OrderPageTest {
         assertThat("order page", orderPage, hasOrderTotal("250.00"));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysOrderDetailsColumnHeadings() {
         orderPage = renderOrderPage().with(order).asDom();
         assertThat("order page", orderPage,
                 hasSelector("table#order-details tr th",
-                        matches(hasText("Quantity"),
+                        contains(hasText("Quantity"),
                                 hasText("Item"),
                                 hasText("Price"),
                                 hasText("Total"))));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysLineItemsInColumns() {
         ItemBuilder item = anItem().withNumber("12345678").describedAs("Green Adult").priced("100.00");
         orderPage = renderOrderPage().with(order.from(aCart().containing(item, item))).asDom();
         assertThat("order page", orderPage, hasSelector("#order-details tr#line-item-12345678 td",
-                matches(hasText("2"),
+                contains(hasText("2"),
                         hasText(containsString("Green Adult")),
                         hasText("100.00"),
                         hasText("200.00"))));
@@ -75,25 +73,23 @@ public class OrderPageTest {
         assertThat("order page", orderPage, hasSelector("#order-details tr[id^='line-item']", hasSize(2)));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysBillingInformation() {
         orderPage = renderOrderPage().with(
                 order.paidWith(aVisa().billedTo(anAddress().
                         withFirstName("John").withLastName("Doe").withEmail("jdoe@gmail.com"))))
                 .asDom();
-        assertThat("order page", orderPage, hasSelector("#billing-address span", matchesInAnyOrder(
+        assertThat("order page", orderPage, hasSelector("#billing-address span", containsInAnyOrder(
                 hasText("John"),
                 hasText("Doe"),
                 hasText("jdoe@gmail.com"))));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysPaymentDetails() {
         orderPage = renderOrderPage().with(order.paidWith(
                 aVisa().withNumber("9999 9999 9999").withExpiryDate("12/12"))).asDom();
-        assertThat("order page", orderPage, hasSelector("#payment-details span", matchesInAnyOrder(
+        assertThat("order page", orderPage, hasSelector("#payment-details span", containsInAnyOrder(
                 hasText("Visa"),
                 hasText("9999 9999 9999"),
                 hasText("12/12"))));

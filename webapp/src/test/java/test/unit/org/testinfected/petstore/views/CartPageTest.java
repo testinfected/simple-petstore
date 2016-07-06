@@ -7,15 +7,15 @@ import test.support.org.testinfected.petstore.builders.ItemBuilder;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import static com.vtence.hamcrest.dom.DomMatchers.contains;
+import static com.vtence.hamcrest.dom.DomMatchers.hasAttribute;
+import static com.vtence.hamcrest.dom.DomMatchers.hasBlankText;
+import static com.vtence.hamcrest.dom.DomMatchers.hasSelector;
+import static com.vtence.hamcrest.dom.DomMatchers.hasText;
+import static com.vtence.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasBlankText;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.matches;
+import static org.hamcrest.Matchers.iterableWithSize;
 import static test.support.org.testinfected.petstore.builders.CartBuilder.aCart;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
@@ -27,13 +27,12 @@ public class CartPageTest {
     Element cartPage;
     CartBuilder cart = aCart();
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysColumnHeadings() {
         cartPage = renderCartPage().with(cart).asDom();
         assertThat("cart page", cartPage,
                 hasSelector("#cart-content th",
-                        matches(hasText("Quantity"),
+                        contains(hasText("Quantity"),
                                 hasText("Item"),
                                 hasText("Price"),
                                 hasText("Total"))));
@@ -59,17 +58,16 @@ public class CartPageTest {
         cartPage = renderCartPage().with(cart.containing(
                 anItem().withNumber("12345678"), anItem().withNumber("12345678"),
                 anItem().withNumber("87654321"))).asDom();
-        assertThat("cart page", cartPage, hasSelector("#cart-content tr[id^='cart-item']", hasSize(2)));
+        assertThat("cart page", cartPage, hasSelector("#cart-content tr[id^='cart-item']", iterableWithSize(2)));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysProductDetailsInColumns() throws Exception {
         ItemBuilder item = anItem().withNumber("12345678").priced("18.50").describedAs("Green Adult");
         cartPage = renderCartPage().with(cart.containing(item, item)).asDom();
         assertThat("cart page", cartPage,
                 hasSelector("tr#cart-item-12345678 td",
-                        matches(hasText("2"),
+                        contains(hasText("2"),
                                 hasText(containsString("Green Adult")),
                                 hasText("18.50"),
                                 hasText("37.00"),

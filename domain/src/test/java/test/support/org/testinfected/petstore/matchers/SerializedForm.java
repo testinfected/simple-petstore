@@ -3,14 +3,12 @@ package test.support.org.testinfected.petstore.matchers;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import org.testinfected.hamcrest.ExceptionImposter;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -26,11 +24,9 @@ public class SerializedForm<T> extends TypeSafeDiagnosingMatcher<T> {
         boolean matches;
         try {
             matches = cloneMatcher.matches(serializedClone(original));
-        } catch (NotSerializableException e) {
+        } catch (ClassNotFoundException | IOException e) {
             mismatchDescription.appendText("not serializable " + e.getMessage());
             return false;
-        } catch (Exception e) {
-            throw ExceptionImposter.imposterize(e);
         }
 
         if (!matches) {

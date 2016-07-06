@@ -2,10 +2,11 @@ package test.support.org.testinfected.petstore.web.drivers.pages;
 
 import com.objogate.wl.web.AsyncWebDriver;
 
+import static java.lang.String.valueOf;
+import static org.hamcrest.Matchers.equalTo;
 import static org.openqa.selenium.By.cssSelector;
 import static org.openqa.selenium.By.id;
 import static org.openqa.selenium.By.linkText;
-import static org.testinfected.hamcrest.core.StringMatchers.being;
 
 public class ProductsPage extends Page {
 
@@ -18,12 +19,12 @@ public class ProductsPage extends Page {
     }
 
     public ProductsPage displaysMatchCount(int matchCount) {
-        browser.element(id("match-count")).assertText(being(matchCount));
+        browser.element(id("match-count")).assertText(equalTo(valueOf(matchCount)));
         return this;
     }
 
     public ProductsPage displaysProduct(String number, String name) {
-        browser.element(cssSelector("#product-" + number + " .product-name")).assertText(being(name));
+        browser.element(cssSelector("#product-" + number + " .product-name")).assertText(equalTo(name));
         return this;
     }
 

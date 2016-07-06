@@ -6,18 +6,18 @@ import org.w3c.dom.Element;
 import test.support.org.testinfected.petstore.web.OfflineRenderer;
 import test.support.org.testinfected.petstore.web.WebRoot;
 
+import static com.vtence.hamcrest.dom.DomMatchers.contains;
+import static com.vtence.hamcrest.dom.DomMatchers.hasAttribute;
+import static com.vtence.hamcrest.dom.DomMatchers.hasBlankText;
+import static com.vtence.hamcrest.dom.DomMatchers.hasChild;
+import static com.vtence.hamcrest.dom.DomMatchers.hasId;
+import static com.vtence.hamcrest.dom.DomMatchers.hasNoSelector;
+import static com.vtence.hamcrest.dom.DomMatchers.hasSelector;
+import static com.vtence.hamcrest.dom.DomMatchers.hasSize;
+import static com.vtence.hamcrest.dom.DomMatchers.hasTag;
+import static com.vtence.hamcrest.dom.DomMatchers.hasText;
+import static com.vtence.hamcrest.dom.DomMatchers.hasUniqueSelector;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasAttribute;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasBlankText;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasChild;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasId;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasNoSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasSize;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasTag;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasText;
-import static org.testinfected.hamcrest.dom.DomMatchers.hasUniqueSelector;
-import static org.testinfected.hamcrest.dom.DomMatchers.matches;
 import static test.support.org.testinfected.petstore.builders.Builders.build;
 import static test.support.org.testinfected.petstore.builders.ItemBuilder.anItem;
 import static test.support.org.testinfected.petstore.web.OfflineRenderer.render;
@@ -36,7 +36,6 @@ public class ItemsPageTest {
         assertThat("items page", itemsPage, hasNoSelector("#inventory"));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysNumberOfAvailableItems() {
         itemsPage = renderItemsPage().with(items.add(build(anItem(), anItem()))).asDom();
@@ -45,20 +44,18 @@ public class ItemsPageTest {
         assertThat("items page", itemsPage, hasSelector("#inventory tr[id^='item']", hasSize(2)));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysColumnHeadingsOnItemsTable() {
         itemsPage = renderItemsPage().with(items.add(build(anItem()))).asDom();
 
         assertThat("items page", itemsPage,
                 hasSelector("#items th",
-                        matches(hasText("Reference number"),
+                        contains(hasText("Reference number"),
                                 hasText("Description"),
                                 hasText("Price"),
                                 hasBlankText())));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     displaysItemDetailsInColumns() throws Exception {
         itemsPage = renderItemsPage().
@@ -67,13 +64,12 @@ public class ItemsPageTest {
 
         assertThat("items page", itemsPage,
                 hasSelector("tr#item-12345678 td",
-                        matches(hasText("12345678"),
+                        contains(hasText("12345678"),
                                 hasText("Green Adult"),
                                 hasText("18.50"),
                                 hasChild(hasTag("form")))));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     addsItemToShoppingCartWhenFormSubmitted() {
         itemsPage = renderItemsPage().
@@ -90,7 +86,6 @@ public class ItemsPageTest {
                         hasAttribute("value", "12345678")));
     }
 
-    @SuppressWarnings("unchecked")
     @Test public void
     returnsToHomePageToContinueShopping() {
         itemsPage = renderItemsPage().with(items.add(build(anItem()))).asDom();
