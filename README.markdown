@@ -7,6 +7,7 @@ A fork of my [petstore](https://github.com/testinfected/petstore) repository, bu
 It uses the following tools:
 
 - [Simple](http://www.simpleframework.org/), an embeddable high-performance HTTP server
+- [Molecule](https://github.com/testinfected/molecule), a micro framework for web development 
 - [Mustache](http://mustache.github.com) for logic-less templating
 - Plain JDBC
 - No IoC container
